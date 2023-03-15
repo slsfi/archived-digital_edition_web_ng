@@ -22,16 +22,31 @@ ion-split-pane {
   }
 }
 
-
-ul, ::ng-deep ul {
-  padding: 0 0 0 16px;
+:host::ng-deep ul {
+  padding-left: 16px;
   list-style-type: none;
+  width: 100%;
+  position: relative;
+  app-recursive-accordion {
+    width: 100%;
+  }
   li {
     color: #000;
-    padding: 8px 0 8px 8px;
     display: flex;
     overflow-wrap: break-word;
     position: relative;
+    width: 100%;
+    padding: 10px 0;
+    &.accordion-list {
+      display: none;
+      padding: 0;
+      width: 100%;
+      transition: display linear 0.2s;
+      &.open {
+        display: block;
+        transition: display linear 0.2s;
+      }
+    }
     &.menu-highlight {
       border-right: 5px solid var(--primary-color);
     }

@@ -492,12 +492,14 @@ export const config: Config = {
       title: "Dummy epub",
       filename: "2685.epub",
       download: "https://www.sls.fi/",
-      cover: ""
+      cover: "",
+      id: "2685.epub"
     },{
       title: "Another dummy epub",
-      filename: "2685.epub",
+      filename: "285.epub",
       download: "https://www.sls.fi/",
-      cover: ""
+      cover: "",
+      id: "285.epub",
     }
   ]
 }

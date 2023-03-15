@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { NavigationEnd, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AlertController, MenuController, Platform } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { DigitalEdition } from "../../models/digital-edition.model";
@@ -17,8 +17,6 @@ import { GalleryService } from "../../services/gallery/gallery.service";
 import { MetadataService } from "../../services/metadata/metadata.service";
 import { config } from "src/app/services/config/config";
 import { RecursiveAccordion } from "../recursive-accordion/recursive-accordion";
-import { filter, map } from "rxjs/operators";
-import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-side-menu',
@@ -38,7 +36,7 @@ export class SideMenu implements OnInit {
   appName?: string;
   errorMessage?: string;
   splitPane = false;
-  collectionsList?: any[];
+  collectionsList: any[];
   collectionsListWithTOC?: any[];
   tocData: any;
   pdfCollections?: any[];
@@ -259,6 +257,13 @@ export class SideMenu implements OnInit {
     this.registerEventListeners();
     this.getCollectionList();
     // If we have MediaCollections we need to add these first
+
+    this.setMusicAccordionItems();
+    this.setDefaultOpenAccordions();
+  }
+
+  ngOnInit(): void {
+    this.initializeApp();
     if (this._config.show?.TOC?.MediaCollections) {
       this.getMediaCollections().then((mediaCollectionMenu) => {
         if (mediaCollectionMenu && mediaCollectionMenu.length > 0) {
@@ -283,6 +288,7 @@ export class SideMenu implements OnInit {
           this.mediaCollectionOptions.loading = false;
           this.mediaCollectionOptions.accordionToc = {
             toc: mediaCollectionMenu,
+            children: mediaCollectionMenu,
             searchTocItem: true,
             searchTitle: '', // If toc item has to be searched by unique title also
             currentPublicationId: null
@@ -305,12 +311,6 @@ export class SideMenu implements OnInit {
         this.getCollectionsWithTOC(data);
       })
     }
-    this.setMusicAccordionItems();
-    this.setDefaultOpenAccordions();
-  }
-
-  ngOnInit(): void {
-    this.initializeApp();
   }
 
   songTypesMenuMarkdownConfig() {

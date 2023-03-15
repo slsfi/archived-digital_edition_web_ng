@@ -16,13 +16,12 @@ type MenuChild = {
 export class RecursiveAccordion implements OnInit {
   @Input() children: MenuChild[];
   @Input() selected: boolean = false;
-  @Input() childId: string;
+  @Input() childId: string = '';
   @Input() parentPath: string = '';
   selectedMenu: string = '';
   currentRoute: string = '';
 
   constructor(public router: Router) {
-    console.log(this.router)
   }
 
   ngOnInit() {
@@ -33,5 +32,9 @@ export class RecursiveAccordion implements OnInit {
 
   toggleAccordion(value: string) {
     this.selectedMenu = this.selectedMenu === value ? '' : value;
+  }
+
+  pathGenerator(parentPath: string, childId: string): string {
+    return childId === 'all' ? `/media-collections` : `${parentPath}/${childId}`
   }
 }

@@ -152,7 +152,7 @@ export class DigitalEditionsApp {
   tocWorkSearchSelected = false;
   tocHomeSelected = false;
 
-  showSideMenu:boolean = false
+  showSideMenu:boolean = true;
   constructor(
     public platform: Platform,
     public translate: TranslateService,
@@ -1129,7 +1129,7 @@ export class DigitalEditionsApp {
   }
 
   openCollection(collection: any) {
-    if (this.hasCover === false && this.hasTitle === false && this.hasForeword === false && this.hasIntro === false) {
+    if (!this.hasCover && !this.hasTitle && !this.hasForeword && !this.hasIntro) {
       this.getTocRoot(collection);
     } else {
       const downloadOnly = config.collectionDownloads?.isDownloadOnly ?? false;
