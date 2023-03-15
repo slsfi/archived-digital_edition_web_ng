@@ -81,8 +81,6 @@ export class ReadPage /*implements OnDestroy*/ {
   // backdropWidth: number;
   // showAddViewsFabBackdrop: boolean = false;
 
-  public urlParameters$: Observable<any>;
-
   addViewPopoverisOpen: boolean = false;
 
   private unlistenFirstTouchStartEvent?: () => void;
@@ -148,7 +146,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
   // TODO OLLIN UUDET
   public views$: Observable<any>; // TODO
-  public link$: Observable<string>;
+  public textItemID$: Observable<string>;
 
   // TODO paramX$ tyyli
 
@@ -273,59 +271,51 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   ngOnInit() {
+    /*
     this.urlParameters$ = combineLatest(
       [this.route.params, this.route.queryParams]
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams}))
     );
+    */
 
-    this.link$ = this.route.params.pipe(map(({collectionID, publicationID, chapterID}) => {
-      let link;
+    this.textItemID$ = this.route.params.pipe(map(({collectionID, publicationID, chapterID}) => {
+      let textItemID;
 
       if (chapterID !== "" && chapterID != null) {
-        link = collectionID + '_' + publicationID + '_' + chapterID;
+        textItemID = collectionID + '_' + publicationID + '_' + chapterID;
       } else {
-        link = collectionID + '_' + publicationID;
+        textItemID = collectionID + '_' + publicationID;
       }
 
-      return link;
+      // Save the id of the previous and current read view text in textService.
+      // TODO: This is maybe not needed any more:
+      this.textService.previousReadViewTextId = this.textService.readViewTextId;
+      this.textService.readViewTextId = textItemID;
+
+      this.paramPublicationID = publicationID;
+      this.setCollectionAndPublicationLegacyId();
+
+      return textItemID;
     }));
 
     this.views$ = this.route.queryParams.pipe(map(({views}) => {
-      // views are parametrized in the url as a array
+      // views are parametrized in the url as an array of objects      
+      
+      if (views === undefined || views === null || views.length < 1) {
+        this.setDefaultViews();
+      } else {
+        const parsed_views = JSON.parse(views);
 
-      // if views are empty return default views
-      if (views === undefined || views === null || views.length === 0) {
-        return views; // TODO return default data that is just a object literal
+        // Clear the array keeping track of recently open views in
+        // text service and populate it with the current ones
+        this.textService.recentPageReadViews = [];
+        parsed_views.forEach((viewObj: any) => {
+          this.textService.recentPageReadViews.push({ type: viewObj.type });
+        });
+        return parsed_views;
       }
-
-      return views;
     }));
-
-    this.urlParameters$.subscribe(routeParams => {
-      console.log('route params and queryparams:', routeParams);
-
-      /*
-      let onlyViewsChange = false;
-      if (this.paramCollectionID !== routeParams['collectionID']) {
-        this.paramCollectionID = routeParams['collectionID'];
-      }
-      if (this.paramPublicationID !== routeParams['publicationID']) {
-        this.paramPublicationID = routeParams['publicationID'];
-      }
-*/
-      this.paramCollectionID = routeParams['collectionID'] ?? undefined;
-      this.paramPublicationID = routeParams['publicationID'] ?? undefined;
-      this.paramChapterID = routeParams['chapterID'] ?? undefined;
-      this.paramFacsId = routeParams['facs_id'] ?? undefined;
-      this.paramFacsNr = routeParams['facs_nr'] ?? undefined;
-      this.paramSearchTitle = routeParams['search_title'] ?? undefined;
-      this.paramViews = routeParams['views'] ?? undefined;
-
-      if (this.paramCollectionID && this.paramPublicationID) {
-        this.ngOnInitLang();
-      }
-    });
   }
 
   ngOnInitLang() {
@@ -354,7 +344,7 @@ export class ReadPage /*implements OnDestroy*/ {
       this.textService.previousReadViewTextId = this.textService.readViewTextId;
       this.textService.readViewTextId = this.establishedText.link;
 
-      this.setDefaultViews();
+      // this.setDefaultViews();
 
       /*
       if (this.queryParamSearchResult !== undefined) {
@@ -431,7 +421,6 @@ export class ReadPage /*implements OnDestroy*/ {
     });
 
     this.setUpTextListeners();
-    this.setCollectionAndPublicationLegacyId();
   }
 
   ionViewDidEnter() {
@@ -640,35 +629,19 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   setDefaultViews() {
-    let views: Array<string> = [];
-    if (this.paramViews) {
-      views = this.paramViews.split('-');
-    }
-
-    if (views.length < 1) {
-      // There are no views defined in the url params => open either recent or default views
-      if (this.textService.recentPageReadViews.length > 0) {
-        this.setViews(this.textService.recentPageReadViews);
-      } else {
-        this.setConfigDefaultReadModeViews();
-      }
+    // There are no views defined in the url params => open either recent or default views
+    if (this.textService.recentPageReadViews.length > 0) {
+      this.router.navigate(
+        [],
+        {
+          relativeTo: this.route,
+          queryParams: { views: JSON.stringify(this.textService.recentPageReadViews) },
+          queryParamsHandling: 'merge'
+        }
+      );
     } else {
-      // Open with the views defined in the url params
-      this.setViews(views);
+      this.setConfigDefaultReadModeViews();
     }
-
-
-    /*
-    if (this.queryParamViews !== undefined) {
-      this.setViewsFromSearchResults();
-    } else {
-      if (urlViews !== 'default' && urlViews.length > 0 && this.viewsExistInAvailableViewModes(views)) {
-        this.openUrlViews(views);
-      } else {
-        // this.setOpenedViewsFromLocalStorage();
-      }
-    }
-    */
   }
 
   /*
@@ -705,29 +678,29 @@ export class ReadPage /*implements OnDestroy*/ {
    * And if no config for this was set at all it sets established as the default.
    */
   setConfigDefaultReadModeViews() {
-    const defaultReadModes: any = config.defaults?.ReadModeView ?? 'established';
-    let viewsUrlString = '';
-    if (defaultReadModes instanceof Array) {
-      let defaultReadModeForMobileSelected = false;
-      defaultReadModes.forEach((val: any) => {
-        if (!defaultReadModeForMobileSelected && this.displayToggles[val]) {
-          /* Sets the default view on mobile to the first default read mode view which is available. */
-          this.show = val;
-          defaultReadModeForMobileSelected = true;
-        }
-        this.addView(val);
-      });
-      viewsUrlString = defaultReadModes.join('-');
-    } else {
-      this.show = defaultReadModes;
-      this.addView(defaultReadModes);
-      viewsUrlString = defaultReadModes;
-    }
+    const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
+    let newViews: Array<any> = [];
+    let defaultReadModeForMobileSelected = false;
+
+    defaultReadModes.forEach((val: any) => {
+      // TODO: Fix setting default view for mobile
+      if (!defaultReadModeForMobileSelected && this.displayToggles[val]) {
+        /* Sets the default view on mobile to the first default read mode view which is available. */
+        this.show = val;
+        defaultReadModeForMobileSelected = true;
+      }
+
+      if (this.availableViewModes.indexOf(val) !== -1) {
+        const view = { type: val } as any;
+        newViews.push(view);
+      }
+    });
+    
     this.router.navigate(
       [],
       {
         relativeTo: this.route,
-        queryParams: { views: viewsUrlString },
+        queryParams: { views: JSON.stringify(newViews) },
         queryParamsHandling: 'merge'
       }
     );
@@ -2166,33 +2139,17 @@ export class ReadPage /*implements OnDestroy*/ {
 
     if (this.availableViewModes.indexOf(type) !== -1) {
       const view = {
-        content: `This is an upcoming ${type} view`,
-        type,
-        established: { show: (type === 'established' && !this.multilingualEST), id: id },
-        comments: { show: (type === 'comments'), id: id },
-        facsimiles: { show: (type === 'facsimiles'), id: id },
-        manuscripts: { show: (type === 'manuscripts'), id: id },
-        variations: { show: (type === 'variations'), id: id, variationSortOrder: variationSortOrder },
-        introduction: { show: (type === 'introduction'), id: id },
-        songexample: { show: (type === 'songexample'), id: id },
-        illustrations: { show: (type === 'illustrations'), image: image },
-        legend: { show: (type === 'legend'), id: id }
+        type: type,
+        ...id && { id: id },
+        ...image && { image: image },
+        ...variationSortOrder && { variationSortOrder: variationSortOrder }
       } as any;
-      if (this.multilingualEST) {
-        for (const lang of this.estLanguages) {
-          view['established_' + lang] = { show: (type === 'established' && language === lang), id: id }
-        }
-        if (type === 'established' && language) {
-          view['type'] = 'established_' + language;
-        }
+
+      if (this.multilingualEST && type === 'established' && language) {
+        view['type'] = 'established_' + language;
       }
 
       this.views.push(view);
-
-      // Always open two variations if no variation is yet open
-      // if (type === 'variations' && this.hasKey('variations', this.views) === false) {
-      //   this.addView('variations');
-      // }
     }
   }
 
@@ -2207,6 +2164,9 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   removeSlide(i: any) {
+    this.removeVariationSortOrderFromService(i);
+    this.views.splice(i, 1);
+    // TODO: Update views in queryparams
   }
 
   /**
@@ -2214,14 +2174,32 @@ export class ReadPage /*implements OnDestroy*/ {
    * positions with the view on the right. If a FabContainer is passed
    * it is closed.
    */
-  moveViewRight(id: number, fab?: IonFab) {}
+  moveViewRight(id: number, fab?: IonFab) {
+    if (id > -1 && id < this.views.length - 1) {
+      this.views = this.moveArrayItem(this.views, id, id + 1);
+      // this.updateURL(); TODO: Update views in queryparams
+      this.switchVariationSortOrdersInService(id, id + 1);
+      if (fab !== undefined) {
+        fab.close();
+      }
+    }
+  }
 
   /**
    * Moves the view with index id one step to the left, i.e. exchange
    * positions with the view on the left. If a FabContainer is passed
    * it is closed.
    */
-  moveViewLeft(id: number, fab?: IonFab) {}
+  moveViewLeft(id: number, fab?: IonFab) {
+    if (id > 0 && id < this.views.length) {
+      this.views = this.moveArrayItem(this.views, id, id - 1);
+      // this.updateURL(); TODO: Update views in queryparams
+      this.switchVariationSortOrdersInService(id, id - 1);
+      if (fab !== undefined) {
+        fab.close();
+      }
+    }
+  }
 
   /**
    * Reorders the given array by moving the item at position 'fromIndex'

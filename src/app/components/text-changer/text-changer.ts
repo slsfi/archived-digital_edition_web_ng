@@ -614,7 +614,7 @@ export class TextChangerComponent {
       const itemIdParts = item.itemId.split('_');
       const collectionId = itemIdParts[0];
       const publicationId = itemIdParts[1];
-      let chapterId = 'nochapter';
+      let chapterId = '';
       if (itemIdParts[2]) {
         chapterId = itemIdParts[2];
       }
@@ -649,7 +649,7 @@ export class TextChangerComponent {
         this.events.publishUpdatePositionInPageRead(params);
       } else {
         console.log('Opening read from TextChanger.open()');
-        this.router.navigate(['/publication', collectionId, 'text', publicationId, chapterId, 'not', 'infinite', 'nosong', 'searchtitle', this.defaultReadViews]);
+        this.router.navigate(['/publication', collectionId, 'text', publicationId, chapterId]);
       }
     }
 
