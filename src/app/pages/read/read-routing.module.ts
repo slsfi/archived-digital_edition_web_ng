@@ -4,7 +4,7 @@ import { ReadPage } from './read';
 
 const routes: Routes = [
   {
-    path: ':collectionID/text/:publicationID/:chapterID/:facs_id/:facs_nr/:song_id/:search_title/:urlviews',
+    path: ':collectionID/text/:publicationID/:chapterID/:facs_id/:facs_nr/:song_id/:search_title/:views',
     component: ReadPage,
   },
   {

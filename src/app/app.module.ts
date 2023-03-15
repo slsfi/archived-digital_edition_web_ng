@@ -36,7 +36,6 @@ import { DigitalEditionListModule } from './components/digital-edition-list/digi
 import { ComponentsModule } from './components/components.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { MathJaxModule } from './components/math-jax/math-jax.module';
-import { CommentModalPage } from './modals/comment-modal/comment-modal';
 import { ReferenceDataModalPage } from './modals/reference-data-modal/reference-data-modal';
 import { DownloadTextsModalPage } from './modals/download-texts-modal/download-texts-modal';
 import { FacsimileZoomPageModule } from './modals/facsimile-zoom/facsimile-zoom.module';
@@ -58,7 +57,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
 @NgModule({
   declarations: [
     DigitalEditionsApp,
-    CommentModalPage,
     ReferenceDataModalPage,
     DownloadTextsModalPage,
   ],
@@ -124,7 +122,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     DigitalEditionsApp,
     ReadPopoverPage,
     UserSettingsPopoverPage,
-    CommentModalPage,
     ReferenceDataModalPage,
     FacsimileZoomModalPage,
     DownloadTextsModalPage,

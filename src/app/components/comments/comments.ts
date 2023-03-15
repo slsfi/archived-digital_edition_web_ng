@@ -52,7 +52,7 @@ export class CommentsComponent {
   }
 
   ngOnInit() {
-    console.log('link', this.link);
+    // console.log('comments link', this.link);
     if ( this.external ) {
       const extParts = String(this.external).split(' ');
       this.textService.getCollectionAndPublicationByLegacyId(extParts[0] + '_' + extParts[1]).subscribe(data => {
@@ -76,7 +76,6 @@ export class CommentsComponent {
   }
 
   setText() {
-    console.log('link', this.link);
     this.commentService.getComment(this.link || '').subscribe({
       next: (text) => {
         this.textLoading = false;

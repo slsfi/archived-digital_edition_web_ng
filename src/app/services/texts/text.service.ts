@@ -23,6 +23,7 @@ export class TextService {
   variationsOrder: number[] = [];
   varIdsInStorage: string[] = [];
   readtextIdsInStorage: string[] = [];
+  recentPageReadViews: string[] = [];
 
   /* A more logical place for the activeTocOrder variable would be the table-of-contents service,
      but due to the way it's set up it can't be a singleton service. That's why activeTocOrder

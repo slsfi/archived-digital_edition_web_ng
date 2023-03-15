@@ -1,20 +1,17 @@
 import { Component, Renderer2, ElementRef, OnDestroy, ViewChild, Input, EventEmitter, SecurityContext, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActionSheetController, IonFab, IonPopover, ModalController, PopoverController, ToastController } from '@ionic/angular';
+import { IonFab, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { TranslateModule, LangChangeEvent, TranslateService, TranslatePipe } from '@ngx-translate/core';
-import { global } from 'src/app/global';
-import { CommentModalPage } from 'src/app/modals/comment-modal/comment-modal';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { SearchAppPage } from 'src/app/modals/search-app/search-app';
 import { EstablishedText } from 'src/app/models/established-text.model';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { TableOfContentsItem } from 'src/app/models/table-of-contents-item.model';
-import { TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
-import { PublicationCacheService } from 'src/app/services/cache/publication-cache.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -30,18 +27,6 @@ import { config } from "src/app/services/config/config";
 import { DragScrollComponent } from 'src/directives/ngx-drag-scroll/public-api';
 import { isBrowser } from 'src/standalone/utility-functions';
 
-/**
- * A page used for reading publications.
- * Allows user to read established, manuscript, variation and facsimile version of a specific publication.
- * This is done with the help of components: read-text, manuscripts, variations and facsimiles.
- * Desktop version uses draggable horizontal list of cards, mobile version uses tabs.
- */
-
-enum TextType {
-  TitlePage,
-  Introduction,
-  ReadText
-}
 
 // @IonicPage({
 //   name: 'read',
@@ -62,19 +47,12 @@ export class ReadPage /*implements OnDestroy*/ {
   // @ViewChild('fab') fabList: FabContainer;
   // @ViewChild('settingsIconElement') settingsIconElement: ElementRef;
 
-  textType: TextType = TextType.ReadText;
-
   id?: string;
   multilingualEST: false;
   estLanguages = [];
   estLang: 'none';
   establishedText?: EstablishedText;
-  errorMessage?: string;
-  tocRoot?: TableOfContentsCategory[];
   popover?: ReadPopoverPage;
-  subTitle?: string;
-  cacheItem = false;
-  collectionTitle?: string;
   hasOccurrenceResults = false;
   showOccurrencesModal = false;
   searchResult: string | null;
@@ -103,12 +81,9 @@ export class ReadPage /*implements OnDestroy*/ {
   // backdropWidth: number;
   // showAddViewsFabBackdrop: boolean = false;
 
+  public urlParameters$: Observable<any>;
+
   addViewPopoverisOpen: boolean = false;
-
-  prevItem: any;
-  nextItem: any;
-
-  divWidth = '100px';
 
   private unlistenFirstTouchStartEvent?: () => void;
   private unlistenClickEvents?: () => void;
@@ -126,33 +101,16 @@ export class ReadPage /*implements OnDestroy*/ {
 
   typeVersion?: string;
   displayToggles: any;
-  displayToggle = true;
-
-  prevnext: any;
-  texts: any;
 
   occurrenceResult?: OccurrenceResult;
 
   legacyId = '';
-  songDatafile = '';
 
   views = [] as any;
 
   show = 'established'; // Mobile tabs
 
-  availableViewModes = [
-    'manuscripts',
-    'variations',
-    'comments',
-    'established',
-    'facsimiles',
-    'introduction',
-    'songexample',
-    'illustrations',
-    'legend'
-  ];
-
-  appUsesAccordionToc = false;
+  availableViewModes: Array<string> = [];
 
   tooltips = {
     'persons': {} as any,
@@ -168,9 +126,8 @@ export class ReadPage /*implements OnDestroy*/ {
   paramChapterID: any;
   paramFacsId: any;
   paramFacsNr: any;
-  paramSongId: any;
   paramSearchTitle: any;
-  paramUrlviews: any;
+  paramViews: any;
 
   queryParamTocItem: any
   queryParamRoot: any
@@ -194,13 +151,11 @@ export class ReadPage /*implements OnDestroy*/ {
     // public params: NavParams,
     private textService: TextService,
     private commentService: CommentService,
-    public toastCtrl: ToastController,
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
     public popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
-    public actionSheetCtrl: ActionSheetController,
     public modalCtrl: ModalController,
     private sanitizer: DomSanitizer,
     private tooltipService: TooltipService,
@@ -211,13 +166,11 @@ export class ReadPage /*implements OnDestroy*/ {
     private storage: StorageService,
     public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
-    public publicationCacheService: PublicationCacheService,
     private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.isCached();
     this.searchResult = null;
 
     this.toolTipPosType = 'fixed';
@@ -238,8 +191,6 @@ export class ReadPage /*implements OnDestroy*/ {
     this.intervalTimerId = 0;
 
     // this.backdropWidth = 0;
-
-    this.appUsesAccordionToc = config.AccordionTOC ?? undefined;
 
     try {
       const i18n = config.i18n ?? undefined;
@@ -304,70 +255,44 @@ export class ReadPage /*implements OnDestroy*/ {
 
     // Hide some or all of the display toggles (variations, facsimiles, established etc.)
     this.displayToggles = config.settings?.displayTypesToggles ?? [];
+    for (const toggle in this.displayToggles) {
+      if (this.displayToggles[toggle as keyof typeof this.displayToggles]) {
+        this.availableViewModes.push(toggle);
+      }
+    }
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.show = config.defaults?.ReadModeView ?? 'established';
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.paramCollectionID = params['collectionID'];
-      this.paramPublicationID = params['publicationID'];
-      this.paramChapterID = params['chapterID'];
-      this.paramFacsId = params['facs_id'];
-      this.paramFacsNr = params['facs_nr'];
-      this.paramSongId = params['song_id'];
-      this.paramSearchTitle = params['search_title'];
-      this.paramUrlviews = params['urlviews'];
+    this.urlParameters$ = combineLatest(
+      [this.route.params, this.route.queryParams]
+    ).pipe(
+      map(([params, queryParams]) => ({...params, ...queryParams}))
+    );
 
-      this.paramsLoaded = true;
+    this.urlParameters$.subscribe(routeParams => {
+      console.log('route params and queryparams:', routeParams);
 
-      if (this.paramsLoaded && this.queryParamsLoaded) {
-        this.ngOnInitLang();
+      /*
+      let onlyViewsChange = false;
+      if (this.paramCollectionID !== routeParams['collectionID']) {
+        this.paramCollectionID = routeParams['collectionID'];
       }
-    });
+      if (this.paramPublicationID !== routeParams['publicationID']) {
+        this.paramPublicationID = routeParams['publicationID'];
+      }
+*/
+      this.paramCollectionID = routeParams['collectionID'] ?? undefined;
+      this.paramPublicationID = routeParams['publicationID'] ?? undefined;
+      this.paramChapterID = routeParams['chapterID'] ?? undefined;
+      this.paramFacsId = routeParams['facs_id'] ?? undefined;
+      this.paramFacsNr = routeParams['facs_nr'] ?? undefined;
+      this.paramSearchTitle = routeParams['search_title'] ?? undefined;
+      this.paramViews = routeParams['views'] ?? undefined;
 
-    this.route.queryParams.subscribe(params => {
-      if (params['tocItem']) {
-        try {
-          this.queryParamTocItem = JSON.parse(params['tocItem']);
-        } catch(e: any) {}
-      }
-      if (params['root']) {
-        try {
-          this.queryParamRoot = JSON.parse(params['root']);
-        } catch(e: any) {}
-      }
-      if (params['views']) {
-        try {
-          this.queryParamViews = JSON.parse(params['views']);
-        } catch(e: any) {}
-      }
-      if (params['searchResult']) {
-        try {
-          this.queryParamSearchResult = JSON.parse(params['searchResult']);
-        } catch(e: any) {}
-      }
-      if (params['occurrenceResult']) {
-        try {
-          this.queryParamOccurrenceResult = JSON.parse(params['occurrenceResult']);
-        } catch(e: any) {}
-      }
-      if (params['matches']) {
-        try {
-          this.queryParamMatches = JSON.parse(params['matches']);
-        } catch(e: any) {}
-      }
-      this.queryParamId = params['id'];
-      this.queryParamLegacyId = params['legacyId'];
-      this.queryParamSelectedItemInAccordion = params['selectedItemInAccordion'];
-      this.queryParamObjectType = params['objectType'];
-      this.queryParamShowOccurrencesModalOnRead = params['showOccurrencesModalOnRead'];
-      this.queryParamTocLinkId = params['tocLinkId'];
-
-      this.queryParamsLoaded = true;
-
-      if (this.paramsLoaded && this.queryParamsLoaded) {
+      if (this.paramCollectionID && this.paramPublicationID) {
         this.ngOnInitLang();
       }
     });
@@ -375,115 +300,33 @@ export class ReadPage /*implements OnDestroy*/ {
 
   ngOnInitLang() {
     this.langService.getLanguage().subscribe(lang => {
-      if (this.paramCollectionID !== 'songtypes') {
-        this.setCollectionTitle();
+
+      let link = this.paramCollectionID + '_' + this.paramPublicationID;
+      if (this.paramChapterID) {
+        link += '_' + this.paramChapterID;
       }
 
-
-      if (this.userSettingsService.isMobile()) {
-        // this.navBar.backButtonClick
-      }
-
-      let link = null;
-
-      this.matches = [];
-      this.availableViewModes = [];
+      // TODO: get rid of this.legacyId, it probably is not needed
+      this.legacyId = link; //<collectionID>_<publicationID>
+      this.establishedText = new EstablishedText({ link: link, id: link, title: '', text: '' });
 
 
-      let foundTrueCount = 0;
-      for (const toggle in this.displayToggles) {
-        if (this.displayToggles[toggle as keyof typeof this.displayToggles] && toggle !== 'introduction') {
-          this.availableViewModes.push(toggle);
-          foundTrueCount++;
-        }
-      }
-      if (foundTrueCount <= 1) {
-        this.displayToggle = false;
-      }
-
-
-
-      if (this.queryParamTocItem !== undefined && this.queryParamTocItem !== null) {
-        // @TODO: fix this. it is unmaintainable
-        this.id = this.queryParamTocItem.itemId;
-        const collectionIsUndefined = (this.queryParamTocItem.collection_id !== undefined);
-        const linkIdIsNotUndefined = (this.queryParamTocItem.link_id !== undefined);
-        const collectionID = this.queryParamTocItem.collection_id;
-
-        link = (collectionIsUndefined ? collectionID : this.queryParamTocItem.toc_ed_id) + '_'
-          + (this.queryParamTocItem.link_id || this.queryParamTocItem.toc_linkID);
-
-      } else if (this.paramCollectionID !== undefined && this.queryParamId === 'introduction') {
-
-      } else if (this.paramCollectionID !== undefined && this.queryParamId !== undefined) {
-        this.id = this.queryParamId;
-        link = this.paramCollectionID + '_' + this.id;
-      }
-
-      const title = global.getSubtitle();
-      this.tocRoot = this.queryParamRoot;
-      this.establishedText = new EstablishedText({ link: link, id: this.id, title: title, text: '' });
-
-      if (this.queryParamLegacyId !== undefined) {
-        this.legacyId = this.queryParamLegacyId;
-        this.establishedText.link = this.queryParamLegacyId;
-      } else {
-
-        this.legacyId = this.paramCollectionID + '_' + this.paramPublicationID;
-        this.establishedText.link = this.paramCollectionID + '_' + this.paramPublicationID;
-
-        if (this.paramChapterID !== undefined && !this.paramChapterID.startsWith('nochapter') &&
-        this.paramChapterID !== ':chapterID' && this.paramChapterID !== 'chapterID') {
-          this.establishedText.link += '_' + this.paramChapterID;
-        }
-
+      // TODO: SEbastian: nochapter with pos not taken into account above
+      /*
         if (this.paramChapterID !== undefined && this.paramChapterID.startsWith('nochapter;')) {
           this.nochapterPos = this.paramChapterID.replace('nochapter;', '');
         } else {
           this.nochapterPos = null;
         }
-
-        // this.viewCtrl.setBackButtonText('');
-
-        if (!this.queryParamSelectedItemInAccordion) {
-          const searchTocItem = true;
-          this.getTocRoot(this.paramCollectionID, searchTocItem);
-        }
-
-        if (this.paramCollectionID !== 'songtypes' && !this.appUsesAccordionToc) {
-          // this.events.publish('pageLoaded:single-edition', { 'title': title });
-        }
-      }
+      */
 
       // Save the id of the previous and current read view text in textService.
-      if (this.establishedText && this.establishedText.link) {
-        this.textService.previousReadViewTextId = this.textService.readViewTextId;
-        this.textService.readViewTextId = this.establishedText.link;
-      }
-
-      if (this.queryParamMatches !== undefined) {
-        this.matches = this.queryParamMatches;
-      }
+      this.textService.previousReadViewTextId = this.textService.readViewTextId;
+      this.textService.readViewTextId = this.establishedText.link;
 
       this.setDefaultViews();
 
-      this.setTocCache();
-
-      this.updateTexts();
-
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.updateTexts();
-      });
-
-
-      /*if (this.params.get('url') !== undefined && this.params.get('url').indexOf('=') !== -1) {
-        this.songID = this.params.get('url').split('=')[1];
-      }*/
-
-      // if (this.params.get('song_datafile') !== undefined && this.params.get('song_datafile').indexOf('.json') !== -1) {
-      //   //
-      // }
-
+      /*
       if (this.queryParamSearchResult !== undefined) {
         this.searchResult = this.queryParamSearchResult;
       }
@@ -501,36 +344,22 @@ export class ReadPage /*implements OnDestroy*/ {
           }
         });
       }
+      */
 
+      /*
       this.events.getShowView().subscribe((data) => {
         const { view, id, chapter } = data;
         // user and time are the same arguments passed in `events.publish(user, time)`
         console.log('Welcome', view, 'at', id, 'chapter', chapter);
         this.openNewExternalView(view, id);
       })
+      */
 
       this.getAdditionalParams();
     });
   }
 
   ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishMusicAccordionReset(true);
-
-    // if (this.userSettingsService.isMobile()) {
-    //   this.viewCtrl.showBackButton(true);
-    // } else {
-    //   this.viewCtrl.showBackButton(false);
-    // }
-    if (this.paramPublicationID === 'first') {
-      this.showFirstText();
-    } else {
-      this.showText();
-    }
-    if ( this.establishedText !== undefined && this.establishedText.title !== undefined ) {
-      // this.events.publish('pageLoaded:read', { 'title': this.establishedText.title });
-    }
-
     this.events.getUpdatePositionInPageRead().subscribe((params) => {
       /* This is triggered when the publication chapter that should be opened in page-read
          is the same as the previous, only with a different text position. Then page-read
@@ -595,34 +424,36 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   ngAfterViewInit() {
-    this.ngZone.runOutsideAngular(() => {
-      let iterationsLeft = 6;
-      clearInterval(this.intervalTimerId);
-      const that = this;
-      this.intervalTimerId = window.setInterval(function() {
-        try {
-          if (iterationsLeft < 1) {
-            clearInterval(that.intervalTimerId);
-          } else {
-            iterationsLeft -= 1;
-            if (that.establishedText && that.establishedText.link) {
-              const itemId = 'toc_' + that.establishedText.link;
-              let foundElem = document.getElementById(itemId);
-              if (foundElem === null || foundElem === undefined) {
-                // Scroll to toc item without position
-                foundElem = document.getElementById(itemId.split(';').shift() || '');
-              }
-              if (foundElem) {
-                that.scrollToTOC(foundElem);
-                clearInterval(that.intervalTimerId);
+    if (isBrowser()) {
+      this.ngZone.runOutsideAngular(() => {
+        let iterationsLeft = 6;
+        clearInterval(this.intervalTimerId);
+        const that = this;
+        this.intervalTimerId = window.setInterval(function() {
+          try {
+            if (iterationsLeft < 1) {
+              clearInterval(that.intervalTimerId);
+            } else {
+              iterationsLeft -= 1;
+              if (that.establishedText && that.establishedText.link) {
+                const itemId = 'toc_' + that.establishedText.link;
+                let foundElem = document.getElementById(itemId);
+                if (foundElem === null || foundElem === undefined) {
+                  // Scroll to toc item without position
+                  foundElem = document.getElementById(itemId.split(';').shift() || '');
+                }
+                if (foundElem) {
+                  that.scrollToTOC(foundElem);
+                  clearInterval(that.intervalTimerId);
+                }
               }
             }
+          } catch (e) {
+            console.log('error in setInterval function in PageRead.ngAfterViewInit()', e);
           }
-        } catch (e) {
-          console.log('error in setInterval function in PageRead.ngAfterViewInit()', e);
-        }
-      }.bind(this), 500);
-    });
+        }.bind(this), 500);
+      });
+    }
     // this.setFabBackdropWidth();
   }
 
@@ -640,11 +471,6 @@ export class ReadPage /*implements OnDestroy*/ {
       this.facs_id = this.paramFacsId;
       this.facs_nr = this.paramFacsNr;
 
-      if (this.paramSongId !== undefined &&
-        this.paramSongId !== ':song_id' &&
-        this.paramSongId !== 'nosong') {
-        this.song_id = this.paramSongId;
-      }
     } else {
       //
     }
@@ -705,86 +531,7 @@ export class ReadPage /*implements OnDestroy*/ {
     return await searchModal.present();
   }
 
-  /**
-   * Get collection toc.
-   * Search toc item in accordion on page refresh or share.
-   *
-   * @param id - collectionID
-   * @param searchTocItem
-   */
-  getTocRoot(id: string, searchTocItem?: boolean) {
-    this.tocService.getTableOfContents(id)
-      .subscribe(
-        (tocItems: any) => {
-          tocItems.selectedCollId = null;
-          tocItems.selectedPubId = null;
-          if (this.paramCollectionID && this.paramPublicationID) {
-            tocItems.selectedCollId = this.paramCollectionID;
-            tocItems.selectedPubId = this.paramPublicationID;
-          }
-
-          const chIDFromParams = this.paramChapterID;
-          if (chIDFromParams !== undefined
-          && chIDFromParams !== null
-          && !chIDFromParams.startsWith('nochapter')
-          && chIDFromParams !== ':chapterID'
-          && chIDFromParams !== 'chapterID') {
-            tocItems.selectedChapterId = chIDFromParams;
-          } else {
-            tocItems.selectedChapterId = '';
-          }
-
-          const tocLoadedParams = { tocItems: tocItems } as any;
-
-          if (searchTocItem && this.appUsesAccordionToc) {
-            tocLoadedParams['searchTocItem'] = true;
-            tocLoadedParams['collectionID'] = this.paramCollectionID;
-            tocLoadedParams['publicationID'] = this.paramPublicationID;
-            tocLoadedParams['chapterID'] = this.paramChapterID;
-
-            if (this.search_title) {
-              tocLoadedParams['search_title'] = this.search_title;
-            }
-          }
-          this.events.publishTableOfContentsLoaded(tocLoadedParams);
-          this.storage.set('toc_' + id, tocItems);
-        },
-        error => { this.errorMessage = <any>error });
-  }
-
-  setTocCache() {
-    const id = this.paramCollectionID;
-    this.tocService.getTableOfContents(id)
-      .subscribe(
-        tocItems => {
-          this.storage.set('toc_' + id, tocItems);
-        },
-        error => console.log(error)
-      );
-  }
-
-  setCollectionTitle() {
-    this.textService.getCollection(this.paramCollectionID).subscribe(
-      collection => {
-        this.collectionTitle = collection.name;
-      },
-      error => {
-        console.log('could not get collection title');
-      }
-    );
-  }
-
   setViews(viewmodes: any) {
-    if (Array(viewmodes).length === 1) {
-      if (viewmodes[0] === ':urlviews') {
-        this.setConfigDefaultReadModeViews();
-      }
-    }
-
-    if (viewmodes[0] === '' && viewmodes[1] === ':urlviews') {
-      viewmodes[0] = this.show;
-    }
-
     let variationsViewOrderNumber = 0;
     let sameCollection = false;
     // Check if the same collection as the previous time page-read was loaded.
@@ -799,45 +546,51 @@ export class ReadPage /*implements OnDestroy*/ {
       this.clearVariationsFromStorage();
     }
 
-    const that = this;
-    viewmodes.forEach(function (viewmode: any) {
-      // set the first viewmode as default
-      that.show = viewmodes[0];
+    let defaultReadModeForMobileSelected = false;
+    viewmodes.forEach((viewmode: any) => {
+      if (!defaultReadModeForMobileSelected && this.displayToggles[viewmode]) {
+        /* Sets the default view on mobile to the first default read mode view which is available. */
+        this.show = viewmode;
+        defaultReadModeForMobileSelected = true;
+      }
 
-      // check if it is similar to established_sv
+      // check if view type it is similar to established_sv
       const parts = viewmode.split('_');
       if (parts.length > 1) {
-        that.addView(parts[0], null, null, null, null, parts[1]);
+        this.addView(parts[0], null, null, null, null, parts[1]);
       } else {
         if (viewmode === 'variations') {
           // this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
-          if (sameCollection && that.textService.variationsOrder.length > 0) {
-            that.addView(viewmode, null, null, null, null, null, that.textService.variationsOrder[variationsViewOrderNumber]);
+          if (sameCollection && this.textService.variationsOrder.length > 0) {
+            this.addView(viewmode, null, null, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
           } else {
-            that.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
-            that.textService.variationsOrder.push(variationsViewOrderNumber);
+            this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
+            this.textService.variationsOrder.push(variationsViewOrderNumber);
           }
           variationsViewOrderNumber++;
         } else {
-          that.addView(viewmode);
+          this.addView(viewmode);
         }
       }
-    }.bind(this));
+    });
   }
 
   showAllViews() {
-    const that = this;
-    this.availableViewModes.forEach(function (viewmode: any) {
-      const viewTypesShown = that.getViewTypesShown();
-      if (viewmode !== 'showAll' && that.viewModeShouldBeShown(viewmode) && viewTypesShown.indexOf(viewmode) === -1) {
-        that.show = viewmode;
-        that.addView(viewmode);
+    this.availableViewModes.forEach((viewmode: any) => {
+      const viewTypesShown = this.getViewTypesShown();
+      if (
+        viewmode !== 'showAll' &&
+        this.viewModeShouldBeShown(viewmode) &&
+        viewTypesShown.indexOf(viewmode) === -1
+      ) {
+        this.show = viewmode;
+        this.addView(viewmode);
       }
-    }.bind(this));
+    });
   }
 
   viewModeShouldBeShown(viewmode: any) {
-    if (viewmode === 'established' && !this.displayToggles['established']) {
+    if (viewmode.startsWith('established') && !this.displayToggles[viewmode]) {
       return false;
     } else if (viewmode === 'comments' && !this.displayToggles['comments']) {
       return false;
@@ -846,10 +599,6 @@ export class ReadPage /*implements OnDestroy*/ {
     } else if (viewmode === 'manuscripts' && !this.displayToggles['manuscripts']) {
       return false;
     } else if (viewmode === 'variations' && !this.displayToggles['variations']) {
-      return false;
-    } else if (viewmode === 'introduction' && !this.displayToggles['introduction']) {
-      return false;
-    } else if (viewmode === 'songexample' && !this.displayToggles['songexample']) {
       return false;
     } else if (viewmode === 'illustrations' && !this.displayToggles['illustrations']) {
       return false;
@@ -860,72 +609,39 @@ export class ReadPage /*implements OnDestroy*/ {
     return true;
   }
 
-  /**
-   * This can be used to open default views when coming from an other page.
-   * It can be used for search results. Just send in nav params a list of objects,
-   * where each object has 'type' and 'id' properties.
-   * Example: { type: 'manuscript', id: 'the_id_to_the_specific_ms' }
-   * This used for example in person-search and place-search
-   *
-   * If no default views needs to be opened it opens the default views set in config.json
-   */
   setDefaultViews() {
-    let urlViews = '';
-    try {
-      urlViews = this.paramUrlviews || '';
-    } catch (e) {
-      console.log(e);
+    let views: Array<string> = [];
+    if (this.paramViews) {
+      views = this.paramViews.split('-');
     }
-    const views = (urlViews + '').split('&');
+
+    if (views.length < 1) {
+      // There are no views defined in the url params => open either recent or default views
+      if (this.textService.recentPageReadViews.length > 0) {
+        this.setViews(this.textService.recentPageReadViews);
+      } else {
+        // this.setConfigDefaultReadModeViews();
+      }
+    } else {
+      // Open with the views defined in the url params
+      this.setViews(views);
+    }
+
+
+    /*
     if (this.queryParamViews !== undefined) {
       this.setViewsFromSearchResults();
     } else {
       if (urlViews !== 'default' && urlViews.length > 0 && this.viewsExistInAvailableViewModes(views)) {
         this.openUrlViews(views);
       } else {
-        this.setOpenedViewsFromLocalStorage();
+        // this.setOpenedViewsFromLocalStorage();
       }
     }
+    */
   }
 
-  openUrlViews(views: any) {
-    this.setViews(views);
-
-    const viewmodes = {
-      views: views,
-      expires: this.viewModeExpires()
-    };
-
-    this.storage.set('viewmodes', viewmodes);
-  }
-
-  viewModeExpires() {
-    const today = new Date();
-    const expires = new Date();
-    const daysUntilExpires = config.cache?.viewmodes?.daysUntilExpires ?? 1;
-
-    expires.setDate(today.getDate() + daysUntilExpires);
-
-    return expires;
-  }
-
-  setOpenedViewsFromLocalStorage() {
-    this.storage.get('viewmodes').then((viewmodes) => {
-      const now = new Date();
-
-      if (viewmodes && viewmodes !== undefined) {
-        const hasExpired = viewmodes.expires < now;
-        if (viewmodes !== undefined && viewmodes.views.length > 0 && !hasExpired && this.viewsExistInAvailableViewModes(viewmodes.views)) {
-          this.setViews(viewmodes.views);
-        } else {
-          this.setConfigDefaultReadModeViews();
-        }
-      } else {
-        this.setConfigDefaultReadModeViews();
-      }
-    });
-  }
-
+  /*
   setViewsFromSearchResults() {
     for (const v of this.queryParamViews) {
       if (v.type) {
@@ -950,35 +666,41 @@ export class ReadPage /*implements OnDestroy*/ {
       }
     }
   }
+  */
 
   /**
-   * Supports also multiple deafault read-modes.
+   * Supports also multiple default read-modes.
    * If there are multiple it loops through every read-mode (array of strings).
    * If it's not an array it just sets the string value it gets from config.json.
    * And if no config for this was set at all it sets established as the default.
    */
   setConfigDefaultReadModeViews() {
     const defaultReadModes: any = config.defaults?.ReadModeView ?? 'established';
-    if (defaultReadModes !== undefined && defaultReadModes.length > 0) {
-      if (defaultReadModes instanceof Array) {
-        let defaultReadModeForMobileSelected = false;
-        const that = this;
-        defaultReadModes.forEach(function (val: any) {
-          if (!defaultReadModeForMobileSelected && that.displayToggles[val]) {
-            /* Sets the default view on mobile to the first default read mode view which is available. */
-            that.show = val;
-            defaultReadModeForMobileSelected = true;
-          }
-          that.addView(val);
-        }.bind(this));
-      } else {
-        this.show = defaultReadModes;
-        this.addView(defaultReadModes);
-      }
+    let viewsUrlString = '';
+    if (defaultReadModes instanceof Array) {
+      let defaultReadModeForMobileSelected = false;
+      defaultReadModes.forEach((val: any) => {
+        if (!defaultReadModeForMobileSelected && this.displayToggles[val]) {
+          /* Sets the default view on mobile to the first default read mode view which is available. */
+          this.show = val;
+          defaultReadModeForMobileSelected = true;
+        }
+        this.addView(val);
+      });
+      viewsUrlString = defaultReadModes.join('-');
     } else {
-      this.show = 'established';
-      this.addView('established');
+      this.show = defaultReadModes;
+      this.addView(defaultReadModes);
+      viewsUrlString = defaultReadModes;
     }
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { views: viewsUrlString },
+        queryParamsHandling: 'merge'
+      }
+    );
   }
 
   updateURL() {
@@ -995,17 +717,9 @@ export class ReadPage /*implements OnDestroy*/ {
       this.paramFacsNr !== ':facs_nr') {
       facs_id = this.paramFacsId;
       facs_nr = this.paramFacsNr;
-      if (this.paramSongId !== undefined &&
-        this.paramSongId !== ':song_id' &&
-        this.paramSongId !== 'nosong') {
-        song_id = this.paramSongId;
-      } else {
-        song_id = 'nosong';
-      }
     } else {
       facs_id = 'not';
       facs_nr = 'infinite';
-      song_id = 'nosong';
     }
 
     let chapter_id = 'nochapter';
@@ -1087,97 +801,6 @@ export class ReadPage /*implements OnDestroy*/ {
     }.bind(this));
 
     return viewModes;
-  }
-
-  updateCachedViewModes() {
-    const viewmodes = {
-      views: this.getViewTypesShown(),
-      expires: this.viewModeExpires()
-    };
-
-    this.storage.set('viewmodes', viewmodes);
-  }
-
-  isCached() {
-    const collectionID = this.paramCollectionID;
-    const publicationID = this.queryParamId;
-    const id = collectionID + '_' + publicationID;
-
-    this.storage.get(id + '_cached').then((is_cached) => {
-      if (is_cached) {
-        this.cacheItem = true;
-      } else {
-        this.cacheItem = false;
-      }
-    });
-  }
-
-  download() {
-    this.cacheItem = !this.cacheItem;
-
-    const collectionID = this.paramCollectionID;
-    const publicationID = this.paramPublicationID;
-
-    if (this.cacheItem) {
-      this.addToCache(collectionID, publicationID);
-    } else if (!this.cacheItem) {
-      this.removeFromCache(collectionID, publicationID);
-    }
-  }
-
-  async addToCache(collectionID: any, publicationID: any) {
-    const id = collectionID + '_' + publicationID;
-    const types = ['est', 'ms', 'var'];
-    const added = true;
-
-    if (this.collectionTitle) {
-      await this.publicationCacheService.cachePublication(collectionID, publicationID, this.collectionTitle);
-    }
-    await this.storage.set(id + '_cached', true);
-
-    let status = 'Something went wrong';
-    if (added) {
-      status = 'Publication was successfully added to cache';
-    }
-
-    const toast = await this.toastCtrl.create({
-      message: status,
-      duration: 3000,
-      position: 'bottom'
-    });
-
-    await toast.present();
-  }
-
-  async removeFromCache(collectionID: any, publicationID: any) {
-    const id = collectionID + '_' + publicationID;
-    const types = ['est', 'ms', 'var'];
-    let removed = true;
-
-    await this.publicationCacheService.removeFromCache(collectionID, publicationID);
-    await this.storage.set(id + '_cached', false);
-
-    for (let i = 0; i < types.length; i++) {
-      await this.storage.get(id + '_' + types[i]).then((content) => {
-        if (content) {
-          removed = false;
-          this.storage.set(id + '_cached', true);
-        }
-      });
-    }
-
-    let status = 'Something went wrong'
-    if (removed) {
-      status = 'Publication was successfully removed from cache';
-    }
-
-    const toast = await this.toastCtrl.create({
-      message: status,
-      duration: 3000,
-      position: 'bottom'
-    });
-
-    await toast.present();
   }
 
   scrollToTOC(element: HTMLElement) {
@@ -1811,117 +1434,6 @@ export class ReadPage /*implements OnDestroy*/ {
       });
 
     });
-  }
-
-  public get isIntroduction() {
-    return this.textType === TextType.Introduction;
-  }
-  public get isReadText() {
-    return this.textType === TextType.ReadText;
-  }
-  public get isTitlePage() {
-    return this.textType === TextType.TitlePage;
-  }
-
-  private showIntroduction() {
-    this.textType = TextType.Introduction;
-    if (this.establishedText) {
-      this.establishedText.content = '';
-    }
-    this.getIntroduction(this.paramCollectionID, this.translate.currentLang);
-  }
-
-  private showText() {
-    this.textType = TextType.ReadText;
-  }
-
-  /**
-   * TODO: This function doesn't seem to work as intended. It probably fails because it uses
-   * TODO: legacyId, which should be legacy_id if you look at what the API returns. Most projects
-   * TODO: don't use legacy_id.
-   */
-  private showFirstText() {
-    this.textType = TextType.ReadText;
-    const cache_id = 'col_' + this.paramCollectionID + 'first_pub';
-    let inCache = false;
-
-    this.storage.get(cache_id).then((content) => {
-      if (content) {
-        this.establishedText = content;
-        inCache = true;
-      }
-    });
-
-    if (!inCache) {
-      this.textService.getCollectionPublications(this.paramCollectionID).subscribe(
-        pub => {
-          if (this.establishedText) {
-            this.establishedText.content = '';
-            this.establishedText.title = pub[0].name;
-            this.establishedText.link = pub[0].legacyId;
-          }
-          this.legacyId = pub[0].legacyId;
-          this.showText();
-          this.storage.set(cache_id, this.establishedText);
-        },
-        error => {
-          console.log('error');
-        }
-      );
-    }
-  }
-
-  updateTexts() {
-    this.translate.get('Read').subscribe(
-      value => {
-        this.texts = value;
-      }
-    )
-  }
-
-  back() {
-    // this.viewCtrl.dismiss();
-  }
-
-  setText(id: any, data: any) {
-
-    const id2 = id.replace('_est', '');
-    const parts = id2.split(';');
-
-    let tmpContent = data;
-
-    if (parts.length > 1) {
-
-      let selector = '#' + parts[1];
-      if (parts.length > 2) {
-        selector = '.' + parts[2];
-      }
-
-      const range = document.createRange();
-      const documentFragment = range.createContextualFragment(data);
-
-      tmpContent = documentFragment.querySelector(selector)?.innerHTML || '';
-    }
-
-    if (this.establishedText) {
-      this.establishedText.content = tmpContent.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-    }
-  }
-
-  getIntroduction(id: string, lang: string) {
-    this.textService.getIntroduction(id, lang).subscribe(
-      res => {
-        // in order to get id attributes for tooltips
-        // console.log('recieved introduction,..,', res.content);
-        if (this.establishedText) {
-          this.establishedText.content = this.sanitizer.bypassSecurityTrustHtml(
-            res.content.replace(/images\//g, 'assets/images/')
-              .replace(/\.png/g, '.svg')
-          );
-        }
-      },
-      error => { this.errorMessage = <any>error }
-    );
   }
 
   showPersonTooltip(id: string, targetElem: HTMLElement, origin: any) {
@@ -2594,17 +2106,6 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
 
-  async showCommentModal(id: string) {
-    id = id.replace('end', 'en');
-    id = this.establishedText?.link + ';' + id;
-    const modal = await this.modalCtrl.create({
-      component: CommentModalPage,
-      componentProps: { id: id, title: this.texts.CommentsFor + ' ' + this.establishedText?.title },
-      showBackdrop: true
-    });
-    return await modal.present();
-  }
-
   async showPersonModal(id: string) {
     const modal = await this.modalCtrl.create({
       component: OccurrencesPage,
@@ -2657,34 +2158,6 @@ export class ReadPage /*implements OnDestroy*/ {
     return await modal.present();
   }
 
-  async presentDownloadActionSheet() {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Ladda ner digital version',
-      buttons: [
-        {
-          text: 'Epub',
-          role: 'epub',
-          handler: () => {
-            console.log('Epub clicked');
-          }
-        }, {
-          text: 'Kindle',
-          role: 'kindle',
-          handler: () => {
-            console.log('Kindle clicked');
-          }
-        }, {
-          text: 'PDF',
-          role: 'pdf',
-          handler: () => {
-            console.log('PDF clicked');
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-  }
-
   openNewExternalView(view: string, id: any) {
     this.addView(view, id, undefined, true);
   }
@@ -2725,7 +2198,7 @@ export class ReadPage /*implements OnDestroy*/ {
         songexample: { show: (type === 'songexample'), id: id },
         illustrations: { show: (type === 'illustrations'), image: image },
         legend: { show: (type === 'legend'), id: id }
-      } as any
+      } as any;
       if (this.multilingualEST) {
         for (const lang of this.estLanguages) {
           view['established_' + lang] = { show: (type === 'established' && language === lang), id: id }
@@ -2736,9 +2209,6 @@ export class ReadPage /*implements OnDestroy*/ {
       }
 
       this.views.push(view);
-
-      this.updateURL();
-      this.updateCachedViewModes();
 
       // Always open two variations if no variation is yet open
       // if (type === 'variations' && this.hasKey('variations', this.views) === false) {
@@ -2761,7 +2231,6 @@ export class ReadPage /*implements OnDestroy*/ {
     this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
     this.updateURL();
-    this.updateCachedViewModes();
   }
 
   /**
@@ -2773,7 +2242,6 @@ export class ReadPage /*implements OnDestroy*/ {
     if (id > -1 && id < this.views.length - 1) {
       this.views = this.moveArrayItem(this.views, id, id + 1);
       this.updateURL();
-      this.updateCachedViewModes();
       this.switchVariationSortOrdersInService(id, id + 1);
       if (fab !== undefined) {
         fab.close();
@@ -2790,7 +2258,6 @@ export class ReadPage /*implements OnDestroy*/ {
     if (id > 0 && id < this.views.length) {
       this.views = this.moveArrayItem(this.views, id, id - 1);
       this.updateURL();
-      this.updateCachedViewModes();
       this.switchVariationSortOrdersInService(id, id - 1);
       if (fab !== undefined) {
         fab.close();
@@ -2809,133 +2276,6 @@ export class ReadPage /*implements OnDestroy*/ {
       reorderedArray.splice(toIndex, 0, reorderedArray.splice(fromIndex, 1)[0]);
     }
     return reorderedArray;
-  }
-
-  swipePrevNext(myEvent: any) {
-    if (myEvent.direction !== undefined) {
-      if (myEvent.direction === 2) {
-        this.next();
-      } else if (myEvent.direction === 4) {
-        this.previous();
-      }
-    }
-  }
-
-  async previous(test?: boolean) {
-    if (this.legacyId === undefined) {
-      this.legacyId = this.paramCollectionID + '_' + this.paramPublicationID;
-    }
-    const c_id = this.legacyId.split('_')[0];
-    await this.storage.get('toc_' + c_id).then((toc) => {
-      this.findTocItem(toc, 'prev');
-    });
-
-    if (this.prevItem !== undefined && test !== true) {
-      await this.open(this.prevItem);
-    } else if (test && this.prevItem !== undefined) {
-      return true;
-    } else if (test && this.prevItem === undefined) {
-      return false;
-    }
-    return;
-  }
-
-  async next(test?: boolean) {
-    if (this.legacyId === undefined) {
-      this.legacyId = this.paramCollectionID + '_' + this.paramPublicationID;
-    }
-    const c_id = this.legacyId.split('_')[0];
-    await this.storage.get('toc_' + c_id).then((toc) => {
-      this.findTocItem(toc, 'next');
-    });
-    if (this.nextItem !== undefined && test !== true) {
-      await this.open(this.nextItem);
-    } else if (test && this.nextItem !== undefined) {
-      return true;
-    } else if (test && this.nextItem === undefined) {
-      return false;
-    }
-    return;
-  }
-
-  findTocItem(toc: any, type?: string) {
-    if (!toc) {
-      return;
-    }
-
-    if (!toc.children && toc instanceof Array) {
-      for (let i = 0; i < toc.length; i++) {
-        if (toc[i].itemId && toc[i].itemId === this.legacyId) {
-          if (type === 'next' && toc[i + 1]) {
-            if (toc[i + 1].type === 'subtitle') {
-              i = i + 1;
-            }
-            if (toc[i + 1] === undefined || i + 1 === toc.length) {
-              if ((i + 1) === toc.length) {
-                this.nextItem = null;
-                break;
-              }
-            } else {
-              this.nextItem = toc[i + 1];
-              break;
-            }
-          } else if (type === 'prev' && toc[i - 1]) {
-            if (toc[i - 1].type === 'subtitle') {
-              i = i - 1;
-            }
-            if (toc[i - 1] === undefined || i === 0) {
-              if (i === 0) {
-                this.prevItem = null;
-                break;
-              }
-            } else {
-              this.prevItem = toc[i - 1];
-              break;
-            }
-          }
-        }
-      }
-    } else if (toc.children) {
-      const childs = toc.children;
-      for (let j = 0; j < childs.length; j++) {
-        if (childs[j] && childs[j].itemId && childs[j].itemId === this.legacyId) {
-
-          if (childs[j + 1]) {
-            if (childs[j + 1].itemId === '') {
-              this.nextItem = childs[j + 2];
-            } else {
-              this.nextItem = childs[j + 1];
-            }
-          }
-
-          if (childs[j - 1].itemId === '') {
-            this.prevItem = childs[j - 2];
-          } else {
-            this.prevItem = childs[j - 1];
-          }
-        }
-        if (childs[j] && childs[j].children) {
-          this.findTocItem(childs[j].children, type);
-        }
-      }
-    }
-  }
-
-  open(item: any) {
-    const params = { tocItem: JSON.stringify(item), collection: JSON.stringify({ title: item.itemId }) } as any;
-    this.storage.set('currentTOCItem', item);
-
-    params['tocLinkId'] = item.itemId;
-    const parts = item.itemId.split('_');
-    // params['collectionID'] = parts[0];
-    // params['publicationID'] = parts[1];
-
-    // if (this.recentlyOpenViews !== undefined && this.recentlyOpenViews.length > 0) {
-    //   params['recentlyOpenViews'] = this.recentlyOpenViews;
-    // }
-
-    console.log('Opening read from ReadPage.open()');
-    this.router.navigate([`/publication/${parts[0]}/text/${parts[1]}/`], { queryParams: params })
   }
 
   private scrollToVariant(element: HTMLElement) {
@@ -3025,67 +2365,6 @@ export class ReadPage /*implements OnDestroy*/ {
     this.events.publishZoomFacsimile();
   }
 
-  findItem(id: string, includePrevNext?: boolean): any {
-    let prev: any;
-    const returnData = { item: TableOfContentsItem, next: TableOfContentsItem, prev: TableOfContentsItem };
-
-    let found = false;
-    let cat, child, item;
-
-    if (this.tocRoot) {
-      for (cat of this.tocRoot) {
-        if (cat.items) {
-          for (child of cat.items) {
-            for (item of child.items) {
-              item = item as any;
-              if (found) { // we found it last iteration...
-                returnData.next = item;
-                return returnData;
-              }
-    
-              if (item.id === id) {
-                found = true;
-                returnData.item = item;
-                returnData.prev = prev;
-                if (!includePrevNext) {
-                  return item;
-                }
-              }
-              prev = item;
-            }
-          }
-        }
-      }
-    }
-
-    if (found) {
-      return includePrevNext ? returnData : returnData.item;
-    }
-  }
-
-  firstPage() {
-    const c_id = this.legacyId.split('_')[0];
-    const toc = this.storage.get('toc_' + c_id)
-    let firstItemOfCollection;
-    toc.then(val => {
-      if (val.children) {
-        firstItemOfCollection = val.children[1];
-        // console.log(firstItemOfCollection);
-
-        const params = {tocItem: JSON.stringify(firstItemOfCollection), collection: JSON.stringify({title: firstItemOfCollection.itemId})} as any;
-
-        params['tocLinkId'] = firstItemOfCollection.itemId;
-        const parts = firstItemOfCollection.itemId.split('_');
-        // params['collectionID'] = parts[0];
-        // params['publicationID'] = parts[1];
-
-        console.log('Opening read from ReadPage.firstPage()');
-        // nav[0].setRoot('read', params);
-        this.router.navigate([`/publication/${parts[0]}/text/${parts[1]}/`], { queryParams: params });
-      }
-    }).catch(err => console.error(err));
-  }
-
   private scrollColumnIntoView(columnElement: HTMLElement, offset = 26) {
     if (columnElement === undefined || columnElement === null) {
       return;
@@ -3107,18 +2386,18 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   setCollectionAndPublicationLegacyId() {
-    this.textService.getLegacyIdByPublicationId(this.paramPublicationID).subscribe(
-      publication => {
+    this.textService.getLegacyIdByPublicationId(this.paramPublicationID).subscribe({
+      next: (publication) => {
         this.collectionAndPublicationLegacyId = '';
         if (publication[0].legacy_id) {
           this.collectionAndPublicationLegacyId = publication[0].legacy_id;
         }
       },
-      error => {
+      error: (e) => {
         this.collectionAndPublicationLegacyId = '';
         console.log('could not get publication data trying to resolve collection and publication legacy id');
       }
-    );
+    });
   }
 
 /**
@@ -3252,7 +2531,7 @@ export class ReadPage /*implements OnDestroy*/ {
   }
   */
 
-  showaddViewPopover(e: Event) {
+  showAddViewPopover(e: Event) {
     this.addViewPopover.event = e;
     this.addViewPopoverisOpen = true;
   }
@@ -3283,24 +2562,5 @@ export class ReadPage /*implements OnDestroy*/ {
       }
     }
   }
-
-  /*
-  nativeEmail() {
-    // Check if sharing via email is supported
-    this.socialSharing.canShareViaEmail().then(() => {
-      console.log('Sharing via email is possible');
-
-      // Share via email
-      this.socialSharing.shareViaEmail('Body', 'Subject', ['recipient@example.org']).then(() => {
-        // Success!
-      }).catch(() => {
-        // Error!
-        console.log('Email error')
-      });
-    }).catch(() => {
-      console.log('Sharing via email is not possible');
-    });
-  }
-  */
 
 }

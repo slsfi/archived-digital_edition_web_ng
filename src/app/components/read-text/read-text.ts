@@ -1,7 +1,6 @@
 import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
@@ -12,6 +11,7 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
+import { isBrowser } from 'src/standalone/utility-functions';
 
 /**
  * Generated class for the ReadTextComponent component.
@@ -69,6 +69,7 @@ export class ReadTextComponent {
   }
 
   ngOnInit() {
+    console.log('read text link', this.link);
     if ( this.external !== undefined && this.external !== null ) {
       const extParts = String(this.external).split(' ');
       this.textService.getCollectionAndPublicationByLegacyId(extParts[0] + '_' + extParts[1]).subscribe(data => {
@@ -86,47 +87,49 @@ export class ReadTextComponent {
   }
 
   ngAfterViewInit() {
-    this.ngZone.runOutsideAngular(() => {
-      // Scroll to link position if defined.
-      let iterationsLeft = 10;
-      clearInterval(this.intervalTimerId);
-      const that = this;
-      this.intervalTimerId = window.setInterval(function() {
-        if (iterationsLeft < 1) {
-          clearInterval(that.intervalTimerId);
-        } else {
-          iterationsLeft -= 1;
-          let posId = null;
-          if (that.nochapterPos !== undefined && that.nochapterPos !== null) {
-            posId = that.nochapterPos;
-          } else if ( that.link !== undefined ) {
-            const linkData = that.link.split(';');
-            if (linkData[1]) {
-              posId = linkData[1];
+    if (isBrowser()) {
+      this.ngZone.runOutsideAngular(() => {
+        // Scroll to link position if defined.
+        let iterationsLeft = 10;
+        clearInterval(this.intervalTimerId);
+        const that = this;
+        this.intervalTimerId = window.setInterval(function() {
+          if (iterationsLeft < 1) {
+            clearInterval(that.intervalTimerId);
+          } else {
+            iterationsLeft -= 1;
+            let posId = null;
+            if (that.nochapterPos !== undefined && that.nochapterPos !== null) {
+              posId = that.nochapterPos;
+            } else if ( that.link !== undefined ) {
+              const linkData = that.link.split(';');
+              if (linkData[1]) {
+                posId = linkData[1];
+              } else {
+                clearInterval(that.intervalTimerId);
+              }
             } else {
               clearInterval(that.intervalTimerId);
             }
-          } else {
-            clearInterval(that.intervalTimerId);
-          }
 
-          if (posId) {
-            let target = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]') as HTMLAnchorElement;
-            if ( target && ((target.parentElement && target.parentElement.classList.contains('ttFixed'))
-            || (target.parentElement?.parentElement && target.parentElement?.parentElement.classList.contains('ttFixed'))) ) {
-              // Position in footnote --> look for second target
-              target = document.querySelectorAll('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]')[1] as HTMLAnchorElement;
-            }
-            if (target) {
-              that.commonFunctions.scrollToHTMLElement(target);
+            if (posId) {
+              let target = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]') as HTMLAnchorElement;
+              if ( target && ((target.parentElement && target.parentElement.classList.contains('ttFixed'))
+              || (target.parentElement?.parentElement && target.parentElement?.parentElement.classList.contains('ttFixed'))) ) {
+                // Position in footnote --> look for second target
+                target = document.querySelectorAll('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]')[1] as HTMLAnchorElement;
+              }
+              if (target) {
+                that.commonFunctions.scrollToHTMLElement(target);
+                clearInterval(that.intervalTimerId);
+              }
+            } else {
               clearInterval(that.intervalTimerId);
             }
-          } else {
-            clearInterval(that.intervalTimerId);
           }
-        }
-      }.bind(this), 1000);
-    });
+        }.bind(this), 1000);
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -206,8 +209,8 @@ export class ReadTextComponent {
           this.textLoading = false;
           if (this.matches) {
             readtext = this.commonFunctions.insertSearchMatchTags(readtext, this.matches);
-            this.text = this.sanitizer.bypassSecurityTrustHtml(readtext);
           }
+          this.text = this.sanitizer.bypassSecurityTrustHtml(readtext);
           console.log('Retrieved read-text from cache');
         } else {
           console.log('Failed to retrieve read-text text from cache');

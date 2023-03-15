@@ -40,6 +40,7 @@
 
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
+        <h1>{{views.length}}</h1>
 
         <!-- Tooltip wrapper -->
         <div
@@ -82,7 +83,7 @@
               <ion-icon name="ellipsis-vertical"></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length>1" side="bottom">
-              <ion-fab-button *ngIf="displayToggle" (click)="removeSlide(i)">
+              <ion-fab-button *ngIf="availableViewModes.length > 1" (click)="removeSlide(i)">
                 <ion-icon name="trash-bin-sharp"></ion-icon>
               </ion-fab-button>
               <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i, fabmenu)">
@@ -142,12 +143,12 @@
         </div>
 
         <!-- Add view -->
-        <div *ngIf="!userSettingsService.isMobile() && displayToggle" class="add-view-column">
+        <div *ngIf="!userSettingsService.isMobile() && availableViewModes.length > 1" class="add-view-column">
           <!--
           <div class="fab-backdrop" [ngClass]="showAddViewsFabBackdrop ? 'show-fab-backdrop' : ''" [ngStyle]="{'width':backdropWidth+'px'}" (click)="toggleFabBackdrop(); fabmenuadd.close()"></div>
           -->
           <ion-fab id="add-view-fab" #fabmenuadd>
-            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" attr.aria-label="{{ 'Read.AddColumn' | translate }}" (click)="showaddViewPopover($event)">
+            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" attr.aria-label="{{ 'Read.AddColumn' | translate }}" (click)="showAddViewPopover($event)">
               <ion-icon name="add-outline" [attr.aria-hidden]="true"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -236,12 +237,12 @@
       <div class="infoOverlayContent" [MathJax]="infoOverlayText"></div>
     </div>
     <div
-      *ngIf="(userSettingsService.isMobile() || userSettingsService.isTablet()) && hasOccurrenceResults && showOccurrencesModal">
+      *ngIf="hasOccurrenceResults && showOccurrencesModal">
       <button class="readpage-occurrences-mobile" ion-button
         (click)="openOccurrenceResult()">{{ "Read.ShowSearchResults" | translate }} &nbsp;<ion-icon name="search">
         </ion-icon></button>
     </div>
-    <div (swipe)="swipePrevNext($event)" *ngIf="(userSettingsService.isMobile() || userSettingsService.isTablet())">
+    <div>
       <div>
         <ion-segment [(ngModel)]="show">
           <ion-segment-button value="established" *ngIf="displayToggles['established']">
@@ -267,10 +268,6 @@
             [songID]="song_id"></facsimiles>
         </div>
       </div>
-      <!-- NOTE: Temporarily hidden since this doesn't work as intended.
-      <div class="read-from-beginning-button" *ngIf="!prevnext && displayToggle === true && show != 'facsimile'">
-        <button ion-button round icon-end (click)="firstPage()">{{"Read.ReadFromBeginning" | translate }}</button>
-      </div> -->
     </div>
   </ion-content>
 </ng-container>
