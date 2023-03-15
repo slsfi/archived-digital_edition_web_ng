@@ -41,7 +41,7 @@
     <li *ngIf="collectionsList?.length" class="accordion-list" [class.open]="selectedMenu === 'publication' || router.url.includes('publication')">
       <app-recursive-accordion
         [children]="collectionsList"
-        [selected]="selectedMenu === '</span>'"
+        [selected]="selectedMenu === 'publication'"
         [parentPath]="'/publication'">
       </app-recursive-accordion>
     </li>
