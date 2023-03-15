@@ -279,7 +279,7 @@ export class SideMenu implements OnInit {
               t_all = translation;
             }, error => { }
           );
-          mediaCollectionMenu.unshift({ 'id': 'all', 'title': t_all, 'highlight': true });
+          mediaCollectionMenu.unshift({ 'id': 'media-collections', 'title': t_all, 'highlight': true });
           mediaCollectionMenu.forEach((item: any) => {
             item['is_gallery'] = true;
           });

@@ -35,6 +35,6 @@ export class RecursiveAccordion implements OnInit {
   }
 
   pathGenerator(parentPath: string, childId: string): string {
-    return childId === 'all' ? `/media-collections` : `${parentPath}/${childId}`
+    return childId === 'media-collections' ? `/media-collections` : `${parentPath}/${childId}`
   }
 }
