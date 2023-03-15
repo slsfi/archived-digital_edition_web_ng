@@ -145,6 +145,13 @@ export class ReadPage /*implements OnDestroy*/ {
   paramsLoaded?: boolean
   queryParamsLoaded?: boolean
 
+
+  // TODO OLLIN UUDET
+  public views$: Observable<any>; // TODO
+  public link$: Observable<string>;
+
+  // TODO paramX$ tyyli
+
   constructor(
     // public viewCtrl: ViewController,
     // public navCtrl: NavController,
@@ -271,6 +278,29 @@ export class ReadPage /*implements OnDestroy*/ {
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams}))
     );
+
+    this.link$ = this.route.params.pipe(map(({collectionID, publicationID, chapterID}) => {
+      let link;
+
+      if (chapterID !== "" && chapterID != null) {
+        link = collectionID + '_' + publicationID + '_' + chapterID;
+      } else {
+        link = collectionID + '_' + publicationID;
+      }
+
+      return link;
+    }));
+
+    this.views$ = this.route.queryParams.pipe(map(({views}) => {
+      // views are parametrized in the url as a array
+
+      // if views are empty return default views
+      if (views === undefined || views === null || views.length === 0) {
+        return views; // TODO return default data that is just a object literal
+      }
+
+      return views;
+    }));
 
     this.urlParameters$.subscribe(routeParams => {
       console.log('route params and queryparams:', routeParams);
@@ -620,7 +650,7 @@ export class ReadPage /*implements OnDestroy*/ {
       if (this.textService.recentPageReadViews.length > 0) {
         this.setViews(this.textService.recentPageReadViews);
       } else {
-        // this.setConfigDefaultReadModeViews();
+        this.setConfigDefaultReadModeViews();
       }
     } else {
       // Open with the views defined in the url params
@@ -701,57 +731,6 @@ export class ReadPage /*implements OnDestroy*/ {
         queryParamsHandling: 'merge'
       }
     );
-  }
-
-  updateURL() {
-    let facs_id = '';
-    let facs_nr = '';
-    let song_id = '';
-    let search_title = '';
-
-    if (this.paramFacsId !== undefined &&
-      this.paramFacsId !== 'not' &&
-      this.paramFacsId !== ':facs_id' &&
-      this.paramFacsNr !== undefined &&
-      this.paramFacsNr !== 'infinite' &&
-      this.paramFacsNr !== ':facs_nr') {
-      facs_id = this.paramFacsId;
-      facs_nr = this.paramFacsNr;
-    } else {
-      facs_id = 'not';
-      facs_nr = 'infinite';
-    }
-
-    let chapter_id = 'nochapter';
-    if (this.paramChapterID !== undefined && !this.paramChapterID.startsWith('nochapter') &&
-    this.paramChapterID !== ':chapterID' && this.paramChapterID !== 'chapterID') {
-      chapter_id = this.paramChapterID;
-    }
-
-    if (this. paramSearchTitle !== undefined &&
-      this. paramSearchTitle !== ':song_id' &&
-      this. paramSearchTitle !== 'searchtitle') {
-      search_title = this. paramSearchTitle;
-    } else {
-      search_title = 'searchtitle';
-    }
-    const colID = this.paramCollectionID;
-    const pubID = this.paramPublicationID;
-
-    const url = `/publication/${colID}/text/${pubID}/${chapter_id}/${facs_id}/${facs_nr}/${song_id}/${search_title}/`;
-
-    const viewModes = this.getViewTypesShown();
-
-    if (viewModes.includes('illustrations')) {
-      this.illustrationsViewShown = true;
-    } else {
-      this.illustrationsViewShown = false;
-    }
-
-    // this causes problems with back, thus this check.
-    // if (!this.navCtrl.canGoBack() ) {
-    window.history.replaceState('', '', url.concat(viewModes.join('&')));
-    // }
   }
 
   updatePositionInURL(textId: string) {
@@ -2178,7 +2157,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
   addView(type: string, id?: string | null, fab?: IonFab | null, external?: boolean | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
     /* fab is no longer needed by this function*/
-    
+
     if (external === true) {
       this.external = id ? id : undefined;
     } else {
@@ -2228,9 +2207,6 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   removeSlide(i: any) {
-    this.removeVariationSortOrderFromService(i);
-    this.views.splice(i, 1);
-    this.updateURL();
   }
 
   /**
@@ -2238,32 +2214,14 @@ export class ReadPage /*implements OnDestroy*/ {
    * positions with the view on the right. If a FabContainer is passed
    * it is closed.
    */
-  moveViewRight(id: number, fab?: IonFab) {
-    if (id > -1 && id < this.views.length - 1) {
-      this.views = this.moveArrayItem(this.views, id, id + 1);
-      this.updateURL();
-      this.switchVariationSortOrdersInService(id, id + 1);
-      if (fab !== undefined) {
-        fab.close();
-      }
-    }
-  }
+  moveViewRight(id: number, fab?: IonFab) {}
 
   /**
    * Moves the view with index id one step to the left, i.e. exchange
    * positions with the view on the left. If a FabContainer is passed
    * it is closed.
    */
-  moveViewLeft(id: number, fab?: IonFab) {
-    if (id > 0 && id < this.views.length) {
-      this.views = this.moveArrayItem(this.views, id, id - 1);
-      this.updateURL();
-      this.switchVariationSortOrdersInService(id, id - 1);
-      if (fab !== undefined) {
-        fab.close();
-      }
-    }
-  }
+  moveViewLeft(id: number, fab?: IonFab) {}
 
   /**
    * Reorders the given array by moving the item at position 'fromIndex'

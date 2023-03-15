@@ -4,11 +4,11 @@ import { ReadPage } from './read';
 
 const routes: Routes = [
   {
-    path: ':collectionID/text/:publicationID/:chapterID/:facs_id/:facs_nr/:song_id/:search_title/:views',
+    path: ':collectionID/text/:publicationID',
     component: ReadPage,
   },
   {
-    path: ':collectionID/text/:publicationID',
+    path: ':collectionID/text/:publicationID/:chapterID',
     component: ReadPage,
   },
 ];

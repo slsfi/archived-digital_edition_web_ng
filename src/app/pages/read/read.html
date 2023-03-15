@@ -40,7 +40,8 @@
 
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
-        <h1>{{views.length}}</h1>
+        <div style="white-space: pre; width: 300px">{{views | json}}</div>
+        <div style="white-space: pre; width: 300px; color: blue">{{views$ | async | json}}</div>
 
         <!-- Tooltip wrapper -->
         <div
@@ -102,41 +103,48 @@
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
-                <ng-container *ngIf="view.established.show && !multilingualEST && establishedText?.link">
-                  <read-text [link]="establishedText?.link" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
-                </ng-container>
 
-                <ng-container *ngIf="multilingualEST && displayToggles['established'] && establishedText?.link">
-                  <ng-container *ngFor="let lang of estLanguages">
-                    <ng-container *ngIf="view['established_' + lang].show">
-                      <read-text [link]="establishedText?.link + '_' + lang" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                <ng-container *ngIf="link$ | async as link">
+
+                  <ng-container *ngIf="view.established.show && !multilingualEST && establishedText?.link">
+                    <read-text [link]="link" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                  </ng-container>
+
+                  <ng-container *ngIf="multilingualEST && displayToggles['established'] && establishedText?.link">
+                    <ng-container *ngFor="let lang of estLanguages">
+                      <ng-container *ngIf="view['established_' + lang].show">
+                        <read-text [link]="establishedText?.link + '_' + lang" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                      </ng-container>
                     </ng-container>
                   </ng-container>
+
+                  <ng-container *ngIf="view.comments.show">
+                    <comments [link]="establishedText?.link" [matches]="matches" [external]="external" (openNewIntroView)="openNewView($event)">
+                    </comments>
+                  </ng-container>
+                  <ng-container *ngIf="view.facsimiles.show">
+                    <facsimiles [itemId]="establishedText?.link" [selectedFacsimile]="view.facsimiles.id" [matches]="matches"
+                      [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
+                    </facsimiles>
+                  </ng-container>
+                  <ng-container *ngIf="view.manuscripts.show">
+                    <manuscripts [linkID]="view.manuscripts.id" [itemId]="establishedText?.link" [matches]="matches"
+                      (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
+                  </ng-container>
+                  <ng-container *ngIf="view.variations.show">
+                    <variations [linkID]="view.variations.id" [itemId]="establishedText?.link" [matches]="matches" [sortOrder]="view.variations.variationSortOrder"
+                      (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variations>
+                  </ng-container>
+                  <ng-container *ngIf="view.illustrations.show">
+                    <illustrations [initialImage]="view.illustrations.image" [itemId]="establishedText?.link"></illustrations>
+                  </ng-container>
+                  <ng-container *ngIf="view.legend.show">
+                    <legend [itemId]="establishedText?.link" [scrollToElementId]="view.legend.id"></legend>
+                  </ng-container>
+
                 </ng-container>
 
-                <ng-container *ngIf="view.comments.show">
-                  <comments [link]="establishedText?.link" [matches]="matches" [external]="external" (openNewIntroView)="openNewView($event)">
-                  </comments>
-                </ng-container>
-                <ng-container *ngIf="view.facsimiles.show">
-                  <facsimiles [itemId]="establishedText?.link" [selectedFacsimile]="view.facsimiles.id" [matches]="matches"
-                    [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
-                  </facsimiles>
-                </ng-container>
-                <ng-container *ngIf="view.manuscripts.show">
-                  <manuscripts [linkID]="view.manuscripts.id" [itemId]="establishedText?.link" [matches]="matches"
-                    (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
-                </ng-container>
-                <ng-container *ngIf="view.variations.show">
-                  <variations [linkID]="view.variations.id" [itemId]="establishedText?.link" [matches]="matches" [sortOrder]="view.variations.variationSortOrder"
-                    (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variations>
-                </ng-container>
-                <ng-container *ngIf="view.illustrations.show">
-                  <illustrations [initialImage]="view.illustrations.image" [itemId]="establishedText?.link"></illustrations>
-                </ng-container>
-                <ng-container *ngIf="view.legend.show">
-                  <legend [itemId]="establishedText?.link" [scrollToElementId]="view.legend.id"></legend>
-                </ng-container>
+
               </div>
             </ion-card-content>
           </ion-card>
