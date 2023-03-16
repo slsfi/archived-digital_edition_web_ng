@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/content/content.module').then( m => m.ContentPageModule)
   },
   {
-    path: 'publication-cover',
+    path: 'publication/:collectionID/cover',
     loadChildren: () => import('./pages/cover/cover.module').then( m => m.CoverPageModule)
   },
   {
@@ -31,11 +31,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/featured-facsimile/featured-facsimile.module').then( m => m.FeaturedFacsimilePageModule)
   },
   {
-    path: 'publication-foreword',
+    path: 'publication/:collectionID/foreword',
     loadChildren: () => import('./pages/foreword/foreword.module').then( m => m.ForewordPageModule)
   },
   {
-    path: 'publication-introduction',
+    path: 'publication/:collectionID/introduction',
     loadChildren: () => import('./pages/introduction/introduction.module').then( m => m.IntroductionPageModule)
   },
   {
@@ -79,7 +79,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tag-search/tag-search.module').then( m => m.TagearchPageModule)
   },
   {
-    path: 'publication-title',
+    path: 'publication/:collectionID/title',
     loadChildren: () => import('./pages/title/title.module').then( m => m.TitlePageModule)
   },
   {

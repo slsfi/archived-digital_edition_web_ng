@@ -4,7 +4,7 @@ import { CoverPage } from './cover';
 
 const routes: Routes = [
   {
-    path: ':collectionID',
+    path: '',
     component: CoverPage,
   }
 ];

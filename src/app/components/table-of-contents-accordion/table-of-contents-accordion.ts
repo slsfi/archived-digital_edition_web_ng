@@ -11,10 +11,8 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { InnerMenuOptionModel } from 'src/app/models/inner-menu-option.model';
-import { MenuOptionModel } from 'src/app/models/menu-option.model';
 import { SideMenuSettings } from 'src/app/models/side-menu-settings';
-import { SideMenuRedirectEvent, SideMenuRedirectEventData } from 'src/app/models/sidemenu-redirect-events';
-import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
+import { SideMenuRedirectEventData } from 'src/app/models/sidemenu-redirect-events';
 import { TocAccordionMenuOptionModel } from 'src/app/models/toc-accordion-menu-option.model';
 import { config } from "src/app/services/config/config";
 

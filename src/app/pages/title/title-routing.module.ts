@@ -4,7 +4,7 @@ import { TitlePage } from './title';
 
 const routes: Routes = [
   {
-    path: ':collectionID',
+    path: '',
     component: TitlePage,
   },
 ];

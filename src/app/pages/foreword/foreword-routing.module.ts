@@ -4,10 +4,6 @@ import { ForewordPage } from './foreword';
 
 const routes: Routes = [
   {
-    path: ':collectionID',
-    component: ForewordPage,
-  },
-  {
     path: '',
     component: ForewordPage,
   }

@@ -4,7 +4,7 @@ import { IntroductionPage } from './introduction';
 
 const routes: Routes = [
   {
-    path: ':collectionID',
+    path: '',
     component: IntroductionPage,
   }
 ];
