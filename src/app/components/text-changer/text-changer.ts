@@ -23,7 +23,6 @@ import { config } from "src/app/services/config/config";
 })
 export class TextChangerComponent {
 
-  @Input() recentlyOpenViews?: any;
   @Input() parentPageType?: string;
   tocItemId: any;
   prevItem: any;
@@ -614,7 +613,7 @@ export class TextChangerComponent {
       const itemIdParts = item.itemId.split('_');
       const collectionId = itemIdParts[0];
       const publicationId = itemIdParts[1];
-      let chapterId = 'nochapter';
+      let chapterId = '';
       if (itemIdParts[2]) {
         chapterId = itemIdParts[2];
       }
@@ -634,11 +633,6 @@ export class TextChangerComponent {
       if ( itemIdParts[2] !== undefined ) {
         params['chapterID'] = itemIdParts[2];
       }
-      params['search_title'] = 'searchtitle';
-      if (this.recentlyOpenViews !== undefined && this.recentlyOpenViews.length > 0) {
-        params['recentlyOpenViews'] = this.recentlyOpenViews;
-      }
-      params['selectedItemInAccordion'] = true;
 
       if (this.textService.readViewTextId && item.itemId.split('_').length > 1 && item.itemId.indexOf(';') > -1
       && item.itemId.split(';')[0] === this.textService.readViewTextId.split(';')[0]) {
@@ -649,7 +643,7 @@ export class TextChangerComponent {
         this.events.publishUpdatePositionInPageRead(params);
       } else {
         console.log('Opening read from TextChanger.open()');
-        this.router.navigate(['/publication', collectionId, 'text', publicationId, chapterId, 'not', 'infinite', 'nosong', 'searchtitle', this.defaultReadViews]);
+        this.router.navigate(['/publication', collectionId, 'text', publicationId, chapterId]);
       }
     }
 

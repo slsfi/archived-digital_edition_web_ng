@@ -16,7 +16,6 @@ import { PublicationCacheService } from 'src/app/services/cache/publication-cach
 import { LegendModule } from 'src/app/components/legend/legend.module';
 import { DragScrollModule } from 'src/directives/ngx-drag-scroll/public-api';
 import { VariationsModule } from 'src/app/components/variations/variations.module';
-import { IntroductionModule } from 'src/app/components/introduction/introduction.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -45,7 +44,6 @@ export function createTranslateLoader(http: HttpClient) {
       FacsimilesModule,
       ManuscriptsModule,
       VariationsModule,
-      IntroductionModule,
       DragScrollModule,
       MathJaxModule,
       LegendModule,

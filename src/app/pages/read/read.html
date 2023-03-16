@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!(userSettingsService.isMobile())" [recentlyOpenViews]="views" class="text-changer-desktop-view"></text-changer>
+    <text-changer *ngIf="!(userSettingsService.isMobile())" class="text-changer-desktop-view"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
@@ -40,8 +40,6 @@
 
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
-        <div style="white-space: pre; width: 300px">{{views | json}}</div>
-        <div style="white-space: pre; width: 300px; color: blue">{{views$ | async | json}}</div>
 
         <!-- Tooltip wrapper -->
         <div
@@ -74,23 +72,23 @@
           </div>
           <div class="infoOverlayContent" [MathJax]="infoOverlayText"></div>
         </div>
-
+        
         <!-- Wrapper for each column -->
         <div *ngFor="let view of views; let i = index;" id="read_div_{{i}}" class="column_type_{{view.type}}" [ngClass]="views.length > 1 ? 'read-column multiple-columns' : 'read-column single-column'">
 
           <!-- Ion fab column options -->
-          <ion-fab *ngIf="views.length>1" class="column-options" #fabmenu>
-            <ion-fab-button class="toggle-fab-list-button" size="small">
+          <ion-fab *ngIf="views.length>1" class="column-options">
+            <ion-fab-button class="toggle-fab-list-button" size="small" #fabColumnOptionsButton>
               <ion-icon name="ellipsis-vertical"></ion-icon>
             </ion-fab-button>
-            <ion-fab-list *ngIf="views.length>1" side="bottom">
-              <ion-fab-button *ngIf="availableViewModes.length > 1" (click)="removeSlide(i)">
+            <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
+              <ion-fab-button *ngIf="availableViewModes.length > 1" (click)="removeView(i)">
                 <ion-icon name="trash-bin-sharp"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i, fabmenu)">
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)">
                 <ion-icon name="return-down-forward-sharp"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i, fabmenu)">
+              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)">
                 <ion-icon name="return-down-back-sharp"></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
@@ -103,48 +101,41 @@
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
-
-                <ng-container *ngIf="link$ | async as link">
-
-                  <ng-container *ngIf="view.established.show && !multilingualEST && establishedText?.link">
-                    <read-text [link]="link" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
-                  </ng-container>
-
-                  <ng-container *ngIf="multilingualEST && displayToggles['established'] && establishedText?.link">
-                    <ng-container *ngFor="let lang of estLanguages">
-                      <ng-container *ngIf="view['established_' + lang].show">
-                        <read-text [link]="establishedText?.link + '_' + lang" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="view.comments.show">
-                    <comments [link]="establishedText?.link" [matches]="matches" [external]="external" (openNewIntroView)="openNewView($event)">
-                    </comments>
-                  </ng-container>
-                  <ng-container *ngIf="view.facsimiles.show">
-                    <facsimiles [itemId]="establishedText?.link" [selectedFacsimile]="view.facsimiles.id" [matches]="matches"
-                      [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
-                    </facsimiles>
-                  </ng-container>
-                  <ng-container *ngIf="view.manuscripts.show">
-                    <manuscripts [linkID]="view.manuscripts.id" [itemId]="establishedText?.link" [matches]="matches"
-                      (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
-                  </ng-container>
-                  <ng-container *ngIf="view.variations.show">
-                    <variations [linkID]="view.variations.id" [itemId]="establishedText?.link" [matches]="matches" [sortOrder]="view.variations.variationSortOrder"
-                      (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variations>
-                  </ng-container>
-                  <ng-container *ngIf="view.illustrations.show">
-                    <illustrations [initialImage]="view.illustrations.image" [itemId]="establishedText?.link"></illustrations>
-                  </ng-container>
-                  <ng-container *ngIf="view.legend.show">
-                    <legend [itemId]="establishedText?.link" [scrollToElementId]="view.legend.id"></legend>
-                  </ng-container>
-
+                <ng-container *ngIf="view.type == 'established' && !multilingualEST">
+                  <read-text [link]="textItemID" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
                 </ng-container>
 
+                <ng-container *ngIf="multilingualEST && displayToggles['established']">
+                  <ng-container *ngFor="let lang of estLanguages">
+                    <ng-container *ngIf="view.type == 'established_' + lang">
+                      <read-text [link]="textItemID + '_' + lang" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
 
+                <ng-container *ngIf="view.type == 'comments'">
+                  <comments [link]="textItemID" [matches]="matches" [external]="external" (openNewIntroView)="openNewView($event)">
+                  </comments>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'facsimiles'">
+                  <facsimiles [itemId]="textItemID" [selectedFacsimile]="view.id" [matches]="matches"
+                    [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
+                  </facsimiles>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'manuscripts'">
+                  <manuscripts [linkID]="view.id" [itemId]="textItemID" [matches]="matches"
+                    (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'variations'">
+                  <variations [linkID]="view.id" [itemId]="textItemID" [matches]="matches" [sortOrder]="view.variationSortOrder"
+                    (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variations>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'illustrations'">
+                  <illustrations [initialImage]="view.image" [itemId]="textItemID"></illustrations>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'legend'">
+                  <legend [itemId]="textItemID" [scrollToElementId]="view.id"></legend>
+                </ng-container>
               </div>
             </ion-card-content>
           </ion-card>
@@ -250,7 +241,7 @@
         (click)="openOccurrenceResult()">{{ "Read.ShowSearchResults" | translate }} &nbsp;<ion-icon name="search">
         </ion-icon></button>
     </div>
-    <div>
+    <ng-container *ngIf="textItemID$ | async as textItemID">
       <div>
         <ion-segment [(ngModel)]="show">
           <ion-segment-button value="established" *ngIf="displayToggles['established']">
@@ -266,18 +257,18 @@
       </div>
       <div [ngSwitch]="show">
         <div *ngSwitchCase="'established'" class="mobile-mode-established">
-          <read-text [link]="establishedText?.link" [matches]="matches"></read-text>
+          <read-text [link]="textItemID" [matches]="matches"></read-text>
         </div>
         <!--div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts">
-          <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="establishedText?.link" [matches]="matches"></manuscripts>
+          <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="matches"></manuscripts>
         </div-->
         <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-          <facsimiles [itemId]="establishedText?.link" [matches]="matches" [facsID]="facs_id" [facsNr]="facs_nr"
+          <facsimiles [itemId]="textItemID" [matches]="matches" [facsID]="facs_id" [facsNr]="facs_nr"
             [songID]="song_id"></facsimiles>
         </div>
       </div>
-    </div>
+    </ng-container>
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="(userSettingsService.isMobile()) && (show=='established' || show=='manuscripts' || show=='facsimiles')" class="text-changer-mobile-view" [recentlyOpenViews]="views"></text-changer>
+<text-changer *ngIf="(userSettingsService.isMobile()) && (show=='established' || show=='manuscripts' || show=='facsimiles')" class="text-changer-mobile-view"></text-changer>

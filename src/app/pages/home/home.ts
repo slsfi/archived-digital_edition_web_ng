@@ -32,7 +32,6 @@ export class HomePage {
   imageUrl = '';
   imageUrlStyle = '';
   portraitImageAltText = '';
-  errorMessage?: string;
   initLanguage?: string;
   languageSubscription: Subscription | null;
 
@@ -108,14 +107,14 @@ export class HomePage {
     this.getFooterMdContent(lang + '-06');
 
     this.translate.get('Site.Subtitle').subscribe({
-      next: translation => {
+      next: (translation) => {
         if (translation) {
           this.siteHasSubtitle = true;
         } else {
           this.siteHasSubtitle = false;
         }
       },
-      error: e => { this.siteHasSubtitle = false; }
+      error: (e) => { this.siteHasSubtitle = false; }
     });
   }
 
@@ -124,9 +123,7 @@ export class HomePage {
       next: (text) => {
         this.homeContent = text.content;
       },
-      error: (e) => {
-        this.errorMessage = <any>e;
-      }
+      error: (e) => { console.error(e); }
     });
   }
 
@@ -135,9 +132,7 @@ export class HomePage {
       next: (text) => {
         this.homeFooterContent = text.content;
       },
-      error: (e) => {
-        this.errorMessage = <any>e;
-      }
+      error: (e) => { console.error(e); }
     });
   }
 }

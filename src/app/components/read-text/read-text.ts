@@ -69,7 +69,7 @@ export class ReadTextComponent {
   }
 
   ngOnInit() {
-    console.log('read text link', this.link);
+    console.log('read text ngOnInit, link:', this.link);
     if ( this.external !== undefined && this.external !== null ) {
       const extParts = String(this.external).split(' ');
       this.textService.getCollectionAndPublicationByLegacyId(extParts[0] + '_' + extParts[1]).subscribe(data => {
