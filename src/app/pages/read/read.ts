@@ -1,7 +1,7 @@
-import { Component, Renderer2, ElementRef, OnDestroy, ViewChild, Input, EventEmitter, SecurityContext, NgZone } from '@angular/core';
+import { Component, Renderer2, ElementRef, OnDestroy, ViewChild, ViewChildren, QueryList, Input, EventEmitter, SecurityContext, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonFab, IonPopover, ModalController, PopoverController } from '@ionic/angular';
+import { IonFab, IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { TranslateModule, LangChangeEvent, TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -40,6 +40,8 @@ import { isBrowser } from 'src/standalone/utility-functions';
 export class ReadPage /*implements OnDestroy*/ {
   @ViewChild('nav', { read: DragScrollComponent }) ds!: DragScrollComponent;
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
+  @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
+  @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
   // @ViewChild('content') content!: ElementRef;
   // @ViewChild('readColumn') readColumn!: ElementRef;
   // @ViewChild('scrollBar') scrollBar!: ElementRef;
@@ -145,8 +147,14 @@ export class ReadPage /*implements OnDestroy*/ {
 
 
   // TODO OLLIN UUDET
-  public views$: Observable<any>; // TODO
+  public views$: Observable<any>;
   public textItemID$: Observable<string>;
+
+  textItemID: string = '';
+  textPosition: string = '';
+
+  routeQueryParamsSubscription: Subscription | null;
+  routeParamsSubscription: Subscription | null;
 
   // TODO paramX$ tyyli
 
@@ -268,6 +276,9 @@ export class ReadPage /*implements OnDestroy*/ {
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.show = config.defaults?.ReadModeView ?? 'established';
+
+    this.routeQueryParamsSubscription = null;
+    this.routeParamsSubscription = null;
   }
 
   ngOnInit() {
@@ -279,43 +290,90 @@ export class ReadPage /*implements OnDestroy*/ {
     );
     */
 
-    this.textItemID$ = this.route.params.pipe(map(({collectionID, publicationID, chapterID}) => {
+    this.routeParamsSubscription = this.route.paramMap.subscribe((params) => {
       let textItemID;
 
-      if (chapterID !== "" && chapterID != null) {
-        textItemID = collectionID + '_' + publicationID + '_' + chapterID;
+      if (params.has('chapterID') && params.get('chapterID') !== '') {
+        textItemID = params.get('collectionID') + '_' + params.get('publicationID') + '_' + params.get('chapterID');
+        this.paramChapterID = params.get('chapterID');
       } else {
-        textItemID = collectionID + '_' + publicationID;
+        textItemID = params.get('collectionID') + '_' + params.get('publicationID');
       }
 
-      // Save the id of the previous and current read view text in textService.
-      // TODO: This is maybe not needed any more:
-      this.textService.previousReadViewTextId = this.textService.readViewTextId;
-      this.textService.readViewTextId = textItemID;
+      if (this.textItemID !== textItemID) {
+        this.textItemID = textItemID;
+        // Save the id of the previous and current read view text in textService.
+        // TODO: This is maybe not needed any more:
+        this.textService.previousReadViewTextId = this.textService.readViewTextId;
+        this.textService.readViewTextId = this.textItemID;
+      }
 
-      this.paramPublicationID = publicationID;
+      this.paramCollectionID = params.get('collectionID');
+      this.paramPublicationID = params.get('publicationID');
+
       this.setCollectionAndPublicationLegacyId();
+    });
 
-      return textItemID;
-    }));
+    this.routeQueryParamsSubscription = this.route.queryParams.subscribe({
+      next: (queryParams) => {
 
-    this.views$ = this.route.queryParams.pipe(map(({views}) => {
-      // views are parametrized in the url as an array of objects      
-      
-      if (views === undefined || views === null || views.length < 1) {
-        this.setDefaultViews();
-      } else {
-        const parsed_views = JSON.parse(views);
+        if (queryParams['search']) {
+          console.log('search in queryparams:', queryParams['search']);
+          let searchMatches: Array<string> = [];
+          const parsedSearchMatches = JSON.parse(queryParams['search']);
+          if (parsedSearchMatches.length > 0) {
+            parsedSearchMatches.forEach((search_match: any) => {
+              // Remove line break characters
+              let decoded_match = search_match.replace(/\n/gm, '');
+              // Remove any script tags
+              decoded_match = decoded_match.replace(/<script.+?<\/script>/gi, '');
+              decoded_match = this.commonFunctions.encodeCharEntities(decoded_match);
+              searchMatches.push(decoded_match);
+            });
+            this.matches = searchMatches;
+          } else {
+            this.matches = [];
+          }
+        }
 
-        // Clear the array keeping track of recently open views in
-        // text service and populate it with the current ones
-        this.textService.recentPageReadViews = [];
-        parsed_views.forEach((viewObj: any) => {
-          this.textService.recentPageReadViews.push({ type: viewObj.type });
-        });
-        return parsed_views;
-      }
-    }));
+        if (queryParams['views']) {
+          console.log('views in queryparams:', queryParams['views']);
+          const parsedViews = JSON.parse(queryParams['views']);
+
+          // Clear the array keeping track of recently open views in
+          // text service and populate it with the current ones.
+          this.textService.recentPageReadViews = [];
+          parsedViews.forEach((viewObj: any) => {
+            this.textService.recentPageReadViews.push({ type: viewObj.type });
+          });
+
+          if (this.views.length < 1) {
+            this.views = parsedViews;
+          }
+        } else {
+          this.setDefaultViews();
+        }
+
+        if (queryParams['position']) {
+          console.log('position in queryparams:', queryParams['position']);
+          this.textPosition = queryParams['position'];
+        }
+
+        // TODO: Not sure facs_id and facs_nr are needed, or if they should be passed in the view object for facsimiles
+        if (queryParams['facs_id']) {
+          console.log('facs_id in queryparams:', queryParams['facs_id']);
+          this.facs_id = queryParams['facs_id'];
+        }
+
+        if (queryParams['facs_nr']) {
+          console.log('facs_nr in queryparams:', queryParams['facs_nr']);
+          this.facs_nr = queryParams['facs_nr'];
+        }
+
+      },
+      error: (e) => {},
+      complete: () => {}
+    });
   }
 
   ngOnInitLang() {
@@ -478,6 +536,12 @@ export class ReadPage /*implements OnDestroy*/ {
 
   ngOnDestroy() {
     this.events.getShowView().complete();
+    if (this.routeQueryParamsSubscription) {
+      this.routeQueryParamsSubscription.unsubscribe();
+    }
+    if (this.routeParamsSubscription) {
+      this.routeParamsSubscription.unsubscribe();
+    }
   }
 
   getAdditionalParams() {
@@ -2138,7 +2202,7 @@ export class ReadPage /*implements OnDestroy*/ {
     }
 
     if (this.availableViewModes.indexOf(type) !== -1) {
-      const view = {
+      const newView = {
         type: type,
         ...id && { id: id },
         ...image && { image: image },
@@ -2146,10 +2210,19 @@ export class ReadPage /*implements OnDestroy*/ {
       } as any;
 
       if (this.multilingualEST && type === 'established' && language) {
-        view['type'] = 'established_' + language;
+        newView['type'] = 'established_' + language;
       }
 
-      this.views.push(view);
+      // Append the new view to the array of current views and navigate
+      this.views.push(newView);
+      this.router.navigate(
+        [],
+        {
+          relativeTo: this.route,
+          queryParams: { views: JSON.stringify(this.views) },
+          queryParamsHandling: 'merge'
+        }
+      );
     }
   }
 
@@ -2163,41 +2236,72 @@ export class ReadPage /*implements OnDestroy*/ {
     return false;
   }
 
-  removeSlide(i: any) {
+  removeView(i: any) {
     this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
-    // TODO: Update views in queryparams
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { views: JSON.stringify(this.views) },
+        queryParamsHandling: 'merge'
+      }
+    );
   }
 
   /**
    * Moves the view with index id one step to the right, i.e. exchange
-   * positions with the view on the right. If a FabContainer is passed
-   * it is closed.
+   * positions with the view on the right.
    */
-  moveViewRight(id: number, fab?: IonFab) {
+  moveViewRight(id: number) {
     if (id > -1 && id < this.views.length - 1) {
       this.views = this.moveArrayItem(this.views, id, id + 1);
-      // this.updateURL(); TODO: Update views in queryparams
       this.switchVariationSortOrdersInService(id, id + 1);
-      if (fab !== undefined) {
-        fab.close();
-      }
+
+      this.fabColumnOptions.forEach(fabList => {
+        fabList.activated = false;
+      });
+
+      this.fabColumnOptionsButton.forEach(fabButton => {
+        fabButton.activated = false;
+      });
+
+      this.router.navigate(
+        [],
+        {
+          relativeTo: this.route,
+          queryParams: { views: JSON.stringify(this.views) },
+          queryParamsHandling: 'merge'
+        }
+      );
     }
   }
 
   /**
    * Moves the view with index id one step to the left, i.e. exchange
-   * positions with the view on the left. If a FabContainer is passed
-   * it is closed.
+   * positions with the view on the left.
    */
-  moveViewLeft(id: number, fab?: IonFab) {
+  moveViewLeft(id: number) {
     if (id > 0 && id < this.views.length) {
       this.views = this.moveArrayItem(this.views, id, id - 1);
-      // this.updateURL(); TODO: Update views in queryparams
       this.switchVariationSortOrdersInService(id, id - 1);
-      if (fab !== undefined) {
-        fab.close();
-      }
+
+      this.fabColumnOptions.forEach(fabList => {
+        fabList.activated = false;
+      });
+
+      this.fabColumnOptionsButton.forEach(fabButton => {
+        fabButton.activated = false;
+      });
+
+      this.router.navigate(
+        [],
+        {
+          relativeTo: this.route,
+          queryParams: { views: JSON.stringify(this.views) },
+          queryParamsHandling: 'merge'
+        }
+      );
     }
   }
 

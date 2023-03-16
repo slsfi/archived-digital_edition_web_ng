@@ -23,7 +23,6 @@ import { config } from "src/app/services/config/config";
 })
 export class TextChangerComponent {
 
-  @Input() recentlyOpenViews?: any;
   @Input() parentPageType?: string;
   tocItemId: any;
   prevItem: any;
@@ -634,11 +633,6 @@ export class TextChangerComponent {
       if ( itemIdParts[2] !== undefined ) {
         params['chapterID'] = itemIdParts[2];
       }
-      params['search_title'] = 'searchtitle';
-      if (this.recentlyOpenViews !== undefined && this.recentlyOpenViews.length > 0) {
-        params['recentlyOpenViews'] = this.recentlyOpenViews;
-      }
-      params['selectedItemInAccordion'] = true;
 
       if (this.textService.readViewTextId && item.itemId.split('_').length > 1 && item.itemId.indexOf(';') > -1
       && item.itemId.split(';')[0] === this.textService.readViewTextId.split(';')[0]) {
