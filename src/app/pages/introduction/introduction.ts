@@ -23,19 +23,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
 
-/**
- * Generated class for the IntroductionPage page.
- *
- * Collection introduction.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-// @IonicPage({
-//   name: 'introduction',
-//   segment: 'publication-introduction/:collectionID'
-// })
 @Component({
   selector: 'page-introduction',
   templateUrl: 'introduction.html',
@@ -522,7 +510,7 @@ export class IntroductionPage {
                   if (data[0] !== undefined) {
                     publicationId = data[0]['coll_id'];
                   }
-                  let hrefString = '/publication-introduction/' + publicationId;
+                  let hrefString = '/publication/' + publicationId + '/introduction';
                   if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
                     positionId = hrefTargetItems[1].replace('#', '');
                     hrefString += '?pos=' + positionId;

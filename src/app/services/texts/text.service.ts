@@ -21,8 +21,6 @@ export class TextService {
   readViewTextId: string;
   previousReadViewTextId: string;
   variationsOrder: number[] = [];
-  varIdsInStorage: string[] = [];
-  readtextIdsInStorage: string[] = [];
   recentPageReadViews: Array<any> = [];
 
   /* A more logical place for the activeTocOrder variable would be the table-of-contents service,
@@ -48,8 +46,6 @@ export class TextService {
     this.readViewTextId = '';
     this.previousReadViewTextId = '';
     this.variationsOrder = [];
-    this.varIdsInStorage = [];
-    this.readtextIdsInStorage = [];
     this.activeTocOrder = 'thematic';
   }
 
@@ -65,8 +61,6 @@ export class TextService {
       ch_id = null;
     }
 
-    const textId = id;
-
     let api = this.apiEndPoint;
     if (this.useSimpleApi) {
       api = this.simpleApi as string;
@@ -75,74 +69,7 @@ export class TextService {
       ch_id === null ? '' : '/' + ch_id
     }`;
 
-    return this.http.get(url).pipe(
-      map((res) => {
-        let body = res as any;
-        body = body.content as string;
-
-        try {
-          const showReadTextIllustrations = config.settings?.showReadTextIllustrations ?? [];
-          if (showReadTextIllustrations.length > 0) {
-            let galleryId = 44;
-            try {
-              const galleries = config.settings?.galleryCollectionMapping ?? [];
-              galleryId = galleries[c_id];
-            } catch (err) {}
-
-            if (!showReadTextIllustrations.includes(c_id)) {
-              const parser = new DOMParser();
-              body = parser.parseFromString(body, 'text/html');
-              const images: any = body.querySelectorAll(
-                'img.est_figure_graphic'
-              );
-              for (let i = 0; i < images.length; i++) {
-                images[i].classList.add('hide-illustration');
-              }
-
-              const s = new XMLSerializer();
-              body = s.serializeToString(body);
-              if (String(body).includes('images/verk/http')) {
-                body = body.replace(/images\/verk\//g, '');
-              } else {
-                body = body.replace(
-                  /images\/verk\//g,
-                  `${this.apiEndPoint}/${this.appMachineName}/gallery/get/${galleryId}/`
-                );
-              }
-              this.cache.setHtmlCache(textId, body);
-              const ret = this.cache.getHtml(id);
-              if (!ret) {
-                return body;
-              }
-              return this.cache.getHtml(id);
-            }
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
-        const se = new XMLSerializer();
-        try {
-          const parser = new DOMParser();
-          body = parser.parseFromString(body, 'text/html');
-          body = se.serializeToString(body);
-          if (String(body).includes('images/verk/http')) {
-            body = body.replace(/images\/verk\//g, '');
-          }
-          this.cache.setHtmlCache(textId, body);
-        } catch (err) {
-          console.log(err);
-        }
-
-        const cachedHTML = this.cache.getHtml(id);
-        if (cachedHTML && cachedHTML !== '') {
-          return cachedHTML;
-        } else {
-          return body;
-        }
-      }),
-      catchError(this.handleError)
-    );
+    return this.http.get(url);
   }
 
   getIntroduction(id: string, lang: string): Observable<any> {
@@ -377,29 +304,39 @@ export class TextService {
 
   postprocessEstablishedText(text: string, collectionId: string) {
     text = this.mapIllustrationImagePaths(text, collectionId);
-    text = text.replace(/\.png/g, '.svg');
+
+    // Add "tei" class to all classlists
     text = text.replace(
-      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
+      /class="([a-z A-Z _ 0-9]{1,140})"/g,
       'class="tei $1"'
     );
-    text = text.replace(/images\//g, 'assets/images/');
+
     return text;
   }
 
   mapIllustrationImagePaths(text: string, collectionId: string) {
-    let galleryId = 44;
-    try {
-      const galleries = config.settings?.galleryCollectionMapping ?? [];
-      galleryId = galleries[collectionId];
-    } catch (err) {}
+    text = text.replace(/\.png/g, '.svg');
+    text = text.replace(/images\//g, 'assets/images/');
+    text = text.replace(/assets\/images\/verk\/http/g, 'http');
 
-    if (String(text).includes('images/verk/http')) {
-      text = text.replace(/images\/verk\//g, '');
-    } else {
-      text = text.replace(
-        /images\/verk\//g,
-        `${this.apiEndPoint}/${this.appMachineName}/gallery/get/${galleryId}/`
-      );
+    const showReadTextIllustrations = config.settings?.showReadTextIllustrations ?? [];
+    if (showReadTextIllustrations.length > 0) {
+      let galleryId = 44;
+      const galleries = config.settings?.galleryCollectionMapping ?? [];
+      if (galleries.length > 0) {
+        galleryId = galleries[collectionId];
+      }
+
+      if (!showReadTextIllustrations.includes(collectionId)) {
+        text = text.replace(
+          /class="(.*?)est_figure_graphic(.*?)"/g,
+          'class="$1est_figure_graphic hide-illustration$2"'
+        );
+        text = text.replace(
+          /assets\/images\/verk\//g,
+          `${this.apiEndPoint}/${this.appMachineName}/gallery/get/${galleryId}/`
+        );
+      }
     }
     return text;
   }

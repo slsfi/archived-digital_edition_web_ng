@@ -1434,23 +1434,22 @@ export class SideMenu implements OnInit {
 
   openCollectionInitialPage(collection: DigitalEdition) {
     console.log('Opening collection from App.openCollectionInitialPage()');
-    const params = { collection: JSON.stringify(collection), fetch: 'true', /*collectionID: collection.id*/ };
     if ( this.hasCover && this.defaultSelectedItem === 'cover' ) {
-      this.router.navigate([`/publication-cover/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'cover']);
     } else if ( this.hasTitle && this.defaultSelectedItem === 'title' ) {
-      this.router.navigate([`/publication-title/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'title']);
     } else if ( this.hasForeword && this.defaultSelectedItem === 'foreword' ) {
-      this.router.navigate([`/publication-foreword/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'foreword']);
     } else if ( this.hasIntro && this.defaultSelectedItem === 'introduction' ) {
-      this.router.navigate([`/publication-introduction/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'introduction']);
     } else if ( this.hasCover ) {
-      this.router.navigate([`/publication-cover/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'cover']);
     } else if ( this.hasTitle ) {
-      this.router.navigate([`/publication-title/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'title']);
     } else if ( this.hasForeword ) {
-      this.router.navigate([`/publication-foreword/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'foreword']);
     } else if ( this.hasIntro ) {
-      this.router.navigate([`/publication-introduction/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'introduction']);
     }
   }
 

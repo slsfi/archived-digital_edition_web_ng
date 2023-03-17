@@ -1,6 +1,6 @@
 import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
@@ -32,8 +32,6 @@ export class ReadTextComponent {
   @Input() nochapterPos?: string;
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
   public text: any;
-  protected errorMessage?: string;
-  defaultView: string;
   apiEndPoint: string;
   appMachineName: string;
   textLoading: Boolean = true;
@@ -50,7 +48,6 @@ export class ReadTextComponent {
     protected textService: TextService,
     protected sanitizer: DomSanitizer,
     protected storage: StorageService,
-    private toastCtrl: ToastController,
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
@@ -62,7 +59,6 @@ export class ReadTextComponent {
   ) {
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.defaultView = config.defaults?.ReadModeView ?? undefined;
     this.intervalTimerId = 0;
     this.estID = '';
     this.illustrationsViewAvailable = config.settings?.displayTypesToggles?.illustrations ?? false;
@@ -83,7 +79,9 @@ export class ReadTextComponent {
       this.setText();
       this.setIllustrationsInReadtextStatus();
     }
-    this.setUpTextListeners();
+    if (isBrowser()) {
+      this.setUpTextListeners();
+    }
   }
 
   ngAfterViewInit() {
@@ -136,42 +134,12 @@ export class ReadTextComponent {
     this.unlistenClickEvents?.();
   }
 
-  /**
-   * ! This method does not work when an open illustrations-view has been previously
-   * ! removed and then an attempt to reopen one from the read-text is made. New
-   * ! illustrations-views are opened with the openIllustrationInNewView method.
-   */
-  openNewView( event: any, id: any, type: string ) {
-    let openId = id;
-    let chapter = null;
-    if (String(id).includes('ch')) {
-      openId = String(String(id).split('ch')[0]).trim();
-      chapter = 'ch' + String(String(id).split('ch')[1]).trim();
-    }
-    this.events.publishShowView({
-      type, openId, chapter
-    });
-  }
-
   /** Function for opening the passed image in a new illustrations-view. */
   openIllustrationInNewView(image: any) {
     image.viewType = 'illustrations';
     image.id = null;
     this.openNewIllustrView.emit(image);
     this.commonFunctions.scrollLastViewIntoView();
-  }
-
-  private setIllustrationImages() {
-    if (this.link) {
-      this.textService.getEstablishedText(this.link).subscribe(text => {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, 'text/html');
-        const images: any = xmlDoc.querySelectorAll('img.est_figure_graphic');
-        for (let i = 0; i < images.length ; i++) {
-          images[i].classList.add('show-illustration');
-        }
-      });
-    }
   }
 
   async openIllustration(imageNumber: any) {
@@ -201,26 +169,8 @@ export class ReadTextComponent {
         this.estID = this.link.split(';')[0] + '_' + this.link.substring(this.link.lastIndexOf('_') + 1) + '_est';
       }
     }
-    // console.log('this.estID:', this.estID);
 
-    if (this.textService.readtextIdsInStorage.includes(this.estID)) {
-      this.storage.get(this.estID).then((readtext) => {
-        if (readtext) {
-          this.textLoading = false;
-          if (this.matches) {
-            readtext = this.commonFunctions.insertSearchMatchTags(readtext, this.matches);
-          }
-          this.text = this.sanitizer.bypassSecurityTrustHtml(readtext);
-          console.log('Retrieved read-text from cache');
-        } else {
-          console.log('Failed to retrieve read-text text from cache');
-          this.textService.readtextIdsInStorage.splice(this.textService.readtextIdsInStorage.indexOf(this.estID), 1);
-          this.getEstText();
-        }
-      });
-    } else {
-      this.getEstText();
-    }
+    this.getEstText();
     this.doAnalytics();
   }
 
@@ -229,10 +179,13 @@ export class ReadTextComponent {
       return;
     }
     this.textService.getEstablishedText(this.link).subscribe({
-      next: content => {
-        this.textLoading = false;
-        if (content === '' || content === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
+      next: (res) => {
+        let text = res as any;
+        text = text.content as string;
+
+        if (text === '' || text === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
           console.log('no reading text');
+          this.textLoading = false;
           this.translate.get('Read.Established.NoEstablished').subscribe({
             next: translation => {
               this.text = translation;
@@ -244,19 +197,13 @@ export class ReadTextComponent {
           });
         } else {
           const c_id = String(this.link).split('_')[0];
-          let processedText = this.textService.postprocessEstablishedText(content, c_id);
-
-          if (!this.textService.readtextIdsInStorage.includes(this.estID)) {
-            this.textService.readtextIdsInStorage.push(this.estID);
-            this.storage.set(this.estID, processedText);
-          }
-
-          processedText = this.commonFunctions.insertSearchMatchTags(processedText, this.matches);
-          this.text = this.sanitizer.bypassSecurityTrustHtml(processedText);
+          text = this.textService.postprocessEstablishedText(text, c_id);
+          text = this.commonFunctions.insertSearchMatchTags(text, this.matches);
+          this.textLoading = false;
+          this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         }
       },
-      error: e => {
-        this.errorMessage = <any>e;
+      error: (e) => {
         this.textLoading = false;
         this.text = 'Lästexten kunde inte hämtas.';
       }

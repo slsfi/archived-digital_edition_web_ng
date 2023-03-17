@@ -711,7 +711,7 @@ export class DigitalEditionsApp {
       this.currentContentName = 'Digital Publications';
       const params = {};
       this.enableContentMenu();
-      this.router.navigate(['/publications'], { queryParams: params });
+      this.router.navigate(['/publications']);
     });
     this.events.getTopMenuAbout().subscribe(() => {
       this.events.publishSelectedItemInMenu({
@@ -760,7 +760,7 @@ export class DigitalEditionsApp {
       // Open music accordion as well
       this.simpleAccordionsExpanded.musicAccordion = true;
       const params = {};
-      this.router.navigate(['/music'], { queryParams: params });
+      this.router.navigate(['/music']);
     });
     this.events.getTopMenuFront().subscribe(() => {
       this.events.publishSelectedItemInMenu({
@@ -784,7 +784,7 @@ export class DigitalEditionsApp {
       } catch ( e ) {
       }
       const params = {};
-      this.router.navigate(['/home'], { queryParams: params });
+      this.router.navigate(['/home']);
     });
 
     this.events.getDigitalEditionListRecieveData().subscribe((data: any) => {
@@ -810,7 +810,7 @@ export class DigitalEditionsApp {
 
     this.events.getTopMenuElasticSearch().subscribe(() => {
       const params = {};
-      this.router.navigate(['/elastic-search'], { queryParams: params });
+      this.router.navigate(['/elastic-search']);
       this.tocLoaded = true;
       // this.resetCurrentCollection();
       this.enableContentMenu();
@@ -1115,7 +1115,7 @@ export class DigitalEditionsApp {
 
     console.log('Opening read from App.openFirstPage()');
     // TODO Sami
-    this.router.navigate(['/read'], { queryParams: params });
+    this.router.navigate(['/read']);
   }
 
   getTocRoot(collection: DigitalEdition) {
@@ -1156,7 +1156,7 @@ export class DigitalEditionsApp {
         } else {
           // Open collection in single-edition page
           const params = { collection: JSON.stringify(collection), fetch: 'false' };
-          this.router.navigate([`publication-toc/${collection.id}`], { queryParams: params });
+          this.router.navigate([`publication-toc/${collection.id}`]);
         }
       }
       this.cdRef.detectChanges();
@@ -1180,23 +1180,22 @@ export class DigitalEditionsApp {
 
   openCollectionInitialPage(collection: DigitalEdition) {
     console.log('Opening collection from App.openCollectionInitialPage()');
-    const params = { collection: JSON.stringify(collection), fetch: 'true', /*collectionID: collection.id*/ };
     if ( this.hasCover && this.defaultSelectedItem === 'cover' ) {
-      this.router.navigate([`/publication-cover/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'cover']);
     } else if ( this.hasTitle && this.defaultSelectedItem === 'title' ) {
-      this.router.navigate([`/publication-title/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'title']);
     } else if ( this.hasForeword && this.defaultSelectedItem === 'foreword' ) {
-      this.router.navigate([`/publication-foreword/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'foreword']);
     } else if ( this.hasIntro && this.defaultSelectedItem === 'introduction' ) {
-      this.router.navigate([`/publication-introduction/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'introduction']);
     } else if ( this.hasCover ) {
-      this.router.navigate([`/publication-cover/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'cover']);
     } else if ( this.hasTitle ) {
-      this.router.navigate([`/publication-title/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'title']);
     } else if ( this.hasForeword ) {
-      this.router.navigate([`/publication-foreword/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'foreword']);
     } else if ( this.hasIntro ) {
-      this.router.navigate([`/publication-introduction/${collection.id}`], { queryParams: params });
+      this.router.navigate(['/publication', collection.id, 'introduction']);
     }
   }
 
