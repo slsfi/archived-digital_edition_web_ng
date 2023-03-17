@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone } from '@angular/core';
+import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,17 +8,11 @@ import { CommonFunctionsService } from 'src/app/services/common-functions/common
 import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
-/**
- * Generated class for the ReadTextComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'read-text',
   templateUrl: 'read-text.html',
@@ -26,20 +20,15 @@ import { isBrowser } from 'src/standalone/utility-functions';
 })
 export class ReadTextComponent {
 
-  @Input() link?: string;
-  @Input() matches?: Array<string>;
-  @Input() external?: string;
-  @Input() nochapterPos?: string;
+  @Input() textItemID: string = '';
+  @Input() searchMatches: Array<string> = [];
+  @Input() textPosition: string = '';
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
   public text: any;
-  apiEndPoint: string;
-  appMachineName: string;
-  textLoading: Boolean = true;
-  illustrationsVisibleInReadtext: Boolean = false;
-  illustrationsViewAvailable: Boolean = false;
+  textLoading: boolean = true;
+  illustrationsVisibleInReadtext: boolean = false;
+  illustrationsViewAvailable: boolean = false;
   intervalTimerId: number;
-  estID: string;
-  pos?: string;
   private unlistenClickEvents?: () => void;
 
   constructor(
@@ -47,7 +36,6 @@ export class ReadTextComponent {
     protected readPopoverService: ReadPopoverService,
     protected textService: TextService,
     protected sanitizer: DomSanitizer,
-    protected storage: StorageService,
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
@@ -57,76 +45,35 @@ export class ReadTextComponent {
     private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
-    this.appMachineName = config.app?.machineName ?? '';
-    this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.intervalTimerId = 0;
-    this.estID = '';
     this.illustrationsViewAvailable = config.settings?.displayTypesToggles?.illustrations ?? false;
   }
 
-  ngOnInit() {
-    console.log('read text ngOnInit, link:', this.link);
-    if ( this.external !== undefined && this.external !== null ) {
-      const extParts = String(this.external).split(' ');
-      this.textService.getCollectionAndPublicationByLegacyId(extParts[0] + '_' + extParts[1]).subscribe(data => {
-        if ( data[0] !== undefined ) {
-          this.link = data[0]['coll_id'] + '_' + data[0]['pub_id'];
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'textPosition': {
+            if (
+              changes.textPosition.currentValue &&
+              changes.textPosition.currentValue !== changes.textPosition.previousValue
+            ) {
+              this.scrollToTextPosition();
+            }
+          }
         }
-        this.setText();
-        this.setIllustrationsInReadtextStatus();
-      });
-    } else {
-      this.setText();
-      this.setIllustrationsInReadtextStatus();
-    }
-    if (isBrowser()) {
-      this.setUpTextListeners();
+      }
     }
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
+    if (this.textItemID) {
+      this.loadReadText();
+      this.setIllustrationsInReadtextStatus();
+      this.doAnalytics();
+    }
     if (isBrowser()) {
-      this.ngZone.runOutsideAngular(() => {
-        // Scroll to link position if defined.
-        let iterationsLeft = 10;
-        clearInterval(this.intervalTimerId);
-        const that = this;
-        this.intervalTimerId = window.setInterval(function() {
-          if (iterationsLeft < 1) {
-            clearInterval(that.intervalTimerId);
-          } else {
-            iterationsLeft -= 1;
-            let posId = null;
-            if (that.nochapterPos !== undefined && that.nochapterPos !== null) {
-              posId = that.nochapterPos;
-            } else if ( that.link !== undefined ) {
-              const linkData = that.link.split(';');
-              if (linkData[1]) {
-                posId = linkData[1];
-              } else {
-                clearInterval(that.intervalTimerId);
-              }
-            } else {
-              clearInterval(that.intervalTimerId);
-            }
-
-            if (posId) {
-              let target = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]') as HTMLAnchorElement;
-              if ( target && ((target.parentElement && target.parentElement.classList.contains('ttFixed'))
-              || (target.parentElement?.parentElement && target.parentElement?.parentElement.classList.contains('ttFixed'))) ) {
-                // Position in footnote --> look for second target
-                target = document.querySelectorAll('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + posId + '"]')[1] as HTMLAnchorElement;
-              }
-              if (target) {
-                that.commonFunctions.scrollToHTMLElement(target);
-                clearInterval(that.intervalTimerId);
-              }
-            } else {
-              clearInterval(that.intervalTimerId);
-            }
-          }
-        }.bind(this), 1000);
-      });
+      this.setUpTextListeners();
     }
   }
 
@@ -134,51 +81,8 @@ export class ReadTextComponent {
     this.unlistenClickEvents?.();
   }
 
-  /** Function for opening the passed image in a new illustrations-view. */
-  openIllustrationInNewView(image: any) {
-    image.viewType = 'illustrations';
-    image.id = null;
-    this.openNewIllustrView.emit(image);
-    this.commonFunctions.scrollLastViewIntoView();
-  }
-
-  async openIllustration(imageNumber: any) {
-    const modal = await this.modalController.create({
-      component: IllustrationPage,
-      componentProps: { 'imageNumber': imageNumber }
-    });
-    return await modal.present();
-  }
-
-  setText() {
-    // Construct estID for storing read-text in storage
-    if (!this.link) {
-      return;
-    }
-
-    if (this.link.indexOf(';') < 0) {
-      // No pos in link
-      this.estID = this.link + '_est';
-    } else {
-      const posIndex = this.link.indexOf(';');
-      if (this.link.indexOf('_', posIndex) < 0) {
-        // Not a multilingual est link but has pos
-        this.estID = this.link.split(';')[0] + '_est';
-      } else {
-        // Multilingual est link with pos, remove pos
-        this.estID = this.link.split(';')[0] + '_' + this.link.substring(this.link.lastIndexOf('_') + 1) + '_est';
-      }
-    }
-
-    this.getEstText();
-    this.doAnalytics();
-  }
-
-  getEstText() {
-    if (!this.link) {
-      return;
-    }
-    this.textService.getEstablishedText(this.link).subscribe({
+  loadReadText() {
+    this.textService.getEstablishedText(this.textItemID).subscribe({
       next: (res) => {
         let text = res as any;
         text = text.content as string;
@@ -196,9 +100,9 @@ export class ReadTextComponent {
             }
           });
         } else {
-          const c_id = String(this.link).split('_')[0];
+          const c_id = String(this.textItemID).split('_')[0];
           text = this.textService.postprocessEstablishedText(text, c_id);
-          text = this.commonFunctions.insertSearchMatchTags(text, this.matches);
+          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
           this.textLoading = false;
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         }
@@ -217,7 +121,7 @@ export class ReadTextComponent {
    */
   private setIllustrationsInReadtextStatus() {
     const showIllustrations = config.settings?.showReadTextIllustrations ?? [];
-    if (showIllustrations.includes(this.link?.split('_')[0]) || showIllustrations.includes(this.link?.split('_')[1])) {
+    if (showIllustrations.includes(this.textItemID.split('_')[0]) || showIllustrations.includes(this.textItemID.split('_')[1])) {
       this.illustrationsVisibleInReadtext = true;
     } else {
       this.illustrationsVisibleInReadtext = false;
@@ -234,7 +138,7 @@ export class ReadTextComponent {
         try {
           const eventTarget = event.target as HTMLElement;
 
-          // Some of the texts e.g. ordsprak.sls.fi links to external sites
+          // Some of the texts, e.g. ordsprak.sls.fi, have links to external sites
           if ( eventTarget.hasAttribute('href') === true && eventTarget.getAttribute('href')?.includes('http') === false ) {
             event.preventDefault();
           }
@@ -292,8 +196,63 @@ export class ReadTextComponent {
     });
   }
 
+  /**
+   * Function for opening the passed image in a new illustrations-view.
+   */
+  openIllustrationInNewView(image: any) {
+    image.viewType = 'illustrations';
+    image.id = null;
+    this.openNewIllustrView.emit(image);
+    this.commonFunctions.scrollLastViewIntoView();
+  }
+
+  async openIllustration(imageNumber: any) {
+    const modal = await this.modalController.create({
+      component: IllustrationPage,
+      componentProps: { 'imageNumber': imageNumber }
+    });
+    return await modal.present();
+  }
+
+  scrollToTextPosition() {
+    // Scroll to textPosition if defined.
+    if (isBrowser() && this.textPosition) {
+      this.ngZone.runOutsideAngular(() => {
+        let iterationsLeft = 10;
+        clearInterval(this.intervalTimerId);
+        const that = this;
+
+        this.intervalTimerId = window.setInterval(function() {
+          if (iterationsLeft < 1) {
+            clearInterval(that.intervalTimerId);
+          } else {
+            iterationsLeft -= 1;
+            let target = document.querySelector(
+              'page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+            ) as HTMLAnchorElement;
+            if (
+              target && (
+                (target.parentElement && target.parentElement.classList.contains('ttFixed')) ||
+                (target.parentElement?.parentElement && target.parentElement?.parentElement.classList.contains('ttFixed'))
+              )
+            ) {
+              // Position in footnote --> look for second target
+              target = document.querySelectorAll(
+                'page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+              )[1] as HTMLAnchorElement;
+            }
+            if (target) {
+              that.commonFunctions.scrollToHTMLElement(target);
+              clearInterval(that.intervalTimerId);
+            }
+          }
+        }.bind(this), 1000);
+      });
+    }
+  }
+
   doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Established', 'Established', String(this.link));
+    this.analyticsService.doAnalyticsEvent('Established', 'Established', this.textItemID);
   }
 
 }

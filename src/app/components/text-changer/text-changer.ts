@@ -605,43 +605,25 @@ export class TextChangerComponent {
       }
     } else {
       // Open text in page-read
-      const itemIdParts = item.itemId.split('_');
+      let itemIdParts = item.itemId.split(';');
+      let positionId = '';
+      if (itemIdParts.length > 1) {
+        positionId = itemIdParts[1];
+      }
+      itemIdParts = itemIdParts[0].split('_');
       const collectionId = itemIdParts[0];
       const publicationId = itemIdParts[1];
       let chapterId = '';
-      if (itemIdParts[2]) {
+      if (itemIdParts.length > 2) {
         chapterId = itemIdParts[2];
       }
 
-      /**
-       * TODO: The params below are not needed. events.publishUpdatePositionInPageRead only really
-       * needs item.itemId. Basically the function sends a message to the read page to scroll the read
-       * text to a specific position in the text that is already displayed there.
-       */
-      item.selected = true;
-      this.events.publishSelectOneItem(item.itemId);
-
-      const params = {tocItem: item, collection: {title: item.text}} as any;
-      params['tocLinkId'] = item.itemId;
-      params['collectionID'] = collectionId;
-      params['publicationID'] = publicationId;
-      if ( itemIdParts[2] !== undefined ) {
-        params['chapterID'] = itemIdParts[2];
-      }
-
-      if (this.textService.readViewTextId && item.itemId.split('_').length > 1 && item.itemId.indexOf(';') > -1
-      && item.itemId.split(';')[0] === this.textService.readViewTextId.split(';')[0]) {
-        // The read page we are navigating to is just a different position in the text that is already open
-        // --> no need to reload page-read, just scroll to correct position
-        console.log('Text-changer setting new position in page-read');
-        this.setCurrentItem(item.itemId);
-        this.events.publishUpdatePositionInPageRead(params);
-      } else {
-        console.log('Opening read from TextChanger.open()');
-        this.router.navigate(['/publication', collectionId, 'text', publicationId, chapterId]);
-      }
+      console.log('Opening read from TextChanger.open()');
+      this.router.navigate(
+        ['/publication', collectionId, 'text', publicationId, chapterId],
+        { queryParams: { position: positionId } }
+      );
     }
-
   }
 
   setCurrentItem(itemId: string) {

@@ -102,32 +102,32 @@
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
                 <ng-container *ngIf="view.type == 'established' && !multilingualEST">
-                  <read-text [link]="textItemID" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                  <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
                 </ng-container>
 
                 <ng-container *ngIf="multilingualEST && displayToggles['established']">
                   <ng-container *ngFor="let lang of estLanguages">
                     <ng-container *ngIf="view.type == 'established_' + lang">
-                      <read-text [link]="textItemID + '_' + lang" [matches]="matches" [external]="external" [nochapterPos]="nochapterPos" (openNewIllustrView)="openNewView($event)"></read-text>
+                      <read-text [textItemID]="textItemID + '_' + lang" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
                     </ng-container>
                   </ng-container>
                 </ng-container>
 
                 <ng-container *ngIf="view.type == 'comments'">
-                  <comments [link]="textItemID" [matches]="matches" [external]="external" (openNewIntroView)="openNewView($event)">
+                  <comments [link]="textItemID" [matches]="searchMatches" (openNewIntroView)="openNewView($event)">
                   </comments>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'facsimiles'">
-                  <facsimiles [itemId]="textItemID" [selectedFacsimile]="view.id" [matches]="matches"
+                  <facsimiles [itemId]="textItemID" [selectedFacsimile]="view.id" [matches]="searchMatches"
                     [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
                   </facsimiles>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'manuscripts'">
-                  <manuscripts [linkID]="view.id" [itemId]="textItemID" [matches]="matches"
+                  <manuscripts [linkID]="view.id" [itemId]="textItemID" [matches]="searchMatches"
                     (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'variations'">
-                  <variations [linkID]="view.id" [itemId]="textItemID" [matches]="matches" [sortOrder]="view.variationSortOrder"
+                  <variations [linkID]="view.id" [itemId]="textItemID" [matches]="searchMatches" [sortOrder]="view.variationSortOrder"
                     (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variations>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'illustrations'">
@@ -163,7 +163,7 @@
                   <ion-label>{{ "Read.Established.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
                 <ng-container *ngIf="multilingualEST && displayToggles['established']">
-                  <ion-chip *ngFor="let lang of estLanguages" (click)="addView('established', undefined, null, null, lang); commonFunctions.scrollLastViewIntoView()">
+                  <ion-chip *ngFor="let lang of estLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()">
                     <ion-icon name="reader-sharp"></ion-icon>
                     <ion-label>{{ "Read.Established.AddButtonText" | translate }} – {{lang}}</ion-label>
                   </ion-chip>
@@ -257,13 +257,13 @@
       </div>
       <div [ngSwitch]="show">
         <div *ngSwitchCase="'established'" class="mobile-mode-established">
-          <read-text [link]="textItemID" [matches]="matches"></read-text>
+          <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
         </div>
         <!--div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts">
-          <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="matches"></manuscripts>
+          <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
         </div-->
         <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-          <facsimiles [itemId]="textItemID" [matches]="matches" [facsID]="facs_id" [facsNr]="facs_nr"
+          <facsimiles [itemId]="textItemID" [matches]="searchMatches" [facsID]="facs_id" [facsNr]="facs_nr"
             [songID]="song_id"></facsimiles>
         </div>
       </div>

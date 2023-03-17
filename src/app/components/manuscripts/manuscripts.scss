@@ -15,7 +15,7 @@ ion-item.item.show-normalized-toggle {
 
 /* Highlight for search match. */
 match {
-  background-color: $search-match-color !important;
+  background-color: var(--search-match-background-color) !important;
 }
 
 .mobile-mode-manuscripts manuscripts .text-select-wrapper {

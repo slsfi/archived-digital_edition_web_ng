@@ -41,8 +41,6 @@ $blackish-color:  #363636;
 $orange-color:    #e1a462;
 $white-color:     #fff;
 
-$search-match-color:            #a5d7a5;
-
 $forward-arrow-color:					  map-get($map: $colors, $key: 'dark');
 $divider-bg-color:              map-get($map: $colors, $key: 'secondary');
 
@@ -238,6 +236,7 @@ $opacity-hover-transition: opacity 0.2s;
 
   --opacity-hover: 0.6;
   --opacity-hover-transition: opacity 0.2s;
+  --search-match-background-color: #a5d7a5;
 
 
   // OVERRIDE IONIC CSS VARIABLES
