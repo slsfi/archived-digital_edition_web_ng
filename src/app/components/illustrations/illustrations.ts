@@ -160,10 +160,13 @@ export class IllustrationsComponent {
     if (!this.itemId) {
       return;
     }
-    this.textService.getEstablishedText(this.itemId).subscribe(
-      text => {
+    this.textService.getEstablishedText(this.itemId).subscribe({
+      next: (res) => {
+        let text = res as any;
+        text = text.content as string;
+
         const c_id = String(this.itemId).split('_')[0];
-        text = this.textService.mapIllustrationImagePaths(text, c_id);
+        text = this.textService.postprocessEstablishedText(text, c_id);
 
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(text, 'text/html');
@@ -191,8 +194,8 @@ export class IllustrationsComponent {
         }
         this.textLoading = false;
       },
-      error => { this.textLoading = false; }
-    );
+      error: (e) => { this.textLoading = false; }
+    });
   }
 
   doAnalytics() {

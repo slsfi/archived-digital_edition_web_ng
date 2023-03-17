@@ -359,7 +359,7 @@ export class ReadPage /*implements OnDestroy*/ {
           this.textPosition = queryParams['position'];
         }
 
-        // TODO: Not sure facs_id and facs_nr are needed, or if they should be passed in the view object for facsimiles
+        // TODO: Not sure facs_id and facs_nr are needed, or if they should be passed in the view object for facsimiles instead
         if (queryParams['facs_id']) {
           console.log('facs_id in queryparams:', queryParams['facs_id']);
           this.facs_id = queryParams['facs_id'];
@@ -374,74 +374,19 @@ export class ReadPage /*implements OnDestroy*/ {
       error: (e) => {},
       complete: () => {}
     });
-  }
 
-  ngOnInitLang() {
-    this.langService.getLanguage().subscribe(lang => {
-
-      let link = this.paramCollectionID + '_' + this.paramPublicationID;
-      if (this.paramChapterID) {
-        link += '_' + this.paramChapterID;
-      }
-
-      // TODO: get rid of this.legacyId, it probably is not needed
-      this.legacyId = link; //<collectionID>_<publicationID>
-      this.establishedText = new EstablishedText({ link: link, id: link, title: '', text: '' });
-
-
-      // TODO: SEbastian: nochapter with pos not taken into account above
-      /*
-        if (this.paramChapterID !== undefined && this.paramChapterID.startsWith('nochapter;')) {
-          this.nochapterPos = this.paramChapterID.replace('nochapter;', '');
-        } else {
-          this.nochapterPos = null;
-        }
-      */
-
-      // Save the id of the previous and current read view text in textService.
-      this.textService.previousReadViewTextId = this.textService.readViewTextId;
-      this.textService.readViewTextId = this.establishedText.link;
-
-      // this.setDefaultViews();
-
-      /*
-      if (this.queryParamSearchResult !== undefined) {
-        this.searchResult = this.queryParamSearchResult;
-      }
-
-      if (this.queryParamOccurrenceResult !== undefined && this.queryParamShowOccurrencesModalOnRead) {
-        this.hasOccurrenceResults = true;
-        this.showOccurrencesModal = true;
-        this.occurrenceResult = this.queryParamOccurrenceResult;
-        this.storage.set('readpage_searchresults', this.queryParamOccurrenceResult);
-      } else {
-        this.storage.get('readpage_searchresults').then((occurrResult) => {
-          if (occurrResult) {
-            this.hasOccurrenceResults = true;
-            this.occurrenceResult = occurrResult;
-          }
-        });
-      }
-      */
-
-      /*
-      this.events.getShowView().subscribe((data) => {
-        const { view, id, chapter } = data;
-        // user and time are the same arguments passed in `events.publish(user, time)`
-        console.log('Welcome', view, 'at', id, 'chapter', chapter);
-        this.openNewExternalView(view, id);
-      })
-      */
-
-      this.getAdditionalParams();
-    });
+    if (isBrowser()) {
+      this.setUpTextListeners();
+    }
   }
 
   ionViewWillEnter() {
+    // TODO: Find another solution for this
+    /*
     this.events.getUpdatePositionInPageRead().subscribe((params) => {
-      /* This is triggered when the publication chapter that should be opened in page-read
-         is the same as the previous, only with a different text position. Then page-read
-         is not reloaded, but the read-text is just scrolled to the correct position. */
+      // This is triggered when the publication chapter that should be opened in page-read
+      // is the same as the previous, only with a different text position. Then page-read
+      // is not reloaded, but the read-text is just scrolled to the correct position.
       console.log('Scrolling to new position in read text');
 
       const idParts = params.tocLinkId.split(';');
@@ -474,30 +419,19 @@ export class ReadPage /*implements OnDestroy*/ {
         // No position in params --> reload the view with the given params
         // const nav = this.app.getActiveNavs();
         // nav[0].setRoot('read', params);
-        this.router.navigate([`/publication/${idParts[0]}/text/${idParts[1]}/`], { queryParams: params });
+        // this.router.navigate([`/publication/${idParts[0]}/text/${idParts[1]}/`], { queryParams: params });
       }
     });
-
-    this.setUpTextListeners();
+    */
   }
 
   ionViewDidEnter() {
-    this.events.publishHelpContinue();
-    // this.events.publish('help:continue');
     this.analyticsService.doPageView('Read');
   }
 
   ionViewWillLeave() {
-    this.unlistenClickEvents?.();
-    this.unlistenMouseoverEvents?.();
-    this.unlistenMouseoutEvents?.();
-    this.unlistenFirstTouchStartEvent?.();
     this.events.getUpdatePositionInPageRead().complete();
     this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-
-  ionViewDidLeave() {
-    this.storage.set('readpage_searchresults', undefined);
   }
 
   ngAfterViewInit() {
@@ -535,49 +469,16 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   ngOnDestroy() {
-    this.events.getShowView().complete();
     if (this.routeQueryParamsSubscription) {
       this.routeQueryParamsSubscription.unsubscribe();
     }
     if (this.routeParamsSubscription) {
       this.routeParamsSubscription.unsubscribe();
     }
-  }
-
-  getAdditionalParams() {
-    if (this.paramFacsId !== undefined &&
-      this.paramFacsId !== ':facs_id' &&
-      this.paramFacsNr !== undefined &&
-      this.paramFacsNr !== ':facs_nr' &&
-      this.paramFacsId !== 'not' &&
-      this.paramFacsNr !== 'infinite') {
-      this.facs_id = this.paramFacsId;
-      this.facs_nr = this.paramFacsNr;
-
-    } else {
-      //
-    }
-
-    if (this. paramSearchTitle !== undefined &&
-      this. paramSearchTitle !== ':song_id' &&
-      this. paramSearchTitle !== 'searchtitle') {
-      this.search_title = this. paramSearchTitle;
-    }
-    if (this.matches === undefined || this.matches.length < 1) {
-      // Get search match phrases from search_title and decode them
-      if (this.search_title) {
-        const search_matches = this.search_title.split('_');
-        search_matches.forEach((search_match: any) => {
-          let decoded_match = decodeURIComponent(search_match);
-          // Remove line break characters
-          decoded_match = decoded_match.replace(/\n/gm, '');
-          // Remove any script tags
-          decoded_match = decoded_match.replace(/<script.+?<\/script>/gi, '');
-          decoded_match = this.commonFunctions.encodeCharEntities(decoded_match);
-          this.matches?.push(decoded_match);
-        });
-      }
-    }
+    this.unlistenClickEvents?.();
+    this.unlistenMouseoverEvents?.();
+    this.unlistenMouseoutEvents?.();
+    this.unlistenFirstTouchStartEvent?.();
   }
 
   async openOccurrenceResult() {
@@ -621,12 +522,8 @@ export class ReadPage /*implements OnDestroy*/ {
     if (this.textService.readViewTextId.split('_')[0] === this.textService.previousReadViewTextId.split('_')[0]) {
       sameCollection = true;
     } else {
-      // A different collection than last time page-read was loaded --> clear read-texts and variations
-      // stored in storage and variationsOrder array in textService.
-      console.log('Clearing cached read-texts and variations from storage');
-      this.clearReadtextsFromStorage();
+      // A different collection than last time page-read was loaded --> clear variationsOrder array in textService.
       this.textService.variationsOrder = [];
-      this.clearVariationsFromStorage();
     }
 
     let defaultReadModeForMobileSelected = false;
@@ -645,9 +542,9 @@ export class ReadPage /*implements OnDestroy*/ {
         if (viewmode === 'variations') {
           // this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
           if (sameCollection && this.textService.variationsOrder.length > 0) {
-            this.addView(viewmode, null, null, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
+            this.addView(viewmode, null, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
           } else {
-            this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
+            this.addView(viewmode, null, null, null, null, variationsViewOrderNumber);
             this.textService.variationsOrder.push(variationsViewOrderNumber);
           }
           variationsViewOrderNumber++;
@@ -1304,7 +1201,7 @@ export class ReadPage /*implements OnDestroy*/ {
                 if (data[0] !== undefined) {
                   publicationId = data[0]['coll_id'];
                 }
-                let hrefString = '/publication-introduction/' + publicationId;
+                let hrefString = '/publication/' + publicationId + '/introduction';
                 if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
                   positionId = hrefTargetItems[1];
                   hrefString += '/' + positionId;
@@ -2175,7 +2072,7 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   openNewExternalView(view: string, id: any) {
-    this.addView(view, id, undefined, true);
+    this.addView(view, id, true);
   }
 
   openNewView(event: any) {
@@ -2186,13 +2083,13 @@ export class ReadPage /*implements OnDestroy*/ {
     } else if (event.viewType === 'facsimileManuscript') {
       this.addView('manuscripts', event.id);
     } else if (event.viewType === 'illustrations') {
-      this.addView(event.viewType, event.id, undefined, undefined, event);
+      this.addView(event.viewType, event.id, undefined, event);
     } else {
       this.addView(event.viewType, event.id);
     }
   }
 
-  addView(type: string, id?: string | null, fab?: IonFab | null, external?: boolean | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
+  addView(type: string, id?: string | null, external?: boolean | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
     /* fab is no longer needed by this function*/
 
     if (external === true) {
@@ -2201,14 +2098,27 @@ export class ReadPage /*implements OnDestroy*/ {
       this.external = undefined;
     }
 
-    if (this.availableViewModes.indexOf(type) !== -1) {
-      const newView = {
-        type: type,
-        ...id && { id: id },
-        ...image && { image: image },
-        ...variationSortOrder && { variationSortOrder: variationSortOrder }
-      } as any;
+    // TODO: Adding the correct unique variations still requires some work
+    if (type === 'variations' && variationSortOrder === undefined) {
+      let currentVariationsViews = 0;
+      this.views.forEach((viewObj: any) => {
+        if (viewObj.type === 'variations') { currentVariationsViews++; }
+      });
+      variationSortOrder = currentVariationsViews;
+    }
 
+    if (this.availableViewModes.indexOf(type) !== -1) {
+      const newView = { type: type } as any;
+
+      if (id != null) {
+        newView['id'] = id;
+      }
+      if (image != null) {
+        newView['image'] = image;
+      }
+      if (variationSortOrder != null) {
+        newView['variationSortOrder'] = variationSortOrder;
+      }
       if (this.multilingualEST && type === 'established' && language) {
         newView['type'] = 'established_' + language;
       }
@@ -2438,32 +2348,6 @@ export class ReadPage /*implements OnDestroy*/ {
         console.log('could not get publication data trying to resolve collection and publication legacy id');
       }
     });
-  }
-
-/**
-   * Removes all read-texts that are stored in storage based on the ids in the readtextIdsInStorage
-   * array in textService, and empties the array.
-   */
-  clearReadtextsFromStorage() {
-    if (this.textService.readtextIdsInStorage.length > 0) {
-      this.textService.readtextIdsInStorage.forEach((readtextId) => {
-        this.storage.remove(readtextId);
-      });
-      this.textService.readtextIdsInStorage = [];
-    }
-  }
-
-  /**
-   * Removes all variations that are stored in storage based on the ids in the varIdsInStorage
-   * array in textService, and empties the array.
-   */
-  clearVariationsFromStorage() {
-    if (this.textService.varIdsInStorage.length > 0) {
-      this.textService.varIdsInStorage.forEach((varId) => {
-        this.storage.remove(varId);
-      });
-      this.textService.varIdsInStorage = [];
-    }
   }
 
   /**

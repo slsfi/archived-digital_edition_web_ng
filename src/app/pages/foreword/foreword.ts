@@ -14,18 +14,7 @@ import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the ForewordPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-// @IonicPage({
-//   name: 'foreword-page',
-//   segment: 'publication-foreword/:collectionID',
-//   priority: 'high'
-// })
 @Component({
   selector: 'page-foreword',
   templateUrl: 'foreword.html',

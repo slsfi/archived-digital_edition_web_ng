@@ -10,12 +10,7 @@ import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the TextChangerComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'text-changer',
   templateUrl: 'text-changer.html',
@@ -598,13 +593,13 @@ export class TextChangerComponent {
     if (item.page !== undefined) {
       // Open text in page-cover, page-title, page-foreword, page-introduction or media-collections
       if (item.page === 'page-cover') {
-        this.router.navigate(['/publication-cover/', item.itemId]);
+        this.router.navigate(['/publication', item.itemId, 'cover']);
       } else if (item.page === 'page-title') {
-        this.router.navigate(['/publication-title', item.itemId]);
+        this.router.navigate(['/publication', item.itemId, 'title']);
       } else if (item.page === 'page-foreword') {
-        this.router.navigate(['/publication-foreword', item.itemId]);
+        this.router.navigate(['/publication', item.itemId, 'foreword']);
       } else if (item.page === 'page-introduction') {
-        this.router.navigate(['/publication-introduction', item.itemId]);
+        this.router.navigate(['/publication', item.itemId, 'introduction']);
       } else if (item.page === 'media-collections') {
         this.router.navigate(['/media-collections']);
       }

@@ -163,7 +163,7 @@
                   <ion-label>{{ "Read.Established.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
                 <ng-container *ngIf="multilingualEST && displayToggles['established']">
-                  <ion-chip *ngFor="let lang of estLanguages" (click)="addView('established', undefined, undefined, null, null, lang); commonFunctions.scrollLastViewIntoView()">
+                  <ion-chip *ngFor="let lang of estLanguages" (click)="addView('established', undefined, null, null, lang); commonFunctions.scrollLastViewIntoView()">
                     <ion-icon name="reader-sharp"></ion-icon>
                     <ion-label>{{ "Read.Established.AddButtonText" | translate }} – {{lang}}</ion-label>
                   </ion-chip>

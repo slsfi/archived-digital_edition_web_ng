@@ -13,18 +13,7 @@ import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the CoverPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-// @IonicPage({
-//   name: 'cover-page',
-//   segment: 'publication-cover/:collectionID',
-//   priority: 'high'
-// })
 @Component({
   selector: 'page-cover',
   templateUrl: 'cover.html',

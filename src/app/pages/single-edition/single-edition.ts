@@ -267,7 +267,7 @@ export class SingleEditionPage {
     try {
       const publicationId = String(this.tocItems['children'][0]['itemId']).split('_')[1];
       console.log('Opening read from SingleEdition.openFirstPage()');
-      this.router.navigate([`/publication/${this.collection.id}/${publicationId}/`], { queryParams: params});
+      this.router.navigate([`/publication/${this.collection.id}/text/${publicationId}/`]);
     } catch (e) {
       this.maybeLoadIntroductionPage(params['collectionID']);
     }
@@ -276,28 +276,28 @@ export class SingleEditionPage {
   maybeLoadIntroductionPage(collectionID: string) {
       const params = { collection: JSON.stringify(this.collection), fetch: true };
       if ( this.hasCover && this.defaultSelectedItem === 'cover' ) {
-        this.router.navigate([`/publication-cover/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'cover']);
         // nav[0].setRoot('cover-page', params);
       } else if ( this.hasTitle && this.defaultSelectedItem === 'title' ) {
-        this.router.navigate([`/publication-title/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'title']);
         // nav[0].setRoot('title-page', params);
       } else if ( this.hasForeword && this.defaultSelectedItem === 'foreword' ) {
-        this.router.navigate([`/publication-foreword/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'foreword']);
         // nav[0].setRoot('foreword-page', params);
       } else if ( this.hasIntro && this.defaultSelectedItem === 'introduction' ) {
-        this.router.navigate([`/publication-introduction/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'introduction']);
         // nav[0].setRoot('introduction', params);
       } else if ( this.hasCover ) {
-        this.router.navigate([`/publication-cover/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'cover']);
         // nav[0].setRoot('cover-page', params);
       } else if ( this.hasTitle ) {
-        this.router.navigate([`/publication-title/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'title']);
         // nav[0].setRoot('title-page', params);
       } else if ( this.hasForeword ) {
-        this.router.navigate([`/publication-foreword/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'foreword']);
         // nav[0].setRoot('foreword-page', params);
       } else if ( this.hasIntro ) {
-        this.router.navigate([`/publication-introduction/${this.collection.id}`], { queryParams: params });
+        this.router.navigate(['/publication', this.collection.id, 'introduction']);
         // nav[0].setRoot('introduction', params);
       }
   }

@@ -78,22 +78,7 @@ export class VariationsComponent {
   }
 
   setText() {
-    if (this.textService.varIdsInStorage.includes(this.varID)) {
-      this.storage.get(this.varID).then((variations) => {
-        if (variations) {
-          this.textLoading = false;
-          this.variations = variations;
-          this.setVariation();
-          console.log('Retrieved variations from cache');
-        } else {
-          console.log('Failed to retrieve variations from cache');
-          this.textService.varIdsInStorage.splice(this.textService.varIdsInStorage.indexOf(this.varID), 1);
-          this.getVariation();
-        }
-      });
-    } else {
-      this.getVariation();
-    }
+    this.getVariation();
     this.doAnalytics();
   }
 
@@ -101,36 +86,33 @@ export class VariationsComponent {
     if (!this.itemId) {
       return;
     }
-    this.textService.getVariations(this.itemId).subscribe(
-      res => {
+    this.textService.getVariations(this.itemId).subscribe({
+      next: (res) => {
         this.textLoading = false;
         // in order to get id attributes for tooltips
         this.variations = res.variations;
         if (this.variations.length > 0) {
           console.log('recieved variations ,..,');
-          if (!this.textService.varIdsInStorage.includes(this.varID)) {
-            this.textService.varIdsInStorage.push(this.varID);
-            this.storage.set(this.varID, this.variations);
-          }
           this.setVariation();
         } else {
           console.log('no variations');
-          this.translate.get('Read.Variations.NoVariations').subscribe(
-            translation => {
+          this.translate.get('Read.Variations.NoVariations').subscribe({
+            next: (translation) => {
               this.text = translation;
-            }, error => {
-              console.error(error);
+            },
+            error: (e) => {
+              console.error(e);
               this.text = 'Inga varianter';
             }
-          );
+          });
         }
       },
-      err =>  {
+      error: (err) =>  {
         this.errorMessage = <any>err;
         console.error(err);
         this.textLoading = false;
       }
-    );
+    });
   }
 
   setVariation() {
