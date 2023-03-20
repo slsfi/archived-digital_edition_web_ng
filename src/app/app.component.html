@@ -1,6 +1,6 @@
 <ion-app>
-  <top-menu (hamburgerMenuClick)="toggleSideMenu()" [ngClass]="{'splitPanePossible': splitPanePossible}"
-            [showSideMenu]="showSideMenu" [splitPanePossible]="splitPanePossible"></top-menu>
+  <top-menu (hamburgerMenuClick)="toggleSideMenu()"
+            [showSideMenu]="showSideMenu"></top-menu>
   <ion-split-pane [when]="showSideMenu" contentId="content">
     <!-- This is the default, main menu -->
     <ion-menu contentId="content" id="contentMenu">

@@ -74,7 +74,6 @@ export class SideMenu implements OnInit {
   currentAccordionMenu: any = null;
 
   sideMenuMobile = false;
-  splitPaneMobile = false;
 
   splitPaneOpen = false;
   previousSplitPaneOpenState = true;
@@ -87,9 +86,6 @@ export class SideMenu implements OnInit {
     aboutMenu: ['AboutPage'],
     contentMenu: ['HomePage', 'EditionsPage', 'ContentPage', 'MusicPage', 'FeaturedFacsimilePage', 'ElasticSearchPage']
   }
-
-  pagesWithoutMenu = [];
-  pagesWithClosedMenu = ['HomePage'];
 
   public options?: any;
   public songTypesOptions?: {
@@ -163,8 +159,6 @@ export class SideMenu implements OnInit {
   tocWorkSearchSelected = false;
   tocHomeSelected = false;
   selectedMenu: string = '';
-  initialUrl: string;
-  initialPath: string;
 
   constructor(
     public platform: Platform,
@@ -199,7 +193,7 @@ export class SideMenu implements OnInit {
 
     try {
       this.splitReadCollections = this._config.show?.TOC?.splitReadCollections as any;
-      if ( this.splitReadCollections === null || this.splitReadCollections.length <= 0 ) {
+      if (this.splitReadCollections === null || this.splitReadCollections.length <= 0) {
         this.splitReadCollections = [''];
       }
     } catch (e) {
@@ -253,8 +247,12 @@ export class SideMenu implements OnInit {
       this.getMediaCollections().then((mediaCollectionMenu) => {
         if (mediaCollectionMenu && mediaCollectionMenu.length > 0) {
           mediaCollectionMenu.sort(function (a: any, b: any) {
-            if (a['title'] < b['title']) { return -1; }
-            if (a['title'] > b['title']) { return 1; }
+            if (a['title'] < b['title']) {
+              return -1;
+            }
+            if (a['title'] > b['title']) {
+              return 1;
+            }
             return 0;
           });
 
@@ -262,9 +260,10 @@ export class SideMenu implements OnInit {
           this.translate.get('TOC.All').subscribe(
             translation => {
               t_all = translation;
-            }, error => { }
+            }, () => {
+            }
           );
-          mediaCollectionMenu.unshift({ 'id': 'media-collections', 'title': t_all, 'highlight': true });
+          mediaCollectionMenu.unshift({'id': 'media-collections', 'title': t_all, 'highlight': true});
           mediaCollectionMenu.forEach((item: any) => {
             item['is_gallery'] = true;
           });
@@ -314,10 +313,6 @@ export class SideMenu implements OnInit {
     this.collectionsWithoutTOC = this._config.CollectionsWithoutTOC ?? [];
   }
 
-  hideSplitPane() {
-    this.splitPaneOpen = false;
-  }
-
   showSplitPane() {
     this.splitPaneOpen = true;
 
@@ -354,16 +349,16 @@ export class SideMenu implements OnInit {
       return;
     }
 
-    if ( this.collectionSortOrder === undefined ) {
+    if (this.collectionSortOrder === undefined) {
       collections = this.sortListRoman(collections);
-    } else if ( Object.keys(this.collectionSortOrder).length > 0 )  {
+    } else if (Object.keys(this.collectionSortOrder).length > 0) {
       collections = this.sortListDefined(collections, this.collectionSortOrder);
     }
 
     const collectionsTmp = [] as any;
     const pdfCollections = [] as any;
     collections.forEach((collection: any) => {
-      if ( collection.id !== 'mediaCollections' ) {
+      if (collection.id !== 'mediaCollections') {
         if (!(this.collectionsWithoutTOC.indexOf(collection.id) !== -1)) {
           collection['toc_exists'] = true;
           collection['expanded'] = false;
@@ -382,11 +377,7 @@ export class SideMenu implements OnInit {
 
         if (collection.id in this.collectionDownloads['pdf']) {
           collection['isDownload'] = true;
-        } else if (collection.id in this.collectionDownloads['epub']) {
-          collection['isDownload'] = true;
-        } else {
-          collection['isDownload'] = false;
-        }
+        } else collection['isDownload'] = collection.id in this.collectionDownloads['epub'];
         collection['highlight'] = false;
       }
       if (!collection['has_children_pdfs'] || !this.showBooks) {
@@ -400,8 +391,12 @@ export class SideMenu implements OnInit {
     if (this.showBooks) {
       this.pdfCollections = pdfCollections;
       this.pdfCollections?.sort(function (a, b) {
-        if (a['title'] < b['title']) { return -1; }
-        if (a['title'] > b['title']) { return 1; }
+        if (a['title'] < b['title']) {
+          return -1;
+        }
+        if (a['title'] > b['title']) {
+          return 1;
+        }
         return 0;
       });
     }
@@ -421,8 +416,7 @@ export class SideMenu implements OnInit {
   sortListRoman(list: any) {
     for (const coll of list) {
       const romanNumeral = coll.title.split(' ')[0];
-      const order = this.romanToInt(romanNumeral);
-      coll['order'] = order;
+      coll['order'] = this.romanToInt(romanNumeral);
     }
 
     list.sort((a: any, b: any) => {
@@ -441,7 +435,7 @@ export class SideMenu implements OnInit {
       let order = sort[coll.id];
       // If the sort order is not defined in the this._config, just set a high number
       // so that it will be at the end of the list.
-      if ( order === undefined ) {
+      if (order === undefined) {
         order = 9999;
       }
       coll['order'] = order;
@@ -490,7 +484,7 @@ export class SideMenu implements OnInit {
 
     this.simpleAccordionsExpanded.songTypesAccordion = this._config.AccordionsExpandedDefault?.SongTypes ?? false;
     this.simpleAccordionsExpanded.musicAccordion = this._config.AccordionsExpandedDefault?.Music ?? false;
-    for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+    for (let i = 0; i < this.splitReadCollections.length; i++) {
       this.simpleAccordionsExpanded.collectionsAccordion[i] = this._config.AccordionsExpandedDefault?.Collections ?? false;
     }
   }
@@ -510,37 +504,23 @@ export class SideMenu implements OnInit {
                 this.songTypesOptions.toc = tocItems.children;
               }
             },
-            error => { this.errorMessage = <any>error });
+            error => {
+              this.errorMessage = <any>error
+            });
       }
     }
   }
 
   // getting side-menu structure
-  getAboutPages() {
+  async getAboutPages() {
     if (this.aboutMenuMarkdown) {
-      (async () => {
-        this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.language, this.aboutMenuMarkdownInfo.idNumber);
-        console.log( this.aboutOptionsMarkdown);
-      }).bind(this)();
+      this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.language, this.aboutMenuMarkdownInfo.idNumber);
+      console.log(this.aboutOptionsMarkdown);
     }
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      const platforms = [
-        'android',
-        'cordova',
-        'core',
-        'ios',
-        'ipad',
-        'iphone',
-        'mobile',
-        'mobileweb',
-        'phablet',
-        'tablet',
-        'windows',
-      ]
-      // platforms.map(p => console.log(`${p}: ${this.platform.is(p)}`));
       this.languageService.getLanguage().subscribe((lang: string) => {
         this.language = lang;
         this.appName = this._config.app?.name?.[lang] ?? '';
@@ -551,7 +531,7 @@ export class SideMenu implements OnInit {
         this.getSongTypes();
         this.getAboutPages();
       });
-      this.events.publishPdfviewOpen({ 'isOpen': false });
+      this.events.publishPdfviewOpen({'isOpen': false});
     });
 
     // Try to remove META-Tags
@@ -570,7 +550,7 @@ export class SideMenu implements OnInit {
   }
 
   unSelectCollectionWithChildrenPdf() {
-    if ( this.collectionsListWithTOC !== undefined ) {
+    if (this.collectionsListWithTOC !== undefined) {
       try {
         for (const collection of this.collectionsListWithTOC) {
           if (collection.has_children_pdfs && collection.highlight) {
@@ -593,7 +573,7 @@ export class SideMenu implements OnInit {
       }
     })
     this.events.getCollectionWithChildrenPdfsHighlight().subscribe((collectionID: any) => {
-      if ( this.collectionsListWithTOC !== undefined && this.collectionsListWithTOC ) {
+      if (this.collectionsListWithTOC !== undefined && this.collectionsListWithTOC) {
         for (const collection of this.collectionsListWithTOC) {
           if (String(collection.id) === String(collectionID)) {
             collection['highlight'] = true;
@@ -603,8 +583,8 @@ export class SideMenu implements OnInit {
               menuID: selectedMenu,
               component: 'app-component'
             });
-            if ( this.splitReadCollections !== undefined ) {
-              for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+            if (this.splitReadCollections !== undefined) {
+              for (let i = 0; i < this.splitReadCollections.length; i++) {
                 this.simpleAccordionsExpanded.collectionsAccordion[i] = true;
               }
             }
@@ -620,13 +600,13 @@ export class SideMenu implements OnInit {
       // Try to close all the expanded Collections
       try {
         // Check if we have many Read Collections, if so, minimize all
-        if ( this.splitReadCollections.length > 1 ) {
-          for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+        if (this.splitReadCollections.length > 1) {
+          for (let i = 0; i < this.splitReadCollections.length; i++) {
             this.simpleAccordionsExpanded.collectionsAccordion[i] = false;
           }
           this.cdRef.detectChanges();
         }
-      } catch ( e ) {
+      } catch (e) {
       }
     });
 
@@ -691,7 +671,7 @@ export class SideMenu implements OnInit {
 
       // Check if there is a need to expand
       // Otherwise we might change smth after user clicks on accordion
-      for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+      for (let i = 0; i < this.splitReadCollections.length; i++) {
         if (expand && !this.simpleAccordionsExpanded.collectionsAccordion[i]) {
           this.simpleAccordionsExpanded.collectionsAccordion[i] = true;
         } else if (!expand && this.simpleAccordionsExpanded.collectionsAccordion) {
@@ -747,7 +727,7 @@ export class SideMenu implements OnInit {
         // In the rare occasion that collections haven't had time to load we need to wait for them, otherwise the TOC will be empty
         this.ngZone.runOutsideAngular(() => {
           let iterationsLeft = 6;
-          const intervalTimerId = window.setInterval(function() {
+          const intervalTimerId = window.setInterval(function () {
             if (iterationsLeft < 1) {
               that.ngZone.run(() => {
                 that.setTocDataWhenSubscribingToTocLoadedEvent(data);
@@ -778,19 +758,17 @@ export class SideMenu implements OnInit {
       const homeUrl = document.URL.indexOf('/home');
       if (homeUrl >= 0) {
         this.setupPageSettings(currentPage);
-      } else if ( document.URL.indexOf('/') > 0 ) {
-        if ( this.splitPaneOpen === false && this.pageFirstLoad === true ) {
+      } else if (document.URL.indexOf('/') > 0) {
+        if (!this.splitPaneOpen && this.pageFirstLoad) {
           this.showSplitPane();
           this.pageFirstLoad = false;
         }
       }
     });
 
-    this.events.getIonViewWillLeaves().subscribe((className: any) => {
-    });
+    this.events.getIonViewWillLeaves();
 
-    this.events.getIonViewDidLeave().subscribe((className: any) => {
-    });
+    this.events.getIonViewDidLeave();
 
     this.events.getTopMenuContent().subscribe(() => {
       this.events.publishSelectedItemInMenu({
@@ -800,7 +778,7 @@ export class SideMenu implements OnInit {
       this.currentContentName = 'Digital Publications';
       const params = {};
       this.enableContentMenu();
-      this.router.navigate(['/publications'], { queryParams: params });
+      this.router.navigate(['/publications'], {queryParams: params});
     });
     this.events.getTopMenuAbout().subscribe(() => {
       this.events.publishSelectedItemInMenu({
@@ -849,7 +827,7 @@ export class SideMenu implements OnInit {
       // Open music accordion as well
       this.simpleAccordionsExpanded.musicAccordion = true;
       const params = {};
-      this.router.navigate(['/music'], { queryParams: params });
+      this.router.navigate(['/music'], {queryParams: params});
     });
     this.events.getTopMenuFront().subscribe(() => {
       this.events.publishSelectedItemInMenu({
@@ -860,7 +838,7 @@ export class SideMenu implements OnInit {
       this.enableContentMenu();
       // Try to close all the expanded accordions in toc
       try {
-        for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+        for (let i = 0; i < this.splitReadCollections.length; i++) {
           this.simpleAccordionsExpanded.collectionsAccordion[i] = false;
         }
         this.simpleAccordionsExpanded.aboutMenuAccordion = false;
@@ -870,10 +848,10 @@ export class SideMenu implements OnInit {
         this.simpleAccordionsExpanded.pdfAccordion = false;
         this.simpleAccordionsExpanded.songTypesAccordion = false;
         this.cdRef.detectChanges();
-      } catch ( e ) {
+      } catch (e) {
       }
       const params = {};
-      this.router.navigate(['/home'], { queryParams: params });
+      this.router.navigate(['/home'], {queryParams: params});
     });
 
     this.events.getDigitalEditionListRecieveData().subscribe((data: any) => {
@@ -899,7 +877,7 @@ export class SideMenu implements OnInit {
 
     this.events.getTopMenuElasticSearch().subscribe(() => {
       const params = {};
-      this.router.navigate(['/elastic-search'], { queryParams: params });
+      this.router.navigate(['/elastic-search'], {queryParams: params});
       this.tocLoaded = true;
       // this.resetCurrentCollection();
       this.enableContentMenu();
@@ -913,15 +891,15 @@ export class SideMenu implements OnInit {
         if ((data.collectionID !== undefined && String(collection.id) === String(data.collectionID.id))
           || (data.collectionID !== undefined && Number(collection.id) === Number(data.collectionID))) {
           collection.expanded = true;
-          for ( let i = 0; i < this.splitReadCollections.length; i++ ) {
+          for (let i = 0; i < this.splitReadCollections.length; i++) {
             this.simpleAccordionsExpanded.collectionsAccordion[i] = true;
           }
 
-          if ( data.chapterID ) {
+          if (data.chapterID) {
             data.itemId = Number(data.collectionID) + '_' + Number(data.publicationID) + '_' + data.chapterID;
           }
 
-          if ( data.itemId === undefined && data.collectionID !== undefined && data.publicationID !== undefined) {
+          if (data.itemId === undefined && data.collectionID !== undefined && data.publicationID !== undefined) {
             data.itemId = String(data.collectionID) + '_' + String(data.publicationID);
           }
 
@@ -940,7 +918,7 @@ export class SideMenu implements OnInit {
             searchItemId: data.itemId,
             searchPublicationId: dataPublicationID,
             searchCollectionId: dataCollectionID,
-            searchTitle:  null
+            searchTitle: null
           }
           collection.accordionToc.toc = data.tocItems.children;
           this.currentCollection = collection;
@@ -948,17 +926,17 @@ export class SideMenu implements OnInit {
         }
       }
     }
-    if ( data.tocItems.children !== undefined ) {
+    if (data.tocItems.children !== undefined) {
       this.options = data.tocItems.children;
     } else {
       this.options = data.tocItems;
     }
-    if ( data.tocItems && data.tocItems.collectionId !== undefined ) {
+    if (data.tocItems && data.tocItems.collectionId !== undefined) {
       this.currentCollectionId = data.tocItems.collectionId;
-    } else if ( data.collectionID !== undefined ) {
+    } else if (data.collectionID !== undefined) {
       this.currentCollectionId = data.collectionID;
     }
-    if ( data.tocItems.text === undefined ) {
+    if (data.tocItems.text === undefined) {
       this.currentCollectionName = 'media';
       this.currentCollection.title = 'media';
     } else {
@@ -973,31 +951,6 @@ export class SideMenu implements OnInit {
       if (straw === needle) {
         callback();
       }
-    }
-  }
-
-  setSplitPaneState(currentPage: any) {
-    const p = currentPage;
-    this.previousSplitPaneOpenState = this.splitPaneOpen;
-    this.previousSplitPanePossibleState = this.splitPanePossible;
-
-    if (!this.platform.is('mobile')) {
-      this.showSplitPane();
-      this.enableSplitPane();
-    }
-    this.doFor(p, this.pagesWithoutMenu, () => {
-      this.hideSplitPane();
-      this.disableSplitPane();
-      this.splitPanePossible = false;
-    });
-
-    this.doFor(p, this.pagesWithClosedMenu, () => {
-      this.hideSplitPane();
-    });
-
-    // this closes the menu after opening a page when you are on mobile
-    if (this.platform.is('mobile')) {
-      this.hideSplitPane();
     }
   }
 
@@ -1026,16 +979,13 @@ export class SideMenu implements OnInit {
       console.log('enabling content menu for ' + p);
       this.enableContentMenu();
     });
-
-    this.setSplitPaneState(p);
   }
 
   sortCollectionsRoman() {
     if (this.collectionsList) {
       for (const coll of this.collectionsList) {
         const romanNumeral = coll.title.split(' ')[0];
-        const order = this.romanToInt(romanNumeral);
-        coll['order'] = order;
+        coll['order'] = this.romanToInt(romanNumeral);
       }
     }
 
@@ -1072,14 +1022,22 @@ export class SideMenu implements OnInit {
 
   romanCharToInt(c: any) {
     switch (c) {
-      case 'I': return 1;
-      case 'V': return 5;
-      case 'X': return 10;
-      case 'L': return 50;
-      case 'C': return 100;
-      case 'D': return 500;
-      case 'M': return 1000;
-      default: return -1;
+      case 'I':
+        return 1;
+      case 'V':
+        return 5;
+      case 'X':
+        return 10;
+      case 'L':
+        return 50;
+      case 'C':
+        return 100;
+      case 'D':
+        return 500;
+      case 'M':
+        return 1000;
+      default:
+        return -1;
     }
   }
 
@@ -1097,7 +1055,9 @@ export class SideMenu implements OnInit {
           digitalEditions => {
             this.collectionsList = digitalEditions;
           },
-          error => { this.errorMessage = <any>error }
+          error => {
+            this.errorMessage = <any>error
+          }
         );
     }
   }
@@ -1180,7 +1140,7 @@ export class SideMenu implements OnInit {
   }
 
   openFirstPage(collection: DigitalEdition) {
-    const params = { tocItem: null, fetch: false, collection: { title: collection.title } } as any;
+    const params = {tocItem: null, fetch: false, collection: {title: collection.title}} as any;
     params['collectionID'] = collection.id;
 
     /*
@@ -1209,8 +1169,8 @@ export class SideMenu implements OnInit {
         } else {
           tocItemId = undefined;
         }
-      } else if ( (currentTocItem['children'] === undefined && currentTocTier < tocLength - 1)
-        || (currentTocItem === undefined && currentTocTier < tocLength - 1) ) {
+      } else if ((currentTocItem['children'] === undefined && currentTocTier < tocLength - 1)
+        || (currentTocItem === undefined && currentTocTier < tocLength - 1)) {
         currentTocTier = currentTocTier + 1;
         currentTocItem = this.tocItems['children'][currentTocTier];
         if (currentTocItem !== undefined) {
@@ -1218,8 +1178,8 @@ export class SideMenu implements OnInit {
         } else {
           tocItemId = undefined;
         }
-      } else if ( (currentTocItem === undefined && currentTocTier >= tocLength)
-        || (currentTocItem['children'] === undefined && currentTocTier >= tocLength) ) {
+      } else if ((currentTocItem === undefined && currentTocTier >= tocLength)
+        || (currentTocItem['children'] === undefined && currentTocTier >= tocLength)) {
         break;
       }
     }
@@ -1241,7 +1201,7 @@ export class SideMenu implements OnInit {
 
     console.log('Opening read from App.openFirstPage()');
     // TODO Sami
-    this.router.navigate(['/read'], { queryParams: params });
+    this.router.navigate(['/read'], {queryParams: params});
   }
 
   getTocRoot(collection: DigitalEdition) {
@@ -1251,11 +1211,13 @@ export class SideMenu implements OnInit {
           this.tocItems = tocItems;
           this.openFirstPage(collection);
         },
-        error => { this.errorMessage = <any>error });
+        error => {
+          this.errorMessage = <any>error
+        });
   }
 
   openCollection(collection: any) {
-    if (this.hasCover === false && this.hasTitle === false && this.hasForeword === false && this.hasIntro === false) {
+    if (!this.hasCover && !this.hasTitle && !this.hasForeword && !this.hasIntro) {
       this.getTocRoot(collection);
     } else {
       const downloadOnly = this._config.collectionDownloads?.isDownloadOnly ?? false;
@@ -1263,16 +1225,14 @@ export class SideMenu implements OnInit {
         if (collection.id in this.collectionDownloads['pdf']) {
           const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.id + '/pdf/' +
             this.collectionDownloads['pdf'][collection.id] + '/';
-          const ref = window.open(dURL, '_self', 'location=no');
         } else if (collection.id in this.collectionDownloads['epub']) {
           const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.id + '/epub/' +
             this.collectionDownloads['epub'][collection.id] + '/';
-          const ref = window.open(dURL, '_self', 'location=no');
         }
       } else {
         this.currentContentName = collection.title;
         this.collectionsListWithTOC?.forEach((coll) => {
-          if ( coll.id === collection.id ) {
+          if (coll.id === collection.id) {
             collection = coll;
           }
         })
@@ -1281,8 +1241,8 @@ export class SideMenu implements OnInit {
           this.openCollectionInitialPage(collection);
         } else {
           // Open collection in single-edition page
-          const params = { collection: JSON.stringify(collection), fetch: 'false' };
-          this.router.navigate([`publication-toc/${collection.id}`], { queryParams: params });
+          const params = {collection: JSON.stringify(collection), fetch: 'false'};
+          this.router.navigate([`publication-toc/${collection.id}`], {queryParams: params});
         }
       }
       this.cdRef.detectChanges();
@@ -1298,7 +1258,7 @@ export class SideMenu implements OnInit {
       }
     }
     this.currentCollectionId = collection.id;
-    if ( collection.id === 'mediaCollections' ) {
+    if (collection.id === 'mediaCollections') {
       collection.title = 'media';
     }
     this.cdRef.detectChanges();
@@ -1306,21 +1266,21 @@ export class SideMenu implements OnInit {
 
   openCollectionInitialPage(collection: DigitalEdition) {
     console.log('Opening collection from App.openCollectionInitialPage()');
-    if ( this.hasCover && this.defaultSelectedItem === 'cover' ) {
+    if (this.hasCover && this.defaultSelectedItem === 'cover') {
       this.router.navigate(['/publication', collection.id, 'cover']);
-    } else if ( this.hasTitle && this.defaultSelectedItem === 'title' ) {
+    } else if (this.hasTitle && this.defaultSelectedItem === 'title') {
       this.router.navigate(['/publication', collection.id, 'title']);
-    } else if ( this.hasForeword && this.defaultSelectedItem === 'foreword' ) {
+    } else if (this.hasForeword && this.defaultSelectedItem === 'foreword') {
       this.router.navigate(['/publication', collection.id, 'foreword']);
-    } else if ( this.hasIntro && this.defaultSelectedItem === 'introduction' ) {
+    } else if (this.hasIntro && this.defaultSelectedItem === 'introduction') {
       this.router.navigate(['/publication', collection.id, 'introduction']);
-    } else if ( this.hasCover ) {
+    } else if (this.hasCover) {
       this.router.navigate(['/publication', collection.id, 'cover']);
-    } else if ( this.hasTitle ) {
+    } else if (this.hasTitle) {
       this.router.navigate(['/publication', collection.id, 'title']);
-    } else if ( this.hasForeword ) {
+    } else if (this.hasForeword) {
       this.router.navigate(['/publication', collection.id, 'foreword']);
-    } else if ( this.hasIntro ) {
+    } else if (this.hasIntro) {
       this.router.navigate(['/publication', collection.id, 'introduction']);
     }
   }
@@ -1333,11 +1293,7 @@ export class SideMenu implements OnInit {
     if (id && this.mediaCollectionOptions
       && this.mediaCollectionOptions['accordionToc'] && this.mediaCollectionOptions['accordionToc']['toc']) {
       this.mediaCollectionOptions['accordionToc']['toc'].forEach((element: any) => {
-        if (id === element.id) {
-          element.highlight = true;
-        } else {
-          element.highlight = false;
-        }
+        element.highlight = id === element.id;
       });
     }
   }
@@ -1354,11 +1310,7 @@ export class SideMenu implements OnInit {
   selectEpubInToc(filename: string) {
     if (filename && this.epubNames.length) {
       this.epubNames.forEach(name => {
-        if (this.availableEpubs[name]['filename'] === filename) {
-          this.availableEpubs[name]['highlight'] = true;
-        } else {
-          this.availableEpubs[name]['highlight'] = false;
-        }
+        this.availableEpubs[name]['highlight'] = this.availableEpubs[name]['filename'] === filename;
       });
     }
   }
