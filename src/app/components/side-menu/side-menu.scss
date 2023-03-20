@@ -32,7 +32,6 @@ ion-split-pane {
   }
   li {
     color: #000;
-    display: flex;
     overflow-wrap: break-word;
     position: relative;
     width: 100%;
@@ -56,6 +55,9 @@ ion-split-pane {
       color: #000;
       max-width: 100%;
       margin-right: 8px;
+    }
+    ion-icon {
+      float: right;
     }
   }
 }
