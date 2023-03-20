@@ -41,19 +41,20 @@
       </app-recursive-accordion>
     </li>
 
-    <li (click)="toggleAccordion('media-collections')" *ngIf="_config.show?.TOC?.Read">
-      <span>{{"TOC.MediaCollections" | translate }}</span>
-      <ion-icon *ngIf="mediaCollectionOptions.accordionToc?.children"
-                [class.open]="selectedMenu === 'media-collections'"
-                name="chevron-forward-outline"></ion-icon>
-    </li>
-    <li *ngIf="mediaCollectionOptions.accordionToc?.children" [class.open]="selectedMenu === 'media-collection'"
-        class="accordion-list">
-      <app-recursive-accordion
-        [children]="mediaCollectionOptions.accordionToc.children"
-        [parentPath]="'/media-collection'">
-      </app-recursive-accordion>
-    </li>
+    <ng-container *ngIf="_config.show?.TOC?.MediaCollections">
+      <li (click)="toggleAccordion('media-collection')">
+        <span>{{"TOC.MediaCollections" | translate }}</span>
+        <ion-icon [class.open]="selectedMenu === 'media-collection'"
+                  name="chevron-forward-outline"></ion-icon>
+      </li>
+      <li *ngIf="mediaCollectionOptions.accordionToc?.children"[class.open]="selectedMenu === 'media-collection'"
+          class="accordion-list">
+        <app-recursive-accordion
+          [children]="mediaCollectionOptions.accordionToc.children"
+          [parentPath]="'/media-collection'">
+        </app-recursive-accordion>
+      </li>
+    </ng-container>
 
     <!-- Person search: src/app/pages/person-search -->
     <li *ngIf="_config.show?.TOC?.PersonSearch && !musicAccordion.personSearchTypes.show" [class.menu-highlight]="selectedMenu === 'person-search'">
