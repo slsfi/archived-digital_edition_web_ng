@@ -1,15 +1,20 @@
 <nav class="toc-menu-content list-item-spacing">
   <!--  *ngIf="!readMenuOpen && !galleryMenuOpen && !menuConditionals.songTypesMenuOpen"-->
   <ul>
+    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="selectedMenu === '/'">
+      <a routerLink="/">
+        {{"TOC.Home" | translate }}
+      </a>
+    </li>
     <!-- Markdown "About"-pages: src/app/pages/content -->
-    <li (click)="toggleAccordion('content')" *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown">
+    <li (click)="toggleAccordion('/content')" *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown">
       <span>
         {{aboutOptionsMarkdown.title}}
       </span>
-      <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === 'content'"
+      <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/content'"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === 'content'" class="accordion-list">
+    <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/content'" class="accordion-list">
       <app-recursive-accordion
         [children]="aboutOptionsMarkdown.children"
         [parentPath]="'/content'">
@@ -17,24 +22,24 @@
     </li>
 
     <!-- Epubs: src/app/pages/epub -->
-    <li (click)="toggleAccordion('epub')" *ngIf="_config.show?.TOC?.EPUB">
+    <li (click)="toggleAccordion('/epub')" *ngIf="_config.show?.TOC?.EPUB">
       <span>{{"TOC.EPUBS" | translate }}</span>
-      <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === 'epub'"
+      <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === 'epub'" class="accordion-list">
+    <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'" class="accordion-list">
       <app-recursive-accordion
         [children]="_config.AvailableEpubs"
         [parentPath]="'/epub'">
       </app-recursive-accordion>
     </li>
 
-    <li (click)="toggleAccordion('publication')" *ngIf="_config.show?.TOC?.Read">
+    <li (click)="toggleAccordion('/publication')" *ngIf="_config.show?.TOC?.Read">
       <span>{{"TOC.Read" | translate }}</span>
-      <ion-icon *ngIf="collectionsList?.length" [class.open]="selectedMenu === 'publication'"
+      <ion-icon *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="collectionsList?.length" [class.open]="selectedMenu === 'publication'" class="accordion-list">
+    <li *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'" class="accordion-list">
       <app-recursive-accordion
         [children]="collectionsList"
         [parentPath]="'/publication'">
@@ -42,12 +47,12 @@
     </li>
 
     <ng-container *ngIf="_config.show?.TOC?.MediaCollections">
-      <li (click)="toggleAccordion('media-collection')">
+      <li (click)="toggleAccordion('/media-collection')">
         <span>{{"TOC.MediaCollections" | translate }}</span>
-        <ion-icon [class.open]="selectedMenu === 'media-collection'"
+        <ion-icon [class.open]="selectedMenu === '/media-collection'"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="mediaCollectionOptions.accordionToc?.children" [class.open]="selectedMenu === 'media-collection'"
+      <li *ngIf="mediaCollectionOptions.accordionToc?.children" [class.open]="selectedMenu === '/media-collection'"
           class="accordion-list">
         <app-recursive-accordion
           [children]="mediaCollectionOptions.accordionToc.children"
@@ -57,7 +62,7 @@
     </ng-container>
 
     <!-- Person search: src/app/pages/person-search -->
-    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu === 'person-search'">
+    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu === '/person-search'">
       <ng-container *ngFor="let ps of personSearchTypes">
         <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
           {{ps.translation | translate }}
@@ -66,21 +71,21 @@
     </li>
 
     <!-- Place search: src/app/pages/place-search -->
-    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu === 'place-search'">
+    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu === '/place-search'">
       <a routerLink="/place-search">
         {{"TOC.PlaceSearch" | translate }}
       </a>
     </li>
 
     <!-- Tag search: src/app/pages/tag-search -->
-    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu === 'tag-search'">
+    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu === '/tag-search'">
       <a routerLink="/tag-search">
         {{"TOC.TagSearch" | translate }}
       </a>
     </li>
 
     <!-- Work search: src/app/pages/work-search *ngIf="genericSettingsService.show('TOC.WorkSearch')"-->
-    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu === 'work-search'">
+    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu === '/work-search'">
       <a routerLink="/work-search">
         {{"TOC.WorkSearch" | translate }}
       </a>
