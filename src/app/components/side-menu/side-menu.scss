@@ -36,6 +36,7 @@ ion-split-pane {
     position: relative;
     width: 100%;
     padding: 10px 0;
+    cursor: pointer;
     &.accordion-list {
       display: none;
       padding: 0;

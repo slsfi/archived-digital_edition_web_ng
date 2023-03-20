@@ -31,7 +31,7 @@ ion-split-pane {
 ::ng-deep app-side-menu {
   position: relative;
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
   ion-split-pane {
     --border: 1px solid var(--toc-border-right-color);
     --side-max-width: 0;
