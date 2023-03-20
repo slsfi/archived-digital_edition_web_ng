@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US">
   <file id="ngi18n" original="ng.template">
-    <unit id="7987681339479787245">
-      <segment>
-        <source>Om</source>
-      </segment>
-    </unit>
-    <unit id="7992121817446335172">
-      <segment>
-        <source>_</source>
-      </segment>
-    </unit>
     <unit id="BasicActions.Cancel">
       <segment>
         <source>Avbryt</source>
@@ -56,19 +46,224 @@
         <source>FSFD</source>
       </segment>
     </unit>
+    <unit id="Occurrences.articles">
+      <segment>
+        <source> Artiklar </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.authors">
+      <segment>
+        <source> Författare </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.city">
+      <segment>
+        <source> Stad </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Commentary">
+      <segment>
+        <source>Kommentar</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.country">
+      <segment>
+        <source> Plats </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.description">
+      <segment>
+        <source> Beskrivning </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.download">
+      <segment>
+        <source>ladda ner pdf</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Established">
+      <segment>
+        <source>Lästext</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Facsimile">
+      <segment>
+        <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.isbn">
+      <segment>
+        <source> ISBN </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.journal">
+      <segment>
+        <source> Journal </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.latitude">
+      <segment>
+        <source>lat.</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.longitude">
+      <segment>
+        <source>long.</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Manuscript">
+      <segment>
+        <source>Manuskript</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.NoInfoFound">
+      <segment>
+        <source>Ingen information hittades.</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.OccurrencesSmall">
+      <segment>
+        <source>förekomster</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.place_of_birth">
+      <segment>
+        <source> Ort </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.published_year">
+      <segment>
+        <source> Utgivningsår </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.publisher">
+      <segment>
+        <source> Utgivare </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.region">
+      <segment>
+        <source> Region </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Song">
+      <segment>
+        <source>Sång</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.source">
+      <segment>
+        <source> Källa </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Title">
+      <segment>
+        <source>Förekomster</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.type">
+      <segment>
+        <source> Typ </source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Variation">
+      <segment>
+        <source>Variant</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.workOccurrencesDisabled">
+      <segment>
+        <source>Förekomster för verk är inte tillgängliga.</source>
+      </segment>
+    </unit>
+    <unit id="Read.ShowSearchResults">
+      <segment>
+        <source>Förekomster</source>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment>
         <source>Hänvisa</source>
       </segment>
     </unit>
-    <unit id="Site.Subtitle">
-      <segment>
-        <source>_</source>
-      </segment>
-    </unit>
     <unit id="Site.Title">
       <segment>
         <source>Om</source>
+      </segment>
+    </unit>
+    <unit id="Song.Comments">
+      <segment>
+        <source>Kommentarer</source>
+      </segment>
+    </unit>
+    <unit id="Song.Download">
+      <segment>
+        <source>Ladda ner</source>
+      </segment>
+    </unit>
+    <unit id="Song.Landscape">
+      <segment>
+        <source>Landskap</source>
+      </segment>
+    </unit>
+    <unit id="Song.OCL">
+      <segment>
+        <source>Originalsamlingens placering</source>
+      </segment>
+    </unit>
+    <unit id="Song.OCS">
+      <segment>
+        <source>Originalsamlingens signum</source>
+      </segment>
+    </unit>
+    <unit id="Song.Place">
+      <segment>
+        <source>Ort</source>
+      </segment>
+    </unit>
+    <unit id="Song.Playman">
+      <segment>
+        <source>Spelman</source>
+      </segment>
+    </unit>
+    <unit id="Song.Recorder">
+      <segment>
+        <source>Upptecknare</source>
+      </segment>
+    </unit>
+    <unit id="Song.SongName">
+      <segment>
+        <source>Låtens namn</source>
+      </segment>
+    </unit>
+    <unit id="Song.SongNumber">
+      <segment>
+        <source>Sångnummer</source>
+      </segment>
+    </unit>
+    <unit id="Song.SongText">
+      <segment>
+        <source>Sångtext</source>
+      </segment>
+    </unit>
+    <unit id="Song.SongType">
+      <segment>
+        <source>Låttyp</source>
+      </segment>
+    </unit>
+    <unit id="Song.Volume">
+      <segment>
+        <source>Volym</source>
+      </segment>
+    </unit>
+    <unit id="Song.Year">
+      <segment>
+        <source>Uppteckningsår</source>
+      </segment>
+    </unit>
+    <unit id="TOC.MediaCollections">
+      <segment>
+        <source>Album</source>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">

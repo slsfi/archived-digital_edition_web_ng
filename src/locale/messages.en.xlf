@@ -1,17 +1,5 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
-    <unit id="7987681339479787245">
-      <segment state="initial">
-        <source>Om</source>
-        <target>Manuscript</target>
-      </segment>
-    </unit>
-    <unit id="7992121817446335172">
-      <segment state="initial">
-        <source>_</source>
-        <target>f.Kr.</target>
-      </segment>
-    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -66,22 +54,268 @@
         <target>FSFD</target>
       </segment>
     </unit>
+    <unit id="Occurrences.articles">
+      <segment state="initial">
+        <source> Artiklar </source>
+        <target>Articles</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.authors">
+      <segment state="initial">
+        <source> Författare </source>
+        <target>Authors</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.city">
+      <segment state="initial">
+        <source> Stad </source>
+        <target>City</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Commentary">
+      <segment state="initial">
+        <source>Kommentar</source>
+        <target>Commentary</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.country">
+      <segment state="initial">
+        <source> Plats </source>
+        <target>Place</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.description">
+      <segment state="initial">
+        <source> Beskrivning </source>
+        <target>Description</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.download">
+      <segment state="initial">
+        <source>ladda ner pdf</source>
+        <target>download pdf</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Established">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Established</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Facsimile">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Facsimile</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.isbn">
+      <segment state="initial">
+        <source> ISBN </source>
+        <target>ISBN</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.journal">
+      <segment state="initial">
+        <source> Journal </source>
+        <target>Journal</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.latitude">
+      <segment state="initial">
+        <source>lat.</source>
+        <target>lat.</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.longitude">
+      <segment state="initial">
+        <source>long.</source>
+        <target>long.</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Manuscript">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Manuscript</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.NoInfoFound">
+      <segment state="initial">
+        <source>Ingen information hittades.</source>
+        <target>Ingen information hittades.</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.OccurrencesSmall">
+      <segment state="initial">
+        <source>förekomster</source>
+        <target>förekomster</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.place_of_birth">
+      <segment state="initial">
+        <source> Ort </source>
+        <target>Place of Birth</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.published_year">
+      <segment state="initial">
+        <source> Utgivningsår </source>
+        <target>Year of publication</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.publisher">
+      <segment state="initial">
+        <source> Utgivare </source>
+        <target>Publisher</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.region">
+      <segment state="initial">
+        <source> Region </source>
+        <target>Region</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Song">
+      <segment state="initial">
+        <source>Sång</source>
+        <target>Introduction</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.source">
+      <segment state="initial">
+        <source> Källa </source>
+        <target>Source</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Title">
+      <segment state="initial">
+        <source>Förekomster</source>
+        <target>Occurrences</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.type">
+      <segment state="initial">
+        <source> Typ </source>
+        <target>Type</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Variation">
+      <segment state="initial">
+        <source>Variant</source>
+        <target>Variation</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.workOccurrencesDisabled">
+      <segment state="initial">
+        <source>Förekomster för verk är inte tillgängliga.</source>
+        <target>Occurrences for works are disabled.</target>
+      </segment>
+    </unit>
+    <unit id="Read.ShowSearchResults">
+      <segment state="initial">
+        <source>Förekomster</source>
+        <target>Occurrences</target>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Refer</target>
       </segment>
     </unit>
-    <unit id="Site.Subtitle">
-      <segment state="initial">
-        <source>_</source>
-        <target/>
-      </segment>
-    </unit>
     <unit id="Site.Title">
       <segment state="initial">
         <source>Om</source>
         <target>Zacharias Topelius Skrifter</target>
+      </segment>
+    </unit>
+    <unit id="Song.Comments">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Commentary</target>
+      </segment>
+    </unit>
+    <unit id="Song.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Ladda ner</target>
+      </segment>
+    </unit>
+    <unit id="Song.Landscape">
+      <segment state="initial">
+        <source>Landskap</source>
+        <target>Landskap</target>
+      </segment>
+    </unit>
+    <unit id="Song.OCL">
+      <segment state="initial">
+        <source>Originalsamlingens placering</source>
+        <target>Originalsamlingens placering</target>
+      </segment>
+    </unit>
+    <unit id="Song.OCS">
+      <segment state="initial">
+        <source>Originalsamlingens signum</source>
+        <target>Originalsamlingens signum</target>
+      </segment>
+    </unit>
+    <unit id="Song.Place">
+      <segment state="initial">
+        <source>Ort</source>
+        <target>Established text</target>
+      </segment>
+    </unit>
+    <unit id="Song.Playman">
+      <segment state="initial">
+        <source>Spelman</source>
+        <target>Spelman</target>
+      </segment>
+    </unit>
+    <unit id="Song.Recorder">
+      <segment state="initial">
+        <source>Upptecknare</source>
+        <target>Upptecknare</target>
+      </segment>
+    </unit>
+    <unit id="Song.SongName">
+      <segment state="initial">
+        <source>Låtens namn</source>
+        <target>Låtens namn</target>
+      </segment>
+    </unit>
+    <unit id="Song.SongNumber">
+      <segment state="initial">
+        <source>Sångnummer</source>
+        <target>Sångnummer</target>
+      </segment>
+    </unit>
+    <unit id="Song.SongText">
+      <segment state="initial">
+        <source>Sångtext</source>
+        <target>Sångtext</target>
+      </segment>
+    </unit>
+    <unit id="Song.SongType">
+      <segment state="initial">
+        <source>Låttyp</source>
+        <target>Låttyp</target>
+      </segment>
+    </unit>
+    <unit id="Song.Volume">
+      <segment state="initial">
+        <source>Volym</source>
+        <target>Commentary</target>
+      </segment>
+    </unit>
+    <unit id="Song.Year">
+      <segment state="initial">
+        <source>Uppteckningsår</source>
+        <target>Uppteckningsår</target>
+      </segment>
+    </unit>
+    <unit id="TOC.MediaCollections">
+      <segment state="initial">
+        <source>Album</source>
+        <target>Album</target>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">

@@ -3,15 +3,15 @@
     <div *ngIf="!imageOrientationPortrait || titleOnImage" class="title-wrapper">
       <h1 class="banner-title" i18n="@@Site.Title">Om</h1>
 
-      <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="banner-subtitle" i18n="@@Site.Subtitle">_</p>
+      <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="banner-subtitle" i18n="@@Site.Subtitle"></p>
     </div>
     <img *ngIf="imageOrientationPortrait" [src]="imageUrl" [alt]="portraitImageAltText">
   </div>
 
   <div class="text-content">
     <div *ngIf="imageOrientationPortrait" class="title-wrapper">
-      <h1 class="site-title" i18n="Site.Title">Om</h1>
-      <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="site-subtitle" i18n="Site.Subtitle">_</p>
+      <h1 class="site-title" i18n="@@Site.Title">Om</h1>
+      <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="site-subtitle" i18n="Site.Subtitle"></p>
     </div>
 
     <div *ngIf="showSimpleSearch" class="front-page-simple-search">
