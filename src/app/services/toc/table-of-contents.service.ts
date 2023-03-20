@@ -29,6 +29,9 @@ export class TableOfContentsService {
       if (multilingualTOC) {
         this.multilingualTOC = multilingualTOC;
 
+        // TODO: Refactor so the service doesn't have a language subscription,
+        // TODO: instead the functions should take language as a parameter
+        // TODO: and use it if multilingualTOC is true.
         this.languageSubscription = this.languageService
           .languageSubjectChange()
           .subscribe((lang: any) => {
@@ -99,15 +102,19 @@ export class TableOfContentsService {
     );
   }
 
-  getFirst(collectionID: string): Observable<any> {
-    // @TODO add multilingual support to this as well...
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        this.tableOfContentsUrl +
-        collectionID +
-        '/first'
-    );
+  /**
+   * Get first TOC item which has itemId property and type property has value other
+   * than 'subtitle' and 'section_title'
+   * @param collectionID 
+   * @param language 
+   */
+  getFirst(collectionID: string, language?: string): Observable<any> {
+    let url = config.app.apiEndpoint + '/' + config.app.machineName +
+              '/toc-first/' + collectionID;
+    if (language && this.multilingualTOC) {
+      url = url + '/' + language;
+    }
+
+    return this.http.get(url);
   }
 }
