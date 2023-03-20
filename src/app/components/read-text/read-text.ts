@@ -21,8 +21,8 @@ import { isBrowser } from 'src/standalone/utility-functions';
 export class ReadTextComponent {
 
   @Input() textItemID: string = '';
-  @Input() searchMatches: Array<string> = [];
   @Input() textPosition: string = '';
+  @Input() searchMatches: Array<string> = [];
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
   public text: any;
   textLoading: boolean = true;

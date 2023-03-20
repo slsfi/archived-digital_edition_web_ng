@@ -1,8 +1,8 @@
-import { Component, Renderer2, ElementRef, OnDestroy, ViewChild, ViewChildren, QueryList, Input, EventEmitter, SecurityContext, NgZone } from '@angular/core';
+import { Component, Renderer2, ElementRef, ViewChild, ViewChildren, QueryList, SecurityContext, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonFab, IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { TranslateModule, LangChangeEvent, TranslateService, TranslatePipe } from '@ngx-translate/core';
+import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
@@ -15,11 +15,9 @@ import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
@@ -49,7 +47,6 @@ export class ReadPage /*implements OnDestroy*/ {
   // @ViewChild('fab') fabList: FabContainer;
   // @ViewChild('settingsIconElement') settingsIconElement: ElementRef;
 
-  id?: string;
   multilingualEST: false;
   estLanguages = [];
   estLang: 'none';
@@ -173,9 +170,7 @@ export class ReadPage /*implements OnDestroy*/ {
     private tooltipService: TooltipService,
     public tocService: TableOfContentsService,
     public translate: TranslateService,
-    private langService: LanguageService,
     private events: EventsService,
-    private storage: StorageService,
     public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
     private analyticsService: AnalyticsService,
@@ -379,62 +374,18 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
 
-  ionViewWillEnter() {
-    // TODO: Find another solution for this
-    /*
-    this.events.getUpdatePositionInPageRead().subscribe((params) => {
-      // This is triggered when the publication chapter that should be opened in page-read
-      // is the same as the previous, only with a different text position. Then page-read
-      // is not reloaded, but the read-text is just scrolled to the correct position.
-      console.log('Scrolling to new position in read text');
-
-      const idParts = params.tocLinkId.split(';');
-      if (idParts.length > 1 && idParts[1]) {
-        this.textService.previousReadViewTextId = this.textService.readViewTextId;
-        this.textService.readViewTextId = params.tocLinkId;
-        if (this.establishedText) {
-          this.establishedText.link = params.tocLinkId;
-          this.establishedText.id = params.tocLinkId;
-        }
-        this.updatePositionInURL(params.tocLinkId);
-
-        const posId = idParts[1];
-        this.ngZone.runOutsideAngular(() => {
-          try {
-            this.scrollReadTextToAnchorPosition(posId);
-            const itemId = 'toc_' + this.establishedText?.link;
-            let foundElem = document.getElementById(itemId);
-            if (foundElem === null) {
-              // Scroll to toc item without position
-              foundElem = document.getElementById(itemId.split(';').shift() || '');
-            }
-            if (foundElem) {
-              this.scrollToTOC(foundElem);
-            }
-          } catch (e) {
-          }
-        });
-      } else {
-        // No position in params --> reload the view with the given params
-        // const nav = this.app.getActiveNavs();
-        // nav[0].setRoot('read', params);
-        // this.router.navigate([`/publication/${idParts[0]}/text/${idParts[1]}/`], { queryParams: params });
-      }
-    });
-    */
-  }
-
   ionViewDidEnter() {
     this.analyticsService.doPageView('Read');
   }
 
   ionViewWillLeave() {
-    this.events.getUpdatePositionInPageRead().complete();
     this.events.publishIonViewWillLeave(this.constructor.name);
   }
 
   ngAfterViewInit() {
     if (isBrowser()) {
+      // This scrolls the table of contents so the current text is centered vertically
+      // TODO: This won't do what it's supposed to in the Angular 15 app.
       this.ngZone.runOutsideAngular(() => {
         let iterationsLeft = 6;
         clearInterval(this.intervalTimerId);
@@ -445,8 +396,8 @@ export class ReadPage /*implements OnDestroy*/ {
               clearInterval(that.intervalTimerId);
             } else {
               iterationsLeft -= 1;
-              if (that.establishedText && that.establishedText.link) {
-                const itemId = 'toc_' + that.establishedText.link;
+              if (that.textItemID && that.textPosition !== undefined) {
+                const itemId = 'toc_' + that.textItemID + (that.textPosition ? ';' + that.textPosition : '');
                 let foundElem = document.getElementById(itemId);
                 if (foundElem === null || foundElem === undefined) {
                   // Scroll to toc item without position
@@ -464,7 +415,6 @@ export class ReadPage /*implements OnDestroy*/ {
         }.bind(this), 500);
       });
     }
-    // this.setFabBackdropWidth();
   }
 
   ngOnDestroy() {
@@ -1087,50 +1037,35 @@ export class ReadPage /*implements OnDestroy*/ {
 
               let comparePageId = '';
 
-              if (hrefTargetItems.length === 1 && hrefTargetItems[0].startsWith('/')) {
-                // If only a position starting with a hash, assume it's in the same publication, text and chapter.
-                publicationId = this.establishedText?.link.split(';').shift()?.split('_')[0] || '';
-                textId = this.establishedText?.link.split(';').shift()?.split('_')[1] || '';
-                chapterId = this.paramChapterID;
-                if (chapterId !== undefined
-                  && chapterId !== null
-                  && !chapterId.startsWith('nochapter')
-                  && chapterId !== ':chapterID'
-                  && chapterId !== 'chapterID') {
-                    chapterId = chapterId.split(';').shift() || chapterId;
+              if (hrefTargetItems.length === 1 && hrefTargetItems[0].startsWith('#')) {
+                // If only a position starting with a hash, assume it's in the same collection, text and chapter.
+                if (this.paramChapterID) {
+                  comparePageId = this.paramCollectionID + '_' + this.paramPublicationID + '_' + this.paramChapterID;
                 } else {
-                  chapterId = '';
-                }
-                if (chapterId !== '') {
-                  comparePageId = publicationId + '_' + textId + '_' + chapterId;
-                } else {
-                  comparePageId = publicationId + '_' + textId;
+                  comparePageId = this.paramCollectionID + '_' + this.paramPublicationID;
                 }
               } else if (hrefTargetItems.length > 1) {
                 publicationId = hrefTargetItems[0];
                 textId = hrefTargetItems[1];
                 comparePageId = publicationId + '_' + textId;
-                if (hrefTargetItems.length > 2 && !hrefTargetItems[2].startsWith('/')) {
+                if (hrefTargetItems.length > 2 && !hrefTargetItems[2].startsWith('#')) {
                   chapterId = hrefTargetItems[2];
                   comparePageId += '_' + chapterId;
                 }
               }
 
               let legacyPageId = this.collectionAndPublicationLegacyId;
-              const chIDFromParams = this.paramChapterID;
-              if (chIDFromParams !== undefined
-              && chIDFromParams !== null
-              && !chIDFromParams.startsWith('nochapter')
-              && chIDFromParams !== ':chapterID'
-              && chIDFromParams !== 'chapterID') {
-                legacyPageId += '_' + chIDFromParams.split(';').shift();
+              if (this.paramChapterID) {
+                legacyPageId += '_' + this.paramChapterID;
               }
 
               // Check if we are already on the same page.
-              if ( (comparePageId === this.establishedText?.link.split(';').shift() || comparePageId === legacyPageId)
-              && hrefTargetItems[hrefTargetItems.length - 1].startsWith('/')) {
+              if (
+                (comparePageId === this.textItemID || comparePageId === legacyPageId) &&
+                hrefTargetItems[hrefTargetItems.length - 1].startsWith('#')
+              ) {
                 // We are on the same page and the last item in the target href is a textposition.
-                positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('/', '');
+                positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('#', '');
 
                 // Find the element in the correct column (read-text or comments) based on ref type.
                 const matchingElements = document.querySelectorAll('page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + positionId + '"]');
@@ -1146,11 +1081,13 @@ export class ReadPage /*implements OnDestroy*/ {
                   }
                   if (parentElem !== null && parentElem.tagName === refType) {
                     targetElement = matchingElements[i] as HTMLElement;
-                    if (targetElement.parentElement?.classList.contains('ttFixed')
-                    || targetElement.parentElement?.parentElement?.classList.contains('ttFixed')) {
-                      // Found position is in footnote --> look for next occurence since the first footnote element
-                      // is not displayed (footnote elements are copied to a list at the end of the reading text and that's
-                      // the position we need to find).
+                    if (
+                      targetElement.parentElement?.classList.contains('ttFixed') ||
+                      targetElement.parentElement?.parentElement?.classList.contains('ttFixed')
+                    ) {
+                      // Found position is in footnote --> look for next occurence since the first
+                      // footnote element is not displayed (footnote elements are copied to a list
+                      // at the end of the reading text and that's the position we need to find).
                     } else {
                       break;
                     }
@@ -1171,21 +1108,17 @@ export class ReadPage /*implements OnDestroy*/ {
                     textId = data[0]['pub_id'];
                   }
 
-                  let hrefString = '/publication/' + publicationId + '/text/' + textId + '/';
+                  let hrefString = '/publication/' + publicationId + '/text/' + textId;
                   if (chapterId) {
-                    hrefString += chapterId;
+                    hrefString += '/' + chapterId;
                     if (hrefTargetItems.length > 3 && hrefTargetItems[3].startsWith('#')) {
                       positionId = hrefTargetItems[3].replace('#', ';');
-                      hrefString += positionId;
+                      hrefString += '?position=' + positionId;
                     }
-                  } else {
-                    hrefString += 'nochapter';
-                    if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
-                      positionId = hrefTargetItems[2].replace('#', ';');
-                      hrefString += positionId;
-                    }
+                  } else if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
+                    positionId = hrefTargetItems[2].replace('#', ';');
+                    hrefString += '?position=' + positionId;
                   }
-                  hrefString += '/not/infinite/nosong/searchtitle/established&comments';
                   if (newWindowRef) {
                     newWindowRef.location.href = hrefString;
                   }
@@ -1203,7 +1136,7 @@ export class ReadPage /*implements OnDestroy*/ {
                 let hrefString = '/publication/' + publicationId + '/introduction';
                 if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
                   positionId = hrefTargetItems[1];
-                  hrefString += '/' + positionId;
+                  hrefString += '?position=' + positionId;
                 }
                 // Open the link in a new window/tab.
                 window.open(hrefString, '_blank');

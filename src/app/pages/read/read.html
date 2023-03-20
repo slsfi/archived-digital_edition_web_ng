@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!(userSettingsService.isMobile())" class="text-changer-desktop-view"></text-changer>
+    <text-changer *ngIf="!(userSettingsService.isMobile())" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-read'" class="text-changer-desktop-view"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
@@ -271,4 +271,4 @@
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="(userSettingsService.isMobile()) && (show=='established' || show=='manuscripts' || show=='facsimiles')" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="(userSettingsService.isMobile()) && (show=='established' || show=='manuscripts' || show=='facsimiles')" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-read'" class="text-changer-mobile-view"></text-changer>

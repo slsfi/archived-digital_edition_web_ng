@@ -197,8 +197,8 @@ export class IntroductionPage {
       
       // Check if there is a text position in the route params
       // (comes from queryParams)
-      if (routeParams['pos'] !== undefined) {
-        this.pos = routeParams['pos'];
+      if (routeParams['position'] !== undefined) {
+        this.pos = routeParams['position'];
       } else {
         this.pos = null;
       }
@@ -447,21 +447,17 @@ export class IntroductionPage {
                   chapterId = hrefTargetItems[2];
                 }
 
-                let hrefString = '#/publication/' + publicationId + '/text/' + textId + '/';
+                let hrefString = '/publication/' + publicationId + '/text/' + textId;
                 if (chapterId) {
-                  hrefString += chapterId;
+                  hrefString += '/' + chapterId;
                   if (hrefTargetItems.length > 3 && hrefTargetItems[3].startsWith('#')) {
                     positionId = hrefTargetItems[3].replace('#', ';');
-                    hrefString += positionId;
+                    hrefString += '?position=' + positionId;
                   }
-                } else {
-                  hrefString += 'nochapter';
-                  if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
-                    positionId = hrefTargetItems[2].replace('#', ';');
-                    hrefString += positionId;
-                  }
+                } else if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
+                  positionId = hrefTargetItems[2].replace('#', ';');
+                  hrefString += '?position=' + positionId;
                 }
-                hrefString += '/not/infinite/nosong/searchtitle/established&comments';
                 if (newWindowRef) {
                   newWindowRef.location.href = hrefString;
                 }
@@ -481,8 +477,12 @@ export class IntroductionPage {
               }
 
               // Check if we are already on the same page.
-              if ( (String(publicationId) === String(this.id) || String(publicationId) === String(this.collectionLegacyId))
-              && positionId !== undefined ) {
+              if (
+                (
+                  String(publicationId) === String(this.id) ||
+                  String(publicationId) === String(this.collectionLegacyId)
+                ) && positionId !== undefined 
+              ) {
                 // Same introduction.
                 positionId = positionId.replace('#', '');
 
@@ -513,7 +513,7 @@ export class IntroductionPage {
                   let hrefString = '/publication/' + publicationId + '/introduction';
                   if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
                     positionId = hrefTargetItems[1].replace('#', '');
-                    hrefString += '?pos=' + positionId;
+                    hrefString += '?position=' + positionId;
                   }
                   if (newWindowRef) {
                     newWindowRef.location.href = hrefString;
