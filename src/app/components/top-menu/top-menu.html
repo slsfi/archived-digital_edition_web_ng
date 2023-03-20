@@ -14,32 +14,36 @@
     </ion-button>
     <ion-button *ngIf="showTopContentButton && userSettingsService.isDesktop()">
       <a [routerLink]="['/publications']">
-        {{ 'TopMenu.Read' | translate }}
+        <ng-container i18n="@@TopMenu.Read">Lue</ng-container>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopAboutButton && userSettingsService.isDesktop()">
       <a [routerLink]="['/content', language + '-' + firstAboutPageId]">
-        {{ 'TopMenu.Info' | translate }}
+        <ng-container i18n="@@TopMenu.Info">Topeliuksesta ja editiosta</ng-container>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopMusicButton && userSettingsService.isDesktop()">
+
+      <!-- https://stackoverflow.com/a/69621135 -->
+
       <a [routerLink]="['/music']">
-        {{ 'TopMenu.Music' | translate }}
+        <ng-container i18n="@@TopMenu.Music">Musik</ng-container>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopSimpleSearchButton" class="simple-search-button" (click)="searchApp()" id="searchIcon">
       <ion-icon slot="start" name="search"></ion-icon>
-      <span class="side-title">{{ 'TopMenu.SimpleSearch' | translate }}</span>
+      <span i18n="@@TopMenu.SimpleSearch">Hae</span>
     </ion-button>
     <ion-button *ngIf="showTopElasticButton" class="elastic-search-button" id="elasticSearchIcon">
       <a [routerLink]="['/elastic-search']">
         <ion-icon slot="start" name="search"></ion-icon>
-        <span class="side-title">{{ 'TopMenu.AdvancedSearch' | translate }}</span>
+        <span i18n="@@TopMenu.AdvancedSearch">Hae</span>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopURNButton" (click)="showReference($event)">
       <ion-icon slot="start" name="share"></ion-icon>
-      <span class="side-title">{{ 'Reference.refer' | translate }}</span>
+      <span class="side-title" i18n="@@Reference.refer">Viittaa</span>
+
     </ion-button>
     <ion-button *ngIf="showHelpButton" (click)="help()">
       <ion-icon name="help"></ion-icon>

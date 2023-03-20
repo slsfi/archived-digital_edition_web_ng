@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US">
+  <file id="ngi18n" original="ng.template">
+    <unit id="Reference.refer">
+      <segment>
+        <source>Viittaa</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.AdvancedSearch">
+      <segment>
+        <source>Hae</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Info">
+      <segment>
+        <source>Topeliuksesta ja editiosta</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Music">
+      <segment>
+        <source>Musik</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Read">
+      <segment>
+        <source>Lue</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.SimpleSearch">
+      <segment>
+        <source>Hae</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

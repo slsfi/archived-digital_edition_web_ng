@@ -11,8 +11,12 @@ import { AppServerModule } from './src/main.server';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+
   const distFolder = join(process.cwd(), 'dist/app/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+
+  const distFolderFi = join(process.cwd(), 'dist/app/browser/fi');
+  const indexHtmlFi = existsSync(join(distFolderFi, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
   server.engine('html', ngExpressEngine({
@@ -20,7 +24,7 @@ export function app(): express.Express {
   }));
 
   server.set('view engine', 'html');
-  server.set('views', distFolder);
+  server.set('views', distFolderFi);
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
@@ -28,6 +32,11 @@ export function app(): express.Express {
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'
   }));
+
+  // All fi routes use the Universal engine
+  server.get('/fi/*', (req, res) => {
+    res.render(indexHtmlFi, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+  });
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {

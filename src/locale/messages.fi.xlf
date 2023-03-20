@@ -1,0 +1,40 @@
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
+  <file id="namespace1">
+    <unit id="Reference.refer">
+      <segment state="initial">
+        <source>Viittaa</source>
+        <target>Viittaa</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.AdvancedSearch">
+      <segment state="initial">
+        <source>Hae</source>
+        <target>Hae</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Info">
+      <segment state="initial">
+        <source>Topeliuksesta ja editiosta</source>
+        <target>Topeliuksesta ja editiosta</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Music">
+      <segment state="initial">
+        <source>Musik</source>
+        <target>Musik</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Read">
+      <segment state="initial">
+        <source>Lue</source>
+        <target>Lue</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.SimpleSearch">
+      <segment state="initial">
+        <source>Hae</source>
+        <target>Hae</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>
