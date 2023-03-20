@@ -2196,6 +2196,10 @@ page-introduction .tei.show_pageNumbering {
 page-read .mobile-mode-established .tei.show_pageNumbering {
     padding-left: 28px;
 }
+/* Icons that open corresponding images in the illustrations-view are not clickable in mobile mode. */
+page-read .mobile-mode-established img.hide-illustration + span.tei.figureP.iconBefore::before {
+    cursor: default;
+}
 
 /* PAGE BREAKS IN ORIGINAL AND EDITION */
 .pb_orig,
@@ -2233,47 +2237,96 @@ span.footnoteindicator {
 }
 
 /* Overrides for read-text */
-read-text div.tei {
-    span.dashUnderline {
-        font-style: italic;
-        border-bottom: none;
-    }
-    .encreasedSize {
-        font-style: italic;
-        font-size: 100%;
-    }
-    span.uppercase,
-    span.uppercaseDiary {
-        font-variant: small-caps;
-        text-transform: none;
-    }
-    .encircled {
-        font-style: italic;
-        border: none;
+read-text {
+    div.tei {
+        transition: padding-left linear 0.2s;
+
+        &.XMLcomment{
+            display: none;
+        }
+        span.dashUnderline {
+            font-style: italic;
+            border-bottom: none;
+        }
+        .encreasedSize {
+            font-style: italic;
+            font-size: 100%;
+        }
+        span.uppercase,
+        span.uppercaseDiary {
+            font-variant: small-caps;
+            text-transform: none;
+        }
+        .encircled {
+            font-style: italic;
+            border: none;
+        }
+
+        img.hide-illustration {
+            visibility: hidden;
+            height: 0;
+        
+            & ~ p.tei:first-of-type::after {
+                content: '';
+                cursor: pointer;
+                background-image: url('/assets/images/img_placeholder.svg');
+                height: 1.059em; /* equals 18px on default 17px text size */
+                width: 1.176em; /* equals 20px on default 17px text size */
+                margin-left: 5px;
+                margin-bottom: -3px;
+                display: inline-block;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            & + span.tei.figureP.iconBefore::before {
+                content: '';
+                cursor: pointer;
+                background-image: url('/assets/images/img_placeholder.svg');
+                height: 1.059em; /* equals 18px on default 17px text size */
+                width: 1.176em; /* equals 20px on default 17px text size */
+                margin-right: 5px;
+                margin-bottom: -3px;
+                display: inline-block;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        }
+        
+        a.xreference.ref_illustration {
+            img {
+                margin-left: 0.15em;
+            }
+        }
+        match {
+            background-color: var(--search-match-background-color);
+        }
     }
 }
 
 /* Overrides for manuscripts */
-manuscripts div.tei {
-    span.uppercase {
-        text-transform: uppercase;
-        font-variant: normal;
-    }
-    span.dashUnderline {
-        border-bottom: 1px dashed black;
-    }
-    .encircled {
-        border: 1px solid gray;
-    }
-    .encreasedSize {
-        font-size: 120%;
-    }
-    p.underline, 
-    h3.underline {
-        font-style: normal;
-        text-decoration: underline;
+manuscripts {
+    div.tei {
+        span.uppercase {
+            text-transform: uppercase;
+            font-variant: normal;
+        }
+        span.dashUnderline {
+            border-bottom: 1px dashed black;
+        }
+        .encircled {
+            border: 1px solid gray;
+        }
+        .encreasedSize {
+            font-size: 120%;
+        }
+        p.underline, 
+        h3.underline {
+            font-style: normal;
+            text-decoration: underline;
+        }
     }
 }
+
 
 /* Introduction specific */
 page-introduction div.tei span.footnoteindicator {

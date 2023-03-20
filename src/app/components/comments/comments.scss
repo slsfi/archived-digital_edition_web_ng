@@ -1,5 +1,5 @@
 @import "../../../theme/variables.scss";
 
 match {
-  background-color: $search-match-color !important;
+  background-color: var(--search-match-background-color) !important;
 }

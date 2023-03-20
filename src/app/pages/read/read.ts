@@ -96,8 +96,7 @@ export class ReadPage /*implements OnDestroy*/ {
   song_id: any;
   search_title: any;
 
-  matches?: Array<string>;
-  external?: string;
+  searchMatches: Array<string> = [];
 
   typeVersion?: string;
   displayToggles: any;
@@ -330,9 +329,9 @@ export class ReadPage /*implements OnDestroy*/ {
               decoded_match = this.commonFunctions.encodeCharEntities(decoded_match);
               searchMatches.push(decoded_match);
             });
-            this.matches = searchMatches;
+            this.searchMatches = searchMatches;
           } else {
-            this.matches = [];
+            this.searchMatches = [];
           }
         }
 
@@ -537,14 +536,14 @@ export class ReadPage /*implements OnDestroy*/ {
       // check if view type it is similar to established_sv
       const parts = viewmode.split('_');
       if (parts.length > 1) {
-        this.addView(parts[0], null, null, null, null, parts[1]);
+        this.addView(parts[0], null, null, null, parts[1]);
       } else {
         if (viewmode === 'variations') {
           // this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
           if (sameCollection && this.textService.variationsOrder.length > 0) {
-            this.addView(viewmode, null, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
+            this.addView(viewmode, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
           } else {
-            this.addView(viewmode, null, null, null, null, variationsViewOrderNumber);
+            this.addView(viewmode, null, null, null, variationsViewOrderNumber);
             this.textService.variationsOrder.push(variationsViewOrderNumber);
           }
           variationsViewOrderNumber++;
@@ -2071,10 +2070,6 @@ export class ReadPage /*implements OnDestroy*/ {
     return await modal.present();
   }
 
-  openNewExternalView(view: string, id: any) {
-    this.addView(view, id, true);
-  }
-
   openNewView(event: any) {
     if (event.viewType === 'facsimiles') {
       this.addView(event.viewType, event.id);
@@ -2083,20 +2078,13 @@ export class ReadPage /*implements OnDestroy*/ {
     } else if (event.viewType === 'facsimileManuscript') {
       this.addView('manuscripts', event.id);
     } else if (event.viewType === 'illustrations') {
-      this.addView(event.viewType, event.id, undefined, event);
+      this.addView(event.viewType, event.id, event);
     } else {
       this.addView(event.viewType, event.id);
     }
   }
 
-  addView(type: string, id?: string | null, external?: boolean | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
-    /* fab is no longer needed by this function*/
-
-    if (external === true) {
-      this.external = id ? id : undefined;
-    } else {
-      this.external = undefined;
-    }
+  addView(type: string, id?: string | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
 
     // TODO: Adding the correct unique variations still requires some work
     if (type === 'variations' && variationSortOrder === undefined) {

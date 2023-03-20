@@ -328,9 +328,11 @@ export class TextService {
       }
 
       if (!showReadTextIllustrations.includes(collectionId)) {
+        // * The replace below should only replace in classLists, but adding a more specific 
+        // * regex causes a "too much recursion" error for long texts.
         text = text.replace(
-          /class="(.*?)est_figure_graphic(.*?)"/g,
-          'class="$1est_figure_graphic hide-illustration$2"'
+          /est_figure_graphic/g,
+          'est_figure_graphic hide-illustration'
         );
         text = text.replace(
           /assets\/images\/verk\//g,

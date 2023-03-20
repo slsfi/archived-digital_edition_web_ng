@@ -1,5 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { isBrowser } from 'src/standalone/utility-functions';
+
 
 @Injectable()
 export class CommonFunctionsService {
@@ -153,35 +155,37 @@ export class CommonFunctionsService {
    * It should be called after adding new views/columns.
    */
   scrollLastViewIntoView() {
-    this.ngZone.runOutsideAngular(() => {
-      let iterationsLeft = 10;
-      clearInterval(this.intervalTimerId);
-      const that = this;
-      this.intervalTimerId = window.setInterval(function() {
-        if (iterationsLeft < 1) {
-          clearInterval(that.intervalTimerId);
-        } else {
-          iterationsLeft -= 1;
-          const viewElements = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden)')?.getElementsByClassName('read-column');
-          if (viewElements && viewElements[0] !== undefined) {
-            const lastViewElement = viewElements[viewElements.length - 1] as HTMLElement;
-            let scrollingContainer = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content');
-            if (scrollingContainer) {
-              const shadowContainer = scrollingContainer.shadowRoot;
-              if (shadowContainer) {
-                scrollingContainer = shadowContainer.querySelector('[part="scroll"]');
-                if (scrollingContainer) {
-                  const x = lastViewElement.getBoundingClientRect().right + scrollingContainer.scrollLeft -
-                  scrollingContainer.getBoundingClientRect().left;
-                  scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
-                  clearInterval(that.intervalTimerId);
+    if (isBrowser()) {
+      this.ngZone.runOutsideAngular(() => {
+        let iterationsLeft = 10;
+        clearInterval(this.intervalTimerId);
+        const that = this;
+        this.intervalTimerId = window.setInterval(function() {
+          if (iterationsLeft < 1) {
+            clearInterval(that.intervalTimerId);
+          } else {
+            iterationsLeft -= 1;
+            const viewElements = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden)')?.getElementsByClassName('read-column');
+            if (viewElements && viewElements[0] !== undefined) {
+              const lastViewElement = viewElements[viewElements.length - 1] as HTMLElement;
+              let scrollingContainer = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content');
+              if (scrollingContainer) {
+                const shadowContainer = scrollingContainer.shadowRoot;
+                if (shadowContainer) {
+                  scrollingContainer = shadowContainer.querySelector('[part="scroll"]');
+                  if (scrollingContainer) {
+                    const x = lastViewElement.getBoundingClientRect().right + scrollingContainer.scrollLeft -
+                    scrollingContainer.getBoundingClientRect().left;
+                    scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
+                    clearInterval(that.intervalTimerId);
+                  }
                 }
               }
             }
           }
-        }
-      }.bind(this), 500);
-    });
+        }.bind(this), 500);
+      });
+    }
   }
 
 
