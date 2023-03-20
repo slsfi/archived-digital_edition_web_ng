@@ -1,19 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US">
   <file id="ngi18n" original="ng.template">
+    <unit id="7987681339479787245">
+      <segment>
+        <source>Om</source>
+      </segment>
+    </unit>
+    <unit id="7992121817446335172">
+      <segment>
+        <source>_</source>
+      </segment>
+    </unit>
+    <unit id="BasicActions.Cancel">
+      <segment>
+        <source>Avbryt</source>
+      </segment>
+    </unit>
+    <unit id="Filter.apply">
+      <segment>
+        <source>Verkställ</source>
+      </segment>
+    </unit>
+    <unit id="Filter.bornBetween">
+      <segment>
+        <source> Född mellan </source>
+      </segment>
+    </unit>
+    <unit id="Filter.countries">
+      <segment>
+        <source> Land </source>
+      </segment>
+    </unit>
+    <unit id="Filter.personTypes">
+      <segment>
+        <source> Personkategori </source>
+      </segment>
+    </unit>
+    <unit id="Filter.tagTypes">
+      <segment>
+        <source> Ämneskategori </source>
+      </segment>
+    </unit>
+    <unit id="Filter.title">
+      <segment>
+        <source>Avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="MusicPage.PageTitle">
+      <segment>
+        <source>Musikvolymerna</source>
+      </segment>
+    </unit>
+    <unit id="MusicPage.SubTitle">
+      <segment>
+        <source>FSFD</source>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment>
-        <source>Viittaa</source>
+        <source>Hänvisa</source>
+      </segment>
+    </unit>
+    <unit id="Site.Subtitle">
+      <segment>
+        <source>_</source>
+      </segment>
+    </unit>
+    <unit id="Site.Title">
+      <segment>
+        <source>Om</source>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">
       <segment>
-        <source>Hae</source>
+        <source>Sök</source>
       </segment>
     </unit>
     <unit id="TopMenu.Info">
       <segment>
-        <source>Topeliuksesta ja editiosta</source>
+        <source>Om</source>
       </segment>
     </unit>
     <unit id="TopMenu.Music">
@@ -23,12 +88,12 @@
     </unit>
     <unit id="TopMenu.Read">
       <segment>
-        <source>Lue</source>
+        <source>Läs</source>
       </segment>
     </unit>
     <unit id="TopMenu.SimpleSearch">
       <segment>
-        <source>Hae</source>
+        <source>Sök</source>
       </segment>
     </unit>
   </file>

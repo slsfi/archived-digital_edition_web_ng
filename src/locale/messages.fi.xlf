@@ -1,20 +1,98 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
+    <unit id="7987681339479787245">
+      <segment state="initial">
+        <source>Om</source>
+        <target>Käsikirjoitus</target>
+      </segment>
+    </unit>
+    <unit id="7992121817446335172">
+      <segment state="initial">
+        <source>_</source>
+        <target>eKr.</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.Cancel">
+      <segment state="initial">
+        <source>Avbryt</source>
+        <target>Peruuta</target>
+      </segment>
+    </unit>
+    <unit id="Filter.apply">
+      <segment state="initial">
+        <source>Verkställ</source>
+        <target>Rajaa</target>
+      </segment>
+    </unit>
+    <unit id="Filter.bornBetween">
+      <segment state="initial">
+        <source> Född mellan </source>
+        <target>Syntynyt vuosien välissä</target>
+      </segment>
+    </unit>
+    <unit id="Filter.countries">
+      <segment state="initial">
+        <source> Land </source>
+        <target>Maa</target>
+      </segment>
+    </unit>
+    <unit id="Filter.personTypes">
+      <segment state="initial">
+        <source> Personkategori </source>
+        <target>Henkilötyyppi</target>
+      </segment>
+    </unit>
+    <unit id="Filter.tagTypes">
+      <segment state="initial">
+        <source> Ämneskategori </source>
+        <target>Asiasanatyyppi</target>
+      </segment>
+    </unit>
+    <unit id="Filter.title">
+      <segment state="initial">
+        <source>Avgränsningar</source>
+        <target>Rajaa</target>
+      </segment>
+    </unit>
+    <unit id="MusicPage.PageTitle">
+      <segment state="initial">
+        <source>Musikvolymerna</source>
+        <target>Musikvolymerna</target>
+      </segment>
+    </unit>
+    <unit id="MusicPage.SubTitle">
+      <segment state="initial">
+        <source>FSFD</source>
+        <target>FSFD</target>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
-        <source>Viittaa</source>
+        <source>Hänvisa</source>
         <target>Viittaa</target>
+      </segment>
+    </unit>
+    <unit id="Site.Subtitle">
+      <segment state="initial">
+        <source>_</source>
+        <target/>
+      </segment>
+    </unit>
+    <unit id="Site.Title">
+      <segment state="initial">
+        <source>Om</source>
+        <target>Zacharias Topelius Skrifter</target>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">
       <segment state="initial">
-        <source>Hae</source>
+        <source>Sök</source>
         <target>Hae</target>
       </segment>
     </unit>
     <unit id="TopMenu.Info">
       <segment state="initial">
-        <source>Topeliuksesta ja editiosta</source>
+        <source>Om</source>
         <target>Topeliuksesta ja editiosta</target>
       </segment>
     </unit>
@@ -26,13 +104,13 @@
     </unit>
     <unit id="TopMenu.Read">
       <segment state="initial">
-        <source>Lue</source>
+        <source>Läs</source>
         <target>Lue</target>
       </segment>
     </unit>
     <unit id="TopMenu.SimpleSearch">
       <segment state="initial">
-        <source>Hae</source>
+        <source>Sök</source>
         <target>Hae</target>
       </segment>
     </unit>

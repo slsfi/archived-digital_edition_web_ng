@@ -14,12 +14,12 @@
     </ion-button>
     <ion-button *ngIf="showTopContentButton && userSettingsService.isDesktop()">
       <a [routerLink]="['/publications']">
-        <ng-container i18n="@@TopMenu.Read">Lue</ng-container>
+        <ng-container i18n="@@TopMenu.Read">Läs</ng-container>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopAboutButton && userSettingsService.isDesktop()">
       <a [routerLink]="['/content', language + '-' + firstAboutPageId]">
-        <ng-container i18n="@@TopMenu.Info">Topeliuksesta ja editiosta</ng-container>
+        <ng-container i18n="@@TopMenu.Info">Om</ng-container>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopMusicButton && userSettingsService.isDesktop()">
@@ -32,17 +32,17 @@
     </ion-button>
     <ion-button *ngIf="showTopSimpleSearchButton" class="simple-search-button" (click)="searchApp()" id="searchIcon">
       <ion-icon slot="start" name="search"></ion-icon>
-      <span i18n="@@TopMenu.SimpleSearch">Hae</span>
+      <span i18n="@@TopMenu.SimpleSearch">Sök</span>
     </ion-button>
     <ion-button *ngIf="showTopElasticButton" class="elastic-search-button" id="elasticSearchIcon">
       <a [routerLink]="['/elastic-search']">
         <ion-icon slot="start" name="search"></ion-icon>
-        <span i18n="@@TopMenu.AdvancedSearch">Hae</span>
+        <span i18n="@@TopMenu.AdvancedSearch">Sök</span>
       </a>
     </ion-button>
     <ion-button *ngIf="showTopURNButton" (click)="showReference($event)">
       <ion-icon slot="start" name="share"></ion-icon>
-      <span class="side-title" i18n="@@Reference.refer">Viittaa</span>
+      <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
 
     </ion-button>
     <ion-button *ngIf="showHelpButton" (click)="help()">

@@ -6,7 +6,10 @@
 -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{'Filter.title' | translate }}</ion-title>
+    <ion-title i18n="@@Filter.title">Avgränsningar</ion-title>
+
+
+
     <ion-buttons slot="end">
       <ion-button class="close-button" (click)="cancel()">
         <ion-icon name="close"></ion-icon>
@@ -22,8 +25,8 @@
 
     <ng-container *ngIf="!showLoading">
       <ion-list *ngIf="shouldFilterYear">
-        <ion-list-header class="year_label">
-          {{"Filter.bornBetween" | translate}}
+        <ion-list-header class="year_label" i18n="@@Filter.bornBetween">
+          Född mellan
         </ion-list-header>
         <ion-item class="filter-year-inputs" *ngIf="shouldFilterYear">
           <ion-input type="number" min="1" class="fromYear" [(ngModel)]="filterYearMin"></ion-input>
@@ -32,8 +35,8 @@
       </ion-list>
 
       <ion-list *ngIf="filterCategoryTypes">
-        <ion-list-header>
-          {{"Filter.tagTypes" | translate}}
+        <ion-list-header i18n="@@Filter.tagTypes">
+          Ämneskategori
         </ion-list-header>
         <ion-item *ngFor="let filterCT of filterCategoryTypes">
             <ion-label>{{filterCT.name}}</ion-label>
@@ -42,8 +45,8 @@
       </ion-list>
 
       <ion-list *ngIf="filterPersonTypes">
-        <ion-list-header>
-          {{"Filter.personTypes" | translate}}
+        <ion-list-header i18n="@@Filter.personTypes">
+          Personkategori
         </ion-list-header>
         <ion-item *ngFor="let filterPT of filterPersonTypes">
             <ion-label>{{filterPT.name}}</ion-label>
@@ -52,8 +55,8 @@
       </ion-list>
 
       <ion-list *ngIf="filterPlaceCountries">
-        <ion-list-header>
-          {{"Filter.countries" | translate}}
+        <ion-list-header i18n="@@Filter.countries">
+          Land
         </ion-list-header>
         <ion-item *ngFor="let filterC of filterPlaceCountries">
             <ion-label>{{filterC.name}}</ion-label>
@@ -65,7 +68,7 @@
     <hr/>
 
     <ion-buttons slot="end">
-      <ion-button fill="outline" (click)="cancel()">{{"BasicActions.Cancel" | translate}}</ion-button>
-      <ion-button *ngIf="!showLoading" (click)="apply()">{{"Filter.apply" | translate}}</ion-button>
+      <ion-button fill="outline" (click)="cancel()" i18n="@@BasicActions.Cancel">Avbryt</ion-button>
+      <ion-button *ngIf="!showLoading" (click)="apply()" i18n="@@Filter.apply">Verkställ</ion-button>
     </ion-buttons>
 </ion-content>
