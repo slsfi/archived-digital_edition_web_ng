@@ -73,6 +73,11 @@ export const config: Config = {
       showLanguageButton: true,
       showMusicButton: false,
       showHelpButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetic: ["211", "215", "219", "220"],
+      sortableCollectionsChronologic: ["215", "219", "220"],
+      sortableCollectionsGenre: []
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -230,8 +235,7 @@ export const config: Config = {
     facsimileDefaultZoomLevel: 4,
     facsimileZoomPageLevel: 1,
     galleryCollectionMapping: { 214: 44, 206: 19 },
-    showReadTextIllustrations: ["20212", "20213", "206"],
-    sortableLetters: ["220", "219", "215", "211"]
+    showReadTextIllustrations: ["20212", "20213", "206"]
   },
   i18n: {
     languages: ["sv", "fi"],
@@ -604,6 +608,11 @@ export const config_soderholm: Config = {
       showLanguageButton: false,
       showMusicButton: false,
       showHelpButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetic: [],
+      sortableCollectionsChronologic: [],
+      sortableCollectionsGenre: []
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -661,8 +670,7 @@ export const config_soderholm: Config = {
     facsimileDefaultZoomLevel: 2,
     facsimileZoomPageLevel: 2,
     galleryCollectionMapping: {},
-    showReadTextIllustrations: [],
-    sortableLetters: []
+    showReadTextIllustrations: []
   },
   i18n: {
     languages: ["sv"],
