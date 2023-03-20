@@ -1,9 +1,0 @@
-.accordion {
-  display: none;
-  width: 100%;
-  transition: display linear 0.2s;
-  &.open {
-    display: block;
-    transition: display linear 0.2s;
-  }
-}

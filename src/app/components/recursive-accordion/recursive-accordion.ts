@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { config } from "src/app/services/config/config";
+import { ActivationEnd, NavigationEnd, Router, RoutesRecognized } from "@angular/router";
+import { filter } from "rxjs/operators";
 
 type MenuChild = {
   title: string;
@@ -15,8 +15,6 @@ type MenuChild = {
 })
 export class RecursiveAccordion implements OnInit {
   @Input() children: MenuChild[];
-  @Input() selected: boolean = false;
-  @Input() childId: string = '';
   @Input() parentPath: string = '';
   selectedMenu: string = '';
 
@@ -24,31 +22,10 @@ export class RecursiveAccordion implements OnInit {
   }
 
   ngOnInit() {
-    if (this.childId) {
-      this.selected = this.selected || this.router.url.includes(this.childId);
-    }
+    this.selectedMenu = this.children.map(item => item.id).find(item => this.router.url.includes(item)) || '';
   }
 
   toggleAccordion(value: string) {
     this.selectedMenu = this.selectedMenu === value ? '' : value;
-  }
-
-  pathGenerator(parentPath: string, childId: string): string {
-    if (this.parentPath === '/publication') {
-      if(config.HasCover) {
-        return `${parentPath}/${childId}/cover`
-      } else if (config.HasTitle) {
-        return `${parentPath}/${childId}/title`
-      } else if (config.HasForeword) {
-        return `${parentPath}/${childId}/foreword`
-      } else if (config.HasIntro) {
-        return `${parentPath}/${childId}/introduction`
-      } else {
-        //TODO: thanh - path for when all conditions fail
-        return ''
-      }
-    } else {
-      return childId === 'media-collections' ? `/media-collections` : `${parentPath}/${childId}`
-    }
   }
 }
