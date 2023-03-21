@@ -31,12 +31,13 @@ export class TextChangerComponent {
   lastItem?: boolean;
   currentItemTitle?: string;
   collectionId: string = '';
-  languageSubscription: Subscription | null;
+  language: string = ''
+  languageSubscription: Subscription | null = null;
 
   displayNext: boolean = true;
   displayPrev: boolean = true;
 
-  flattened: any;
+  flattened: Array<any> = [];
   currentToc: any;
 
   collectionHasCover: boolean = false;
@@ -57,10 +58,7 @@ export class TextChangerComponent {
     this.collectionHasTitle = config.HasTitle ?? false;
     this.collectionHasForeword = config.HasForeword ?? false;
     this.collectionHasIntro = config.HasIntro ?? false;
-
-    this.languageSubscription = null;
-    this.tocItemId = '';
-    this.collectionId = '';
+    this.language = config.i18n?.locale ?? 'sv';
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -104,23 +102,34 @@ export class TextChangerComponent {
         this.tocItemId += ';' + this.textPosition;
       }
 
-      if (!firstChange) {
+      if (
+        !firstChange &&
+        this.parentPageType === 'page-read' &&
+        this.textItemID === changes.textItemID.previousValue &&
+        this.textPosition !== changes.textPosition.previousValue
+      ) {
+        // Same read text, different text position
+        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
+      } else if (
+        !firstChange &&
+        this.parentPageType === 'page-read' &&
+        this.flattened.length > 0 &&
+        this.collectionId === changes.textItemID.previousValue.split('_')[0]
+      ) {
+        // Different read text, same collection
+        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
+      } else if (!firstChange) {
+        // Different collection or parent page type
         this.loadData();
       }
     }
   }
 
   ngOnInit() {
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
+    this.languageSubscription = this.langService.languageSubjectChange().subscribe(language => {
+      this.language = language;
       this.loadData();
     });
-
-    /*
-    this.events.getUpdatePositionInPageReadTextChanger().complete();
-    this.events.getUpdatePositionInPageReadTextChanger().subscribe((itemId) => {
-      this.setCurrentItem(itemId);
-    });
-    */
 
     // TODO: Reload when the TOC sorting changes and set current item
     /*
@@ -261,6 +270,7 @@ export class TextChangerComponent {
 
   setFirstTocItemAsNext(collectionId: string) {
     try {
+      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(collectionId).subscribe(
         (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {
@@ -421,6 +431,7 @@ export class TextChangerComponent {
   }
 
   async previous(test?: boolean) {
+    // TODO: Add this.language to getTableOfContents()
     this.tocService.getTableOfContents(this.collectionId).subscribe(
       toc => {
         this.findNext(toc);
@@ -438,6 +449,7 @@ export class TextChangerComponent {
 
   async next(test?: boolean) {
     if (this.tocItemId !== 'mediaCollections') {
+      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
           this.findNext(toc);
@@ -638,30 +650,13 @@ export class TextChangerComponent {
         chapterId = itemIdParts[2];
       }
 
-      console.log('Opening read from TextChanger.open()');
       this.router.navigate(
-        ['/publication', collectionId, 'text', publicationId, chapterId],
+        (
+          chapterId ? ['/publication', collectionId, 'text', publicationId, chapterId] : 
+          ['/publication', collectionId, 'text', publicationId]
+        ),
         (positionId ? { queryParams: { position: positionId } } : {})
       );
-    }
-  }
-
-  setCurrentItem(itemId: string) {
-    this.tocItemId = itemId;
-    if (this.tocItemId.indexOf('_') > -1) {
-      this.collectionId = this.tocItemId.split('_')[0];
-    } else {
-      this.collectionId = this.tocItemId;
-    }
-    if (this.flattened.length < 1) {
-      this.tocService.getTableOfContents(this.collectionId).subscribe(
-        toc => {
-          this.flatten(toc);
-          this.setCurrentPreviousAndNextItemsFromFlattenedToc();
-        }
-      );
-    } else {
-      this.setCurrentPreviousAndNextItemsFromFlattenedToc();
     }
   }
 
