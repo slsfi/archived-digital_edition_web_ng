@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { EpubComponent } from 'src/app/components/epub/epub';
 import { IonicModule, NavParams } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EpubPageRoutingModule } from './epub-routing.module';
@@ -39,7 +38,6 @@ export function createTranslateLoader(http: HttpClient) {
       EpubPageRoutingModule
     ],
     providers: [
-      TableOfContentsService,
       NavParams
     ],
     entryComponents: [

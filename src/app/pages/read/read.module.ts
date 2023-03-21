@@ -8,7 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { CommentsModule } from 'src/app/components/comments/comments.module';
 import { MathJaxModule } from 'src/app/components/math-jax/math-jax.module';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { ReadTextModule } from 'src/app/components/read-text/read-text.module';
 import { FacsimilesModule } from 'src/app/components/facsimiles/facsimiles.module';
 import { ManuscriptsModule } from 'src/app/components/manuscripts/manuscripts.module';
@@ -53,8 +52,7 @@ export function createTranslateLoader(http: HttpClient) {
       ReadPage,
     ],
     providers: [
-      PublicationCacheService,
-      TableOfContentsService
+      PublicationCacheService
     ]
   })
   export class ReadPageModule {}

@@ -8,7 +8,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DigitalEditionListModule } from 'src/app/components/digital-edition-list/digital-edition-list.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { PipesModule } from 'src/pipes/pipes.module';
-import { MdContentService } from 'src/app/services/md/md-content.service';
 import { MusicRoutingModule } from './music-routing.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -41,8 +40,6 @@ export function createTranslateLoader(http: HttpClient) {
   entryComponents: [
     MusicPage
   ],
-  providers: [
-    MdContentService
-  ]
+  providers: []
 })
 export class MusicPageModule {}

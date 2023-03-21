@@ -8,8 +8,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MarkdownModule } from 'ngx-markdown';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
 import { PdfService } from 'src/app/services/pdf/pdf.service';
 import { SingleEditionRoutingModule } from './single-edition-routing.module';
 import { PipesModule } from 'src/pipes/pipes.module';
@@ -41,8 +39,6 @@ export function createTranslateLoader(http: HttpClient) {
       SingleEditionRoutingModule
     ],
     providers: [
-        TableOfContentsService,
-        MdContentService,
         PdfService
     ],
     entryComponents: [

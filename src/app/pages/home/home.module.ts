@@ -6,7 +6,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DigitalEditionListModule } from 'src/app/components/digital-edition-list/digital-edition-list.module';
 import { PipesModule } from 'src/pipes/pipes.module';
-import { MdContentService } from 'src/app/services/md/md-content.service';
 import { MarkdownModule } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
@@ -37,8 +36,6 @@ export function createTranslateLoader(http: HttpClient) {
       ComponentsModule,
       HomePageRoutingModule,
     ],
-    providers: [
-      MdContentService
-    ],
+    providers: [],
   })
   export class HomePageModule {}
