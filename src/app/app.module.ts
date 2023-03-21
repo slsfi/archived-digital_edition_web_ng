@@ -13,7 +13,6 @@ import { EventsService } from './services/events/events.service';
 import { HtmlContentService } from './services/html/html-content.service';
 import { MdContentService } from './services/md/md-content.service';
 import { TextService } from './services/texts/text.service';
-import { TextCacheService } from './services/texts/text-cache.service';
 import { LanguageService } from './services/languages/language.service';
 import { ReadPopoverService } from './services/settings/read-popover.service';
 import { CommentService } from './services/comments/comment.service';
@@ -95,7 +94,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     HtmlContentService,
     MdContentService,
     TextService,
-    TextCacheService,
     TranslateService,
     LanguageService,
     ReadPopoverService,

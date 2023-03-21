@@ -11,7 +11,6 @@ import { MathJaxModule } from 'src/app/components/math-jax/math-jax.module';
 import { ReadTextModule } from 'src/app/components/read-text/read-text.module';
 import { FacsimilesModule } from 'src/app/components/facsimiles/facsimiles.module';
 import { ManuscriptsModule } from 'src/app/components/manuscripts/manuscripts.module';
-import { PublicationCacheService } from 'src/app/services/cache/publication-cache.service';
 import { LegendModule } from 'src/app/components/legend/legend.module';
 import { DragScrollModule } from 'src/directives/ngx-drag-scroll/public-api';
 import { VariationsModule } from 'src/app/components/variations/variations.module';
@@ -51,8 +50,6 @@ export function createTranslateLoader(http: HttpClient) {
     entryComponents: [
       ReadPage,
     ],
-    providers: [
-      PublicationCacheService
-    ]
+    providers: []
   })
   export class ReadPageModule {}

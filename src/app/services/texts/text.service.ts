@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable } from 'rxjs';
-import { TextCacheService } from './text-cache.service';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
@@ -10,7 +9,6 @@ export class TextService {
   private introductionUrlDownloadable =
     '/text/downloadable/{format}/{c_id}/inl/{lang}';
 
-  textCache: any;
   apiEndPoint: string;
 
   simpleApi?: string;
@@ -29,7 +27,6 @@ export class TextService {
   activeTocOrder: string;
 
   constructor(
-    private cache: TextCacheService,
     private http: HttpClient
   ) {
     this.appMachineName = config.app?.machineName ?? '';
