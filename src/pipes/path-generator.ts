@@ -12,18 +12,22 @@ import { config } from "src/app/services/config/config";
 export class PathGenerator implements PipeTransform {
   transform(parentPath: string, childId: string): string {
     if (parentPath === '/publication') {
-      if(config.HasCover) {
-        return `${parentPath}/${childId}/cover`
+      if (config.HasCover) {
+        return `${parentPath}/${childId}/cover`;
       } else if (config.HasTitle) {
-        return `${parentPath}/${childId}/title`
+        return `${parentPath}/${childId}/title`;
       } else if (config.HasForeword) {
-        return `${parentPath}/${childId}/foreword`
+        return `${parentPath}/${childId}/foreword`;
       } else if (config.HasIntro) {
-        return `${parentPath}/${childId}/introduction`
-      } else {
-        //TODO: thanh - path for when all conditions fail
-        return ''
+        return `${parentPath}/${childId}/introduction`;
+      } else if (config.collections?.firstReadItem) {
+        const idPath = config.collections.firstReadItem[childId]?.split('_') || [];
+        if (idPath.length) {
+          idPath[0] = 'text';
+        }
+        return `/publication/${childId}/${idPath.join('/')}`;
       }
+      return '';
     } else {
       return childId === 'media-collections' ? `/media-collections` : `${parentPath}/${childId}`
     }

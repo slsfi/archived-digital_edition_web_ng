@@ -1315,12 +1315,16 @@ export class SideMenu implements OnInit {
   }
 
   categorizeCollections(collections: any) {
-    if(this._config.show?.TOC?.splitReadCollections) {
-        this.collectionsList = this._config.show.TOC.splitReadCollections.map(() => [])
-        collections.forEach((collection: any) => {
-          let index = this.splitReadCollections.findIndex(item => item.includes(collection.id));
-          index > -1 && this.collectionsList[index].push(collection);
-        })
+    if (this._config.show?.TOC?.splitReadCollections) {
+      this.collectionsList = this._config.show.TOC.splitReadCollections.map((item: any, index: number) => ({
+        id: `Read${index + 1}`,
+        children: [],
+        title: `Read${index + 1}`
+      }))
+      collections.forEach((collection: any) => {
+        let index = this._config.show.TOC.splitReadCollections.findIndex((item: number[]) => item.includes(collection.id));
+        index > -1 && this.collectionsList[index].children.push(collection);
+      })
     } else
       this.collectionsList = collections;
   }
