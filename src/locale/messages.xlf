@@ -36,6 +36,11 @@
         <source>Avgränsningar</source>
       </segment>
     </unit>
+    <unit id="MediaCollections.GotoMediaCollection">
+      <segment>
+        <source>Gå till bildbanken</source>
+      </segment>
+    </unit>
     <unit id="MusicPage.PageTitle">
       <segment>
         <source>Musikvolymerna</source>
@@ -186,6 +191,11 @@
         <source>Hänvisa</source>
       </segment>
     </unit>
+    <unit id="SearchApp.infotext">
+      <segment>
+        <source>!!!!</source>
+      </segment>
+    </unit>
     <unit id="Site.Title">
       <segment>
         <source>Om</source>
@@ -264,6 +274,11 @@
     <unit id="TOC.MediaCollections">
       <segment>
         <source>Album</source>
+      </segment>
+    </unit>
+    <unit id="TOC.WorkSearch">
+      <segment>
+        <source>!!!!</source>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">

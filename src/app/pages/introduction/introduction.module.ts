@@ -8,9 +8,10 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { IntroductionRoutingModule } from './introduction-routing.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

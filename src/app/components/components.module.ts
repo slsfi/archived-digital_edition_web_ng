@@ -31,9 +31,10 @@ import { RouterLink } from "@angular/router";
 import { TopMenuComponent } from "./top-menu/top-menu";
 import { SideMenu} from "./side-menu/side-menu";
 import { RecursiveAccordion } from "./recursive-accordion/recursive-accordion";
+import {CustomTranslateHttpLoader} from "../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

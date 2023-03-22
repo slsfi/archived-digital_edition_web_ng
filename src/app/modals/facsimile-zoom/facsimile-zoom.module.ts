@@ -7,9 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { PinchZoomModule } from 'src/app/components/pinch-zoom/pinch-zoom.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient): TranslateLoader {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+    return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

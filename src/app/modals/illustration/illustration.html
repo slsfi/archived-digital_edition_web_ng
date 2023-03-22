@@ -36,7 +36,7 @@
           <p>{{imgMetadata['art_location']}}</p>
           <p class="media-collection-link">
             <a (click)="goToMediaCollection()">
-              <ion-icon name="photos"></ion-icon> {{ "MediaCollections.GotoMediaCollection" | translate }}
+              <ion-icon name="photos"></ion-icon> <ng-container i18n="@@MediaCollections.GotoMediaCollection">Gå till bildbanken</ng-container>
             </a>
           </p>
         </div>

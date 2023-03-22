@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {lastValueFrom, Observable} from 'rxjs';
 import { LanguageService } from '../languages/language.service';
 import { config } from "src/app/services/config/config";
 
@@ -21,14 +21,16 @@ export class GalleryService {
 
   async getGalleries(language: string): Promise<any> {
     try {
-      const response = await fetch(
-        config.app.apiEndpoint +
-          '/' +
-          config.app.machineName +
-          '/gallery/data/' +
-          language
+      // console.log("FETCH HERE 3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+      const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language
+      await lastValueFrom(this.http.get(url));
+
+      /*const response = await fetch(
+        url
       );
-      return response.json();
+      return response.json();*/
+
     } catch (e) {}
   }
 
@@ -38,6 +40,9 @@ export class GalleryService {
       if (id) {
         incId = '/' + id;
       }
+
+      console.log("FETCH HERE 5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
       const response = await fetch(
         config.app.apiEndpoint +
           '/' +
@@ -55,6 +60,9 @@ export class GalleryService {
       if (id) {
         incId = '/' + id;
       }
+
+      console.log("FETCH HERE 6!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
       const response = await fetch(
         config.app.apiEndpoint +
           '/' +
@@ -72,6 +80,9 @@ export class GalleryService {
       if (id) {
         incId = '/' + id;
       }
+
+      console.log("FETCH HERE 7!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
       const response = await fetch(
         config.app.apiEndpoint +
           '/' +
