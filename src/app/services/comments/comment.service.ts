@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable } from 'rxjs';
-import { CommentCacheService } from './comment-cache.service';
+import { catchError, map, Observable, of } from 'rxjs';
 import { CommonFunctionsService } from '../common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
 export class CommentService {
-  private readTextUrl = '/text/com/';
-  textCache: any;
+  cachedCollectionComments: Record<string, any> = {};
   activeCommentHighlight: any;
   activeLemmaHighlight: any;
 
   constructor(
     private http: HttpClient,
-    private cache: CommentCacheService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.activeCommentHighlight = {
@@ -27,78 +24,125 @@ export class CommentService {
     };
   }
 
-  getComment(id: string): Observable<any> {
-    const id2 = id.replace('_com', '');
-    const parts = id2.split(';');
-    const collection_id = parts[0].split('_')[0];
-    const pub_id = parts[0].split('_')[1];
-    const section_id = parts[0].split('_')[2];
+  /**
+   * Returns an html fragment as a string observable of all comments for the specified text.
+   * @param textItemID The full text id: <collectionID>_<publicationID>_<chapterID>.
+   * <chapterID> is optional.
+   * @returns Observable of string.
+   */
+  getComments(textItemID: string): Observable<any> {
+    textItemID = textItemID.replace('_com', '').split(';')[0];
 
-    if (!parts[1]) {
-      parts[1] = '';
-    }
-
-    const commentId =
-      collection_id +
-      '_' +
-      pub_id +
-      (section_id === undefined && section_id !== '')
-        ? '_' + section_id
-        : '';
-    const introURL = '/text/' + collection_id + '/' + pub_id + '/com';
-    const commentIdURL =
-      '/text/' + collection_id + '/' + pub_id + '/com/' + parts[1];
-    let url: string = '';
-
-    if (parts[1]) {
-      if (parts[1].length > 1) {
-        url = commentIdURL;
+    if (this.cachedCollectionComments.hasOwnProperty(textItemID)) {
+      // The comments for the text are cached
+      return of(this.cachedCollectionComments[textItemID]);
+    } else {
+      const textIDParts = textItemID.split('_');
+      const collection_id = textIDParts[0];
+      const pub_id = textIDParts[1];
+      let chapter_id = '';
+      if (textIDParts[2] !== undefined) {
+        chapter_id = textIDParts[2];
       }
-    } else {
-      url = introURL;
-    }
+  
+      let url = '/text/' + collection_id + '/' + pub_id + '/com';
+      if (chapter_id) {
+        url += '/' + chapter_id + '/' + chapter_id;
+      }
+  
+      url = config.app.apiEndpoint + '/' + config.app.machineName + url;
 
-    if (section_id !== undefined && section_id !== '') {
-      url = introURL + '/' + section_id + '/' + section_id;
-    } else {
-      url = introURL;
-    }
-
-    url = config.app.apiEndpoint + '/' + config.app.machineName + url;
-
-    if (this.cache.hasHtml(commentId)) {
-      return this.cache.getHtmlAsObservable(id2);
-    } else {
       return this.http.get(url).pipe(
         map((res) => {
           let body = res as any;
-          body = body.content as string;
-
-          if (parts[1]) {
-            const selector: string = '.' + parts[1];
-            const range = document.createRange();
-            const docFrags = range.createContextualFragment(body);
-            if (docFrags.querySelector(selector)) {
-              const htmlElement: Element | null =
-                docFrags.querySelector(selector);
-              const htmlElementNext: any =
-                docFrags.querySelector(selector)?.nextSibling;
-              const strippedBody = htmlElement?.innerHTML;
-              if (strippedBody !== undefined && strippedBody.length > 0) {
-                return strippedBody || ' - no content - ';
-              } else if (
-                htmlElementNext?.nodeName === 'SPAN' &&
-                htmlElementNext['className'] === 'tooltip'
-              ) {
-                return htmlElementNext.textContent || ' - no content - ';
-              }
-            }
+          if (body.content) {
+            body = (body.content as string).trim();
+            body = this.postprocessCommentsText(body);
+            this.clearCachedCollectionComments();
+            this.cachedCollectionComments[textItemID] = body;
           }
-          return body || ' - no content - ';
+          return body || '';
         }),
         catchError(this.handleError)
       );
     }
+  }
+
+  /**
+   * Returns the html fragment of a single comment as a string observable.
+   * @param textItemID The full text id: <collectionID>_<publicationID>_<chapterID>.
+   * <chapterID> is optional.
+   * @param elementID Unique class name of the html element wrapping the comment.
+   * @returns Observable of string.
+   */
+  getSingleComment(textItemID: string, elementID: string): Observable<any> {
+    if (elementID == '') {
+      return of('');
+    }
+
+    if (this.cachedCollectionComments.hasOwnProperty(textItemID)) {
+      // The comments for the text are cached
+      let singleComment = this.extractSingleComment(elementID, this.cachedCollectionComments[textItemID]);
+      return of(singleComment);
+    } else {
+      // Comments not cached, get them from backend and then extract single comment
+      const textIDParts = textItemID.split('_');
+      const collection_id = textIDParts[0];
+      const pub_id = textIDParts[1];
+      let chapter_id = '';
+      if (textIDParts[2] !== undefined) {
+        chapter_id = textIDParts[2];
+      }
+  
+      let url = '/text/' + collection_id + '/' + pub_id + '/com';
+      if (chapter_id) {
+        url += '/' + chapter_id + '/' + chapter_id;
+      }
+  
+      url = config.app.apiEndpoint + '/' + config.app.machineName + url;
+  
+      return this.http.get(url).pipe(
+        map((res) => {
+          let body = res as any;
+          if (body.content) {
+            body = (body.content as string).trim();
+            body = this.postprocessCommentsText(body);
+            this.clearCachedCollectionComments();
+            this.cachedCollectionComments[textItemID] = body;
+            let singleComment = this.extractSingleComment(elementID, body);
+            return singleComment;
+          }
+          return '';
+        }),
+        catchError(this.handleError)
+      );
+    }
+  }
+
+  /**
+   * Returns an html fragment as a string with the comment with class
+   * name @param elementID from the set of all comments in @param comments.
+   * @returns String.
+   */
+  private extractSingleComment(elementID: string, comments: string): string {
+    const selector = '.' + elementID;
+    const range = document.createRange();
+    const docFrags = range.createContextualFragment(comments);
+    const htmlElement = docFrags.querySelector(selector);
+    if (htmlElement) {
+      const htmlElementNext = htmlElement.nextElementSibling;
+      const strippedBody = htmlElement.innerHTML;
+      if (strippedBody !== undefined && strippedBody.length > 0) {
+        return strippedBody || ' - no content - ';
+      } else if (
+        // TODO: not sure if this is needed, comments should never be in this format
+        htmlElementNext?.nodeName === 'SPAN' &&
+        htmlElementNext?.className.includes('tooltip')
+      ) {
+        return htmlElementNext.textContent || ' - no content - ';
+      }
+    }
+    return ' - no content - ';
   }
 
   private async handleError(error: Response | any) {
@@ -128,7 +172,7 @@ export class CommentService {
     const parts = id2.split(';');
     const collection_id = parts[0].split('_')[0];
     const pub_id = parts[0].split('_')[1];
-    const section_id = parts[0].split('_')[2];
+    const chapter_id = parts[0].split('_')[2];
 
     if (!parts[1]) {
       parts[1] = '';
@@ -138,8 +182,8 @@ export class CommentService {
       collection_id +
       '_' +
       pub_id +
-      (section_id === undefined && section_id !== '')
-        ? '_' + section_id
+      (chapter_id === undefined && chapter_id !== '')
+        ? '_' + chapter_id
         : '';
     let url =
       '/text/downloadable/' +
@@ -150,8 +194,8 @@ export class CommentService {
       pub_id +
       '/com';
 
-    if (section_id !== undefined && section_id !== '') {
-      url = url + '/' + section_id;
+    if (chapter_id !== undefined && chapter_id !== '') {
+      url = url + '/' + chapter_id;
     }
 
     return this.http.get(
@@ -160,6 +204,32 @@ export class CommentService {
         config.app.machineName +
         url
     );
+  }
+
+  postprocessCommentsText(text: string) {
+    // Replace png images with svg counterparts
+    text = text.replace(/\.png/g, '.svg');
+    // Fix image paths
+    text = text.replace(/images\//g, 'assets/images/');
+    // Add "teiComment" to all classlists
+    text = text.replace(
+      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
+      'class=\"teiComment $1\"'
+      );
+    
+    // text = text.replace(/(teiComment teiComment )/g, 'teiComment ');
+    // text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    // text = text.replace(/&amp;/g, '&');
+
+    return text;
+  }
+
+  clearCachedCollectionComments() {
+    for (const property in this.cachedCollectionComments) {
+      if (this.cachedCollectionComments.hasOwnProperty(property)) {
+        delete this.cachedCollectionComments[property];
+      }
+    }
   }
 
   /* Use this function to scroll the lemma of a comment into view in the reading text view. */

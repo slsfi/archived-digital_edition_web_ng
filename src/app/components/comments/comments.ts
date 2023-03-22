@@ -1,20 +1,16 @@
-import { Component, Input, Renderer2, ElementRef, EventEmitter, Output, NgZone } from '@angular/core';
+import { Component, Input, Renderer2, ElementRef, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalController } from '@ionic/angular';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
-/**
- * Class for the CommentsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+import { isBrowser } from 'src/standalone/utility-functions';
+
+
 @Component({
   selector: 'comments',
   templateUrl: 'comments.html',
@@ -22,17 +18,14 @@ import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 })
 export class CommentsComponent {
 
-  @Input() link?: string;
-  @Input() matches?: Array<string>;
-  @Input() external?: string;
-  @Output() openNewIntroView: EventEmitter<any> = new EventEmitter();
+  @Input() textItemID: string = '';
+  @Input() searchMatches: Array<string> = [];
+
   public text: any;
-  protected errorMessage?: string;
   manuscript: any;
   sender: any;
   receiver: any;
   letter: any;
-  textLoading: Boolean = true;
   private unlistenClickEvents?: () => void;
 
   constructor(
@@ -43,7 +36,6 @@ export class CommentsComponent {
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
-    private events: EventsService,
     private analyticsService: AnalyticsService,
     public translate: TranslateService,
     protected modalController: ModalController,
@@ -52,79 +44,70 @@ export class CommentsComponent {
   }
 
   ngOnInit() {
-    // console.log('comments link', this.link);
-    if ( this.external ) {
-      const extParts = String(this.external).split(' ');
-      this.textService.getCollectionAndPublicationByLegacyId(extParts[0] + '_' + extParts[1]).subscribe(data => {
-        if ( data[0] !== undefined ) {
-          this.link = data[0]['coll_id'] + '_' + data[0]['pub_id'];
-        }
-        this.setText();
-      });
-    } else {
-      this.setText();
+    if (this.textItemID) {
+      this.loadCommentsText();
+      this.getCorrespondanceMetadata();
+      this.doAnalytics();
     }
-    this.getCorrespondanceMetadata();
-    this.setUpTextListeners();
-  }
-
-  ngAfterViewInit() {
+    if (isBrowser()) {
+      this.setUpTextListeners();
+    }
   }
 
   ngOnDestroy() {
     this.unlistenClickEvents?.();
   }
 
-  setText() {
-    this.commentService.getComment(this.link || '').subscribe({
+  loadCommentsText() {
+    this.commentService.getComments(this.textItemID).subscribe({
       next: (text) => {
-        this.textLoading = false;
-        if (text === '' || text === null || text === undefined || text.length < 1) {
+        if (!text) {
+          console.log('no comments');
           this.translate.get('Read.Comments.NoComments').subscribe(
             (translation) => { this.text = translation; }
           );
         } else {
-          this.text = this.commonFunctions.insertSearchMatchTags(String(text), this.matches ?? []);
-          this.text = this.sanitizer.bypassSecurityTrustHtml(
-            this.text.replace(/images\//g, 'assets/images/')
-              .replace(/\.png/g, '.svg').replace(/class=\"([a-z A-Z _ 0-9]{1,140})\"/g, 'class=\"teiComment $1\"')
-              .replace(/(teiComment teiComment )/g, 'teiComment ')
-              .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-          );
+          text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
+          this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         }
-        this.doAnalytics();
       },
       error: (e) =>  {
-        console.error('Error loading comments...', this.link);
-        this.errorMessage = <any>e;
-        this.textLoading = false;
+        // TODO: Add translated error message.
+        this.text = 'Error: the comments could not be fetched.';
       }
     });
   }
 
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Comments', 'Comments', String(this.link));
-  }
+  getCorrespondanceMetadata() {
+    this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).subscribe({
+      next: (text) => {
+        if (text['subjects'] !== undefined && text['subjects'] !== null) {
+          if (text['subjects'].length > 0) {
+            const senders = [] as any;
+            const receivers = [] as any;
+            text['subjects'].forEach((subject: any) => {
+              if ( subject['avs\u00e4ndare'] ) {
+                senders.push(subject['avs\u00e4ndare']);
+              }
+              if ( subject['mottagare'] ) {
+                receivers.push(subject['mottagare']);
+              }
+            });
+            this.sender = this.commonFunctions.concatenateNames(senders);
+            this.receiver = this.commonFunctions.concatenateNames(receivers);
+          }
+        }
 
-  openNewView( event: any, id: any, type: string ) {
-    let openId = id;
-    let chapter = null;
-    if (String(id).includes('ch')) {
-      openId = String(String(id).split('ch')[0]).trim();
-      chapter = 'ch' + String(String(id).split('ch')[1]).trim();
-    }
-    this.events.publishShowView({
-      type, openId, chapter
-    })
-  }
-
-  openNewIntro( event: any, id: any ) {
-    id.viewType = 'introduction';
-    this.openNewIntroView.emit(id);
+        if (text['letter'] !== undefined && text['letter'] !== null) {
+          this.letter = text['letter'];
+          this.doAnalytics();
+        }
+      },
+      error: (e) => { }
+    });
   }
 
   private setUpTextListeners() {
-    // We must do it like this since we want to trigger an event on a dynamically loaded innerhtml.
     const nElement: HTMLElement = this.elementRef.nativeElement;
 
     this.ngZone.runOutsideAngular(() => {
@@ -197,45 +180,17 @@ export class CommentsComponent {
     });
   }
 
-  getCorrespondanceMetadata() {
-    this.commentService.getCorrespondanceMetadata(String(this.link).split('_')[1]).subscribe(
-      text => {
-        if (text['subjects'] !== undefined && text['subjects'] !== null) {
-          if (text['subjects'].length > 0) {
-            const senders = [] as any;
-            const receivers = [] as any;
-            text['subjects'].forEach((subject: any) => {
-              if ( subject['avs\u00e4ndare'] ) {
-                senders.push(subject['avs\u00e4ndare']);
-              }
-              if ( subject['mottagare'] ) {
-                receivers.push(subject['mottagare']);
-              }
-            });
-            this.sender = this.commonFunctions.concatenateNames(senders);
-            this.receiver = this.commonFunctions.concatenateNames(receivers);
-          }
-        }
-
-        if (text['letter'] !== undefined && text['letter'] !== null) {
-          this.letter = text['letter'];
-          this.doAnalytics();
-        }
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
-  }
-
   async openIllustration(imageNumber: any) {
     const modal = await this.modalController.create({
       component: IllustrationPage,
       cssClass: 'foo',
-      componentProps: {
-        'imageNumber': imageNumber,
-      }
+      componentProps: { 'imageNumber': imageNumber }
     });
     return await modal.present();
   }
+
+  doAnalytics() {
+    this.analyticsService.doAnalyticsEvent('Comments', 'Comments', this.textItemID);
+  }
+
 }

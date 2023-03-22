@@ -114,7 +114,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="view.type == 'comments'">
-                  <comments [link]="textItemID" [matches]="searchMatches" (openNewIntroView)="openNewView($event)">
+                  <comments [textItemID]="textItemID" [searchMatches]="searchMatches">
                   </comments>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'facsimiles'">

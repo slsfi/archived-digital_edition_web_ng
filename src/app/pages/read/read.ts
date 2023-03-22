@@ -50,7 +50,6 @@ export class ReadPage /*implements OnDestroy*/ {
   multilingualEST: false;
   estLanguages = [];
   estLang: 'none';
-  establishedText?: EstablishedText;
   popover?: ReadPopoverPage;
   hasOccurrenceResults = false;
   showOccurrencesModal = false;
@@ -271,8 +270,8 @@ export class ReadPage /*implements OnDestroy*/ {
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.show = config.defaults?.ReadModeView ?? 'established';
 
-    this.routeQueryParamsSubscription = null;
     this.routeParamsSubscription = null;
+    this.routeQueryParamsSubscription = null;
   }
 
   ngOnInit() {
@@ -284,35 +283,39 @@ export class ReadPage /*implements OnDestroy*/ {
     );
     */
 
-    this.routeParamsSubscription = this.route.paramMap.subscribe((params) => {
-      let textItemID;
+    this.routeParamsSubscription = this.route.params.subscribe({
+      next: (params) => {
+        let textItemID;
 
-      if (params.has('chapterID') && params.get('chapterID') !== '') {
-        textItemID = params.get('collectionID') + '_' + params.get('publicationID') + '_' + params.get('chapterID');
-        this.paramChapterID = params.get('chapterID');
-      } else {
-        textItemID = params.get('collectionID') + '_' + params.get('publicationID');
-      }
+        if (params['chapterID'] !== undefined && params['chapterID'] !== '') {
+          textItemID = params['collectionID'] + '_' + params['publicationID'] + '_' + params['chapterID'];
+          this.paramChapterID = params['chapterID'];
+        } else {
+          textItemID = params['collectionID'] + '_' + params['publicationID'];
+        }
 
-      if (this.textItemID !== textItemID) {
-        this.textItemID = textItemID;
-        // Save the id of the previous and current read view text in textService.
-        // TODO: This is maybe not needed any more:
-        this.textService.previousReadViewTextId = this.textService.readViewTextId;
-        this.textService.readViewTextId = this.textItemID;
-      }
+        if (this.textItemID !== textItemID) {
+          this.textItemID = textItemID;
+          // Save the id of the previous and current read view text in textService.
+          // TODO: This is maybe not needed any more:
+          this.textService.previousReadViewTextId = this.textService.readViewTextId;
+          this.textService.readViewTextId = this.textItemID;
+        }
 
-      this.paramCollectionID = params.get('collectionID');
-      this.paramPublicationID = params.get('publicationID');
+        this.paramCollectionID = params['collectionID'];
+        this.paramPublicationID = params['publicationID'];
 
-      this.setCollectionAndPublicationLegacyId();
+        this.setCollectionAndPublicationLegacyId();
+      },
+      error: (e) => {},
+      complete: () => {}
     });
 
     this.routeQueryParamsSubscription = this.route.queryParams.subscribe({
       next: (queryParams) => {
 
         if (queryParams['search']) {
-          console.log('search in queryparams:', queryParams['search']);
+          // console.log('search in queryparams:', queryParams['search']);
           let searchMatches: Array<string> = [];
           const parsedSearchMatches = JSON.parse(queryParams['search']);
           if (parsedSearchMatches.length > 0) {
@@ -331,8 +334,24 @@ export class ReadPage /*implements OnDestroy*/ {
         }
 
         if (queryParams['views']) {
-          console.log('views in queryparams:', queryParams['views']);
+          // console.log('views in queryparams:', queryParams['views']);
           const parsedViews = JSON.parse(queryParams['views']);
+
+          let viewsChanged = false;
+          if (this.views.length !== parsedViews.length) {
+            viewsChanged = true;
+          } else {
+            for (let i = 0; i < this.views.length; i++) {
+              if (JSON.stringify(this.views[i]) !== JSON.stringify(parsedViews[i])) {
+                viewsChanged = true;
+                break;
+              }
+            }
+          }
+
+          if (this.views.length < 1 || viewsChanged) {
+            this.views = parsedViews;
+          }
 
           // Clear the array keeping track of recently open views in
           // text service and populate it with the current ones.
@@ -340,27 +359,23 @@ export class ReadPage /*implements OnDestroy*/ {
           parsedViews.forEach((viewObj: any) => {
             this.textService.recentPageReadViews.push({ type: viewObj.type });
           });
-
-          if (this.views.length < 1) {
-            this.views = parsedViews;
-          }
         } else {
           this.setDefaultViews();
         }
 
-        if (queryParams['position']) {
-          console.log('position in queryparams:', queryParams['position']);
+        if (queryParams['position'] || (this.textPosition && queryParams['position'] === undefined)) {
+          // console.log('position in queryparams:', queryParams['position']);
           this.textPosition = queryParams['position'];
         }
 
         // TODO: Not sure facs_id and facs_nr are needed, or if they should be passed in the view object for facsimiles instead
         if (queryParams['facs_id']) {
-          console.log('facs_id in queryparams:', queryParams['facs_id']);
+          // console.log('facs_id in queryparams:', queryParams['facs_id']);
           this.facs_id = queryParams['facs_id'];
         }
 
         if (queryParams['facs_nr']) {
-          console.log('facs_nr in queryparams:', queryParams['facs_nr']);
+          // console.log('facs_nr in queryparams:', queryParams['facs_nr']);
           this.facs_nr = queryParams['facs_nr'];
         }
 
@@ -1564,24 +1579,23 @@ export class ReadPage /*implements OnDestroy*/ {
       return;
     }
 
-    id = this.establishedText?.link + ';' + id;
-    this.tooltipService.getCommentTooltip(id).subscribe(
-      tooltip => {
+    this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
+      next: (tooltip) => {
         this.setToolTipPosition(targetElem, tooltip.description);
         this.setToolTipText(tooltip.description);
         this.tooltips.comments[id] = tooltip.description
       },
-      error => {
+      error: (e) => {
         let noInfoFound = 'Could not get comment information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe(
-          translation => {
+        this.translate.get('Occurrences.NoInfoFound').subscribe({
+          next: (translation) => {
             noInfoFound = translation;
-          }, errorT => { }
-        );
+          }, error: (errorT) => { }
+        });
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
-    );
+    });
   }
 
   showVariantTooltip(targetElem: HTMLElement) {
@@ -1596,11 +1610,11 @@ export class ReadPage /*implements OnDestroy*/ {
 
   showFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
     if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
-      this.translate.get('note').subscribe(
-        translation => {
+      this.translate.get('note').subscribe({
+        next: (translation) => {
           this.setInfoOverlayTitle(translation);
-        }, error => { }
-      );
+        }, error: (e) => { }
+      });
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.footnotes[id]);
       return;
@@ -1651,11 +1665,11 @@ export class ReadPage /*implements OnDestroy*/ {
     const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
       this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
 
-    this.translate.get('note').subscribe(
-      translation => {
+    this.translate.get('note').subscribe({
+      next: (translation) => {
         this.setInfoOverlayTitle(translation);
-      }, error => { }
-    );
+      }, error: (e) => { }
+    });
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
       this.setInfoOverlayText(footNoteHTML);
@@ -1666,11 +1680,11 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   showManuscriptFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.translate.get('note').subscribe(
-      translation => {
+    this.translate.get('note').subscribe({
+      next: (translation) => {
         this.setInfoOverlayTitle(translation);
-      }, error => { }
-    );
+      }, error: (e) => { }
+    });
     const footNoteHTML: string | null = this.getManuscriptFootnoteText(id, targetElem);
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
@@ -1679,11 +1693,11 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   showVariantFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.translate.get('note').subscribe(
-      translation => {
+    this.translate.get('note').subscribe({
+      next: (translation) => {
         this.setInfoOverlayTitle(translation);
-      }, error => { }
-    );
+      }, error: (e) => { }
+    });
     const footNoteHTML: string | null = this.getVariantFootnoteText(id, targetElem);
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
@@ -1693,44 +1707,43 @@ export class ReadPage /*implements OnDestroy*/ {
 
   showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
     if (this.tooltips.comments[id as keyof typeof this.tooltips.comments]) {
-      this.translate.get('Occurrences.Commentary').subscribe(
-        translation => {
+      this.translate.get('Occurrences.Commentary').subscribe({
+        next: (translation) => {
           this.setInfoOverlayTitle(translation);
-        }, errorA => { }
-      );
+        }, error: (errorA) => { }
+      });
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.comments[id as keyof typeof this.tooltips.comments]);
       return;
     }
 
-    id = this.establishedText?.link + ';' + id;
-    this.tooltipService.getCommentTooltip(id).subscribe(
-      (tooltip) => {
-        this.translate.get('Occurrences.Commentary').subscribe(
-          translation => {
+    this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
+      next: (tooltip) => {
+        this.translate.get('Occurrences.Commentary').subscribe({
+          next: (translation) => {
             this.setInfoOverlayTitle(translation);
-          }, errorB => { }
-        );
+          }, error: (errorB) => { }
+        });
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(tooltip.description);
         this.tooltips.comments[id] = tooltip.description
       },
-      errorC => {
+      error: (errorC) => {
         let noInfoFound = 'Could not get comment information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe(
-          translation => {
+        this.translate.get('Occurrences.NoInfoFound').subscribe({
+          next: (translation) => {
             noInfoFound = translation;
-          }, errorD => { }
-        );
-        this.translate.get('Occurrences.Commentary').subscribe(
-          translation => {
+          }, error: (errorD) => { }
+        });
+        this.translate.get('Occurrences.Commentary').subscribe({
+          next: (translation) => {
             this.setInfoOverlayTitle(translation);
-          }, errorE => { }
-        );
+          }, error: (errorE) => { }
+        });
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(noInfoFound);
       }
-    );
+    });
   }
 
   /* This method is used for showing infoOverlays for changes, normalisations and abbreviations. */
@@ -1998,7 +2011,7 @@ export class ReadPage /*implements OnDestroy*/ {
   public async showDownloadModal() {
     const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
-      componentProps: { textId: this.establishedText?.link, origin: 'page-read' }
+      componentProps: { textId: this.textItemID, origin: 'page-read' }
     })
     return await modal.present();
   }

@@ -24,8 +24,8 @@ export class ReadTextComponent {
   @Input() textPosition: string = '';
   @Input() searchMatches: Array<string> = [];
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
+
   public text: any;
-  textLoading: boolean = true;
   illustrationsVisibleInReadtext: boolean = false;
   illustrationsViewAvailable: boolean = false;
   intervalTimerId: number;
@@ -59,6 +59,11 @@ export class ReadTextComponent {
               changes.textPosition.currentValue !== changes.textPosition.previousValue
             ) {
               this.scrollToTextPosition();
+            } else if (
+              changes.textPosition.previousValue &&
+              changes.textPosition.currentValue === undefined
+            ) {
+              this.scrollReadTextToTop();
             }
           }
         }
@@ -89,27 +94,25 @@ export class ReadTextComponent {
 
         if (text === '' || text === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
           console.log('no reading text');
-          this.textLoading = false;
           this.translate.get('Read.Established.NoEstablished').subscribe({
             next: translation => {
               this.text = translation;
             },
             error: eTransl => {
               console.error(eTransl);
-              this.text = 'Ingen lästext';
+              this.text = 'Ingen lästext.';
             }
           });
         } else {
           const c_id = String(this.textItemID).split('_')[0];
           text = this.textService.postprocessEstablishedText(text, c_id);
           text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
-          this.textLoading = false;
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         }
       },
       error: (e) => {
-        this.textLoading = false;
-        this.text = 'Lästexten kunde inte hämtas.';
+        // TODO: Add translated error message.
+        this.text = 'Error: The read text could not be fetched.';
       }
     });
   }
@@ -139,7 +142,10 @@ export class ReadTextComponent {
           const eventTarget = event.target as HTMLElement;
 
           // Some of the texts, e.g. ordsprak.sls.fi, have links to external sites
-          if ( eventTarget.hasAttribute('href') === true && eventTarget.getAttribute('href')?.includes('http') === false ) {
+          if (
+            eventTarget.hasAttribute('href') === true &&
+            eventTarget.getAttribute('href')?.includes('http') === false
+          ) {
             event.preventDefault();
           }
 
@@ -149,7 +155,10 @@ export class ReadTextComponent {
             // Check if click on an illustration or icon representing an illustration
             if (eventTarget.classList.contains('doodle') && eventTarget.hasAttribute('src')) {
               // Click on a pictogram ("doodle")
-              image = {src: '/assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg', class: 'doodle'};
+              image = {
+                src: '/assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
+                class: 'doodle'
+              };
             } else if (this.illustrationsVisibleInReadtext) {
               // There are possibly visible illustrations in the read text. Check if click on such an image.
               if (eventTarget.classList.contains('est_figure_graphic') && eventTarget.hasAttribute('src')) {
@@ -157,9 +166,11 @@ export class ReadTextComponent {
               }
             } else {
               // Check if click on an icon representing an image which is NOT visible in the reading text
-              if (eventTarget.previousElementSibling !== null
-              && eventTarget.previousElementSibling.classList.contains('est_figure_graphic')
-              && eventTarget.previousElementSibling.hasAttribute('src')) {
+              if (
+                eventTarget.previousElementSibling !== null &&
+                eventTarget.previousElementSibling.classList.contains('est_figure_graphic') &&
+                eventTarget.previousElementSibling.hasAttribute('src')
+              ) {
                 image = {src: event.target.previousElementSibling.src, class: 'illustration'};
               }
             }
@@ -247,6 +258,19 @@ export class ReadTextComponent {
             }
           }
         }.bind(this), 1000);
+      });
+    }
+  }
+
+  scrollReadTextToTop() {
+    if (isBrowser()) {
+      this.ngZone.runOutsideAngular(() => {
+        const target = document.querySelector(
+          'page-read:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+        ) as HTMLElement;
+        if (target) {
+          this.commonFunctions.scrollElementIntoView(target, 'top', 50);
+        }
       });
     }
   }

@@ -421,7 +421,7 @@ export class DownloadTextsModalPage {
   }
 
   private openCommentsForPrint() {
-    this.commentService.getComment(this.textId).subscribe({
+    this.commentService.getComments(this.textId).subscribe({
       next: content => {
         this.commentService.getCorrespondanceMetadata(String(this.textId).split('_')[1].split(';')[0]).subscribe({
           next: metadata => {

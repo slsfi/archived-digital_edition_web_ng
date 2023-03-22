@@ -93,6 +93,7 @@ export class TooltipService {
     return this.http.get(url);
   }
 
+  // TODO: This function is never used.
   decodeHtmlEntity(str: string) {
     return str.replace(/&#(\d+);/g, function (match, dec) {
       return String.fromCharCode(dec);
@@ -104,34 +105,14 @@ export class TooltipService {
    * <img src=".." data-id="en5929">
    * <span class="tooltip"></span>
    */
-  getCommentTooltip(id: string): Observable<any> {
-    const parts = id.split(';');
-    const htmlId = parts[0];
-    const elementId = parts[parts.length - 1].replace('end', 'en');
-    return this.commentService.getComment(parts[0]).pipe(
-      map((data: any) => {
-        const range = document.createRange();
-        const doc = range.createContextualFragment(data);
-        const element = doc.querySelector('.' + elementId);
-
-        if (element) {
-          const formatedCommentData = element.innerHTML
-            .replace(
-              /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
-              'class="teiComment $1"'
-            )
-            .replace(/(teiComment teiComment )/g, 'teiComment ')
-            .replace(/(&lt;)/g, '<')
-            .replace(/(&gt;)/g, '>');
-          return (
-            {
-              name: 'Comment',
-              description: (element.innerHTML = formatedCommentData),
-            } || { name: 'Error', description: element?.innerHTML }
-          );
-        } else {
-          return { name: 'Error', description: 'error' };
-        }
+  getCommentTooltip(textItemID: string, elementID: string): Observable<any> {
+    elementID = elementID.replace('end', 'en');
+    return this.commentService.getSingleComment(textItemID, elementID).pipe(
+      map((comment: any) => {
+        return (
+          { name: 'Comment', description: comment } ||
+          { name: 'Error', description: '' }
+        );
       })
     );
   }

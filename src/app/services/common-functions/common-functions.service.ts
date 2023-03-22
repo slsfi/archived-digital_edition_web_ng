@@ -255,27 +255,29 @@ export class CommonFunctionsService {
    * corresponding character entity references.
    */
   encodeCharEntities(text: string) {
-    const entities = {
-      '&' : '&amp;',
-      '<' : '&lt;',
-      '>' : '&gt;',
-      '"' : '&quot;',
-      '\'' : '&apos;',
-      '℔' : '&#x2114;',
-      'ʄ' : '&#x284;'
-    };
+    if (isBrowser()) {
+      const entities = {
+        '&' : '&amp;',
+        '<' : '&lt;',
+        '>' : '&gt;',
+        '"' : '&quot;',
+        '\'' : '&apos;',
+        '℔' : '&#x2114;',
+        'ʄ' : '&#x284;'
+      };
 
-    // First parse the text as html which will decode all entity references,
-    // otherwise & in existing entity references will be replaced.
-    const parser = new DOMParser;
-    const dom = parser.parseFromString('<!DOCTYPE html><html><body>' + text + '</body></html>', 'text/html');
-    text = dom.body.textContent || '';
+      // First parse the text as html which will decode all entity references,
+      // otherwise & in existing entity references will be replaced.
+      const parser = new DOMParser;
+      const dom = parser.parseFromString('<!DOCTYPE html><html><body>' + text + '</body></html>', 'text/html');
+      text = dom.body.textContent || '';
 
-    // Then encode the selected characters
-    Object.entries(entities).forEach(([code, entity]) => {
-      const re = new RegExp('[' + code + ']', 'gi');
-      text = text.replace(re, entity);
-    });
+      // Then encode the selected characters
+      Object.entries(entities).forEach(([code, entity]) => {
+        const re = new RegExp('[' + code + ']', 'gi');
+        text = text.replace(re, entity);
+      });
+    }
     return text;
   }
 

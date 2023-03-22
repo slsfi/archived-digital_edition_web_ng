@@ -23,8 +23,6 @@ export class TextChangerComponent {
   tocItemId: string = '';
   prevItem: any;
   nextItem: any;
-  lastNext: any;
-  lastPrev: any;
   prevItemTitle?: string;
   nextItemTitle?: string;
   firstItem?: boolean;
@@ -38,7 +36,6 @@ export class TextChangerComponent {
   displayPrev: boolean = true;
 
   flattened: Array<any> = [];
-  currentToc: any;
 
   collectionHasCover: boolean = false;
   collectionHasTitle: boolean = false;
@@ -105,7 +102,11 @@ export class TextChangerComponent {
       if (
         !firstChange &&
         this.parentPageType === 'page-read' &&
-        this.textItemID === changes.textItemID.previousValue &&
+        (
+          changes.textItemID === undefined ||
+          this.textItemID === changes.textItemID.previousValue
+        ) &&
+        changes.textPosition &&
         this.textPosition !== changes.textPosition.previousValue
       ) {
         // Same read text, different text position
@@ -114,6 +115,7 @@ export class TextChangerComponent {
         !firstChange &&
         this.parentPageType === 'page-read' &&
         this.flattened.length > 0 &&
+        changes.textItemID &&
         this.collectionId === changes.textItemID.previousValue.split('_')[0]
       ) {
         // Different read text, same collection
