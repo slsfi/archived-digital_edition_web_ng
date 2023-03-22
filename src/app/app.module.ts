@@ -16,7 +16,6 @@ import { TextService } from './services/texts/text.service';
 import { LanguageService } from './services/languages/language.service';
 import { ReadPopoverService } from './services/settings/read-popover.service';
 import { CommentService } from './services/comments/comment.service';
-import { CommentCacheService } from './services/comments/comment-cache.service';
 import { CommonFunctionsService } from './services/common-functions/common-functions.service';
 import { SemanticDataService } from './services/semantic-data/semantic-data.service';
 import { ReferenceDataService } from './services/reference-data/reference-data.service';
@@ -99,7 +98,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     ReadPopoverService,
     Title,
     CommentService,
-    CommentCacheService,
     CommonFunctionsService,
     SemanticDataService,
     ReferenceDataService,
