@@ -1,11 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { EventsService } from 'src/app/services/events/events.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/app/services/config/config";
@@ -18,8 +17,10 @@ import { config } from "src/app/services/config/config";
 })
 export class TextChangerComponent {
 
-  @Input() parentPageType?: string;
-  tocItemId: any;
+  @Input() textItemID: string = '';
+  @Input() textPosition: string = '';
+  @Input() parentPageType: string = '';
+  tocItemId: string = '';
   prevItem: any;
   nextItem: any;
   lastNext: any;
@@ -29,83 +30,114 @@ export class TextChangerComponent {
   firstItem?: boolean;
   lastItem?: boolean;
   currentItemTitle?: string;
-  collectionId: string;
-  languageSubscription: Subscription | null;
+  collectionId: string = '';
+  language: string = ''
+  languageSubscription: Subscription | null = null;
 
-  displayNext: Boolean = true;
-  displayPrev: Boolean = true;
+  displayNext: boolean = true;
+  displayPrev: boolean = true;
 
-  flattened: any;
+  flattened: Array<any> = [];
   currentToc: any;
 
-  collectionHasCover: Boolean = false;
-  collectionHasTitle: Boolean = false;
-  collectionHasForeword: Boolean = false;
-  collectionHasIntro: Boolean = false;
-  defaultReadViews = '';
+  collectionHasCover: boolean = false;
+  collectionHasTitle: boolean = false;
+  collectionHasForeword: boolean = false;
+  collectionHasIntro: boolean = false;
 
   constructor(
     public events: EventsService,
-    public storage: StorageService,
     public tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService,
     public translateService: TranslateService,
     private langService: LanguageService,
     protected textService: TextService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     this.collectionHasCover = config.HasCover ?? false;
     this.collectionHasTitle = config.HasTitle ?? false;
     this.collectionHasForeword = config.HasForeword ?? false;
     this.collectionHasIntro = config.HasIntro ?? false;
-    const defaultReadViewsArray = config.defaults?.ReadModeView ?? ['established'];
-    this.defaultReadViews = defaultReadViewsArray.join('&');
+    this.language = config.i18n?.locale ?? 'sv';
+  }
 
-    if (this.parentPageType === undefined) {
-      this.parentPageType = 'page-read';
+  ngOnChanges(changes: SimpleChanges) {
+    let relevantChanges = false;
+    let firstChange = true;
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        if (propName === 'textItemID') {
+          if (changes.textItemID.currentValue !== changes.textItemID.previousValue) {
+            relevantChanges = true;
+          }
+          if (!changes.textItemID.firstChange) {
+            firstChange = false;
+          }
+        } else if (propName === 'textPosition') {
+          if (changes.textPosition.currentValue !== changes.textPosition.previousValue) {
+            relevantChanges = true;
+          }
+          if (!changes.textPosition.firstChange) {
+            firstChange = false;
+          }
+        } else if (propName === 'parentPageType') {
+          if (changes.parentPageType.currentValue !== changes.parentPageType.previousValue) {
+            relevantChanges = true;
+          }
+          if (!changes.parentPageType.firstChange) {
+            firstChange = false;
+          }
+        }
+      }
     }
-    this.languageSubscription = null;
-    this.tocItemId = '';
-    this.collectionId = '';
+
+    if (relevantChanges) {
+      if (!this.parentPageType) {
+        this.parentPageType = 'page-read';
+      }
+
+      this.collectionId = this.textItemID.split('_')[0];
+      this.tocItemId = this.textItemID;
+      if (this.textPosition) {
+        this.tocItemId += ';' + this.textPosition;
+      }
+
+      if (
+        !firstChange &&
+        this.parentPageType === 'page-read' &&
+        this.textItemID === changes.textItemID.previousValue &&
+        this.textPosition !== changes.textPosition.previousValue
+      ) {
+        // Same read text, different text position
+        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
+      } else if (
+        !firstChange &&
+        this.parentPageType === 'page-read' &&
+        this.flattened.length > 0 &&
+        this.collectionId === changes.textItemID.previousValue.split('_')[0]
+      ) {
+        // Different read text, same collection
+        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
+      } else if (!firstChange) {
+        // Different collection or parent page type
+        this.loadData();
+      }
+    }
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.collectionId = params['collectionID'];
-      let publicationId = '';
-      let chapterId = '';
-
-      try {
-        publicationId = params['publicationID'];
-        chapterId = params['chapterID'];
-      } catch {}
-
-      this.tocItemId = this.collectionId;
-      if (publicationId) {
-        this.tocItemId += '_' + publicationId;
-        if (chapterId && chapterId.startsWith('nochapter') === false) {
-          this.tocItemId += '_' + chapterId;
-        }
-      }
-
-      if (this.languageSubscription) {
-        this.languageSubscription.unsubscribe();
-      }
-      this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-        this.loadData();
-      });
-  
-      this.events.getUpdatePositionInPageReadTextChanger().complete();
-      this.events.getUpdatePositionInPageReadTextChanger().subscribe((itemId) => {
-        this.setCurrentItem(itemId);
-      });
-  
-      this.events.getTocActiveSorting().complete();
-      this.events.getTocActiveSorting().subscribe((sortType) => {
-        this.loadData();
-      });
+    this.languageSubscription = this.langService.languageSubjectChange().subscribe(language => {
+      this.language = language;
+      this.loadData();
     });
+
+    // TODO: Reload when the TOC sorting changes and set current item
+    /*
+    this.events.getTocActiveSorting().complete();
+    this.events.getTocActiveSorting().subscribe((sortType) => {
+      this.loadData();
+    });
+    */
   }
 
   ngOnDestroy() {
@@ -120,10 +152,10 @@ export class TextChangerComponent {
     if (this.parentPageType === 'page-cover') {
       // Initialised from page-cover
       this.translateService.get('Read.CoverPage.Title').subscribe({
-        next: translation => {
+        next: (translation) => {
           this.currentItemTitle = translation;
         },
-        error: e => { this.currentItemTitle = ''; }
+        error: (e) => { this.currentItemTitle = ''; }
       });
 
       this.firstItem = true;
@@ -141,10 +173,10 @@ export class TextChangerComponent {
     } else if (this.parentPageType === 'page-title') {
       // Initialised from page-title
       this.translateService.get('Read.TitlePage.Title').subscribe({
-        next: translation => {
+        next: (translation) => {
           this.currentItemTitle = translation;
         },
-        error: e => { this.currentItemTitle = ''; }
+        error: (e) => { this.currentItemTitle = ''; }
       });
 
       if (this.collectionHasCover) {
@@ -170,10 +202,10 @@ export class TextChangerComponent {
     } else if (this.parentPageType === 'page-foreword') {
       // Initialised from page-foreword
       this.translateService.get('Read.ForewordPage.Title').subscribe({
-        next: translation => {
+        next: (translation) => {
           this.currentItemTitle = translation;
         },
-        error: e => { this.currentItemTitle = ''; }
+        error: (e) => { this.currentItemTitle = ''; }
       });
 
       this.lastItem = false;
@@ -198,10 +230,10 @@ export class TextChangerComponent {
     } else if (this.parentPageType === 'page-introduction') {
       // Initialised from page-introduction
       this.translateService.get('Read.Introduction.Title').subscribe({
-        next: translation => {
+        next: (translation) => {
           this.currentItemTitle = translation;
         },
-        error: e => { this.currentItemTitle = ''; }
+        error: (e) => { this.currentItemTitle = ''; }
       });
 
       this.lastItem = false;
@@ -238,6 +270,7 @@ export class TextChangerComponent {
 
   setFirstTocItemAsNext(collectionId: string) {
     try {
+      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(collectionId).subscribe(
         (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {
@@ -398,13 +431,13 @@ export class TextChangerComponent {
   }
 
   async previous(test?: boolean) {
+    // TODO: Add this.language to getTableOfContents()
     this.tocService.getTableOfContents(this.collectionId).subscribe(
       toc => {
         this.findNext(toc);
       }
     );
     if (this.prevItem !== undefined && test !== true) {
-      this.storage.set('currentTOCItem', this.prevItem);
       await this.open(this.prevItem);
     } else if (test && this.prevItem !== undefined) {
       return true;
@@ -416,6 +449,7 @@ export class TextChangerComponent {
 
   async next(test?: boolean) {
     if (this.tocItemId !== 'mediaCollections') {
+      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
           this.findNext(toc);
@@ -423,9 +457,8 @@ export class TextChangerComponent {
       );
     }
     if (this.nextItem !== undefined && test !== true) {
-      this.storage.set('currentTOCItem', this.nextItem);
       await this.open(this.nextItem);
-    }  else if (test && this.nextItem !== undefined) {
+    } else if (test && this.nextItem !== undefined) {
       return true;
     } else if (test && this.nextItem === undefined) {
       return false;
@@ -435,7 +468,7 @@ export class TextChangerComponent {
 
   findNext(toc: any) {
     // flatten the toc structure
-    if ( this.flattened.length < 1 ) {
+    if (this.flattened.length < 1) {
       this.flatten(toc);
     }
     if (this.textService.activeTocOrder === 'alphabetical') {
@@ -541,7 +574,6 @@ export class TextChangerComponent {
       } else {
         this.currentItemTitle = '';
       }
-      this.storage.set('currentTOCItemTitle', this.currentItemTitle);
     }
     return currentItemFound;
   }
@@ -618,30 +650,13 @@ export class TextChangerComponent {
         chapterId = itemIdParts[2];
       }
 
-      console.log('Opening read from TextChanger.open()');
       this.router.navigate(
-        ['/publication', collectionId, 'text', publicationId, chapterId],
-        { queryParams: { position: positionId } }
+        (
+          chapterId ? ['/publication', collectionId, 'text', publicationId, chapterId] : 
+          ['/publication', collectionId, 'text', publicationId]
+        ),
+        (positionId ? { queryParams: { position: positionId } } : {})
       );
-    }
-  }
-
-  setCurrentItem(itemId: string) {
-    this.tocItemId = itemId;
-    if (this.tocItemId.indexOf('_') > -1) {
-      this.collectionId = this.tocItemId.split('_')[0];
-    } else {
-      this.collectionId = this.tocItemId;
-    }
-    if (this.flattened.length < 1) {
-      this.tocService.getTableOfContents(this.collectionId).subscribe(
-        toc => {
-          this.flatten(toc);
-          this.setCurrentPreviousAndNextItemsFromFlattenedToc();
-        }
-      );
-    } else {
-      this.setCurrentPreviousAndNextItemsFromFlattenedToc();
     }
   }
 

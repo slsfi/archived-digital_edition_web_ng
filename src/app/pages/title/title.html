@@ -1,6 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
-    <text-changer slot="start" *ngIf="!(userSettingsService.isMobile())" [parentPageType]="'page-title'" class="text-changer-desktop-view"></text-changer>
+
+    <text-changer slot="start" *ngIf="!(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-desktop-view"></text-changer>
+
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
@@ -38,4 +40,4 @@
 
 </ion-content>
 
-<text-changer *ngIf="(userSettingsService.isMobile())" [parentPageType]="'page-title'" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-mobile-view"></text-changer>

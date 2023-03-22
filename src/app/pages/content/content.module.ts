@@ -8,7 +8,6 @@ import { ContentPageRoutingModule } from './content-routing.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HtmlContentService } from 'src/app/services/html/html-content.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
 import { IonicModule, NavParams } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -41,7 +40,6 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     providers: [
         HtmlContentService,
-        MdContentService,
         NavParams
     ]
   })

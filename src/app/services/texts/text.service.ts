@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable } from 'rxjs';
-import { TextCacheService } from './text-cache.service';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
@@ -10,7 +9,6 @@ export class TextService {
   private introductionUrlDownloadable =
     '/text/downloadable/{format}/{c_id}/inl/{lang}';
 
-  textCache: any;
   apiEndPoint: string;
 
   simpleApi?: string;
@@ -29,7 +27,6 @@ export class TextService {
   activeTocOrder: string;
 
   constructor(
-    private cache: TextCacheService,
     private http: HttpClient
   ) {
     this.appMachineName = config.app?.machineName ?? '';
@@ -327,9 +324,16 @@ export class TextService {
         galleryId = galleries[collectionId];
       }
 
-      if (!showReadTextIllustrations.includes(collectionId)) {
+      const regexFigure = new RegExp(/est_figure_graphic/);
+      const regexAssets = new RegExp(/assets\/images\/verk\//);
+
+      if (
+        !showReadTextIllustrations.includes(collectionId) &&
+        (regexFigure.test(text) || regexAssets.test(text))
+      ) {
         // * The replace below should only replace in classLists, but adding a more specific 
-        // * regex causes a "too much recursion" error for long texts.
+        // * regex causes a "too much recursion" error for long texts. There used to be a
+        // * DOMParser here.
         text = text.replace(
           /est_figure_graphic/g,
           'est_figure_graphic hide-illustration'

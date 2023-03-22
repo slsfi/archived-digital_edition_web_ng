@@ -19,6 +19,18 @@ export const config: Config = {
       205: 18, 215: 19, 217: 20, 204: 21, 212: 22, 209: 23
     }
   },
+  collections: {
+    firstReadItem: {
+      216: "216_20280", 219: "219_19443", 220: "220_20122",
+      218: "218_20230_ch2", 210: "210_20548_ch1", 208: "208_18466_ch4",
+      207: "207_18464_ch1", 214: "214_20240_ch1", 203: "203_20217_ch1",
+      213: "213_18465_ch1", 202: "202_18467_ch1", 199: "199_18284",
+      221: "221_21422", 206: "206_20212_ch1", 201: "201_18471",
+      211: "211_20128", 200: "200_19870", 205: "205_20227_ch1",
+      215: "215_20568", 217: "217_20559_ch1", 204: "204_20322",
+      212: "212_20323", 209: "209_20479"
+    }
+  },
   page: {
     about: {
       markdownFolderNumber: "03",
@@ -73,6 +85,11 @@ export const config: Config = {
       showLanguageButton: true,
       showMusicButton: false,
       showHelpButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetic: ["211", "215", "219", "220"],
+      sortableCollectionsChronologic: ["215", "219", "220"],
+      sortableCollectionsGenre: []
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -230,8 +247,7 @@ export const config: Config = {
     facsimileDefaultZoomLevel: 4,
     facsimileZoomPageLevel: 1,
     galleryCollectionMapping: { 214: 44, 206: 19 },
-    showReadTextIllustrations: ["20212", "20213", "206"],
-    sortableLetters: ["220", "219", "215", "211"]
+    showReadTextIllustrations: ["20212", "20213", "206"]
   },
   i18n: {
     languages: ["sv", "fi"],
@@ -604,6 +620,11 @@ export const config_soderholm: Config = {
       showLanguageButton: false,
       showMusicButton: false,
       showHelpButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetic: [],
+      sortableCollectionsChronologic: [],
+      sortableCollectionsGenre: []
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -661,8 +682,7 @@ export const config_soderholm: Config = {
     facsimileDefaultZoomLevel: 2,
     facsimileZoomPageLevel: 2,
     galleryCollectionMapping: {},
-    showReadTextIllustrations: [],
-    sortableLetters: []
+    showReadTextIllustrations: []
   },
   i18n: {
     languages: ["sv"],

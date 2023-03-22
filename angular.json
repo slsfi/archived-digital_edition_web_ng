@@ -13,12 +13,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": ["fi"],
             "outputPath": "dist/app/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "i18nDuplicateTranslation": "error",
+            "i18nMissingTranslation": "error",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -38,7 +41,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
             "scripts": [
               "node_modules/marked/marked.min.js"
             ]
@@ -75,9 +81,19 @@
             },
             "ci": {
               "progress": false
+            },
+            "fi": {
+              "localize": [
+                "fi"
+              ]
+            },
+            "sv": {
+              "localize": [
+                "sv"
+              ]
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -90,14 +106,54 @@
             },
             "ci": {
               "progress": false
+            },
+            "fi": {
+              "browserTarget": "app:build:development,fi"
+            },
+            "sv": {
+              "browserTarget": "app:build:development,sv"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "app:build"
+            "browserTarget": "app:build",
+            "format": "xlf2",
+            "outputPath": "src/locale",
+            "targetFiles": [
+              "messages.fi.xlf",
+              "messages.sv.xlf",
+              "messages.no.xlf",
+              "messages.en.xlf"
+            ]
+          },
+          "configurations": {
+            "fi": {
+              "outputPath": "src/locale/",
+              "outFile": "messages.fi.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "fi"
+            },
+            "sv": {
+              "outputPath": "src/locale/",
+              "outFile": "messages.sv.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "sv"
+            },
+            "no": {
+              "outputPath": "src/locale/",
+              "outFile": "messages.no.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "no"
+            },
+            "en": {
+              "outputPath": "src/locale/",
+              "outFile": "messages.en.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "en"
+            }
           }
         },
         "test": {
@@ -120,7 +176,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -165,7 +224,7 @@
             },
             "ci": {}
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
@@ -199,6 +258,12 @@
             }
           },
           "defaultConfiguration": "production"
+        }
+      },
+      "i18n": {
+        "locales": {
+          "fi": { "translation": "src/locale/messages.fi.xlf" },
+          "sv": { "translation": "src/locale/messages.sv.xlf" }
         }
       }
     }

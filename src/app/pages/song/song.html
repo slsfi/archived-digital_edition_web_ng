@@ -2,7 +2,17 @@
   <ng-container *ngIf="true">
 
     <ng-container *ngIf="showOccurrencesModal" class="occurrenceButton">
-      <button ion-button small (click)="openOccurrenceResult()">{{ (occurrenceResult?.name)?occurrenceResult?.name:("Read.ShowSearchResults" | translate) }} &nbsp;<ion-icon name="search"></ion-icon></button>
+      <button ion-button small (click)="openOccurrenceResult()">
+
+        <ng-container *ngIf="occurrenceResult?.name">
+          {{occurrenceResult?.name}}
+        </ng-container>
+
+        <ng-container *ngIf="!occurrenceResult?.name">
+          <ng-container i18n="@@Read.ShowSearchResults">Förekomster</ng-container> &nbsp;<ion-icon name="search"></ion-icon>
+        </ng-container>
+
+      </button>
     </ng-container>
 
   <ion-grid>
@@ -26,15 +36,15 @@
                   <ion-card-content>
                 <ion-list inset="true">
                     <ion-item (click)="downloadMIDI()">
-                        {{ "Song.Download" | translate}} Midi
+                        <ng-container i18n="@@Song.Download">Ladda ner</ng-container> Midi
                       <ion-icon name="download" item-end></ion-icon>
                     </ion-item>
                     <ion-item (click)="downloadXML()">
-                      {{ "Song.Download" | translate}} Music XML
+                      <ng-container i18n="@@Song.Download">Ladda ner</ng-container> Music XML
                       <ion-icon name="download" item-end></ion-icon>
                     </ion-item>
                     <ion-item (click)="downloadJPEG()">
-                      {{ "Song.Download" | translate}} JPEG
+                      <ng-container i18n="@@Song.Download">Ladda ner</ng-container> JPEG
                       <ion-icon name="download" item-end></ion-icon>
                     </ion-item>
                   </ion-list>
@@ -47,19 +57,19 @@
 
 
           <ion-list *ngIf="song">
-              <ion-item>{{"Song.Playman" | translate}}: {{song.performer_firstname}} {{song.performer_lastname}} {{(song.performer_born_name)?"("+song.performer_born_name+")":""}}</ion-item>
-              <ion-item>{{"Song.SongType" | translate}}: {{song.type}}</ion-item>
-              <ion-item>{{"Song.SongName" | translate}}: {{song.name}}</ion-item>
-              <ion-item>{{"Song.Landscape" | translate}}: {{song.landscape}}</ion-item>
-              <ion-item>{{"Song.Place" | translate}}: {{song.place}}</ion-item>
-              <ion-item>{{"Song.Recorder" | translate}}: {{song.recorder_firstname}} {{song.recorder_lastname}} {{(song.recorder_born_name)?"("+song.recorder_born_name+")":""}}</ion-item>
-              <ion-item>{{"Song.Year" | translate}}: {{song.original_publication_date}}</ion-item>
-              <ion-item>{{"Song.OCL" | translate}}: {{song.original_collection_location}}</ion-item>
-              <ion-item>{{"Song.OCS" | translate}}: {{song.original_collection_signature}}</ion-item>
-              <ion-item>{{"Song.Volume" | translate}}: {{song.volume}}</ion-item>
-              <ion-item>{{"Song.SongNumber" | translate}}: {{song.number}}</ion-item>
-              <ion-item>{{"Song.Comments" | translate}}: {{song.comment}}</ion-item>
-              <ion-item>{{"Song.SongText" | translate}}: {{song.lyrics}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Playman">Spelman</ng-container>: {{song.performer_firstname}} {{song.performer_lastname}} {{(song.performer_born_name)?"("+song.performer_born_name+")":""}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.SongType">Låttyp</ng-container>: {{song.type}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.SongName">Låtens namn</ng-container>: {{song.name}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Landscape">Landskap</ng-container>: {{song.landscape}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Place">Ort</ng-container>: {{song.place}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Recorder">Upptecknare</ng-container>: {{song.recorder_firstname}} {{song.recorder_lastname}} {{(song.recorder_born_name)?"("+song.recorder_born_name+")":""}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Year">Uppteckningsår</ng-container>: {{song.original_publication_date}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.OCL">Originalsamlingens placering</ng-container>: {{song.original_collection_location}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.OCS">Originalsamlingens signum</ng-container>: {{song.original_collection_signature}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Volume">Volym</ng-container>: {{song.volume}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.SongNumber">Sångnummer</ng-container>: {{song.number}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.Comments">Kommentarer</ng-container>: {{song.comment}}</ion-item>
+              <ion-item><ng-container i18n="@@Song.SongText">Sångtext</ng-container>: {{song.lyrics}}</ion-item>
             </ion-list>
 
 
