@@ -7,44 +7,69 @@
       </a>
     </li>
     <!-- Markdown "About"-pages: src/app/pages/content -->
-    <li (click)="toggleAccordion('/content')" *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown">
-      <span>
-        {{aboutOptionsMarkdown.title}}
-      </span>
-      <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/content'"
-                name="chevron-forward-outline"></ion-icon>
-    </li>
-    <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/content'" class="accordion-list">
-      <app-recursive-accordion
-        [children]="aboutOptionsMarkdown.children"
-        [parentPath]="'/content'">
-      </app-recursive-accordion>
-    </li>
+    <ng-container *ngIf="_config.show?.TOC?.About">
+      <li (click)="toggleAccordion('/content')" *ngIf="aboutOptionsMarkdown">
+        <span>
+          {{aboutOptionsMarkdown.title}}
+        </span>
+        <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/content'"
+                  name="chevron-forward-outline"></ion-icon>
+      </li>
+      <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/content'"
+          class="accordion-list">
+        <app-recursive-accordion
+          [children]="aboutOptionsMarkdown.children"
+          [parentPath]="'/content'">
+        </app-recursive-accordion>
+      </li>
+    </ng-container>
 
     <!-- Epubs: src/app/pages/epub -->
-    <li (click)="toggleAccordion('/epub')" *ngIf="_config.show?.TOC?.EPUB">
-      <span>{{"TOC.EPUBS" | translate }}</span>
-      <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'"
-                name="chevron-forward-outline"></ion-icon>
-    </li>
-    <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'" class="accordion-list">
-      <app-recursive-accordion
-        [children]="_config.AvailableEpubs"
-        [parentPath]="'/epub'">
-      </app-recursive-accordion>
-    </li>
+    <ng-container *ngIf="_config.show?.TOC?.EPUB">
+      <li (click)="toggleAccordion('/epub')">
+        <span>{{"TOC.EPUBS" | translate }}</span>
+        <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'"
+                  name="chevron-forward-outline"></ion-icon>
+      </li>
+      <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'" class="accordion-list">
+        <app-recursive-accordion
+          [children]="_config.AvailableEpubs"
+          [parentPath]="'/epub'">
+        </app-recursive-accordion>
+      </li>
+    </ng-container>
 
-    <li (click)="toggleAccordion('/publication')" *ngIf="_config.show?.TOC?.Read">
-      <span>{{"TOC.Read" | translate }}</span>
-      <ion-icon *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'"
-                name="chevron-forward-outline"></ion-icon>
-    </li>
-    <li *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'" class="accordion-list">
-      <app-recursive-accordion
-        [children]="collectionsList"
-        [parentPath]="'/publication'">
-      </app-recursive-accordion>
-    </li>
+    <ng-container *ngIf="_config.show?.TOC?.Read">
+      <ng-container *ngIf="_config.show.TOC.splitReadCollections">
+        <ng-container *ngFor="let collection of collectionsList; let i = index">
+          <li (click)="toggleAccordion('Read'+i)">
+            <span>{{"TOC.Read" + (i + 1)  | translate }}</span>
+            <ion-icon *ngIf="collection.length" [class.open]="selectedMenu === ('Read'+ (i + 1))"
+                      name="chevron-forward-outline"></ion-icon>
+          </li>
+          <li [class.open]="selectedMenu === ('Read'+ i)" class="accordion-list">
+            <app-recursive-accordion
+              [children]="collection"
+              [parentPath]="'/publication'">
+            </app-recursive-accordion>
+          </li>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!_config.show.TOC.splitReadCollections">
+        <li (click)="toggleAccordion('/publication')">
+          <span>{{"TOC.Read" | translate }}</span>
+          <ion-icon *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'"
+                    name="chevron-forward-outline"></ion-icon>
+        </li>
+        <li *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'" class="accordion-list">
+          <app-recursive-accordion
+            [children]="collectionsList"
+            [parentPath]="'/publication'">
+          </app-recursive-accordion>
+        </li>
+      </ng-container>
+
+    </ng-container>
 
     <ng-container *ngIf="_config.show?.TOC?.MediaCollections">
       <li (click)="toggleAccordion('/media-collection')">

@@ -87,7 +87,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/work-search/work-search.module').then( m => m.WorkearchPageModule)
   },
   {
-    path: 'publication',
+    path: 'publication/:collectionID/text',
     loadChildren: () => import('./pages/read/read.module').then( m => m.ReadPageModule)
   },
   {

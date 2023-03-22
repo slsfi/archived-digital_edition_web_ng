@@ -4,11 +4,11 @@ import { ReadPage } from './read';
 
 const routes: Routes = [
   {
-    path: ':collectionID/text/:publicationID',
+    path: ':publicationID',
     component: ReadPage,
   },
   {
-    path: ':collectionID/text/:publicationID/:chapterID',
+    path: ':publicationID/:chapterID',
     component: ReadPage,
   },
 ];

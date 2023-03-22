@@ -36,13 +36,11 @@ export class SideMenu implements OnInit {
   appName?: string;
   errorMessage?: string;
   splitPane = false;
-  collectionsList: any[];
+  collectionsList: any[] = [];
   collectionsListWithTOC?: any[];
   tocData: any;
   pdfCollections?: any[];
   currentContentName?: string;
-  readMenuOpen = false;
-  galleryMenuOpen = false; // legacy
   personSearchTypes = [] as any;
   apiEndPoint: string;
   projectMachineName: string;
@@ -151,7 +149,7 @@ export class SideMenu implements OnInit {
   epubNames: any[];
 
   galleryInReadMenu = true;
-  splitReadCollections: any[];
+  splitReadCollections: Number[][] | string[] = [''];
 
   tocPersonSearchSelected = false;
   tocPlaceSearchSelected = false;
@@ -191,14 +189,7 @@ export class SideMenu implements OnInit {
       this.showBooks = false;
     }
 
-    try {
-      this.splitReadCollections = this._config.show?.TOC?.splitReadCollections as any;
-      if (this.splitReadCollections === null || this.splitReadCollections.length <= 0) {
-        this.splitReadCollections = [''];
-      }
-    } catch (e) {
-      this.splitReadCollections = [''];
-    }
+    this.splitReadCollections = this._config.show?.TOC?.splitReadCollections || [];
 
     this.collectionSortOrder = this._config.app?.CollectionSortOrder ?? undefined;
 
@@ -583,10 +574,8 @@ export class SideMenu implements OnInit {
               menuID: selectedMenu,
               component: 'app-component'
             });
-            if (this.splitReadCollections !== undefined) {
-              for (let i = 0; i < this.splitReadCollections.length; i++) {
-                this.simpleAccordionsExpanded.collectionsAccordion[i] = true;
-              }
+            for (let i = 0; i < this.splitReadCollections.length; i++) {
+              this.simpleAccordionsExpanded.collectionsAccordion[i] = true;
             }
           } else {
             collection['highlight'] = false;
@@ -855,12 +844,10 @@ export class SideMenu implements OnInit {
     });
 
     this.events.getDigitalEditionListRecieveData().subscribe((data: any) => {
-      this.collectionsList = data.digitalEditions;
-      const sortCollectionsByRomanNumerals = this._config.SortCollectionsByRomanNumerals ?? false;
-
-      if (sortCollectionsByRomanNumerals) {
-        this.sortCollectionsRoman();
-      }
+      this.categorizeCollections(data.digitalEditions);
+      // if (this._config.SortCollectionsByRomanNumerals) {
+      //   this.sortCollectionsRoman();
+      // }
     });
 
     this.events.getPdfviewOpen().subscribe((params: any) => {
@@ -1047,13 +1034,13 @@ export class SideMenu implements OnInit {
     if (loadCollectionsFromAssets) {
       this.digitalEditionListService.getCollectionsFromAssets()
         .subscribe(digitalEditions => {
-          this.collectionsList = digitalEditions;
+          this.categorizeCollections(digitalEditions);
         });
     } else {
       this.digitalEditionListService.getDigitalEditions()
         .subscribe(
           digitalEditions => {
-            this.collectionsList = digitalEditions;
+            this.categorizeCollections(digitalEditions);
           },
           error => {
             this.errorMessage = <any>error
@@ -1325,5 +1312,16 @@ export class SideMenu implements OnInit {
 
   toggleAccordion(value: string) {
     this.selectedMenu = this.selectedMenu === value ? '' : value;
+  }
+
+  categorizeCollections(collections: any) {
+    if(this._config.show?.TOC?.splitReadCollections) {
+        this.collectionsList = this._config.show.TOC.splitReadCollections.map(() => [])
+        collections.forEach((collection: any) => {
+          let index = this.splitReadCollections.findIndex(item => item.includes(collection.id));
+          index > -1 && this.collectionsList[index].push(collection);
+        })
+    } else
+      this.collectionsList = collections;
   }
 }
