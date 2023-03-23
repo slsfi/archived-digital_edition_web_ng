@@ -74,10 +74,6 @@ export class SideMenu implements OnInit {
   sideMenuMobile = false;
 
   splitPaneOpen = false;
-  previousSplitPaneOpenState = true;
-  splitPanePossible = true;
-  previousSplitPanePossibleState = true;
-
   pagesThatShallShow = {
     tocMenu: ['FeaturedFacsimilePage'],
     tableOfContentsMenu: ['SingleEditionPage', 'CoverPage', 'TitlePage', 'ForewordPage', 'IntroductionPage'],
@@ -149,7 +145,7 @@ export class SideMenu implements OnInit {
   epubNames: any[];
 
   galleryInReadMenu = true;
-  splitReadCollections: Number[][] | string[] = [''];
+  splitReadCollections: Number[][] = [];
 
   tocPersonSearchSelected = false;
   tocPlaceSearchSelected = false;
@@ -193,7 +189,6 @@ export class SideMenu implements OnInit {
 
     this.collectionSortOrder = this._config.app?.CollectionSortOrder ?? undefined;
 
-    this.sideMenuMobileConfig();
     this.songTypesMenuMarkdownConfig();
     this.aboutMenuMarkdownConfig();
 
@@ -296,10 +291,6 @@ export class SideMenu implements OnInit {
     this.aboutMenuMarkdown = this._config.AboutMenuAccordion ?? false;
   }
 
-  sideMenuMobileConfig() {
-    this.sideMenuMobile = this._config.SidemenuMobile ?? false;
-  }
-
   getCollectionsWithoutTOC() {
     this.collectionsWithoutTOC = this._config.CollectionsWithoutTOC ?? [];
   }
@@ -322,14 +313,6 @@ export class SideMenu implements OnInit {
         });
       }
     }, 1);
-  }
-
-  disableSplitPane() {
-    this.splitPanePossible = false;
-  }
-
-  enableSplitPane() {
-    this.splitPanePossible = true;
   }
 
   getCollectionsWithTOC(collections: any, media?: any) {
@@ -1223,10 +1206,7 @@ export class SideMenu implements OnInit {
             collection = coll;
           }
         })
-        if (collection.id && !collection.isDownloadOnly) {
-          // Open the collection from its initial page: cover, title, foreword, intro or first text
-          this.openCollectionInitialPage(collection);
-        } else {
+        if (!collection.id || collection.isDownloadOnly) {
           // Open collection in single-edition page
           const params = {collection: JSON.stringify(collection), fetch: 'false'};
           this.router.navigate([`publication-toc/${collection.id}`], {queryParams: params});
@@ -1249,27 +1229,6 @@ export class SideMenu implements OnInit {
       collection.title = 'media';
     }
     this.cdRef.detectChanges();
-  }
-
-  openCollectionInitialPage(collection: DigitalEdition) {
-    console.log('Opening collection from App.openCollectionInitialPage()');
-    if (this.hasCover && this.defaultSelectedItem === 'cover') {
-      this.router.navigate(['/publication', collection.id, 'cover']);
-    } else if (this.hasTitle && this.defaultSelectedItem === 'title') {
-      this.router.navigate(['/publication', collection.id, 'title']);
-    } else if (this.hasForeword && this.defaultSelectedItem === 'foreword') {
-      this.router.navigate(['/publication', collection.id, 'foreword']);
-    } else if (this.hasIntro && this.defaultSelectedItem === 'introduction') {
-      this.router.navigate(['/publication', collection.id, 'introduction']);
-    } else if (this.hasCover) {
-      this.router.navigate(['/publication', collection.id, 'cover']);
-    } else if (this.hasTitle) {
-      this.router.navigate(['/publication', collection.id, 'title']);
-    } else if (this.hasForeword) {
-      this.router.navigate(['/publication', collection.id, 'foreword']);
-    } else if (this.hasIntro) {
-      this.router.navigate(['/publication', collection.id, 'introduction']);
-    }
   }
 
   async getMediaCollections(): Promise<any> {
