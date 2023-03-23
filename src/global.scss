@@ -584,7 +584,9 @@
       }
     }
   }
+  /* --- */
 
+  /* --- Style block: Inline popover in page-read to add new view. --- */
   ion-popover.page-read-add-view-popover {
     --background: transparent;
     --box-shadow: none;
@@ -619,6 +621,63 @@
       --background: #dbdbdb;
     }
   }
+  /* --- */
+
+  /* --- Style block: Style for the block in read columns where a different variant, manuscript or facsimile text can be selected. --- */
+  .text-select-wrapper {
+    padding: 0 0 1rem 0;
+    margin: 0 0 1.5rem 0;
+    border-bottom: 1px solid #666;
+    background-color: var(--page-read-columns-background-color);
+    width: 100%;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      word-wrap: break-word;
+      white-space: normal;
+      margin: 0 0 0.5rem 0 !important;
+    }
+
+    .flex-buttons {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .flex-buttons ion-button.button {
+      --background: var(--button-background-color);
+      --color: var(--button-text-color);
+      --padding-bottom: 0.125em;
+      --padding-top: 0.125em;
+      --padding-start: 1em;
+      --padding-end: 1em;
+      font-size: 0.8125rem;
+      height: 1.875rem;
+    }
+
+    .flex-buttons + ion-item {
+      margin-top: 0.5rem;
+    }
+
+    .flex-buttons > ion-button.button.align-right {
+      margin-left: auto;
+    }
+  }
+  .text-select-wrapper.facsimile-header {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+  }
+  .text-select-wrapper.facsimile-header.external-urls-header {
+    margin-bottom: 0 !important;
+  }
+  .mobile-mode-read-content .text-select-wrapper.facsimile-header {
+    margin: 0;
+    padding: 0.5rem;
+  }
+  /* --- */
+
 
 
   /*
@@ -1365,53 +1424,7 @@
     }
   }
 
-  // Style for the component in read columns where a different variant, manuscript or facsimile text can be selected.
-  .text-select-wrapper {
-    padding: 0 0 1rem 0;
-    margin: 0 0 1.5rem 0;
-    border-bottom: 1px solid #666;
-    background-color: var(--page-read-columns-background-color);
-    width: 100%;
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      word-wrap: break-word;
-      white-space: normal;
-      margin: 0 0 0.5rem 0 !important;
-    }
-
-    .flex-buttons {
-      display: flex;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-
-    .flex-buttons button.button {
-      font-size: 0.8125rem;
-      height: 1.875rem !important;
-    }
-
-    .flex-buttons + ion-item {
-      margin-top: 0.5rem;
-    }
-
-    .flex-buttons > button.button.align-right {
-      margin-left: auto;
-    }
-  }
-  .text-select-wrapper.facsimile-header {
-    border-bottom: 0;
-    padding-bottom: 0;
-    margin-bottom: 1rem;
-  }
-  .text-select-wrapper.facsimile-header.external-urls-header {
-    margin-bottom: 0 !important;
-  }
-  .mobile-mode-read-content .text-select-wrapper.facsimile-header {
-    margin: 0;
-    padding: 0.5rem;
-  }
+  
 
   // Styles for the popover showing sort options for the TOC in sortable TOCs
   .collectionFiltersSelectOptionsPopover .popover-content {

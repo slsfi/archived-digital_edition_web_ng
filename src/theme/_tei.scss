@@ -1918,6 +1918,13 @@ div.tei {
         display: inline-block;
         margin: 0 0.5em 0 0;
     }
+    .XMLcomment {
+        display: none;
+    }
+    /* Highlight for search match. */
+    match {
+        background-color: var(--search-match-background-color);
+    }
 }
 
 /* Style for tooltip boxes. The tooltips also inherit styles from div.tei */
@@ -2241,9 +2248,6 @@ read-text {
     div.tei {
         transition: padding-left linear 0.2s;
 
-        &.XMLcomment{
-            display: none;
-        }
         span.dashUnderline {
             font-style: italic;
             border-bottom: none;
@@ -2296,9 +2300,6 @@ read-text {
             img {
                 margin-left: 0.15em;
             }
-        }
-        match {
-            background-color: var(--search-match-background-color);
         }
     }
 }

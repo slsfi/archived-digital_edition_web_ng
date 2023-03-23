@@ -272,7 +272,6 @@ export class TextChangerComponent {
 
   setFirstTocItemAsNext(collectionId: string) {
     try {
-      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(collectionId).subscribe(
         (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {

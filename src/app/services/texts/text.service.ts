@@ -1,20 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
 export class TextService {
-  private introductionUrl = '/text/{c_id}/{p_id}/inl/{lang}';
-  private introductionUrlDownloadable =
-    '/text/downloadable/{format}/{c_id}/inl/{lang}';
-
-  apiEndPoint: string;
-
-  simpleApi?: string;
-  useSimpleApi = false;
-
-  appMachineName: string;
+  appMachineName: string = '';
+  apiEndPoint: string = '';
+  simpleApi: string = '';
 
   readViewTextId: string;
   previousReadViewTextId: string;
@@ -31,14 +24,7 @@ export class TextService {
   ) {
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
-
-    try {
-      const simpleApi = config.app?.simpleApi ?? '';
-      if (simpleApi) {
-        this.useSimpleApi = true;
-        this.simpleApi = simpleApi;
-      }
-    } catch (e) {}
+    this.simpleApi = config.app?.simpleApi ?? '';
 
     this.readViewTextId = '';
     this.previousReadViewTextId = '';
@@ -47,259 +33,152 @@ export class TextService {
   }
 
   getEstablishedText(id: string): Observable<any> {
-    const c_id = `${id}`.split('_')[0] as any;
-    const pub_id = `${id}`.split('_')[1];
-    let ch_id = null;
-    if (`${id}`.split('_')[2] !== undefined) {
-      ch_id = String(`${id}`.split('_')[2]).split(';')[0];
-    }
-
-    if (ch_id === '' || ch_id === 'nochapter') {
-      ch_id = null;
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts[1];
+    let ch_id = '';
+    if (idParts[2] !== undefined) {
+      ch_id = idParts[2];
     }
 
     let api = this.apiEndPoint;
-    if (this.useSimpleApi) {
-      api = this.simpleApi as string;
+    if (this.simpleApi) {
+      api = this.simpleApi;
     }
-    const url = `${api}/${this.appMachineName}/text/${c_id}/${pub_id}/est${
-      ch_id === null ? '' : '/' + ch_id
-    }`;
 
+    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/est${
+      (ch_id ? '/' + ch_id : '')
+    }`;
     return this.http.get(url);
   }
 
   getIntroduction(id: string, lang: string): Observable<any> {
-    const path = this.introductionUrl
-      .replace('{c_id}', id)
-      .replace('{p_id}', '1')
-      .replace('{lang}', lang);
-
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        path
-    );
-  }
-
-  getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/legacy/' +
-        legacyId
-    );
-  }
-
-  getTitlePage(id: string, lang: string): Observable<any> {
-    const data = `${id}`.split('_');
-    const c_id = data[0];
-    const pub_id = data.length > 1 ? data[1] : 1;
-
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/text/' +
-        c_id +
-        '/' +
-        pub_id +
-        '/tit/' +
-        lang
-    );
-  }
-
-  getForewordPage(id: string, lang: string): Observable<any> {
-    const data = `${id}`.split('_');
-    const c_id = data[0];
-
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/text/' +
-        c_id +
-        '/fore/' +
-        lang
-    );
-  }
-
-  getCoverPage(id: string, lang: string): Observable<any> {
-    const data = `${id}`.split('_');
-    const c_id = data[0];
-    const pub_id = data.length > 1 ? data[1] : 1;
-
-    /**
-     * ! The API endpoint below has not been implemented.
-     */
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/text/' +
-        c_id +
-        '/' +
-        pub_id +
-        '/cover/' +
-        lang
-    );
-  }
-
-  getVariations(id: string): Observable<any> {
-    const c_id = `${id}`.split('_')[0];
-    const pub_id = `${id}`.split('_')[1];
-    let chapter = `${id}`.split('_')[2];
-    if (chapter !== undefined && chapter !== null) {
-      chapter = chapter.split(';')[0];
-    }
-    const url =
-      config.app.apiEndpoint +
-      '/' +
-      config.app.machineName +
-      '/text/' +
-      c_id +
-      '/' +
-      pub_id +
-      '/var' +
-      (chapter ? '/' + chapter + '' : '');
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${id}/1/inl/${lang}`;
     return this.http.get(url);
   }
 
-  getManuscripts(id: string, chapter?: string): Observable<any> {
-    const c_id = `${id}`.split('_')[0];
-    const pub_id = `${id}`.split('_')[1];
+  getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
+    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/${legacyId}`;
+    return this.http.get(url);
+  }
 
-    if (chapter !== undefined && chapter !== null) {
-      chapter = String(chapter).split(';')[0];
+  getTitlePage(id: string, lang: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts.length > 1 ? idParts[1] : "1";
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/tit/${lang}`;
+    return this.http.get(url);
+  }
+
+  getForewordPage(id: string, lang: string): Observable<any> {
+    const coll_id = id.split(';')[0].split('_')[0];
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/fore/${lang}`;
+    return this.http.get(url);
+  }
+
+  /**
+   * ! DON'T USE! The API endpoint this function tries to use has not been implemented.
+   */
+  getCoverPage(id: string, lang: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts.length > 1 ? idParts[1] : "1";
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/cover/${lang}`;
+    return this.http.get(url);
+  }
+
+  getVariations(id: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts[1];
+    let ch_id = '';
+    if (idParts[2] !== undefined) {
+      ch_id = idParts[2];
+    }
+
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/var${
+      (ch_id ? '/' + ch_id : '')
+    }`;
+    return this.http.get(url);
+  }
+
+  getManuscripts(id: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts[1];
+    let ch_id = '';
+    if (idParts[2] !== undefined) {
+      ch_id = idParts[2];
     }
 
     let api = this.apiEndPoint;
-    if (this.useSimpleApi && this.simpleApi) {
+    if (this.simpleApi) {
       api = this.simpleApi;
     }
 
-    return this.http.get(
-      api +
-        '/' +
-        config.app.machineName +
-        '/text/' +
-        c_id +
-        '/' +
-        pub_id +
-        '/ms' +
-        (chapter ? '/' + chapter + '' : '')
-    );
+    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/ms${
+      (ch_id ? '/' + ch_id : '')
+    }`;
+    return this.http.get(url);
   }
 
   getTextByType(type: string, id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/text/' +
-        type +
-        '/' +
-        id
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${type}/${id}`;
+    return this.http.get(url);
   }
 
   getCollection(id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/collection/' +
-        id
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/collection/${id}`;
+    return this.http.get(url);
   }
 
   getCollectionPublications(collection_id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/collection/' +
-        collection_id +
-        '/publications'
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/collection/${collection_id}/publications`;
+    return this.http.get(url);
   }
 
   getPublication(id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/publication/' +
-        id
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/publication/${id}`;
+    return this.http.get(url);
   }
 
   getLegacyIdByPublicationId(id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/legacy/publication/' +
-        id
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/publication/${id}`;
+    return this.http.get(url);
   }
 
   getLegacyIdByCollectionId(id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/legacy/collection/' +
-        id
-    );
+    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/collection/${id}`;
+    return this.http.get(url);
   }
 
-  getDownloadableIntroduction(
-    id: string,
-    format: string,
-    lang: string
-  ): Observable<any> {
-    const path = this.introductionUrlDownloadable
-      .replace('{format}', format)
-      .replace('{c_id}', id)
-      .replace('{lang}', lang);
-
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        path
-    );
+  getDownloadableIntroduction(id: string, format: string, lang: string): Observable<any> {
+    const url = `${this.apiEndPoint}/${this.appMachineName}/text/downloadable/${format}/${id}/inl/${lang}`;
+    return this.http.get(url);
   }
 
   getDownloadableEstablishedText(id: string, format: string): Observable<any> {
-    const c_id = `${id}`.split('_')[0];
-    const pub_id = `${id}`.split('_')[1];
-    let ch_id = null;
-    if (`${id}`.split('_')[2] !== undefined) {
-      ch_id = String(`${id}`.split('_')[2]).split(';')[0];
-    }
-
-    if (ch_id === '' || ch_id === 'nochapter') {
-      ch_id = null;
+    const idParts = id.split(';')[0].split('_');
+    const coll_id = idParts[0];
+    const pub_id = idParts[1];
+    let ch_id = '';
+    if (idParts[2] !== undefined) {
+      ch_id = idParts[2];
     }
 
     let api = this.apiEndPoint;
-    if (this.useSimpleApi && this.simpleApi) {
+    if (this.simpleApi) {
       api = this.simpleApi;
     }
-    const url = `${api}/${
-      this.appMachineName
-    }/text/downloadable/${format}/${c_id}/${pub_id}/est${
-      ch_id === null ? '' : '/' + ch_id
-    }`;
 
+    const url = `${api}/${this.appMachineName}/text/downloadable/${format}/${coll_id}/${pub_id}/est${
+      (ch_id ? '/' + ch_id : '')
+    }`;
     return this.http.get(url);
   }
 
   postprocessEstablishedText(text: string, collectionId: string) {
+    text = text.trim();
     text = this.mapIllustrationImagePaths(text, collectionId);
 
     // Add "tei" class to all classlists

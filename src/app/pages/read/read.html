@@ -123,7 +123,7 @@
                   </facsimiles>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'manuscripts'">
-                  <manuscripts [linkID]="view.id" [itemId]="textItemID" [matches]="searchMatches"
+                  <manuscripts [msID]="view.id" [textItemID]="textItemID" [searchMatches]="searchMatches"
                     (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'variations'">
