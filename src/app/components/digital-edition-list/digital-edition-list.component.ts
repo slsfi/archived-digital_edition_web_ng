@@ -63,7 +63,7 @@ export class DigitalEditionList implements OnInit {
     this.hasTitle = config.HasTitle ?? true;
     this.hasForeword = config.HasForeword ?? true;
     this.hasIntro = config.HasIntro ?? true;
-    this.collectionSortOrder = config.app?.CollectionSortOrder ?? undefined;
+    this.collectionSortOrder = config.collections?.order ?? [];
     this.hasMediaCollections = config.show?.TOC?.MediaCollections ?? false;
     this.galleryInReadMenu = config.ImageGallery?.ShowInReadMenu ?? false;
     this.showEpubsInList = config.show?.epubsInDigitalEditionList ?? false;
@@ -97,17 +97,21 @@ export class DigitalEditionList implements OnInit {
     this.digitalEditionsFirstHalf = [];
     this.digitalEditionsSecondHalf = [];
     this.digitalEditionListService.getDigitalEditions().subscribe({
-      next: digitalEditions => {
+      next: (digitalEditions) => {
         this.digitalEditions = digitalEditions;
         if ( this.hasMediaCollections && this.galleryInReadMenu ) {
           const mediaColl = new DigitalEdition({id: 'mediaCollections', title: 'media'});
           this.digitalEditions?.unshift(mediaColl);
         }
         let de = digitalEditions;
-        this.events.publishDigitalEditionListRecieveData({ digitalEditions });
         this.setPDF(de);
-        if ( this.collectionSortOrder !== undefined && Object.keys(this.collectionSortOrder).length > 0 )  {
-          de = this.sortListDefined(de, this.collectionSortOrder);
+        if (
+          this.collectionSortOrder !== undefined &&
+          this.collectionSortOrder.length > 0 &&
+          this.collectionSortOrder[0].length > 0
+        )  {
+          de = this.sortDigitalEditions(de, this.collectionSortOrder);
+          this.digitalEditions = de;
         }
         if (this.collectionsToShow !== undefined && this.collectionsToShow.length > 0) {
           this.filterCollectionsToShow(de);
@@ -116,30 +120,28 @@ export class DigitalEditionList implements OnInit {
           this.prependEpubsToDigitalEditions();
         }
       },
-      error: e => { this.errorMessage = <any>e; }
+      error: (e) => { this.errorMessage = <any>e; }
     });
   }
 
-  sortListDefined(list: any, sort: any) {
-    for (const coll of list) {
-      let order = sort[coll.id];
-      // If the sort order is not defined in the config, just set a high number
-      // so that it will be at the end of the list.
-      if ( order === undefined ) {
-        order = 9999;
-      }
-      coll['order'] = order;
+  sortDigitalEditions(editionsList: any, sortList: any) {
+    let collectionOrderList: any = [];
+    let orderedEditionsList: any = [];
+    
+    for (let i = 0; i < sortList.length; i++) {
+      collectionOrderList = collectionOrderList.concat(sortList[i]);
     }
 
-    list.sort((a: any, b: any) => {
-      if (typeof a['order'] === 'number') {
-        return (a['order'] - b['order']);
-      } else {
-        return ((a['order'] < b['order']) ? -1 : ((a['order'] > b['order']) ? 1 : 0));
+    for (const id of collectionOrderList) {
+      for (let x = 0; x < editionsList.length; x++) {
+        if (editionsList[x].id && String(editionsList[x].id) === String(id)) {
+          orderedEditionsList.push(editionsList[x]);
+          break;
+        }
       }
-    });
+    }
 
-    return list;
+    return orderedEditionsList;
   }
 
   /*
