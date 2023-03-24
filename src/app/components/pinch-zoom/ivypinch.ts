@@ -639,6 +639,7 @@ export class IvyPinch {
   }
 
   getMatchMedia(query: any) {
+    console.log("#### WINDOW 14");
     return window.matchMedia(query).matches;
   }
 

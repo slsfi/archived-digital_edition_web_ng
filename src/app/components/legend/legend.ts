@@ -134,6 +134,8 @@ export class LegendComponent {
       this.ngZone.runOutsideAngular(() => {
         let iterationsLeft = 10;
         clearInterval(this.intervalTimerId);
+
+        console.log("#### WINDOW 13");
         this.intervalTimerId = window.setInterval(function() {
           if (iterationsLeft < 1) {
             clearInterval(that.intervalTimerId);

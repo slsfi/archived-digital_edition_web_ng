@@ -1,59 +1,65 @@
-import 'zone.js/node';
-
-import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+/***************************************************************************************************
+ * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+ */
+import '@angular/localize/init';
+import 'zone.js/dist/zone-node';
+import {LOCALE_ID} from '@angular/core';
+import {APP_BASE_HREF} from '@angular/common';
+import {ngExpressEngine} from '@nguniversal/express-engine';
 import * as express from 'express';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import {existsSync} from 'fs';
+import {join} from 'path';
 
-import { AppServerModule } from './src/main.server';
+import {AppServerModule} from './src/main.server';
+import {environment} from "./src/environments/environment";
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
-  const server = express();
+export function app(lang: string): express.Express
+{
+    const server = express();
+    const distFolder = join(process.cwd(), `dist/app/browser/${lang}`);
+    const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
-  const distFolder = join(process.cwd(), 'dist/app/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+    // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
+    server.engine('html', ngExpressEngine({
+        bootstrap: AppServerModule,
+        extraProviders: [{ provide: LOCALE_ID, useValue: lang }],
+    } as any));
 
-  const distFolderFi = join(process.cwd(), 'dist/app/browser/fi');
-  const indexHtmlFi = existsSync(join(distFolderFi, 'index.original.html')) ? 'index.original.html' : 'index';
+    server.set('view engine', 'html');
+    server.set('views', distFolder);
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
-  }));
+    // Example Express Rest API endpoints
+    // server.get('/api/**', (req, res) => { });
+    // Serve static files from /browser
+    server.get('*.*', express.static(distFolder, {
+        maxAge: '1y'
+    }));
 
-  server.set('view engine', 'html');
-  server.set('views', distFolderFi);
+    // All regular routes use the Universal engine
+    server.get('*', (req, res) => {
+        res.render(indexHtml, {req, providers: [
+            {provide: APP_BASE_HREF, useValue: req.baseUrl},
+            {provide: LOCALE_ID, useValue: lang}
+        ]});
+    });
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
-  }));
-
-  // All fi routes use the Universal engine
-  server.get('/fi/*', (req, res) => {
-    res.render(indexHtmlFi, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
-  });
-
-  // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
-    res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
-  });
-
-  return server;
+    return server;
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
+    const port = process.env['PORT'] || 4000;
 
-  // Start up the Node server
-  const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+    // Start up the Node server
+    const appFr = app('fr');
+    const appEn = app('en');
+    const server = express();
+    server.use('/fr', appFr);
+    server.use('/en', appEn);
+    server.use('' , appFr);
+    server.listen(port, () => {
+        console.log(`Node Express server listening on http://localhost:${port}`);
+    });
 }
 
 // Webpack will replace 'require' with '__webpack_require__'
@@ -62,8 +68,8 @@ function run(): void {
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
 const moduleFilename = mainModule && mainModule.filename || '';
-if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
-  run();
+if (!environment.production && moduleFilename === __filename || moduleFilename.includes('iisnode')) {
+    run();
 }
 
 export * from './src/main.server';

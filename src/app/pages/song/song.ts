@@ -151,18 +151,24 @@ export class SongPage {
   downloadMIDI() {
     this.doAnalytics('Download', 'mid');
     const dURL = `assets/midi-files/${this.songOriginalId}.mid`;
+
+    console.log("#### WINDOW 3");
     const ref = window.open(dURL, '_self', 'location=no');
   }
 
   downloadXML() {
     this.doAnalytics('Download', 'xml');
     const dURL = `assets/musicxml/${this.songOriginalId}.xml`;
+
+    console.log("#### WINDOW 4");
     const ref = window.open(dURL, '_self', 'location=no');
   }
 
   downloadJPEG() {
     this.doAnalytics('Download', 'jpg');
     const dURL = `assets/jpeg-files/${this.songOriginalId}.jpg`;
+
+    console.log("#### WINDOW 5");
     const ref = window.open(dURL, '_self', 'location=no');
   }
 

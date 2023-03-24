@@ -10,8 +10,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "dev:ssr": "ng run app:serve-ssr",
-    "serve:ssr": "node dist/app/server/main.js",
-    "build:ssr": "ng build && ng run app:server",
     "prerender": "ng run app:prerender",
     "build:prod": "ng build --aot --output-path=www",
     "postbuild": "./scripts/cache-busting.js",
@@ -21,7 +19,9 @@
     "i18n:extract": "node ./convert_legacy_i18n.js && ng extract-i18n --sort idAsc",
     "i18n:dev:ssr": "ng run app:serve-ssr",
     "i18n:build:ssr": "ng build --localize --configuration=development && ng run app:server",
-    "i18n:serve:ssr": "node dist/app/server/main.js"
+    "i18n:serve:ssr": "node dist/app/server/main.js",
+    "build:ssr": "ng build && ng run app:server && copyfiles proxy-server.js dist/app",
+    "serve:ssr": "node dist/app/proxy-server.js"
   },
   "private": true,
   "dependencies": {
@@ -38,8 +38,8 @@
     "@capacitor/haptics": "4.1.0",
     "@capacitor/keyboard": "4.1.0",
     "@capacitor/status-bar": "4.1.1",
-    "@ionic/angular": "^6.1.9",
-    "@ionic/angular-server": "^6.4.2-dev.11672338764.1def15a7",
+    "@ionic/angular": "^6.5.7-dev.11677189602.12905db0",
+    "@ionic/angular-server": "^6.5.7-dev.11677189602.12905db0",
     "@ionic/storage": "^3.0.6",
     "@ionic/storage-angular": "^3.0.6",
     "@nguniversal/express-engine": "^15.2.0",
@@ -91,6 +91,7 @@
     "@types/node": "^12.20.55",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
