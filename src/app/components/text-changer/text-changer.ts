@@ -27,16 +27,11 @@ export class TextChangerComponent {
   nextItemTitle?: string;
   firstItem?: boolean;
   lastItem?: boolean;
-  currentItemTitle?: string;
+  currentItemTitle: string = '';
   collectionId: string = '';
   language: string = ''
   languageSubscription: Subscription | null = null;
-
-  displayNext: boolean = true;
-  displayPrev: boolean = true;
-
   flattened: Array<any> = [];
-
   collectionHasCover: boolean = false;
   collectionHasTitle: boolean = false;
   collectionHasForeword: boolean = false;
@@ -48,7 +43,7 @@ export class TextChangerComponent {
     public userSettingsService: UserSettingsService,
     public translateService: TranslateService,
     private langService: LanguageService,
-    protected textService: TextService,
+    private textService: TextService,
     private router: Router
   ) {
     this.collectionHasCover = config.HasCover ?? false;
@@ -59,28 +54,18 @@ export class TextChangerComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let relevantChanges = false;
     let firstChange = true;
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         if (propName === 'textItemID') {
-          if (changes.textItemID.currentValue !== changes.textItemID.previousValue) {
-            relevantChanges = true;
-          }
           if (!changes.textItemID.firstChange) {
             firstChange = false;
           }
         } else if (propName === 'textPosition') {
-          if (changes.textPosition.currentValue !== changes.textPosition.previousValue) {
-            relevantChanges = true;
-          }
           if (!changes.textPosition.firstChange) {
             firstChange = false;
           }
         } else if (propName === 'parentPageType') {
-          if (changes.parentPageType.currentValue !== changes.parentPageType.previousValue) {
-            relevantChanges = true;
-          }
           if (!changes.parentPageType.firstChange) {
             firstChange = false;
           }
@@ -88,49 +73,49 @@ export class TextChangerComponent {
       }
     }
 
-    if (relevantChanges) {
-      if (!this.parentPageType) {
-        this.parentPageType = 'page-read';
-      }
+    if (!this.parentPageType) {
+      this.parentPageType = 'page-read';
+    }
 
-      this.collectionId = this.textItemID.split('_')[0];
-      this.tocItemId = this.textItemID;
-      if (this.textPosition) {
-        this.tocItemId += ';' + this.textPosition;
-      }
+    this.collectionId = this.textItemID.split('_')[0];
+    this.tocItemId = this.textItemID;
+    if (this.textPosition) {
+      this.tocItemId += ';' + this.textPosition;
+    }
 
-      if (
-        !firstChange &&
-        this.parentPageType === 'page-read' &&
-        (
-          changes.textItemID === undefined ||
-          this.textItemID === changes.textItemID.previousValue
-        ) &&
-        changes.textPosition &&
-        this.textPosition !== changes.textPosition.previousValue
-      ) {
-        // Same read text, different text position
-        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
-      } else if (
-        !firstChange &&
-        this.parentPageType === 'page-read' &&
-        this.flattened.length > 0 &&
-        changes.textItemID &&
-        this.collectionId === changes.textItemID.previousValue.split('_')[0]
-      ) {
-        // Different read text, same collection
-        this.setCurrentPreviousAndNextItemsFromFlattenedToc();
-      } else if (!firstChange) {
-        // Different collection or parent page type
-        this.loadData();
-      }
+    if (
+      !firstChange &&
+      this.parentPageType === 'page-read' &&
+      (
+        changes.textItemID === undefined ||
+        this.textItemID === changes.textItemID.previousValue
+      ) &&
+      changes.textPosition &&
+      this.textPosition !== changes.textPosition.previousValue
+    ) {
+      // Same read text, different text position
+      this.setCurrentPreviousAndNextItemsFromFlattenedToc(this.tocItemId);
+    } else if (
+      !firstChange &&
+      this.parentPageType === 'page-read' &&
+      this.flattened.length > 0 &&
+      changes.textItemID &&
+      this.collectionId === changes.textItemID.previousValue.split('_')[0]
+    ) {
+      // Different read text, same collection
+      this.setCurrentPreviousAndNextItemsFromFlattenedToc(this.tocItemId);
+    } else if (!firstChange) {
+      // Different collection or parent page type
+      this.loadData();
     }
   }
 
   ngOnInit() {
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(language => {
       this.language = language;
-      this.loadData();
+      if (this.textItemID) {
+        this.loadData();
+      }
     });
 
     // TODO: Reload when the TOC sorting changes and set current item
@@ -156,8 +141,7 @@ export class TextChangerComponent {
       this.translateService.get('Read.CoverPage.Title').subscribe({
         next: (translation) => {
           this.currentItemTitle = translation;
-        },
-        error: (e) => { this.currentItemTitle = ''; }
+        }
       });
 
       this.firstItem = true;
@@ -177,8 +161,7 @@ export class TextChangerComponent {
       this.translateService.get('Read.TitlePage.Title').subscribe({
         next: (translation) => {
           this.currentItemTitle = translation;
-        },
-        error: (e) => { this.currentItemTitle = ''; }
+        }
       });
 
       if (this.collectionHasCover) {
@@ -206,8 +189,7 @@ export class TextChangerComponent {
       this.translateService.get('Read.ForewordPage.Title').subscribe({
         next: (translation) => {
           this.currentItemTitle = translation;
-        },
-        error: (e) => { this.currentItemTitle = ''; }
+        }
       });
 
       this.lastItem = false;
@@ -234,8 +216,7 @@ export class TextChangerComponent {
       this.translateService.get('Read.Introduction.Title').subscribe({
         next: (translation) => {
           this.currentItemTitle = translation;
-        },
-        error: (e) => { this.currentItemTitle = ''; }
+        }
       });
 
       this.lastItem = false;
@@ -258,23 +239,14 @@ export class TextChangerComponent {
       // Default functionality, e.g. as when initialised from page-read
       this.firstItem = false;
       this.lastItem = false;
-      const that = this;
-      this.next(true).then(function(val: any) {
-        that.displayNext = val;
-      }.bind(this));
-      this.previous(true).then(function(val: any) {
-        that.displayPrev = val;
-      }.bind(this));
-      // this.flattened = [];
-      // this.setupData(this.collectionId);
+      this.next(true);
     }
   }
 
   setFirstTocItemAsNext(collectionId: string) {
     try {
-      // TODO: Add this.language to getTableOfContents()
-      this.tocService.getTableOfContents(collectionId).subscribe(
-        (toc: any) => {
+      this.tocService.getTableOfContents(collectionId).subscribe({
+        next: (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {
             this.flatten(toc);
             if (this.textService.activeTocOrder === 'alphabetical') {
@@ -283,8 +255,11 @@ export class TextChangerComponent {
               this.sortFlattenedTocChronologically();
             }
             for (let i = 0; i < this.flattened.length; i++) {
-              if (this.flattened[i].itemId !== undefined && this.flattened[i].type !== 'subtitle'
-              && this.flattened[i].type !== 'section_title') {
+              if (
+                this.flattened[i].itemId !== undefined &&
+                this.flattened[i].type !== 'subtitle' &&
+                this.flattened[i].type !== 'section_title'
+              ) {
                 this.nextItemTitle = this.flattened[i].text;
                 this.nextItem = this.flattened[i];
                 break;
@@ -296,8 +271,8 @@ export class TextChangerComponent {
             this.lastItem = true;
           }
         }
-      );
-    } catch ( e ) {
+      });
+    } catch (e) {
       console.log('Unable to get first toc item as next in text-changer');
       this.nextItemTitle = '';
       this.nextItem = null;
@@ -307,14 +282,14 @@ export class TextChangerComponent {
 
   setPageTitleAsNext(collectionId: string) {
     this.translateService.get('Read.TitlePage.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.nextItemTitle = translation;
         this.nextItem = {
           itemId: collectionId,
           page: 'page-title'
         };
       },
-      error: e => {
+      error: (e) => {
         this.nextItemTitle = '';
         this.nextItem = null;
         this.lastItem = true;
@@ -324,14 +299,14 @@ export class TextChangerComponent {
 
   setPageForewordAsNext(collectionId: string) {
     this.translateService.get('Read.ForewordPage.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.nextItemTitle = translation;
         this.nextItem = {
           itemId: collectionId,
           page: 'page-foreword'
         };
       },
-      error: e => {
+      error: (e) => {
         this.nextItemTitle = '';
         this.nextItem = null;
         this.lastItem = true;
@@ -341,14 +316,14 @@ export class TextChangerComponent {
 
   setPageIntroductionAsNext(collectionId: string) {
     this.translateService.get('Read.Introduction.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.nextItemTitle = translation;
         this.nextItem = {
           itemId: collectionId,
           page: 'page-introduction'
         };
       },
-      error: e => {
+      error: (e) => {
         this.nextItemTitle = '';
         this.nextItem = null;
         this.lastItem = true;
@@ -366,14 +341,14 @@ export class TextChangerComponent {
 
   setPageCoverAsPrevious(collectionId: string) {
     this.translateService.get('Read.CoverPage.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.prevItemTitle = translation;
         this.prevItem = {
           itemId: collectionId,
           page: 'page-cover'
         };
       },
-      error: e => {
+      error: (e) => {
         this.prevItemTitle = '';
         this.prevItem = null;
         this.firstItem = true;
@@ -383,14 +358,14 @@ export class TextChangerComponent {
 
   setPageTitleAsPrevious(collectionId: string) {
     this.translateService.get('Read.TitlePage.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.prevItemTitle = translation;
         this.prevItem = {
           itemId: collectionId,
           page: 'page-title'
         };
       },
-      error: e => {
+      error: (e) => {
         this.prevItemTitle = '';
         this.prevItem = null;
         this.firstItem = true;
@@ -400,14 +375,14 @@ export class TextChangerComponent {
 
   setPageForewordAsPrevious(collectionId: string) {
     this.translateService.get('Read.ForewordPage.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.prevItemTitle = translation;
         this.prevItem = {
           itemId: collectionId,
           page: 'page-foreword'
         };
       },
-      error: e => {
+      error: (e) => {
         this.prevItemTitle = '';
         this.prevItem = null;
         this.firstItem = true;
@@ -417,14 +392,14 @@ export class TextChangerComponent {
 
   setPageIntroductionAsPrevious(collectionId: string) {
     this.translateService.get('Read.Introduction.Title').subscribe({
-      next: translation => {
+      next: (translation) => {
         this.prevItemTitle = translation;
         this.prevItem = {
           itemId: collectionId,
           page: 'page-introduction'
         };
       },
-      error: e => {
+      error: (e) => {
         this.prevItemTitle = '';
         this.prevItem = null;
         this.firstItem = true;
@@ -434,11 +409,13 @@ export class TextChangerComponent {
 
   async previous(test?: boolean) {
     // TODO: Add this.language to getTableOfContents()
-    this.tocService.getTableOfContents(this.collectionId).subscribe(
-      toc => {
-        this.findNext(toc);
-      }
-    );
+    if (this.parentPageType === 'page-read') {
+      this.tocService.getTableOfContents(this.collectionId).subscribe(
+        toc => {
+          this.findNext(toc);
+        }
+      );
+    }
     if (this.prevItem !== undefined && test !== true) {
       await this.open(this.prevItem);
     } else if (test && this.prevItem !== undefined) {
@@ -450,7 +427,7 @@ export class TextChangerComponent {
   }
 
   async next(test?: boolean) {
-    if (this.tocItemId !== 'mediaCollections') {
+    if (this.tocItemId !== 'mediaCollections' && this.parentPageType === 'page-read') {
       // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
@@ -469,7 +446,6 @@ export class TextChangerComponent {
   }
 
   findNext(toc: any) {
-    // flatten the toc structure
     if (this.flattened.length < 1) {
       this.flatten(toc);
     }
@@ -478,7 +454,7 @@ export class TextChangerComponent {
     } else if (this.textService.activeTocOrder === 'chronological') {
       this.sortFlattenedTocChronologically();
     }
-    let itemFound = this.setCurrentPreviousAndNextItemsFromFlattenedToc();
+    let itemFound = this.setCurrentPreviousAndNextItemsFromFlattenedToc(this.tocItemId);
     if (!itemFound) {
       if (this.tocItemId.indexOf(';') > -1) {
         let searchTocId = this.tocItemId.split(';')[0];
@@ -494,7 +470,7 @@ export class TextChangerComponent {
     }
   }
 
-  setCurrentPreviousAndNextItemsFromFlattenedToc(currentTextId = this.tocItemId) {
+  setCurrentPreviousAndNextItemsFromFlattenedToc(currentTextId: string) {
     // get the id of the current toc item in the flattened toc array
     let currentId = 0;
     let currentItemFound = false;
@@ -582,9 +558,9 @@ export class TextChangerComponent {
 
   flatten(toc: any) {
     if (toc !== null && toc !== undefined) {
-      if ( toc.children ) {
+      if (toc.children) {
         for (let i = 0, count = toc.children.length; i < count; i++) {
-          if ( toc.children[i].itemId !== undefined && toc.children[i].itemId !== '') {
+          if (toc.children[i].itemId !== undefined && toc.children[i].itemId !== '') {
             this.flattened.push(toc.children[i]);
           }
           this.flatten(toc.children[i]);
@@ -606,24 +582,27 @@ export class TextChangerComponent {
 
   sortFlattenedTocChronologically() {
     if (this.flattened.length > 0) {
-      this.flattened.sort((a: any, b: any) => (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0);
+      this.flattened.sort(
+        (a: any, b: any) =>
+          (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0
+      );
     }
   }
 
   findPrevTitle(toc: any, currentIndex: any, prevChild?: any) {
-    if ( currentIndex === 0 ) {
+    if (currentIndex === 0) {
       this.findPrevTitle(prevChild, prevChild.length);
     }
-    for ( let i = currentIndex; i > 0; i-- ) {
-      if ( toc[i - 1] !== undefined ) {
-        if ( toc[i - 1].type !== 'subtitle' &&  toc[i - 1].type !== 'section_title' ) {
+    for (let i = currentIndex; i > 0; i--) {
+      if (toc[i - 1] !== undefined) {
+        if (toc[i - 1].type !== 'subtitle' && toc[i - 1].type !== 'section_title') {
           return toc[i - 1];
         }
       }
     }
   }
 
-  open(item: any) {
+  async open(item: any) {
     if (item.page !== undefined) {
       // Open text in page-cover, page-title, page-foreword, page-introduction or media-collections
       if (item.page === 'page-cover') {

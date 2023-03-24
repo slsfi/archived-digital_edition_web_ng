@@ -89,30 +89,30 @@ export class ReadTextComponent {
   loadReadText() {
     this.textService.getEstablishedText(this.textItemID).subscribe({
       next: (res) => {
-        let text = res as any;
-        text = text.content as string;
-
-        if (text === '' || text === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
-          console.log('no reading text');
+        if (
+          res &&
+          res.content &&
+          res.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+        ) {
+          const collectionID = this.textItemID.split('_')[0];
+          let text = res.content as string;
+          text = this.textService.postprocessEstablishedText(text, collectionID);
+          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+        } else {
           this.translate.get('Read.Established.NoEstablished').subscribe({
-            next: translation => {
+            next: (translation) => {
               this.text = translation;
             },
-            error: eTransl => {
-              console.error(eTransl);
+            error: (e) => {
               this.text = 'Ingen lästext.';
             }
           });
-        } else {
-          const c_id = String(this.textItemID).split('_')[0];
-          text = this.textService.postprocessEstablishedText(text, c_id);
-          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
-          this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         }
       },
       error: (e) => {
         // TODO: Add translated error message.
-        this.text = 'Error: The read text could not be fetched.';
+        this.text = 'Ett fel har uppstått. Lästexten kunde inte hämtas.';
       }
     });
   }

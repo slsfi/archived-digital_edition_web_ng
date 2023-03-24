@@ -393,10 +393,6 @@ export class ReadPage /*implements OnDestroy*/ {
     this.analyticsService.doPageView('Read');
   }
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-
   ngAfterViewInit() {
     if (isBrowser()) {
       // This scrolls the table of contents so the current text is centered vertically

@@ -1,6 +1,6 @@
-<ion-spinner *ngIf="textLoading" class="loading" name="crescent"></ion-spinner>
+<ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
 
-<div id="ms" *ngIf="!textLoading && manuscripts.length>0" class="text-select-wrapper">
+<div id="ms" *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
   <h3 [innerHTML]="selectedManuscriptName"></h3>
   <div class="flex-buttons">
     <ion-button *ngIf="manuscripts.length>1" (click)="selectManuscript()">{{"Read.Manuscripts.ChangeManuscript" | translate}}</ion-button>
@@ -13,7 +13,7 @@
   </div>
   <ion-item class="show-normalized-toggle">
     <ion-label>{{"Read.Manuscripts.ShowNormalized" | translate}}</ion-label>
-    <ion-toggle [(ngModel)]="normalized" (ionChange)="changeManuscript()"></ion-toggle>
+    <ion-toggle [(ngModel)]="showNormalizedMs" (ionChange)="changeManuscript()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 </div>
 

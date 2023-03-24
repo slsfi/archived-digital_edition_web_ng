@@ -1,156 +1,95 @@
-import { Component, Input, ElementRef, EventEmitter, Output, NgZone } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AlertButton, AlertController, AlertInput, ToastController } from '@ionic/angular';
+import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the ManuscriptsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'manuscripts',
   templateUrl: 'manuscripts.html',
   styleUrls: ['manuscripts.scss']
 })
 export class ManuscriptsComponent {
-  @Input() itemId?: string;
-  @Input() linkID?: string;
-  @Input() matches?: Array<string>;
+
+  @Input() textItemID: string = '';
+  @Input() msID: string = '';
+  @Input() searchMatches: Array<string> = [];
   @Output() openNewManView: EventEmitter<any> = new EventEmitter();
   @Output() openNewLegendView: EventEmitter<any> = new EventEmitter();
 
-  text: any;
+  public text: any = '';
   selection?: 0;
-  manuscripts: any;
-  selectedManuscript: any;
-  selectedManuscriptName: string;
-  normalized = false;
-  errorMessage?: string;
-  msID?: string;
+  manuscripts: any = [];
+  selectedManuscript: any = undefined;
+  selectedManuscriptName: string = '';
+  showNormalizedMs = false;
   chapter?: string | null;
-  textLoading: Boolean = true;
-  showOpenLegendButton: Boolean = false;
+  textLoading: boolean = true;
+  showOpenLegendButton: boolean = false;
 
   constructor(
     protected sanitizer: DomSanitizer,
     protected readPopoverService: ReadPopoverService,
     protected textService: TextService,
     protected storage: StorageService,
-    private elementRef: ElementRef,
-    private ngZone: NgZone,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
-    private events: EventsService,
     public translate: TranslateService,
     private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
-    this.text = '';
-    this.selectedManuscriptName = '';
-    this.manuscripts = [];
     this.showOpenLegendButton = config.showOpenLegendButton?.manuscripts ?? false;
   }
 
   ngOnInit() {
-    const parts = String(this.itemId).split('_');
-    this.chapter = null;
-    if ( parts[2] !== undefined ) {
-      this.chapter = parts[2];
-    }
-    this.msID = this.itemId + '_ms';
-    this.setText(this.msID);
-  }
-
-  setText(id: string) {
-    this.storage.get(id).then((manuscripts) => {
-      if (manuscripts) {
-        this.getCacheText(id);
-      } else {
-        this.getManuscript(id);
-      }
+    if (this.textItemID) {
+      this.loadManuscriptTexts();
       this.doAnalytics();
-    });
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Manuscripts', 'Manuscripts', String(this.msID));
-  }
-
-  openNewMan(event: Event, id: any) {
-    event.preventDefault();
-    event.stopPropagation();
-    id.viewType = 'manuscripts';
-    this.openNewManView.emit(id);
-  }
-
-  openFacsimileMan(event: Event, id: any) {
-    event.preventDefault();
-    event.stopPropagation();
-    id.viewType = 'manuscriptFacsimile';
-    this.openNewManView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
-  }
-
-  openNewLegend(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const id = {
-      viewType: 'legend',
-      id: 'ms-legend'
     }
-    this.openNewLegendView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
   }
 
-  getManuscript(id: string) {
-    this.textService.getManuscripts(id, this.chapter ? this.chapter : undefined).subscribe({
-      next: res => {
-        this.textLoading = false;
-        // in order to get id attributes for tooltips
-        this.manuscripts = res.manuscripts;
-        if (this.manuscripts.length > 0) {
-          console.log('recieved manuscripts ,..,');
+  loadManuscriptTexts() {
+    this.textService.getManuscripts(this.textItemID).subscribe({
+      next: (res) => {
+        if (
+          res &&
+          res.manuscripts.length > 0 &&
+          res.manuscripts[0].manuscript_changes
+        ) {
+          this.manuscripts = res.manuscripts;
           this.setManuscript();
         } else {
-          console.log('no manuscripts');
-          this.translate.get('Read.Manuscripts.NoManuscripts').subscribe(
-            translation => {
+          this.translate.get('Read.Manuscripts.NoManuscripts').subscribe({
+            next: (translation) => {
               this.text = translation;
-            }, error => {
-              console.error(error);
-              this.text = 'Inga manuskript';
+            },
+            error: (e) => {
+              this.text = 'Inga transkriptioner.';
             }
-          );
+          });
         }
       },
-      error: err => {
-        this.errorMessage = <any>err;
-        console.error(err);
-        this.textLoading = false;
+      error: (e) => {
+        // TODO: Add translated error message.
+        this.text = 'Ett fel har uppstått. Transkriptioner kunde inte hämtas.';
       }
     });
   }
 
   setManuscript() {
-    const inputFilename = this.linkID + '.xml';
-    const that = this;
-    const inputManuscript = this.manuscripts.filter(function (item: any) {
-      return (item.original_filename === inputFilename || item.id === that.linkID || item.legacy_id === that.linkID);
-    }.bind(this))[0];
-
-    if (this.linkID && this.linkID !== undefined && inputManuscript !== undefined) {
-      this.selectedManuscript = inputManuscript;
+    if (this.msID) {
+      const inputManuscript = this.manuscripts.filter((item: any) => {
+        return (item.id === this.msID);
+      })[0];
+      if (inputManuscript) {
+        this.selectedManuscript = inputManuscript;
+      }
     } else {
-      console.log('no link id setting 0 to first');
       this.selectedManuscript = this.manuscripts[0];
     }
     this.changeManuscript();
@@ -160,48 +99,52 @@ export class ManuscriptsComponent {
     if (manuscript) {
       this.selectedManuscript = manuscript;
     }
-    this.selectedManuscriptName = this.selectedManuscript.name;
-    if (this.selectedManuscript && this.selectedManuscript.manuscript_normalized !== undefined) {
-      if (this.normalized) {
-        this.text = this.commonFunctions.insertSearchMatchTags(this.selectedManuscript.manuscript_normalized, (this.matches || []));
-        this.text = this.sanitizer.bypassSecurityTrustHtml(
-          this.text.replace(/images\//g, 'assets/images/')
-            .replace(/\.png/g, '.svg').replace(/class=\"([a-z A-Z _ 0-9]{1,140})\"/g, 'class=\"teiManuscript tei $1\"')
-        );
+    if (this.selectedManuscript) {
+      this.selectedManuscriptName = this.selectedManuscript.name;
+      let text = '';
+      if (this.showNormalizedMs) {
+        text = this.selectedManuscript.manuscript_normalized;
       } else {
-        this.text = this.commonFunctions.insertSearchMatchTags(this.selectedManuscript.manuscript_changes, (this.matches || []));
-        this.text = this.sanitizer.bypassSecurityTrustHtml(
-          this.text.replace(/images\//g, 'assets/images/')
-            .replace(/\.png/g, '.svg').replace(/class=\"([a-z A-Z _ 0-9]{1,140})\"/g, 'class=\"teiManuscript tei $1\"')
-        );
+        text = this.selectedManuscript.manuscript_changes;
       }
+      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+      text = this.postprocessManuscriptText(text);
+      this.text = this.sanitizer.bypassSecurityTrustHtml(text);
     }
   }
 
-  getCacheText(id: string) {
-    this.storage.get(id).then((manuscripts) => {
-      this.textLoading = false;
-      this.manuscripts = manuscripts;
-      this.setManuscript();
-    });
+  postprocessManuscriptText(text: string) {
+    text = text.trim();
+    // Replace png images with svg counterparts
+    text = text.replace(/\.png/g, '.svg');
+    // Fix image paths
+    text = text.replace(/images\//g, 'assets/images/');
+    // Add "tei" and "teiManuscript" to all classlists
+    text = text.replace(
+      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
+      'class=\"teiManuscript tei $1\"'
+    );
+    return text;
   }
 
   async selectManuscript() {
     let msTranslations = null as any;
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
-    this.translate.get('Read.Manuscripts').subscribe(
-      translation => {
+    this.translate.get('Read.Manuscripts').subscribe({
+      next: (translation) => {
         msTranslations = translation;
-      }, error => { }
-    );
+      },
+      error: (e) => {}
+    });
 
     let buttonTranslations = null as any;
-    this.translate.get('BasicActions').subscribe(
-      translation => {
+    this.translate.get('BasicActions').subscribe({
+      next: (translation) => {
         buttonTranslations = translation;
-      }, error => { }
-    );
+      },
+      error: (e) => {}
+    });
 
     const alert = await this.alertCtrl.create({
       header: msTranslations.SelectMsDialogTitle,
@@ -236,6 +179,36 @@ export class ManuscriptsComponent {
     alert.buttons = buttons;
 
     await alert.present();
+  }
+
+  openNewMan(event: Event, id: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    id.viewType = 'manuscripts';
+    this.openNewManView.emit(id);
+  }
+
+  openFacsimileMan(event: Event, id: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    id.viewType = 'manuscriptFacsimile';
+    this.openNewManView.emit(id);
+    this.commonFunctions.scrollLastViewIntoView();
+  }
+
+  openNewLegend(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const id = {
+      viewType: 'legend',
+      id: 'ms-legend'
+    }
+    this.openNewLegendView.emit(id);
+    this.commonFunctions.scrollLastViewIntoView();
+  }
+
+  doAnalytics() {
+    this.analyticsService.doAnalyticsEvent('Manuscripts', 'Manuscripts', this.textItemID);
   }
 
 }

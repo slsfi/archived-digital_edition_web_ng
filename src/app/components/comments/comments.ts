@@ -61,19 +61,23 @@ export class CommentsComponent {
   loadCommentsText() {
     this.commentService.getComments(this.textItemID).subscribe({
       next: (text) => {
-        if (!text) {
-          console.log('no comments');
-          this.translate.get('Read.Comments.NoComments').subscribe(
-            (translation) => { this.text = translation; }
-          );
-        } else {
+        if (text) {
           text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+        } else {
+          this.translate.get('Read.Comments.NoComments').subscribe({
+            next: (translation) => {
+              this.text = translation;
+            },
+            error: (e) => {
+              this.text = 'Inga kommentarer.';
+            }
+          });
         }
       },
       error: (e) =>  {
         // TODO: Add translated error message.
-        this.text = 'Error: the comments could not be fetched.';
+        this.text = 'Ett fel har uppstått. Kommentarer kunde inte hämtas.';
       }
     });
   }
