@@ -1,19 +1,19 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { AppComponent } from './app.component';
+import { DigitalEditionsApp } from './app.component';
 
-describe('AppComponent', () => {
+describe('DigitalEditionsApp', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      declarations: [DigitalEditionsApp],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(DigitalEditionsApp);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });

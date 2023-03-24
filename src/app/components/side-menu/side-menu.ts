@@ -4,7 +4,6 @@ import { NavigationEnd, Router } from "@angular/router";
 import { AlertController, MenuController, Platform } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { DigitalEdition } from "../../models/digital-edition.model";
-import { TocAccordionMenuOptionModel } from "../../models/toc-accordion-menu-option.model";
 import { StorageService } from "../../services/storage/storage.service";
 import { LanguageService } from "../../services/languages/language.service";
 import { EventsService } from "../../services/events/events.service";
@@ -39,7 +38,6 @@ export class SideMenu implements OnInit {
   tocData: any;
   pdfCollections?: any[];
   currentContentName?: string;
-  personSearchTypes = [] as any;
   apiEndPoint: string;
   projectMachineName: string;
   staticPagesMenus = [] as any;
@@ -60,16 +58,12 @@ export class SideMenu implements OnInit {
 
   defaultSelectedItem: String = 'title';
 
-  collectionSortOrder: any;
   songTypesMenuMarkdownInfo: any;
   aboutMenuMarkdownInfo: any;
 
-  songTypesMenuMarkdown = false;
   aboutMenuMarkdown = false;
 
   currentAccordionMenu: any = null;
-
-  sideMenuMobile = false;
 
   splitPaneOpen = false;
   pagesThatShallShow = {
@@ -80,14 +74,7 @@ export class SideMenu implements OnInit {
   }
 
   public options?: any;
-  public songTypesOptions?: {
-    toc: Array<TocAccordionMenuOptionModel>
-  };
-
   mediaCollectionOptions: any;
-  songTypesOptionsMarkdown = {
-    toc: []
-  };
 
   aboutOptionsMarkdown: {
     title: string;
@@ -104,39 +91,7 @@ export class SideMenu implements OnInit {
     epubs: false
   }
 
-  musicAccordion = {
-    personSearchTypes: {
-      show: false,
-      selected: false
-    },
-    tagSearch: {
-      show: false,
-      selected: false
-    },
-    placeSearch: {
-      show: false,
-      selected: false
-    },
-    musicianSearch: {
-      selected: false
-    },
-    music: {
-      show: false,
-      selected: false
-    },
-    writerSearch: {
-      selected: false
-    },
-    playmanTraditionPage: {
-      show: false,
-      selected: false
-    }
-  } as any;
   showBooks = false;
-  hasCover = false;
-  hasTitle = false;
-  hasForeword = false;
-  hasIntro = false;
   tocItems?: any;
 
   availableEpubs: any[];
@@ -185,19 +140,11 @@ export class SideMenu implements OnInit {
 
     this.splitReadCollections = this._config.show?.TOC?.splitReadCollections || [];
 
-    this.collectionSortOrder = this._config.app?.CollectionSortOrder ?? undefined;
-
-    this.songTypesMenuMarkdownConfig();
     this.aboutMenuMarkdownConfig();
 
     this.accordionTOC = this._config.AccordionTOC ?? false;
     this.openCollectionFromToc = this._config.OpenCollectionFromToc ?? false;
     this.galleryInReadMenu = this._config.ImageGallery?.ShowInReadMenu ?? true;
-    this.accordionMusic = this._config.AccordionMusic ?? false;
-    this.hasCover = this._config.HasCover ?? false;
-    this.hasTitle = this._config.HasTitle ?? false;
-    this.hasForeword = this._config.HasForeword ?? false;
-    this.hasIntro = this._config.HasIntro ?? false;
     this.availableEpubs = this._config.AvailableEpubs ?? undefined;
     if (this.availableEpubs !== undefined) {
       this.epubNames = Object.keys(this.availableEpubs);
@@ -214,7 +161,6 @@ export class SideMenu implements OnInit {
     this.getCollectionList();
     // If we have MediaCollections we need to add these first
 
-    this.setMusicAccordionItems();
     this.setDefaultOpenAccordions();
   }
 
@@ -224,7 +170,7 @@ export class SideMenu implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe(event => {
       this.selectedMenu = menuArray.find(item => (event as any).url.includes(item)) || '/';
-      if(this.selectedMenu === '/publication') {
+      if (this.selectedMenu === '/publication') {
         let collectionId = (event as any).url.split('/')[2]
         let index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)))
         this.selectedMenu += index;
@@ -286,10 +232,6 @@ export class SideMenu implements OnInit {
     }
   }
 
-  songTypesMenuMarkdownConfig() {
-    this.songTypesMenuMarkdown = this._config.SongTypesMenuMarkdown ?? false;
-  }
-
   aboutMenuMarkdownConfig() {
     this.aboutMenuMarkdown = this._config.AboutMenuAccordion ?? false;
   }
@@ -326,10 +268,10 @@ export class SideMenu implements OnInit {
       return;
     }
 
-    if (this.collectionSortOrder === undefined) {
+    if (!this._config.collections?.order) {
       collections = this.sortListRoman(collections);
-    } else if (Object.keys(this.collectionSortOrder).length > 0) {
-      collections = this.sortListDefined(collections, this.collectionSortOrder);
+    } else if (this._config.collections.order.length) {
+      collections = this.sortListDefined(collections, this._config.collections.order);
     }
 
     const collectionsTmp = [] as any;
@@ -407,12 +349,12 @@ export class SideMenu implements OnInit {
     return list;
   }
 
-  sortListDefined(list: any, sort: any) {
+  sortListDefined(list: any, sort: any[]) {
     for (const coll of list) {
-      let order = sort[coll.id];
+      let order = sort.indexOf(coll.id);
       // If the sort order is not defined in the this._config, just set a high number
       // so that it will be at the end of the list.
-      if (order === undefined) {
+      if (order === -1) {
         order = 9999;
       }
       coll['order'] = order;
@@ -429,31 +371,6 @@ export class SideMenu implements OnInit {
     return list;
   }
 
-  openMusicAccordionItem(musicAccordionItem: any, findInMusicAccordion?: any) {
-    Object.keys(this.musicAccordion).forEach(key => this.musicAccordion[key as keyof typeof this.musicAccordion].selected = false);
-    if (findInMusicAccordion) {
-      this.musicAccordion[musicAccordionItem as keyof typeof this.musicAccordion].selected = true;
-    } else {
-      musicAccordionItem.selected = true;
-    }
-  }
-
-  setMusicAccordionItems() {
-    if (!this.accordionMusic) {
-      return;
-    }
-
-    this.musicAccordion.personSearchTypes.show = this._config.MusicAccordionShow?.PersonSearchTypes ?? undefined;
-    this.musicAccordion.tagSearch.show = this._config.MusicAccordionShow?.TagSearch ?? undefined;
-    this.musicAccordion.placeSearch.show = this._config.MusicAccordionShow?.PlaceSearch ?? undefined;
-    this.musicAccordion.music.show = this._config.MusicAccordionShow?.Music ?? undefined;
-    this.musicAccordion.playmanTraditionPage.show = this._config.MusicAccordionShow?.PlaymanTraditionPage ?? undefined;
-  }
-
-  resetMusicAccordion() {
-    Object.keys(this.musicAccordion).forEach(key => this.musicAccordion[key as keyof typeof this.musicAccordion].selected = false);
-  }
-
   setDefaultOpenAccordions() {
     if (!this.accordionTOC || !this.accordionMusic) {
       return;
@@ -466,33 +383,10 @@ export class SideMenu implements OnInit {
     }
   }
 
-  getSongTypes() {
-    if (this._config.show?.TOC?.SongTypes) {
-      if (this.songTypesMenuMarkdown) {
-        (async () => {
-          const songTypesMarkdownMenu = await this.mdcontentService.getMarkdownMenu(this.language, this.songTypesMenuMarkdownInfo.idNumber);
-          this.songTypesOptionsMarkdown.toc = songTypesMarkdownMenu.children;
-        }).bind(this)();
-      } else {
-        this.tableOfContentsService.getTableOfContents('songtypes')
-          .subscribe(
-            (tocItems: any) => {
-              if (this.songTypesOptions) {
-                this.songTypesOptions.toc = tocItems.children;
-              }
-            },
-            error => {
-              this.errorMessage = <any>error
-            });
-      }
-    }
-  }
-
   // getting side-menu structure
   async getAboutPages() {
     if (this.aboutMenuMarkdown) {
       this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.language, this.aboutMenuMarkdownInfo.idNumber);
-      console.log(this.aboutOptionsMarkdown);
     }
   }
 
@@ -502,10 +396,8 @@ export class SideMenu implements OnInit {
         this.language = lang;
         this.appName = this._config.app?.name?.[lang] ?? '';
         this.titleService.setTitle(this.appName as string);
-        this.getPersonSearchTypes();
         this.getStaticPagesMenus();
         this.setRootPage();
-        this.getSongTypes();
         this.getAboutPages();
       });
       this.events.publishPdfviewOpen({'isOpen': false});
@@ -516,14 +408,6 @@ export class SideMenu implements OnInit {
     // Add the new META-Tags
     this.metadataService.addDescription();
     this.metadataService.addKeywords();
-  }
-
-  unSelectAllMusicAccordionItems() {
-    Object.keys(this.musicAccordion).forEach(
-      key => {
-        this.musicAccordion[key as keyof typeof this.musicAccordion].selected = false;
-      }
-    );
   }
 
   unSelectCollectionWithChildrenPdf() {
@@ -589,7 +473,6 @@ export class SideMenu implements OnInit {
     this.events.getSelectedItemInMenu().subscribe((menu: any) => {
       // console.log('subscription to selected toc item in app.component activated', menu);
       if (menu.component === 'table-of-contents-accordion-component' || this.currentAccordionMenu !== menu.menuID) {
-        this.unSelectAllMusicAccordionItems();
         this.unSelectCollectionWithChildrenPdf();
         this.tocHomeSelected = false;
         this.tocPersonSearchSelected = false;
@@ -621,21 +504,6 @@ export class SideMenu implements OnInit {
           this.simpleAccordionsExpanded.epubs = true;
         }
       }
-    });
-    this.events.getMusicAccordionSetSelected().subscribe((data: any) => {
-      if (!data || !this.musicAccordion) {
-        return;
-      }
-
-      const musicAccordionKey = data.musicAccordionKey;
-      this.openMusicAccordionItem(musicAccordionKey, true);
-    });
-    this.events.getMusicAccordionReset().subscribe((data: any) => {
-      if (!data) {
-        return;
-      }
-
-      this.resetMusicAccordion();
     });
     this.events.getCollectionsAccordionChange().subscribe((data: any) => {
       if (!data) {
@@ -792,18 +660,7 @@ export class SideMenu implements OnInit {
         }
       });
     });
-    this.events.getTopMenuMusic().subscribe(() => {
-      this.events.publishSelectedItemInMenu({
-        menuID: 'topMenu',
-        component: 'app-component'
-      });
-      this.musicAccordion['music'].selected = true;
 
-      // Open music accordion as well
-      this.simpleAccordionsExpanded.musicAccordion = true;
-      const params = {};
-      this.router.navigate(['/music'], {queryParams: params});
-    });
     this.events.getTopMenuFront().subscribe(() => {
       this.events.publishSelectedItemInMenu({
         menuID: 'topMenu',
@@ -852,7 +709,6 @@ export class SideMenu implements OnInit {
       const params = {};
       this.router.navigate(['/elastic-search'], {queryParams: params});
       this.tocLoaded = true;
-      // this.resetCurrentCollection();
       this.enableContentMenu();
     });
   }
@@ -954,23 +810,6 @@ export class SideMenu implements OnInit {
     });
   }
 
-  sortCollectionsRoman() {
-    if (this.collectionsList) {
-      for (const coll of this.collectionsList) {
-        const romanNumeral = coll.title.split(' ')[0];
-        coll['order'] = this.romanToInt(romanNumeral);
-      }
-    }
-
-    this.collectionsList?.sort((a, b) => {
-      if (typeof a['order'] === 'number') {
-        return (a['order'] - b['order']);
-      } else {
-        return ((a['order'] < b['order']) ? -1 : ((a['order'] > b['order']) ? 1 : 0));
-      }
-    });
-  }
-
   romanToInt(str1: any) {
     if (str1 == null) {
       return -1;
@@ -1033,10 +872,6 @@ export class SideMenu implements OnInit {
           }
         );
     }
-  }
-
-  getPersonSearchTypes() {
-    this.personSearchTypes = this._config.PersonSearchTypes ?? undefined;
   }
 
   getStaticPagesMenus() {
@@ -1190,7 +1025,7 @@ export class SideMenu implements OnInit {
   }
 
   openCollection(collection: any) {
-    if (!this.hasCover && !this.hasTitle && !this.hasForeword && !this.hasIntro) {
+    if (!this._config.HasCover && !this._config.HasTitle && !this._config.HasForeword && !this._config.HasIntro) {
       this.getTocRoot(collection);
     } else {
       const downloadOnly = this._config.collectionDownloads?.isDownloadOnly ?? false;

@@ -74,7 +74,7 @@
 
     <!-- Person search: src/app/pages/person-search -->
     <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu === '/person-search'">
-      <ng-container *ngFor="let ps of personSearchTypes">
+      <ng-container *ngFor="let ps of _config.PersonSearchTypes">
         <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
           {{ps.translation | translate }}
         </a>
