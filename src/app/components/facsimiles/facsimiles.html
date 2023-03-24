@@ -3,7 +3,7 @@
   <h3 *ngIf="!selectedFacsimileIsExternal" [innerHTML]="selectedFacsimileName"></h3>
   <h3 *ngIf="selectedFacsimileIsExternal">{{"Read.Facsimiles.ExternalHeading" | translate}}</h3>
   <div *ngIf="facsimiles.length>1 || (facsimiles.length==1 && externalFacsimilesExist)" class="flex-buttons">
-    <ion-button (click)="selectFacsimile()">{{"Read.Facsimiles.ChangeFacsimile" | translate}}</ion-button>
+    <ion-button class="standard-button" (click)="selectFacsimile()">{{"Read.Facsimiles.ChangeFacsimile" | translate}}</ion-button>
   </div>
 </div>
 

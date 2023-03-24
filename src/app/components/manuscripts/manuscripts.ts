@@ -134,22 +134,14 @@ export class ManuscriptsComponent {
     this.translate.get('Read.Manuscripts').subscribe({
       next: (translation) => {
         msTranslations = translation;
-      },
-      error: (e) => {}
+      }
     });
 
     let buttonTranslations = null as any;
     this.translate.get('BasicActions').subscribe({
       next: (translation) => {
         buttonTranslations = translation;
-      },
-      error: (e) => {}
-    });
-
-    const alert = await this.alertCtrl.create({
-      header: msTranslations.SelectMsDialogTitle,
-      subHeader: msTranslations.SelectMsDialogSubtitle,
-      cssClass: 'select-text-alert'
+      }
     });
 
     this.manuscripts.forEach((manuscript: any, index: any) => {
@@ -159,7 +151,7 @@ export class ManuscriptsComponent {
         checkedValue = true;
       }
 
-      alert.inputs.push({
+      inputs.push({
         type: 'radio',
         label: manuscript.name,
         value: index,
@@ -167,16 +159,21 @@ export class ManuscriptsComponent {
       });
     });
 
-    alert.buttons.push(buttonTranslations.Cancel);
-    alert.buttons.push({
+    buttons.push(buttonTranslations.Cancel);
+    buttons.push({
       text: buttonTranslations.Ok,
       handler: (index: any) => {
         this.changeManuscript(this.manuscripts[parseInt(index)]);
       }
     });
-    
-    alert.inputs = inputs;
-    alert.buttons = buttons;
+
+    const alert = await this.alertCtrl.create({
+      header: msTranslations.SelectMsDialogTitle,
+      subHeader: msTranslations.SelectMsDialogSubtitle,
+      cssClass: 'select-text-alert',
+      buttons: buttons,
+      inputs: inputs
+    });
 
     await alert.present();
   }

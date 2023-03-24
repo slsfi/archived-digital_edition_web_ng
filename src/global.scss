@@ -481,6 +481,39 @@
   }
 
   // Ion-button styles
+  ion-button.button.standard-button,
+  ion-button.button.standard-outline-button,
+  ion-button.button.circular-icon-button {
+    --background: var(--button-background-color);
+    --border-radius: 2px;
+    --color: var(--button-text-color);
+    --padding-bottom: 0.125em;
+    --padding-top: 0.125em;
+    --padding-start: 1em;
+    --padding-end: 1em;
+    font-size: 0.8125rem;
+    height: 1.875rem;
+    letter-spacing: 0;
+  }
+  ion-button.button.standard-outline-button,
+  ion-button.button.circular-icon-button {
+    --background: transparent;
+    --border-color: var(--button-background-color);
+    --border-width: 1px;
+    --color: var(--button-background-color);
+  }
+  ion-button.button.circular-icon-button {
+    --border-radius: 1.25rem;
+    --padding-bottom: 0.5625rem;
+    --padding-top: 0.5625rem;
+    --padding-start: 0.25rem;
+    --padding-end: 0.25rem;
+  }
+  ion-button.button.circular-icon-button ion-icon {
+    --color: var(--button-background-color);
+    --ionicon-stroke-width: 48px;
+    font-size: 1.25rem;
+  }
   ion-button.close {
     --background-hover: transparent;
     --color: #000;
@@ -517,6 +550,50 @@
   ion-spinner.loading.spinner-crescent * {
     width: 32px;
     height: 32px;
+  }
+
+  // Ion-alert styles
+  // Style for alert where a different variant, manuscript or facsimile text can be selected.
+  ion-alert.select-text-alert .alert-wrapper,
+  ion-alert.custom-select-alert .alert-wrapper {
+    contain: content;
+    min-width: 250px;
+    max-width: 500px;
+    border-radius: $corner-roundness;
+
+    .alert-title {
+      font-size: 1.125rem;
+      font-weight: bold;
+    }
+
+    .alert-radio-group {
+      max-height: 50vh;
+      padding: 1rem 0;
+    }
+
+    button.alert-radio-button {
+      font-size: 1rem;
+
+      .alert-radio-label {
+        white-space: normal;
+      }
+
+      &[aria-checked="true"] {
+        .alert-radio-icon {
+          border-color: var(--button-background-color);
+        }
+        .alert-radio-inner {
+          background-color: var(--button-background-color);
+        }
+        .alert-radio-label {
+          color: var(--button-background-color);
+        }
+      }
+    }
+
+    .alert-button-group button.alert-button {
+      color: var(--button-background-color);
+    }
   }
 
 
@@ -643,17 +720,6 @@
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
-    }
-
-    .flex-buttons ion-button.button {
-      --background: var(--button-background-color);
-      --color: var(--button-text-color);
-      --padding-bottom: 0.125em;
-      --padding-top: 0.125em;
-      --padding-start: 1em;
-      --padding-end: 1em;
-      font-size: 0.8125rem;
-      height: 1.875rem;
     }
 
     .flex-buttons + ion-item {
@@ -1383,45 +1449,6 @@
   }
   button.circular-icon-button.button ion-icon {
     font-size: 1.25rem;
-  }
-
-  // Style for alert where a different variant, manuscript or facsimile text can be selected.
-  ion-alert.select-text-alert .alert-wrapper,
-  ion-alert.custom-select-alert .alert-wrapper {
-    max-width: 500px;
-    border-radius: $corner-roundness;
-
-    .alert-title {
-      font-size: 1.125rem;
-    }
-
-    .alert-radio-group {
-      max-height: 50vh;
-    }
-
-    button.alert-radio-button {
-      font-size: 1rem;
-
-      .alert-radio-label {
-        white-space: normal;
-      }
-
-      &[aria-checked="true"] {
-        .alert-radio-icon {
-          border-color: var(--button-background-color);
-        }
-        .alert-radio-inner {
-          background-color: var(--button-background-color);
-        }
-        .alert-radio-label {
-          color: var(--button-background-color);
-        }
-      }
-    }
-
-    .alert-button-group button.alert-button {
-      color: var(--button-background-color);
-    }
   }
 
   

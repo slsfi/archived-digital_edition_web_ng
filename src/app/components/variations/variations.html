@@ -3,10 +3,10 @@
 <div *ngIf="!textLoading && variations.length>0" class="text-select-wrapper">
   <h3 [innerHTML]="selectedVariationName"></h3>
   <div class="flex-buttons">
-    <ion-button (click)="selectVariation($event)">{{'Read.Variations.ChangeVariation' | translate}}</ion-button>
-    <ion-button fill="outline" (click)="selectVariationForNewView()">{{'Read.Variations.OpenNewVariation' | translate}}</ion-button>
-    <ion-button *ngIf="showOpenLegendButton" fill="outline" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="{{ 'Read.Legend.Title' | translate }}">
-      <ion-icon name="help"></ion-icon>
+    <ion-button class="standard-button" (click)="selectVariation($event)">{{'Read.Variations.ChangeVariation' | translate}}</ion-button>
+    <ion-button class="standard-outline-button" fill="outline" (click)="selectVariationForNewView()">{{'Read.Variations.OpenNewVariation' | translate}}</ion-button>
+    <ion-button *ngIf="showOpenLegendButton" fill="outline" slot="icon-only" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="{{ 'Read.Legend.Title' | translate }}">
+      <ion-icon name="help-outline"></ion-icon>
     </ion-button>
   </div>
 </div>
