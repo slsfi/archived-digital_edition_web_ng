@@ -40,14 +40,14 @@
     </ng-container>
 
     <ng-container *ngIf="_config.show?.TOC?.Read">
-      <ng-container *ngIf="_config.show.TOC.splitReadCollections">
+      <ng-container *ngIf="_config.collections.order">
         <ng-container *ngFor="let collection of collectionsList; let i = index">
-          <li (click)="toggleAccordion('Read'+i)">
+          <li (click)="toggleAccordion('/publication' + i)">
             <span>{{"TOC.Read" + (i + 1)  | translate }}</span>
-            <ion-icon *ngIf="collection.children.length" [class.open]="selectedMenu === ('Read'+ (i + 1))"
+            <ion-icon *ngIf="collection.children.length" [class.open]="selectedMenu === ('/publication' + i)"
                       name="chevron-forward-outline"></ion-icon>
           </li>
-          <li [class.open]="selectedMenu === ('Read'+ i)" class="accordion-list">
+          <li [class.open]="selectedMenu === ('/publication' + i)" class="accordion-list">
             <app-recursive-accordion
               [children]="collection.children"
               [parentPath]="'/publication'">
@@ -55,20 +55,6 @@
           </li>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="!_config.show.TOC.splitReadCollections">
-        <li (click)="toggleAccordion('/publication')">
-          <span>{{"TOC.Read" | translate }}</span>
-          <ion-icon *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'"
-                    name="chevron-forward-outline"></ion-icon>
-        </li>
-        <li *ngIf="collectionsList?.length" [class.open]="selectedMenu === '/publication'" class="accordion-list">
-          <app-recursive-accordion
-            [children]="collectionsList"
-            [parentPath]="'/publication'">
-          </app-recursive-accordion>
-        </li>
-      </ng-container>
-
     </ng-container>
 
     <ng-container *ngIf="_config.show?.TOC?.MediaCollections">

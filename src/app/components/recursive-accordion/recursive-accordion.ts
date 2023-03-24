@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivationEnd, NavigationEnd, Router, RoutesRecognized } from "@angular/router";
-import { filter } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 type MenuChild = {
   title: string;

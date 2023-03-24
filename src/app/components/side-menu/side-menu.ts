@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { NavigationEnd, Router } from "@angular/router";
 import { AlertController, MenuController, Platform } from "@ionic/angular";
@@ -15,7 +15,6 @@ import { TableOfContentsService } from "../../services/toc/table-of-contents.ser
 import { GalleryService } from "../../services/gallery/gallery.service";
 import { MetadataService } from "../../services/metadata/metadata.service";
 import { config } from "src/app/services/config/config";
-import { RecursiveAccordion } from "../recursive-accordion/recursive-accordion";
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -25,7 +24,6 @@ import { filter } from 'rxjs/operators';
 })
 export class SideMenu implements OnInit {
   @Input() showSideMenu: boolean = false;
-  @ViewChild('accordionAbout') accordionAbout: RecursiveAccordion;
 
   _config = config
   searchTocItem = false;
@@ -226,6 +224,11 @@ export class SideMenu implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe(event => {
       this.selectedMenu = menuArray.find(item => (event as any).url.includes(item)) || '/';
+      if(this.selectedMenu === '/publication') {
+        let collectionId = (event as any).url.split('/')[2]
+        let index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)))
+        this.selectedMenu += index;
+      }
     })
 
     this.initializeApp();
@@ -1274,14 +1277,14 @@ export class SideMenu implements OnInit {
   }
 
   categorizeCollections(collections: any) {
-    if (this._config.show?.TOC?.splitReadCollections) {
-      this.collectionsList = this._config.show.TOC.splitReadCollections.map((item: any, index: number) => ({
+    if (this._config.collections?.order) {
+      this.collectionsList = this._config.collections.order.map((item: any, index: number) => ({
         id: `Read${index + 1}`,
         children: [],
-        title: `Read${index + 1}`
+        title: `TOC.Read${index + 1}`
       }))
       collections.forEach((collection: any) => {
-        let index = this._config.show.TOC.splitReadCollections.findIndex((item: number[]) => item.includes(collection.id));
+        let index = this._config.collections.order.findIndex((item: number[]) => item.includes(collection.id));
         index > -1 && this.collectionsList[index].children.push(collection);
       })
     } else
