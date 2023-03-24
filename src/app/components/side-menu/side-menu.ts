@@ -1114,9 +1114,16 @@ export class SideMenu implements OnInit {
   categorizeCollections(collections: any) {
     if (this._config.collections?.order) {
       this.collectionsList = this._config.collections.order.map(() => [])
-      collections.forEach((collection: any) => {
-        let index = this._config.collections.order.findIndex((item: number[]) => item.includes(collection.id));
-        index > -1 && this.collectionsList[index].push(collection);
+
+      this._config.collections.order.forEach((array: number[], index: number) => {
+        array.forEach((item:number) => {
+          const collectionIndex = collections.findIndex((collection:any) => collection.id === item);
+          if(collectionIndex > -1){
+            this.collectionsList[index].push(collections[collectionIndex]);
+            //reduce the size of collections for the next iteration
+            collections.splice(collectionIndex, 1);
+          }
+        })
       })
     } else
       this.collectionsList = collections;
