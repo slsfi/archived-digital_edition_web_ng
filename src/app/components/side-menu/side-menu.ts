@@ -1113,14 +1113,10 @@ export class SideMenu implements OnInit {
 
   categorizeCollections(collections: any) {
     if (this._config.collections?.order) {
-      this.collectionsList = this._config.collections.order.map((item: any, index: number) => ({
-        id: `Read${index + 1}`,
-        children: [],
-        title: `TOC.Read${index + 1}`
-      }))
+      this.collectionsList = this._config.collections.order.map(() => [])
       collections.forEach((collection: any) => {
         let index = this._config.collections.order.findIndex((item: number[]) => item.includes(collection.id));
-        index > -1 && this.collectionsList[index].children.push(collection);
+        index > -1 && this.collectionsList[index].push(collection);
       })
     } else
       this.collectionsList = collections;
