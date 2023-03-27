@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {lastValueFrom, Observable} from 'rxjs';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
@@ -22,13 +22,16 @@ export class DigitalEditionListService {
 
   async getDigitalEditionsPromise(): Promise<any> {
     try {
-      const response = await fetch(
-        config.app.apiEndpoint +
-          '/' +
-          config.app.machineName +
-          this.digitalEditionsUrl
+      // console.log("FETCH HERE 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      const url = config.app.apiEndpoint + '/' + config.app.machineName + this.digitalEditionsUrl
+
+      return await lastValueFrom(this.http.get(url));
+
+      /*const response = await fetch(
+        url
       );
-      return response.json();
+      return response.json();*/
+
     } catch (e) {}
   }
 

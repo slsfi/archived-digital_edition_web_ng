@@ -52,19 +52,18 @@ export class ReadTextComponent {
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
-        switch (propName) {
-          case 'textPosition': {
-            if (
-              changes.textPosition.currentValue &&
-              changes.textPosition.currentValue !== changes.textPosition.previousValue
-            ) {
-              this.scrollToTextPosition();
-            } else if (
-              changes.textPosition.previousValue &&
-              changes.textPosition.currentValue === undefined
-            ) {
-              this.scrollReadTextToTop();
-            }
+        if (propName === 'textPosition') {
+          if (
+            !changes.textPosition.firstChange &&
+            changes.textPosition.currentValue &&
+            changes.textPosition.currentValue !== changes.textPosition.previousValue
+          ) {
+            this.scrollToTextPosition();
+          } else if (
+            changes.textPosition.previousValue &&
+            changes.textPosition.currentValue === undefined
+          ) {
+            this.scrollReadTextToTop();
           }
         }
       }
@@ -99,6 +98,9 @@ export class ReadTextComponent {
           text = this.textService.postprocessEstablishedText(text, collectionID);
           text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+          if (this.textPosition) {
+            this.scrollToTextPosition();
+          }
         } else {
           this.translate.get('Read.Established.NoEstablished').subscribe({
             next: (translation) => {
@@ -124,7 +126,10 @@ export class ReadTextComponent {
    */
   private setIllustrationsInReadtextStatus() {
     const showIllustrations = config.settings?.showReadTextIllustrations ?? [];
-    if (showIllustrations.includes(this.textItemID.split('_')[0]) || showIllustrations.includes(this.textItemID.split('_')[1])) {
+    if (
+      showIllustrations.includes(this.textItemID.split('_')[0]) ||
+      showIllustrations.includes(this.textItemID.split('_')[1])
+    ) {
       this.illustrationsVisibleInReadtext = true;
     } else {
       this.illustrationsVisibleInReadtext = false;
@@ -162,7 +167,7 @@ export class ReadTextComponent {
             } else if (this.illustrationsVisibleInReadtext) {
               // There are possibly visible illustrations in the read text. Check if click on such an image.
               if (eventTarget.classList.contains('est_figure_graphic') && eventTarget.hasAttribute('src')) {
-                image = {src: event.target.src, class: 'visible-illustration'};
+                image = { src: event.target.src, class: 'visible-illustration' };
               }
             } else {
               // Check if click on an icon representing an image which is NOT visible in the reading text
@@ -171,7 +176,7 @@ export class ReadTextComponent {
                 eventTarget.previousElementSibling.classList.contains('est_figure_graphic') &&
                 eventTarget.previousElementSibling.hasAttribute('src')
               ) {
-                image = {src: event.target.previousElementSibling.src, class: 'illustration'};
+                image = { src: event.target.previousElementSibling.src, class: 'illustration' };
               }
             }
 

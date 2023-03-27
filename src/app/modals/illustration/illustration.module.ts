@@ -5,9 +5,10 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient): TranslateLoader {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

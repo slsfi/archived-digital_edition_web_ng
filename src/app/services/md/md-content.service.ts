@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {lastValueFrom, Observable} from 'rxjs';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
@@ -53,14 +53,14 @@ export class MdContentService {
 
   async getStaticPagesTocPromise(language: string): Promise<any> {
     try {
-      const url =
-        this.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        this.staticPagesURL +
-        language;
-      const response = await fetch(url);
-      return response.json();
+      const url = this.apiEndpoint + '/' + config.app.machineName + this.staticPagesURL + language;
+
+      // console.log("FETCH HERE 4!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+      return await lastValueFrom(this.http.get(url));
+
+      // const response = await fetch(url);
+      // return response.json();
     } catch (e) {}
   }
 

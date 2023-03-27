@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import {isBrowser} from "../../../standalone/utility-functions";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ export class StorageService {
   private _storage: Storage | null = null;
 
   constructor(private storage: Storage) {
+    if (!isBrowser()) { return; }
+
     this.init();
   }
 
@@ -25,7 +28,7 @@ export class StorageService {
 
   public get(key: string) {
     if (this._storage) {
-      return this._storage.get(key); 
+      return this._storage.get(key);
     } else {
       return Promise.resolve();
     }

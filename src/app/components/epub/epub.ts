@@ -115,6 +115,7 @@ export class EpubComponent {
       this.unlistenKeyDownEvents();
     }
     if (this.handleWindowResize) {
+      console.log("#### WINDOW 2");
       window.removeEventListener('resize', this.handleWindowResize);
     }
     if (this.book !== undefined) {
@@ -540,6 +541,8 @@ export class EpubComponent {
   }
 
   downloadEpub() {
+
+    console.log("#### WINDOW 11");
     const ref = window.open(this.downloadURL, '_blank');
   }
 
@@ -706,6 +709,8 @@ export class EpubComponent {
 
   private setUpWindowResizeListener() {
     this.handleWindowResize = this.onWindowResize.bind(this);
+
+    console.log("#### WINDOW 12");
     window.addEventListener('resize', this.handleWindowResize);
   }
 

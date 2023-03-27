@@ -11,9 +11,10 @@ import { MarkdownModule } from 'ngx-markdown';
 import { PdfService } from 'src/app/services/pdf/pdf.service';
 import { SingleEditionRoutingModule } from './single-edition-routing.module';
 import { PipesModule } from 'src/pipes/pipes.module';
+import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+    return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

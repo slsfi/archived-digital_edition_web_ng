@@ -70,9 +70,11 @@ export class Touches {
             // Window
             if (listener === "resize") {
                 if (action === 'addEventListener') {
+                  console.log("#### WINDOW 16");
                     window.addEventListener(listener, this[handler], false);
                 }
                 if (action === 'removeEventListener') {
+                  console.log("#### WINDOW 17");
                     window.removeEventListener(listener, this[handler], false);
                 }
             // Document
@@ -190,7 +192,7 @@ export class Touches {
 
     handleMousemove = (event: any) => {
         //event.preventDefault();
-        
+
         if (!this.isMousedown) {
             return;
         }
@@ -373,6 +375,8 @@ export class Touches {
     detectTouchScreen() {
         var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
         var mq = function(query: any) {
+
+          console.log("#### WINDOW 18");
             return window.matchMedia(query).matches;
         }
 

@@ -9,11 +9,20 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "sv",
+        "locales": {
+          "fi": {
+            "baseHref": "fi/",
+            "translation": "src/locale/messages.fi.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": ["fi"],
+            "localize": true,
             "outputPath": "dist/app/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -83,11 +92,13 @@
               "progress": false
             },
             "fi": {
+              "deleteOutputPath": false,
               "localize": [
                 "fi"
               ]
             },
             "sv": {
+              "deleteOutputPath": false,
               "localize": [
                 "sv"
               ]
@@ -209,6 +220,7 @@
           "configurations": {
             "production": {
               "outputHashing": "media",
+              "localize": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -222,9 +234,21 @@
               "extractLicenses": false,
               "vendorChunk": true
             },
-            "ci": {}
+            "ci": {},
+            "sv": {
+              "localize": [
+                "sv"
+              ],
+              "deleteOutputPath": false
+            },
+            "fi": {
+              "localize": [
+                "fi"
+              ],
+              "deleteOutputPath": false
+            }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
@@ -255,15 +279,25 @@
             "development": {
               "browserTarget": "app:build:development",
               "serverTarget": "app:server:development"
+            },
+            "sv": {
+              "browserTarget": "app:build:production,sv",
+              "serverTarget": "app:server:production,sv",
+              "routes": [
+                "/"
+              ],
+              "guessRoutes": false
+            },
+            "fi": {
+              "browserTarget": "app:build:production,fi",
+              "serverTarget": "app:server:production,fi",
+              "routes": [
+                "/"
+              ],
+              "guessRoutes": false
             }
           },
           "defaultConfiguration": "production"
-        }
-      },
-      "i18n": {
-        "locales": {
-          "fi": { "translation": "src/locale/messages.fi.xlf" },
-          "sv": { "translation": "src/locale/messages.sv.xlf" }
         }
       }
     }

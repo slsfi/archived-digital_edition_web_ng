@@ -10,9 +10,10 @@ import { PipesModule } from 'src/pipes/pipes.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MediaCollectionRoutingModule } from './media-collection-routing.module';
+import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

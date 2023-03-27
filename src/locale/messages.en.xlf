@@ -42,6 +42,12 @@
         <target>Filter</target>
       </segment>
     </unit>
+    <unit id="MediaCollections.GotoMediaCollection">
+      <segment state="initial">
+        <source>Gå till bildbanken</source>
+        <target>Gå till bildbanken</target>
+      </segment>
+    </unit>
     <unit id="MusicPage.PageTitle">
       <segment state="initial">
         <source>Musikvolymerna</source>
@@ -222,6 +228,12 @@
         <target>Refer</target>
       </segment>
     </unit>
+    <unit id="SearchApp.infotext">
+      <segment state="initial">
+        <source>!!!!</source>
+        <target/>
+      </segment>
+    </unit>
     <unit id="Site.Title">
       <segment state="initial">
         <source>Om</source>
@@ -316,6 +328,12 @@
       <segment state="initial">
         <source>Album</source>
         <target>Album</target>
+      </segment>
+    </unit>
+    <unit id="TOC.WorkSearch">
+      <segment state="initial">
+        <source>!!!!</source>
+        <target>Works</target>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">

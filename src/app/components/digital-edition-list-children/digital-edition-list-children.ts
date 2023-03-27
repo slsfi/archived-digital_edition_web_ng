@@ -76,12 +76,18 @@ export class DigitalEditionListChildrenComponent {
         const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.collectionId + '/pdf/' +
           this.collectionDownloads['pdf'][collection.collectionId].title + '/' +
           this.collectionDownloads['pdf'][collection.collectionId].title;
+
+
+        console.log("#### WINDOW 6");
         const ref = window.open(dURL);
+
         this.analyticsService.doAnalyticsEvent('Download', 'PDF', this.collectionDownloads['pdf'][collection.id]);
       } else if (collection.collectionId in this.collectionDownloads['epub'] && type === 'epub') {
         const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.collectionId + '/epub/' +
           this.collectionDownloads['epub'][collection.collectionId].title + '/' +
           this.collectionDownloads['epub'][collection.collectionId].title;
+
+        console.log("#### WINDOW 7");
         const ref = window.open(dURL);
         this.analyticsService.doAnalyticsEvent('Download', 'EPUB', this.collectionDownloads['epub'][collection.collectionId]);
       }
@@ -115,6 +121,8 @@ export class DigitalEditionListChildrenComponent {
     const isChildPdf = true;
     const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + this.collectionID + '/pdf/' +
     edition.pdfFile + '/' + isChildPdf;
+
+    console.log("#### WINDOW 8");
     const ref = window.open(dURL, '_self', 'location=no');
   }
 

@@ -100,10 +100,17 @@ export class ContentPage {
       // The language has changed so the content needs to be reloaded
       this.fileID = lang + String(this.fileID).slice(String(this.fileID).indexOf('-'));
       // Update url with the new id
+
+      console.log("#### WINDOW 1");
       let url = window.location.href;
+
       url = url.slice(0, url.lastIndexOf('/')) + '/';
+
+    // /#/content/ is never the case with the new router
       if (url.endsWith('/#/content/')) {
         url += this.fileID;
+
+        console.log("###### HISTORY PUSH 1");
         history.pushState(null, '', url);
       }
       this.events.getAboutMarkdownTOCLoaded().subscribe((toc) => {

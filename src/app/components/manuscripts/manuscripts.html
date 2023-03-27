@@ -3,12 +3,12 @@
 <div id="ms" *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
   <h3 [innerHTML]="selectedManuscriptName"></h3>
   <div class="flex-buttons">
-    <ion-button *ngIf="manuscripts.length>1" (click)="selectManuscript()">{{"Read.Manuscripts.ChangeManuscript" | translate}}</ion-button>
+    <ion-button *ngIf="manuscripts.length>1" class="standard-button" (click)="selectManuscript()">{{"Read.Manuscripts.ChangeManuscript" | translate}}</ion-button>
     <!-- Doesn't always open the correct facsimile so hidden until further.
     <ion-button fill="outline" (click)="openFacsimileMan($event, selectedManuscript)">{{"Read.Manuscripts.OpenFacsimile" | translate}}</ion-button>
     -->
-    <ion-button *ngIf="showOpenLegendButton" fill="outline" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="{{ 'Read.Legend.Title' | translate }}">
-      <ion-icon name="help"></ion-icon>
+    <ion-button *ngIf="showOpenLegendButton" fill="outline" slot="icon-only" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="{{ 'Read.Legend.Title' | translate }}">
+      <ion-icon name="help-outline"></ion-icon>
     </ion-button>
   </div>
   <ion-item class="show-normalized-toggle">
