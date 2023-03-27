@@ -20,17 +20,14 @@ export class ManuscriptsComponent {
   @Input() textItemID: string = '';
   @Input() msID: string = '';
   @Input() searchMatches: Array<string> = [];
-  @Output() openNewManView: EventEmitter<any> = new EventEmitter();
-  @Output() openNewLegendView: EventEmitter<any> = new EventEmitter();
+  @Output() openNewManView = new EventEmitter<any>();
+  @Output() openNewLegendView = new EventEmitter<any>();
+  @Output() selectedMsID = new EventEmitter<string>();
 
   public text: any = '';
-  selection?: 0;
   manuscripts: any = [];
   selectedManuscript: any = undefined;
-  selectedManuscriptName: string = '';
   showNormalizedMs = false;
-  chapter?: string | null;
-  textLoading: boolean = true;
   showOpenLegendButton: boolean = false;
 
   constructor(
@@ -84,7 +81,7 @@ export class ManuscriptsComponent {
   setManuscript() {
     if (this.msID) {
       const inputManuscript = this.manuscripts.filter((item: any) => {
-        return (item.id === this.msID);
+        return (String(item.id) === String(this.msID));
       })[0];
       if (inputManuscript) {
         this.selectedManuscript = inputManuscript;
@@ -92,25 +89,34 @@ export class ManuscriptsComponent {
     } else {
       this.selectedManuscript = this.manuscripts[0];
     }
+    // Emit the ms id so the read page can update queryParams
+    this.emitSelectedManuscriptId(this.selectedManuscript.id);
     this.changeManuscript();
   }
 
   changeManuscript(manuscript?: any) {
-    if (manuscript) {
+    if (manuscript && this.selectedManuscript && this.selectedManuscript.id !== manuscript.id) {
       this.selectedManuscript = manuscript;
+      // Emit the ms id so the read page can update queryParams
+      this.emitSelectedManuscriptId(manuscript.id);
     }
     if (this.selectedManuscript) {
-      this.selectedManuscriptName = this.selectedManuscript.name;
       let text = '';
       if (this.showNormalizedMs) {
         text = this.selectedManuscript.manuscript_normalized;
       } else {
         text = this.selectedManuscript.manuscript_changes;
       }
-      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
       text = this.postprocessManuscriptText(text);
+      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+
     }
+  }
+
+  toggleNormalizedManuscript() {
+    this.showNormalizedMs = !this.showNormalizedMs;
+    this.changeManuscript();
   }
 
   postprocessManuscriptText(text: string) {
@@ -133,6 +139,7 @@ export class ManuscriptsComponent {
     const buttons = [] as AlertButton[];
     this.translate.get('Read.Manuscripts').subscribe({
       next: (translation) => {
+        // ! msTranslations is an object with several translations
         msTranslations = translation;
       }
     });
@@ -140,6 +147,7 @@ export class ManuscriptsComponent {
     let buttonTranslations = null as any;
     this.translate.get('BasicActions').subscribe({
       next: (translation) => {
+        // ! buttonTranslations is an object with several translations
         buttonTranslations = translation;
       }
     });
@@ -170,12 +178,16 @@ export class ManuscriptsComponent {
     const alert = await this.alertCtrl.create({
       header: msTranslations.SelectMsDialogTitle,
       subHeader: msTranslations.SelectMsDialogSubtitle,
-      cssClass: 'select-text-alert',
+      cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs
     });
 
     await alert.present();
+  }
+
+  emitSelectedManuscriptId(id: number) {
+    this.selectedMsID.emit(String(id));
   }
 
   openNewMan(event: Event, id: any) {

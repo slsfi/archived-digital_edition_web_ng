@@ -231,7 +231,7 @@ ul {
   background-color: #efefef;
   color: #000;
   padding: 2px 4px;
-  border-radius: $corner-roundness;
+  border-radius: var(--corner-border-radius);
   &.est {
     color: $est-color;
   }

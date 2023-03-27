@@ -481,8 +481,8 @@
   }
 
   // Ion-button styles
-  ion-button.button.standard-button,
-  ion-button.button.standard-outline-button,
+  ion-button.button.custom-button,
+  ion-button.button.custom-outline-button,
   ion-button.button.circular-icon-button {
     --background: var(--button-background-color);
     --border-radius: 2px;
@@ -495,7 +495,7 @@
     height: 1.875rem;
     letter-spacing: 0;
   }
-  ion-button.button.standard-outline-button,
+  ion-button.button.custom-outline-button,
   ion-button.button.circular-icon-button {
     --background: transparent;
     --border-color: var(--button-background-color);
@@ -554,12 +554,10 @@
 
   // Ion-alert styles
   // Style for alert where a different variant, manuscript or facsimile text can be selected.
-  ion-alert.select-text-alert .alert-wrapper,
   ion-alert.custom-select-alert .alert-wrapper {
-    contain: content;
     min-width: 250px;
     max-width: 500px;
-    border-radius: $corner-roundness;
+    border-radius: var(--corner-border-radius);
 
     .alert-title {
       font-size: 1.125rem;
@@ -572,9 +570,11 @@
     }
 
     button.alert-radio-button {
+      contain: content;
       font-size: 1rem;
 
       .alert-radio-label {
+        line-height: 1.35;
         white-space: normal;
       }
 

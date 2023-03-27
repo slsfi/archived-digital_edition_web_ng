@@ -216,6 +216,30 @@
         <target>Occurrences for works are disabled.</target>
       </segment>
     </unit>
+    <unit id="Read.Legend.Title">
+      <segment state="initial">
+        <source>Teckenförklaringar</source>
+        <target>Legend</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.ChangeManuscript">
+      <segment state="initial">
+        <source>Byt manuskript</source>
+        <target>Change manuscript</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.OpenFacsimile">
+      <segment state="initial">
+        <source>Öppna faksimil</source>
+        <target>Open fascimile</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.ShowNormalized">
+      <segment state="initial">
+        <source>Visa ändringar inarbetade</source>
+        <target>Visa ändringar inarbetade</target>
+      </segment>
+    </unit>
     <unit id="Read.ShowSearchResults">
       <segment state="initial">
         <source>Förekomster</source>

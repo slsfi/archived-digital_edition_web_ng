@@ -1222,7 +1222,7 @@ div.tei {
         margin-left: 0.25em;
         border: 1px solid rgb(152, 0, 0);
         background: var(--tooltip-background-color);
-        border-radius: $corner-roundness;
+        border-radius: var(--corner-border-radius);
         box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     }
     span.extVariants.show-extVariants {
@@ -1932,7 +1932,7 @@ div.tei {
     z-index: 1001;
     background: var(--tooltip-background-color);
     border: 1px solid #222;
-    border-radius: $corner-roundness;
+    border-radius: var(--corner-border-radius);
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     padding: 0.5rem 0.625rem !important;
     white-space: normal;
@@ -2020,7 +2020,7 @@ page-introduction div.tei figure {
     text-align: left;
     line-height: 1.4em;
     overflow: auto;
-    border-radius: $corner-roundness $corner-roundness 0 0;
+    border-radius: var(--corner-border-radius) var(--corner-border-radius) 0 0;
     font-family: var(--font-stack-app-base);
 
     .infoOverlayHeader {

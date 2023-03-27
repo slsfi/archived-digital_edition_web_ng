@@ -418,14 +418,7 @@ export class ReadPage /*implements OnDestroy*/ {
   setDefaultViews() {
     // There are no views defined in the url params => open either recent or default views
     if (this.textService.recentPageReadViews.length > 0) {
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.textService.recentPageReadViews) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.textService.recentPageReadViews);
     } else {
       this.setConfigDefaultReadModeViews();
     }
@@ -456,14 +449,19 @@ export class ReadPage /*implements OnDestroy*/ {
       }
     });
 
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: { views: JSON.stringify(newViews) },
-        queryParamsHandling: 'merge'
+    this.updateViewsInRouterQueryParams(newViews);
+  }
+
+  viewsExistInAvailableViewModes(viewmodes: any) {
+    const that = this;
+    viewmodes.forEach(function (viewmode: any) {
+      if ( that.availableViewModes.indexOf(viewmode) === -1 ) {
+        return false;
       }
-    );
+      return viewmode;
+    }.bind(this));
+
+    return true;
   }
 
   getViewTypesShown() {
@@ -1845,28 +1843,14 @@ export class ReadPage /*implements OnDestroy*/ {
 
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
   removeView(i: any) {
     this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: { views: JSON.stringify(this.views) },
-        queryParamsHandling: 'merge'
-      }
-    );
+    this.updateViewsInRouterQueryParams(this.views);
   }
 
   /**
@@ -1886,14 +1870,7 @@ export class ReadPage /*implements OnDestroy*/ {
         fabButton.activated = false;
       });
 
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
@@ -1914,14 +1891,7 @@ export class ReadPage /*implements OnDestroy*/ {
         fabButton.activated = false;
       });
 
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
@@ -1936,6 +1906,22 @@ export class ReadPage /*implements OnDestroy*/ {
       reorderedArray.splice(toIndex, 0, reorderedArray.splice(fromIndex, 1)[0]);
     }
     return reorderedArray;
+  }
+
+  updateViewManuscriptID(manuscriptID: string, viewIndex: number) {
+    this.views[viewIndex]['id'] = manuscriptID;
+    this.updateViewsInRouterQueryParams(this.views);
+  }
+
+  updateViewsInRouterQueryParams(views: Array<any>) {
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { views: JSON.stringify(views) },
+        queryParamsHandling: 'merge'
+      }
+    );
   }
 
   private scrollToVariant(element: HTMLElement) {
