@@ -8,14 +8,12 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
 
-
 @Component({
   selector: 'page-cover',
   templateUrl: 'cover.html',
   styleUrls: ['cover.scss']
 })
 export class CoverPage {
-
   image_alt = '';
   image_src = '';
   hasMDCover = '';
@@ -26,6 +24,8 @@ export class CoverPage {
   collection: any;
   coverSelected: boolean;
   languageSubscription?: Subscription;
+  routeParamsSubscription?: Subscription;
+  paramCollectionID: string;
 
   constructor(
     private langService: LanguageService,
@@ -33,7 +33,7 @@ export class CoverPage {
     protected sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService,
     private mdContentService: MdContentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.coverSelected = true;
     this.hasMDCover = config.ProjectStaticMarkdownCoversFolder ?? '';
@@ -43,7 +43,13 @@ export class CoverPage {
     this.route.params.subscribe(params => {
       this.id = params['collectionID'];
       this.checkIfCollectionHasChildrenPdfs();
-
+      this.routeParamsSubscription = this.route.params.subscribe({
+        next: (params) => {
+          this.paramCollectionID = params['collectionID'];
+        },
+        error: (e) => {},
+        complete: () => {}
+      });
       this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
         if (lang) {
           this.loadCover(lang, this.id);
@@ -56,6 +62,7 @@ export class CoverPage {
     if (this.languageSubscription) {
       this.languageSubscription.unsubscribe();
     }
+    this.routeParamsSubscription && this.routeParamsSubscription.unsubscribe();
   }
 
   checkIfCollectionHasChildrenPdfs() {
@@ -113,5 +120,4 @@ export class CoverPage {
       return '';
     }
   }
-
 }

@@ -1,0 +1,44 @@
+<nav *ngIf="!isLoading">
+  <ul>
+    <li *ngIf="_config.HasCover">
+      <a routerLink="{{collectionId | publicationPathGenerator: 'cover'}}">
+        {{'Read.CoverPage.Title' | translate}}
+      </a>
+    </li>
+    <li *ngIf="_config.HasTitle">
+      <a routerLink="{{collectionId | publicationPathGenerator: 'title'}}">
+        {{'Read.TitlePage.Title' | translate}}
+      </a>
+    </li>
+    <li *ngIf="_config.HasForeword">
+      <a routerLink="{{collectionId | publicationPathGenerator: 'foreword'}}">
+        {{'Read.ForewordPage.Title' | translate}}
+      </a>
+    </li>
+    <li *ngIf="_config.HasIntro">
+      <a routerLink="{{collectionId | publicationPathGenerator: 'introduction'}}">
+        {{'Read.Introduction.Title' | translate}}
+      </a>
+    </li>
+    <ng-container *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children}"></ng-container>
+  </ul>
+</nav>
+
+<ng-template #recursiveTemplate let-list>
+  <ng-container *ngFor="let item of list">
+    <li>
+      <a *ngIf="!item.children" routerLink="{{item.itemId | pagePathGenerator}}" [queryParams]="item.itemId | positionParamGenerator">{{item.text}}</a>
+      <span *ngIf="item.children">
+        {{item.text}}
+      </span>
+
+      <ion-icon *ngIf="item.children" [class.open]=""
+                name="chevron-forward-outline"></ion-icon>
+    </li>
+    <li *ngIf="item.children" [class.open]="">
+      <ul>
+        <ng-container *ngTemplateOutlet="recursiveTemplate; context: {$implicit: item.children}"></ng-container>
+      </ul>
+    </li>
+  </ng-container>
+</ng-template>

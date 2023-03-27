@@ -33,7 +33,6 @@ export class SideMenu implements OnInit {
   collectionDownloads: any;
   accordionTOC = false;
   aboutMenuMarkdownInfo: any;
-  aboutMenuMarkdown = false;
   mediaCollectionOptions: any;
   aboutOptionsMarkdown: {
     title: string;
