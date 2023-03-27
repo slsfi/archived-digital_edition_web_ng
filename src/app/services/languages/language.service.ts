@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EventsService } from '../events/events.service';
@@ -17,7 +17,8 @@ export class LanguageService {
   constructor(
     public translate: TranslateService,
     // public storage: StorageService,
-    private events: EventsService
+    private events: EventsService,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this._langChangeEnabled = config.i18n?.enableLanguageChanges ?? true;
     this._defaultLanguage = config.i18n?.locale ?? 'sv';
@@ -46,6 +47,7 @@ export class LanguageService {
     }
     */
 
+    /*
     if (!this._langChangeEnabled) {
       this.translate.use(this._defaultLanguage);
     } else {
@@ -56,12 +58,15 @@ export class LanguageService {
         this.translate.use(this._defaultLanguage);
       }
     }
+    */
 
-    this._language = this.translate.currentLang;
-    this.languageSubject = new BehaviorSubject<string>(this.translate.currentLang);
+    this.translate.use(this.activeLocale);
+    this._language = this.activeLocale;
+    this.languageSubject = new BehaviorSubject<string>(this.activeLocale);
 
     // this.storage.set('language', this.translate.currentLang);
 
+    /*
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       const prevLang = this._language;
       // this.storage.set('language', this.translate.currentLang);
@@ -70,6 +75,7 @@ export class LanguageService {
         this.updateLanguageSubject(this._language);
       }
     });
+    */
   }
 
   public getLanguage(): Observable<string> {
