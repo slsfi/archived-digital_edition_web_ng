@@ -265,7 +265,7 @@ export class SideMenu implements OnInit {
 
   // getting side-menu structure
   async getAboutPages() {
-    if (this.aboutMenuMarkdown) {
+    if (this._config.AboutMenuAccordion) {
       this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.language, this.aboutMenuMarkdownInfo.idNumber);
     }
   }
