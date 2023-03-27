@@ -11,7 +11,7 @@ const getTranslatedServer = (lang) => {
 };
 
 function run() {
-    const port = process.env['PORT'] || 4200;
+    const port = process.env['PORT'] || 4201;
 
     // Start up the Node server
     const appFi = getTranslatedServer("fi");
