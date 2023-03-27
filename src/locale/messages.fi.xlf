@@ -216,6 +216,30 @@
         <target>Teosten esiintymät eivät ole saatavilla.</target>
       </segment>
     </unit>
+    <unit id="Read.Legend.Title">
+      <segment state="initial">
+        <source>Teckenförklaringar</source>
+        <target>Lukuohje</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.ChangeManuscript">
+      <segment state="initial">
+        <source>Byt manuskript</source>
+        <target>Vaihda käsikirjoitusta</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.OpenFacsimile">
+      <segment state="initial">
+        <source>Öppna faksimil</source>
+        <target>Näytä faksimilet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.ShowNormalized">
+      <segment state="initial">
+        <source>Visa ändringar inarbetade</source>
+        <target>Näytä muutokset toteutettuina</target>
+      </segment>
+    </unit>
     <unit id="Read.ShowSearchResults">
       <segment state="initial">
         <source>Förekomster</source>

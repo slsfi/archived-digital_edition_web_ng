@@ -108,7 +108,7 @@ ion-item.item.item.collection-name-top {
 .collection-filters-select > .item-inner > .input-wrapper {
     padding: 4px 4px 4px 8px;
     border: 1px solid #888;
-    border-radius: $corner-roundness;
+    border-radius: var(--corner-border-radius);
     margin: 24px 0;
     background-color: #fafafa;
 }

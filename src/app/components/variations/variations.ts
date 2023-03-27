@@ -171,7 +171,7 @@ export class VariationsComponent {
     const alert = await this.alertCtrl.create({
       header: varTranslations.SelectVariationDialogTitle,
       subHeader: varTranslations.SelectVariationDialogSubtitle,
-      cssClass: 'select-text-alert'
+      cssClass: 'custom-select-alert'
     });
 
     this.variations.forEach((variation: any, index: any) => {
@@ -226,7 +226,7 @@ export class VariationsComponent {
     const alert = await this.alertCtrl.create({
       header: varTranslations.OpenNewVariationDialogTitle,
       subHeader: varTranslations.OpenNewVariationDialogSubtitle,
-      cssClass: 'select-text-alert'
+      cssClass: 'custom-select-alert'
     });
 
     this.variations.forEach((variation: any, index: any) => {

@@ -50,7 +50,6 @@ $divider-bg-color:              map-get($map: $colors, $key: 'secondary');
 // --------------------------------------------------
 $top-menu-left: 370px;
 $top-menu-left-split-pane: 10px;
-$corner-roundness: $popover-md-border-radius;
 $opacity-hover: 0.6;
 $opacity-hover-transition: opacity 0.2s;
 
@@ -237,6 +236,7 @@ $opacity-hover-transition: opacity 0.2s;
   --opacity-hover: 0.6;
   --opacity-hover-transition: opacity 0.2s;
   --search-match-background-color: #a5d7a5;
+  --corner-border-radius: 3px;
 
 
   // OVERRIDE IONIC CSS VARIABLES

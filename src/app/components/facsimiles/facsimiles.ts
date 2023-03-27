@@ -396,7 +396,7 @@ export class FacsimilesComponent {
     const alert = await this.alertCtrl.create({
       header: facsTranslations.SelectFacsDialogTitle,
       subHeader: facsTranslations.SelectFacsDialogSubtitle,
-      cssClass: 'select-text-alert'
+      cssClass: 'custom-select-alert'
     });
 
     if (this.externalFacsimilesExist && this.externalURLs.length > 0) {

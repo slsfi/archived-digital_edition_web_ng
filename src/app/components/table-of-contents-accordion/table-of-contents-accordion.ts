@@ -499,7 +499,7 @@ export class TableOfContentsAccordionComponent {
       translation => {
         this.sortSelectOptions = {
           title: translation,
-          cssClass: 'select-text-alert'
+          cssClass: 'custom-select-alert'
         };
       }, error => { }
     );

@@ -32,7 +32,7 @@ ion-title {
 .fromYear,
 .toYear {
   border: 1px solid gray;
-  border-radius: $corner-roundness;
+  border-radius: var(--corner-border-radius);
   background-color: #fff;
   max-width: 200px;
   transition: all 0.3s;

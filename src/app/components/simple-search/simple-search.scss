@@ -71,7 +71,7 @@ h2{
     margin-left: 8px;
     background-color: #fafafa;
     padding: 2px 4px;
-    border-radius: $corner-roundness;
+    border-radius: var(--corner-border-radius);
 }
 .textType.title,
 .textType.person,

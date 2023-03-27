@@ -134,7 +134,7 @@ ion-item.facsimile-zoom-page-numbering {
   width: auto;
   min-height: auto;
   align-self: center;
-  border-radius: $corner-roundness;
+  border-radius: var(--corner-border-radius);
 
   div.item-inner {
     padding: 8px 0;
@@ -161,7 +161,7 @@ ion-item.facsimile-zoom-page-numbering {
                 padding: 5px;
                 border: 1px solid #666;
                 margin: 0;
-                border-radius: $corner-roundness;
+                border-radius: var(--corner-border-radius);
                 background-color: #fafafa;
             }
             input:focus {
@@ -186,7 +186,7 @@ ion-item.facsimile-zoom-page-numbering {
   margin: 0;
   white-space: normal;
   line-height: 1.4rem;
-  border-radius: $corner-roundness;
+  border-radius: var(--corner-border-radius);
 }
 
 .image-description .facs-desc .facs-desc-title {

@@ -552,14 +552,7 @@ export class ReadPage /*implements OnDestroy*/ {
   setDefaultViews() {
     // There are no views defined in the url params => open either recent or default views
     if (this.textService.recentPageReadViews.length > 0) {
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.textService.recentPageReadViews) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.textService.recentPageReadViews);
     } else {
       this.setConfigDefaultReadModeViews();
     }
@@ -616,42 +609,8 @@ export class ReadPage /*implements OnDestroy*/ {
         newViews.push(view);
       }
     });
-    
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: { views: JSON.stringify(newViews) },
-        queryParamsHandling: 'merge'
-      }
-    );
-  }
 
-  updatePositionInURL(textId: string) {
-    const currentPage = String(window.location.href);
-    let url = '/' + currentPage.split('/')[1];
-
-    const idParts = textId.split('_');
-    let chapter = '';
-    if (textId.indexOf(';') > -1) {
-      if (idParts.length > 2) {
-        chapter = idParts[2];
-      } else if (idParts.length > 1) {
-        chapter = 'nochapter;' + idParts[1].split(';')[1];
-      }
-    }
-    let pubId = url.slice(url.indexOf('/text/') + 6);
-    let endPart = pubId.slice(pubId.indexOf('/') + 1);
-    endPart = endPart.slice(endPart.indexOf('/'));
-    pubId = pubId.slice(0, pubId.indexOf('/'));
-
-    url = url.slice(0, url.indexOf('/text/') + 6) + pubId + '/' + chapter + endPart;
-    const viewModes = this.getViewTypesShown();
-    // this causes problems with back, thus this check.
-    // if (!this.navCtrl.canGoBack() ) {
-    //   window.history.replaceState('', '', url);
-    // }
-    this.router.navigate([url])
+    this.updateViewsInRouterQueryParams(newViews);
   }
 
   viewsExistInAvailableViewModes(viewmodes: any) {
@@ -2055,14 +2014,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
@@ -2079,14 +2031,7 @@ export class ReadPage /*implements OnDestroy*/ {
   removeView(i: any) {
     this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: { views: JSON.stringify(this.views) },
-        queryParamsHandling: 'merge'
-      }
-    );
+    this.updateViewsInRouterQueryParams(this.views);
   }
 
   /**
@@ -2106,14 +2051,7 @@ export class ReadPage /*implements OnDestroy*/ {
         fabButton.activated = false;
       });
 
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
@@ -2134,14 +2072,7 @@ export class ReadPage /*implements OnDestroy*/ {
         fabButton.activated = false;
       });
 
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: { views: JSON.stringify(this.views) },
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.updateViewsInRouterQueryParams(this.views);
     }
   }
 
@@ -2156,6 +2087,22 @@ export class ReadPage /*implements OnDestroy*/ {
       reorderedArray.splice(toIndex, 0, reorderedArray.splice(fromIndex, 1)[0]);
     }
     return reorderedArray;
+  }
+
+  updateViewManuscriptID(manuscriptID: string, viewIndex: number) {
+    this.views[viewIndex]['id'] = manuscriptID;
+    this.updateViewsInRouterQueryParams(this.views);
+  }
+
+  updateViewsInRouterQueryParams(views: Array<any>) {
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { views: JSON.stringify(views) },
+        queryParamsHandling: 'merge'
+      }
+    );
   }
 
   private scrollToVariant(element: HTMLElement) {
