@@ -1,22 +1,22 @@
 <nav *ngIf="!isLoading">
   <ul>
     <li *ngIf="_config.HasCover">
-      <a routerLink="{{collectionId | publicationPathGenerator: 'cover'}}">
+      <a routerLink="{{collectionID | publicationPathGenerator: 'cover'}}">
         {{'Read.CoverPage.Title' | translate}}
       </a>
     </li>
     <li *ngIf="_config.HasTitle">
-      <a routerLink="{{collectionId | publicationPathGenerator: 'title'}}">
+      <a routerLink="{{collectionID | publicationPathGenerator: 'title'}}">
         {{'Read.TitlePage.Title' | translate}}
       </a>
     </li>
     <li *ngIf="_config.HasForeword">
-      <a routerLink="{{collectionId | publicationPathGenerator: 'foreword'}}">
+      <a routerLink="{{collectionID | publicationPathGenerator: 'foreword'}}">
         {{'Read.ForewordPage.Title' | translate}}
       </a>
     </li>
     <li *ngIf="_config.HasIntro">
-      <a routerLink="{{collectionId | publicationPathGenerator: 'introduction'}}">
+      <a routerLink="{{collectionID | publicationPathGenerator: 'introduction'}}">
         {{'Read.Introduction.Title' | translate}}
       </a>
     </li>

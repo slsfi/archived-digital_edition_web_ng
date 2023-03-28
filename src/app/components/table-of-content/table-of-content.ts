@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
-import { TableOfContentsService } from "../../services/toc/table-of-contents.service";
-import { config } from "../../services/config/config";
 import { ActivatedRoute } from "@angular/router";
+import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
+import { config } from "src/app/services/config/config";
 
 @Component({
   selector: 'table-of-content',
@@ -10,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 
 export class TableOfContent {
-  @Input() collectionId: string;
+  @Input() collectionID: string;
   collectionContent: any;
   isLoading: boolean = true;
   _config = config;
@@ -19,20 +19,33 @@ export class TableOfContent {
     publicationID: '',
     chapterID: ''
   }
-  constructor(private tocService: TableOfContentsService, private route: ActivatedRoute,) {}
+
+  constructor(
+    private tocService: TableOfContentsService,
+    private route: ActivatedRoute
+  ) {}
+
   ngOnInit() {
-    this.tocService.getTableOfContents(this.collectionId).subscribe(data => {
+    console.log('collection side menu initialized');
+
+    this.tocService.getTableOfContents(this.collectionID).subscribe(data => {
       this.collectionContent = data;
       this.isLoading = false;
-      console.log(data)
-    })
-    this.route.params.subscribe(data => {
-      console.log(data)
-      this.selectedMenu = {
-        collectionID: data.collectionID,
-        publicationID: data.publicationID,
-        chapterID: data.chapterID
+      console.log('tocService response:', data);
+    });
+
+    // ! ActivatedRoute only works for components loaded via router-outlet, so this will always return an empty object since this component is outside the router-outlet defined in app.component.html.
+    // ! Find another way to get the current text.
+    this.route.params.subscribe({
+      next: (params) => {
+        console.log('route.params: ', params);
+        this.selectedMenu = {
+          collectionID: params.collectionID,
+          publicationID: params.publicationID,
+          chapterID: params.chapterID
+        }
       }
-    })
+    });
   }
+
 }

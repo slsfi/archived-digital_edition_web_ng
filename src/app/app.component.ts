@@ -8,16 +8,27 @@ import { filter } from "rxjs/operators";
   styleUrls: ['app.component.scss'],
 })
 export class DigitalEditionsApp {
-  showSideMenu:boolean = true;
+
+  showSideMenu: boolean = true;
+  showCollectionSideMenu: boolean = false;
+  collectionID: string = '';
+  
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe(event => {
-      if((event as any).url.includes('/publication'))
-        this.showSideMenu = false;
-    })
+    ).subscribe({
+      next: (event: any) => {
+        const collectionSegment = '/publication/';
+        if (event.url.startsWith(collectionSegment)) {
+          this.collectionID = event.url.slice(collectionSegment.length).split('/')[0] || '';
+          this.showCollectionSideMenu = true;
+        } else {
+          this.showCollectionSideMenu = false;
+        }
+      }
+    });
   }
 
   toggleSideMenu() {
