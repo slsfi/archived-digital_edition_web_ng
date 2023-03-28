@@ -4,12 +4,12 @@ import { TableOfContentsService } from "src/app/services/toc/table-of-contents.s
 import { config } from "src/app/services/config/config";
 
 @Component({
-  selector: 'table-of-content',
-  templateUrl: 'table-of-content.html',
-  styleUrls: ['table-of-content.scss']
+  selector: 'collection-side-menu',
+  templateUrl: 'collection-side-menu.html',
+  styleUrls: ['collection-side-menu.scss']
 })
 
-export class TableOfContent {
+export class CollectionSideMenu {
   @Input() collectionID: string;
   collectionContent: any;
   isLoading: boolean = true;

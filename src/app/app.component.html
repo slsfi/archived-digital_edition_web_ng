@@ -5,7 +5,7 @@
     <!-- This is the default, main menu -->
     <ion-menu contentId="content" id="contentMenu">
       <app-side-menu *ngIf="!showCollectionSideMenu"></app-side-menu>
-      <table-of-content *ngIf="showCollectionSideMenu" [collectionID]="collectionID"></table-of-content>
+      <collection-side-menu *ngIf="showCollectionSideMenu" [collectionID]="collectionID"></collection-side-menu>
     </ion-menu>
     <!-- Page content, which is displayed in the right container of <ion-split-pane> -->
     <div class="ion-page" id="content">

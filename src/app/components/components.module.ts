@@ -19,8 +19,8 @@ import { RouterLink } from "@angular/router";
 import { TopMenuComponent } from "./top-menu/top-menu";
 import { SideMenu} from "./side-menu/side-menu";
 import { RecursiveAccordion } from "./recursive-accordion/recursive-accordion";
-import {CustomTranslateHttpLoader} from "../../standalone/TranslateLoader-shim";
-import { TableOfContent} from "./table-of-content/table-of-content";
+import { CustomTranslateHttpLoader } from "../../standalone/TranslateLoader-shim";
+import { CollectionSideMenu} from "./collection-side-menu/collection-side-menu";
 
 export function createTranslateLoader(http: HttpClient) {
   return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,7 +40,7 @@ export function createTranslateLoader(http: HttpClient) {
 		MathJaxComponent,
 		SideMenu,
 		RecursiveAccordion,
-    TableOfContent
+    	CollectionSideMenu
 	],
 	imports: [
 		IonicModule,
@@ -68,7 +68,7 @@ export function createTranslateLoader(http: HttpClient) {
     DateHistogram,
     MathJaxComponent,
     SideMenu,
-    TableOfContent
+    CollectionSideMenu
   ]
 })
 export class ComponentsModule { }
