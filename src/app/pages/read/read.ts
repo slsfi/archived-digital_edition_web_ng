@@ -3,11 +3,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { SearchAppPage } from 'src/app/modals/search-app/search-app';
+import { EstablishedText } from 'src/app/models/established-text.model';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
@@ -23,6 +25,11 @@ import { config } from "src/app/services/config/config";
 import { DragScrollComponent } from 'src/directives/ngx-drag-scroll/public-api';
 import { isBrowser } from 'src/standalone/utility-functions';
 
+
+// @IonicPage({
+//   name: 'read',
+//   segment: 'publication/:collectionID/text/:publicationID/:chapterID/:facs_id/:facs_nr/:song_id/:search_title/:urlviews'
+// })
 @Component({
   selector: 'page-read',
   templateUrl: './read.html',
@@ -33,6 +40,12 @@ export class ReadPage /*implements OnDestroy*/ {
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
+  // @ViewChild('content') content!: ElementRef;
+  // @ViewChild('readColumn') readColumn!: ElementRef;
+  // @ViewChild('scrollBar') scrollBar!: ElementRef;
+  // @ViewChild('toolbar') navBar!: ElementRef;
+  // @ViewChild('fab') fabList: FabContainer;
+  // @ViewChild('settingsIconElement') settingsIconElement: ElementRef;
 
   multilingualEST: false;
   estLanguages = [];
@@ -54,6 +67,7 @@ export class ReadPage /*implements OnDestroy*/ {
   infoOverlayText: string;
   infoOverlayTitle: string;
   intervalTimerId: number;
+  nochapterPos?: any;
   userIsTouching: Boolean = false;
   collectionAndPublicationLegacyId?: string;
   illustrationsViewShown: Boolean = false;
@@ -62,6 +76,8 @@ export class ReadPage /*implements OnDestroy*/ {
   showViewOptionsButton: Boolean = true;
   showTextDownloadButton: Boolean = false;
   usePrintNotDownloadIcon: Boolean = false;
+  // backdropWidth: number;
+  // showAddViewsFabBackdrop: boolean = false;
 
   addViewPopoverisOpen: boolean = false;
 
@@ -78,10 +94,12 @@ export class ReadPage /*implements OnDestroy*/ {
 
   searchMatches: Array<string> = [];
 
+  typeVersion?: string;
   displayToggles: any;
 
   occurrenceResult?: OccurrenceResult;
 
+  legacyId = '';
 
   views = [] as any;
 
@@ -101,7 +119,26 @@ export class ReadPage /*implements OnDestroy*/ {
   paramCollectionID: any;
   paramPublicationID: any;
   paramChapterID: any;
+  paramFacsId: any;
+  paramFacsNr: any;
+  paramSearchTitle: any;
+  paramViews: any;
+
+  queryParamTocItem: any
+  queryParamRoot: any
+  queryParamViews: any
+  queryParamSearchResult: any
+  queryParamOccurrenceResult: any
+  queryParamId: any
+  queryParamLegacyId: any
+  queryParamSelectedItemInAccordion: any
   queryParamObjectType: any
+  queryParamMatches: any
+  queryParamShowOccurrencesModalOnRead: any
+  queryParamTocLinkId: any
+
+  paramsLoaded?: boolean
+  queryParamsLoaded?: boolean
 
 
   // TODO OLLIN UUDET
@@ -117,6 +154,9 @@ export class ReadPage /*implements OnDestroy*/ {
   // TODO paramX$ tyyli
 
   constructor(
+    // public viewCtrl: ViewController,
+    // public navCtrl: NavController,
+    // public params: NavParams,
     private textService: TextService,
     private commentService: CommentService,
     private renderer2: Renderer2,
@@ -155,6 +195,9 @@ export class ReadPage /*implements OnDestroy*/ {
       left: -1500 + 'px'
     };
     this.intervalTimerId = 0;
+
+    // this.backdropWidth = 0;
+
     try {
       const i18n = config.i18n ?? undefined;
 
@@ -232,6 +275,14 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   ngOnInit() {
+    /*
+    this.urlParameters$ = combineLatest(
+      [this.route.params, this.route.queryParams]
+    ).pipe(
+      map(([params, queryParams]) => ({...params, ...queryParams}))
+    );
+    */
+
     this.routeParamsSubscription = this.route.params.subscribe({
       next: (params) => {
         let textItemID;
@@ -342,6 +393,41 @@ export class ReadPage /*implements OnDestroy*/ {
     this.analyticsService.doPageView('Read');
   }
 
+  ngAfterViewInit() {
+    if (isBrowser()) {
+      // This scrolls the table of contents so the current text is centered vertically
+      // TODO: This won't do what it's supposed to in the Angular 15 app.
+      this.ngZone.runOutsideAngular(() => {
+        let iterationsLeft = 6;
+        clearInterval(this.intervalTimerId);
+        const that = this;
+        this.intervalTimerId = window.setInterval(function() {
+          try {
+            if (iterationsLeft < 1) {
+              clearInterval(that.intervalTimerId);
+            } else {
+              iterationsLeft -= 1;
+              if (that.textItemID && that.textPosition !== undefined) {
+                const itemId = 'toc_' + that.textItemID + (that.textPosition ? ';' + that.textPosition : '');
+                let foundElem = document.getElementById(itemId);
+                if (foundElem === null || foundElem === undefined) {
+                  // Scroll to toc item without position
+                  foundElem = document.getElementById(itemId.split(';').shift() || '');
+                }
+                if (foundElem) {
+                  that.scrollToTOC(foundElem);
+                  clearInterval(that.intervalTimerId);
+                }
+              }
+            }
+          } catch (e) {
+            console.log('error in setInterval function in PageRead.ngAfterViewInit()', e);
+          }
+        }.bind(this), 500);
+      });
+    }
+  }
+
   ngOnDestroy() {
     if (this.routeQueryParamsSubscription) {
       this.routeQueryParamsSubscription.unsubscribe();
@@ -379,6 +465,54 @@ export class ReadPage /*implements OnDestroy*/ {
 
       return await occurrenceModal.present();
     }
+  }
+
+  async openSearchResult() {
+    const searchModal = await this.modalCtrl.create({
+      component: SearchAppPage,
+      componentProps: { searchResult: this.searchResult }
+    });
+    return await searchModal.present();
+  }
+
+  setViews(viewmodes: any) {
+    let variationsViewOrderNumber = 0;
+    let sameCollection = false;
+    // Check if the same collection as the previous time page-read was loaded.
+    if (this.textService.readViewTextId.split('_')[0] === this.textService.previousReadViewTextId.split('_')[0]) {
+      sameCollection = true;
+    } else {
+      // A different collection than last time page-read was loaded --> clear variationsOrder array in textService.
+      this.textService.variationsOrder = [];
+    }
+
+    let defaultReadModeForMobileSelected = false;
+    viewmodes.forEach((viewmode: any) => {
+      if (!defaultReadModeForMobileSelected && this.displayToggles[viewmode]) {
+        /* Sets the default view on mobile to the first default read mode view which is available. */
+        this.show = viewmode;
+        defaultReadModeForMobileSelected = true;
+      }
+
+      // check if view type it is similar to established_sv
+      const parts = viewmode.split('_');
+      if (parts.length > 1) {
+        this.addView(parts[0], null, null, null, parts[1]);
+      } else {
+        if (viewmode === 'variations') {
+          // this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
+          if (sameCollection && this.textService.variationsOrder.length > 0) {
+            this.addView(viewmode, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
+          } else {
+            this.addView(viewmode, null, null, null, variationsViewOrderNumber);
+            this.textService.variationsOrder.push(variationsViewOrderNumber);
+          }
+          variationsViewOrderNumber++;
+        } else {
+          this.addView(viewmode);
+        }
+      }
+    });
   }
 
   showAllViews() {
@@ -423,6 +557,32 @@ export class ReadPage /*implements OnDestroy*/ {
       this.setConfigDefaultReadModeViews();
     }
   }
+
+  /*
+  setViewsFromSearchResults() {
+    for (const v of this.queryParamViews) {
+      if (v.type) {
+        // console.log(`Aading view ${v.type}, ${v.id}`);
+        this.addView(v.type, v.id);
+      }
+      if (v.type === 'manuscripts' || v.type === 'ms') {
+        this.show = 'manuscripts';
+        this.typeVersion = v.id;
+      } else if (v.type === 'variation' || v.type === 'var') {
+        this.show = 'variations';
+        this.typeVersion = v.id;
+      } else if ((v.type === 'comments' || v.type === 'com')) {
+        this.show = 'comments';
+      } else if (v.type === 'established' || v.type === 'est') {
+        this.show = 'established';
+      } else if (v.type === 'facsimiles' || v.type === 'facs') {
+        this.show = 'facsimiles';
+      } else if (v.type === 'song-example') {
+        this.show = 'song-example';
+      }
+    }
+  }
+  */
 
   /**
    * Supports also multiple default read-modes.
@@ -472,6 +632,16 @@ export class ReadPage /*implements OnDestroy*/ {
     }.bind(this));
 
     return viewModes;
+  }
+
+  scrollToTOC(element: HTMLElement) {
+    try {
+      if (element !== null) {
+        this.commonFunctions.scrollElementIntoView(element);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   private getEventTarget(event: any) {
@@ -1847,6 +2017,16 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
 
+  hasKey(nameKey: string, myArray: any) {
+    for (let i = 0; i < (myArray.length - 1); i++) {
+      const item: any = myArray[i];
+      if (item['variation'].show === true) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   removeView(i: any) {
     this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
@@ -1987,6 +2167,42 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
 
+  keyPress(event: any) {
+    console.log(event);
+  }
+
+  moveLeft() {
+    this.ds.moveLeft();
+  }
+
+  moveRight() {
+    this.ds.moveRight();
+  }
+
+  nextFacs() {
+    this.events.publishNextFacsimile();
+  }
+
+  prevFacs() {
+    this.events.publishPreviousFacsimile();
+  }
+
+  zoomFacs() {
+    this.events.publishZoomFacsimile();
+  }
+
+  private scrollColumnIntoView(columnElement: HTMLElement, offset = 26) {
+    if (columnElement === undefined || columnElement === null) {
+      return;
+    }
+    const scrollingContainer = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content > div.scroll-content');
+    if (scrollingContainer !== null) {
+      const x = columnElement.getBoundingClientRect().left + scrollingContainer.scrollLeft -
+      scrollingContainer.getBoundingClientRect().left - offset;
+      scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
+    }
+  }
+
   printMainContentClasses() {
     if (this.userSettingsService.isMobile()) {
       return 'mobile-mode-read-content';
@@ -2008,6 +2224,15 @@ export class ReadPage /*implements OnDestroy*/ {
         console.log('could not get publication data trying to resolve collection and publication legacy id');
       }
     });
+  }
+
+  /**
+   * Adds the sort order of a variation to the variationsOrder array in textService.
+   */
+  addVariationSortOrderToService(sortOrder: number) {
+    if (sortOrder !== null && sortOrder !== undefined) {
+      this.textService.variationsOrder.push(sortOrder);
+    }
   }
 
   /**
@@ -2080,9 +2305,61 @@ export class ReadPage /*implements OnDestroy*/ {
     return varIndex;
   }
 
+  /*
+  setFabBackdropWidth() {
+    if (isBrowser()) {
+      let scrollingContainer = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content');
+      if (scrollingContainer) {
+        const shadowContainer = scrollingContainer.shadowRoot;
+        if (shadowContainer) {
+          scrollingContainer = shadowContainer.querySelector('[part="scroll"]');
+          if (scrollingContainer) {
+            this.backdropWidth = scrollingContainer.scrollWidth;
+          }
+        }
+      }
+    }
+  }
+  toggleFabBackdrop() {
+    if (this.showAddViewsFabBackdrop) {
+      this.showAddViewsFabBackdrop = false;
+    } else {
+      this.setFabBackdropWidth();
+      this.showAddViewsFabBackdrop = true;
+    }
+  }
+  */
+
   showAddViewPopover(e: Event) {
     this.addViewPopover.event = e;
     this.addViewPopoverisOpen = true;
+  }
+
+  scrollReadTextToAnchorPosition(posId: string) {
+    const container = document.querySelectorAll('page-read:not([ion-page-hidden]):not(.ion-page-hidden) read-text')[0];
+    if (container) {
+      const targets = container.querySelectorAll('a[name="' + posId + '"].anchor');
+      if (targets && targets.length > 0) {
+        let target = targets[0] as HTMLAnchorElement;
+        if ( target && ((target.parentElement && target.parentElement.classList.contains('ttFixed'))
+        || (target.parentElement?.parentElement && target.parentElement.parentElement.classList.contains('ttFixed'))) ) {
+          // Position in footnote --> look for second target
+          if (targets.length > 1) {
+            target = targets[1] as HTMLAnchorElement;
+          }
+        }
+        if (target) {
+          if (!this.userSettingsService.isMobile()) {
+            let columnElement = container as HTMLElement;
+            while (columnElement.parentElement !== null && !columnElement.parentElement.classList.contains('read-column')) {
+              columnElement = columnElement.parentElement;
+            }
+            this.scrollColumnIntoView(columnElement);
+          }
+          this.commonFunctions.scrollToHTMLElement(target);
+        }
+      }
+    }
   }
 
 }

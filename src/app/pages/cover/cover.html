@@ -1,37 +1,27 @@
-<ion-split-pane [when]="true" contentId="cover-content">
-  <table-of-content [collectionId]="paramCollectionID"></table-of-content>
-  <ion-content id="cover-content">
-    <ion-header *ngIf="!(userSettingsService.isMobile()) && !hasDigitalEditionListChildren" class="ion-no-border">
-      <ion-toolbar class="secondary">
+<ion-header class="ion-no-border" *ngIf="!(userSettingsService.isMobile()) && !hasDigitalEditionListChildren">
+  <ion-toolbar class="secondary">
 
-        <text-changer *ngIf="!(userSettingsService.isMobile())" [parentPageType]="'page-cover'" [textItemID]="id"
-                      class="text-changer-desktop-view"></text-changer>
+    <text-changer *ngIf="!(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-desktop-view"></text-changer>
 
-      </ion-toolbar>
-    </ion-header>
+  </ion-toolbar>
+</ion-header>
 
-    <ion-content *ngIf="hasDigitalEditionListChildren" class="ion-padding">
-      <div class="">
-        <digital-edition-list-children [childrenPdfs]="childrenPdfs" [collectionID]="id"
-                                       [layoutType]="'auto'"></digital-edition-list-children>
-      </div>
-    </ion-content>
+<ion-content *ngIf="hasDigitalEditionListChildren" class="ion-padding">
+  <div class="">
+    <digital-edition-list-children [layoutType]="'auto'" [childrenPdfs]="childrenPdfs" [collectionID]="id"></digital-edition-list-children>
+  </div>
+</ion-content>
 
-    <ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" [ngClass]="printMainContentClasses()"
-                 class="publication-ion-content">
-      <div class="scroll-content-container">
-        <div [innerHTML]="text" class="tei teiContainer"></div>
-      </div>
-    </ion-content>
-    <ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" [ngClass]="printMainContentClasses()"
-                 class="publication-ion-content">
-      <div [ngClass]="printMainContentClasses()" class="cover-image-wrapper">
-        <img [alt]="image_alt" [src]="image_src" class="cover-image">
-      </div>
-    </ion-content>
-    <text-changer *ngIf="(userSettingsService.isMobile()) && !hasDigitalEditionListChildren"
-                  [parentPageType]="'page-cover'"
-                  [textItemID]="id" class="text-changer-mobile-view"></text-changer>
-  </ion-content>
-</ion-split-pane>
+<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="publication-ion-content" [ngClass]="printMainContentClasses()">
+  <div class="scroll-content-container">
+      <div class="tei teiContainer" [innerHTML]="text"></div>
+  </div>
+</ion-content>
 
+<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="publication-ion-content" [ngClass]="printMainContentClasses()">
+  <div class="cover-image-wrapper" [ngClass]="printMainContentClasses()">
+    <img class="cover-image" [src]="image_src" [alt]="image_alt">
+  </div>
+</ion-content>
+
+<text-changer *ngIf="(userSettingsService.isMobile()) && !hasDigitalEditionListChildren" [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-mobile-view"></text-changer>
