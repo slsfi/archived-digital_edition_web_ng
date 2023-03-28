@@ -62,12 +62,10 @@ export class PagePathGenerator implements PipeTransform {
   transform(itemId: string): any {
     const idList = itemId.split('_');
     let url = `/publication/${idList[0]}/text/${idList[1]}`;
-    if(idList.length === 3) {
-      const chapterList = idList[2].split(';')
-      url += `/${chapterList[0]}`
+    if (idList.length > 2) {
+      const chapter = idList[2].split(';')[0];
+      url += `/${chapter}`;
     }
-    else
-      url += '/nochapter'
     return url;
   }
 }
@@ -77,14 +75,10 @@ export class PagePathGenerator implements PipeTransform {
 })
 export class PositionParamGenerator implements PipeTransform {
   transform(itemId: string): any {
-    const idList = itemId.split('_');
-
-    if(idList.length === 3) {
-      const chapterList = idList[2].split(';')
-      if(chapterList[1]){
-        return {
-          position: chapterList[1]
-        }
+    const idList = itemId.split(';');
+    if (idList.length > 1) {
+      return {
+        position: idList[1]
       }
     }
     return;

@@ -35,7 +35,7 @@ export class CollectionSideMenu {
     });
 
     // ! ActivatedRoute only works for components loaded via router-outlet, so this will always return an empty object since this component is outside the router-outlet defined in app.component.html.
-    // ! Find another way to get the current text.
+    // ! Find another way to get the current text IDs. We also need the position, if any.
     this.route.params.subscribe({
       next: (params) => {
         console.log('route.params: ', params);
