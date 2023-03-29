@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from "@angular/router";
+import { NavigationEnd, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
 import { filter } from "rxjs/operators";
 
 @Component({
@@ -20,9 +20,22 @@ export class DigitalEditionsApp {
       filter(event => event instanceof NavigationEnd)
     ).subscribe({
       next: (event: any) => {
+        console.log('router event: ', event);
         const collectionSegment = '/publication/';
         if (event.url.startsWith(collectionSegment)) {
           this.collectionID = event.url.slice(collectionSegment.length).split('/')[0] || '';
+
+          // Parse the current url to get route params and queryParams
+          // From params we need find out if we are on a cover, title, 
+          // foreword, introduction or read page (= has /text/ in the url after
+          // collectionID). THis information has to be passed to <collection-side-menu>.
+          // If we are on a read page we need to get the publicationID and
+          // possible chapterID and position (position from queryParams)
+          // and also pass this information to <collection-side-menu>.
+          const currentUrlTree: UrlTree = this.router.parseUrl(event.url);
+          const currentQueryParams = currentUrlTree.queryParams;
+          const currentParams: UrlSegment[] = currentUrlTree.root.children[PRIMARY_OUTLET].segments;
+
           this.showCollectionSideMenu = true;
         } else {
           this.showCollectionSideMenu = false;
