@@ -28,31 +28,85 @@ ion-split-pane {
     }
 }
 
-::ng-deep app-side-menu {
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
-  ion-split-pane {
-    --border: 1px solid var(--toc-border-right-color);
-    --side-max-width: 0;
-    --side-width: 0;
-    height: 100%;
+::ng-deep {
+  app-side-menu, collection-side-menu {
     position: relative;
+    height: 100%;
+    overflow-y: auto;
+    ul {
+      padding-left: 16px;
+      list-style-type: none;
+      width: 100%;
+      position: relative;
 
-    // Styles for the navigation menu on the left
-    .split-pane-side {
-      /*position: relative;*/
-      /*width: 0;
-      max-width: 0;*/
-      /*
-      transition: 1s all ease-in;
-      transform: none !important;
-      z-index: 7 !important;
-      */
+      app-recursive-accordion {
+        width: 100%;
+      }
+
+      li {
+        color: #000;
+        overflow-wrap: break-word;
+        position: relative;
+        width: 100%;
+        padding: 10px 0;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        &.accordion-list {
+          display: none;
+          padding: 0;
+          width: 100%;
+          transition: display linear 0.2s;
+
+          &.open {
+            display: block;
+            transition: display linear 0.2s;
+          }
+        }
+
+        &.menu-highlight {
+          border-right: 5px solid var(--primary-color);
+        }
+
+        a {
+          width: 100%;
+          display: block;
+          text-decoration: none;
+          color: #000;
+          max-width: 100%;
+          margin-right: 8px;
+        }
+
+        ion-icon {
+          float: right;
+        }
+      }
     }
-    &.split-pane-visible {
-      --side-max-width: 270px;
-      --side-width: 270px;
+
+    ion-split-pane {
+      --border: 1px solid var(--toc-border-right-color);
+      --side-max-width: 0;
+      --side-width: 0;
+      height: 100%;
+      position: relative;
+
+      // Styles for the navigation menu on the left
+      .split-pane-side {
+        /*position: relative;*/
+        /*width: 0;
+        max-width: 0;*/
+        /*
+        transition: 1s all ease-in;
+        transform: none !important;
+        z-index: 7 !important;
+        */
+      }
+
+      &.split-pane-visible {
+        --side-max-width: 270px;
+        --side-width: 270px;
+      }
     }
   }
 }
