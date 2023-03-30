@@ -125,7 +125,6 @@ export const config: Config = {
       manuscripts: true,
       variations: true,
       facsimiles: true,
-      introduction: false,
       illustrations: true,
       legend: true
     },
@@ -1060,5 +1059,369 @@ export const config_soderholm: Config = {
       url:"https://soderholm.sls.fi",
       logo:"https://soderholm.sls.fi/assets/images/logo.svg"
     }
+  }
+}
+
+export const config_mechelin: Config = {
+  app: {
+    machineName: "leomechelin",
+    projectId: 1,
+    apiEndpoint: "https://api-dot-leomechelin.ew.r.appspot.com/digitaledition",
+    simpleApi: "https://leomechelin.ew.r.appspot.com",
+    facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
+    name: {
+      sv: "Leo Mechelin",
+      fi: "Leo Mechelin"
+    },
+    siteLogoURL: "https://leomechelin-dev.web.app",
+  },
+  collections: {
+    order: [
+      [1]
+    ],
+    firstReadItem: {
+      1: "1_1199"
+    }
+  },
+  page: {
+    about: {
+      markdownFolderNumber: "03",
+      initialPageNode: "01-01"
+    },
+    home: {
+      imageOrientationIsPortrait: false,
+      imageOnRightIfPortrait: false,
+      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
+      imageUrl: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg",
+      portraitImageUrlInMobileMode: "",
+      portraitImageAltText: "",
+      showSimpleSearch: false,
+      showEditionList: false,
+      showFooter: false
+    },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    introduction: {
+      hasSeparateTOC: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    mediaCollection: {
+      showURNButton: true
+    },
+    read: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    title: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    }
+  },
+  component: {
+    topMenu: {
+      showAboutButton: true,
+      showContentButton: true,
+      showElasticSearchButton: false,
+      showSimpleSearchButton: false,
+      showURNButton: false,
+      showLanguageButton: true,
+      showMusicButton: false,
+      showHelpButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetic: [],
+      sortableCollectionsChronologic: ["1"],
+      sortableCollectionsGenre: ["1"]
+    }
+  },
+  urnResolverUrl: "https://urn.fi/",
+  useSimpleWorkMetadata: false,
+  showOpenLegendButton: {
+    manuscripts: true,
+    variations: true
+  },
+  settings: {
+    disableReadToggles: false,
+    readToggles: {
+      comments: true,
+      personInfo: true,
+      placeInfo: false,
+      changes: true,
+      normalisations: true,
+      workInfo: false,
+      abbreviations: true,
+      pageNumbering: false,
+      pageBreakOriginal: true,
+      pageBreakEdition: false
+    },
+    introToggles: {
+      personInfo: false,
+      placeInfo: false,
+      workInfo: false,
+      pageNumbering: false,
+      pageBreakEdition: false
+    },
+    displayTypesToggles: {
+      showAll: true,
+      established: true,
+      comments: false,
+      manuscripts: true,
+      variations: false,
+      facsimiles: true,
+      illustrations: false,
+      legend: false
+    },
+    toolTips: {
+      comments: true,
+      personInfo: true,
+      placeInfo: false,
+      changes: true,
+      normalisations: true,
+      variations: false,
+      abbreviations: true,
+      workInfo: false,
+      footNotes: true
+    },
+    enableModeToggle: true,
+    getFacsimilePagesInfinite: true,
+    facsimileDefaultZoomLevel: 1,
+    facsimileZoomPageLevel: 1,
+    galleryCollectionMapping: {},
+    showReadTextIllustrations: []
+  },
+  i18n: {
+    languages: ["sv", "fi"],
+    locale: "sv",
+    enableLanguageChanges: true,
+    multilingualTOC: true,
+    multilingualEST: true,
+    estLanguages: ["sv", "fi"]
+  },
+  collectionDownloads: {
+    isDownloadOnly: false,
+    pdf: {},
+    epub: {}
+  },
+  textDownloadOptions: {
+    enabledIntroductionFormats: {
+        xml: false,
+        print: false
+    },
+    enabledEstablishedFormats: {
+        xml: false,
+        txt: false,
+        print: false
+    },
+    enabledCommentsFormats: {
+        xml: false,
+        txt: false,
+        print: false
+    },
+    usePrintNotDownloadIcon: false
+  },
+  simpleSearch: {
+    showPageNumbers: false,
+    user_defined_search_fields: []
+  },
+  editionImages: {
+    1: "https://leomechelin.fi/assets/images/løvenskiold_cover.jpg",
+    default: "assets/images/edition-default-cover.png"
+  },
+  show: {
+    TOC: {
+        Home: false,
+        About: true,
+        Read: true,
+        Facsimiles: false,
+        ImageGallery: false,
+        PersonSearch: false,
+        PlaceSearch: false,
+        MediaCollections: false,
+        TagSearch: false,
+        WorkSearch: false,
+        SongTypes: false,
+        Books: false,
+        EPUB: false,
+        ExtraText: true
+    }
+  },
+  defaults: {
+      ReadModeView: ["established_sv", "manuscripts", "facsimiles"]
+  },
+  cache: {
+      viewmodes: {
+          daysUntilExpires: 2
+      }
+  },
+  PersonSearchTypes: [
+    {
+        object_type: "subject",
+        object_subtype: "",
+        translation: "TOC.PersonSearch"
+    }
+  ],
+  PersonSearch: {
+      ShowFilter: false,
+      ShowPublishedStatus: 2,
+      InitialLoadNumber: 500
+  },
+  LocationSearch: {
+      ShowFilter: false,
+      ShowPublishedStatus: 2,
+      InitialLoadNumber: 500
+  },
+  TagSearch: {
+      ShowFilter: false,
+      ShowPublishedStatus: 2
+  },
+  ImageGallery: {
+    ShowInReadMenu: false
+  },
+  Occurrences: {
+      HideTypeAndDescription: true,
+      hideCityRegionCountry: true,
+      ShowPublishedStatus: 2
+  },
+  StaticPagesMenus: [
+      {
+          menuID: "aboutMenu",
+          idNumber: "03",
+          hasMenuConditional: false
+      }
+  ],
+  StaticPagesMenusInTOC: [
+      {
+          menuID: "aboutMenu",
+          idNumber: "03",
+          hasMenuConditional: false
+      }
+  ],
+  LoadCollectionsFromAssets: false,
+  ProjectStaticMarkdownCoversFolder: "",
+  ProjectStaticMarkdownTitleFolder: "",
+  showOccurencesModalOnReadPageAfterSearch: {
+    tagSearch: true,
+    personSearch: true,
+    placeSearch: true,
+    workSearch: true
+  },
+  SortCollectionsByRomanNumerals: false,
+  AccordionTOC: true,
+  OpenCollectionFromToc: true,
+  AccordionMusic: false,
+  SearchTocItemInAccordionByTitle: false,
+  AccordionsExpandedDefault: {
+      SongTypes: false,
+      Music: false
+  },
+  MusicAccordion: {
+      PersonSearchTypes: false,
+      TagSearch: false,
+      PlaceSearch: false,
+      Music: false
+  },
+  AboutMenuAccordion: true,
+  HasCover: false,
+  HasTitle: false,
+  HasForeword: false,
+  HasIntro: true,
+  OpenOccurrencesAndInfoOnNewPage: false,
+  SingleOccurrenceType: null,
+  MusicPage: {
+      collectionsToShow: []
+  },
+  ElasticSearch: {
+    groupOpenByDefault: {
+        type: true,
+        genre: true,
+        collection: true
+    },
+    indices: ["leomechelin"],
+    fixedFilters: [
+      {
+        terms: {
+          deleted: ["0"]
+        }
+      },
+      {
+        terms: {
+          published: ["2"]
+        }
+      }
+    ],
+    types: ["est","inl","ms"],
+    hitsPerPage: 20,
+    source: [],
+    aggregations: {
+      Years: {
+        date_histogram: {
+          field: "orig_date_sort",
+          calendar_interval: "year",
+          format: "yyyy"
+        }
+      },
+      Type: {
+        terms: {
+          field: "xml_type.keyword",
+          size: 40
+        }
+      },
+      Genre: {
+        terms: {
+          field: "publication_data.genre.keyword",
+          size: 40
+        }
+      },
+      Collection: {
+        terms: {
+          field: "publication_data.colname.keyword",
+          size: 40
+        }
+      },
+      Subjects: {
+        terms: {
+          field: "publication_subjects.full_name.keyword",
+          size: 40
+        }
+      },
+      Person: {
+        terms: {
+          field: "publication_subjects.full_name.keyword",
+          size: 40
+        }
+      },
+      LetterSenderName: {
+        terms: {
+          field: "sender_subject_name.keyword",
+          size: 40
+        }
+      },
+      LetterReceiverName: {
+        terms: {
+          field: "receiver_subject_name.keyword",
+          size: 40
+        }
+      },
+      LetterSenderLocation: {
+        terms: {
+          field: "sender_location_name.keyword",
+          size: 40
+        }
+      },
+      LetterReceiverLocation: {
+        terms: {
+          field: "receiver_location_name.keyword",
+          size: 40
+        }
+      }
+    },
+    suggestions: {}
   }
 }
