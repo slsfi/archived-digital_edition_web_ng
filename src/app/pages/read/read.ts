@@ -26,10 +26,6 @@ import { DragScrollComponent } from 'src/directives/ngx-drag-scroll/public-api';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
-// @IonicPage({
-//   name: 'read',
-//   segment: 'publication/:collectionID/text/:publicationID/:chapterID/:facs_id/:facs_nr/:song_id/:search_title/:urlviews'
-// })
 @Component({
   selector: 'page-read',
   templateUrl: './read.html',
@@ -40,12 +36,6 @@ export class ReadPage /*implements OnDestroy*/ {
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
-  // @ViewChild('content') content!: ElementRef;
-  // @ViewChild('readColumn') readColumn!: ElementRef;
-  // @ViewChild('scrollBar') scrollBar!: ElementRef;
-  // @ViewChild('toolbar') navBar!: ElementRef;
-  // @ViewChild('fab') fabList: FabContainer;
-  // @ViewChild('settingsIconElement') settingsIconElement: ElementRef;
 
   multilingualEST: false;
   estLanguages = [];
@@ -76,8 +66,6 @@ export class ReadPage /*implements OnDestroy*/ {
   showViewOptionsButton: Boolean = true;
   showTextDownloadButton: Boolean = false;
   usePrintNotDownloadIcon: Boolean = false;
-  // backdropWidth: number;
-  // showAddViewsFabBackdrop: boolean = false;
 
   addViewPopoverisOpen: boolean = false;
 
@@ -151,12 +139,7 @@ export class ReadPage /*implements OnDestroy*/ {
   routeQueryParamsSubscription: Subscription | null;
   routeParamsSubscription: Subscription | null;
 
-  // TODO paramX$ tyyli
-
   constructor(
-    // public viewCtrl: ViewController,
-    // public navCtrl: NavController,
-    // public params: NavParams,
     private textService: TextService,
     private commentService: CommentService,
     private renderer2: Renderer2,
@@ -195,8 +178,6 @@ export class ReadPage /*implements OnDestroy*/ {
       left: -1500 + 'px'
     };
     this.intervalTimerId = 0;
-
-    // this.backdropWidth = 0;
 
     try {
       const i18n = config.i18n ?? undefined;
@@ -263,7 +244,13 @@ export class ReadPage /*implements OnDestroy*/ {
     this.displayToggles = config.settings?.displayTypesToggles ?? [];
     for (const toggle in this.displayToggles) {
       if (this.displayToggles[toggle as keyof typeof this.displayToggles]) {
-        this.availableViewModes.push(toggle);
+        if (toggle === 'established' && this.multilingualEST) {
+          for (const estLanguage of this.estLanguages) {
+            this.availableViewModes.push(toggle + '_' + estLanguage);
+          }
+        } else {
+          this.availableViewModes.push(toggle);
+        }
       }
     }
 
@@ -524,13 +511,17 @@ export class ReadPage /*implements OnDestroy*/ {
         viewTypesShown.indexOf(viewmode) === -1
       ) {
         this.show = viewmode;
-        this.addView(viewmode);
+        if (viewmode.startsWith('established') && viewmode.split('_')[1]) {
+          this.addView('established', null, null, viewmode.split('_')[1]);
+        } else {
+          this.addView(viewmode);
+        }
       }
     });
   }
 
   viewModeShouldBeShown(viewmode: any) {
-    if (viewmode.startsWith('established') && !this.displayToggles[viewmode]) {
+    if (viewmode.startsWith('established') && !this.displayToggles['established']) {
       return false;
     } else if (viewmode === 'comments' && !this.displayToggles['comments']) {
       return false;
@@ -827,7 +818,6 @@ export class ReadPage /*implements OnDestroy*/ {
             });
             modalShown = true;
           } else if (eventTarget['classList'].contains('ttComment')) {
-            console.log('comment');
             this.ngZone.run(() => {
               this.showInfoOverlayFromInlineHtml(eventTarget);
             });
@@ -1995,6 +1985,10 @@ export class ReadPage /*implements OnDestroy*/ {
       variationSortOrder = currentVariationsViews;
     }
 
+    if (type === 'established' && language && this.multilingualEST) {
+      type = 'established_' + language;
+    }
+
     if (this.availableViewModes.indexOf(type) !== -1) {
       const newView = { type: type } as any;
 
@@ -2007,24 +2001,11 @@ export class ReadPage /*implements OnDestroy*/ {
       if (variationSortOrder != null) {
         newView['variationSortOrder'] = variationSortOrder;
       }
-      if (this.multilingualEST && type === 'established' && language) {
-        newView['type'] = 'established_' + language;
-      }
 
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
       this.updateViewsInRouterQueryParams(this.views);
     }
-  }
-
-  hasKey(nameKey: string, myArray: any) {
-    for (let i = 0; i < (myArray.length - 1); i++) {
-      const item: any = myArray[i];
-      if (item['variation'].show === true) {
-        return true;
-      }
-    }
-    return false;
   }
 
   removeView(i: any) {
@@ -2304,31 +2285,6 @@ export class ReadPage /*implements OnDestroy*/ {
     }
     return varIndex;
   }
-
-  /*
-  setFabBackdropWidth() {
-    if (isBrowser()) {
-      let scrollingContainer = document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content');
-      if (scrollingContainer) {
-        const shadowContainer = scrollingContainer.shadowRoot;
-        if (shadowContainer) {
-          scrollingContainer = shadowContainer.querySelector('[part="scroll"]');
-          if (scrollingContainer) {
-            this.backdropWidth = scrollingContainer.scrollWidth;
-          }
-        }
-      }
-    }
-  }
-  toggleFabBackdrop() {
-    if (this.showAddViewsFabBackdrop) {
-      this.showAddViewsFabBackdrop = false;
-    } else {
-      this.setFabBackdropWidth();
-      this.showAddViewsFabBackdrop = true;
-    }
-  }
-  */
 
   showAddViewPopover(e: Event) {
     this.addViewPopover.event = e;

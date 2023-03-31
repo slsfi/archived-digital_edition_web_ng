@@ -2,17 +2,12 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { EventsService } from 'src/app/services/events/events.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
 
-
-/**
- * HomePage is the first page user sees.
- */
 
 @Component({
   selector: 'home-page',
@@ -39,7 +34,6 @@ export class HomePage {
     public navCtrl: NavController,
     public translate: TranslateService,
     public languageService: LanguageService,
-    private events: EventsService,
     private mdContentService: MdContentService,
     private userSettingsService: UserSettingsService,
     protected textService: TextService
@@ -104,18 +98,16 @@ export class HomePage {
 
   loadContent(lang: string) {
     this.getMdContent(lang + '-01');
-    this.getFooterMdContent(lang + '-06');
+    if (this.showFooter) {
+      this.getFooterMdContent(lang + '-06');
+    }
 
-    this.translate.get('Site.Subtitle').subscribe({
-      next: (translation) => {
-        if (translation) {
-          this.siteHasSubtitle = true;
-        } else {
-          this.siteHasSubtitle = false;
-        }
-      },
-      error: (e) => { this.siteHasSubtitle = false; }
-    });
+    // Only show subtitle if translation for it not missing
+    if ($localize`:@@Site.Subtitle:Webbplatsens undertitel`) {
+      this.siteHasSubtitle = true;
+    } else {
+      this.siteHasSubtitle = false;
+    }
   }
 
   getMdContent(fileID: string) {

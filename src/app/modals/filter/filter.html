@@ -25,9 +25,7 @@
 
     <ng-container *ngIf="!showLoading">
       <ion-list *ngIf="shouldFilterYear">
-        <ion-list-header class="year_label" i18n="@@Filter.bornBetween">
-          Född mellan
-        </ion-list-header>
+        <ion-list-header class="year_label" i18n="@@Filter.bornBetween">Född mellan</ion-list-header>
         <ion-item class="filter-year-inputs" *ngIf="shouldFilterYear">
           <ion-input type="number" min="1" class="fromYear" [(ngModel)]="filterYearMin"></ion-input>
           <ion-input type="number" min="1" class="toYear" [(ngModel)]="filterYearMax"></ion-input>
@@ -35,9 +33,7 @@
       </ion-list>
 
       <ion-list *ngIf="filterCategoryTypes">
-        <ion-list-header i18n="@@Filter.tagTypes">
-          Ämneskategori
-        </ion-list-header>
+        <ion-list-header i18n="@@Filter.tagTypes">Ämneskategori</ion-list-header>
         <ion-item *ngFor="let filterCT of filterCategoryTypes">
             <ion-label>{{filterCT.name}}</ion-label>
             <ion-toggle [(ngModel)]="filterCT.selected"></ion-toggle>
@@ -45,9 +41,7 @@
       </ion-list>
 
       <ion-list *ngIf="filterPersonTypes">
-        <ion-list-header i18n="@@Filter.personTypes">
-          Personkategori
-        </ion-list-header>
+        <ion-list-header i18n="@@Filter.personTypes">Personkategori</ion-list-header>
         <ion-item *ngFor="let filterPT of filterPersonTypes">
             <ion-label>{{filterPT.name}}</ion-label>
             <ion-toggle [(ngModel)]="filterPT.selected"></ion-toggle>
@@ -55,9 +49,7 @@
       </ion-list>
 
       <ion-list *ngIf="filterPlaceCountries">
-        <ion-list-header i18n="@@Filter.countries">
-          Land
-        </ion-list-header>
+        <ion-list-header i18n="@@Filter.countries">Land</ion-list-header>
         <ion-item *ngFor="let filterC of filterPlaceCountries">
             <ion-label>{{filterC.name}}</ion-label>
             <ion-toggle [(ngModel)]="filterC.selected"></ion-toggle>

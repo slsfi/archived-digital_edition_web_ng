@@ -37,81 +37,61 @@
                 <ion-item *ngIf="(city && !hideCityRegionCountry) || (region && !hideCityRegionCountry) || (country && !hideCityRegionCountry) || place_of_birth || (type && !hideTypeAndDescription) || source || publisher || published_year || isbn || (authors && authors[0] !== undefined) || journal || (description && !hideTypeAndDescription) || description || articleData.length > 0 || longitude" class="item-stable" (click)="showFilters()">
                     <ion-grid>
                       <ion-row *ngIf="city && !hideCityRegionCountry">
-                        <ion-col class="header" i18n="@@Occurrences.city">
-                          Stad
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.city">Stad</ion-col>
                         <ion-col>
                           <span class="city">{{city}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="region && !hideCityRegionCountry">
-                        <ion-col class="header" i18n="@@Occurrences.region">
-                          Region
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.region">Region</ion-col>
                         <ion-col>
                             <span *ngIf="region" class="region">{{region}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="country && !hideCityRegionCountry">
-                        <ion-col class="header" i18n="@@Occurrences.country">
-                          Plats
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.country">Plats</ion-col>
                         <ion-col>
                             <span *ngIf="country" class="country">{{country}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="place_of_birth">
-                        <ion-col class="header" i18n="@@Occurrences.place_of_birth">
-                          Ort
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.place_of_birth">Ort</ion-col>
                         <ion-col>
                             <span *ngIf="place_of_birth" class="place_of_birth">{{place_of_birth}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="type && !hideTypeAndDescription">
-                        <ion-col class="header" i18n="@@Occurrences.type">
-                          Typ
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.type">Typ</ion-col>
                         <ion-col>
                             <span *ngIf="type" class="type">{{type}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="source">
-                        <ion-col class="header" i18n="@@Occurrences.source">
-                          Källa
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.source">Källa</ion-col>
                         <ion-col>
                             <span *ngIf="source" class="source"><a href="{{source}}" target="_blank">{{source}}</a></span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="publisher">
-                        <ion-col class="header" i18n="@@Occurrences.publisher">
-                          Utgivare
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.publisher">Utgivare</ion-col>
                         <ion-col>
                             <span *ngIf="publisher" class="source">{{publisher}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="published_year">
-                        <ion-col class="header" i18n="@@Occurrences.published_year">
-                          Utgivningsår
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.published_year">Utgivningsår</ion-col>
                         <ion-col>
                             <span *ngIf="published_year" class="source">{{published_year}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="isbn">
-                        <ion-col class="header" i18n="@@Occurrences.isbn">
-                          ISBN
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.isbn">ISBN</ion-col>
                         <ion-col>
                             <span *ngIf="isbn" class="source">{{isbn}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="authors && authors[0] !== undefined">
-                        <ion-col class="header" i18n="@@Occurrences.authors">
-                          Författare
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.authors">Författare</ion-col>
                         <ion-col>
                             <ion-col *ngFor="let author of authors; let i = index" col-12>
                               <div class="article_description">{{author.full_name}}</div>
@@ -119,17 +99,13 @@
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="journal">
-                        <ion-col class="header" i18n="@@Occurrences.journal">
-                          Journal
-                        </ion-col>
+                        <ion-col class="header" i18n="@@Occurrences.journal">Journal</ion-col>
                         <ion-col>
                             <span *ngIf="journal" class="source">{{journal}}</span>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="description && !hideTypeAndDescription" class="description_header">
-                        <ion-col col-12 class="header" i18n="@@Occurrences.description">
-                          Beskrivning
-                        </ion-col>
+                        <ion-col col-12 class="header" i18n="@@Occurrences.description">Beskrivning</ion-col>
                       </ion-row>
                       <ion-row *ngIf="description" class="description">
                         <ion-col col-12>
@@ -137,9 +113,7 @@
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="articleData.length>0">
-                        <ion-col col-12 class="header" i18n="@@Occurrences.articles">
-                          Artiklar
-                        </ion-col>
+                        <ion-col col-12 class="header" i18n="@@Occurrences.articles">Artiklar</ion-col>
                       </ion-row>
                       <ion-row *ngIf="articleData.length>0">
                         <ion-col *ngFor="let article of articleData; let i = index" col-12>

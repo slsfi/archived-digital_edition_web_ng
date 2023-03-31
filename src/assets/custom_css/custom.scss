@@ -1,18 +1,20 @@
+/*
+
 :root {
-  /* Base colors */
+  // Base colors
   --primary-color: #2b3d55;
   --secondary-color: #d1d2c5;
-  --primary-color-rgb: 43, 61, 85; /* RGB-version of --primary-color, used when an alpha channel needs to be added to the color */
+  --primary-color-rgb: 43, 61, 85; // RGB-version of --primary-color, used when an alpha channel needs to be added to the color
   --text-color-on-primary-color-background: #fff;
   --text-color-on-secondary-color-background: #000;
   --default-link-color: #8d1c60;
   --main-background-color: #ededed;
 
-  /* Custom color variables */
-  --tertiary-color: #375181; /* previous: #203c6e */
+  // Custom color variables
+  --tertiary-color: #375181; // previous: #203c6e
   --tertiary-color-rgb: 55, 81, 129;
 
-  /* TOC, i.e. the left navigation */
+  // TOC, i.e. the left navigation
   --toc-text-color: #fff;
   --toc-background-color: #623247;
   --toc-border-right-color: #dedede;
@@ -33,49 +35,43 @@
   --toc-selected-item-divider-color: transparent;
   --toc-selected-item-description-text-color: #f7f7f7;
 
-  /* Home-page */
-  --page-home-portrait-mode-background-color-below-image: var(
-    --secondary-color
-  );
+  // Home-page
+  --page-home-portrait-mode-background-color-below-image: var(--secondary-color);
 
-  /* Introduction-page */
+  // Introduction-page
   --page-introduction-separate-toc-background-color: var(--secondary-color);
-  --page-introduction-separate-toc-text-color: var(
-    --text-color-on-secondary-color-background
-  );
+  --page-introduction-separate-toc-text-color: var(--text-color-on-secondary-color-background);
 
-  /* Read-page */
+  // Read-page
   --page-read-columns-header-background-color: #ccced3;
   --page-read-columns-background-color: #fafafa;
   --page-read-add-column-text-color: var(--dark-color);
   --page-read-add-column-background-color: #ccced3;
 
-  /* Top-menu */
+  // Top-menu
   --top-menu-toolbar-bottom-border: 1px solid #647484;
-  /*--top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));*/
+  //--top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
 
-  /* Text-changer in read-page */
+  // Text-changer in read-page
   --text-changer-background-color-mobile-mode: #adadad;
   --text-changer-text-color-mobile-mode: #000;
 
-  /* Facsimile column in read-page */
-  --facsimile-column-page-number-wrapper-background-color: var(
-    --main-background-color
-  );
+  // Facsimile column in read-page
+  --facsimile-column-page-number-wrapper-background-color: var(--main-background-color);
 
-  /* Elastic search */
-  /*--elastic-search-facet-background-color:                  transparent;*/
-  /*--elastic-search-facet-border-color:                      #ccc;*/
-  /*--elastic-search-hititem-border-color:                    #ccc;*/
-  /*--elastic-search-hititem-hover-background-color:          #fff;*/
-  /*--elastic-search-hititem-hover-border-color:              var(--primary-color);*/
-  /*--elastic-search-search-match-highlight-background-color: #a5d7a5;*/
-  /*--elastic-search-search-match-highlight-text-color:       #000;*/
+  // Elastic search
+  //--elastic-search-facet-background-color:                  transparent;
+  //--elastic-search-facet-border-color:                      #ccc;
+  //--elastic-search-hititem-border-color:                    #ccc;
+  //--elastic-search-hititem-hover-background-color:          #fff;
+  //--elastic-search-hititem-hover-border-color:              var(--primary-color);
+  //--elastic-search-search-match-highlight-background-color: #a5d7a5;
+  //--elastic-search-search-match-highlight-text-color:       #000;
   --elastic-search-date-histogram-year-bar-color: var(--primary-color);
   --elastic-search-date-histogram-year-hover-color: var(--secondary-color);
   --elastic-search-date-histogram-year-in-range-color: #c71a23;
 
-  /* Simple search */
+  // Simple search
   --simple-search-search-match-highlight-background-color: var(--primary-color);
   --simple-search-search-match-highlight-text-color: var(
     --text-color-on-primary-color-background
@@ -83,47 +79,45 @@
   --simple-search-hititem-hover-background-color-rgb: var(--primary-color-rgb);
   --simple-search-hititem-hover-background-color-alpha: 0.1;
   --simple-search-hititem-background-color: var(--main-background-color);
-  --simple-search-selected-search-suggestion-background-color: var(
-    --secondary-color
-  );
+  --simple-search-selected-search-suggestion-background-color: var(--secondary-color);
 
-  /* Media-collections */
+  // Media-collections
   --media-collection-card-content-background-color: #d9d9d9;
   --media-collection-card-content-border-top-color: var(--default-link-color);
   --media-collection-filter-select-background-color: #d9d9d9;
 
-  /* Indices, i.e. person-search, place-search, tag-search and work-search */
+  // Indices, i.e. person-search, place-search, tag-search and work-search
   --index-list-item-background-color: var(--main-background-color);
   --index-list-divider-background-color: var(--secondary-color);
 
-  /* Tutorial */
+  // Tutorial
   --tutorial-tooltip-background-color: #4f7b8c;
   --tutorial-tooltip-text-color: #fff;
   --tutorial-tooltip-font-size: 1.0625rem;
 
-  /* Info overlay */
+  // Info overlay
   --infoOverlay-background-color: #333;
   --infoOverlay-text-color: #e3e3e3;
   --info-overlay-link-to-reference-color: #f37bc3;
 
-  /* Tooltips */
+  // Tooltips
   --tooltip-background-color: #fafafa;
 
-  /* Ion-modal */
+  // Ion-modal
   --ion-modal-content-background-color: var(--main-background-color);
   --ion-modal-item-background-color: var(--main-background-color);
   --ion-modal-item-divider-border-bottom-color: #dedede;
 
-  /* Ion-popover */
+  // Ion-popover
   --ion-popover-content-background-color: var(--main-background-color);
   --ion-popover-item-border-bottom-color: #dedede;
   --ion-popover-list-header-background-color: #ccced3;
 
-  /* Ion-segment */
+  // Ion-segment
   --segment-activated-background-color: var(--primary-color);
   --segment-activated-text-color: var(--text-color-on-primary-color-background);
 
-  /* Buttons */
+  // Buttons
   --button-background-color: var(--primary-color);
   --button-background-color-rgb: var(--primary-color-rgb);
   --button-hover-background-color: var(--button-background-color);
@@ -137,9 +131,9 @@
   --fab-button-secondary-icon-color: #000;
 }
 
-/* Unika stilar för Zacharias Topelius Skrifter */
+// Unika stilar för Zacharias Topelius Skrifter
 
-/* Sidans rubrik på ingångssidan. */
+// Sidans rubrik på ingångssidan.
 home-page .portrait-mode .site-title {
   font-family: "Crimson Pro", "SourceSerif", serif;
   font-weight: 300;
@@ -149,33 +143,35 @@ home-page .portrait-mode .site-title {
   letter-spacing: 0.042em;
   text-align: center;
 }
-home-page .frontpage-editions-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  column-gap: 1.5em;
-  margin: 2.75em 0;
-}
-home-page .frontpage-editions-list-col {
-  width: 100%;
-  max-width: 440px;
-}
-home-page .frontpage-editions-list p {
-  margin: 0;
-}
-home-page .frontpage-editions-list ul {
-  margin-top: 0;
-}
-home-page .frontpage-editions-list li {
-  padding-bottom: 0.25em;
+home-page {
+  .frontpage-editions-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1.5em;
+    margin: 2.75em 0;
+  }
+  .frontpage-editions-list-col {
+    width: 100%;
+    max-width: 440px;
+  }
+  .frontpage-editions-list p {
+    margin: 0;
+  }
+  .frontpage-editions-list ul {
+    margin-top: 0;
+  }
+  .frontpage-editions-list li {
+    padding-bottom: 0.25em;
+  }
 }
 
-/* I listan med utgåvor ska utgåvornas titlar inte stå under omslagsbilderna. */
+// I listan med utgåvor ska utgåvornas titlar inte stå under omslagsbilderna.
 .digital-edition-list-card-content {
   display: none;
 }
 
-/* Indrag för strofer i Publicistiken och dramatiken i Läsning för barn. */
+// Indrag för strofer i Publicistiken och dramatiken i Läsning för barn.
 div.tei p.lgIndent {
   margin-left: 80px !important;
   text-indent: -35px !important;
@@ -185,7 +181,7 @@ div.tei p.lgIndent.lIndent {
   text-indent: -35px !important;
 }
 
-/* Rubrikstilar för akter och scener i Dramatik. */
+// Rubrikstilar för akter och scener i Dramatik.
 div.tei h2.tei.act {
   font-style: normal;
   font-weight: 400;
@@ -201,7 +197,7 @@ div.tei h3.tei.scene {
   margin: 2.5em 0 1em 0;
 }
 
-/* Marginaler i Dramatik. */
+// Marginaler i Dramatik.
 div.tei div.drama p.center + p.invisiblelg {
   margin-bottom: 0 !important;
 }
@@ -290,13 +286,13 @@ div.tei .noMarginsRight {
   margin: 0;
 }
 
-/* Unesco logon i markdown på startsidan. */
+// Unesco logon i markdown på startsidan.
 home-page img[src$="#front-page-unesco-logo"] {
   display: block;
   margin: 3em auto;
 }
 
-/* Högerställ spalten med verkdel i tabeller över delutgåvorna. */
+// Högerställ spalten med verkdel i tabeller över delutgåvorna.
 page-content table.editions-list td:first-child {
   text-align: right;
 }
@@ -307,7 +303,7 @@ page-content table.editions-list tr:last-child > td {
   padding-bottom: 0.5em;
 }
 
-/* Bilder i kringtexter */
+// Bilder i kringtexter
 page-content figure {
   margin: 1.75em 0;
 }
@@ -320,7 +316,7 @@ page-content figure figcaption {
   font-size: 1rem;
 }
 
-/* Tabell utan marginaler i kringtexter */
+// Tabell utan marginaler i kringtexter
 page-content div.md_content markdown table.no_margins_table td {
   padding: 0 0.75em 0 0;
 }
@@ -328,7 +324,7 @@ page-content div.md_content markdown table.no_margins_table td:last-child {
   padding: 0;
 }
 
-/* Sökinstruktionerna i avancerade sökningen */
+// Sökinstruktionerna i avancerade sökningen
 page-elastic-search ion-row.page-info-row .info.markdown details {
   padding: 0.5em 0.5em 0;
 }
@@ -366,3 +362,5 @@ page-elastic-search .page-info-row .info.markdown .query_example {
   border-radius: 3px;
   border: 1px solid var(--button-background-color);
 }
+
+*/

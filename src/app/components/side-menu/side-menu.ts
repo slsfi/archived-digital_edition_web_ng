@@ -272,8 +272,8 @@ export class SideMenu implements OnInit {
   initializeApp() {
     this.languageService.getLanguage().subscribe((lang: string) => {
       this.language = lang;
-      this.appName = this._config.app?.name?.[lang] ?? '';
-      this.titleService.setTitle(this.appName as string);
+      this.appName = $localize`:@@Site.Title:Webbplatsens titel`;
+      this.titleService.setTitle(this.appName);
       this.getStaticPagesMenus();
       this.getAboutPages();
     });

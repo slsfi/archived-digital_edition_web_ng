@@ -6,6 +6,12 @@
         <target>Peruuta</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Ok">
+      <segment state="initial">
+        <source>Ok</source>
+        <target>Ok</target>
+      </segment>
+    </unit>
     <unit id="Filter.apply">
       <segment state="initial">
         <source>Verkställ</source>
@@ -14,25 +20,25 @@
     </unit>
     <unit id="Filter.bornBetween">
       <segment state="initial">
-        <source> Född mellan </source>
+        <source>Född mellan</source>
         <target>Syntynyt vuosien välissä</target>
       </segment>
     </unit>
     <unit id="Filter.countries">
       <segment state="initial">
-        <source> Land </source>
+        <source>Land</source>
         <target>Maa</target>
       </segment>
     </unit>
     <unit id="Filter.personTypes">
       <segment state="initial">
-        <source> Personkategori </source>
+        <source>Personkategori</source>
         <target>Henkilötyyppi</target>
       </segment>
     </unit>
     <unit id="Filter.tagTypes">
       <segment state="initial">
-        <source> Ämneskategori </source>
+        <source>Ämneskategori</source>
         <target>Asiasanatyyppi</target>
       </segment>
     </unit>
@@ -62,19 +68,19 @@
     </unit>
     <unit id="Occurrences.articles">
       <segment state="initial">
-        <source> Artiklar </source>
+        <source>Artiklar</source>
         <target>Artiklar</target>
       </segment>
     </unit>
     <unit id="Occurrences.authors">
       <segment state="initial">
-        <source> Författare </source>
+        <source>Författare</source>
         <target>Kirjoittaja</target>
       </segment>
     </unit>
     <unit id="Occurrences.city">
       <segment state="initial">
-        <source> Stad </source>
+        <source>Stad</source>
         <target>Stad</target>
       </segment>
     </unit>
@@ -86,13 +92,13 @@
     </unit>
     <unit id="Occurrences.country">
       <segment state="initial">
-        <source> Plats </source>
+        <source>Plats</source>
         <target>Plats</target>
       </segment>
     </unit>
     <unit id="Occurrences.description">
       <segment state="initial">
-        <source> Beskrivning </source>
+        <source>Beskrivning</source>
         <target>Beskrivning</target>
       </segment>
     </unit>
@@ -116,13 +122,13 @@
     </unit>
     <unit id="Occurrences.isbn">
       <segment state="initial">
-        <source> ISBN </source>
+        <source>ISBN</source>
         <target>ISBN</target>
       </segment>
     </unit>
     <unit id="Occurrences.journal">
       <segment state="initial">
-        <source> Journal </source>
+        <source>Journal</source>
         <target>Journal</target>
       </segment>
     </unit>
@@ -158,25 +164,25 @@
     </unit>
     <unit id="Occurrences.place_of_birth">
       <segment state="initial">
-        <source> Ort </source>
+        <source>Ort</source>
         <target>Ort</target>
       </segment>
     </unit>
     <unit id="Occurrences.published_year">
       <segment state="initial">
-        <source> Utgivningsår </source>
+        <source>Utgivningsår</source>
         <target>Julkaisuvuosi</target>
       </segment>
     </unit>
     <unit id="Occurrences.publisher">
       <segment state="initial">
-        <source> Utgivare </source>
+        <source>Utgivare</source>
         <target>Kustantaja</target>
       </segment>
     </unit>
     <unit id="Occurrences.region">
       <segment state="initial">
-        <source> Region </source>
+        <source>Region</source>
         <target>Region</target>
       </segment>
     </unit>
@@ -188,7 +194,7 @@
     </unit>
     <unit id="Occurrences.source">
       <segment state="initial">
-        <source> Källa </source>
+        <source>Källa</source>
         <target>Källa</target>
       </segment>
     </unit>
@@ -200,7 +206,7 @@
     </unit>
     <unit id="Occurrences.type">
       <segment state="initial">
-        <source> Typ </source>
+        <source>Typ</source>
         <target>Typ</target>
       </segment>
     </unit>
@@ -228,10 +234,22 @@
         <target>Vaihda käsikirjoitusta</target>
       </segment>
     </unit>
-    <unit id="Read.Manuscripts.OpenFacsimile">
+    <unit id="Read.Manuscripts.NoManuscripts">
       <segment state="initial">
-        <source>Öppna faksimil</source>
-        <target>Näytä faksimilet</target>
+        <source>Inga manuskript.</source>
+        <target>Käsikirjoituksia ei ole.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.SelectMsDialogSubtitle">
+      <segment state="initial">
+        <source>Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.</source>
+        <target>Käsikirjoitus korvaa sarakkeen käsikirjoituksen.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.SelectMsDialogTitle">
+      <segment state="initial">
+        <source>Välj manuskript</source>
+        <target>Valitse käsikirjoitus</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.ShowNormalized">
@@ -252,15 +270,15 @@
         <target>Viittaa</target>
       </segment>
     </unit>
-    <unit id="SearchApp.infotext">
+    <unit id="Site.Subtitle">
       <segment state="initial">
-        <source>!!!!</source>
+        <source>Webbplatsens undertitel</source>
         <target/>
       </segment>
     </unit>
     <unit id="Site.Title">
       <segment state="initial">
-        <source>Om</source>
+        <source>Webbplatsens titel</source>
         <target>Zacharias Topelius Skrifter</target>
       </segment>
     </unit>
@@ -356,7 +374,7 @@
     </unit>
     <unit id="TOC.WorkSearch">
       <segment state="initial">
-        <source>!!!!</source>
+        <source>Verkregister</source>
         <target>Teoshakemisto</target>
       </segment>
     </unit>

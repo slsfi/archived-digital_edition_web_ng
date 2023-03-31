@@ -61,14 +61,7 @@ export class ManuscriptsComponent {
           this.manuscripts = res.manuscripts;
           this.setManuscript();
         } else {
-          this.translate.get('Read.Manuscripts.NoManuscripts').subscribe({
-            next: (translation) => {
-              this.text = translation;
-            },
-            error: (e) => {
-              this.text = 'Inga transkriptioner.';
-            }
-          });
+          this.text = $localize`:@@Read.Manuscripts.NoManuscripts:Inga manuskript.`;
         }
       },
       error: (e) => {
@@ -134,23 +127,8 @@ export class ManuscriptsComponent {
   }
 
   async selectManuscript() {
-    let msTranslations = null as any;
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
-    this.translate.get('Read.Manuscripts').subscribe({
-      next: (translation) => {
-        // ! msTranslations is an object with several translations
-        msTranslations = translation;
-      }
-    });
-
-    let buttonTranslations = null as any;
-    this.translate.get('BasicActions').subscribe({
-      next: (translation) => {
-        // ! buttonTranslations is an object with several translations
-        buttonTranslations = translation;
-      }
-    });
 
     this.manuscripts.forEach((manuscript: any, index: any) => {
       let checkedValue = false;
@@ -167,17 +145,17 @@ export class ManuscriptsComponent {
       });
     });
 
-    buttons.push(buttonTranslations.Cancel);
+    buttons.push({ text: $localize`:@@BasicActions.Cancel:Avbryt` });
     buttons.push({
-      text: buttonTranslations.Ok,
+      text: $localize`:@@BasicActions.Ok:Ok`,
       handler: (index: any) => {
         this.changeManuscript(this.manuscripts[parseInt(index)]);
       }
     });
 
     const alert = await this.alertCtrl.create({
-      header: msTranslations.SelectMsDialogTitle,
-      subHeader: msTranslations.SelectMsDialogSubtitle,
+      header: $localize`:@@Read.Manuscripts.SelectMsDialogTitle:Välj manuskript`,
+      subHeader: $localize`:@@Read.Manuscripts.SelectMsDialogSubtitle:Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs

@@ -212,10 +212,10 @@ export class FacsimilesComponent {
             const facsimile = new Facsimile(f);
             facsimile.itemId = this.itemId;
             facsimile.manuscript_id = f.publication_manuscript_id;
-            if ( f['external_url'] === null || f['external_url'] === '' ) {
+            if (!f['external_url']) {
               facsimile.title = this.sanitizer.sanitize(SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(f['title']));
             }
-            if ( f['external_url'] !== null && f['external_url'] !== '' ) {
+            if (f['external_url'] && !f['folder_path']) {
               this.externalFacsimilesExist = true;
               this.externalURLs.push({'title': f['title'], 'url': f['external_url']});
             } else {

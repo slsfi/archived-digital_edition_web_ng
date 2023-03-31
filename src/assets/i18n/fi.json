@@ -254,8 +254,7 @@
         "place-register": "Paikkahakemisto",
         "tag-register": "Ämnesord",
         "verk": "Teoshakemisto",
-        "sort-by": "Lajittele",
-        "infotext": ""
+        "sort-by": "Lajittele"
     },
     "Occurrences": {
         "Title": "Esiintymät",

@@ -6,6 +6,11 @@
         <source>Avbryt</source>
       </segment>
     </unit>
+    <unit id="BasicActions.Ok">
+      <segment>
+        <source>Ok</source>
+      </segment>
+    </unit>
     <unit id="Filter.apply">
       <segment>
         <source>Verkställ</source>
@@ -13,22 +18,22 @@
     </unit>
     <unit id="Filter.bornBetween">
       <segment>
-        <source> Född mellan </source>
+        <source>Född mellan</source>
       </segment>
     </unit>
     <unit id="Filter.countries">
       <segment>
-        <source> Land </source>
+        <source>Land</source>
       </segment>
     </unit>
     <unit id="Filter.personTypes">
       <segment>
-        <source> Personkategori </source>
+        <source>Personkategori</source>
       </segment>
     </unit>
     <unit id="Filter.tagTypes">
       <segment>
-        <source> Ämneskategori </source>
+        <source>Ämneskategori</source>
       </segment>
     </unit>
     <unit id="Filter.title">
@@ -53,17 +58,17 @@
     </unit>
     <unit id="Occurrences.articles">
       <segment>
-        <source> Artiklar </source>
+        <source>Artiklar</source>
       </segment>
     </unit>
     <unit id="Occurrences.authors">
       <segment>
-        <source> Författare </source>
+        <source>Författare</source>
       </segment>
     </unit>
     <unit id="Occurrences.city">
       <segment>
-        <source> Stad </source>
+        <source>Stad</source>
       </segment>
     </unit>
     <unit id="Occurrences.Commentary">
@@ -73,12 +78,12 @@
     </unit>
     <unit id="Occurrences.country">
       <segment>
-        <source> Plats </source>
+        <source>Plats</source>
       </segment>
     </unit>
     <unit id="Occurrences.description">
       <segment>
-        <source> Beskrivning </source>
+        <source>Beskrivning</source>
       </segment>
     </unit>
     <unit id="Occurrences.download">
@@ -98,12 +103,12 @@
     </unit>
     <unit id="Occurrences.isbn">
       <segment>
-        <source> ISBN </source>
+        <source>ISBN</source>
       </segment>
     </unit>
     <unit id="Occurrences.journal">
       <segment>
-        <source> Journal </source>
+        <source>Journal</source>
       </segment>
     </unit>
     <unit id="Occurrences.latitude">
@@ -133,22 +138,22 @@
     </unit>
     <unit id="Occurrences.place_of_birth">
       <segment>
-        <source> Ort </source>
+        <source>Ort</source>
       </segment>
     </unit>
     <unit id="Occurrences.published_year">
       <segment>
-        <source> Utgivningsår </source>
+        <source>Utgivningsår</source>
       </segment>
     </unit>
     <unit id="Occurrences.publisher">
       <segment>
-        <source> Utgivare </source>
+        <source>Utgivare</source>
       </segment>
     </unit>
     <unit id="Occurrences.region">
       <segment>
-        <source> Region </source>
+        <source>Region</source>
       </segment>
     </unit>
     <unit id="Occurrences.Song">
@@ -158,7 +163,7 @@
     </unit>
     <unit id="Occurrences.source">
       <segment>
-        <source> Källa </source>
+        <source>Källa</source>
       </segment>
     </unit>
     <unit id="Occurrences.Title">
@@ -168,7 +173,7 @@
     </unit>
     <unit id="Occurrences.type">
       <segment>
-        <source> Typ </source>
+        <source>Typ</source>
       </segment>
     </unit>
     <unit id="Occurrences.Variation">
@@ -191,9 +196,19 @@
         <source>Byt manuskript</source>
       </segment>
     </unit>
-    <unit id="Read.Manuscripts.OpenFacsimile">
+    <unit id="Read.Manuscripts.NoManuscripts">
       <segment>
-        <source>Öppna faksimil</source>
+        <source>Inga manuskript.</source>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.SelectMsDialogSubtitle">
+      <segment>
+        <source>Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.</source>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.SelectMsDialogTitle">
+      <segment>
+        <source>Välj manuskript</source>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.ShowNormalized">
@@ -211,14 +226,14 @@
         <source>Hänvisa</source>
       </segment>
     </unit>
-    <unit id="SearchApp.infotext">
+    <unit id="Site.Subtitle">
       <segment>
-        <source>!!!!</source>
+        <source>Webbplatsens undertitel</source>
       </segment>
     </unit>
     <unit id="Site.Title">
       <segment>
-        <source>Om</source>
+        <source>Webbplatsens titel</source>
       </segment>
     </unit>
     <unit id="Song.Comments">
@@ -298,7 +313,7 @@
     </unit>
     <unit id="TOC.WorkSearch">
       <segment>
-        <source>!!!!</source>
+        <source>Verkregister</source>
       </segment>
     </unit>
     <unit id="TopMenu.AdvancedSearch">

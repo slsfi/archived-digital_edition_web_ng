@@ -669,6 +669,10 @@
     --box-shadow: none;
     --offset-y: 40px;
 
+    &::part(content) {
+      width: 350px;
+    }
+
     ion-content {
       --background: transparent;
     }

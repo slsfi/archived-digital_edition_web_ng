@@ -1,23 +1,13 @@
 <ion-content class="ion-padding" #content>
   <ion-grid>
     <ion-row class="page-info-row">
-      <h1 class="page-title" i18n="@@TOC.WorkSearch">!!!!</h1>
+      <h1 class="page-title" i18n="@@TOC.WorkSearch">Verkregister</h1>
       <div class="info markdown" *ngIf="mdContent">
         <markdown [data]="mdContent"></markdown>
       </div>
     </ion-row>
     <ion-row class="search-area-row">
       <ion-col col-10>
-
-        <!-- WHAT -->
-        <ion-row *ngIf="('SearchApp.infotext' | translate) !== 'SearchApp.infotext' && ('SearchApp.infotext' | translate).length>0">
-
-
-            <ion-col col-12>
-              <p class="info_text" i18n="@@SearchApp.infotext">!!!!</p>
-            </ion-col>
-        </ion-row>
-
         <ion-row>
           <ion-col col-11>
             <ion-searchbar placeholder="{{'SearchApp.search-holder' | translate}}" class="searchbar" [(ngModel)]="searchText" (ionChange)=onChanged($event)>

@@ -6,11 +6,6 @@ export const config: Config = {
     projectId: 10,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    name: {
-      sv: "Zacharias Topelius Skrifter",
-      fi: "Zacharias Topelius Skrifter",
-      en: "Zacharias Topelius Skrifter"
-    },
     siteLogoURL: "https://www.sls.fi/"
   },
   collections: {
@@ -426,11 +421,6 @@ export const config_soderholm: Config = {
     projectId: 7,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    name: {
-      sv: "Kerstin Söderholm",
-      fi: "Kerstin Söderholm",
-      en: "Kerstin Söderholm"
-    },
     siteLogoURL: "https://www.sls.fi/"
   },
   collections: {
@@ -622,7 +612,6 @@ export const config_soderholm: Config = {
       manuscripts: true,
       variations: false,
       facsimiles: true,
-      introduction: false,
       illustrations: false,
       legend: false
     },
@@ -1062,6 +1051,9 @@ export const config_soderholm: Config = {
   }
 }
 
+/**
+ * This is the config for leomechelin.fi, here only for testing purposes.
+ */
 export const config_mechelin: Config = {
   app: {
     machineName: "leomechelin",
@@ -1069,15 +1061,11 @@ export const config_mechelin: Config = {
     apiEndpoint: "https://api-dot-leomechelin.ew.r.appspot.com/digitaledition",
     simpleApi: "https://leomechelin.ew.r.appspot.com",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
-    name: {
-      sv: "Leo Mechelin",
-      fi: "Leo Mechelin"
-    },
     siteLogoURL: "https://leomechelin-dev.web.app",
   },
   collections: {
     order: [
-      [1]
+      [1, 2, 3, 4, 5, 6, 7, 8 ,9]
     ],
     firstReadItem: {
       1: "1_1199"
@@ -1253,7 +1241,7 @@ export const config_mechelin: Config = {
     }
   },
   defaults: {
-      ReadModeView: ["established_sv", "manuscripts", "facsimiles"]
+      ReadModeView: ["established_sv", "established_fi", "manuscripts", "facsimiles"]
   },
   cache: {
       viewmodes: {

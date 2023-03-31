@@ -10,11 +10,15 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "sv",
+        "sourceLocale": "en-US",
         "locales": {
           "fi": {
             "baseHref": "fi/",
             "translation": "src/locale/messages.fi.xlf"
+          },
+          "sv": {
+            "baseHref": "sv/",
+            "translation": "src/locale/messages.sv.xlf"
           }
         }
       },
@@ -30,7 +34,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "i18nDuplicateTranslation": "error",
-            "i18nMissingTranslation": "error",
+            "i18nMissingTranslation": "ignore",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -52,7 +56,8 @@
             ],
             "styles": [
               "src/theme/variables.scss",
-              "src/global.scss"
+              "src/global.scss",
+              "src/assets/custom_css/custom.scss"
             ],
             "scripts": [
               "node_modules/marked/marked.min.js"
@@ -305,7 +310,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
