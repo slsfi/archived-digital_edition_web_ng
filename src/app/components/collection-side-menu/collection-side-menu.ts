@@ -31,7 +31,13 @@ export class CollectionSideMenu {
       this.isLoading = false;
       console.log('tocService response:', data);
 
-      const itemId = `${this.initialUrlSegments[1].path}_${this.initialUrlSegments[3].path}_${this.initialUrlSegments[4].path}${this.initialQueryParams.position ? `;${this.initialQueryParams.position}` : ''}`
+      let itemId = '';
+      itemId += this.initialUrlSegments[1]?.path ? `${this.initialUrlSegments[1].path}` : '';
+      itemId += this.initialUrlSegments[3]?.path ? `_${this.initialUrlSegments[3].path}` : '';
+      itemId += this.initialUrlSegments[4]?.path ? `_${this.initialUrlSegments[4].path}` : '';
+
+      itemId += this.initialQueryParams.position ? `;${this.initialQueryParams.position}` : '';
+
       this.recursiveFinding(data.children, itemId);
     });
 
