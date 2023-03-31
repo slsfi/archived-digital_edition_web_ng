@@ -48,7 +48,7 @@ ion-split-pane {
         overflow-wrap: break-word;
         position: relative;
         width: 100%;
-        padding: 10px 5px 10px 0;
+        padding-right: 5px ;
         cursor: pointer;
         display: flex;
         flex-direction: row;
@@ -77,7 +77,9 @@ ion-split-pane {
           max-width: 100%;
           margin-right: 8px;
         }
-
+        > *:not(ul) {
+          padding: 10px 0;
+        }
         ion-icon {
           float: right;
           flex-shrink: 0;
