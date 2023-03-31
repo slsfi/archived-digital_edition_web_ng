@@ -1,21 +1,21 @@
 <nav *ngIf="!isLoading">
   <ul>
-    <li *ngIf="_config.HasCover">
+    <li *ngIf="_config.HasCover" [class.menu-highlight]="router.url.includes('cover')">
       <a routerLink="{{collectionID | publicationPathGenerator: 'cover'}}">
         {{'Read.CoverPage.Title' | translate}}
       </a>
     </li>
-    <li *ngIf="_config.HasTitle">
+    <li *ngIf="_config.HasTitle" [class.menu-highlight]="router.url.includes('title')">
       <a routerLink="{{collectionID | publicationPathGenerator: 'title'}}">
         {{'Read.TitlePage.Title' | translate}}
       </a>
     </li>
-    <li *ngIf="_config.HasForeword">
+    <li *ngIf="_config.HasForeword" [class.menu-highlight]="router.url.includes('foreword')">
       <a routerLink="{{collectionID | publicationPathGenerator: 'foreword'}}">
         {{'Read.ForewordPage.Title' | translate}}
       </a>
     </li>
-    <li *ngIf="_config.HasIntro">
+    <li *ngIf="_config.HasIntro" [class.menu-highlight]="router.url.includes('introduction')">
       <a routerLink="{{collectionID | publicationPathGenerator: 'introduction'}}">
         {{'Read.Introduction.Title' | translate}}
       </a>
@@ -28,17 +28,17 @@
 <ng-template #recursiveTemplate let-level="level" let-list let-path="path">
   <ng-container *ngFor="let item of list">
     <li (click)="toggle(item.itemId || item.text, level)"
-        [class.menu-highlight]="item.itemId && selectedMenu.slice(-1).includes(item.itemId)">
+        [class.menu-highlight]="highlightedMenu === item.itemId">
       <a *ngIf="item.itemId" [queryParams]="item.itemId | positionParamGenerator"
          routerLink="{{item.itemId | pagePathGenerator}}">{{item.text}}</a>
       <span *ngIf="!item.itemId">
         {{item.text}}
       </span>
       <ion-icon *ngIf="item.children"
-                [class.open]="selectedMenu[level] === item.itemId || selectedMenu[level] === item.text"
+                [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="item.children" [class.open]="selectedMenu[level] === item.itemId || selectedMenu[level] === item.text"
+    <li *ngIf="item.children"  [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
         class="accordion-list">
       <ul>
         <ng-container

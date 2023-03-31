@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 import {
-  Params,
+  Params, Router,
   UrlSegment
 } from "@angular/router";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
@@ -12,7 +12,7 @@ import { config } from "src/app/services/config/config";
   styleUrls: ['collection-side-menu.scss']
 })
 
-export class CollectionSideMenu {
+export class CollectionSideMenu implements OnChanges {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
@@ -20,9 +20,10 @@ export class CollectionSideMenu {
   isLoading: boolean = true;
   _config = config;
   selectedMenu: string[] = []
-
+  highlightedMenu: string;
   constructor(
-    private tocService: TableOfContentsService
+    private tocService: TableOfContentsService,
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -31,17 +32,27 @@ export class CollectionSideMenu {
       this.isLoading = false;
       console.log('tocService response:', data);
 
-      let itemId = '';
-      itemId += this.initialUrlSegments[1]?.path ? `${this.initialUrlSegments[1].path}` : '';
-      itemId += this.initialUrlSegments[3]?.path ? `_${this.initialUrlSegments[3].path}` : '';
-      itemId += this.initialUrlSegments[4]?.path ? `_${this.initialUrlSegments[4].path}` : '';
-
-      itemId += this.initialQueryParams.position ? `;${this.initialQueryParams.position}` : '';
+      const itemId = this.getItemId();
+      this.highlightedMenu = itemId
 
       this.recursiveFinding(data.children, itemId);
     });
-
   }
+
+  ngOnChanges() {
+    this.highlightedMenu = this.getItemId();
+  }
+
+  getItemId(): string {
+    let itemId = '';
+    itemId += this.initialUrlSegments[1]?.path ? `${this.initialUrlSegments[1].path}` : '';
+    itemId += this.initialUrlSegments[3]?.path ? `_${this.initialUrlSegments[3].path}` : '';
+    itemId += this.initialUrlSegments[4]?.path ? `_${this.initialUrlSegments[4].path}` : '';
+
+    itemId += this.initialQueryParams.position ? `;${this.initialQueryParams.position}` : '';
+    return itemId
+  }
+
   toggle(menuId: string, menuLevel: number) {
     if(this.selectedMenu.includes(menuId))
       this.selectedMenu.splice(menuLevel)

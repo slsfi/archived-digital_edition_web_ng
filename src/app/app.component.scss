@@ -80,6 +80,7 @@ ion-split-pane {
 
         ion-icon {
           float: right;
+          flex-shrink: 0;
         }
       }
     }
