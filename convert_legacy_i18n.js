@@ -34,7 +34,7 @@ function convertStringsToObjects(obj) {
   return newObj;
 }
 
-const languages = ["fi", "sv", "no", "en"];
+const languages = ["fi", "sv", "en"];
 
 console.log("Converting ngx-translate JSON files to XLIFF 2.0 files...");
 
