@@ -1,38 +1,17 @@
 {
     "Site": {
-        "Title": "Zacharias Topelius Skrifter",
-        "Subtitle": ""
-    },
-    "BrowserWarning": "Din webbläsare stöds inte",
-    "BrowserWarningInfo": "Internet Explorer stöds inte av denna sida. Använd Edge, Firefox, Chrome eller nån annan webbläsare.",
-    "BrowserWarningClose": "Stäng",
-    "TutorialTexts": {
-        "nextLabel": "Nästa",
-        "prevLabel": "Föregående",
-        "skipLabel": "Hoppa över",
-        "doneLabel": "Klar",
-        "searchIcon": "Klicka här för att söka i utgåvan.",
-        "WelcomeText": "Välkommen, här följer en presentation av användargränssnittet.",
-        "MenuToggleText": "Klicka här för att dölja eller visa sidomenyn.",
-        "ReadTocItemText": "Här kan du se alla digital publikationer och volymer.",
-        "DownloadCacheText": "Med denna knapp kan du spara datan lokalt, så går det snabbare nästa gång."
+        "Title": "Webbplatsens titel",
+        "Subtitle": "Webbplatsens undertitel"
     },
     "TopMenu": {
         "Home": "Startsida",
-        "Read": "Läs",
-        "Info": "Om",
+        "Read": "Innehåll",
+        "Info": "Om utgåvan",
         "Music": "Musik",
         "SimpleSearch": "Sök",
         "AdvancedSearch": "Sök"
     },
-    "Tabs": {
-        "Home": "Hem",
-        "Read": "Läs digitalt",
-        "Info": "Mer information"
-    },
     "Read": {
-        "DigitalEditions": "Digitala utgåvor",
-        "OpenInTab": "Öppna i ny flik",
         "Popover": {
             "Options": "Inställningar",
             "All": "Välj alla",
@@ -49,9 +28,6 @@
             "PageBreakOriginal": "Sidnummer/-brytning i originalet",
             "PageBreakEdition": "Sidnummer i den tryckta utgåvan"
         },
-        "DownloadDigitalVersion": "Ladda ner digital version",
-        "DownloadPDF": "Ladda ner PDF",
-        "CommentsFor": "Kommentar till",
         "ReadFromBeginning": "Läs från början",
         "Established": {
             "Title": "Lästext",
@@ -88,15 +64,15 @@
             "AddButtonText": "Manuskript",
             "ShowNormalized": "Visa ändringar inarbetade",
             "OpenFacsimile": "Öppna faksimil",
-            "NoManuscripts": "Inga manuskript.",
+            "NoManuscripts": "Inga manuskriptutskrifter.",
             "ChangeManuscript": "Byt manuskript",
             "SelectMsDialogTitle": "Välj manuskript",
             "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade."
         },
         "Variations": {
-            "Title": "Varianter",
-            "AddButtonText": "Varianter",
-            "NoVariations": "Inga varianter.",
+            "Title": "Tryckta varianter",
+            "AddButtonText": "Tryckta varianter",
+            "NoVariations": "Inga tryckta varianter tillgängliga.",
             "ChangeVariation": "Byt variant",
             "OpenNewVariation": "Öppna ny variant",
             "SelectVariationDialogTitle": "Välj variant",
@@ -112,7 +88,7 @@
             "OpenManuscript": "Öppna manuskript",
             "ExternalHeading": "Externa faksimil",
             "ChangeFacsimile": "Byt faksimil",
-            "NoFacsimiles": "Inga faksimil.",
+            "NoFacsimiles": "Inga faksimil tillgängliga.",
             "SelectFacsDialogTitle": "Välj faksimil",
             "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade."
         },
@@ -163,6 +139,7 @@
     "MediaCollections": {
         "MediaCollections": "Faksimilsamlingar",
         "GotoMediaCollection": "Gå till bildbanken",
+        "locations": "Platser",
         "location": "Plats",
         "tags": "Ämnesord",
         "tag": "Ämnesord",
@@ -175,14 +152,13 @@
     "media": "Fotografier",
     "TOC": {
         "Home": "Till startsidan",
-        "About": "Om",
-        "Read": "Läs",
-        "Read1": "Läs",
-        "Read2": "Läs",
-        "ReadN": "Läs",
+        "About": "Om utgåvan",
+        "Read": "Innehåll",
+        "Read1": "Innehåll 2",
+        "Read2": "Innehåll 3",
         "Facsimiles": "Faksimil i urval",
         "ImageGallery": "Bildgalleri",
-        "MediaCollections": "Album",
+        "MediaCollections": "Bildbank",
         "PersonSearch": "Personregister",
         "PlaceSearch": "Ortregister",
         "TagSearch": "Ämnesord",
@@ -204,22 +180,8 @@
         },
         "EPUBS": "Epub"
     },
-    "GalleryPages": {
-        "0": "Finland framställdt i teckningar",
-        "1": "En resa i Finland",
-        "2": "Topelius liv och verk"
-    },
-    "MobilePages": {
-        "header": "Sidor"
-    },
     "BackButton": {
         "default": "Tillbaka"
-    },
-    "HomePage": {
-        "current": "Aktuellt",
-        "publishedEditions": "Publicerade utgåvor:",
-        "digitalEditionHeading": "Zacharias Topelius verk i digital utgåva",
-        "selectEdition": "Se denna"
     },
     "SearchApp": {
         "simpleSearch": "Sök",
@@ -248,7 +210,7 @@
     "Occurrences": {
         "Title": "Förekomster",
         "Manuscript": "Manuskript",
-        "Variation": "Variant",
+        "Variation": "Tryckt variant",
         "Commentary": "Kommentar",
         "Facsimile": "Faksimil",
         "Established": "Lästext",
@@ -262,7 +224,7 @@
         "latitude": "lat.",
         "city": "Stad",
         "region": "Region",
-        "country": "Plats",
+        "country": "Land",
         "place_of_birth": "Ort",
         "type": "Typ",
         "source": "Källa",
@@ -278,13 +240,13 @@
         "workOccurrencesDisabled": "Förekomster för verk är inte tillgängliga."
     },
     "ElasticSearch": {
-        "PageTitle": "Sök",
+        "PageTitle": "Sök i utgåvan",
         "NoHits": "Sökningen gav inga svar.",
         "Found": "Texter med sökträffar:",
         "SearchField": "Lägg till sökfält",
         "From": "Från",
         "To": "Till",
-        "Search": "Söktext",
+        "Search": "Sök ...",
         "ANDSearch": "söktext",
         "AND": "och",
         "Years": "År",
@@ -325,15 +287,16 @@
     "Subjects": "Ämnen",
     "Tags": "Taggar",
     "Person": "Person",
-    "LetterSenderName": "Avsändare",
-    "LetterReceiverName": "Mottagare",
-    "LetterSenderLocation": "Avsändarort",
-    "LetterReceiverLocation": "Mottagarort",
+    "LetterSenderName": "Avsändare (brev)",
+    "LetterReceiverName": "Mottagare (brev)",
+    "LetterSenderLocation": "Avsändarort (brev)",
+    "LetterReceiverLocation": "Mottagarort (brev)",
     "est": "Lästext",
     "ms": "Manuskript",
     "com": "Kommentar",
-    "tit": "Titel",
-    "var": "Variant",
+    "tit": "Titelblad",
+    "fore": "Förord",
+    "var": "Tryckt variant",
     "inl": "Inledning",
     "locations": "Platser",
     "location": "Plats",
@@ -368,7 +331,7 @@
         "permaLink": "Beständig webbadress",
         "topMenu": "Hänvisa till denna webbutgåva",
         "established": "Hänvisa till denna lästext",
-        "intro": "Hänvisa till delutgåvans inledning",
+        "intro": "Hänvisa till denna inledning",
         "pageTitle": "Hänvisa till denna delutgåva",
         "pageForeword": "Hänvisa till detta förord",
         "pageEpub": "Hänvisa till denna text",
@@ -402,7 +365,7 @@
     "comments": "Kommentarer",
     "facsimiles": "Faksimil",
     "manuscripts": "Manuskript",
-    "variations": "Varianter",
+    "variations": "Tryckta varianter",
     "introduction": "Inledning",
     "songexample": "Sång",
     "illustrations": "Illustrationer",
@@ -431,8 +394,8 @@
     "DownloadTexts": {
         "Download": "Ladda ner",
         "Title": "Ladda ner och skriv ut",
-        "Instructions": "Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster.",
-        "InstructionsIntroduction": "Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster.",
+        "Instructions": "Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).",
+        "InstructionsIntroduction": "Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).",
         "CopyrightNotice": "Licens: CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "Licens: CC BY-NC-ND 4.0",
         "Print": "Skriv ut",
