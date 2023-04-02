@@ -141,7 +141,6 @@
             "targetFiles": [
               "messages.fi.xlf",
               "messages.sv.xlf",
-              "messages.no.xlf",
               "messages.en.xlf"
             ]
           },
@@ -157,12 +156,6 @@
               "outFile": "messages.sv.xlf",
               "i18nFormat": "xlf2",
               "i18nLocale": "sv"
-            },
-            "no": {
-              "outputPath": "src/locale/",
-              "outFile": "messages.no.xlf",
-              "i18nFormat": "xlf2",
-              "i18nLocale": "no"
             },
             "en": {
               "outputPath": "src/locale/",
