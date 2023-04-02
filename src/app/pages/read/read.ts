@@ -1060,7 +1060,7 @@ export class ReadPage /*implements OnDestroy*/ {
                     textId = data[0]['pub_id'];
                   }
 
-                  let hrefString = '/publication/' + publicationId + '/text/' + textId;
+                  let hrefString = '/collection/' + publicationId + '/text/' + textId;
                   if (chapterId) {
                     hrefString += '/' + chapterId;
                     if (hrefTargetItems.length > 3 && hrefTargetItems[3].startsWith('#')) {
@@ -1085,7 +1085,7 @@ export class ReadPage /*implements OnDestroy*/ {
                 if (data[0] !== undefined) {
                   publicationId = data[0]['coll_id'];
                 }
-                let hrefString = '/publication/' + publicationId + '/introduction';
+                let hrefString = '/collection/' + publicationId + '/introduction';
                 if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
                   positionId = hrefTargetItems[1];
                   hrefString += '?position=' + positionId;

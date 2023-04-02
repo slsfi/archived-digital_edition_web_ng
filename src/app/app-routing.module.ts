@@ -11,8 +11,24 @@ const routes: Routes = [
     loadChildren: () => import('./pages/content/content.module').then( m => m.ContentPageModule)
   },
   {
-    path: 'publication/:collectionID/cover',
+    path: 'collection/:collectionID/cover',
     loadChildren: () => import('./pages/cover/cover.module').then( m => m.CoverPageModule)
+  },
+  {
+    path: 'collection/:collectionID/title',
+    loadChildren: () => import('./pages/title/title.module').then( m => m.TitlePageModule)
+  },
+  {
+    path: 'collection/:collectionID/foreword',
+    loadChildren: () => import('./pages/foreword/foreword.module').then( m => m.ForewordPageModule)
+  },
+  {
+    path: 'collection/:collectionID/introduction',
+    loadChildren: () => import('./pages/introduction/introduction.module').then( m => m.IntroductionPageModule)
+  },
+  {
+    path: 'collection/:collectionID/text',
+    loadChildren: () => import('./pages/read/read.module').then( m => m.ReadPageModule)
   },
   {
     path: 'publications',
@@ -25,14 +41,6 @@ const routes: Routes = [
   {
     path: 'epub',
     loadChildren: () => import('./pages/epub/epub.module').then( m => m.EpubModule)
-  },
-  {
-    path: 'publication/:collectionID/foreword',
-    loadChildren: () => import('./pages/foreword/foreword.module').then( m => m.ForewordPageModule)
-  },
-  {
-    path: 'publication/:collectionID/introduction',
-    loadChildren: () => import('./pages/introduction/introduction.module').then( m => m.IntroductionPageModule)
   },
   {
     path: 'person-search',
@@ -63,16 +71,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tag-search/tag-search.module').then( m => m.TagearchPageModule)
   },
   {
-    path: 'publication/:collectionID/title',
-    loadChildren: () => import('./pages/title/title.module').then( m => m.TitlePageModule)
-  },
-  {
     path: 'works',
     loadChildren: () => import('./pages/work-search/work-search.module').then( m => m.WorkearchPageModule)
-  },
-  {
-    path: 'publication/:collectionID/text',
-    loadChildren: () => import('./pages/read/read.module').then( m => m.ReadPageModule)
   },
   {
     path: '',

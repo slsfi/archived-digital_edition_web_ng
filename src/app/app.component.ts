@@ -21,7 +21,7 @@ export class DigitalEditionsApp {
       filter(event => event instanceof NavigationEnd)
     ).subscribe({
       next: (event: any) => {
-        const collectionSegment = '/publication/';
+        const collectionSegment = '/collection/';
         if (event.url.startsWith(collectionSegment)) {
           this.collectionID = event.url.slice(collectionSegment.length).split('/')[0] || '';
 

@@ -42,15 +42,15 @@
     <ng-container *ngIf="_config.show?.TOC?.Read">
       <ng-container *ngIf="_config.collections.order">
         <ng-container *ngFor="let collection of collectionsList; let i = index">
-          <li (click)="toggleAccordion('/publication' + i)">
+          <li (click)="toggleAccordion('/collection' + i)">
             <span>{{"TOC.Read" + (i + 1)  | translate }}</span>
-            <ion-icon *ngIf="collection.length" [class.open]="selectedMenu === ('/publication' + i)"
+            <ion-icon *ngIf="collection.length" [class.open]="selectedMenu === ('/collection' + i)"
                       name="chevron-forward-outline"></ion-icon>
           </li>
-          <li [class.open]="selectedMenu === ('/publication' + i)" class="accordion-list">
+          <li [class.open]="selectedMenu === ('/collection' + i)" class="accordion-list">
             <app-recursive-accordion
               [children]="collection"
-              [parentPath]="'/publication'">
+              [parentPath]="'/collection'">
             </app-recursive-accordion>
           </li>
         </ng-container>

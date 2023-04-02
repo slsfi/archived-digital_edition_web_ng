@@ -422,7 +422,7 @@ export class WorkSearchPage {
       }
     ];
 
-    this.router.navigate([`/publication/${col_id}/text/${pub_id}/nochapter/not/infinite1/nosong/searchtitle/text_type`], { queryParams: params });
+    this.router.navigate([`/collection/${col_id}/text/${pub_id}/nochapter/not/infinite1/nosong/searchtitle/text_type`], { queryParams: params });
   }
 
   async openFilterModal() {

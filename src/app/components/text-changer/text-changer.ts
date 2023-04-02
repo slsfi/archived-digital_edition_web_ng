@@ -606,13 +606,13 @@ export class TextChangerComponent {
     if (item.page !== undefined) {
       // Open text in page-cover, page-title, page-foreword, page-introduction or media-collections
       if (item.page === 'page-cover') {
-        this.router.navigate(['/publication', item.itemId, 'cover']);
+        this.router.navigate(['/collection', item.itemId, 'cover']);
       } else if (item.page === 'page-title') {
-        this.router.navigate(['/publication', item.itemId, 'title']);
+        this.router.navigate(['/collection', item.itemId, 'title']);
       } else if (item.page === 'page-foreword') {
-        this.router.navigate(['/publication', item.itemId, 'foreword']);
+        this.router.navigate(['/collection', item.itemId, 'foreword']);
       } else if (item.page === 'page-introduction') {
-        this.router.navigate(['/publication', item.itemId, 'introduction']);
+        this.router.navigate(['/collection', item.itemId, 'introduction']);
       } else if (item.page === 'media-collections') {
         this.router.navigate(['/media-collections']);
       }
@@ -633,8 +633,8 @@ export class TextChangerComponent {
 
       this.router.navigate(
         (
-          chapterId ? ['/publication', collectionId, 'text', publicationId, chapterId] : 
-          ['/publication', collectionId, 'text', publicationId]
+          chapterId ? ['/collection', collectionId, 'text', publicationId, chapterId] : 
+          ['/collection', collectionId, 'text', publicationId]
         ),
         (positionId ? { queryParams: { position: positionId } } : {})
       );

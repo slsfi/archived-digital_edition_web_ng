@@ -6,19 +6,19 @@ import {
   InitialPathGeneratorPipe,
   PagePathGenerator,
   PositionParamGenerator,
-  PublicationPathGenerator
+  CollectionPathGenerator
 } from "./path-generator";
 
 @NgModule({
   declarations: [OrderByPipe,
     SearchPipe,
     SortPipe,
-    InitialPathGeneratorPipe, PublicationPathGenerator, PagePathGenerator, PositionParamGenerator],
+    InitialPathGeneratorPipe, CollectionPathGenerator, PagePathGenerator, PositionParamGenerator],
   imports: [],
   exports: [OrderByPipe,
     SearchPipe,
     SortPipe,
-    InitialPathGeneratorPipe, PublicationPathGenerator, PagePathGenerator, PositionParamGenerator]
+    InitialPathGeneratorPipe, CollectionPathGenerator, PagePathGenerator, PositionParamGenerator]
 })
 export class PipesModule {
 }

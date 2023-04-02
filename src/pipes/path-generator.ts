@@ -11,7 +11,7 @@ import { config } from "src/app/services/config/config";
 })
 export class InitialPathGeneratorPipe implements PipeTransform {
   transform(parentPath: string, childId: string): string {
-    if (parentPath === '/publication') {
+    if (parentPath === '/collection') {
       if (config.HasCover) {
         return `${parentPath}/${childId}/cover`;
       } else if (config.HasTitle) {
@@ -25,7 +25,7 @@ export class InitialPathGeneratorPipe implements PipeTransform {
         if (idPath.length) {
           idPath[0] = 'text';
         }
-        return `/publication/${childId}/${idPath.join('/')}`;
+        return `/collection/${childId}/${idPath.join('/')}`;
       }
       return '';
     } else {
@@ -36,21 +36,21 @@ export class InitialPathGeneratorPipe implements PipeTransform {
 
 
 @Pipe({
-  name: 'publicationPathGenerator'
+  name: 'collectionPathGenerator'
 })
-export class PublicationPathGenerator implements PipeTransform {
+export class CollectionPathGenerator implements PipeTransform {
   transform(collectionId: string, typeOfPage?: string): any {
     switch (typeOfPage) {
       case 'cover':
-        return `/publication/${collectionId}/cover`;
+        return `/collection/${collectionId}/cover`;
       case 'title':
-        return `/publication/${collectionId}/title`;
+        return `/collection/${collectionId}/title`;
       case 'foreword':
-        return `/publication/${collectionId}/foreword`;
+        return `/collection/${collectionId}/foreword`;
       case 'introduction':
-        return `/publication/${collectionId}/introduction`;
+        return `/collection/${collectionId}/introduction`;
       default:
-        return `/publication/${collectionId}/text`;
+        return `/collection/${collectionId}/text`;
     }
   }
 }
@@ -61,7 +61,7 @@ export class PublicationPathGenerator implements PipeTransform {
 export class PagePathGenerator implements PipeTransform {
   transform(itemId: string): any {
     const idList = itemId.split('_');
-    let url = `/publication/${idList[0]}/text/${idList[1]}`;
+    let url = `/collection/${idList[0]}/text/${idList[1]}`;
     if (idList.length > 2) {
       const chapter = idList[2].split(';')[0];
       url += `/${chapter}`;

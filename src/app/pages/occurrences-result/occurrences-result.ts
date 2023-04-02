@@ -651,7 +651,7 @@ export class OccurrencesResultPage {
     }
     params['selectedItemInAccordion'] = false;
 
-    this.router.navigate([`/publication/${col_id}/text/${pub_id}/nochapter/${facs_id}/${facs_nr}/nosong/searchtitle/text_type`], { queryParams: params });
+    this.router.navigate([`/collection/${col_id}/text/${pub_id}/nochapter/${facs_id}/${facs_nr}/nosong/searchtitle/text_type`], { queryParams: params });
   }
 
   downloadArticle(url: any) {
