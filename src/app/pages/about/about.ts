@@ -8,11 +8,11 @@ import { config } from "src/app/services/config/config";
 
 
 @Component({
-  selector: 'page-content',
-  templateUrl: 'content.html',
-  styleUrls: ['content.scss']
+  selector: 'page-about',
+  templateUrl: 'about.html',
+  styleUrls: ['about.scss']
 })
-export class ContentPage {
+export class AboutPage {
 
   appName?: string;
   mdContent?: MdContent;

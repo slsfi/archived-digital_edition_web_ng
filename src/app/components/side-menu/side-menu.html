@@ -6,20 +6,20 @@
         {{"TOC.Home" | translate }}
       </a>
     </li>
-    <!-- Markdown "About"-pages: src/app/pages/content -->
+    <!-- Markdown "About"-pages: src/app/pages/about -->
     <ng-container *ngIf="_config.show?.TOC?.About">
-      <li (click)="toggleAccordion('/content')" *ngIf="aboutOptionsMarkdown">
+      <li (click)="toggleAccordion('/about')" *ngIf="aboutOptionsMarkdown">
         <span>
           {{aboutOptionsMarkdown.title}}
         </span>
-        <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/content'"
+        <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/about'"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/content'"
+      <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/about'"
           class="accordion-list">
         <app-recursive-accordion
           [children]="aboutOptionsMarkdown.children"
-          [parentPath]="'/content'">
+          [parentPath]="'/about'">
         </app-recursive-accordion>
       </li>
     </ng-container>

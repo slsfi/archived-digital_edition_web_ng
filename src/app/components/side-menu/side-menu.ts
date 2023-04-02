@@ -82,7 +82,7 @@ export class SideMenu implements OnInit {
   }
 
   ngOnInit() {
-    const menuArray = ['/content', '/epub', '/collection', '/media-collection', '/tag-search', '/work-search', '/person-search', '/place-search']
+    const menuArray = ['/about', '/epub', '/collection', '/media-collection', '/tag-search', '/work-search', '/person-search', '/place-search']
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(event => {

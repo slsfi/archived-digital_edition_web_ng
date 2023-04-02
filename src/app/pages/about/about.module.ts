@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { ContentPage } from './content';
+import { AboutPage } from './about';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-import { ContentPageRoutingModule } from './content-routing.module';
+import { AboutPageRoutingModule } from './about-routing.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HtmlContentService } from 'src/app/services/html/html-content.service';
@@ -19,7 +19,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
     declarations: [
-      ContentPage
+      AboutPage
     ],
     imports: [
       CommonModule,
@@ -34,14 +34,14 @@ export function createTranslateLoader(http: HttpClient) {
       }),
       ComponentsModule,
       MarkdownModule.forRoot(),
-      ContentPageRoutingModule,
+      AboutPageRoutingModule,
     ],
     entryComponents: [
-      ContentPage
+      AboutPage
     ],
     providers: [
         HtmlContentService,
         NavParams
     ]
   })
-  export class ContentPageModule {}
+  export class AboutPageModule {}

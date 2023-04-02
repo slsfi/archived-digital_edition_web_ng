@@ -18,7 +18,7 @@
       </a>
     </ion-button>
     <ion-button *ngIf="showTopAboutButton && userSettingsService.isDesktop()">
-      <a [routerLink]="['/content', language + '-' + firstAboutPageId]">
+      <a [routerLink]="['/about', language + '-' + firstAboutPageId]">
         <ng-container i18n="@@TopMenu.Info">Om</ng-container>
       </a>
     </ion-button>

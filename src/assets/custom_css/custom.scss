@@ -293,34 +293,34 @@ home-page img[src$="#front-page-unesco-logo"] {
 }
 
 // Högerställ spalten med verkdel i tabeller över delutgåvorna.
-page-content table.editions-list td:first-child {
+page-about table.editions-list td:first-child {
   text-align: right;
 }
-page-content table.editions-list td {
+page-about table.editions-list td {
   padding-bottom: 0;
 }
-page-content table.editions-list tr:last-child > td {
+page-about table.editions-list tr:last-child > td {
   padding-bottom: 0.5em;
 }
 
 // Bilder i kringtexter
-page-content figure {
+page-about figure {
   margin: 1.75em 0;
 }
-page-content figure.centered {
+page-about figure.centered {
   margin: 1.75em auto;
 }
-page-content figure figcaption {
+page-about figure figcaption {
   font-style: italic;
   margin-top: 0.5em;
   font-size: 1rem;
 }
 
 // Tabell utan marginaler i kringtexter
-page-content div.md_content markdown table.no_margins_table td {
+page-about div.md_content markdown table.no_margins_table td {
   padding: 0 0.75em 0 0;
 }
-page-content div.md_content markdown table.no_margins_table td:last-child {
+page-about div.md_content markdown table.no_margins_table td:last-child {
   padding: 0;
 }
 
