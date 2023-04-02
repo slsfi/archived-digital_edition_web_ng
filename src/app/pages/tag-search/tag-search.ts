@@ -11,7 +11,6 @@ import { CommonFunctionsService } from 'src/app/services/common-functions/common
 import { EventsService } from 'src/app/services/events/events.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { MetadataService } from 'src/app/services/metadata/metadata.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -64,7 +63,6 @@ export class TagSearchPage {
               private userSettingsService: UserSettingsService,
               private events: EventsService,
               private analyticsService: AnalyticsService,
-              private metadataService: MetadataService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
   ) {

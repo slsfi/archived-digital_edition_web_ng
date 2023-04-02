@@ -7,7 +7,6 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { MetadataService } from 'src/app/services/metadata/metadata.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
@@ -49,7 +48,6 @@ export class MediaCollectionsPage {
     public translate: TranslateService,
     public cdRef: ChangeDetectorRef,
     private analyticsService: AnalyticsService,
-    private metadataService: MetadataService,
     private mdContentService: MdContentService,
     private router: Router,
   ) {
@@ -315,24 +313,6 @@ export class MediaCollectionsPage {
     this.galleries = filteredGalleries;
     this.doAnalytics('subject', name);
     return;
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription(this.constructor.name);
-    this.metadataService.addKeywords();
-
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({selected: 'media-collections'});
-    this.events.publishSelectedItemInMenu({
-      menuID: 'all',
-      component: 'media-collections'
-    });
   }
 
   asThumb(url: any) {

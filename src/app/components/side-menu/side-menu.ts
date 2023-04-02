@@ -7,7 +7,6 @@ import { MdContentService } from "../../services/md/md-content.service";
 import { UserSettingsService } from "../../services/settings/user-settings.service";
 import { DigitalEditionListService } from "../../services/toc/digital-edition-list.service";
 import { GalleryService } from "../../services/gallery/gallery.service";
-import { MetadataService } from "../../services/metadata/metadata.service";
 import { config } from "src/app/services/config/config";
 import { filter } from 'rxjs/operators';
 
@@ -54,7 +53,6 @@ export class SideMenu implements OnInit {
     public titleService: Title,
     public digitalEditionListService: DigitalEditionListService,
     private galleryService: GalleryService,
-    private metadataService: MetadataService,
     private router: Router,
   ) {
     this.mediaCollectionOptions = {};
@@ -277,12 +275,6 @@ export class SideMenu implements OnInit {
       this.getStaticPagesMenus();
       this.getAboutPages();
     });
-
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription();
-    this.metadataService.addKeywords();
   }
 
   romanToInt(str1: any) {

@@ -22,7 +22,6 @@ import { ReferenceDataService } from './services/reference-data/reference-data.s
 import { UserSettingsService } from './services/settings/user-settings.service';
 import { GenericSettingsService } from './services/settings/generic-settings.service';
 import { AnalyticsService } from './services/analytics/analytics.service';
-import { MetadataService } from './services/metadata/metadata.service';
 import { GalleryService } from './services/gallery/gallery.service';
 import { TooltipService } from './services/tooltips/tooltip.service';
 import { SearchDataService } from './services/search/search-data.service';
@@ -108,7 +107,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     GalleryService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AnalyticsService,
-    MetadataService,
     EventsService,
     TableOfContentsService
   ],

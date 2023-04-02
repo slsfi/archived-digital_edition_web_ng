@@ -10,7 +10,6 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { MetadataService } from 'src/app/services/metadata/metadata.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
@@ -66,7 +65,6 @@ export class MediaCollectionPage {
     public translate: TranslateService,
     public languageService: LanguageService,
     private analyticsService: AnalyticsService,
-    private metadataService: MetadataService,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
 
@@ -85,15 +83,6 @@ export class MediaCollectionPage {
 
   doAnalytics(category: any, label: any, action: any) {
     this.analyticsService.doAnalyticsEvent(category, label, action);
-  }
-
-  ionViewDidEnter() {
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription(this.constructor.name);
-    this.metadataService.addKeywords();
-    this.analyticsService.doPageView('Collection');
   }
 
   getMediaCollections(id?: any, type?: any) {
