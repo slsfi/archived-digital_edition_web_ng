@@ -54,18 +54,6 @@
         <target>Gå till bildbanken</target>
       </segment>
     </unit>
-    <unit id="MusicPage.PageTitle">
-      <segment state="initial">
-        <source>Musikvolymerna</source>
-        <target>Musikvolymerna</target>
-      </segment>
-    </unit>
-    <unit id="MusicPage.SubTitle">
-      <segment state="initial">
-        <source>FSFD</source>
-        <target/>
-      </segment>
-    </unit>
     <unit id="Occurrences.articles">
       <segment state="initial">
         <source>Artiklar</source>
@@ -186,12 +174,6 @@
         <target>Region</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Song">
-      <segment state="initial">
-        <source>Sång</source>
-        <target>Melodi</target>
-      </segment>
-    </unit>
     <unit id="Occurrences.source">
       <segment state="initial">
         <source>Källa</source>
@@ -258,12 +240,6 @@
         <target>Visa ändringar inarbetade</target>
       </segment>
     </unit>
-    <unit id="Read.ShowSearchResults">
-      <segment state="initial">
-        <source>Förekomster</source>
-        <target>Förekomster</target>
-      </segment>
-    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
@@ -280,90 +256,6 @@
       <segment state="initial">
         <source>Webbplatsens titel</source>
         <target>Zacharias Topelius Skrifter</target>
-      </segment>
-    </unit>
-    <unit id="Song.Comments">
-      <segment state="initial">
-        <source>Kommentarer</source>
-        <target>Kommentarer</target>
-      </segment>
-    </unit>
-    <unit id="Song.Download">
-      <segment state="initial">
-        <source>Ladda ner</source>
-        <target>Ladda ner</target>
-      </segment>
-    </unit>
-    <unit id="Song.Landscape">
-      <segment state="initial">
-        <source>Landskap</source>
-        <target>Landskap</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCL">
-      <segment state="initial">
-        <source>Originalsamlingens placering</source>
-        <target>Originalsamlingens placering</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCS">
-      <segment state="initial">
-        <source>Originalsamlingens signum</source>
-        <target>Originalsamlingens signum</target>
-      </segment>
-    </unit>
-    <unit id="Song.Place">
-      <segment state="initial">
-        <source>Ort</source>
-        <target>Ort</target>
-      </segment>
-    </unit>
-    <unit id="Song.Playman">
-      <segment state="initial">
-        <source>Spelman</source>
-        <target>Spelman</target>
-      </segment>
-    </unit>
-    <unit id="Song.Recorder">
-      <segment state="initial">
-        <source>Upptecknare</source>
-        <target>Upptecknare</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongName">
-      <segment state="initial">
-        <source>Låtens namn</source>
-        <target>Låtens namn</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongNumber">
-      <segment state="initial">
-        <source>Sångnummer</source>
-        <target>Melodinummer</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongText">
-      <segment state="initial">
-        <source>Sångtext</source>
-        <target>Meloditext</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongType">
-      <segment state="initial">
-        <source>Låttyp</source>
-        <target>Låttyp</target>
-      </segment>
-    </unit>
-    <unit id="Song.Volume">
-      <segment state="initial">
-        <source>Volym</source>
-        <target>Volym</target>
-      </segment>
-    </unit>
-    <unit id="Song.Year">
-      <segment state="initial">
-        <source>Uppteckningsår</source>
-        <target>Uppteckningsår</target>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
@@ -388,12 +280,6 @@
       <segment state="initial">
         <source>Om</source>
         <target>Utgave</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Music">
-      <segment state="initial">
-        <source>Musik</source>
-        <target>Musik</target>
       </segment>
     </unit>
     <unit id="TopMenu.Read">

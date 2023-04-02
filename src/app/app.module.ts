@@ -24,7 +24,6 @@ import { GenericSettingsService } from './services/settings/generic-settings.ser
 import { AnalyticsService } from './services/analytics/analytics.service';
 import { MetadataService } from './services/metadata/metadata.service';
 import { GalleryService } from './services/gallery/gallery.service';
-import { SongService } from './services/song/song.service';
 import { TooltipService } from './services/tooltips/tooltip.service';
 import { SearchDataService } from './services/search/search-data.service';
 import { TableOfContentsService } from './services/toc/table-of-contents.service';
@@ -106,7 +105,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     TooltipService,
     UserSettingsService,
     GenericSettingsService,
-    SongService,
     GalleryService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AnalyticsService,

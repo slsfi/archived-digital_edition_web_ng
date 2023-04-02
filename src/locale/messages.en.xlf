@@ -54,18 +54,6 @@
         <target>Gå till bildbanken</target>
       </segment>
     </unit>
-    <unit id="MusicPage.PageTitle">
-      <segment state="initial">
-        <source>Musikvolymerna</source>
-        <target>Musikvolymerna</target>
-      </segment>
-    </unit>
-    <unit id="MusicPage.SubTitle">
-      <segment state="initial">
-        <source>FSFD</source>
-        <target>FSFD</target>
-      </segment>
-    </unit>
     <unit id="Occurrences.articles">
       <segment state="initial">
         <source>Artiklar</source>
@@ -93,7 +81,7 @@
     <unit id="Occurrences.country">
       <segment state="initial">
         <source>Plats</source>
-        <target>Place</target>
+        <target>Country</target>
       </segment>
     </unit>
     <unit id="Occurrences.description">
@@ -153,19 +141,19 @@
     <unit id="Occurrences.NoInfoFound">
       <segment state="initial">
         <source>Ingen information hittades.</source>
-        <target>Ingen information hittades.</target>
+        <target>No information.</target>
       </segment>
     </unit>
     <unit id="Occurrences.OccurrencesSmall">
       <segment state="initial">
         <source>förekomster</source>
-        <target>förekomster</target>
+        <target>occurrences</target>
       </segment>
     </unit>
     <unit id="Occurrences.place_of_birth">
       <segment state="initial">
         <source>Ort</source>
-        <target>Place of Birth</target>
+        <target>Place of birth</target>
       </segment>
     </unit>
     <unit id="Occurrences.published_year">
@@ -184,12 +172,6 @@
       <segment state="initial">
         <source>Region</source>
         <target>Region</target>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Song">
-      <segment state="initial">
-        <source>Sång</source>
-        <target>Introduction</target>
       </segment>
     </unit>
     <unit id="Occurrences.source">
@@ -237,7 +219,7 @@
     <unit id="Read.Manuscripts.NoManuscripts">
       <segment state="initial">
         <source>Inga manuskript.</source>
-        <target>No manuscripts</target>
+        <target>No transcribed manuscripts.</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.SelectMsDialogSubtitle">
@@ -258,12 +240,6 @@
         <target>Visa ändringar inarbetade</target>
       </segment>
     </unit>
-    <unit id="Read.ShowSearchResults">
-      <segment state="initial">
-        <source>Förekomster</source>
-        <target>Occurrences</target>
-      </segment>
-    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
@@ -273,103 +249,19 @@
     <unit id="Site.Subtitle">
       <segment state="initial">
         <source>Webbplatsens undertitel</source>
-        <target/>
+        <target>Website subtitle</target>
       </segment>
     </unit>
     <unit id="Site.Title">
       <segment state="initial">
         <source>Webbplatsens titel</source>
-        <target>Zacharias Topelius Skrifter</target>
-      </segment>
-    </unit>
-    <unit id="Song.Comments">
-      <segment state="initial">
-        <source>Kommentarer</source>
-        <target>Commentary</target>
-      </segment>
-    </unit>
-    <unit id="Song.Download">
-      <segment state="initial">
-        <source>Ladda ner</source>
-        <target>Ladda ner</target>
-      </segment>
-    </unit>
-    <unit id="Song.Landscape">
-      <segment state="initial">
-        <source>Landskap</source>
-        <target>Landskap</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCL">
-      <segment state="initial">
-        <source>Originalsamlingens placering</source>
-        <target>Originalsamlingens placering</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCS">
-      <segment state="initial">
-        <source>Originalsamlingens signum</source>
-        <target>Originalsamlingens signum</target>
-      </segment>
-    </unit>
-    <unit id="Song.Place">
-      <segment state="initial">
-        <source>Ort</source>
-        <target>Established text</target>
-      </segment>
-    </unit>
-    <unit id="Song.Playman">
-      <segment state="initial">
-        <source>Spelman</source>
-        <target>Spelman</target>
-      </segment>
-    </unit>
-    <unit id="Song.Recorder">
-      <segment state="initial">
-        <source>Upptecknare</source>
-        <target>Upptecknare</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongName">
-      <segment state="initial">
-        <source>Låtens namn</source>
-        <target>Låtens namn</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongNumber">
-      <segment state="initial">
-        <source>Sångnummer</source>
-        <target>Sångnummer</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongText">
-      <segment state="initial">
-        <source>Sångtext</source>
-        <target>Sångtext</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongType">
-      <segment state="initial">
-        <source>Låttyp</source>
-        <target>Låttyp</target>
-      </segment>
-    </unit>
-    <unit id="Song.Volume">
-      <segment state="initial">
-        <source>Volym</source>
-        <target>Commentary</target>
-      </segment>
-    </unit>
-    <unit id="Song.Year">
-      <segment state="initial">
-        <source>Uppteckningsår</source>
-        <target>Uppteckningsår</target>
+        <target>Website title</target>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
       <segment state="initial">
         <source>Album</source>
-        <target>Album</target>
+        <target>Media</target>
       </segment>
     </unit>
     <unit id="TOC.WorkSearch">
@@ -388,12 +280,6 @@
       <segment state="initial">
         <source>Om</source>
         <target>About</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Music">
-      <segment state="initial">
-        <source>Musik</source>
-        <target>Photos</target>
       </segment>
     </unit>
     <unit id="TopMenu.Read">

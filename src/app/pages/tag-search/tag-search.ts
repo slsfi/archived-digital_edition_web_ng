@@ -75,37 +75,17 @@ export class TagSearchPage {
     }
   }
 
-  ionViewWillEnter() {
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription(this.constructor.name);
-    this.metadataService.addKeywords();
-
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'tag-search'});
-    this.events.publishSelectedItemInMenu({
-      menuID: 'tagSearch',
-      component: 'tag-search'
-    });
-  }
-
   ionViewDidEnter() {
     this.analyticsService.doPageView('Tags');
   }
 
   ionViewDidLoad() {
-    this.selectMusicAccordionItem();
     this.getTags();
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
       if (lang) {
         this.getMdContent(lang + '-12-04');
       }
     });
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
   }
 
   ngOnDestroy() {
@@ -207,20 +187,6 @@ export class TagSearchPage {
 
   hasMore() {
     return this.last_fetch_size > this.max_fetch_size - 1;
-  }
-
-  appHasMusicAccordionConfig() {
-    return config.AccordionMusic ?? false;
-  }
-
-  selectMusicAccordionItem() {
-    const appHasMusicAccordion = this.appHasMusicAccordionConfig();
-
-    if (!appHasMusicAccordion) {
-      return;
-    }
-
-    this.events.publishMusicAccordionSetSelected({musicAccordionKey: 'tagSearch'});
   }
 
   async openTag(occurrenceResult: OccurrenceResult) {

@@ -119,7 +119,7 @@
                 </ng-container>
                 <ng-container *ngIf="view.type == 'facsimiles'">
                   <facsimiles [itemId]="textItemID" [selectedFacsimile]="view.id" [matches]="searchMatches"
-                    [facsID]="facs_id" [facsNr]="facs_nr" [songID]="song_id" (openNewFacsimileView)="openNewView($event)">
+                    [facsID]="facs_id" [facsNr]="facs_nr" (openNewFacsimileView)="openNewView($event)">
                   </facsimiles>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'manuscripts'">
@@ -262,8 +262,7 @@
           <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
         </div-->
         <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-          <facsimiles [itemId]="textItemID" [matches]="searchMatches" [facsID]="facs_id" [facsNr]="facs_nr"
-            [songID]="song_id"></facsimiles>
+          <facsimiles [itemId]="textItemID" [matches]="searchMatches" [facsID]="facs_id" [facsNr]="facs_nr"></facsimiles>
         </div>
       </div>
     </ng-container>

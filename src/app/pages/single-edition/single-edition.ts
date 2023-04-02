@@ -213,7 +213,6 @@ export class SingleEditionPage {
   ionViewWillEnter() {
     this.events.publishIonViewWillEnter(this.constructor.name);
     this.events.publishTableOfContentsUnSelectSelectedTocItem(true);
-    this.events.publishMusicAccordionReset(true);
     if (this.collection.id && !this.collection.isDownloadOnly) {
       this.getTocRoot(this.collection.id);
       

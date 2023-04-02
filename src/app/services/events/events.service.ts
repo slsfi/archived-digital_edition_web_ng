@@ -44,16 +44,12 @@ export class EventsService {
     private topMenuContent = new Subject<any>();
     // topMenu:about
     private topMenuAbout = new Subject<any>();
-    // topMenu:music
-    private topMenuMusic = new Subject<any>();
     // title-logo:collectionTitle
     private titleLogoCollectionTitle = new Subject<any>();
     // tableOfContents:unSelectSelectedTocItem
     private tableOfContentsUnSelectSelectedTocItem = new Subject<any>();
     // SelectedItemInMenu
     private selectedItemInMenu = new Subject<any>();
-    // musicAccordion:SetSelected
-    private musicAccordionSetSelected = new Subject<any>();
     // aboutMarkdownTOC:loaded
     private aboutMarkdownTOCLoaded = new Subject<any>();
     // pdfview:open
@@ -62,8 +58,6 @@ export class EventsService {
     private collectionWithChildrenPdfsHighlight = new Subject<any>();
     // exitActiveCollection
     private exitActiveCollection = new Subject<any>();
-    // musicAccordion:reset
-    private musicAccordionReset = new Subject<any>();
     // collectionsAccordion:change
     private collectionsAccordionChange = new Subject<any>();
     // typesAccordion:change
@@ -268,14 +262,6 @@ export class EventsService {
         return this.topMenuAbout;
     }
 
-    publishTopMenuMusic(data?: any) {
-        this.topMenuMusic.next(data);
-    }
-
-    getTopMenuMusic(): Subject<any> {
-        return this.topMenuMusic;
-    }
-
     publishTitleLogoCollectionTitle(data?: any) {
         this.titleLogoCollectionTitle.next(data);
     }
@@ -298,14 +284,6 @@ export class EventsService {
 
     getSelectedItemInMenu(): Subject<any> {
         return this.selectedItemInMenu;
-    }
-
-    publishMusicAccordionSetSelected(data?: any) {
-        this.musicAccordionSetSelected.next(data);
-    }
-
-    getMusicAccordionSetSelected(): Subject<any> {
-        return this.musicAccordionSetSelected;
     }
 
     publishAboutMarkdownTOCLoaded(data?: any) {
@@ -338,14 +316,6 @@ export class EventsService {
 
     getExitActiveCollection(): Subject<any> {
         return this.exitActiveCollection;
-    }
-
-    publishMusicAccordionReset(data?: any) {
-        this.musicAccordionReset.next(data);
-    }
-
-    getMusicAccordionReset(): Subject<any> {
-        return this.musicAccordionReset;
     }
 
     publishCollectionsAccordionChange(data?: any) {

@@ -57,9 +57,6 @@ export const config: Config = {
     mediaCollection: {
       showURNButton: true
     },
-    music: {
-      collectionsToShow: []
-    },
     read: {
       showURNButton: true,
       showViewOptionsButton: true
@@ -77,7 +74,6 @@ export const config: Config = {
       showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: true,
-      showMusicButton: false,
       showHelpButton: false
     },
     sideMenu: {
@@ -210,7 +206,6 @@ export const config: Config = {
       MediaCollections: true,
       TagSearch: false,
       WorkSearch: false,
-      SongTypes: false,
       Books: false,
       EPUB: true
     },
@@ -274,18 +269,7 @@ export const config: Config = {
   SortCollectionsByRomanNumerals: false,
   AccordionTOC: true,
   OpenCollectionFromToc: true,
-  AccordionMusic: false,
   SearchTocItemInAccordionByTitle: false,
-  AccordionsExpandedDefault: {
-    SongTypes: false,
-    Music: false
-  },
-  MusicAccordion: {
-    PersonSearchTypes: false,
-    TagSearch: false,
-    PlaceSearch: false,
-    Music: false
-  },
   AboutMenuAccordion: true,
   HasCover: true,
   HasTitle: true,
@@ -293,9 +277,6 @@ export const config: Config = {
   HasIntro: true,
   OpenOccurrencesAndInfoOnNewPage: false,
   SingleOccurrenceType: null,
-  MusicPage: {
-    collectionsToShow: []
-  },
   ElasticSearch: {
     show: {
       sortOptions: true,
@@ -549,9 +530,6 @@ export const config_soderholm: Config = {
     mediaCollection: {
       showURNButton: true
     },
-    music: {
-      collectionsToShow: []
-    },
     read: {
       showURNButton: true,
       showViewOptionsButton: true
@@ -569,7 +547,6 @@ export const config_soderholm: Config = {
       showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: false,
-      showMusicButton: false,
       showHelpButton: false
     },
     sideMenu: {
@@ -892,7 +869,6 @@ export const config_soderholm: Config = {
       MediaCollections: false,
       TagSearch: false,
       WorkSearch: false,
-      SongTypes: false,
       Books: false,
       EPUB: true
     },
@@ -956,18 +932,7 @@ export const config_soderholm: Config = {
   SortCollectionsByRomanNumerals: false,
   AccordionTOC: true,
   OpenCollectionFromToc: true,
-  AccordionMusic: false,
   SearchTocItemInAccordionByTitle: false,
-  AccordionsExpandedDefault: {
-    SongTypes: false,
-    Music: false
-  },
-  MusicAccordion: {
-    PersonSearchTypes: false,
-    TagSearch: false,
-    PlaceSearch: false,
-    Music: false
-  },
   AboutMenuAccordion: true,
   HasCover: false,
   HasTitle: false,
@@ -975,9 +940,6 @@ export const config_soderholm: Config = {
   HasIntro: false,
   OpenOccurrencesAndInfoOnNewPage: false,
   SingleOccurrenceType: null,
-  MusicPage: {
-    collectionsToShow: []
-  },
   ElasticSearch: {
     show: {
       sortOptions: false,
@@ -1120,7 +1082,6 @@ export const config_mechelin: Config = {
       showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: true,
-      showMusicButton: false,
       showHelpButton: false
     },
     sideMenu: {
@@ -1224,20 +1185,19 @@ export const config_mechelin: Config = {
   },
   show: {
     TOC: {
-        Home: false,
-        About: true,
-        Read: true,
-        Facsimiles: false,
-        ImageGallery: false,
-        PersonSearch: false,
-        PlaceSearch: false,
-        MediaCollections: false,
-        TagSearch: false,
-        WorkSearch: false,
-        SongTypes: false,
-        Books: false,
-        EPUB: false,
-        ExtraText: true
+      Home: false,
+      About: true,
+      Read: true,
+      Facsimiles: false,
+      ImageGallery: false,
+      PersonSearch: false,
+      PlaceSearch: false,
+      MediaCollections: false,
+      TagSearch: false,
+      WorkSearch: false,
+      Books: false,
+      EPUB: false,
+      ExtraText: true
     }
   },
   defaults: {
@@ -1303,18 +1263,7 @@ export const config_mechelin: Config = {
   SortCollectionsByRomanNumerals: false,
   AccordionTOC: true,
   OpenCollectionFromToc: true,
-  AccordionMusic: false,
   SearchTocItemInAccordionByTitle: false,
-  AccordionsExpandedDefault: {
-      SongTypes: false,
-      Music: false
-  },
-  MusicAccordion: {
-      PersonSearchTypes: false,
-      TagSearch: false,
-      PlaceSearch: false,
-      Music: false
-  },
   AboutMenuAccordion: true,
   HasCover: false,
   HasTitle: false,
@@ -1322,9 +1271,6 @@ export const config_mechelin: Config = {
   HasIntro: true,
   OpenOccurrencesAndInfoOnNewPage: false,
   SingleOccurrenceType: null,
-  MusicPage: {
-      collectionsToShow: []
-  },
   ElasticSearch: {
     groupOpenByDefault: {
         type: true,

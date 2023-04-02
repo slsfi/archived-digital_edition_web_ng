@@ -28,7 +28,6 @@ export class TopMenuComponent {
   public showHelpButton;
   public showViewToggle: boolean;
   public showTopURNButton: boolean;
-  public showTopMusicButton: boolean;
   public showTopElasticButton: boolean;
   public showTopSimpleSearchButton: boolean;
   public showTopContentButton: boolean;
@@ -51,7 +50,6 @@ export class TopMenuComponent {
     this.showTopSimpleSearchButton = config.component?.topMenu?.showSimpleSearchButton ?? true;
     this.showTopContentButton = config.component?.topMenu?.showContentButton ?? true;
     this.showTopAboutButton = config.component?.topMenu?.showAboutButton ?? true;
-    this.showTopMusicButton = config.component?.topMenu?.showMusicButton ?? true;
     this.language = config.i18n?.locale ?? 'sv';
 
     const aboutPagesFolderNumber = config.page?.about?.markdownFolderNumber ?? '03';

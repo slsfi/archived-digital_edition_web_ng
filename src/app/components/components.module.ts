@@ -10,10 +10,8 @@ import { PipesModule } from 'src/pipes/pipes.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TitleLogoComponent } from './title-logo/title-logo';
-import { ListOfSongsComponent } from './list-of-songs/list-of-songs';
 import { TextChangerComponent } from './text-changer/text-changer';
 import { MathJaxComponent } from './math-jax/math-jax';
-import { SongExampleComponent } from './song-example/song-example';
 import { IllustrationsComponent } from './illustrations/illustrations';
 import { RouterLink } from "@angular/router";
 import { TopMenuComponent } from "./top-menu/top-menu";
@@ -32,9 +30,7 @@ export function createTranslateLoader(http: HttpClient) {
 		TopMenuComponent,
 		TextChangerComponent,
 		SimpleSearchComponent,
-		SongExampleComponent,
 		DigitalEditionListChildrenComponent,
-		ListOfSongsComponent,
 		IllustrationsComponent,
 		DateHistogram,
 		MathJaxComponent,
@@ -61,9 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     TopMenuComponent,
     TextChangerComponent,
     SimpleSearchComponent,
-    SongExampleComponent,
     DigitalEditionListChildrenComponent,
-    ListOfSongsComponent,
     IllustrationsComponent,
     DateHistogram,
     MathJaxComponent,

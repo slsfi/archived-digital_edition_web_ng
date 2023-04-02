@@ -7,7 +7,6 @@
         "Home": "Etusivu",
         "Read": "Sisältö",
         "Info": "Tietoja",
-        "Music": "Musik",
         "SimpleSearch": "Hae",
         "AdvancedSearch": "Hae"
     },
@@ -92,10 +91,6 @@
             "SelectFacsDialogTitle": "Valitse faksimile",
             "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen."
         },
-        "SongExample": {
-            "Title": "Sång exempel",
-            "AddButtonText": "Sång exempel"
-        },
         "TitlePage": {
             "Title": "Nimiölehti"
         },
@@ -163,10 +158,7 @@
         "PlaceSearch": "Paikkahakemisto",
         "TagSearch": "Ämnesord",
         "WorkSearch": "Teoshakemisto",
-        "MusicianSearch": "Spelmän",
         "WriterSearch": "Upptecknare",
-        "SongTypes": "Låttyper",
-        "Music": "Musiikkia",
         "Collections": "Kategorier",
         "PlaymanTradition": "Finlandssvensk spelmanstradition",
         "Books": "Kirjat",
@@ -214,7 +206,6 @@
         "Commentary": "Kommentti",
         "Facsimile": "Faksimile",
         "Established": "Lukuteksti",
-        "Song": "Sång",
         "Info": "Infoa",
         "NoInfoFound": "Ei löydetty.",
         "OccurrencesSmall": "esiitymää",
@@ -311,7 +302,6 @@
     "photos": "foton",
     "recorder": "Upptecknare",
     "playman": "Spelman",
-    "song": "Melodi",
     "Text": "PDF",
     "BC": "eKr.",
     "note": "Viite",
@@ -338,36 +328,12 @@
         "mediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
         "missing": "Sivulla ei ole pysyvää osoitetta"
     },
-    "Song": {
-        "Playman": "Spelman",
-        "playman": "Spelman",
-        "SongType": "Låttyp",
-        "SongName": "Låtens namn",
-        "Landscape": "Landskap",
-        "Place": "Ort",
-        "Recorder": "Upptecknare",
-        "recorder": "Upptecknare",
-        "Year": "Uppteckningsår",
-        "OCL": "Originalsamlingens placering",
-        "OCS": "Originalsamlingens signum",
-        "Volume": "Volym",
-        "SongNumber": "Sångnummer",
-        "Comments": "Kommentarer",
-        "SongText": "Sångtext",
-        "Download": "Ladda ner"
-    },
-    "MusicPage": {
-        "Title": "Musik",
-        "PageTitle": "Musikvolymerna",
-        "SubTitle": "FSFD"
-    },
     "established": "Lukuteksti",
     "comments": "Kommentaari",
     "facsimiles": "Faksimilet",
     "manuscripts": "Käsikirjoitukset",
     "variations": "Painetut variantit",
     "introduction": "Johdanto",
-    "songexample": "Sång",
     "illustrations": "Kuvat",
     "legend": "Lukuohje",
     "EditionsList": {

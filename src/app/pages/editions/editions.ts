@@ -47,16 +47,6 @@ export class EditionsPage {
     }
   }
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem(true);
-    this.events.publishMusicAccordionReset(true);
-    this.events.publishPageLoadedCollections({'title': 'Editions'});
-  }
-
   getMdContent(fileID: string) {
     this.mdContentService.getMdContent(fileID).subscribe({
       next: text => { this.readContent = text.content.trim(); },

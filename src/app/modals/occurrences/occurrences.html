@@ -153,17 +153,11 @@
                               <ng-container i18n="@@Occurrences.Facsimile">Faksimil</ng-container>: {{publication.occurrences[0].publication_facsimile_page}}
                             </div>
                           </ion-item>
-                          <ion-item class="displayName" *ngIf="publication.occurrences[0].textType == 'song' && publication.occurrences[0].description">
-                            <div>
-                              <ng-container i18n="@@Occurrences.Song">Sång</ng-container>: {{publication.occurrences[0].description}}
-                            </div>
-                          </ion-item>
                           <ion-button *ngIf="publication.occurrences[0].textType == 'ms'" fill="clear" slot="end" i18n="@@Occurrences.Manuscript">Manuskript</ion-button>
                           <ion-button *ngIf="publication.occurrences[0].textType == 'var'" fill="clear" slot="end" i18n="@@Occurrences.Variation">Variant</ion-button>
                           <ion-button *ngIf="publication.occurrences[0].textType == 'com'" fill="clear" slot="end" i18n="@@Occurrences.Commentary">Kommentar</ion-button>
                           <ion-button *ngIf="publication.occurrences[0].textType == 'facs'" fill="clear" slot="end" i18n="@@Occurrences.Facsimile">Faksimil</ion-button>
                           <ion-button *ngIf="publication.occurrences[0].textType == 'est'" fill="clear" slot="end" i18n="@@Occurrences.Established">Lästext</ion-button>
-                          <ion-button *ngIf="publication.occurrences[0].textType == 'song'" fill="clear" slot="end" i18n="@@Occurrences.Song">Sång</ion-button>
                         </ion-item>
                       </ion-list>
                     </ion-item-group>

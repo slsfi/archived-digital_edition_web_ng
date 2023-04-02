@@ -22,14 +22,6 @@
         <ng-container i18n="@@TopMenu.Info">Om</ng-container>
       </a>
     </ion-button>
-    <ion-button *ngIf="showTopMusicButton && userSettingsService.isDesktop()">
-
-      <!-- https://stackoverflow.com/a/69621135 -->
-
-      <a [routerLink]="['/music']">
-        <ng-container i18n="@@TopMenu.Music">Musik</ng-container>
-      </a>
-    </ion-button>
     <ion-button *ngIf="showTopSimpleSearchButton" class="simple-search-button" (click)="searchApp()" id="searchIcon">
       <ion-icon slot="start" name="search"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.SimpleSearch">Sök</span>

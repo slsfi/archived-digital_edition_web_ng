@@ -6,19 +6,10 @@
     padding: 1rem 1rem 4rem 1rem;
 }
 
-list-of-songs {
-    margin-left: 1rem;
-    display: block;
-}
-
 @media(max-width: 820px) {
     .md_content {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-    }
-    
-    list-of-songs{
-        margin-left: 0.5rem;
     }
 }
 
@@ -26,9 +17,5 @@ list-of-songs {
     .md_content {
         padding-left: 0;
         padding-right: 0;
-    }
-    
-    list-of-songs{
-        margin-left: 0;
     }
 }

@@ -46,16 +46,6 @@
         <source>Gå till bildbanken</source>
       </segment>
     </unit>
-    <unit id="MusicPage.PageTitle">
-      <segment>
-        <source>Musikvolymerna</source>
-      </segment>
-    </unit>
-    <unit id="MusicPage.SubTitle">
-      <segment>
-        <source>FSFD</source>
-      </segment>
-    </unit>
     <unit id="Occurrences.articles">
       <segment>
         <source>Artiklar</source>
@@ -156,11 +146,6 @@
         <source>Region</source>
       </segment>
     </unit>
-    <unit id="Occurrences.Song">
-      <segment>
-        <source>Sång</source>
-      </segment>
-    </unit>
     <unit id="Occurrences.source">
       <segment>
         <source>Källa</source>
@@ -216,11 +201,6 @@
         <source>Visa ändringar inarbetade</source>
       </segment>
     </unit>
-    <unit id="Read.ShowSearchResults">
-      <segment>
-        <source>Förekomster</source>
-      </segment>
-    </unit>
     <unit id="Reference.refer">
       <segment>
         <source>Hänvisa</source>
@@ -234,76 +214,6 @@
     <unit id="Site.Title">
       <segment>
         <source>Webbplatsens titel</source>
-      </segment>
-    </unit>
-    <unit id="Song.Comments">
-      <segment>
-        <source>Kommentarer</source>
-      </segment>
-    </unit>
-    <unit id="Song.Download">
-      <segment>
-        <source>Ladda ner</source>
-      </segment>
-    </unit>
-    <unit id="Song.Landscape">
-      <segment>
-        <source>Landskap</source>
-      </segment>
-    </unit>
-    <unit id="Song.OCL">
-      <segment>
-        <source>Originalsamlingens placering</source>
-      </segment>
-    </unit>
-    <unit id="Song.OCS">
-      <segment>
-        <source>Originalsamlingens signum</source>
-      </segment>
-    </unit>
-    <unit id="Song.Place">
-      <segment>
-        <source>Ort</source>
-      </segment>
-    </unit>
-    <unit id="Song.Playman">
-      <segment>
-        <source>Spelman</source>
-      </segment>
-    </unit>
-    <unit id="Song.Recorder">
-      <segment>
-        <source>Upptecknare</source>
-      </segment>
-    </unit>
-    <unit id="Song.SongName">
-      <segment>
-        <source>Låtens namn</source>
-      </segment>
-    </unit>
-    <unit id="Song.SongNumber">
-      <segment>
-        <source>Sångnummer</source>
-      </segment>
-    </unit>
-    <unit id="Song.SongText">
-      <segment>
-        <source>Sångtext</source>
-      </segment>
-    </unit>
-    <unit id="Song.SongType">
-      <segment>
-        <source>Låttyp</source>
-      </segment>
-    </unit>
-    <unit id="Song.Volume">
-      <segment>
-        <source>Volym</source>
-      </segment>
-    </unit>
-    <unit id="Song.Year">
-      <segment>
-        <source>Uppteckningsår</source>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
@@ -324,11 +234,6 @@
     <unit id="TopMenu.Info">
       <segment>
         <source>Om</source>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Music">
-      <segment>
-        <source>Musik</source>
       </segment>
     </unit>
     <unit id="TopMenu.Read">

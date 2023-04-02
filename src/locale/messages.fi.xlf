@@ -15,13 +15,13 @@
     <unit id="Filter.apply">
       <segment state="initial">
         <source>Verkställ</source>
-        <target>Rajaa</target>
+        <target>Aseta</target>
       </segment>
     </unit>
     <unit id="Filter.bornBetween">
       <segment state="initial">
         <source>Född mellan</source>
-        <target>Syntynyt vuosien välissä</target>
+        <target>Syntynyt vuosina</target>
       </segment>
     </unit>
     <unit id="Filter.countries">
@@ -33,19 +33,19 @@
     <unit id="Filter.personTypes">
       <segment state="initial">
         <source>Personkategori</source>
-        <target>Henkilötyyppi</target>
+        <target>Henkilökategoria</target>
       </segment>
     </unit>
     <unit id="Filter.tagTypes">
       <segment state="initial">
         <source>Ämneskategori</source>
-        <target>Asiasanatyyppi</target>
+        <target>Aihekategoria</target>
       </segment>
     </unit>
     <unit id="Filter.title">
       <segment state="initial">
         <source>Avgränsningar</source>
-        <target>Rajaa</target>
+        <target>Rajaukset</target>
       </segment>
     </unit>
     <unit id="MediaCollections.GotoMediaCollection">
@@ -54,22 +54,10 @@
         <target>Kuvapankkiin</target>
       </segment>
     </unit>
-    <unit id="MusicPage.PageTitle">
-      <segment state="initial">
-        <source>Musikvolymerna</source>
-        <target>Musikvolymerna</target>
-      </segment>
-    </unit>
-    <unit id="MusicPage.SubTitle">
-      <segment state="initial">
-        <source>FSFD</source>
-        <target>FSFD</target>
-      </segment>
-    </unit>
     <unit id="Occurrences.articles">
       <segment state="initial">
         <source>Artiklar</source>
-        <target>Artiklar</target>
+        <target>Artikkeleita</target>
       </segment>
     </unit>
     <unit id="Occurrences.authors">
@@ -81,7 +69,7 @@
     <unit id="Occurrences.city">
       <segment state="initial">
         <source>Stad</source>
-        <target>Stad</target>
+        <target>Kaupunki</target>
       </segment>
     </unit>
     <unit id="Occurrences.Commentary">
@@ -93,7 +81,7 @@
     <unit id="Occurrences.country">
       <segment state="initial">
         <source>Plats</source>
-        <target>Plats</target>
+        <target>Maa</target>
       </segment>
     </unit>
     <unit id="Occurrences.description">
@@ -129,7 +117,7 @@
     <unit id="Occurrences.journal">
       <segment state="initial">
         <source>Journal</source>
-        <target>Journal</target>
+        <target>Aikakauslehti</target>
       </segment>
     </unit>
     <unit id="Occurrences.latitude">
@@ -183,13 +171,7 @@
     <unit id="Occurrences.region">
       <segment state="initial">
         <source>Region</source>
-        <target>Region</target>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Song">
-      <segment state="initial">
-        <source>Sång</source>
-        <target>Sång</target>
+        <target>Alue</target>
       </segment>
     </unit>
     <unit id="Occurrences.source">
@@ -237,13 +219,13 @@
     <unit id="Read.Manuscripts.NoManuscripts">
       <segment state="initial">
         <source>Inga manuskript.</source>
-        <target>Käsikirjoituksia ei ole.</target>
+        <target>Ei transkriboituja käsikirjoituksia.</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.SelectMsDialogSubtitle">
       <segment state="initial">
         <source>Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.</source>
-        <target>Käsikirjoitus korvaa sarakkeen käsikirjoituksen.</target>
+        <target>Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen.</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.SelectMsDialogTitle">
@@ -258,12 +240,6 @@
         <target>Näytä muutokset toteutettuina</target>
       </segment>
     </unit>
-    <unit id="Read.ShowSearchResults">
-      <segment state="initial">
-        <source>Förekomster</source>
-        <target>Esiintymät</target>
-      </segment>
-    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
@@ -273,103 +249,19 @@
     <unit id="Site.Subtitle">
       <segment state="initial">
         <source>Webbplatsens undertitel</source>
-        <target/>
+        <target>Sivuston alaotsikko</target>
       </segment>
     </unit>
     <unit id="Site.Title">
       <segment state="initial">
         <source>Webbplatsens titel</source>
-        <target>Zacharias Topelius Skrifter</target>
-      </segment>
-    </unit>
-    <unit id="Song.Comments">
-      <segment state="initial">
-        <source>Kommentarer</source>
-        <target>Kommentarer</target>
-      </segment>
-    </unit>
-    <unit id="Song.Download">
-      <segment state="initial">
-        <source>Ladda ner</source>
-        <target>Ladda ner</target>
-      </segment>
-    </unit>
-    <unit id="Song.Landscape">
-      <segment state="initial">
-        <source>Landskap</source>
-        <target>Landskap</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCL">
-      <segment state="initial">
-        <source>Originalsamlingens placering</source>
-        <target>Originalsamlingens placering</target>
-      </segment>
-    </unit>
-    <unit id="Song.OCS">
-      <segment state="initial">
-        <source>Originalsamlingens signum</source>
-        <target>Originalsamlingens signum</target>
-      </segment>
-    </unit>
-    <unit id="Song.Place">
-      <segment state="initial">
-        <source>Ort</source>
-        <target>Ort</target>
-      </segment>
-    </unit>
-    <unit id="Song.Playman">
-      <segment state="initial">
-        <source>Spelman</source>
-        <target>Spelman</target>
-      </segment>
-    </unit>
-    <unit id="Song.Recorder">
-      <segment state="initial">
-        <source>Upptecknare</source>
-        <target>Upptecknare</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongName">
-      <segment state="initial">
-        <source>Låtens namn</source>
-        <target>Låtens namn</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongNumber">
-      <segment state="initial">
-        <source>Sångnummer</source>
-        <target>Sångnummer</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongText">
-      <segment state="initial">
-        <source>Sångtext</source>
-        <target>Sångtext</target>
-      </segment>
-    </unit>
-    <unit id="Song.SongType">
-      <segment state="initial">
-        <source>Låttyp</source>
-        <target>Låttyp</target>
-      </segment>
-    </unit>
-    <unit id="Song.Volume">
-      <segment state="initial">
-        <source>Volym</source>
-        <target>Volym</target>
-      </segment>
-    </unit>
-    <unit id="Song.Year">
-      <segment state="initial">
-        <source>Uppteckningsår</source>
-        <target>Uppteckningsår</target>
+        <target>Sivuston otsikko</target>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
       <segment state="initial">
         <source>Album</source>
-        <target>Album</target>
+        <target>Kuvapankki</target>
       </segment>
     </unit>
     <unit id="TOC.WorkSearch">
@@ -387,19 +279,13 @@
     <unit id="TopMenu.Info">
       <segment state="initial">
         <source>Om</source>
-        <target>Topeliuksesta ja editiosta</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Music">
-      <segment state="initial">
-        <source>Musik</source>
-        <target>Musik</target>
+        <target>Tietoja</target>
       </segment>
     </unit>
     <unit id="TopMenu.Read">
       <segment state="initial">
         <source>Läs</source>
-        <target>Lue</target>
+        <target>Sisältö</target>
       </segment>
     </unit>
     <unit id="TopMenu.SimpleSearch">

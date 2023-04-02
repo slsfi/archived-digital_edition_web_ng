@@ -1,21 +1,18 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, ModalController, NavController, NavParams, Platform } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { EventsService } from 'src/app/services/events/events.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
-import { MetadataService } from 'src/app/services/metadata/metadata.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
@@ -59,20 +56,16 @@ export class PersonSearchPage {
   languageSubscription?: Subscription;
   debouncedSearch = debounce(this.searchPersons, 500);
 
-  constructor(public navCtrl: NavController,
+  constructor(
               public semanticDataService: SemanticDataService,
               protected langService: LanguageService,
               private mdContentService: MdContentService,
               public modalCtrl: ModalController,
-              private platform: Platform,
               public loadingCtrl: LoadingController,
               public occurrenceService: OccurrenceService,
               protected storage: StorageService,
               public translate: TranslateService,
-              private userSettingsService: UserSettingsService,
-              private events: EventsService,
               private analyticsService: AnalyticsService,
-              private metadataService: MetadataService,
               private tooltipService: TooltipService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
@@ -87,21 +80,6 @@ export class PersonSearchPage {
     }
   }
 
-  ionViewWillEnter() {
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription(this.constructor.name);
-    this.metadataService.addKeywords();
-
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'person-search'});
-    this.events.publishSelectedItemInMenu({
-      menuID: 'personSearch',
-      component: 'person-search'
-    });
-  }
-
   ionViewDidEnter() {
     this.analyticsService.doPageView('Subjects');
   }
@@ -113,10 +91,6 @@ export class PersonSearchPage {
         this.getMdContent(lang + '-12-02');
       }
     });
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
   }
 
   ngOnDestroy() {
@@ -152,30 +126,9 @@ export class PersonSearchPage {
         this.pageTitle = null;
       }
 
-      this.selectMusicAccordionItem();
       this.getPersons();
     });
 
-  }
-
-  appHasMusicAccordionConfig() {
-    return config.AccordionMusic ?? false;
-  }
-
-  selectMusicAccordionItem() {
-    const appHasMusicAccordion = this.appHasMusicAccordionConfig();
-
-    if (!appHasMusicAccordion || !this.subType.length) {
-      return;
-    }
-
-    if ( this.subType !== null ) {
-      for ( let i = 0; i < this.personSearchTypes.length; i++ ) {
-        if ( this.personSearchTypes[i].object_subtype === this.subType ) {
-          this.events.publishMusicAccordionSetSelected({musicAccordionKey: this.personSearchTypes[i].musicAccordionKey});
-        }
-      }
-    }
   }
 
   getPersons() {

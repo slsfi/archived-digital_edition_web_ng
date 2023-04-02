@@ -75,37 +75,17 @@ export class PlaceSearchPage {
     }
   }
 
-  ionViewWillEnter() {
-    // Try to remove META-Tags
-    this.metadataService.clearHead();
-    // Add the new META-Tags
-    this.metadataService.addDescription(this.constructor.name);
-    this.metadataService.addKeywords();
-
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'place-search'});
-    this.events.publishSelectedItemInMenu({
-      menuID: 'placeSearch',
-      component: 'place-search'
-    });
-  }
-
   ionViewDidEnter() {
     this.analyticsService.doPageView('Places');
   }
 
   ngOnInit() {
-    this.selectMusicAccordionItem();
     this.getPlaces();
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
       if (lang) {
         this.getMdContent(lang + '-12-03');
       }
     });
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
   }
 
   ngOnDestroy() {
@@ -207,20 +187,6 @@ export class PlaceSearchPage {
 
   hasMore() {
     return this.last_fetch_size > this.max_fetch_size - 1;
-  }
-
-  appHasMusicAccordionConfig() {
-    return config.AccordionMusic ?? false;
-  }
-
-  selectMusicAccordionItem() {
-    const appHasMusicAccordion = this.appHasMusicAccordionConfig();
-
-    if (!appHasMusicAccordion) {
-      return;
-    }
-
-    this.events.publishMusicAccordionSetSelected({musicAccordionKey: 'placeSearch'});
   }
 
   async openPlace(occurrenceResult: OccurrenceResult) {

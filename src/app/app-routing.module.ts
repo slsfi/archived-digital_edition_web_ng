@@ -51,10 +51,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/media-collections/media-collections.module').then( m => m.MediaCollectionsPageModule)
   },
   {
-    path: 'music',
-    loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule)
-  },
-  {
     path: 'result',
     loadChildren: () => import('./pages/occurrences-result/occurrences-result.module').then( m => m.OccurrencesResultPageModule)
   },
@@ -69,10 +65,6 @@ const routes: Routes = [
   {
     path: 'publication-toc',
     loadChildren: () => import('./pages/single-edition/single-edition.module').then( m => m.SingleEditionPageModule)
-  },
-  {
-    path: 'song',
-    loadChildren: () => import('./pages/song/song.module').then( m => m.SongPageModule)
   },
   {
     path: 'tags',

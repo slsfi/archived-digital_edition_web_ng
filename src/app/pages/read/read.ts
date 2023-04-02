@@ -77,7 +77,6 @@ export class ReadPage /*implements OnDestroy*/ {
   // Used for infinite facsimile
   facs_id: any;
   facs_nr: any;
-  song_id: any;
   search_title: any;
 
   searchMatches: Array<string> = [];

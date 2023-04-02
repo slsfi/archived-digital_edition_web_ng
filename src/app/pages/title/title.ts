@@ -132,15 +132,6 @@ export class TitlePage {
     }
   }
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishMusicAccordionReset(true);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'title'});
-  }
-
   getMdContent(fileID: string) {
     this.mdContentService.getMdContent(fileID).subscribe({
       next: text => { this.mdContent = text.content; },

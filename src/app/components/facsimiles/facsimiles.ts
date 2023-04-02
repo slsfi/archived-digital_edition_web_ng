@@ -9,7 +9,6 @@ import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { SongService } from 'src/app/services/song/song.service';
 import { config } from "src/app/services/config/config";
 
 /**
@@ -30,7 +29,6 @@ export class FacsimilesComponent {
   @Input() matches?: Array<string>;
   @Input() facsID?: any;
   @Input() facsNr?: any;
-  @Input() songID?: any;
   @Output() openNewFacsimileView: EventEmitter<any> = new EventEmitter();
 
   public text: any;
@@ -75,7 +73,6 @@ export class FacsimilesComponent {
     public translate: TranslateService,
     protected events: EventsService,
     private alertCtrl: AlertController,
-    public songService: SongService,
     private analyticsService: AnalyticsService,
     private route: ActivatedRoute,
   ) {
@@ -133,13 +130,7 @@ export class FacsimilesComponent {
       if (this.facsimilePagesInfinite) {
         /* In the if-branches below the displayed facsimile image is set based on input, i.e. the facsimile component
            has been opened through an emitted event. The default behaviour of the component is in the else-branch. */
-        if (this.facsID && this.facsNr && this.songID) {
-          this.facsUrl = config.app.apiEndpoint + '/' +
-            config.app.machineName +
-            `/song-example/page/image/${this.facsID}/`;
-          this.facsNumber = this.facsNr;
-          this.facsSize = null;
-        } else if (this.facsID && this.facsNr) {
+        if (this.facsID && this.facsNr) {
           this.facsUrl = config.app.apiEndpoint + '/' +
             config.app.machineName +
             `/facsimile/page/image/${this.facsID}/`;

@@ -294,9 +294,6 @@ export class OccurrencesPage {
         if (occurrence.publication_facsimile_id) {
           this.setFacsimileOccurrence(occurrence, 'facs')
         }
-        if (occurrence.type === 'song') {
-          this.setOccurrence(occurrence, occurrence.type);
-        }
       }
     } else if ( this.singleOccurrenceType === occurrence.type ) {
       this.setOccurrence(occurrence, occurrence.type);
@@ -320,11 +317,6 @@ export class OccurrencesPage {
   }
 
   openText(text: any) {
-    if (text.textType === 'song' && text.description) {
-      this.selectSong(text.description);
-      return;
-    }
-
     const params = {} as any;
     const col_id = text.collectionID.split('_')[0];
     const pub_id = text.collectionID.split('_')[1];
@@ -392,23 +384,6 @@ export class OccurrencesPage {
 
     this.viewCtrl.dismiss();
     this.router.navigate([`/media-collection/${null}/${data.id}/${type}`], { queryParams: params });
-  }
-
-  /**
-   * If occurrence is a song, go to song page instead
-   */
-  selectSong(song_name: any) {
-    const params = {
-    } as any;
-
-    params['occurrenceResult'] = JSON.stringify(this.occurrenceResult);
-    params['objectType'] = this.objectType;
-
-    if (this.navParams.get('showOccurrencesModalOnSong')) {
-      params['showOccurrencesModalOnSong'] = true;
-    }
-    this.viewCtrl.dismiss();
-    this.router.navigate([`/song/${song_name}`], { queryParams: params });
   }
 
   setOccurrence(occurrence: Occurrence, type: string) {

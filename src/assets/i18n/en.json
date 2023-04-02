@@ -7,7 +7,6 @@
         "Home": "Home",
         "Read": "Content",
         "Info": "About",
-        "Music": "Music",
         "SimpleSearch": "Search",
         "AdvancedSearch": "Advanced Search"
     },
@@ -92,10 +91,6 @@
             "SelectFacsDialogTitle": "Select facsimile",
             "SelectFacsDialogSubtitle": "The facsimile will be shown in the column where you clicked."
         },
-        "SongExample": {
-            "Title": "Song example",
-            "AddButtonText": "Song example"
-        },
         "TitlePage": {
             "Title": "Title page"
         },
@@ -163,10 +158,7 @@
         "PlaceSearch": "Places",
         "TagSearch": "Subjects",
         "WorkSearch": "Works",
-        "MusicianSearch": "Musicians Search",
         "WriterSearch": "Writers Search",
-        "SongTypes": "Song Types",
-        "Music": "Music",
         "Collections": "Publications",
         "PlaymanTradition": "Finlandssvensk spelmanstradition",
         "Books": "Books",
@@ -214,7 +206,6 @@
         "Commentary": "Commentary",
         "Facsimile": "Facsimile",
         "Established": "Established",
-		"Song": "Song",
         "Info": "Information",
         "NoInfoFound": "No information.",
         "OccurrencesSmall": "occurrences",
@@ -311,7 +302,6 @@
     "photos": "photos",
     "recorder": "Recorder",
     "playman": "Playman",
-    "song": "Melody",
     "Text": "PDF",
     "BC": "BC",
     "note": "Note",
@@ -338,36 +328,12 @@
         "mediaCollection": "Refer to this media collection",
         "missing": "This page does not have a persistent identifier"
     },
-    "Song": {
-        "Playman": "Spelman",
-        "playman": "Spelman",
-        "SongType": "Låttyp",
-        "SongName": "Låtens namn",
-        "Landscape": "Landskap",
-        "Place": "Ort",
-        "Recorder": "Upptecknare",
-        "recorder": "Upptecknare",
-        "Year": "Uppteckningsår",
-        "OCL": "Originalsamlingens placering",
-        "OCS": "Originalsamlingens signum",
-        "Volume": "Volym",
-        "SongNumber": "Sångnummer",
-        "Comments": "Kommentarer",
-        "SongText": "Sångtext",
-        "Download": "Ladda ner"
-    },
-    "MusicPage": {
-        "Title": "Musik",
-        "PageTitle": "Musikvolymerna",
-        "SubTitle": "FSFD"
-    },
     "established": "Reading text",
     "comments": "Commentary",
     "facsimiles": "Fascimile",
     "manuscripts": "Manuscript",
     "variations": "Variants",
     "introduction": "Introduction",
-    "songexample": "Song",
     "illustrations": "Illustrations",
     "legend": "Legend",
     "EditionsList": {
