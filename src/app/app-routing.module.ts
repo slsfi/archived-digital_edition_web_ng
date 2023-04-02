@@ -27,10 +27,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/epub/epub.module').then( m => m.EpubModule)
   },
   {
-    path: 'featured',
-    loadChildren: () => import('./pages/featured-facsimile/featured-facsimile.module').then( m => m.FeaturedFacsimilePageModule)
-  },
-  {
     path: 'publication/:collectionID/foreword',
     loadChildren: () => import('./pages/foreword/foreword.module').then( m => m.ForewordPageModule)
   },
@@ -53,10 +49,6 @@ const routes: Routes = [
   {
     path: 'result',
     loadChildren: () => import('./pages/occurrences-result/occurrences-result.module').then( m => m.OccurrencesResultPageModule)
-  },
-  {
-    path: 'facsimile',
-    loadChildren: () => import('./pages/pdf/pdf.module').then( m => m.PdfPageModule)
   },
   {
     path: 'places',

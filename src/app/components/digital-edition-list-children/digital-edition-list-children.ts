@@ -126,9 +126,4 @@ export class DigitalEditionListChildrenComponent {
     const ref = window.open(dURL, '_self', 'location=no');
   }
 
-  showPDF(edition: any) {
-    const isChildPdf = true;
-    const params = { page: 1};
-    this.router.navigate([`/facsimile/pdf/${edition.facsimileId}`], { queryParams: params })
-  }
 }

@@ -50,10 +50,6 @@ export class TableOfContentsService {
     }
   }
 
-  getToc(): Observable<any> {
-    return this.http.get('assets/toc-example.json');
-  }
-
   getTableOfContents(id: string): Observable<any> {
     let url =
       this.apiEndpoint +
