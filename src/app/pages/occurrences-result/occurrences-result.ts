@@ -5,7 +5,6 @@ import { router } from 'sw-toolbox';
 import { SearchAppPage } from 'src/app/modals/search-app/search-app';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -84,7 +83,6 @@ export class OccurrencesResultPage {
     public modalCtrl: ModalController,
     private events: EventsService,
     private cf: ChangeDetectorRef,
-    private analyticsService: AnalyticsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -110,12 +108,7 @@ export class OccurrencesResultPage {
     });
   }
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
   ionViewWillEnter() {
-    console.log('entering occurrence result page');
-    this.events.publishIonViewWillEnter(this.constructor.name);
     this.segments = 'info';
   }
 
@@ -459,7 +452,6 @@ export class OccurrencesResultPage {
           let title = tag.name;
           title = title.charAt(0).toUpperCase() + title.slice(1);
           this.title = title;
-          this.analyticsService.doAnalyticsEvent('Occurrence', 'tag', String(title));
         }
         // string.charAt(0).toUpperCase() + string.slice(1);
         this.loadingInfoData = false;
@@ -485,7 +477,6 @@ export class OccurrencesResultPage {
           let title = work.title;
           title = title.charAt(0).toUpperCase() + title.slice(1);
           this.title = title;
-          this.analyticsService.doAnalyticsEvent('Occurrence', 'work', String(title));
         }
         // string.charAt(0).toUpperCase() + string.slice(1);
         this.loadingInfoData = false;
@@ -502,7 +493,6 @@ export class OccurrencesResultPage {
   setSubject(subject: any) {
     if (subject.name) {
       this.title = subject.name;
-      this.analyticsService.doAnalyticsEvent('Occurrence', 'subject', String(this.title));
     }
 
     this.infoData.type = subject.object_type;
@@ -516,7 +506,6 @@ export class OccurrencesResultPage {
   setLocation(location: any) {
     if (location.name) {
       this.title = location.name;
-      this.analyticsService.doAnalyticsEvent('Occurrence', 'location', String(this.title));
     }
 
     this.infoData.city = location.city;
@@ -528,7 +517,6 @@ export class OccurrencesResultPage {
   setWork(work: any) {
     if (work.name) {
       this.title = work.name;
-      this.analyticsService.doAnalyticsEvent('Occurrence', 'work', String(this.title));
     }
 
     this.infoData.city = work.city;
@@ -666,13 +654,8 @@ export class OccurrencesResultPage {
     this.router.navigate([`/publication/${col_id}/text/${pub_id}/nochapter/${facs_id}/${facs_nr}/nosong/searchtitle/text_type`], { queryParams: params });
   }
 
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Occurrence-result');
-  }
-
   downloadArticle(url: any) {
     const ref = window.open(url, '_blank', 'location=no');
-    this.analyticsService.doAnalyticsEvent('Download', 'PDF', url);
   }
 
   /**

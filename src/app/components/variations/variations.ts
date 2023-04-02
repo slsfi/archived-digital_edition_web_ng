@@ -4,7 +4,6 @@ import { AlertButton, AlertController, AlertInput, ToastController } from '@ioni
 import { TranslateService } from '@ngx-translate/core';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
@@ -51,7 +50,6 @@ export class VariationsComponent {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     public translate: TranslateService,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.text = '';
@@ -66,10 +64,6 @@ export class VariationsComponent {
     this.setText();
   }
 
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Variations', 'Variations', String(this.varID));
-  }
-
   openNewVar( event: Event, id: any ) {
     event.preventDefault();
     event.stopPropagation();
@@ -79,7 +73,6 @@ export class VariationsComponent {
 
   setText() {
     this.getVariation();
-    this.doAnalytics();
   }
 
   getVariation() {

@@ -11,7 +11,6 @@ import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { EventsService } from 'src/app/services/events/events.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
@@ -84,9 +83,8 @@ export class OccurrencesPage {
               public occurrenceService: OccurrenceService,
               public viewCtrl: ModalController,
               private events: EventsService,
-              private analyticsService: AnalyticsService,
               public commonFunctions: CommonFunctionsService,
-              public router: Router,
+              public router: Router
   ) {
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
 
@@ -139,7 +137,6 @@ export class OccurrencesPage {
     this.getMediaData();
     this.getArticleData();
     this.getGalleryOccurrences();
-    this.analyticsService.doAnalyticsEvent('Occurrence', this.objectType, String(this.title));
   }
 
   ionViewWillLeave() {
@@ -240,7 +237,6 @@ export class OccurrencesPage {
   }
 
   ionViewDidEnter() {
-    this.analyticsService.doPageView('Occurrences');
     this.loadmap();
   }
 

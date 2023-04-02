@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
@@ -62,7 +61,6 @@ export class TagSearchPage {
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
               private events: EventsService,
-              private analyticsService: AnalyticsService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
   ) {
@@ -71,10 +69,6 @@ export class TagSearchPage {
     if (this.max_fetch_size > 10000) {
       this.max_fetch_size = 10000;
     }
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Tags');
   }
 
   ionViewDidLoad() {

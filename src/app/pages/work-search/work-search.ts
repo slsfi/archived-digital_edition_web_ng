@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -79,15 +78,10 @@ export class WorkSearchPage {
               private userSettingsService: UserSettingsService,
               private events: EventsService,
               private cf: ChangeDetectorRef,
-              private analyticsService: AnalyticsService,
-              private router: Router,
+              private router: Router
   ) {
     this.showFilter = config.WorkSearch.ShowFilter ?? false;
     this.infiniteScrollNumber = config.WorkSearch.InitialLoadNumber ?? 200;
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Works');
   }
 
   ngOnInit() {

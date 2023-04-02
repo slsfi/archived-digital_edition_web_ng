@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
@@ -37,7 +36,6 @@ export class ManuscriptsComponent {
     protected storage: StorageService,
     private alertCtrl: AlertController,
     public translate: TranslateService,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.showOpenLegendButton = config.showOpenLegendButton?.manuscripts ?? false;
@@ -46,7 +44,6 @@ export class ManuscriptsComponent {
   ngOnInit() {
     if (this.textItemID) {
       this.loadManuscriptTexts();
-      this.doAnalytics();
     }
   }
 
@@ -192,10 +189,6 @@ export class ManuscriptsComponent {
     }
     this.openNewLegendView.emit(id);
     this.commonFunctions.scrollLastViewIntoView();
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Manuscripts', 'Manuscripts', this.textItemID);
   }
 
 }

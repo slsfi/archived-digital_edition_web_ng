@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { SimpleSearchComponent } from 'src/app/components/simple-search/simple-search';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 
 /**
@@ -26,8 +25,7 @@ export class SearchAppPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public viewCtrl: ModalController,
-    public events: EventsService,
-    private analyticsService: AnalyticsService,
+    public events: EventsService
   ) {
     this.show = 'simple';
     this.results = ['foo', 'bar', 'foobar', 'Hello World'];
@@ -44,17 +42,9 @@ export class SearchAppPage {
   }
 
   ionViewDidEnter() {
-    this.analyticsService.doPageView('Search');
     setTimeout(() => {
         this.childcmp?.setFocus();
     });
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
   }
 
   cancel() {

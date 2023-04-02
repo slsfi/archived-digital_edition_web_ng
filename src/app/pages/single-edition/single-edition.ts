@@ -14,7 +14,6 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { PdfService } from 'src/app/services/pdf/pdf.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { config } from "src/app/services/config/config";
 import { global } from '../../../app/global';
 
@@ -73,7 +72,6 @@ export class SingleEditionPage {
     protected userSettingsService: UserSettingsService,
     protected mdcontentService: MdContentService,
     protected pdfService: PdfService,
-    private analyticsService: AnalyticsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -133,13 +131,6 @@ export class SingleEditionPage {
         this.root = params['root'];
       }
     });
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Single-edition');
-    if (this.hasDigitalEditionListChildren && this.platform.is('mobile')) {
-      this.events.publishSplitPaneToggleDisable();
-    }
   }
 
   getDescriptions() {

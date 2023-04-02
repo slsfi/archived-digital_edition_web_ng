@@ -7,7 +7,6 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
 import { Facet } from 'src/app/models/facet.model';
@@ -85,8 +84,8 @@ export class SimpleSearchComponent {
     public semanticDataService: SemanticDataService,
     private tooltipService: TooltipService,
     private storage: StorageService,
-    private cf: ChangeDetectorRef,
-    private analyticsService: AnalyticsService) {
+    private cf: ChangeDetectorRef
+  ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
     this.showPageNumbers = config.simpleSearch?.showPageNumbers ?? true;
@@ -347,7 +346,6 @@ export class SimpleSearchComponent {
   }
 
   startSearch(searchString: any) {
-    this.analyticsService.doAnalyticsEvent('Search', 'SimpleSearch', String(searchString));
     this.isLoading = true;
     this.searchString = searchString;
     const that = this;

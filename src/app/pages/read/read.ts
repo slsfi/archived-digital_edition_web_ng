@@ -11,7 +11,6 @@ import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { SearchAppPage } from 'src/app/modals/search-app/search-app';
 import { EstablishedText } from 'src/app/models/established-text.model';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -154,7 +153,6 @@ export class ReadPage /*implements OnDestroy*/ {
     private events: EventsService,
     public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute,
     private router: Router
@@ -373,10 +371,6 @@ export class ReadPage /*implements OnDestroy*/ {
     if (isBrowser()) {
       this.setUpTextListeners();
     }
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Read');
   }
 
   ngAfterViewInit() {

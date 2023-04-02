@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalController } from '@ionic/angular';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -36,7 +35,6 @@ export class CommentsComponent {
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
-    private analyticsService: AnalyticsService,
     public translate: TranslateService,
     protected modalController: ModalController,
     public commonFunctions: CommonFunctionsService
@@ -47,7 +45,6 @@ export class CommentsComponent {
     if (this.textItemID) {
       this.loadCommentsText();
       this.getCorrespondanceMetadata();
-      this.doAnalytics();
     }
     if (isBrowser()) {
       this.setUpTextListeners();
@@ -104,7 +101,6 @@ export class CommentsComponent {
 
         if (text['letter'] !== undefined && text['letter'] !== null) {
           this.letter = text['letter'];
-          this.doAnalytics();
         }
       },
       error: (e) => { }
@@ -191,10 +187,6 @@ export class CommentsComponent {
       componentProps: { 'imageNumber': imageNumber }
     });
     return await modal.present();
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Comments', 'Comments', this.textItemID);
   }
 
 }

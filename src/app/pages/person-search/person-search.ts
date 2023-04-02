@@ -12,7 +12,6 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
@@ -65,7 +64,6 @@ export class PersonSearchPage {
               public occurrenceService: OccurrenceService,
               protected storage: StorageService,
               public translate: TranslateService,
-              private analyticsService: AnalyticsService,
               private tooltipService: TooltipService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
@@ -78,10 +76,6 @@ export class PersonSearchPage {
     if (this.max_fetch_size > 10000) {
       this.max_fetch_size = 10000;
     }
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Subjects');
   }
 
   ngOnInit() {

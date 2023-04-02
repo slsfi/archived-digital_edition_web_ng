@@ -5,7 +5,6 @@ import { AlertButton, AlertController, AlertInput, ModalController } from '@ioni
 import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { Facsimile } from 'src/app/models/facsimile.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -73,7 +72,6 @@ export class FacsimilesComponent {
     public translate: TranslateService,
     protected events: EventsService,
     private alertCtrl: AlertController,
-    private analyticsService: AnalyticsService,
     private route: ActivatedRoute,
   ) {
     this.deRegisterEventListeners();
@@ -102,10 +100,6 @@ export class FacsimilesComponent {
     id.viewType = 'facsimileManuscript';
     id.id = id.manuscript_id;
     this.openNewFacsimileView.emit(id);
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Facsimiles', 'Facsimiles', this.selectedFacsimile.title);
   }
 
   ngOnInit() {
@@ -304,7 +298,6 @@ export class FacsimilesComponent {
           console.log('recieved facsimiles ,..,');
         }
         this.changeFacsimile();
-        this.doAnalytics();
       },
       error => {
       console.error('Error loading facsimiles...', this.itemId);

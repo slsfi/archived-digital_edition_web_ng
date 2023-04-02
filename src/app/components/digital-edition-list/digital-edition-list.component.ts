@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
@@ -8,7 +8,6 @@ import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { config } from "src/app/services/config/config";
 
 @Component({
@@ -50,8 +49,6 @@ export class DigitalEditionList implements OnInit {
     protected tableOfContentsService: TableOfContentsService,
     private events: EventsService,
     public userSettingsService: UserSettingsService,
-    private analyticsService: AnalyticsService,
-    private navCtrl: NavController,
     private router: Router
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
@@ -234,7 +231,6 @@ export class DigitalEditionList implements OnInit {
 
         console.log("#### WINDOW 9");
         const ref = window.open(dURL);
-        this.doAnalytics('Download', 'PDF', this.collectionDownloads['pdf'][collection.id]);
       } else if (collection.id in this.collectionDownloads['epub'] && type === 'epub') {
         const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.id + '/epub/' +
           this.collectionDownloads['epub'][collection.id].title + '/' +
@@ -242,13 +238,8 @@ export class DigitalEditionList implements OnInit {
 
         console.log("#### WINDOW 10");
         const ref = window.open(dURL);
-        this.doAnalytics('Download', 'EPUB', this.collectionDownloads['epub'][collection.id]);
       }
     }
-  }
-
-  doAnalytics(category: any, type: any, name: any) {
-    this.analyticsService.doAnalyticsEvent(category, 'digital-edition-list', String(type + ' - ' + name));
   }
 
   openFirstPage(collection: DigitalEdition) {

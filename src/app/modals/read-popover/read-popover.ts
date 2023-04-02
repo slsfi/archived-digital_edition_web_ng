@@ -3,7 +3,6 @@ import { NavParams, PopoverController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from 'src/app/services/events/events.service';
 import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { config } from "src/app/services/config/config";
 
 /**
@@ -54,8 +53,7 @@ export class ReadPopoverPage {
     public readPopoverService: ReadPopoverService,
     public translate: TranslateService,
     private events: EventsService,
-    public params: NavParams,
-    private analyticsService: AnalyticsService
+    public params: NavParams
   ) {
     const toggles = this.params.get('toggles');
     this.readToggles = config.settings?.readToggles ?? undefined;
@@ -75,14 +73,6 @@ export class ReadPopoverPage {
 
     this.show = readPopoverService.show;
     this.fontsize = readPopoverService.fontsize;
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
   }
 
   close() {
@@ -148,52 +138,42 @@ export class ReadPopoverPage {
 
   toggleComments() {
     this.readPopoverService.show.comments = this.show.comments;
-    this.doAnalytics('toggleComments - ' + this.show.comments);
   }
 
   togglePersonInfo() {
     this.readPopoverService.show.personInfo = this.show.personInfo;
-    this.doAnalytics('togglePersonInfo - ' + this.show.personInfo);
   }
 
   togglePlaceInfo() {
     this.readPopoverService.show.placeInfo = this.show.placeInfo;
-    this.doAnalytics('togglePlaceInfo - ' + this.show.placeInfo);
   }
 
   toggleWorkInfo() {
     this.readPopoverService.show.workInfo = this.show.workInfo;
-    this.doAnalytics('toggleWorkInfo - ' + this.show.workInfo);
   }
 
   toggleChanges() {
     this.readPopoverService.show.changes = this.show.changes;
-    this.doAnalytics('toggleChanges - ' + this.show.changes);
   }
 
   toggleNormalisations() {
     this.readPopoverService.show.normalisations = this.show.normalisations;
-    this.doAnalytics('toggleNormalisations - ' + this.show.normalisations);
   }
 
   toggleAbbreviations() {
     this.readPopoverService.show.abbreviations = this.show.abbreviations;
-    this.doAnalytics('toggleAbbreviations - ' + this.show.abbreviations);
   }
 
   togglePageNumbering() {
     this.readPopoverService.show.pageNumbering = this.show.pageNumbering;
-    this.doAnalytics('togglePageNumbering - ' + this.show.pageNumbering);
   }
 
   togglePageBreakOriginal() {
     this.readPopoverService.show.pageBreakOriginal = this.show.pageBreakOriginal;
-    this.doAnalytics('togglePageBreakOriginal - ' + this.show.pageBreakOriginal);
   }
 
   togglePageBreakEdition() {
     this.readPopoverService.show.pageBreakEdition = this.show.pageBreakEdition;
-    this.doAnalytics('togglePageBreakEdition - ' + this.show.pageBreakEdition);
   }
 
   setFontSize(size: number) {
@@ -201,11 +181,7 @@ export class ReadPopoverPage {
       this.fontsize = size;
       this.readPopoverService.fontsize = this.fontsize;
       this.readPopoverService.sendFontsizeToSubscribers(this.fontsize);
-      this.doAnalytics('setFontSize - ' + Fontsize[size]);
     }
   }
 
-  doAnalytics(type: any) {
-    this.analyticsService.doAnalyticsEvent('Read-Settings', 'Read-Settings - ' + type, String(type));
-  }
 }

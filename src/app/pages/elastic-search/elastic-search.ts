@@ -13,7 +13,6 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { EventsService } from 'src/app/services/events/events.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
 import { config } from "src/app/services/config/config";
@@ -96,7 +95,6 @@ export class ElasticSearchPage {
     public userSettingsService: UserSettingsService,
     private events: EventsService,
     private cf: ChangeDetectorRef,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute
   ) {
@@ -217,24 +215,6 @@ export class ElasticSearchPage {
           };
         }
       );
-    });
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Elastic Search');
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-
-  ionViewWillEnter() {
-    // console.log('will enter elastic search');
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'elastic-search'});
-    this.events.publishSelectedItemInMenu({
-      menuID: 'elasticSearch',
-      component: 'elastic-search'
     });
   }
 
@@ -462,7 +442,6 @@ export class ElasticSearchPage {
         if (this.queries.length > 0 && this.queries[0] !== undefined && this.queries[0].length > 0 ) {
           this.queries.forEach(term => {
             this.cleanQueries.push(term.toLowerCase().replace(/[^a-zA-ZåäöÅÄÖ[0-9]+/g, ''));
-            this.analyticsEvent('term', term);
           });
           for (const item in data.hits.hits) {
             this.elastic.executeTermQuery(this.cleanQueries, [data.hits.hits[item]['_id']])
@@ -522,10 +501,6 @@ export class ElasticSearchPage {
 
   hasMore() {
     return this.total > this.from + this.hitsPerPage;
-  }
-
-  analyticsEvent(type: any, term: any) {
-    this.analyticsService.doAnalyticsEvent('Search', 'ElasticSearch - ' + type, String(term));
   }
 
   /**
@@ -610,7 +585,6 @@ export class ElasticSearchPage {
     this.updateSelectedFacets(facetGroupKey, facet);
 
     this.onFacetsChanged();
-    this.analyticsEvent('facet', String(facet.key));
   }
 
   selectSuggestedFacet(facetGroupKey: string, facet: Facet) {

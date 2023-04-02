@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -39,21 +38,16 @@ export class IllustrationsComponent {
     private modalCtrl: ModalController,
     private events: EventsService,
     public translate: TranslateService,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.registerEventListeners();
   }
   ngOnInit() {
     this.getIllustrationImages();
-    this.doAnalytics();
   }
 
   ngOnDestroy() {
     this.deRegisterEventListeners();
-  }
-
-  ngAfterViewInit() {
   }
 
   registerEventListeners() {
@@ -196,10 +190,6 @@ export class IllustrationsComponent {
       },
       error: (e) => { this.textLoading = false; }
     });
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Illustration', 'Illustration', String(this.itemId));
   }
 
 }

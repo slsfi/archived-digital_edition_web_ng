@@ -7,7 +7,6 @@ import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
@@ -58,7 +57,6 @@ export class DownloadTextsModalPage {
     public readPopoverService: ReadPopoverService,
     private tocService: TableOfContentsService,
     private langService: LanguageService,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
     // Get configs
@@ -246,10 +244,6 @@ export class DownloadTextsModalPage {
 
   }
 
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Download texts modal');
-  }
-
   public initiateDownload(textType: string, format: string) {
     this.showErrorMessage = false;
     let mimetype = 'application/xml';
@@ -321,7 +315,6 @@ export class DownloadTextsModalPage {
         }
       });
     }
-    this.doAnalytics(textType + '_' + format);
   }
 
   public openPrintFriendlyText(textType: string) {
@@ -336,7 +329,6 @@ export class DownloadTextsModalPage {
       this.loadingCom = true;
       this.openCommentsForPrint();
     }
-    this.doAnalytics(textType + '_print');
   }
 
   dismiss() {
@@ -782,10 +774,6 @@ export class DownloadTextsModalPage {
       filename += '---'
     }
     return filename;
-  }
-
-  doAnalytics(textType: string) {
-    this.analyticsService.doAnalyticsEvent('Download texts modal', textType, String(this.textId));
   }
 
 }

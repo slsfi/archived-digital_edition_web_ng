@@ -2,7 +2,6 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MdContent } from 'src/app/models/md-content.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
@@ -47,7 +46,6 @@ export class MediaCollectionsPage {
     public languageService: LanguageService,
     public translate: TranslateService,
     public cdRef: ChangeDetectorRef,
-    private analyticsService: AnalyticsService,
     private mdContentService: MdContentService,
     private router: Router,
   ) {
@@ -130,15 +128,6 @@ export class MediaCollectionsPage {
             },
             error =>  {}
         );
-  }
-
-
-  doAnalytics(type: any, name: any) {
-    this.analyticsService.doAnalyticsEvent('Filter', type, String(name));
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Collections', 'Media-Collections');
   }
 
   getCollectionLocations() {
@@ -235,7 +224,6 @@ export class MediaCollectionsPage {
       }
     });
     this.galleries = filteredGalleries;
-    this.doAnalytics('tag', name);
     return;
   }
 
@@ -273,7 +261,6 @@ export class MediaCollectionsPage {
       }
     });
     this.galleries = filteredGalleries;
-    this.doAnalytics('location', name);
     return;
   }
 
@@ -311,7 +298,6 @@ export class MediaCollectionsPage {
       }
     });
     this.galleries = filteredGalleries;
-    this.doAnalytics('subject', name);
     return;
   }
 

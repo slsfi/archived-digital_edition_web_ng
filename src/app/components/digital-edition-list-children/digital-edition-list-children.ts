@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { config } from "src/app/services/config/config";
 
 
@@ -28,7 +27,6 @@ export class DigitalEditionListChildrenComponent {
 
   constructor(
     public userSettingsService: UserSettingsService,
-    private analyticsService: AnalyticsService,
     private router: Router
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
@@ -81,7 +79,6 @@ export class DigitalEditionListChildrenComponent {
         console.log("#### WINDOW 6");
         const ref = window.open(dURL);
 
-        this.analyticsService.doAnalyticsEvent('Download', 'PDF', this.collectionDownloads['pdf'][collection.id]);
       } else if (collection.collectionId in this.collectionDownloads['epub'] && type === 'epub') {
         const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + collection.collectionId + '/epub/' +
           this.collectionDownloads['epub'][collection.collectionId].title + '/' +
@@ -89,7 +86,6 @@ export class DigitalEditionListChildrenComponent {
 
         console.log("#### WINDOW 7");
         const ref = window.open(dURL);
-        this.analyticsService.doAnalyticsEvent('Download', 'EPUB', this.collectionDownloads['epub'][collection.collectionId]);
       }
     }
   }
@@ -117,7 +113,6 @@ export class DigitalEditionListChildrenComponent {
     if (event && event.stopPropagation) {
       event.stopPropagation();
     }
-    this.analyticsService.doAnalyticsEvent('Download', 'PDF', edition.pdfFile);
     const isChildPdf = true;
     const dURL = this.apiEndPoint + '/' + this.projectMachineName + '/files/' + this.collectionID + '/pdf/' +
     edition.pdfFile + '/' + isChildPdf;

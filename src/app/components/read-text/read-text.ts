@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -42,7 +41,6 @@ export class ReadTextComponent {
     public userSettingsService: UserSettingsService,
     public translate: TranslateService,
     protected modalController: ModalController,
-    private analyticsService: AnalyticsService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.intervalTimerId = 0;
@@ -74,7 +72,6 @@ export class ReadTextComponent {
     if (this.textItemID) {
       this.loadReadText();
       this.setIllustrationsInReadtextStatus();
-      this.doAnalytics();
     }
     if (isBrowser()) {
       this.setUpTextListeners();
@@ -278,10 +275,6 @@ export class ReadTextComponent {
         }
       });
     }
-  }
-
-  doAnalytics() {
-    this.analyticsService.doAnalyticsEvent('Established', 'Established', this.textItemID);
   }
 
 }

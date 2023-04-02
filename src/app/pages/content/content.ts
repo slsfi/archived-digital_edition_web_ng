@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MdContent } from 'src/app/models/md-content.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { config } from "src/app/services/config/config";
@@ -24,8 +23,7 @@ export class ContentPage {
   constructor(
     private mdContentService: MdContentService,
     protected langService: LanguageService,
-    private analyticsService: AnalyticsService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.languageSubscription = null;
     this.lang = config.i18n?.locale ?? 'sv';
@@ -53,10 +51,6 @@ export class ContentPage {
     });
   }
 
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Content');
-  }
-
   ngOnDestroy() {
     if (this.languageSubscription) {
       this.languageSubscription.unsubscribe();
@@ -69,17 +63,11 @@ export class ContentPage {
     }
   }
 
-  doAnalytics( title: any ) {
-    this.analyticsService.doPageView('Content - ' + title);
-    this.analyticsService.doAnalyticsEvent('Content', 'Content - ' + title, title);
-  }
-
   getMdContent(fileID: string) {
     this.mdContentService.getMdContent(fileID).subscribe({
       next: text => {
         if (this.mdContent) {
           this.mdContent.content = text.content;
-          this.doAnalytics(this.mdContent.id);
         }
       },
       error: e => {}

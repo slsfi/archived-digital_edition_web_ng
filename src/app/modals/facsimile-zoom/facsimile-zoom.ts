@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -48,8 +47,7 @@ export class FacsimileZoomModalPage {
     public navParams: NavParams,
     private events: EventsService,
     public commonFunctions: CommonFunctionsService,
-    public userSettingsService: UserSettingsService,
-    private analyticsService: AnalyticsService
+    public userSettingsService: UserSettingsService
   ) {
     this.manualPageNumber = 1;
     this.backsides = [];
@@ -80,7 +78,6 @@ export class FacsimileZoomModalPage {
       this.facsimilePagesInfinite = true;
       this.facsUrl = this.navParams.get('facsUrl');
       this.facsNumber = this.navParams.get('facsNr');
-      this.doAnalytics(String(this.facsUrl) + String(this.facsNumber));
     } else {
       this.images = this.navParams.get('images');
 
@@ -115,7 +112,6 @@ export class FacsimileZoomModalPage {
       }
       this.activeImage = this.navParams.get('activeImage');
       this.manualPageNumber = this.activeImage + 1;
-      this.doAnalytics(String(this.images[this.activeImage]));
     }
 
     try {
@@ -141,13 +137,8 @@ export class FacsimileZoomModalPage {
   }
 
   ionViewDidEnter() {
-    this.analyticsService.doPageView('Facsimile-zoom');
     const toolbarElem = document.querySelector('.facsimile_button_group');
     this.toolbarHeight = Math.ceil(toolbarElem?.getBoundingClientRect().bottom || 0);
-  }
-
-  doAnalytics(name: any) {
-    this.analyticsService.doAnalyticsEvent('Facsimile-zoom', 'Facsimile-zoom', String(name));
   }
 
   previous() {
@@ -173,7 +164,6 @@ export class FacsimileZoomModalPage {
     if ( this.manualPageNumber === 0 ) {
       this.manualPageNumber = 1;
     }
-    this.doAnalytics(String(this.images[this.activeImage]));
     const that = this;
     setTimeout(function () {
       const toolbarElem = document.querySelector('.facsimile_button_group');
@@ -199,7 +189,6 @@ export class FacsimileZoomModalPage {
       this.activeImage = 0;
       this.manualPageNumber = 1;
     }
-    this.doAnalytics(String(this.images[this.activeImage]));
     const that = this;
     setTimeout(function () {
       const toolbarElem = document.querySelector('.facsimile_button_group');
@@ -260,7 +249,6 @@ export class FacsimileZoomModalPage {
       this.activeImage = 0;
       this.manualPageNumber = 1;
     }
-    this.doAnalytics(String(this.images[this.activeImage]));
   }
 
   getBacksideUrl(frontsideUrl: any) {

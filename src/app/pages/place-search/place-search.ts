@@ -14,7 +14,6 @@ import { OccurrenceService } from 'src/app/services/occurrence/occurence.service
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
@@ -61,7 +60,6 @@ export class PlaceSearchPage {
               private events: EventsService,
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
-              private analyticsService: AnalyticsService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
   ) {
@@ -71,10 +69,6 @@ export class PlaceSearchPage {
     if (this.max_fetch_size > 10000) {
       this.max_fetch_size = 10000;
     }
-  }
-
-  ionViewDidEnter() {
-    this.analyticsService.doPageView('Places');
   }
 
   ngOnInit() {

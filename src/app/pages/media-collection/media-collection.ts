@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { MdContent } from 'src/app/models/md-content.model';
-import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
@@ -64,9 +63,8 @@ export class MediaCollectionPage {
     private modalController: ModalController,
     public translate: TranslateService,
     public languageService: LanguageService,
-    private analyticsService: AnalyticsService,
     private mdContentService: MdContentService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
 
   ) {
     // this.mediaCollectionId = this.navParams.get('mediaCollectionId');
@@ -79,10 +77,6 @@ export class MediaCollectionPage {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
     this.showURNButton = config.page?.mediaCollection?.showURNButton ?? true;
-  }
-
-  doAnalytics(category: any, label: any, action: any) {
-    this.analyticsService.doAnalyticsEvent(category, label, action);
   }
 
   getMediaCollections(id?: any, type?: any) {
@@ -193,11 +187,9 @@ export class MediaCollectionPage {
       this.getCollectionLocations();
       this.getCollectionSubjects();
       this.getMediaCollections();
-      this.doAnalytics('Collection', this.mediaTitle, '');
     } else {
       this.mediaCollectionId = undefined;
       this.getMediaCollections(this.singleId, this.type);
-      this.doAnalytics('Filter', this.type, this.singleId);
     }
   }
 
@@ -356,7 +348,6 @@ export class MediaCollectionPage {
       }
     });
     this.mediaCollection = filteredGalleries;
-    this.doAnalytics('Filter', 'tag', name);
 
     return;
   }
@@ -395,7 +386,6 @@ export class MediaCollectionPage {
       }
     });
     this.mediaCollection = filteredGalleries;
-    this.doAnalytics('Filter', 'location', name);
 
     return;
   }
@@ -434,7 +424,6 @@ export class MediaCollectionPage {
       }
     });
     this.mediaCollection = filteredGalleries;
-    this.doAnalytics('Filter', 'subject', name);
 
     return;
   }
