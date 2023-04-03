@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
 import { filter } from "rxjs/operators";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'ion-app-v2',
@@ -14,9 +15,10 @@ export class DigitalEditionsApp {
   collectionID: string = '';
   initialUrlSegments: UrlSegment[];
   initialQueryParams: Params;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private title: Title) {}
 
   ngOnInit() {
+    this.title.setTitle($localize`:@@Site.Title:Webbplatsens titel`);
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe({

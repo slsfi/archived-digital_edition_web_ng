@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, Platform } from '@ionic/angular';
 import debounce from 'lodash/debounce';
@@ -30,7 +30,7 @@ import { config } from "src/app/services/config/config";
   templateUrl: 'tag-search.html',
   styleUrls: ['tag-search.scss']
 })
-export class TagSearchPage {
+export class TagSearchPage implements OnInit{
   tags: any[] = [];
   tagsCopy: any[] = [];
   searchText?: string;
@@ -69,6 +69,10 @@ export class TagSearchPage {
     if (this.max_fetch_size > 10000) {
       this.max_fetch_size = 10000;
     }
+  }
+
+  ngOnInit() {
+    this.commonFunctions.setTitle($localize`:@@TOC.TagSearch:Ämnesord`, 1);
   }
 
   ionViewDidLoad() {

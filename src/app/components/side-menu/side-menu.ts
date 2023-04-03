@@ -270,8 +270,6 @@ export class SideMenu implements OnInit {
   initializeApp() {
     this.languageService.getLanguage().subscribe((lang: string) => {
       this.language = lang;
-      this.appName = $localize`:@@Site.Title:Webbplatsens titel`;
-      this.titleService.setTitle(this.appName);
       this.getStaticPagesMenus();
       this.getAboutPages();
     });
@@ -350,7 +348,6 @@ export class SideMenu implements OnInit {
       }
     }
   }
-
 
   async getMediaCollections(): Promise<any> {
     return await this.galleryService.getGalleries(this.language);

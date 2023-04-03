@@ -27,7 +27,7 @@
 
 <ng-template #recursiveTemplate let-level="level" let-list let-path="path">
   <ng-container *ngFor="let item of list">
-    <li (click)="toggle(item.itemId || item.text, level)"
+    <li (click)="toggle(item, level)"
         [class.menu-highlight]="highlightedMenu === item.itemId">
       <a *ngIf="item.itemId" [queryParams]="item.itemId | positionParamGenerator"
          routerLink="{{item.itemId | pagePathGenerator}}">{{item.text}}</a>
@@ -38,7 +38,7 @@
                 [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="item.children"  [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
+    <li *ngIf="item.children" [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
         class="accordion-list">
       <ul>
         <ng-container

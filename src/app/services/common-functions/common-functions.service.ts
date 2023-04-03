@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { isBrowser } from 'src/standalone/utility-functions';
+import { Title } from "@angular/platform-browser";
 
 
 @Injectable()
@@ -10,7 +11,8 @@ export class CommonFunctionsService {
 
   constructor(
     public ngZone: NgZone,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private title: Title
   ) {
     this.intervalTimerId = 0;
   }
@@ -296,4 +298,14 @@ export class CommonFunctionsService {
     })();
   }
 
+  setTitle(pageTitle: string, position: number){
+    let title = this.title.getTitle().split(' - ')
+    let siteTitle: string[] = [];
+    if(position === 1 ) { // From primary side menu
+      siteTitle = title.slice(-1);
+    } else if(position === 2) { //From collection side menu
+      siteTitle = title.slice(-2);
+    }
+    this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`)
+  }
 }

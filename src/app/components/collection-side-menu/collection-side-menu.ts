@@ -1,10 +1,14 @@
 import { Component, Input, OnChanges } from "@angular/core";
 import {
+  NavigationEnd,
   Params, Router,
   UrlSegment
 } from "@angular/router";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
 import { config } from "src/app/services/config/config";
+import { Title } from "@angular/platform-browser";
+import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: 'collection-side-menu',
@@ -23,7 +27,8 @@ export class CollectionSideMenu implements OnChanges {
   highlightedMenu: string;
   constructor(
     private tocService: TableOfContentsService,
-    public router: Router
+    public router: Router,
+    public commonFunctions: CommonFunctionsService,
   ) {}
 
   ngOnInit() {
@@ -31,16 +36,46 @@ export class CollectionSideMenu implements OnChanges {
       this.collectionContent = data;
       this.isLoading = false;
       console.log('tocService response:', data);
-
+      this.commonFunctions.setTitle(data.text, 1);
       const itemId = this.getItemId();
       this.highlightedMenu = itemId
 
-      this.recursiveFinding(data.children, itemId);
+      let item = this.recursiveFinding(data.children, itemId);
+      if(item) {
+        this.selectedMenu.unshift(item.itemId || item.text)
+      } else {
+        this.setTitleForDefaultPages();
+      }
     });
+    this.router.events.pipe(
+      filter(events => events instanceof NavigationEnd),
+    ).subscribe((event: any) => {
+      this.setTitleForDefaultPages();
+    })
   }
 
   ngOnChanges() {
     this.highlightedMenu = this.getItemId();
+  }
+
+  setTitleForDefaultPages() {
+    const pageTitle = this.router.url.split('/').slice(-1).join();
+    switch (pageTitle) {
+      case 'cover':
+        this.commonFunctions.setTitle($localize`:@@Read.CoverPage.Title:Omslag`,2);
+        return;
+      case 'title':
+        this.commonFunctions.setTitle($localize`:@@Read.CoverPage.TitlePage:Titelblad`,2);
+        return;
+      case 'foreword':
+        this.commonFunctions.setTitle($localize`:@@Read.CoverPage.ForewordPage:Förord`,2);
+        return;
+      case 'introduction':
+        this.commonFunctions.setTitle($localize`:@@Read.CoverPage.Introduction:Inledning`,2);
+        return;
+      default:
+        return;
+    }
   }
 
   getItemId(): string {
@@ -53,30 +88,35 @@ export class CollectionSideMenu implements OnChanges {
     return itemId
   }
 
-  toggle(menuId: string, menuLevel: number) {
-    if(this.selectedMenu.includes(menuId))
+  toggle(menuItem: any, menuLevel: number) {
+    if(this.selectedMenu.includes(menuItem.itemId || menuItem.text))
       this.selectedMenu.splice(menuLevel)
     else if(!menuLevel){
-      this.selectedMenu = [menuId];
+      this.selectedMenu = [menuItem.itemId || menuItem.text];
     }
     else {
       this.selectedMenu.splice(menuLevel);
-      this.selectedMenu.push(menuId);
+      this.selectedMenu.push(menuItem.itemId || menuItem.text);
+    }
+    if(menuItem.itemId) {
+      this.commonFunctions.setTitle(menuItem.text,2);
     }
   }
-  recursiveFinding(array: any[], stringForComparison: string): boolean {
-    return array.some(item => {
+  recursiveFinding(array: any[], stringForComparison: string): any {
+    return array.find(item => {
       if(item.children) {
-        const res = this.recursiveFinding(item.children, stringForComparison)
-        if(res)
-          this.selectedMenu.unshift(item.itemId || item.text)
-        return res;
+        const result = this.recursiveFinding(item.children, stringForComparison)
+        if(result)
+          this.selectedMenu.unshift(result.itemId || result.text)
+        return result;
       } else {
-        if(item.itemId === stringForComparison){
-          this.selectedMenu.unshift(item.itemId || item.text)
+        if(item.itemId === stringForComparison) {
+          this.commonFunctions.setTitle(item.text,2);
+          return item;
         }
-        return item.itemId === stringForComparison;
+        return undefined;
       }
     })
   }
+
 }

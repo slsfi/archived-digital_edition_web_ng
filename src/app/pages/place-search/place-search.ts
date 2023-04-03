@@ -72,6 +72,7 @@ export class PlaceSearchPage {
   }
 
   ngOnInit() {
+    this.commonFunctions.setTitle($localize`:@@TOC.PlaceSearch:Ortregister`, 1);
     this.getPlaces();
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
       if (lang) {

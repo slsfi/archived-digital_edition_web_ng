@@ -7,6 +7,8 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
+import { Title } from "@angular/platform-browser";
+import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 
 
 @Component({
@@ -36,7 +38,8 @@ export class HomePage {
     public languageService: LanguageService,
     private mdContentService: MdContentService,
     private userSettingsService: UserSettingsService,
-    protected textService: TextService
+    protected textService: TextService,
+    private commonFunctions: CommonFunctionsService
   ) {
     if (this.userSettingsService.isMobile()) {
       this.userSettingsService.temporarilyHideSplitPane();
@@ -65,6 +68,7 @@ export class HomePage {
   }
 
   ngOnInit() {
+    this.commonFunctions.setTitle($localize`:@@TOC.Home:Till startsidan`, 1);
     this.languageSubscription = this.languageService.languageSubjectChange().subscribe((lang) => {
       if (lang) {
         this.loadContent(lang);

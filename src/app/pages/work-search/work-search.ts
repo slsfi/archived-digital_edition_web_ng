@@ -14,6 +14,7 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/app/services/config/config";
+import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 
 /**
  * Generated class for the worksearchPage page.
@@ -78,13 +79,15 @@ export class WorkSearchPage {
               private userSettingsService: UserSettingsService,
               private events: EventsService,
               private cf: ChangeDetectorRef,
-              private router: Router
+              private router: Router,
+              private commonFunctions: CommonFunctionsService
   ) {
     this.showFilter = config.WorkSearch.ShowFilter ?? false;
     this.infiniteScrollNumber = config.WorkSearch.InitialLoadNumber ?? 200;
   }
 
   ngOnInit() {
+    this.commonFunctions.setTitle($localize`:@@TOC.WorkSearch:Verkregister`, 1);
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
       this.setData();
       if (lang) {
@@ -318,7 +321,7 @@ export class WorkSearchPage {
 
       if (this.allData) {
         this.sortListAlphabeticallyAndGroup(this.allData);
-  
+
         for (let i = 0; i < 30; i++) {
           this.works.push(this.allData[this.count]);
           this.worksCopy.push(this.allData[this.count]);

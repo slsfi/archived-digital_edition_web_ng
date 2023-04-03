@@ -83,21 +83,21 @@
 
     <!-- Place search: src/app/pages/place-search -->
     <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu === '/place-search'">
-      <a routerLink="/place-search">
+      <a routerLink="/places">
         {{"TOC.PlaceSearch" | translate }}
       </a>
     </li>
 
     <!-- Tag search: src/app/pages/tag-search -->
     <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu === '/tag-search'">
-      <a routerLink="/tag-search">
+      <a routerLink="/tags">
         {{"TOC.TagSearch" | translate }}
       </a>
     </li>
 
     <!-- Work search: src/app/pages/work-search *ngIf="genericSettingsService.show('TOC.WorkSearch')"-->
     <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu === '/work-search'">
-      <a routerLink="/work-search">
+      <a routerLink="/works">
         {{"TOC.WorkSearch" | translate }}
       </a>
     </li>
