@@ -15,7 +15,6 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
-import { Title } from "@angular/platform-browser";
 
 /**
  * A page for searching person occurrences.
@@ -80,7 +79,6 @@ export class PersonSearchPage {
   }
 
   ngOnInit() {
-    this.commonFunctions.setTitle($localize`:@@TOC.PersonSearch:Personregister`, 1);
     this.getParamsData();
     this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
       if (lang) {

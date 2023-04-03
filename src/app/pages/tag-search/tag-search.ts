@@ -30,7 +30,7 @@ import { config } from "src/app/services/config/config";
   templateUrl: 'tag-search.html',
   styleUrls: ['tag-search.scss']
 })
-export class TagSearchPage implements OnInit{
+export class TagSearchPage{
   tags: any[] = [];
   tagsCopy: any[] = [];
   searchText?: string;
@@ -69,10 +69,6 @@ export class TagSearchPage implements OnInit{
     if (this.max_fetch_size > 10000) {
       this.max_fetch_size = 10000;
     }
-  }
-
-  ngOnInit() {
-    this.commonFunctions.setTitle($localize`:@@TOC.TagSearch:Ämnesord`, 1);
   }
 
   ionViewDidLoad() {

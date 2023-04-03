@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
+import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 
 @Component({
   selector: 'ion-app-v2',
@@ -15,7 +16,7 @@ export class DigitalEditionsApp {
   collectionID: string = '';
   initialUrlSegments: UrlSegment[];
   initialQueryParams: Params;
-  constructor(private router: Router, private title: Title) {}
+  constructor(private router: Router, private title: Title, private commonFunctions: CommonFunctionsService) {}
 
   ngOnInit() {
     this.title.setTitle($localize`:@@Site.Title:Webbplatsens titel`);
@@ -41,11 +42,32 @@ export class DigitalEditionsApp {
         } else {
           this.showCollectionSideMenu = false;
         }
+        this.setTitleForDefaultPages();
       }
     });
   }
 
   toggleSideMenu() {
     this.showSideMenu = !this.showSideMenu
+  }
+  setTitleForDefaultPages() {
+    const pageTitle = this.router.url.split('/').slice(-1).join();
+    switch (pageTitle) {
+      case 'person-search':
+        this.commonFunctions.setTitle($localize`:@@TOC.PersonSearch:Personregister`, 1);
+        return;
+      case 'places':
+        this.commonFunctions.setTitle($localize`:@@TOC.PlaceSearch:Ortregister`, 1);
+        return;
+      case 'tags':
+        this.commonFunctions.setTitle($localize`:@@TOC.TagSearch:Ämnesord`, 1);
+        return;
+      case 'works':
+        this.commonFunctions.setTitle($localize`:@@TOC.WorkSearch:Verkregister`, 1);
+        return;
+      default:
+        this.commonFunctions.setTitle($localize`:@@TOC.Home:Till startsidan`, 1);
+        return;
+    }
   }
 }

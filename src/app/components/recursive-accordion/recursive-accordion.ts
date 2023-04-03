@@ -31,7 +31,6 @@ export class RecursiveAccordion implements OnInit {
   }
 
   toggleAccordion(item: MenuChild) {
-    console.log(item)
     let id = item.id
     this.selectedMenu = this.selectedMenu === id ? '' : id;
     if(!item.children) {
