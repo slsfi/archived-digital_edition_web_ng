@@ -105,14 +105,7 @@ export class SideMenu implements OnInit {
             return 0;
           });
 
-          let t_all = 'Alla';
-          this.translate.get('TOC.All').subscribe(
-            translation => {
-              t_all = translation;
-            }, () => {
-            }
-          );
-          mediaCollectionMenu.unshift({'id': 'media-collections', 'title': t_all, 'highlight': true});
+          mediaCollectionMenu.unshift({'id': 'media-collections', 'title': $localize`:@@TOC.All:Alla`, 'highlight': true});
           mediaCollectionMenu.forEach((item: any) => {
             item['is_gallery'] = true;
           });

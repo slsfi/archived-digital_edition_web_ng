@@ -19,7 +19,7 @@ export class GalleryService {
       // console.log("FETCH HERE 3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
       const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language
-      await lastValueFrom(this.http.get(url));
+      return await lastValueFrom(this.http.get(url));
 
       /*const response = await fetch(
         url

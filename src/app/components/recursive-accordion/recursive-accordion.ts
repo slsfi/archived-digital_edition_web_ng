@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { Title } from "@angular/platform-browser";
 import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 
 type MenuChild = {
