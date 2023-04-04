@@ -87,16 +87,8 @@ export class CollectionSideMenu implements OnChanges {
     return itemId
   }
 
-  toggle(menuItem: any, menuLevel: number) {
-    if(this.selectedMenu.includes(menuItem.itemId || menuItem.text))
-      this.selectedMenu.splice(menuLevel)
-    else if(!menuLevel){
-      this.selectedMenu = [menuItem.itemId || menuItem.text];
-    }
-    else {
-      this.selectedMenu.splice(menuLevel);
-      this.selectedMenu.push(menuItem.itemId || menuItem.text);
-    }
+  toggle(menuItem: any) {
+    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.text)
     if(menuItem.itemId) {
       this.commonFunctions.setTitle(menuItem.text,2);
     }

@@ -308,4 +308,12 @@ export class CommonFunctionsService {
     }
     this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`)
   }
+
+  addOrRemoveValueInArray(array: any[], value: any){
+    let index = array.indexOf(value);
+    if(index > -1)
+      array.splice(index,1);
+    else
+      array.push(value);
+  }
 }

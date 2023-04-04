@@ -13,13 +13,13 @@
       <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" i18n="@@Read.Introduction.Title">Inledning</a>
     </li>
     <ng-container
-      *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children, level: 0, path: ''}"></ng-container>
+      *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children}"></ng-container>
   </ul>
 </nav>
 
-<ng-template #recursiveTemplate let-level="level" let-list let-path="path">
+<ng-template #recursiveTemplate let-list >
   <ng-container *ngFor="let item of list">
-    <li (click)="toggle(item, level)"
+    <li (click)="toggle(item)"
         [class.menu-highlight]="highlightedMenu === item.itemId">
       <a *ngIf="item.itemId" [queryParams]="item.itemId | positionParamGenerator"
          routerLink="{{item.itemId | pagePathGenerator}}">{{item.text}}</a>
@@ -27,14 +27,14 @@
         {{item.text}}
       </span>
       <ion-icon *ngIf="item.children"
-                [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
+                [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.text)"
                 name="chevron-forward-outline"></ion-icon>
     </li>
-    <li *ngIf="item.children" [class.open]="selectedMenu[level] && (selectedMenu[level] === item.itemId || selectedMenu[level] === item.text)"
+    <li *ngIf="item.children" [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.text)"
         class="accordion-list">
       <ul>
         <ng-container
-          *ngTemplateOutlet="recursiveTemplate; context: {$implicit: item.children, path: path +'/' + (item.itemId || item.text), level: (level+1)}"></ng-container>
+          *ngTemplateOutlet="recursiveTemplate; context: {$implicit: item.children}"></ng-container>
       </ul>
     </li>
   </ng-container>

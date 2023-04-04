@@ -1,7 +1,7 @@
 <nav class="toc-menu-content list-item-spacing">
   <!--  *ngIf="!readMenuOpen && !galleryMenuOpen && !menuConditionals.songTypesMenuOpen"-->
   <ul>
-    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="selectedMenu === '/'">
+    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="selectedMenu.includes('/')">
       <a routerLink="/" i18n="@@TOC.Home">Till startsidan</a>
     </li>
     <!-- Markdown "About"-pages: src/app/pages/about -->
@@ -10,10 +10,10 @@
         <span>
           {{aboutOptionsMarkdown.title}}
         </span>
-        <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu === '/about'"
+        <ion-icon *ngIf="aboutOptionsMarkdown.children" [class.open]="selectedMenu.includes('/about')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu === '/about'"
+      <li *ngIf="_config.show?.TOC?.About && aboutOptionsMarkdown" [class.open]="selectedMenu.includes('/about')"
           class="accordion-list">
         <app-recursive-accordion
           [children]="aboutOptionsMarkdown.children"
@@ -26,10 +26,10 @@
     <ng-container *ngIf="_config.show?.TOC?.EPUB">
       <li (click)="toggleAccordion('/epub')">
         <span i18n="@@TOC.EPUBS">Epub</span>
-        <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'"
+        <ion-icon *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu.includes('/epub')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu === '/epub'" class="accordion-list">
+      <li *ngIf="_config.AvailableEpubs" [class.open]="selectedMenu.includes('/epub')" class="accordion-list">
         <app-recursive-accordion
           [children]="_config.AvailableEpubs"
           [parentPath]="'/epub'">
@@ -46,10 +46,10 @@
             <span *ngIf="i == 2" i18n="@@TOC.Read2">Innehåll 3</span>
             <span *ngIf="i == 3" i18n="@@TOC.Read3">Innehåll 4</span>
             <span *ngIf="i == 4" i18n="@@TOC.Read4">Innehåll 5</span>
-            <ion-icon *ngIf="collection.length" [class.open]="selectedMenu === ('/collection' + i)"
+            <ion-icon *ngIf="collection.length" [class.open]="selectedMenu.includes(('/collection' + i))"
                       name="chevron-forward-outline"></ion-icon>
           </li>
-          <li [class.open]="selectedMenu === ('/collection' + i)" class="accordion-list">
+          <li [class.open]="selectedMenu.includes(('/collection' + i))" class="accordion-list">
             <app-recursive-accordion
               [children]="collection"
               [parentPath]="'/collection'">
@@ -62,10 +62,10 @@
     <ng-container *ngIf="_config.show?.TOC?.MediaCollections">
       <li (click)="toggleAccordion('/media-collection')">
         <span i18n="@@TOC.MediaCollections">Bildbank</span>
-        <ion-icon [class.open]="selectedMenu === '/media-collection'"
+        <ion-icon [class.open]="selectedMenu.includes('/media-collection')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="mediaCollectionOptions.accordionToc?.children" [class.open]="selectedMenu === '/media-collection'"
+      <li *ngIf="mediaCollectionOptions.accordionToc?.children" [class.open]="selectedMenu.includes('/media-collection')"
           class="accordion-list">
         <app-recursive-accordion
           [children]="mediaCollectionOptions.accordionToc.children"
@@ -75,7 +75,7 @@
     </ng-container>
 
     <!-- Person search: src/app/pages/person-search -->
-    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu === '/person-search'">
+    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu.includes('/person-search')">
       <ng-container *ngFor="let ps of _config.PersonSearchTypes; let j = index">
         <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
           <ng-container *ngIf="j == 0" i18n="@@PersonSearch">Personregister</ng-container>
@@ -86,17 +86,17 @@
     </li>
 
     <!-- Place search: src/app/pages/place-search -->
-    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu === '/places'">
+    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu.includes('/places')">
       <a routerLink="/places" i18n="@@TOC.PlaceSearch">Ortregister</a>
     </li>
 
     <!-- Tag search: src/app/pages/tag-search -->
-    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu === '/tags'">
+    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu.includes('/tags')">
       <a routerLink="/tags" i18n="@@TOC.TagSearch">Ämnesord</a>
     </li>
 
     <!-- Work search: src/app/pages/work-search *ngIf="genericSettingsService.show('TOC.WorkSearch')"-->
-    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu === '/works'">
+    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu.includes('/works')">
       <a routerLink="/works" i18n="@@TOC.WorkSearch">Verkregister</a>
     </li>
   </ul>

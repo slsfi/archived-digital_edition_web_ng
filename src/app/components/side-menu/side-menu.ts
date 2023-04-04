@@ -7,6 +7,7 @@ import { DigitalEditionListService } from "../../services/toc/digital-edition-li
 import { GalleryService } from "../../services/gallery/gallery.service";
 import { config } from "src/app/services/config/config";
 import { filter } from 'rxjs/operators';
+import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 
 @Component({
   selector: 'app-side-menu',
@@ -40,7 +41,7 @@ export class SideMenu implements OnInit {
   epubNames: any[];
   galleryInReadMenu = true;
   splitReadCollections: Number[][] = [];
-  selectedMenu: string = '';
+  selectedMenu: string[] = [];
 
   constructor(
     public mdcontentService: MdContentService,
@@ -49,6 +50,7 @@ export class SideMenu implements OnInit {
     public digitalEditionListService: DigitalEditionListService,
     private galleryService: GalleryService,
     private router: Router,
+    private commonFunctions: CommonFunctionsService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.mediaCollectionOptions = {};
@@ -81,12 +83,13 @@ export class SideMenu implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(event => {
-      this.selectedMenu = menuArray.find(item => (event as any).url.includes(item)) || '/';
-      if (this.selectedMenu === '/collection') {
+      let initialSelectedMenu= menuArray.find(item => (event as any).url.includes(item)) || '/';
+      if (initialSelectedMenu === '/collection') {
         let collectionId = (event as any).url.split('/')[2]
         let index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)))
-        this.selectedMenu += index;
+        initialSelectedMenu += index;
       }
+      this.selectedMenu.push(initialSelectedMenu)
     })
 
     this.initializeApp();
@@ -339,7 +342,7 @@ export class SideMenu implements OnInit {
   }
 
   toggleAccordion(value: string) {
-    this.selectedMenu = this.selectedMenu === value ? '' : value;
+    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, value)
   }
 
   categorizeCollections(collections: any) {

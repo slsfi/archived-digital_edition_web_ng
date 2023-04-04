@@ -16,22 +16,21 @@ type MenuChild = {
 export class RecursiveAccordion implements OnInit {
   @Input() children: MenuChild[];
   @Input() parentPath: string = '';
-  selectedMenu: string = '';
+  selectedMenu: string[] = [];
 
   constructor(public router: Router, private commonFunctions: CommonFunctionsService) {
   }
 
   ngOnInit() {
     const selectedChild = this.children.find(item => this.router.url.includes(item.id))
-    this.selectedMenu =  selectedChild ? selectedChild.id : '';
+    selectedChild && this.selectedMenu.push(selectedChild.id)
     if(selectedChild && !selectedChild.children) {
       this.commonFunctions.setTitle(selectedChild.title, 1)
     }
   }
 
   toggleAccordion(item: MenuChild) {
-    let id = item.id
-    this.selectedMenu = this.selectedMenu === id ? '' : id;
+    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, item.id)
     if(!item.children) {
       this.commonFunctions.setTitle(item.title, 1)
     }
