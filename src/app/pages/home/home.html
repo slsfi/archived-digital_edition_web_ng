@@ -14,10 +14,6 @@
       <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="site-subtitle" i18n="@@Site.Subtitle">Webbplatsens undertitel</p>
     </div>
 
-    <div *ngIf="showSimpleSearch" class="front-page-simple-search">
-      <simple-search [scrollableSimpleSearch]="true"></simple-search>
-    </div>
-
     <div class="site-presentation">
       <markdown [data]="homeContent"></markdown>
     </div>

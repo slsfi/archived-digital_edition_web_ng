@@ -1,10 +1,4 @@
 <ion-content padding>
-  <ion-fab class="search-results--mobile" bottom lef *ngIf="searchResult">
-    <button ion-button small (click)="openSearchResult()">{{searchResult}}&nbsp;<ion-icon name="search"></ion-icon></button>
-  </ion-fab>
-  <ion-fab class="search-results--desktop" top left *ngIf="searchResult">
-      <button ion-button small (click)="openSearchResult()">{{searchResult}}&nbsp;<ion-icon name="search"></ion-icon></button>
-  </ion-fab>
   <ion-grid class="occurrences-result">
     <ion-row justify-content-center>
       <ion-col col-md-8 col-sm-12 class="occurrences-result__content">

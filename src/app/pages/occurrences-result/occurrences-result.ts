@@ -2,7 +2,6 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { router } from 'sw-toolbox';
-import { SearchAppPage } from 'src/app/modals/search-app/search-app';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -681,14 +680,6 @@ export class OccurrencesResultPage {
     }
 
     this.router.navigate([`/song/${song_id}/${songsFilter}`], { queryParams: params });
-  }
-
-  async openSearchResult() {
-    const searchModal = await this.modalCtrl.create({
-      component: SearchAppPage,
-      componentProps: { searchResult: this.searchResult }
-    });
-    return await searchModal.present();
   }
 
   doInfinite(infiniteScroll: any) {

@@ -7,7 +7,6 @@
         "Home": "Home",
         "Read": "Content",
         "Info": "About",
-        "SimpleSearch": "Search",
         "AdvancedSearch": "Advanced Search"
     },
     "Read": {
@@ -179,29 +178,17 @@
     "BackButton": {
         "default": "Go back"
     },
-    "SearchApp": {
-        "simpleSearch": "Simple Search",
-        "advancedSearch": "Advanced Search",
-        "filter": "Filter",
-        "matchesOn": "Match(es):",
-        "numberOf": "match(es)",
-        "pagenumber": "p.",
-        "search-holder": "Search text",
-        "hitCount": "Hit Count",
-        "type": "Type",
-        "timeline": "Timeline",
-        "freetext": "Freetext",
-        "start": "Start",
-        "end": "End",
-        "relevance": "Relevance",
-        "alphabetical": "Alphabetical",
-        "oldest": "Oldest",
-        "genre": "Genre",
-        "person-register": "Persons",
-        "place-register": "Places ",
-        "tag-register": "Subjects/Tags",
-        "verk": "Works",
-        "sort-by": "Sort by"
+    "IndexOfPersons": {
+        "searchPlaceholder": "Search ..."
+    },
+    "IndexOfPlaces": {
+        "searchPlaceholder": "Search ..."
+    },
+    "IndexOfTags": {
+        "searchPlaceholder": "Search ..."
+    },
+    "IndexOfWorks": {
+        "searchPlaceholder": "Search ..."
     },
     "Occurrences": {
         "Title": "Occurrences",

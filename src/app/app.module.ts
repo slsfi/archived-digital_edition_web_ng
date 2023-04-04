@@ -22,7 +22,6 @@ import { UserSettingsService } from './services/settings/user-settings.service';
 import { GenericSettingsService } from './services/settings/generic-settings.service';
 import { GalleryService } from './services/gallery/gallery.service';
 import { TooltipService } from './services/tooltips/tooltip.service';
-import { SearchDataService } from './services/search/search-data.service';
 import { TableOfContentsService } from './services/toc/table-of-contents.service';
 import { CommonModule } from '@angular/common';
 import { PipesModule } from 'src/pipes/pipes.module';
@@ -39,10 +38,8 @@ import { IllustrationPage } from './modals/illustration/illustration';
 import { PersonSearchPageModule } from './pages/person-search/person-search.module';
 import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module';
 import { ReadPopoverPage } from './modals/read-popover/read-popover';
-import { SearchAppPageModule } from './modals/search-app/search-app.module';
 import { UserSettingsPopoverPageModule } from './modals/user-settings-popover/user-settings-popover.module';
 import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-settings-popover';
-import { SearchAppPage } from './modals/search-app/search-app';
 import {CustomTranslateHttpLoader} from "../standalone/TranslateLoader-shim";
 
 export function createTranslateLoader(http: HttpClient): TranslateLoader {
@@ -73,7 +70,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
       }
     }),
     IonicStorageModule.forRoot(),
-    SearchAppPageModule,
     CommonModule,
     UserSettingsPopoverPageModule,
     ComponentsModule,
@@ -97,7 +93,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     CommonFunctionsService,
     SemanticDataService,
     ReferenceDataService,
-    SearchDataService,
     TooltipService,
     UserSettingsService,
     GenericSettingsService,
@@ -114,8 +109,7 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     ReferenceDataModalPage,
     FacsimileZoomModalPage,
     DownloadTextsModalPage,
-    IllustrationPage,
-    SearchAppPage,
+    IllustrationPage
   ]
 })
 export class AppModule {}

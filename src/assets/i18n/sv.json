@@ -7,7 +7,6 @@
         "Home": "Startsida",
         "Read": "Innehåll",
         "Info": "Om utgåvan",
-        "SimpleSearch": "Sök",
         "AdvancedSearch": "Sök"
     },
     "Read": {
@@ -179,29 +178,17 @@
     "BackButton": {
         "default": "Tillbaka"
     },
-    "SearchApp": {
-        "simpleSearch": "Sök",
-        "advancedSearch": "Avancerad sökning",
-        "filter": "Filter",
-        "matchesOn": "Sökträff(ar):",
-        "numberOf": "träffar",
-        "pagenumber": "s.",
-        "search-holder": "Söktext",
-        "hitCount": "Antal träffar",
-        "type": "Typ",
-        "timeline": "Tidsperiod",
-        "freetext": "Fritext",
-        "start": "Start",
-        "end": "Slut",
-        "relevance": "Relevans",
-        "alphabetical": "Alfabetet",
-        "oldest": "Äldst",
-        "genre": "Genre",
-        "person-register": "Personregister",
-        "place-register": "Platsregister ",
-        "tag-register": "Ämnesord",
-        "verk": "Verkregister",
-        "sort-by": "Sortera enligt"
+    "IndexOfPersons": {
+        "searchPlaceholder": "Sök ..."
+    },
+    "IndexOfPlaces": {
+        "searchPlaceholder": "Sök ..."
+    },
+    "IndexOfTags": {
+        "searchPlaceholder": "Sök ..."
+    },
+    "IndexOfWorks": {
+        "searchPlaceholder": "Sök ..."
     },
     "Occurrences": {
         "Title": "Förekomster",

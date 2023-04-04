@@ -10,7 +10,7 @@
           <ion-col>
             <ion-row>
                 <ion-col class="searchbar-col" col-10>
-                  <ion-searchbar placeholder="{{'SearchApp.search-holder' | translate}}" class="searchbar" [(ngModel)]="searchText" (ionInput)="onSearchInput()" (ionClear)="onSearchClear()"></ion-searchbar>
+                  <ion-searchbar placeholder="{{'IndexOfTags.searchPlaceholder' | translate}}" class="searchbar" [(ngModel)]="searchText" (ionInput)="onSearchInput()" (ionClear)="onSearchClear()"></ion-searchbar>
                 </ion-col>
                 <ion-col class="filter-button-col" col-2 *ngIf="showFilter">
                     <button (click)="openFilterModal()" ion-button><ion-icon class="filter-button" name="funnel"></ion-icon></button>
