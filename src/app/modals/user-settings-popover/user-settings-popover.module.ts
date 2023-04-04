@@ -1,17 +1,9 @@
 import { NgModule } from '@angular/core';
-import { UserSettingsPopoverPage } from './user-settings-popover';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient): TranslateLoader {
-    return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { UserSettingsPopoverPage } from './user-settings-popover';
+import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 
 @NgModule({
     declarations: [
@@ -20,14 +12,7 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     imports: [
         CommonModule,
         FormsModule,
-        IonicModule,
-        TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (createTranslateLoader),
-              deps: [HttpClient]
-            }
-          }),
+        IonicModule
     ],
     entryComponents: [
         UserSettingsPopoverPage

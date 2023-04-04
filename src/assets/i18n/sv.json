@@ -4,7 +4,7 @@
         "Subtitle": "Webbplatsens undertitel"
     },
     "TopMenu": {
-        "Home": "Startsida",
+        "Home": "Hem",
         "Read": "Innehåll",
         "Info": "Om utgåvan",
         "AdvancedSearch": "Sök"
@@ -13,7 +13,7 @@
         "Popover": {
             "Options": "Inställningar",
             "All": "Välj alla",
-            "Appearance": "Textstorlek",
+            "Textsize": "Textstorlek",
             "Show": "Visningsalternativ",
             "Comments": "Kommentarer",
             "PersonInfo": "Personupplysningar",
@@ -22,7 +22,7 @@
             "Changes": "Utgivarens ändringar",
             "Normalisations": "Normaliseringar",
             "Abbreviations": "Förkortningar",
-            "PageNumbering": "Stycke-/radnumrering",
+            "ParagraphNumbering": "Stycke-/radnumrering",
             "PageBreakOriginal": "Sidnummer/-brytning i originalet",
             "PageBreakEdition": "Sidnummer i den tryckta utgåvan"
         },
@@ -145,7 +145,7 @@
     },
     "media": "Fotografier",
     "TOC": {
-        "Home": "Till startsidan",
+        "Home": "Hem",
         "About": "Om utgåvan",
         "Read": "Innehåll",
         "Read1": "Innehåll 2",

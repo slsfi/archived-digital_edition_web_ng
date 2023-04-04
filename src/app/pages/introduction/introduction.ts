@@ -122,7 +122,7 @@ export class IntroductionPage {
         'changes': false,
         'normalisations': false,
         'abbreviations': false,
-        'pageNumbering': true,
+        'paragraphNumbering': true,
         'pageBreakOriginal': false,
         'pageBreakEdition': false
       };

@@ -9,7 +9,6 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
   <ion-spinner *ngIf="infoLoading" class="loading" name="crescent"></ion-spinner>
   <ion-item *ngIf="noData"><p i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</p></ion-item>
@@ -130,7 +129,7 @@
                     <div id="map" [ngClass]="isFiltersShown()?'map':'map_hidden'"></div>
                 </ion-item>
                 <ion-item text-wrap style="margin-top: 10px;" *ngIf="galleryOccurrenceData.length > 0" (click)="openGallery(galleryOccurrenceData[0])">
-                  <ion-button fill="outline" slot="end" i18n="@@TOC.MediaCollections">Album</ion-button>
+                  <ion-button fill="outline" slot="end" i18n="@@TOC.MediaCollections">Bildbank</ion-button>
                 </ion-item>
                 <ion-item-divider class="occurrences_title" i18n="@@Occurrences.Title">Förekomster</ion-item-divider>
                 <ion-list class="occurrences_list">

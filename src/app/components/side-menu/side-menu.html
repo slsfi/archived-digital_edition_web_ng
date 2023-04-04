@@ -2,7 +2,7 @@
   <!--  *ngIf="!readMenuOpen && !galleryMenuOpen && !menuConditionals.songTypesMenuOpen"-->
   <ul>
     <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="selectedMenu.includes('/')">
-      <a routerLink="/" i18n="@@TOC.Home">Till startsidan</a>
+      <a routerLink="/" i18n="@@TOC.Home">Hem</a>
     </li>
     <!-- Markdown "About"-pages: src/app/pages/about -->
     <ng-container *ngIf="_config.show?.TOC?.About">

@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { EventsService } from 'src/app/services/events/events.service';
 import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { config } from "src/app/services/config/config";
 
@@ -27,7 +25,7 @@ export class ReadPopoverPage {
       'changes': boolean,
       'normalisations': boolean,
       'abbreviations': boolean,
-      'pageNumbering': boolean,
+      'paragraphNumbering': boolean,
       'pageBreakOriginal': boolean,
       'pageBreakEdition': boolean
   };
@@ -40,7 +38,7 @@ export class ReadPopoverPage {
       'changes': false,
       'normalisations': false,
       'abbreviations': false,
-      'pageNumbering': false,
+      'paragraphNumbering': false,
       'pageBreakOriginal': false,
       'pageBreakEdition': false
   };
@@ -51,8 +49,6 @@ export class ReadPopoverPage {
   constructor(
     public viewCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
-    public translate: TranslateService,
-    private events: EventsService,
     public params: NavParams
   ) {
     const toggles = this.params.get('toggles');
@@ -103,8 +99,8 @@ export class ReadPopoverPage {
       if (this.readToggles.abbreviations) {
         this.show.abbreviations = true;
       }
-      if (this.readToggles.pageNumbering) {
-        this.show.pageNumbering = true;
+      if (this.readToggles.paragraphNumbering) {
+        this.show.paragraphNumbering = true;
       }
       if (this.readToggles.pageBreakOriginal) {
         this.show.pageBreakOriginal = true;
@@ -120,7 +116,7 @@ export class ReadPopoverPage {
       this.show.changes = false;
       this.show.normalisations = false;
       this.show.abbreviations = false;
-      this.show.pageNumbering = false;
+      this.show.paragraphNumbering = false;
       this.show.pageBreakOriginal = false;
       this.show.pageBreakEdition = false;
     }
@@ -131,7 +127,7 @@ export class ReadPopoverPage {
     this.toggleChanges();
     this.toggleNormalisations();
     this.toggleAbbreviations();
-    this.togglePageNumbering();
+    this.toggleParagraphNumbering();
     this.togglePageBreakOriginal();
     this.togglePageBreakEdition();
   }
@@ -164,8 +160,8 @@ export class ReadPopoverPage {
     this.readPopoverService.show.abbreviations = this.show.abbreviations;
   }
 
-  togglePageNumbering() {
-    this.readPopoverService.show.pageNumbering = this.show.pageNumbering;
+  toggleParagraphNumbering() {
+    this.readPopoverService.show.paragraphNumbering = this.show.paragraphNumbering;
   }
 
   togglePageBreakOriginal() {

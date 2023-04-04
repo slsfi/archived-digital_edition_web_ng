@@ -1,6 +1,6 @@
 <ion-list *ngIf="enableLanguageChanges" lines="full">
     <ion-list-header class="user-settings-popover-header">
-        <ion-label>{{'About.Language' | translate}}</ion-label>
+        <ion-label i18n="@@About.Language">Språk</ion-label>
         <ion-button class="close" (click)="close()">
             <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
@@ -15,19 +15,19 @@
 
 <ion-list lines="full">
     <ion-list-header>
-        <ion-label>{{'About.ViewMode' | translate}}</ion-label>
+        <ion-label i18n="@@About.ViewMode">Visningsläge</ion-label>
     </ion-list-header>
     <ion-radio-group [(ngModel)]="userSettingsService.mode">
         <ion-item>
-            <ion-label>{{'About.ViewModeAuto' | translate}}</ion-label>
+            <ion-label i18n="@@About.ViewModeAuto">Auto</ion-label>
             <ion-radio value="auto"></ion-radio>
         </ion-item>
         <ion-item>
-            <ion-label>{{'About.ViewModeDesktop' | translate}}</ion-label>
+            <ion-label i18n="@@About.ViewModeDesktop">Desktop</ion-label>
             <ion-radio value="desktop"></ion-radio>
         </ion-item>
         <ion-item>
-            <ion-label>{{'About.ViewModeMobile' | translate}}</ion-label>
+            <ion-label i18n="@@About.ViewModeMobile">Mobil</ion-label>
             <ion-radio value="mobile"></ion-radio>
         </ion-item>
     </ion-radio-group>

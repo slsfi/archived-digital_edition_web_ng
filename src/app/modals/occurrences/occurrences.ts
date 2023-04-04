@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, NavController, NavParams, Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { ModalController, NavController, NavParams } from '@ionic/angular';
 import leaflet from 'leaflet';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
@@ -74,10 +73,8 @@ export class OccurrencesPage {
               public navParams: NavParams,
               public semanticDataService: SemanticDataService,
               public modalCtrl: ModalController,
-              private platform: Platform,
               protected textService: TextService,
               private tooltipService: TooltipService,
-              public translate: TranslateService,
               public occurrenceService: OccurrenceService,
               public viewCtrl: ModalController,
               private events: EventsService,

@@ -1,18 +1,10 @@
 import { NgModule } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
-import { OccurrencesPage } from './occurrences';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { OccurrencesPage } from './occurrences';
 
 @NgModule({
   declarations: [
@@ -21,16 +13,9 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     IonicModule,
     PipesModule,
-      TranslateModule.forChild({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }),
-      ComponentsModule,
-      CommonModule,
-      FormsModule,
+    ComponentsModule,
+    CommonModule,
+    FormsModule
   ],
 })
 export class OccurrencesPageModule {}

@@ -4,7 +4,7 @@
   [class.show_personInfo]="readPopoverService.show.personInfo"
   [class.show_workInfo]="readPopoverService.show.workInfo"
   [class.show_abbreviations]="readPopoverService.show.abbreviations"
-  [class.show_pageNumbering]="readPopoverService.show.pageNumbering"
+  [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering"
   [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'">
   <div [innerHTML]="text"></div>
   <div class="ms" *ngIf="letter">

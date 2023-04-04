@@ -6,6 +6,31 @@
         <source>Förkortning</source>
       </segment>
     </unit>
+    <unit id="About.Language">
+      <segment>
+        <source>Språk</source>
+      </segment>
+    </unit>
+    <unit id="About.ViewMode">
+      <segment>
+        <source>Visningsläge</source>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeAuto">
+      <segment>
+        <source>Auto</source>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeDesktop">
+      <segment>
+        <source>Desktop</source>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeMobile">
+      <segment>
+        <source>Mobil</source>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment>
         <source>Avbryt</source>
@@ -31,9 +56,64 @@
         <source>Utgivarens anmärkning</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightNotice">
+      <segment>
+        <source>Licens: CC BY-NC-ND 4.0</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightNoticeIntroduction">
+      <segment>
+        <source>Licens: CC BY-NC-ND 4.0</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment>
         <source>Ladda ner</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.Print">
+      <segment>
+        <source>Utskrift</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.TXT">
+      <segment>
+        <source>TXT</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XML">
+      <segment>
+        <source>XML</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Instructions">
+      <segment>
+        <source>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.InstructionsIntroduction">
+      <segment>
+        <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Print">
+      <segment>
+        <source>Skriv ut</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.TextLoadingError">
+      <segment>
+        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Textsize">
+      <segment>
+        <source>Textstorlek</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Title">
+      <segment>
+        <source>Ladda ner och skriv ut</source>
       </segment>
     </unit>
     <unit id="editorialChange">
@@ -46,9 +126,49 @@
         <source>Normalisering</source>
       </segment>
     </unit>
+    <unit id="ElasticSearch.From">
+      <segment>
+        <source>Från</source>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.SortBy">
       <segment>
         <source>Sortera enligt</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.To">
+      <segment>
+        <source>Till</source>
+      </segment>
+    </unit>
+    <unit id="Epub.Contents">
+      <segment>
+        <source>Innehåll</source>
+      </segment>
+    </unit>
+    <unit id="Epub.DisplayOptions">
+      <segment>
+        <source>Textstorlek</source>
+      </segment>
+    </unit>
+    <unit id="Epub.Download">
+      <segment>
+        <source>Ladda ner</source>
+      </segment>
+    </unit>
+    <unit id="Epub.FileNotFound">
+      <segment>
+        <source>Texten kunde inte laddas. Epub-filen saknas.</source>
+      </segment>
+    </unit>
+    <unit id="Epub.Search">
+      <segment>
+        <source>Sök</source>
+      </segment>
+    </unit>
+    <unit id="Epub.SearchPhrase">
+      <segment>
+        <source>Söktext</source>
       </segment>
     </unit>
     <unit id="established">
@@ -99,6 +219,11 @@
     <unit id="illustrations">
       <segment>
         <source>Illustrationer</source>
+      </segment>
+    </unit>
+    <unit id="introduction">
+      <segment>
+        <source>Inledning</source>
       </segment>
     </unit>
     <unit id="legend">
@@ -246,6 +371,21 @@
         <source>Förekomster för verk är inte tillgängliga.</source>
       </segment>
     </unit>
+    <unit id="PersonSearch">
+      <segment>
+        <source>Personregister</source>
+      </segment>
+    </unit>
+    <unit id="PersonSearch2">
+      <segment>
+        <source>Personregister 2</source>
+      </segment>
+    </unit>
+    <unit id="PersonSearch3">
+      <segment>
+        <source>Personregister 3</source>
+      </segment>
+    </unit>
     <unit id="Read.AddColumn">
       <segment>
         <source>Ny kolumn</source>
@@ -349,6 +489,11 @@
     <unit id="Read.Comments.NoComments">
       <segment>
         <source>Inga kommentarer.</source>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Title">
+      <segment>
+        <source>Kommentarer</source>
       </segment>
     </unit>
     <unit id="Read.CoverPage.ForewordPage">
@@ -516,9 +661,74 @@
         <source>Visa ändringar inarbetade</source>
       </segment>
     </unit>
+    <unit id="Read.Popover.Abbreviations">
+      <segment>
+        <source>Förkortningar</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.All">
+      <segment>
+        <source>Välj alla</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Changes">
+      <segment>
+        <source>Utgivarens ändringar</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Comments">
+      <segment>
+        <source>Kommentarer</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Normalisations">
+      <segment>
+        <source>Normaliseringar</source>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Options">
       <segment>
         <source>Inställningar</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakEdition">
+      <segment>
+        <source>Sidnummer i den tryckta utgåvan</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakOriginal">
+      <segment>
+        <source>Sidnummer/-brytning i originalet</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.ParagraphNumbering">
+      <segment>
+        <source>Stycke-/radnumrering</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PersonInfo">
+      <segment>
+        <source>Personupplysningar</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PlaceInfo">
+      <segment>
+        <source>Platsupplysningar</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Show">
+      <segment>
+        <source>Visningsalternativ</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Textsize">
+      <segment>
+        <source>Textstorlek</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.WorkInfo">
+      <segment>
+        <source>Verkupplysningar</source>
       </segment>
     </unit>
     <unit id="Read.ShowAll">
@@ -576,9 +786,64 @@
         <source>Välj variant</source>
       </segment>
     </unit>
+    <unit id="Reference.established">
+      <segment>
+        <source>Hänvisa till denna lästext</source>
+      </segment>
+    </unit>
+    <unit id="Reference.intro">
+      <segment>
+        <source>Hänvisa till denna inledning</source>
+      </segment>
+    </unit>
+    <unit id="Reference.mediaCollection">
+      <segment>
+        <source>Hänvisa till denna bildsamling</source>
+      </segment>
+    </unit>
+    <unit id="Reference.missing">
+      <segment>
+        <source>Sidan saknar beständig webbadress</source>
+      </segment>
+    </unit>
+    <unit id="Reference.pageEpub">
+      <segment>
+        <source>Hänvisa till denna text</source>
+      </segment>
+    </unit>
+    <unit id="Reference.pageForeword">
+      <segment>
+        <source>Hänvisa till detta förord</source>
+      </segment>
+    </unit>
+    <unit id="Reference.pageTitle">
+      <segment>
+        <source>Hänvisa till denna delutgåva</source>
+      </segment>
+    </unit>
+    <unit id="Reference.permaLink">
+      <segment>
+        <source>Beständig webbadress</source>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment>
         <source>Hänvisa</source>
+      </segment>
+    </unit>
+    <unit id="Reference.thisPage">
+      <segment>
+        <source>Hänvisa till denna sida</source>
+      </segment>
+    </unit>
+    <unit id="Reference.title">
+      <segment>
+        <source>Källhänvisning</source>
+      </segment>
+    </unit>
+    <unit id="Reference.topMenu">
+      <segment>
+        <source>Hänvisa till denna webbutgåva</source>
       </segment>
     </unit>
     <unit id="revisionNote">
@@ -596,14 +861,24 @@
         <source>Webbplatsens titel</source>
       </segment>
     </unit>
+    <unit id="TOC.All">
+      <segment>
+        <source>Alla</source>
+      </segment>
+    </unit>
+    <unit id="TOC.EPUBS">
+      <segment>
+        <source>Epub</source>
+      </segment>
+    </unit>
     <unit id="TOC.Home">
       <segment>
-        <source>Till startsidan</source>
+        <source>Hem</source>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
       <segment>
-        <source>Album</source>
+        <source>Bildbank</source>
       </segment>
     </unit>
     <unit id="TOC.PersonSearch">
@@ -614,6 +889,31 @@
     <unit id="TOC.PlaceSearch">
       <segment>
         <source>Ortregister</source>
+      </segment>
+    </unit>
+    <unit id="TOC.Read">
+      <segment>
+        <source>Innehåll</source>
+      </segment>
+    </unit>
+    <unit id="TOC.Read1">
+      <segment>
+        <source>Innehåll 2</source>
+      </segment>
+    </unit>
+    <unit id="TOC.Read2">
+      <segment>
+        <source>Innehåll 3</source>
+      </segment>
+    </unit>
+    <unit id="TOC.Read3">
+      <segment>
+        <source>Innehåll 4</source>
+      </segment>
+    </unit>
+    <unit id="TOC.Read4">
+      <segment>
+        <source>Innehåll 5</source>
       </segment>
     </unit>
     <unit id="TOC.TagSearch">
@@ -639,11 +939,6 @@
     <unit id="TopMenu.Read">
       <segment>
         <source>Läs</source>
-      </segment>
-    </unit>
-    <unit id="TopMenu.SimpleSearch">
-      <segment>
-        <source>Sök</source>
       </segment>
     </unit>
     <unit id="uncertainPersonCorresp">

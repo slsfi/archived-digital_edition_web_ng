@@ -1,17 +1,9 @@
 import { NgModule } from '@angular/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { ReadPopoverPage } from './read-popover';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient): TranslateLoader {
-    return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
+import { ReadPopoverPage } from './read-popover';
 
 @NgModule({
     declarations: [
@@ -19,15 +11,8 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     ],
     imports: [
         IonicModule,
-        TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (createTranslateLoader),
-              deps: [HttpClient]
-            }
-          }),
-          CommonModule,
-          FormsModule,
+        CommonModule,
+        FormsModule
     ],
     entryComponents: [
         ReadPopoverPage
