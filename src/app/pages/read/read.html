@@ -82,7 +82,7 @@
               <ion-icon name="ellipsis-vertical"></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="availableViewModes.length > 1" (click)="removeView(i)">
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)">
                 <ion-icon name="trash-bin-sharp"></ion-icon>
               </ion-fab-button>
               <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)">
@@ -101,12 +101,12 @@
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
-                <ng-container *ngIf="view.type == 'established' && !multilingualEST">
+                <ng-container *ngIf="view.type == 'established' && multilingualReadingTextLanguages.length < 2">
                   <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
                 </ng-container>
 
-                <ng-container *ngIf="multilingualEST && displayToggles['established']">
-                  <ng-container *ngFor="let lang of estLanguages">
+                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
+                  <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
                     <ng-container *ngIf="view.type == 'established_' + lang">
                       <read-text [textItemID]="textItemID + '_' + lang" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
                     </ng-container>
@@ -141,7 +141,7 @@
         </div>
 
         <!-- Add view -->
-        <div *ngIf="!userSettingsService.isMobile() && availableViewModes.length > 1" class="add-view-column">
+        <div *ngIf="!userSettingsService.isMobile() && enabledViewTypes.length > 1" class="add-view-column">
           <!--
           <div class="fab-backdrop" [ngClass]="showAddViewsFabBackdrop ? 'show-fab-backdrop' : ''" [ngStyle]="{'width':backdropWidth+'px'}" (click)="toggleFabBackdrop(); fabmenuadd.close()"></div>
           -->
@@ -153,41 +153,41 @@
           <ion-popover #addViewPopover class="page-read-add-view-popover" reference="trigger" side="bottom" alignment="end" [isOpen]="addViewPopoverisOpen" (didDismiss)="addViewPopoverisOpen = false" [dismissOnSelect]="true">
             <ng-template>
               <ion-content>
-                <ion-chip *ngIf="displayToggles['showAll']" (click)="showAllViews(); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['showAll']" (click)="showAllViewTypes(); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="albums-sharp"></ion-icon>
                   <ion-label>{{ "Read.ShowAll" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="!multilingualEST && displayToggles['established']" (click)="addView('established'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="multilingualReadingTextLanguages.length < 2 && viewTypes['established']" (click)="addView('established'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="reader-sharp"></ion-icon>
                   <ion-label>{{ "Read.Established.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ng-container *ngIf="multilingualEST && displayToggles['established']">
-                  <ion-chip *ngFor="let lang of estLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()">
+                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
+                  <ion-chip *ngFor="let lang of multilingualReadingTextLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()">
                     <ion-icon name="reader-sharp"></ion-icon>
                     <ion-label>{{ "Read.Established.AddButtonText" | translate }} – {{lang}}</ion-label>
                   </ion-chip>
                 </ng-container>
-                <ion-chip *ngIf="displayToggles['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="chatbubble-ellipses-sharp"></ion-icon>
                   <ion-label>{{ "Read.Comments.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="displayToggles['facsimiles']" (click)="addView('facsimiles'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['facsimiles']" (click)="addView('facsimiles'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="image-sharp"></ion-icon>
                   <ion-label>{{ "Read.Facsimiles.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="displayToggles['illustrations']" (click)="addView('illustrations'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['illustrations']" (click)="addView('illustrations'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="images-sharp"></ion-icon>
                   <ion-label>{{ "Read.Illustrations.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="displayToggles['manuscripts']" (click)="addView('manuscripts'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['manuscripts']" (click)="addView('manuscripts'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="document-text-sharp"></ion-icon>
                   <ion-label>{{ "Read.Manuscripts.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="displayToggles['variations']" (click)="addView('variations'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['variations']" (click)="addView('variations'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="documents-sharp"></ion-icon>
                   <ion-label>{{ "Read.Variations.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="displayToggles['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="bulb-sharp"></ion-icon>
                   <ion-label>{{ "Read.Legend.AddButtonText" | translate }}</ion-label>
                 </ion-chip>
@@ -243,13 +243,13 @@
     <ng-container *ngIf="textItemID$ | async as textItemID">
       <div>
         <ion-segment [(ngModel)]="show">
-          <ion-segment-button value="established" *ngIf="displayToggles['established']">
+          <ion-segment-button value="established" *ngIf="viewTypes['established']">
             <ion-label>{{ "Read.Established.Title" | translate }}</ion-label>
           </ion-segment-button>
-          <!--ion-segment-button value="manuscripts" *ngIf="displayToggles['manuscripts']">
+          <!--ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
             {{ "Read.Manuscripts.Title" | translate }}
           </ion-segment-button-->
-          <ion-segment-button value="facsimiles" *ngIf="displayToggles['facsimiles']">
+          <ion-segment-button value="facsimiles" *ngIf="viewTypes['facsimiles']">
             <ion-label>{{ "Read.Facsimiles.Title" | translate }}</ion-label>
           </ion-segment-button>
         </ion-segment>

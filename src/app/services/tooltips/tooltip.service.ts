@@ -1,72 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
-import { map, Observable, Subscription } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CommentService } from '../comments/comment.service';
-import { LanguageService } from '../languages/language.service';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
 export class TooltipService {
-  private placeTooltipUrl = '/tooltips/locations/';
   private apiEndPoint: string;
   private projectMachineName: string;
-  languageSubscription: Subscription;
   uncertainPersonCorrespTranslation = '';
   fictionalPersonCorrespTranslation = '';
   BCTranslation = 'BC';
 
   constructor(
     private commentService: CommentService,
-    private langService: LanguageService,
-    public translate: TranslateService,
     private http: HttpClient
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
 
-    this.updateTranslations();
-
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe((lang) => {
-      if (lang) {
-        this.updateTranslations();
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-  }
-
-  updateTranslations() {
-    this.translate.get('uncertainPersonCorresp').subscribe({
-      next: translation => {
-        this.uncertainPersonCorrespTranslation = translation;
-      },
-      error: e => {
-        this.uncertainPersonCorrespTranslation = '';
-      }
-    });
-
-    this.translate.get('fictionalPersonCorresp').subscribe({
-      next: translation => {
-        this.fictionalPersonCorrespTranslation = translation;
-      },
-      error: e => {
-        this.fictionalPersonCorrespTranslation = '';
-      }
-    });
-
-    this.translate.get('BC').subscribe({
-      next: translation => {
-        this.BCTranslation = translation;
-      },
-      error: e => {
-        this.BCTranslation = 'BC';
-      }
-    });
+    this.uncertainPersonCorrespTranslation = $localize`:@@uncertainPersonCorresp:ev.`;
+    this.fictionalPersonCorrespTranslation = $localize`:@@fictionalPersonCorresp:historisk förebild`;
+    this.BCTranslation = $localize`:@@BC:f.Kr.`;
   }
 
   getPersonTooltip(id: string): Observable<any> {

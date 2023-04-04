@@ -1,14 +1,12 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent, LoadingController, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import size from 'lodash/size';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -77,7 +75,6 @@ export class ElasticSearchPage {
   debouncedSearch = debounce(this.search, 1500);
   sortSelectOptions: Record<string, any> = {};
   mdContent?: string;
-  languageSubscription: Subscription | null;
 
   constructor(
     public navCtrl: NavController,
@@ -86,7 +83,6 @@ export class ElasticSearchPage {
     private platform: Platform,
     protected textService: TextService,
     public translate: TranslateService,
-    public languageService: LanguageService,
     private mdContentService: MdContentService,
     public loadingCtrl: LoadingController,
     public elastic: ElasticSearchService,
@@ -96,7 +92,8 @@ export class ElasticSearchPage {
     private events: EventsService,
     private cf: ChangeDetectorRef,
     public commonFunctions: CommonFunctionsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
     this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
@@ -113,8 +110,6 @@ export class ElasticSearchPage {
     if (this.textHighlightType !== 'fvh' && this.textHighlightType !== 'unified' && this.textHighlightType !== 'plain') {
       this.textHighlightType = 'unified';
     }
-
-    this.languageSubscription = null;
   }
 
   private getParamsData(query: string) {
@@ -199,29 +194,11 @@ export class ElasticSearchPage {
       })
     }, 300);
 
-    this.languageSubscription = this.languageService.languageSubjectChange().subscribe(lang => {
-      if (lang) {
-        this.getMdContent(lang + '-12-01');
-      } else {
-        this.languageService.getLanguage().subscribe(language => {
-          this.getMdContent(language + '-12-01');
-        });
-      }
-      this.translate.get('ElasticSearch.SortBy').subscribe(
-        translation => {
-          this.sortSelectOptions = {
-            title: translation,
-            cssClass: 'custom-select-alert'
-          };
-        }
-      );
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
+    this.getMdContent(this.activeLocale + '-12-01');
+    this.sortSelectOptions = {
+      title: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
+      cssClass: 'custom-select-alert'
+    };
   }
 
   /*

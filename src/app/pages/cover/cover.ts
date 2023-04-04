@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -25,15 +23,14 @@ export class CoverPage {
   text: any;
   collection: any;
   coverSelected: boolean;
-  languageSubscription?: Subscription;
 
   constructor(
-    private langService: LanguageService,
     private textService: TextService,
     protected sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService,
     private mdContentService: MdContentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.coverSelected = true;
     this.hasMDCover = config.ProjectStaticMarkdownCoversFolder ?? '';
@@ -43,19 +40,8 @@ export class CoverPage {
     this.route.params.subscribe(params => {
       this.id = params['collectionID'];
       this.checkIfCollectionHasChildrenPdfs();
-
-      this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-        if (lang) {
-          this.loadCover(lang, this.id);
-        }
-      });
+      this.loadCover(this.activeLocale, this.id);
     });
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
   }
 
   checkIfCollectionHasChildrenPdfs() {

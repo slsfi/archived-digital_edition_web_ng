@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
@@ -10,7 +8,6 @@ import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
@@ -52,22 +49,20 @@ export class PersonSearchPage {
 
   personSearchTypes = [] as any;
 
-  languageSubscription?: Subscription;
   debouncedSearch = debounce(this.searchPersons, 500);
 
   constructor(
               public semanticDataService: SemanticDataService,
-              protected langService: LanguageService,
               private mdContentService: MdContentService,
               public modalCtrl: ModalController,
               public loadingCtrl: LoadingController,
               public occurrenceService: OccurrenceService,
               protected storage: StorageService,
-              public translate: TranslateService,
               private tooltipService: TooltipService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.showFilter = config.PersonSearch?.ShowFilter ?? true;
     this.personSearchTypes = config.PersonSearchTypes ?? [];
@@ -80,17 +75,7 @@ export class PersonSearchPage {
 
   ngOnInit() {
     this.getParamsData();
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-      if (lang) {
-        this.getMdContent(lang + '-12-02');
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
+    this.getMdContent(this.activeLocale + '-12-02');
   }
 
   getParamsData() {
@@ -99,11 +84,7 @@ export class PersonSearchPage {
       this.subType = params['subtype'];
       if ( String(this.subType).includes('subtype') ) {
         this.subType = null;
-        this.translate.get('TOC.PersonSearch').subscribe(
-          translation => {
-            this.pageTitle = translation;
-          }, error => { this.pageTitle = null; }
-        );
+        this.pageTitle = $localize`:@@TOC.PersonSearch:Personregister`;
       }
 
       if (this.subType) {

@@ -1,9 +1,6 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 import { EventsService } from 'src/app/services/events/events.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
@@ -29,8 +26,6 @@ export class TextChangerComponent {
   lastItem?: boolean;
   currentItemTitle: string = '';
   collectionId: string = '';
-  language: string = ''
-  languageSubscription: Subscription | null = null;
   flattened: Array<any> = [];
   collectionHasCover: boolean = false;
   collectionHasTitle: boolean = false;
@@ -41,8 +36,6 @@ export class TextChangerComponent {
     public events: EventsService,
     public tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService,
-    public translateService: TranslateService,
-    private langService: LanguageService,
     private textService: TextService,
     private router: Router
   ) {
@@ -50,7 +43,6 @@ export class TextChangerComponent {
     this.collectionHasTitle = config.HasTitle ?? false;
     this.collectionHasForeword = config.HasForeword ?? false;
     this.collectionHasIntro = config.HasIntro ?? false;
-    this.language = config.i18n?.locale ?? 'sv';
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,12 +103,9 @@ export class TextChangerComponent {
   }
 
   ngOnInit() {
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(language => {
-      this.language = language;
-      if (this.textItemID) {
-        this.loadData();
-      }
-    });
+    if (this.textItemID) {
+      this.loadData();
+    }
 
     // TODO: Reload when the TOC sorting changes and set current item
     /*
@@ -127,22 +116,12 @@ export class TextChangerComponent {
     */
   }
 
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-  }
-
   loadData() {
     this.flattened = [];
 
     if (this.parentPageType === 'page-cover') {
       // Initialised from page-cover
-      this.translateService.get('Read.CoverPage.Title').subscribe({
-        next: (translation) => {
-          this.currentItemTitle = translation;
-        }
-      });
+      this.currentItemTitle = $localize`:@@Read.CoverPage.Title:Omslag`;
 
       this.firstItem = true;
       this.lastItem = false;
@@ -158,11 +137,7 @@ export class TextChangerComponent {
 
     } else if (this.parentPageType === 'page-title') {
       // Initialised from page-title
-      this.translateService.get('Read.TitlePage.Title').subscribe({
-        next: (translation) => {
-          this.currentItemTitle = translation;
-        }
-      });
+      this.currentItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
 
       if (this.collectionHasCover) {
         this.firstItem = false;
@@ -186,11 +161,7 @@ export class TextChangerComponent {
 
     } else if (this.parentPageType === 'page-foreword') {
       // Initialised from page-foreword
-      this.translateService.get('Read.ForewordPage.Title').subscribe({
-        next: (translation) => {
-          this.currentItemTitle = translation;
-        }
-      });
+      this.currentItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
 
       this.lastItem = false;
       if (this.collectionHasCover || this.collectionHasTitle) {
@@ -213,11 +184,7 @@ export class TextChangerComponent {
 
     } else if (this.parentPageType === 'page-introduction') {
       // Initialised from page-introduction
-      this.translateService.get('Read.Introduction.Title').subscribe({
-        next: (translation) => {
-          this.currentItemTitle = translation;
-        }
-      });
+      this.currentItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
 
       this.lastItem = false;
       if (this.collectionHasCover || this.collectionHasTitle || this.collectionHasForeword) {
@@ -281,54 +248,27 @@ export class TextChangerComponent {
   }
 
   setPageTitleAsNext(collectionId: string) {
-    this.translateService.get('Read.TitlePage.Title').subscribe({
-      next: (translation) => {
-        this.nextItemTitle = translation;
-        this.nextItem = {
-          itemId: collectionId,
-          page: 'page-title'
-        };
-      },
-      error: (e) => {
-        this.nextItemTitle = '';
-        this.nextItem = null;
-        this.lastItem = true;
-      }
-    });
+    this.nextItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
+    this.nextItem = {
+      itemId: collectionId,
+      page: 'page-title'
+    };
   }
 
   setPageForewordAsNext(collectionId: string) {
-    this.translateService.get('Read.ForewordPage.Title').subscribe({
-      next: (translation) => {
-        this.nextItemTitle = translation;
-        this.nextItem = {
-          itemId: collectionId,
-          page: 'page-foreword'
-        };
-      },
-      error: (e) => {
-        this.nextItemTitle = '';
-        this.nextItem = null;
-        this.lastItem = true;
-      }
-    });
+    this.nextItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
+    this.nextItem = {
+      itemId: collectionId,
+      page: 'page-foreword'
+    };
   }
 
   setPageIntroductionAsNext(collectionId: string) {
-    this.translateService.get('Read.Introduction.Title').subscribe({
-      next: (translation) => {
-        this.nextItemTitle = translation;
-        this.nextItem = {
-          itemId: collectionId,
-          page: 'page-introduction'
-        };
-      },
-      error: (e) => {
-        this.nextItemTitle = '';
-        this.nextItem = null;
-        this.lastItem = true;
-      }
-    });
+    this.nextItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+    this.nextItem = {
+      itemId: collectionId,
+      page: 'page-introduction'
+    };
   }
 
   setMediaCollectionsAsNext() {
@@ -340,75 +280,38 @@ export class TextChangerComponent {
   }
 
   setPageCoverAsPrevious(collectionId: string) {
-    this.translateService.get('Read.CoverPage.Title').subscribe({
-      next: (translation) => {
-        this.prevItemTitle = translation;
-        this.prevItem = {
-          itemId: collectionId,
-          page: 'page-cover'
-        };
-      },
-      error: (e) => {
-        this.prevItemTitle = '';
-        this.prevItem = null;
-        this.firstItem = true;
-      }
-    });
+    this.prevItemTitle = $localize`:@@Read.CoverPage.Title:Omslag`;
+    this.prevItem = {
+      itemId: collectionId,
+      page: 'page-cover'
+    };
   }
 
   setPageTitleAsPrevious(collectionId: string) {
-    this.translateService.get('Read.TitlePage.Title').subscribe({
-      next: (translation) => {
-        this.prevItemTitle = translation;
-        this.prevItem = {
-          itemId: collectionId,
-          page: 'page-title'
-        };
-      },
-      error: (e) => {
-        this.prevItemTitle = '';
-        this.prevItem = null;
-        this.firstItem = true;
-      }
-    });
+    this.prevItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
+    this.prevItem = {
+      itemId: collectionId,
+      page: 'page-title'
+    };
   }
 
   setPageForewordAsPrevious(collectionId: string) {
-    this.translateService.get('Read.ForewordPage.Title').subscribe({
-      next: (translation) => {
-        this.prevItemTitle = translation;
-        this.prevItem = {
-          itemId: collectionId,
-          page: 'page-foreword'
-        };
-      },
-      error: (e) => {
-        this.prevItemTitle = '';
-        this.prevItem = null;
-        this.firstItem = true;
-      }
-    });
+    this.prevItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
+    this.prevItem = {
+      itemId: collectionId,
+      page: 'page-foreword'
+    };
   }
 
   setPageIntroductionAsPrevious(collectionId: string) {
-    this.translateService.get('Read.Introduction.Title').subscribe({
-      next: (translation) => {
-        this.prevItemTitle = translation;
-        this.prevItem = {
-          itemId: collectionId,
-          page: 'page-introduction'
-        };
-      },
-      error: (e) => {
-        this.prevItemTitle = '';
-        this.prevItem = null;
-        this.firstItem = true;
-      }
-    });
+    this.prevItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+    this.prevItem = {
+      itemId: collectionId,
+      page: 'page-introduction'
+    };
   }
 
   async previous(test?: boolean) {
-    // TODO: Add this.language to getTableOfContents()
     if (this.parentPageType === 'page-read') {
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
@@ -428,7 +331,6 @@ export class TextChangerComponent {
 
   async next(test?: boolean) {
     if (this.tocItemId !== 'mediaCollections' && this.parentPageType === 'page-read') {
-      // TODO: Add this.language to getTableOfContents()
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
           this.findNext(toc);

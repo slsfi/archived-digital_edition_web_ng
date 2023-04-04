@@ -1,19 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, Platform } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import debounce from 'lodash/debounce';
-import { Subscription } from 'rxjs';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { EventsService } from 'src/app/services/events/events.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
 
 /**
@@ -48,21 +44,17 @@ export class TagSearchPage{
   // tslint:disable-next-line:max-line-length
   alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
 
-  languageSubscription?: Subscription;
   debouncedSearch = debounce(this.searchTags, 500);
 
   constructor(
               public semanticDataService: SemanticDataService,
-              protected langService: LanguageService,
               private mdContentService: MdContentService,
-              private platform: Platform,
               public occurrenceService: OccurrenceService,
-              protected storage: StorageService,
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
-              private events: EventsService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,
+              @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.showFilter = config.TagSearch.ShowFilter ?? true;
     this.max_fetch_size = config.TagSearch.InitialLoadNumber ?? 500;
@@ -73,17 +65,7 @@ export class TagSearchPage{
 
   ionViewDidLoad() {
     this.getTags();
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-      if (lang) {
-        this.getMdContent(lang + '-12-04');
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
+    this.getMdContent(this.activeLocale + '-12-04');
   }
 
   getTags() {

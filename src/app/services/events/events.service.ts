@@ -222,14 +222,6 @@ export class EventsService {
         return this.titleLogoSetSubTitle;
     }
 
-    publishTopMenuHelp(data?: any) {
-        this.topMenuHelp.next(data);
-    }
-
-    getTopMenuHelp(): Subject<any> {
-        return this.topMenuHelp;
-    }
-
     publishTopMenuElasticSearch(data?: any) {
         this.topMenuElasticSearch.next(data);
     }

@@ -1,10 +1,8 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MdContent } from 'src/app/models/md-content.model';
-import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
@@ -37,41 +35,32 @@ export class MediaCollectionsPage {
   public apiEndPoint: string;
   public projectMachineName: string;
   mdContent: MdContent;
-  language = 'sv';
 
   constructor(
-    private events: EventsService,
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
-    public languageService: LanguageService,
     public translate: TranslateService,
     public cdRef: ChangeDetectorRef,
     private mdContentService: MdContentService,
     private router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
 
-    let fileID = '11-all';
+    let fileID = activeLocale + '-11-all';
     this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
 
-    this.language = config.i18n?.locale ?? 'sv';
-    this.languageService.getLanguage().subscribe((lang: string) => {
-      this.language = lang;
-      if ( !String(fileID).includes(lang) ) {
-        fileID = lang + '-' + fileID;
-      }
-      this.getMdContent(fileID);
-      this.getMediaCollections();
-      this.getCollectionTags();
-      this.getCollectionLocations();
-      this.getCollectionSubjects();
-    });
+    this.getMdContent(fileID);
+    this.getMediaCollections();
+    this.getCollectionTags();
+    this.getCollectionLocations();
+    this.getCollectionSubjects();
   }
 
   getMediaCollections() {
     (async () => {
-      this.galleries = await this.galleryService.getGalleries(this.language);
+      this.galleries = await this.galleryService.getGalleries(this.activeLocale);
       this.allGalleries = this.galleries;
       this.allGalleries.sort(function(a: any, b: any) {
         const titleA = a.title.toLowerCase(); // ignore upper and lowercase

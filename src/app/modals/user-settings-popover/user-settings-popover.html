@@ -5,8 +5,8 @@
             <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
     </ion-list-header>
-    <ion-radio-group [(ngModel)]="languageService.language">
-        <ion-item *ngFor="let lang of languageService.languages">
+    <ion-radio-group [(ngModel)]="locales">
+        <ion-item *ngFor="let lang of locales">
             <ion-label>{{lang}}</ion-label>
             <ion-radio slot="end" [value]="lang"></ion-radio>
         </ion-item>

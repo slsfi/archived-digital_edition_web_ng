@@ -6,7 +6,13 @@ export const config: Config = {
     projectId: 10,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    siteLogoURL: "https://www.sls.fi/"
+    siteLogoURL: "https://www.sls.fi/",
+    i18n: {
+      languages: ["sv", "fi"],
+      enableLanguageChanges: true,
+      multilingualCollectionTableOfContents: false,
+      multilingualReadingTextLanguages: []
+    },
   },
   collections: {
     order: [
@@ -59,7 +65,17 @@ export const config: Config = {
     },
     read: {
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewTypeSettings: {
+        showAll: true,
+        established: true,
+        comments: true,
+        manuscripts: true,
+        variations: true,
+        facsimiles: true,
+        illustrations: true,
+        legend: true
+      }
     },
     title: {
       showURNButton: true,
@@ -73,8 +89,7 @@ export const config: Config = {
       showElasticSearchButton: true,
       showSimpleSearchButton: false,
       showURNButton: false,
-      showLanguageButton: true,
-      showHelpButton: false
+      showLanguageButton: true
     },
     sideMenu: {
       sortableCollectionsAlphabetic: ["211", "215", "219", "220"],
@@ -109,16 +124,6 @@ export const config: Config = {
       pageNumbering: true,
       pageBreakEdition: true
     },
-    displayTypesToggles: {
-      showAll: true,
-      established: true,
-      comments: true,
-      manuscripts: true,
-      variations: true,
-      facsimiles: true,
-      illustrations: true,
-      legend: true
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -136,11 +141,6 @@ export const config: Config = {
     facsimileZoomPageLevel: 1,
     galleryCollectionMapping: { 214: 44, 206: 19 },
     showReadTextIllustrations: ["20212", "20213", "206"]
-  },
-  i18n: {
-    languages: ["sv", "fi"],
-    locale: "sv",
-    enableLanguageChanges: true
   },
   collectionDownloads: {
     isDownloadOnly: false,
@@ -402,7 +402,13 @@ export const config_soderholm: Config = {
     projectId: 7,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    siteLogoURL: "https://www.sls.fi/"
+    siteLogoURL: "https://www.sls.fi/",
+    i18n: {
+      languages: ["sv"],
+      enableLanguageChanges: false,
+      multilingualCollectionTableOfContents: false,
+      multilingualReadingTextLanguages: []
+    },
   },
   collections: {
     order: [
@@ -532,7 +538,17 @@ export const config_soderholm: Config = {
     },
     read: {
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewTypeSettings: {
+        showAll: false,
+        established: false,
+        comments: false,
+        manuscripts: true,
+        variations: false,
+        facsimiles: true,
+        illustrations: false,
+        legend: false
+      },
     },
     title: {
       showURNButton: true,
@@ -546,8 +562,7 @@ export const config_soderholm: Config = {
       showElasticSearchButton: true,
       showSimpleSearchButton: false,
       showURNButton: false,
-      showLanguageButton: false,
-      showHelpButton: false
+      showLanguageButton: false
     },
     sideMenu: {
       sortableCollectionsAlphabetic: [],
@@ -582,16 +597,6 @@ export const config_soderholm: Config = {
       pageNumbering: false,
       pageBreakEdition: false
     },
-    displayTypesToggles: {
-      showAll: false,
-      established: false,
-      comments: false,
-      manuscripts: true,
-      variations: false,
-      facsimiles: true,
-      illustrations: false,
-      legend: false
-    },
     toolTips: {
         comments: false,
         personInfo: false,
@@ -609,11 +614,6 @@ export const config_soderholm: Config = {
     facsimileZoomPageLevel: 2,
     galleryCollectionMapping: {},
     showReadTextIllustrations: []
-  },
-  i18n: {
-    languages: ["sv"],
-    locale: "sv",
-    enableLanguageChanges: false
   },
   collectionDownloads: {
     isDownloadOnly: false,
@@ -1024,6 +1024,12 @@ export const config_mechelin: Config = {
     simpleApi: "https://leomechelin.ew.r.appspot.com",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     siteLogoURL: "https://leomechelin-dev.web.app",
+    i18n: {
+      languages: ["sv", "fi"],
+      enableLanguageChanges: true,
+      multilingualCollectionTableOfContents: true,
+      multilingualReadingTextLanguages: ["sv", "fi"]
+    }
   },
   collections: {
     order: [
@@ -1067,7 +1073,17 @@ export const config_mechelin: Config = {
     },
     read: {
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewTypeSettings: {
+        showAll: true,
+        established: true,
+        comments: false,
+        manuscripts: true,
+        variations: false,
+        facsimiles: true,
+        illustrations: false,
+        legend: false
+      },
     },
     title: {
       showURNButton: true,
@@ -1081,8 +1097,7 @@ export const config_mechelin: Config = {
       showElasticSearchButton: false,
       showSimpleSearchButton: false,
       showURNButton: false,
-      showLanguageButton: true,
-      showHelpButton: false
+      showLanguageButton: true
     },
     sideMenu: {
       sortableCollectionsAlphabetic: [],
@@ -1117,16 +1132,6 @@ export const config_mechelin: Config = {
       pageNumbering: false,
       pageBreakEdition: false
     },
-    displayTypesToggles: {
-      showAll: true,
-      established: true,
-      comments: false,
-      manuscripts: true,
-      variations: false,
-      facsimiles: true,
-      illustrations: false,
-      legend: false
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -1144,14 +1149,6 @@ export const config_mechelin: Config = {
     facsimileZoomPageLevel: 1,
     galleryCollectionMapping: {},
     showReadTextIllustrations: []
-  },
-  i18n: {
-    languages: ["sv", "fi"],
-    locale: "sv",
-    enableLanguageChanges: true,
-    multilingualTOC: true,
-    multilingualEST: true,
-    estLanguages: ["sv", "fi"]
   },
   collectionDownloads: {
     isDownloadOnly: false,

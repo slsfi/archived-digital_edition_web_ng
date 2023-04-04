@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,7 +7,6 @@ import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/refe
 import { MdContent } from 'src/app/models/md-content.model';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
@@ -38,7 +37,6 @@ export class MediaCollectionPage {
   public projectMachineName: string;
   singleId?: string;
   type?: string;
-  language = 'sv';
 
   allTags = [];
   allLocations = [];
@@ -62,10 +60,9 @@ export class MediaCollectionPage {
     public userSettingsService: UserSettingsService,
     private modalController: ModalController,
     public translate: TranslateService,
-    public languageService: LanguageService,
     private mdContentService: MdContentService,
-    private route: ActivatedRoute
-
+    private route: ActivatedRoute,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     // this.mediaCollectionId = this.navParams.get('mediaCollectionId');
     // this.singleId = this.navParams.get('id');
@@ -81,8 +78,7 @@ export class MediaCollectionPage {
 
   getMediaCollections(id?: any, type?: any) {
     if ( id === undefined && this.mediaCollectionId ) {
-      this.galleryService.getGallery(this.mediaCollectionId, this.language)
-      .subscribe(gallery => {
+      this.galleryService.getGallery(this.mediaCollectionId, this.activeLocale).subscribe(gallery => {
         this.mediaCollection = gallery.gallery ? gallery.gallery : gallery;
         this.allMediaCollection = this.mediaCollection;
         this.mediaTitle = gallery[0].title ? gallery[0].title : this.mediaTitle;
@@ -113,8 +109,7 @@ export class MediaCollectionPage {
         }
       });
     } else {
-      this.galleryService.getGalleryOccurrences(type, id)
-      .subscribe((occurrences: any) => {
+      this.galleryService.getGalleryOccurrences(type, id).subscribe((occurrences: any) => {
         occurrences.forEach((element: any) => {
           element['mediaCollectionId'] = element['media_collection_id'];
           element['front'] = element['filename'];
@@ -154,12 +149,6 @@ export class MediaCollectionPage {
     let fileID = '11-' + this.mediaCollectionId;
     this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
 
-    this.language = config.i18n?.locale ?? 'sv';
-    this.languageService.getLanguage().subscribe((lang: string) => {
-      this.language = lang;
-      this.initStuff();
-    });
-
     this.route.params.subscribe(params => {
       this.mediaCollectionId = params['mediaCollectionId'];
       this.singleId = params['id'];
@@ -179,8 +168,8 @@ export class MediaCollectionPage {
     let fileID = '11-' + this.mediaCollectionId;
     this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
     if (this.mediaCollectionId !== null && this.mediaCollectionId !== 'null') {
-      if ( !String(fileID).includes(this.language) ) {
-        fileID = this.language + '-' + fileID;
+      if ( !String(fileID).startsWith(this.activeLocale) ) {
+        fileID = this.activeLocale + '-' + fileID;
       }
       this.getMdContent(fileID);
       this.getCollectionTags();

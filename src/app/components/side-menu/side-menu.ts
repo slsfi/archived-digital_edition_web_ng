@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { NavigationEnd, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
-import { LanguageService } from "../../services/languages/language.service";
 import { MdContentService } from "../../services/md/md-content.service";
 import { UserSettingsService } from "../../services/settings/user-settings.service";
 import { DigitalEditionListService } from "../../services/toc/digital-edition-list.service";
@@ -19,7 +18,6 @@ export class SideMenu implements OnInit {
   @Input() showSideMenu: boolean = false;
 
   _config = config
-  language = 'sv';
   appName?: string;
   errorMessage?: string;
   collectionsList: any[] = [];
@@ -47,13 +45,13 @@ export class SideMenu implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public languageService: LanguageService,
     public mdcontentService: MdContentService,
     private userSettingsService: UserSettingsService,
     public titleService: Title,
     public digitalEditionListService: DigitalEditionListService,
     private galleryService: GalleryService,
     private router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.mediaCollectionOptions = {};
 
@@ -65,7 +63,6 @@ export class SideMenu implements OnInit {
     }
 
     this.splitReadCollections = this._config.show?.TOC?.splitReadCollections || [];
-
 
     this.accordionTOC = this._config.AccordionTOC ?? false;
     this.galleryInReadMenu = this._config.ImageGallery?.ShowInReadMenu ?? true;
@@ -263,16 +260,13 @@ export class SideMenu implements OnInit {
   // getting side-menu structure
   async getAboutPages() {
     if (this._config.AboutMenuAccordion) {
-      this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.language, this.aboutMenuMarkdownInfo.idNumber);
+      this.aboutOptionsMarkdown = await this.mdcontentService.getMarkdownMenu(this.activeLocale, this.aboutMenuMarkdownInfo.idNumber);
     }
   }
 
   initializeApp() {
-    this.languageService.getLanguage().subscribe((lang: string) => {
-      this.language = lang;
-      this.getStaticPagesMenus();
-      this.getAboutPages();
-    });
+    this.getStaticPagesMenus();
+    this.getAboutPages();
   }
 
   romanToInt(str1: any) {
@@ -350,7 +344,7 @@ export class SideMenu implements OnInit {
   }
 
   async getMediaCollections(): Promise<any> {
-    return await this.galleryService.getGalleries(this.language);
+    return await this.galleryService.getGalleries(this.activeLocale);
   }
 
   toggleAccordion(value: string) {

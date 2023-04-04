@@ -1,22 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {lastValueFrom, Observable} from 'rxjs';
-import { LanguageService } from '../languages/language.service';
+import { lastValueFrom, Observable } from 'rxjs';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
 export class GalleryService {
-  private language: string;
 
   constructor(
-    public languageService: LanguageService,
-    private http: HttpClient
+    private http: HttpClient,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.language = config.i18n?.locale ?? 'sv';
-    this.languageService.getLanguage().subscribe((lang: string) => {
-      this.language = lang;
-      this.getGalleries(this.language);
-    });
+    // ! SK 3.4.2023: Why call this in the constructor?
+    this.getGalleries(this.activeLocale);
   }
 
   async getGalleries(language: string): Promise<any> {

@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { MdContent } from 'src/app/models/md-content.model';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { config } from "src/app/services/config/config";
 
 
 @Component({
@@ -14,63 +11,40 @@ import { config } from "src/app/services/config/config";
 })
 export class AboutPage {
 
-  appName?: string;
-  mdContent?: MdContent;
-  lang: string;
-  fileID?: string;
-  languageSubscription: Subscription | null;
+  mdText: string = '';
+  fileID: string = '';
+  routeParamsSubscription: Subscription | null = null;
 
   constructor(
     private mdContentService: MdContentService,
-    protected langService: LanguageService,
     private route: ActivatedRoute
-  ) {
-    this.languageSubscription = null;
-    this.lang = config.i18n?.locale ?? 'sv';
-
-    this.langService.getLanguage().subscribe((lang) => {
-      this.lang = lang;
-    });
-
-  }
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.routeParamsSubscription = this.route.params.subscribe(params => {
       if (this.fileID !== params['id']) {
         this.fileID = params['id'];
-        this.mdContent = new MdContent({id: this.fileID, title: '...', content: null, filename: null});
-        this.loadContent();
-      }
-    });
-
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-      if (lang) {
-        this.lang = lang;
-        this.loadContent();
+        if (this.fileID) {
+          this.getMdContent(this.fileID);
+        }
       }
     });
   }
 
   ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-  }
-
-  loadContent() {
-    if (this.fileID) {
-      this.getMdContent(this.fileID);
+    if (this.routeParamsSubscription) {
+      this.routeParamsSubscription.unsubscribe();
     }
   }
 
   getMdContent(fileID: string) {
     this.mdContentService.getMdContent(fileID).subscribe({
-      next: text => {
-        if (this.mdContent) {
-          this.mdContent.content = text.content;
-        }
+      next: (text) => {
+        this.mdText = text.content;
       },
-      error: e => {}
+      error: (e) => {
+        this.mdText = '';
+      }
     });
   }
 

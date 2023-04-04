@@ -1,18 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { config } from "src/app/services/config/config";
+
 
 /**
  * Popover with list of available user settings.
  * Settings: view mode, language.
  */
-
-/*@IonicPage({
-  name: 'user-settings-popover-page'
-})*/
 @Component({
   selector: 'user-settings-popover-page',
   templateUrl: 'user-settings-popover.html',
@@ -21,22 +16,15 @@ import { config } from "src/app/services/config/config";
 export class UserSettingsPopoverPage {
 
   enableLanguageChanges = true;
-  language?: string;
+  locales: Array<string>;
 
   constructor(
     public viewCtrl: PopoverController,
     public userSettingsService: UserSettingsService,
-    public languageService: LanguageService,
-    private events: EventsService
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.enableLanguageChanges = config.i18n?.enableLanguageChanges ?? true;
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
+    this.enableLanguageChanges = config.app?.i18n?.enableLanguageChanges ?? true;
+    this.locales = config.app?.i18n?.languages ?? ['sv'];
   }
 
   close() {
