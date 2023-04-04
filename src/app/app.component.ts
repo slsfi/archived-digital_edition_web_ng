@@ -66,7 +66,7 @@ export class DigitalEditionsApp {
         this.commonFunctions.setTitle($localize`:@@TOC.WorkSearch:Verkregister`, 1);
         return;
       default:
-        this.commonFunctions.setTitle($localize`:@@TOC.Home:Till startsidan`, 1);
+        !pageTitle && this.commonFunctions.setTitle($localize`:@@TOC.Home:Till startsidan`, 1);
         return;
     }
   }
