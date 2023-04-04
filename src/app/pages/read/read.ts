@@ -2,14 +2,11 @@ import { Component, Renderer2, ElementRef, ViewChild, ViewChildren, QueryList, S
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { SearchAppPage } from 'src/app/modals/search-app/search-app';
-import { EstablishedText } from 'src/app/models/established-text.model';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
@@ -30,7 +27,7 @@ import { isBrowser } from 'src/standalone/utility-functions';
   templateUrl: './read.html',
   styleUrls: ['read.scss'],
 })
-export class ReadPage /*implements OnDestroy*/ {
+export class ReadPage {
   @ViewChild('nav', { read: DragScrollComponent }) ds!: DragScrollComponent;
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
@@ -145,7 +142,6 @@ export class ReadPage /*implements OnDestroy*/ {
     private sanitizer: DomSanitizer,
     private tooltipService: TooltipService,
     public tocService: TableOfContentsService,
-    public translate: TranslateService,
     private events: EventsService,
     public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
@@ -1152,24 +1148,19 @@ export class ReadPage /*implements OnDestroy*/ {
       return;
     }
 
-    this.tooltipService.getPersonTooltip(id).subscribe(
-      tooltip => {
+    this.tooltipService.getPersonTooltip(id).subscribe({
+      next: (tooltip) => {
         const text = this.tooltipService.constructPersonTooltipText(tooltip, targetElem);
         this.setToolTipPosition(targetElem, text);
         this.setToolTipText(text);
         this.tooltips.persons[id] = text;
       },
-      error => {
-        let noInfoFound = 'Could not get person information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe(
-          translation => {
-            noInfoFound = translation;
-          }, err => { }
-        );
+      error: (e) => {
+        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
-    );
+    });
   }
 
   showPlaceTooltip(id: string, targetElem: HTMLElement, origin: any) {
@@ -1179,8 +1170,8 @@ export class ReadPage /*implements OnDestroy*/ {
       return;
     }
 
-    this.tooltipService.getPlaceTooltip(id).subscribe(
-      tooltip => {
+    this.tooltipService.getPlaceTooltip(id).subscribe({
+      next: (tooltip) => {
         let text = '<b>' + tooltip.name.trim() + '</b>';
         if (tooltip.description) {
           text = text + ', ' + tooltip.description.trim();
@@ -1189,17 +1180,12 @@ export class ReadPage /*implements OnDestroy*/ {
         this.setToolTipText(text);
         this.tooltips.places[id] = text;
       },
-      error => {
-        let noInfoFound = 'Could not get place information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe(
-          translation => {
-            noInfoFound = translation;
-          }, err => { }
-        );
+      error: (e) => {
+        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
-    );
+    });
   }
 
   showWorkTooltip(id: string, targetElem: HTMLElement, origin: any) {
@@ -1214,15 +1200,10 @@ export class ReadPage /*implements OnDestroy*/ {
     }
 
     if (this.simpleWorkMetadata === false) {
-      this.semanticDataService.getSingleObjectElastic('work', id).subscribe(
-        tooltip => {
+      this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
+        next: (tooltip) => {
           if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
-            let noInfoFound = 'Could not get work information';
-            this.translate.get('Occurrences.NoInfoFound').subscribe(
-              translation => {
-                noInfoFound = translation;
-              }, err => { }
-            );
+            const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
             this.setToolTipPosition(targetElem, noInfoFound);
             this.setToolTipText(noInfoFound);
             return;
@@ -1233,35 +1214,25 @@ export class ReadPage /*implements OnDestroy*/ {
           this.setToolTipText(description);
           this.tooltips.works[id] = description;
         },
-        error => {
-          let noInfoFound = 'Could not get work information';
-          this.translate.get('Occurrences.NoInfoFound').subscribe(
-            translation => {
-              noInfoFound = translation;
-            }, err => { }
-          );
+        error: (e) => {
+          const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
-      );
+      });
     } else {
-      this.tooltipService.getWorkTooltip(id).subscribe(
-        tooltip => {
+      this.tooltipService.getWorkTooltip(id).subscribe({
+        next: (tooltip) => {
           this.setToolTipPosition(targetElem, tooltip.description);
           this.setToolTipText(tooltip.description);
           this.tooltips.works[id] = tooltip.description;
         },
-        error => {
-          let noInfoFound = 'Could not get work information';
-          this.translate.get('Occurrences.NoInfoFound').subscribe(
-            translation => {
-              noInfoFound = translation;
-            }, err => { }
-          );
+        error: (e) => {
+          const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
-      );
+      });
     }
   }
 
@@ -1435,12 +1406,7 @@ export class ReadPage /*implements OnDestroy*/ {
         this.tooltips.comments[id] = tooltip.description
       },
       error: (e) => {
-        let noInfoFound = 'Could not get comment information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe({
-          next: (translation) => {
-            noInfoFound = translation;
-          }, error: (errorT) => { }
-        });
+        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
@@ -1459,11 +1425,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
   showFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
     if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
-      this.translate.get('note').subscribe({
-        next: (translation) => {
-          this.setInfoOverlayTitle(translation);
-        }, error: (e) => { }
-      });
+      this.setInfoOverlayTitle($localize`:@@note:Not`);
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.footnotes[id]);
       return;
@@ -1514,11 +1476,7 @@ export class ReadPage /*implements OnDestroy*/ {
     const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
       this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
 
-    this.translate.get('note').subscribe({
-      next: (translation) => {
-        this.setInfoOverlayTitle(translation);
-      }, error: (e) => { }
-    });
+    this.setInfoOverlayTitle($localize`:@@note:Not`);
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
       this.setInfoOverlayText(footNoteHTML);
@@ -1529,11 +1487,7 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   showManuscriptFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.translate.get('note').subscribe({
-      next: (translation) => {
-        this.setInfoOverlayTitle(translation);
-      }, error: (e) => { }
-    });
+    this.setInfoOverlayTitle($localize`:@@note:Not`);
     const footNoteHTML: string | null = this.getManuscriptFootnoteText(id, targetElem);
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
@@ -1542,11 +1496,7 @@ export class ReadPage /*implements OnDestroy*/ {
   }
 
   showVariantFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.translate.get('note').subscribe({
-      next: (translation) => {
-        this.setInfoOverlayTitle(translation);
-      }, error: (e) => { }
-    });
+    this.setInfoOverlayTitle($localize`:@@note:Not`);
     const footNoteHTML: string | null = this.getVariantFootnoteText(id, targetElem);
     this.setInfoOverlayPositionAndWidth(targetElem);
     if (footNoteHTML) {
@@ -1556,11 +1506,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
   showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
     if (this.tooltips.comments[id as keyof typeof this.tooltips.comments]) {
-      this.translate.get('Occurrences.Commentary').subscribe({
-        next: (translation) => {
-          this.setInfoOverlayTitle(translation);
-        }, error: (errorA) => { }
-      });
+      this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.comments[id as keyof typeof this.tooltips.comments]);
       return;
@@ -1568,29 +1514,15 @@ export class ReadPage /*implements OnDestroy*/ {
 
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
-        this.translate.get('Occurrences.Commentary').subscribe({
-          next: (translation) => {
-            this.setInfoOverlayTitle(translation);
-          }, error: (errorB) => { }
-        });
+        this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(tooltip.description);
         this.tooltips.comments[id] = tooltip.description
       },
       error: (errorC) => {
-        let noInfoFound = 'Could not get comment information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe({
-          next: (translation) => {
-            noInfoFound = translation;
-          }, error: (errorD) => { }
-        });
-        this.translate.get('Occurrences.Commentary').subscribe({
-          next: (translation) => {
-            this.setInfoOverlayTitle(translation);
-          }, error: (errorE) => { }
-        });
+        this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
-        this.setInfoOverlayText(noInfoFound);
+        this.setInfoOverlayText($localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`);
       }
     });
   }
@@ -1599,13 +1531,12 @@ export class ReadPage /*implements OnDestroy*/ {
   showInfoOverlayFromInlineHtml(targetElem: HTMLElement) {
     if (targetElem.nextElementSibling !== null
     && targetElem.nextElementSibling.classList.contains('tooltip')) {
-      let title = '';
       let text = '';
       let lemma = '';
 
       if (targetElem.nextElementSibling.classList.contains('ttChanges')) {
         // Change.
-        title = 'editorialChange';
+        this.setInfoOverlayTitle($localize`:@@editorialChange:Utgivarändring`);
         if (targetElem.classList.contains('corr_red')) {
           lemma = targetElem.innerHTML;
         } else if (targetElem.firstElementChild !== null
@@ -1620,7 +1551,7 @@ export class ReadPage /*implements OnDestroy*/ {
         + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttNormalisations')) {
         // Normalisation.
-        title = 'editorialNormalisation';
+        this.setInfoOverlayTitle($localize`:@@editorialNormalisation:Normalisering`);
         if (targetElem.classList.contains('reg_hide')) {
           lemma = '<span class="reg_hide">' + targetElem.innerHTML + '</span>';
         } else {
@@ -1631,7 +1562,7 @@ export class ReadPage /*implements OnDestroy*/ {
         + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttAbbreviations')) {
         // Abbreviation.
-        title = 'abbreviation';
+        this.setInfoOverlayTitle($localize`:@@abbreviation:Förkortning`);
         if (targetElem.firstElementChild !== null
         && targetElem.firstElementChild.classList.contains('abbr')) {
           text = '<p class="infoOverlayText"><span class="ioLemma">'
@@ -1641,7 +1572,7 @@ export class ReadPage /*implements OnDestroy*/ {
         }
       } else if (targetElem.nextElementSibling.classList.contains('ttComment')) {
         // Abbreviation.
-        title = 'comments';
+        this.setInfoOverlayTitle($localize`:@@comments:Kommentarer`);
         if (targetElem.firstElementChild !== null
         && targetElem.firstElementChild.classList.contains('noteText')) {
           text = '<p class="infoOverlayText"><span class="ioLemma">'
@@ -1649,17 +1580,19 @@ export class ReadPage /*implements OnDestroy*/ {
           + '</span><span class="ioDescription">'
           + targetElem.nextElementSibling.innerHTML + '</span></p>';
         }
-      } else if (targetElem.classList.contains('ttFoot')
-      && targetElem.nextElementSibling !== null
-      && targetElem.nextElementSibling.classList.contains('ttFoot')) {
+      } else if (
+        targetElem.classList.contains('ttFoot') &&
+        targetElem.nextElementSibling !== null &&
+        targetElem.nextElementSibling.classList.contains('ttFoot')
+      ) {
         // Some other note coded as a footnote (but lacking id and data-id attributes).
         if (targetElem.nextElementSibling.firstElementChild !== null
         && targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')) {
-          title = '';
           if (targetElem.classList.contains('revision')) {
-            title = 'revisionNote';
+            this.setInfoOverlayTitle($localize`:@@revisionNote:Repetitionsanteckning`);
             lemma = '';
           } else {
+            this.setInfoOverlayTitle('');
             lemma = '<span class="ioLemma">' + targetElem.innerHTML + '</span>';
           }
           text = '<p class="infoOverlayText">'
@@ -1668,27 +1601,24 @@ export class ReadPage /*implements OnDestroy*/ {
         }
       } else {
         // Some other note, generally editorial remarks pertaining to a manuscript.
-        title = '';
         if (targetElem.classList.contains('ttMs')) {
-          title = 'criticalNote';
+          this.setInfoOverlayTitle($localize`:@@criticalNote:Utgivarens anmärkning`);
+        } else {
+          this.setInfoOverlayTitle('');
         }
         lemma = targetElem.textContent || '';
-        if ( targetElem.classList.contains('deletion')
-        || (targetElem.parentElement !== null && targetElem.classList.contains('tei_deletion_medium_wrapper')) ) {
+        if (
+          targetElem.classList.contains('deletion') ||
+          (
+            targetElem.parentElement !== null &&
+            targetElem.classList.contains('tei_deletion_medium_wrapper')
+          )
+        ) {
           lemma = '<span class="deletion">' + lemma + '</span>';
         }
         text = '<p class="infoOverlayText"><span class="ioLemma">'
         + lemma + '</span><span class="ioDescription">'
         + targetElem.nextElementSibling.innerHTML + '</span></p>';
-      }
-      if (title) {
-        this.translate.get(title).subscribe(
-          translation => {
-            this.setInfoOverlayTitle(translation);
-          }, error => { }
-        );
-      } else {
-        this.setInfoOverlayTitle('');
       }
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(text);

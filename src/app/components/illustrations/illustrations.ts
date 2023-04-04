@@ -1,19 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the IllustrationsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'illustrations',
   templateUrl: 'illustrations.html',
@@ -37,7 +30,6 @@ export class IllustrationsComponent {
     private textService: TextService,
     private modalCtrl: ModalController,
     private events: EventsService,
-    public translate: TranslateService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.registerEventListeners();

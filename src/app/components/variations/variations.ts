@@ -1,11 +1,9 @@
-import { Component, Input, ElementRef, ViewChild, Output, EventEmitter, NgZone } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AlertButton, AlertController, AlertInput, ToastController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
 
 /**
@@ -25,7 +23,6 @@ export class VariationsComponent {
   @Input() linkID?: string;
   @Input() matches?: Array<string>;
   @Input() sortOrder?: number;
-  @ViewChild('toolTip') toolTip?: ElementRef;
   @Output() openNewVarView: EventEmitter<any> = new EventEmitter();
   @Output() openNewLegendView: EventEmitter<any> = new EventEmitter();
 
@@ -44,12 +41,7 @@ export class VariationsComponent {
     protected sanitizer: DomSanitizer,
     protected readPopoverService: ReadPopoverService,
     protected textService: TextService,
-    protected storage: StorageService,
-    private elementRef: ElementRef,
-    private ngZone: NgZone,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
-    public translate: TranslateService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.text = '';
@@ -82,27 +74,17 @@ export class VariationsComponent {
     this.textService.getVariations(this.itemId).subscribe({
       next: (res) => {
         this.textLoading = false;
-        // in order to get id attributes for tooltips
         this.variations = res.variations;
         if (this.variations.length > 0) {
-          console.log('recieved variations ,..,');
           this.setVariation();
         } else {
-          console.log('no variations');
-          this.translate.get('Read.Variations.NoVariations').subscribe({
-            next: (translation) => {
-              this.text = translation;
-            },
-            error: (e) => {
-              console.error(e);
-              this.text = 'Inga varianter';
-            }
-          });
+          this.text = $localize`:@@Read.Variations.NoVariations:Inga tryckta varianter tillgängliga.`;
         }
       },
       error: (err) =>  {
-        this.errorMessage = <any>err;
-        console.error(err);
+        console.error('Error loading variants', err);
+        // TODO: add translated error message
+        this.text = 'Varianter kunde inte laddas.'
         this.textLoading = false;
       }
     });
@@ -145,27 +127,8 @@ export class VariationsComponent {
   }
 
   async selectVariation(event: any) {
-    let varTranslations = null as any;
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
-    this.translate.get('Read.Variations').subscribe(
-      translation => {
-        varTranslations = translation;
-      }, error => { }
-    );
-
-    let buttonTranslations = null as any;
-    this.translate.get('BasicActions').subscribe(
-      translation => {
-        buttonTranslations = translation;
-      }, error => { }
-    );
-
-    const alert = await this.alertCtrl.create({
-      header: varTranslations.SelectVariationDialogTitle,
-      subHeader: varTranslations.SelectVariationDialogSubtitle,
-      cssClass: 'custom-select-alert'
-    });
 
     this.variations.forEach((variation: any, index: any) => {
       let checkedValue = false;
@@ -182,9 +145,9 @@ export class VariationsComponent {
       });
     });
 
-    buttons.push(buttonTranslations.Cancel);
+    buttons.push({ text: $localize`:@@BasicActions.Cancel:Avbryt` });
     buttons.push({
-      text: buttonTranslations.Ok,
+      text: $localize`:@@BasicActions.Ok:Ok`,
       handler: (index: any) => {
         this.changeVariation(this.variations[parseInt(index)]);
         this.sortOrder = parseInt(index);
@@ -192,35 +155,20 @@ export class VariationsComponent {
       }
     });
 
-    alert.buttons = buttons;
-    alert.inputs = inputs;
-    
+    const alert = await this.alertCtrl.create({
+      header: $localize`:@@Read.Variations.SelectVariationDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variations.SelectVariationDialogSubtitle:Varianten ersätter den variant som visas i kolumnen där du klickade.`,
+      cssClass: 'custom-select-alert',
+      buttons: buttons,
+      inputs: inputs
+    });    
 
     await alert.present();
   }
 
   async selectVariationForNewView() {
-    let varTranslations = null as any;
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
-    this.translate.get('Read.Variations').subscribe(
-      translation => {
-        varTranslations = translation;
-      }, error => { }
-    );
-
-    let buttonTranslations = null as any;
-    this.translate.get('BasicActions').subscribe(
-      translation => {
-        buttonTranslations = translation;
-      }, error => { }
-    );
-
-    const alert = await this.alertCtrl.create({
-      header: varTranslations.OpenNewVariationDialogTitle,
-      subHeader: varTranslations.OpenNewVariationDialogSubtitle,
-      cssClass: 'custom-select-alert'
-    });
 
     this.variations.forEach((variation: any, index: any) => {
       inputs.push({
@@ -230,12 +178,20 @@ export class VariationsComponent {
       });
     });
 
-    buttons.push(buttonTranslations.Cancel);
+    buttons.push({ text: $localize`:@@BasicActions.Cancel:Avbryt` });
     buttons.push({
-      text: buttonTranslations.Ok,
+      text: $localize`:@@BasicActions.Ok:Ok`,
       handler: (index: any) => {
         this.openVariationInNewView(this.variations[parseInt(index)]);
       }
+    });
+
+    const alert = await this.alertCtrl.create({
+      header: $localize`:@@Read.Variations.OpenNewVariationDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variations.OpenNewVariationDialogSubtitle:Varianten öppnas i en ny kolumn.`,
+      cssClass: 'custom-select-alert',
+      buttons: buttons,
+      inputs: inputs
     });
 
     await alert.present();

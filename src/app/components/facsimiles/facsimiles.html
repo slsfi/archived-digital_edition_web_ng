@@ -1,9 +1,9 @@
 
 <div *ngIf="externalFacsimilesExist || facsimiles.length>0" class="text-select-wrapper facsimile-header" [ngClass]="selectedFacsimileIsExternal?'external-urls-header':''">
   <h3 *ngIf="!selectedFacsimileIsExternal" [innerHTML]="selectedFacsimileName"></h3>
-  <h3 *ngIf="selectedFacsimileIsExternal">{{"Read.Facsimiles.ExternalHeading" | translate}}</h3>
+  <h3 *ngIf="selectedFacsimileIsExternal" i18n="@@Read.Facsimiles.ExternalHeading">Externa faksimil</h3>
   <div *ngIf="facsimiles.length>1 || (facsimiles.length==1 && externalFacsimilesExist)" class="flex-buttons">
-    <ion-button class="custom-button" (click)="selectFacsimile()">{{"Read.Facsimiles.ChangeFacsimile" | translate}}</ion-button>
+    <ion-button class="custom-button" (click)="selectFacsimile()" i18n="@@Read.Facsimiles.ChangeFacsimile">Byt faksimil</ion-button>
   </div>
 </div>
 
@@ -14,8 +14,7 @@
 </div>
 
 <ion-item *ngIf="externalURLs.length===0 && numberOfPages && numberOfPages>1" class="page-number-wrapper">
-  <ion-label class="page_number_label">{{"Read.Facsimiles.Page" | translate}} ({{"Read.Facsimiles.Of" | translate}}
-    {{numberOfPages ? numberOfPages : (images ? images.length : 0)}}):</ion-label>
+  <ion-label class="page_number_label"><ng-container i18n="@@Read.Facsimiles.Page">Bild</ng-container> (<ng-container i18n="@@Read.Facsimiles.Of">av</ng-container> {{numberOfPages ? numberOfPages : (images ? images.length : 0)}}):</ion-label>
   <ion-input class="page_number_input" type="number" (change)="setPage($event)" [(ngModel)]="manualPageNumber"></ion-input>
 </ion-item>
 

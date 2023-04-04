@@ -1,5 +1,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
+    <unit id="abbreviation">
+      <segment state="initial">
+        <source>Förkortning</source>
+        <target>Abbreviation</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -10,6 +16,66 @@
       <segment state="initial">
         <source>Ok</source>
         <target>Ok</target>
+      </segment>
+    </unit>
+    <unit id="BC">
+      <segment state="initial">
+        <source>f.Kr.</source>
+        <target>f.Kr.</target>
+      </segment>
+    </unit>
+    <unit id="comments">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Commentary</target>
+      </segment>
+    </unit>
+    <unit id="criticalNote">
+      <segment state="initial">
+        <source>Utgivarens anmärkning</source>
+        <target>Critical remark</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Download</target>
+      </segment>
+    </unit>
+    <unit id="editorialChange">
+      <segment state="initial">
+        <source>Utgivarändring</source>
+        <target>Emendation</target>
+      </segment>
+    </unit>
+    <unit id="editorialNormalisation">
+      <segment state="initial">
+        <source>Normalisering</source>
+        <target>Normalization</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.SortBy">
+      <segment state="initial">
+        <source>Sortera enligt</source>
+        <target>Sort by</target>
+      </segment>
+    </unit>
+    <unit id="established">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Reading text</target>
+      </segment>
+    </unit>
+    <unit id="facsimiles">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Fascimile</target>
+      </segment>
+    </unit>
+    <unit id="fictionalPersonCorresp">
+      <segment state="initial">
+        <source>historisk förebild</source>
+        <target>historical figure:</target>
       </segment>
     </unit>
     <unit id="Filter.apply">
@@ -48,10 +114,34 @@
         <target>Filter</target>
       </segment>
     </unit>
+    <unit id="illustrations">
+      <segment state="initial">
+        <source>Illustrationer</source>
+        <target>Illustrations</target>
+      </segment>
+    </unit>
+    <unit id="legend">
+      <segment state="initial">
+        <source>Teckenförklaringar</source>
+        <target>Legend</target>
+      </segment>
+    </unit>
+    <unit id="manuscripts">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Manuscript</target>
+      </segment>
+    </unit>
     <unit id="MediaCollections.GotoMediaCollection">
       <segment state="initial">
         <source>Gå till bildbanken</source>
         <target>Gå till bildbanken</target>
+      </segment>
+    </unit>
+    <unit id="note">
+      <segment state="initial">
+        <source>Not</source>
+        <target>Note</target>
       </segment>
     </unit>
     <unit id="Occurrences.articles">
@@ -204,10 +294,298 @@
         <target>Occurrences for works are disabled.</target>
       </segment>
     </unit>
+    <unit id="Read.AddColumn">
+      <segment state="initial">
+        <source>Ny kolumn</source>
+        <target>Add column</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.AddButtonText">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Comments view</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Archive">
+      <segment state="initial">
+        <source>Arkiv</source>
+        <target>Arkiv</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Collection">
+      <segment state="initial">
+        <source>Samling, signum</source>
+        <target>Samling, signum</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Color">
+      <segment state="initial">
+        <source>Färg</source>
+        <target>Färg</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Format">
+      <segment state="initial">
+        <source>Format</source>
+        <target>Format</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Leafs">
+      <segment state="initial">
+        <source>Lägg</source>
+        <target>Lägg</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.LegacyId">
+      <segment state="initial">
+        <source>Brevsignum</source>
+        <target>Brevsignum</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Material">
+      <segment state="initial">
+        <source>Skrivmaterial</source>
+        <target>Skrivmaterial</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Other">
+      <segment state="initial">
+        <source>Övrigt</source>
+        <target>Övrigt</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Pages">
+      <segment state="initial">
+        <source>Sidor brevtext</source>
+        <target>Sidor brevtext</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Pattern">
+      <segment state="initial">
+        <source>Mönster</source>
+        <target>Mönster</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Quality">
+      <segment state="initial">
+        <source>Kvalitet</source>
+        <target>Kvalitet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Receiver">
+      <segment state="initial">
+        <source>Mottagare</source>
+        <target>Mottagare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Sender">
+      <segment state="initial">
+        <source>Avsändare</source>
+        <target>Avsändare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Sheets">
+      <segment state="initial">
+        <source>Antal blad</source>
+        <target>Antal blad</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.State">
+      <segment state="initial">
+        <source>Tillstånd</source>
+        <target>Tillstånd</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Status">
+      <segment state="initial">
+        <source>Status</source>
+        <target>Status</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Title">
+      <segment state="initial">
+        <source>Manuskriptbeskrivning</source>
+        <target>Manuskriptbeskrivning</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Manuscript.Type">
+      <segment state="initial">
+        <source>Form</source>
+        <target>Form</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.NoComments">
+      <segment state="initial">
+        <source>Inga kommentarer.</source>
+        <target>No comments.</target>
+      </segment>
+    </unit>
+    <unit id="Read.CoverPage.ForewordPage">
+      <segment state="initial">
+        <source>Förord</source>
+        <target>Foreword</target>
+      </segment>
+    </unit>
+    <unit id="Read.CoverPage.Introduction">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Inledning</target>
+      </segment>
+    </unit>
+    <unit id="Read.CoverPage.Title">
+      <segment state="initial">
+        <source>Omslag</source>
+        <target>Cover</target>
+      </segment>
+    </unit>
+    <unit id="Read.CoverPage.TitlePage">
+      <segment state="initial">
+        <source>Titelblad</source>
+        <target>Titelblad</target>
+      </segment>
+    </unit>
+    <unit id="Read.Established.AddButtonText">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Established text view</target>
+      </segment>
+    </unit>
+    <unit id="Read.Established.NoEstablished">
+      <segment state="initial">
+        <source>Det finns ingen utskriven lästext, se faksimil.</source>
+        <target>No established text, see facsimiles.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Established.Title">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Established text</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.AddButtonText">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Facsimile view</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ChangeFacsimile">
+      <segment state="initial">
+        <source>Byt faksimil</source>
+        <target>Select facsimile</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ExternalHeading">
+      <segment state="initial">
+        <source>Externa faksimil</source>
+        <target>External facsimiles</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.NoFacsimiles">
+      <segment state="initial">
+        <source>Inga faksimil tillgängliga.</source>
+        <target>No facsimiles available.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Of">
+      <segment state="initial">
+        <source>av</source>
+        <target>of</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Page">
+      <segment state="initial">
+        <source>Bild</source>
+        <target>Image</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">
+      <segment state="initial">
+        <source>Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.</source>
+        <target>The facsimile will be shown in the column where you clicked.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.SelectFacsDialogTitle">
+      <segment state="initial">
+        <source>Välj faksimil</source>
+        <target>Select facsimile</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Title">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Facsimiles</target>
+      </segment>
+    </unit>
+    <unit id="Read.ForewordPage.NoForeword">
+      <segment state="initial">
+        <source>Förordet kunde inte laddas.</source>
+        <target>The foreword could not be loaded.</target>
+      </segment>
+    </unit>
+    <unit id="Read.ForewordPage.Title">
+      <segment state="initial">
+        <source>Förord</source>
+        <target>Foreword</target>
+      </segment>
+    </unit>
+    <unit id="Read.Illustrations.AddButtonText">
+      <segment state="initial">
+        <source>Illustrationer</source>
+        <target>Illustrations</target>
+      </segment>
+    </unit>
+    <unit id="Read.Illustrations.Goto">
+      <segment state="initial">
+        <source>Gå till position i lästext</source>
+        <target>Go to position in text</target>
+      </segment>
+    </unit>
+    <unit id="Read.Illustrations.Nothing">
+      <segment state="initial">
+        <source>Inga illustrationer.</source>
+        <target>No illustrations.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Illustrations.Showall">
+      <segment state="initial">
+        <source>Visa alla</source>
+        <target>Show all</target>
+      </segment>
+    </unit>
+    <unit id="Read.Introduction.Contents">
+      <segment state="initial">
+        <source>Innehåll</source>
+        <target>Contents</target>
+      </segment>
+    </unit>
+    <unit id="Read.Introduction.Title">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Introduction</target>
+      </segment>
+    </unit>
+    <unit id="Read.Legend.AddButtonText">
+      <segment state="initial">
+        <source>Teckenförklaringar</source>
+        <target>Legend</target>
+      </segment>
+    </unit>
+    <unit id="Read.Legend.NoLegend">
+      <segment state="initial">
+        <source>Inga teckenförklaringar tillgängliga.</source>
+        <target>No legend available.</target>
+      </segment>
+    </unit>
     <unit id="Read.Legend.Title">
       <segment state="initial">
         <source>Teckenförklaringar</source>
         <target>Legend</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.AddButtonText">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Manuscript view</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.ChangeManuscript">
@@ -240,10 +618,88 @@
         <target>Visa ändringar inarbetade</target>
       </segment>
     </unit>
+    <unit id="Read.Popover.Options">
+      <segment state="initial">
+        <source>Inställningar</source>
+        <target>Options</target>
+      </segment>
+    </unit>
+    <unit id="Read.ShowAll">
+      <segment state="initial">
+        <source>Visa alla</source>
+        <target>Show all</target>
+      </segment>
+    </unit>
+    <unit id="Read.ShowSearchResults">
+      <segment state="initial">
+        <source>Förekomster</source>
+        <target>Occurrences</target>
+      </segment>
+    </unit>
+    <unit id="Read.TitlePage.Title">
+      <segment state="initial">
+        <source>Titelblad</source>
+        <target>Title page</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.AddButtonText">
+      <segment state="initial">
+        <source>Tryckta varianter</source>
+        <target>Variant view</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.ChangeVariation">
+      <segment state="initial">
+        <source>Byt variant</source>
+        <target>Change variant</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.NoVariations">
+      <segment state="initial">
+        <source>Inga tryckta varianter tillgängliga.</source>
+        <target>No variants available.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.OpenNewVariation">
+      <segment state="initial">
+        <source>Öppna ny variant</source>
+        <target>Open new variant</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.OpenNewVariationDialogSubtitle">
+      <segment state="initial">
+        <source>Varianten öppnas i en ny kolumn.</source>
+        <target>The variant will open in a new column.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.OpenNewVariationDialogTitle">
+      <segment state="initial">
+        <source>Välj variant</source>
+        <target>Select variant</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.SelectVariationDialogSubtitle">
+      <segment state="initial">
+        <source>Varianten ersätter den variant som visas i kolumnen där du klickade.</source>
+        <target>The variant will be shown in the column where you clicked.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variations.SelectVariationDialogTitle">
+      <segment state="initial">
+        <source>Välj variant</source>
+        <target>Select variant</target>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Refer</target>
+      </segment>
+    </unit>
+    <unit id="revisionNote">
+      <segment state="initial">
+        <source>Repetitionsanteckning</source>
+        <target>Revision note</target>
       </segment>
     </unit>
     <unit id="Site.Subtitle">
@@ -258,10 +714,34 @@
         <target>Website title</target>
       </segment>
     </unit>
+    <unit id="TOC.Home">
+      <segment state="initial">
+        <source>Till startsidan</source>
+        <target>Home</target>
+      </segment>
+    </unit>
     <unit id="TOC.MediaCollections">
       <segment state="initial">
         <source>Album</source>
         <target>Media</target>
+      </segment>
+    </unit>
+    <unit id="TOC.PersonSearch">
+      <segment state="initial">
+        <source>Personregister</source>
+        <target>Persons</target>
+      </segment>
+    </unit>
+    <unit id="TOC.PlaceSearch">
+      <segment state="initial">
+        <source>Ortregister</source>
+        <target>Places</target>
+      </segment>
+    </unit>
+    <unit id="TOC.TagSearch">
+      <segment state="initial">
+        <source>Ämnesord</source>
+        <target>Subjects</target>
       </segment>
     </unit>
     <unit id="TOC.WorkSearch">
@@ -292,6 +772,18 @@
       <segment state="initial">
         <source>Sök</source>
         <target>Search</target>
+      </segment>
+    </unit>
+    <unit id="uncertainPersonCorresp">
+      <segment state="initial">
+        <source>ev.</source>
+        <target>possibly</target>
+      </segment>
+    </unit>
+    <unit id="variations">
+      <segment state="initial">
+        <source>Tryckta varianter</source>
+        <target>Variants</target>
       </segment>
     </unit>
   </file>
