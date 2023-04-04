@@ -1,7 +1,8 @@
 <ng-container *ngIf="!scrollableSimpleSearch">
   <ion-searchbar class="search-bar search-bar-page"
     [ngClass]="{'has-suggestions': searchSuggestions && searchSuggestions.length}"
-    placeholder="{{'SearchApp.search-holder' | translate}}"
+    placeholder="Söktext"
+    i18n-placeholder="@@SearchApp.search-holder"
     [(ngModel)]="searchString"
     (ionInput)="onInput($event)"
     #searchbar>
@@ -19,7 +20,7 @@
       </div>
     </div>
     <div class="hitCount">
-      {{"SearchApp.hitCount" | translate}}: {{totalHits}}
+      <ng-container i18n="@@SearchApp.hitCount">Antal träffar</ng-container>: {{totalHits}}
     </div>
   </div>
   <ion-content

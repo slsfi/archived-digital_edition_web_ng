@@ -1,15 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
 
-/**
- * Generated class for the DigitalEditionListChildrenComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'digital-edition-list-children',
   templateUrl: 'digital-edition-list-children.html',
@@ -26,8 +19,7 @@ export class DigitalEditionListChildrenComponent {
   collectionDownloads: any;
 
   constructor(
-    public userSettingsService: UserSettingsService,
-    private router: Router
+    public userSettingsService: UserSettingsService
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';

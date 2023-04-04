@@ -1,7 +1,6 @@
 import { Component, Input, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { NavigationEnd, Router } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
 import { MdContentService } from "../../services/md/md-content.service";
 import { UserSettingsService } from "../../services/settings/user-settings.service";
 import { DigitalEditionListService } from "../../services/toc/digital-edition-list.service";
@@ -44,7 +43,6 @@ export class SideMenu implements OnInit {
   selectedMenu: string = '';
 
   constructor(
-    public translate: TranslateService,
     public mdcontentService: MdContentService,
     private userSettingsService: UserSettingsService,
     public titleService: Title,

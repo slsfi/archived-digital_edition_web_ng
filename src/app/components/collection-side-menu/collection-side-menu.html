@@ -1,24 +1,16 @@
 <nav *ngIf="!isLoading">
   <ul>
     <li *ngIf="_config.HasCover" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}">
-        {{'Read.CoverPage.Title' | translate}}
-      </a>
+      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" i18n="@@Read.CoverPage.Title">Omslag</a>
     </li>
     <li *ngIf="_config.HasTitle" [class.menu-highlight]="initialUrlSegments[2].path === 'title'">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}">
-        {{'Read.TitlePage.Title' | translate}}
-      </a>
+      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}" i18n="@@Read.TitlePage.Title">Titelblad</a>
     </li>
     <li *ngIf="_config.HasForeword" [class.menu-highlight]="initialUrlSegments[2].path === 'foreword'">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}">
-        {{'Read.ForewordPage.Title' | translate}}
-      </a>
+      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}" i18n="@@Read.ForewordPage.Title">Förord</a>
     </li>
     <li *ngIf="_config.HasIntro" [class.menu-highlight]="initialUrlSegments[2].path === 'introduction'">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}">
-        {{'Read.Introduction.Title' | translate}}
-      </a>
+      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" i18n="@@Read.Introduction.Title">Inledning</a>
     </li>
     <ng-container
       *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children, level: 0, path: ''}"></ng-container>

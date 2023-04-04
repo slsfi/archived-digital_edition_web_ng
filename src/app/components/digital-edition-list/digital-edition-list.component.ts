@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
 import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-list.service';
@@ -43,7 +42,6 @@ export class DigitalEditionList implements OnInit {
 
   constructor(
     private digitalEditionListService: DigitalEditionListService,
-    public translate: TranslateService,
     private platform: Platform,
     protected tableOfContentsService: TableOfContentsService,
     private events: EventsService,
