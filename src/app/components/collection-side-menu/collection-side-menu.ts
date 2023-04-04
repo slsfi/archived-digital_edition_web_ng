@@ -6,7 +6,6 @@ import {
 } from "@angular/router";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
 import { config } from "src/app/services/config/config";
-import { Title } from "@angular/platform-browser";
 import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 import { filter } from "rxjs/operators";
 
@@ -118,5 +117,4 @@ export class CollectionSideMenu implements OnChanges {
       }
     })
   }
-
 }

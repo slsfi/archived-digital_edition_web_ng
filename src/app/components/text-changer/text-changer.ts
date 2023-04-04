@@ -5,6 +5,7 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/app/services/config/config";
+import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 
 
 @Component({
@@ -37,7 +38,8 @@ export class TextChangerComponent {
     public tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService,
     private textService: TextService,
-    private router: Router
+    private router: Router,
+    private commonFunctions: CommonFunctionsService
   ) {
     this.collectionHasCover = config.HasCover ?? false;
     this.collectionHasTitle = config.HasTitle ?? false;
@@ -164,11 +166,7 @@ export class TextChangerComponent {
       this.currentItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
 
       this.lastItem = false;
-      if (this.collectionHasCover || this.collectionHasTitle) {
-        this.firstItem = false;
-      } else {
-        this.firstItem = true;
-      }
+      this.firstItem = !(this.collectionHasCover || this.collectionHasTitle);
 
       if (this.collectionHasTitle) {
         this.setPageTitleAsPrevious(this.collectionId);
@@ -187,11 +185,7 @@ export class TextChangerComponent {
       this.currentItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
 
       this.lastItem = false;
-      if (this.collectionHasCover || this.collectionHasTitle || this.collectionHasForeword) {
-        this.firstItem = false;
-      } else {
-        this.firstItem = true;
-      }
+      this.firstItem = !(this.collectionHasCover || this.collectionHasTitle || this.collectionHasForeword);
 
       if (this.collectionHasForeword) {
         this.setPageForewordAsPrevious(this.collectionId);
@@ -206,7 +200,7 @@ export class TextChangerComponent {
       // Default functionality, e.g. as when initialised from page-read
       this.firstItem = false;
       this.lastItem = false;
-      this.next(true);
+      this.next('', true);
     }
   }
 
@@ -311,7 +305,7 @@ export class TextChangerComponent {
     };
   }
 
-  async previous(test?: boolean) {
+  async previous(pageTitle?: string, test?: boolean) {
     if (this.parentPageType === 'page-read') {
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
@@ -321,6 +315,7 @@ export class TextChangerComponent {
     }
     if (this.prevItem !== undefined && test !== true) {
       await this.open(this.prevItem);
+      this.commonFunctions.setTitle(pageTitle || '', 2)
     } else if (test && this.prevItem !== undefined) {
       return true;
     } else if (test && this.prevItem === undefined) {
@@ -329,7 +324,7 @@ export class TextChangerComponent {
     return false;
   }
 
-  async next(test?: boolean) {
+  async next(pageTitle?: string, test?: boolean) {
     if (this.tocItemId !== 'mediaCollections' && this.parentPageType === 'page-read') {
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
@@ -339,6 +334,7 @@ export class TextChangerComponent {
     }
     if (this.nextItem !== undefined && test !== true) {
       await this.open(this.nextItem);
+      this.commonFunctions.setTitle(pageTitle || '', 2)
     } else if (test && this.nextItem !== undefined) {
       return true;
     } else if (test && this.nextItem === undefined) {
@@ -535,7 +531,7 @@ export class TextChangerComponent {
 
       this.router.navigate(
         (
-          chapterId ? ['/collection', collectionId, 'text', publicationId, chapterId] : 
+          chapterId ? ['/collection', collectionId, 'text', publicationId, chapterId] :
           ['/collection', collectionId, 'text', publicationId]
         ),
         (positionId ? { queryParams: { position: positionId } } : {})
