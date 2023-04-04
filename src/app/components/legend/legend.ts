@@ -1,10 +1,8 @@
-import { Component, ElementRef, Input, NgZone, Renderer2 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, Renderer2 } from '@angular/core';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
+import { isBrowser } from 'src/standalone/utility-functions';
 
 /**
  * Class for the LegendComponent component.
@@ -23,23 +21,20 @@ export class LegendComponent {
   @Input() scrollToElementId?: string;
   text?: string;
   textLoading: Boolean = true;
-  languageSubscription?: Subscription;
   staticMdLegendFolderNumber = '13';
   collectionId = '';
   publicationId = '';
-  language?: string;
   intervalTimerId: number;
   private unlistenClickEvents?: () => void;
 
   constructor(
     private elementRef: ElementRef,
-    protected langService: LanguageService,
     private mdContentService: MdContentService,
     private ngZone: NgZone,
     protected readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
-    protected translateService: TranslateService,
-    public commonFunctions: CommonFunctionsService
+    public commonFunctions: CommonFunctionsService,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.intervalTimerId = 0;
   }
@@ -48,44 +43,33 @@ export class LegendComponent {
     this.collectionId = this.itemId?.split('_')[0] || '';
     this.publicationId = this.itemId?.split('_')[1].split(';')[0] || '';
 
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-      if (lang) {
-        this.language = lang;
-        this.getMdContent(this.language + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId + '-' + this.publicationId);
-      }
-    });
-
-    this.setUpTextListeners();
+    this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId + '-' + this.publicationId);
+    if (isBrowser()) {
+      this.setUpTextListeners();
+    }
   }
 
   ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
     this.unlistenClickEvents?.();
   }
 
   getMdContent(fileID: string) {
     this.mdContentService.getMdContent(fileID).subscribe({
-      next: text => {
+      next: (text) => {
         this.text = text.content;
         this.textLoading = false;
-        this.scrollToInitialTextPosition();
+        if (isBrowser()) {
+          this.scrollToInitialTextPosition();
+        }
       },
-      error: e => {
+      error: (e) => {
         if (fileID.split('-').length > 3) {
-          this.getMdContent(this.language + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId);
+          this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId);
         } else if (fileID.split('-')[2] !== '00') {
-          this.getMdContent(this.language + '-' + this.staticMdLegendFolderNumber + '-' + '00');
+          this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + '00');
         } else {
-          this.translateService.get('Read.Legend.NoLegend').subscribe(translation => {
-            if (translation) {
-              this.text = translation;
-            } else {
-              this.text = 'File not found.';
-            }
-            this.textLoading = false;
-          });
+          this.textLoading = false;
+          this.text = $localize`:@@Read.Legend.NoLegend:Inga teckenförklaringar tillgängliga.`;
         }
       }
     });

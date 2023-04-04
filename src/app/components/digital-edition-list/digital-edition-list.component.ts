@@ -22,7 +22,6 @@ export class DigitalEditionList implements OnInit {
   digitalEditionsSecondHalf: any = [];
   projectMachineName: string;
   editionImages: any;
-  appLanguage: any;
   grid?: boolean;
   collectionDownloads: any;
   apiEndPoint: string;
@@ -54,7 +53,6 @@ export class DigitalEditionList implements OnInit {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
     this.editionImages = config.editionImages ?? undefined;
-    this.appLanguage = config.i18n?.locale ?? 'sv';
     this.collectionDownloads = config.collectionDownloads ?? undefined;
     this.hasCover = config.HasCover ?? true;
     this.hasTitle = config.HasTitle ?? true;

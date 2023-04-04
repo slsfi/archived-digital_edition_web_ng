@@ -18,7 +18,7 @@
       </a>
     </ion-button>
     <ion-button *ngIf="showTopAboutButton && userSettingsService.isDesktop()">
-      <a [routerLink]="['/about', language + '-' + firstAboutPageId]">
+      <a [routerLink]="['/about', activeLocale + '-' + firstAboutPageId]">
         <ng-container i18n="@@TopMenu.Info">Om</ng-container>
       </a>
     </ion-button>
@@ -35,10 +35,6 @@
     <ion-button *ngIf="showTopURNButton" (click)="showReference($event)">
       <ion-icon slot="start" name="share"></ion-icon>
       <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
-
-    </ion-button>
-    <ion-button *ngIf="showHelpButton" (click)="help()">
-      <ion-icon name="help"></ion-icon>
     </ion-button>
     <ion-button *ngIf="showViewToggle" (click)="showUserSettingsPopover($event)">
       <ion-icon name="earth"></ion-icon>

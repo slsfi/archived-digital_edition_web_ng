@@ -36,9 +36,7 @@ export class ReadPage /*implements OnDestroy*/ {
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
 
-  multilingualEST: false;
-  estLanguages = [];
-  estLang: 'none';
+  multilingualReadingTextLanguages = [];
   popover?: ReadPopoverPage;
   hasOccurrenceResults = false;
   showOccurrencesModal = false;
@@ -55,8 +53,6 @@ export class ReadPage /*implements OnDestroy*/ {
   infoOverlayWidth: string | null;
   infoOverlayText: string;
   infoOverlayTitle: string;
-  intervalTimerId: number;
-  nochapterPos?: any;
   userIsTouching: Boolean = false;
   collectionAndPublicationLegacyId?: string;
   illustrationsViewShown: Boolean = false;
@@ -81,7 +77,7 @@ export class ReadPage /*implements OnDestroy*/ {
   searchMatches: Array<string> = [];
 
   typeVersion?: string;
-  displayToggles: any;
+  viewTypes: any;
 
   occurrenceResult?: OccurrenceResult;
 
@@ -91,7 +87,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
   show = 'established'; // Mobile tabs
 
-  availableViewModes: Array<string> = [];
+  enabledViewTypes: Array<string> = [];
 
   tooltips = {
     'persons': {} as any,
@@ -134,8 +130,8 @@ export class ReadPage /*implements OnDestroy*/ {
   textItemID: string = '';
   textPosition: string = '';
 
-  routeQueryParamsSubscription: Subscription | null;
-  routeParamsSubscription: Subscription | null;
+  routeQueryParamsSubscription: Subscription | null = null;
+  routeParamsSubscription: Subscription | null = null;
 
   constructor(
     private textService: TextService,
@@ -174,29 +170,8 @@ export class ReadPage /*implements OnDestroy*/ {
       bottom: 0 + 'px',
       left: -1500 + 'px'
     };
-    this.intervalTimerId = 0;
 
-    try {
-      const i18n = config.i18n ?? undefined;
-
-      if (i18n.multilingualEST !== undefined) {
-        this.multilingualEST = i18n.multilingualEST;
-      } else {
-        this.multilingualEST = false;
-      }
-      if (i18n.estLanguages !== undefined) {
-        this.estLanguages = i18n.estLanguages;
-        this.estLang = i18n.estLanguages[0];
-      } else {
-        this.estLanguages = [];
-        this.estLang = 'none';
-      }
-    } catch (e) {
-      this.multilingualEST = false;
-      this.estLanguages = [];
-      this.estLang = 'none';
-      console.error(e);
-    }
+    this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
 
     this.showURNButton = config.page?.read?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.read?.showViewOptionsButton ?? true;
@@ -237,25 +212,22 @@ export class ReadPage /*implements OnDestroy*/ {
       this.showTextDownloadButton = false;
     }
 
-    // Hide some or all of the display toggles (variations, facsimiles, established etc.)
-    this.displayToggles = config.settings?.displayTypesToggles ?? [];
-    for (const toggle in this.displayToggles) {
-      if (this.displayToggles[toggle as keyof typeof this.displayToggles]) {
-        if (toggle === 'established' && this.multilingualEST) {
-          for (const estLanguage of this.estLanguages) {
-            this.availableViewModes.push(toggle + '_' + estLanguage);
+    // Hide some or all of the view types that can be added (variations, facsimiles, established etc.)
+    this.viewTypes = config.page?.read?.viewTypeSettings ?? {};
+    for (const type in this.viewTypes) {
+      if (this.viewTypes.hasOwnProperty(type)) {
+        if (type === 'established' && this.multilingualReadingTextLanguages.length > 1) {
+          for (const estLanguage of this.multilingualReadingTextLanguages) {
+            this.enabledViewTypes.push(type + '_' + estLanguage);
           }
         } else {
-          this.availableViewModes.push(toggle);
+          this.enabledViewTypes.push(type);
         }
       }
     }
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.show = config.defaults?.ReadModeView ?? 'established';
-
-    this.routeParamsSubscription = null;
-    this.routeQueryParamsSubscription = null;
   }
 
   ngOnInit() {
@@ -373,41 +345,6 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
 
-  ngAfterViewInit() {
-    if (isBrowser()) {
-      // This scrolls the table of contents so the current text is centered vertically
-      // TODO: This won't do what it's supposed to in the Angular 15 app.
-      this.ngZone.runOutsideAngular(() => {
-        let iterationsLeft = 6;
-        clearInterval(this.intervalTimerId);
-        const that = this;
-        this.intervalTimerId = window.setInterval(function() {
-          try {
-            if (iterationsLeft < 1) {
-              clearInterval(that.intervalTimerId);
-            } else {
-              iterationsLeft -= 1;
-              if (that.textItemID && that.textPosition !== undefined) {
-                const itemId = 'toc_' + that.textItemID + (that.textPosition ? ';' + that.textPosition : '');
-                let foundElem = document.getElementById(itemId);
-                if (foundElem === null || foundElem === undefined) {
-                  // Scroll to toc item without position
-                  foundElem = document.getElementById(itemId.split(';').shift() || '');
-                }
-                if (foundElem) {
-                  that.scrollToTOC(foundElem);
-                  clearInterval(that.intervalTimerId);
-                }
-              }
-            }
-          } catch (e) {
-            console.log('error in setInterval function in PageRead.ngAfterViewInit()', e);
-          }
-        }.bind(this), 500);
-      });
-    }
-  }
-
   ngOnDestroy() {
     if (this.routeQueryParamsSubscription) {
       this.routeQueryParamsSubscription.unsubscribe();
@@ -455,6 +392,9 @@ export class ReadPage /*implements OnDestroy*/ {
     return await searchModal.present();
   }
 
+  /**
+   * TODO: This function is no longer used, it is here only for reference while refactoring the code.
+   */
   setViews(viewmodes: any) {
     let variationsViewOrderNumber = 0;
     let sameCollection = false;
@@ -468,7 +408,7 @@ export class ReadPage /*implements OnDestroy*/ {
 
     let defaultReadModeForMobileSelected = false;
     viewmodes.forEach((viewmode: any) => {
-      if (!defaultReadModeForMobileSelected && this.displayToggles[viewmode]) {
+      if (!defaultReadModeForMobileSelected && this.viewTypes[viewmode]) {
         /* Sets the default view on mobile to the first default read mode view which is available. */
         this.show = viewmode;
         defaultReadModeForMobileSelected = true;
@@ -495,51 +435,83 @@ export class ReadPage /*implements OnDestroy*/ {
     });
   }
 
-  showAllViews() {
-    this.availableViewModes.forEach((viewmode: any) => {
+  setDefaultViews() {
+    // There are no views defined in the url params => show either recent or default views
+    if (this.textService.recentPageReadViews.length > 0) {
+      // show recent views
+      this.updateViewsInRouterQueryParams(this.textService.recentPageReadViews);
+    } else {
+      // show default views
+      this.setDefaultViewsFromConfig();
+    }
+  }
+
+  setDefaultViewsFromConfig() {
+    const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
+    let newViews: Array<any> = [];
+    let defaultReadModeForMobileSelected = false;
+
+    defaultReadModes.forEach((val: any) => {
+      // TODO: Fix setting default view for mobile
+      if (!defaultReadModeForMobileSelected && this.viewTypes[val]) {
+        /* Sets the default view on mobile to the first default read mode view which is available. */
+        this.show = val;
+        defaultReadModeForMobileSelected = true;
+      }
+
+      if (this.enabledViewTypes.indexOf(val) !== -1) {
+        const view = { type: val } as any;
+        newViews.push(view);
+      }
+    });
+
+    this.updateViewsInRouterQueryParams(newViews);
+  }
+
+  showAllViewTypes() {
+    this.enabledViewTypes.forEach((type: any) => {
       const viewTypesShown = this.getViewTypesShown();
       if (
-        viewmode !== 'showAll' &&
-        this.viewModeShouldBeShown(viewmode) &&
-        viewTypesShown.indexOf(viewmode) === -1
+        type !== 'showAll' &&
+        this.viewTypeShouldBeShown(type) &&
+        viewTypesShown.indexOf(type) === -1
       ) {
-        this.show = viewmode;
-        if (viewmode.startsWith('established') && viewmode.split('_')[1]) {
-          this.addView('established', null, null, viewmode.split('_')[1]);
+        // TODO: this.show sets the shown view in mobile mode, fix if changing to responsive design
+        this.show = type;
+        if (type.startsWith('established') && type.split('_')[1]) {
+          this.addView('established', null, null, type.split('_')[1]);
         } else {
-          this.addView(viewmode);
+          this.addView(type);
         }
       }
     });
   }
 
-  viewModeShouldBeShown(viewmode: any) {
-    if (viewmode.startsWith('established') && !this.displayToggles['established']) {
-      return false;
-    } else if (viewmode === 'comments' && !this.displayToggles['comments']) {
-      return false;
-    } else if (viewmode === 'facsimiles' && !this.displayToggles['facsimiles']) {
-      return false;
-    } else if (viewmode === 'manuscripts' && !this.displayToggles['manuscripts']) {
-      return false;
-    } else if (viewmode === 'variations' && !this.displayToggles['variations']) {
-      return false;
-    } else if (viewmode === 'illustrations' && !this.displayToggles['illustrations']) {
-      return false;
-    } else if (viewmode === 'legend' && !this.displayToggles['legend']) {
-      return false;
-    }
-
-    return true;
+  getViewTypesShown() {
+    const viewTypes = [] as any;
+    this.views.forEach((view: any) => {
+      viewTypes.push(view.type);
+    });
+    return viewTypes;
   }
 
-  setDefaultViews() {
-    // There are no views defined in the url params => open either recent or default views
-    if (this.textService.recentPageReadViews.length > 0) {
-      this.updateViewsInRouterQueryParams(this.textService.recentPageReadViews);
-    } else {
-      this.setConfigDefaultReadModeViews();
+  viewTypeShouldBeShown(type: any) {
+    if (type.startsWith('established') && !this.viewTypes['established']) {
+      return false;
+    } else if (type === 'comments' && !this.viewTypes['comments']) {
+      return false;
+    } else if (type === 'facsimiles' && !this.viewTypes['facsimiles']) {
+      return false;
+    } else if (type === 'manuscripts' && !this.viewTypes['manuscripts']) {
+      return false;
+    } else if (type === 'variations' && !this.viewTypes['variations']) {
+      return false;
+    } else if (type === 'illustrations' && !this.viewTypes['illustrations']) {
+      return false;
+    } else if (type === 'legend' && !this.viewTypes['legend']) {
+      return false;
     }
+    return true;
   }
 
   /*
@@ -567,66 +539,6 @@ export class ReadPage /*implements OnDestroy*/ {
     }
   }
   */
-
-  /**
-   * Supports also multiple default read-modes.
-   * If there are multiple it loops through every read-mode (array of strings).
-   * If it's not an array it just sets the string value it gets from config.json.
-   * And if no config for this was set at all it sets established as the default.
-   */
-  setConfigDefaultReadModeViews() {
-    const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
-    let newViews: Array<any> = [];
-    let defaultReadModeForMobileSelected = false;
-
-    defaultReadModes.forEach((val: any) => {
-      // TODO: Fix setting default view for mobile
-      if (!defaultReadModeForMobileSelected && this.displayToggles[val]) {
-        /* Sets the default view on mobile to the first default read mode view which is available. */
-        this.show = val;
-        defaultReadModeForMobileSelected = true;
-      }
-
-      if (this.availableViewModes.indexOf(val) !== -1) {
-        const view = { type: val } as any;
-        newViews.push(view);
-      }
-    });
-
-    this.updateViewsInRouterQueryParams(newViews);
-  }
-
-  viewsExistInAvailableViewModes(viewmodes: any) {
-    const that = this;
-    viewmodes.forEach(function (viewmode: any) {
-      if ( that.availableViewModes.indexOf(viewmode) === -1 ) {
-        return false;
-      }
-      return viewmode;
-    }.bind(this));
-
-    return true;
-  }
-
-  getViewTypesShown() {
-    const viewModes = [] as any;
-
-    this.views.forEach(function (view: any) {
-      viewModes.push(view.type);
-    }.bind(this));
-
-    return viewModes;
-  }
-
-  scrollToTOC(element: HTMLElement) {
-    try {
-      if (element !== null) {
-        this.commonFunctions.scrollElementIntoView(element);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   private getEventTarget(event: any) {
     let eventTarget: HTMLElement = document.createElement('div');
@@ -1978,11 +1890,11 @@ export class ReadPage /*implements OnDestroy*/ {
       variationSortOrder = currentVariationsViews;
     }
 
-    if (type === 'established' && language && this.multilingualEST) {
+    if (type === 'established' && language && this.multilingualReadingTextLanguages.length > 1) {
       type = 'established_' + language;
     }
 
-    if (this.availableViewModes.indexOf(type) !== -1) {
+    if (this.enabledViewTypes.indexOf(type) !== -1) {
       const newView = { type: type } as any;
 
       if (id != null) {

@@ -1,53 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
-import { LanguageService } from '../languages/language.service';
+import { Observable } from 'rxjs';
 import { config } from "src/app/services/config/config";
 
 @Injectable()
 export class TableOfContentsService {
   private tableOfContentsUrl = '/toc/'; // plus an id...
-  private lang = 'sv';
   private multilingualTOC = false;
-  languageSubscription?: Subscription;
   apiEndpoint: string;
 
   constructor(
-    private languageService: LanguageService,
-    private http: HttpClient
+    private http: HttpClient,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    try {
-      const simpleApi = config.app?.simpleApi ?? '';
-      if (simpleApi) {
-        this.apiEndpoint = simpleApi as string;
-      }
-    } catch (e) {}
-
-    try {
-      const multilingualTOC = config.i18n?.multilingualTOC ?? false;
-      if (multilingualTOC) {
-        this.multilingualTOC = multilingualTOC;
-
-        // TODO: Refactor so the service doesn't have a language subscription,
-        // TODO: instead the functions should take language as a parameter
-        // TODO: and use it if multilingualTOC is true.
-        this.languageSubscription = this.languageService
-          .languageSubjectChange()
-          .subscribe((lang: any) => {
-            if (lang) {
-              this.lang = lang;
-            }
-          });
-      }
-    } catch (e) {}
-  }
-
-  // TODO ngOnDestroy change to angular
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
+    const simpleApi = config.app?.simpleApi ?? '';
+    if (simpleApi) {
+      this.apiEndpoint = simpleApi as string;
     }
+    this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
   getTableOfContents(id: string): Observable<any> {
@@ -59,7 +30,7 @@ export class TableOfContentsService {
       id;
 
     if (this.multilingualTOC) {
-      url += '/' + this.lang;
+      url += '/' + this.activeLocale;
     }
 
     return this.http.get(url);

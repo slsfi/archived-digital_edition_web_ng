@@ -1,8 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -26,15 +23,13 @@ export class HomePage {
   imageUrl = '';
   imageUrlStyle = '';
   portraitImageAltText = '';
-  languageSubscription: Subscription | null;
 
   constructor(
     public navCtrl: NavController,
-    public translate: TranslateService,
-    public languageService: LanguageService,
     private mdContentService: MdContentService,
     private userSettingsService: UserSettingsService,
-    protected textService: TextService
+    protected textService: TextService,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     if (this.userSettingsService.isMobile()) {
       this.userSettingsService.temporarilyHideSplitPane();
@@ -59,19 +54,20 @@ export class HomePage {
     }
 
     this.imageUrlStyle = `url(${this.imageUrl})`;
-    this.languageSubscription = null;
+
+    // Only show subtitle if translation for it not missing
+    if ($localize`:@@Site.Subtitle:Webbplatsens undertitel`) {
+      this.siteHasSubtitle = true;
+    } else {
+      this.siteHasSubtitle = false;
+    }
   }
 
   ngOnInit() {
-    this.languageSubscription = this.languageService.languageSubjectChange().subscribe((lang) => {
-      if (lang) {
-        this.loadContent(lang);
-      } else {
-        this.languageService.getLanguage().subscribe((language) => {
-          this.loadContent(language);
-        });
-      }
-    });
+    this.getMdContent(this.activeLocale + '-01');
+    if (this.showFooter) {
+      this.getFooterMdContent(this.activeLocale + '-06');
+    }
   }
 
   ionViewWillEnter() {
@@ -85,26 +81,6 @@ export class HomePage {
     ) {
       this.textService.previousReadViewTextId = this.textService.readViewTextId;
       this.textService.readViewTextId = '';
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-  }
-
-  loadContent(lang: string) {
-    this.getMdContent(lang + '-01');
-    if (this.showFooter) {
-      this.getFooterMdContent(lang + '-06');
-    }
-
-    // Only show subtitle if translation for it not missing
-    if ($localize`:@@Site.Subtitle:Webbplatsens undertitel`) {
-      this.siteHasSubtitle = true;
-    } else {
-      this.siteHasSubtitle = false;
     }
   }
 

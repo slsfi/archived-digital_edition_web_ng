@@ -6,7 +6,6 @@ import leaflet from 'leaflet';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
@@ -74,7 +73,6 @@ export class OccurrencesPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public semanticDataService: SemanticDataService,
-              protected langService: LanguageService,
               public modalCtrl: ModalController,
               private platform: Platform,
               protected textService: TextService,

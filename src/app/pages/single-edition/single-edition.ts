@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform, PopoverController } from '@ionic/angular';
@@ -9,7 +9,6 @@ import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { HtmlContentService } from 'src/app/services/html/html-content.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -48,7 +47,6 @@ export class SingleEditionPage {
   root?: TableOfContentsCategory[];
   items: any;
   collectionDescription: any;
-  language = 'sv';
   defaultSelectedItem: string;
   description?: string;
   show?: string;
@@ -65,7 +63,6 @@ export class SingleEditionPage {
     protected textService: TextService,
     protected htmlService: HtmlContentService,
     protected translate: TranslateService,
-    protected langService: LanguageService,
     protected events: EventsService,
     protected sanitizer: DomSanitizer,
     protected platform: Platform,
@@ -73,13 +70,11 @@ export class SingleEditionPage {
     protected mdcontentService: MdContentService,
     protected pdfService: PdfService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.collectionDescription = { content: null };
-    this.language = config.i18n?.locale ?? 'sv';
-    this.langService.getLanguage().subscribe((lang) => {
-      this.show = config.defaults?.ReadModeView ?? 'established';
-    });
+    this.show = config.defaults?.ReadModeView ?? 'established';
 
     this.hasCover = config.HasCover ?? false;
     this.hasTitle = config.HasTitle ?? false;
@@ -134,7 +129,7 @@ export class SingleEditionPage {
   }
 
   getDescriptions() {
-    this.mdcontentService.getStaticPagesToc(this.language)
+    this.mdcontentService.getStaticPagesToc(this.activeLocale)
       .subscribe(
         staticToc => {
           let descriptions: any;

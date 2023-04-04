@@ -1,12 +1,9 @@
-import { Component, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, Platform, ToastController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { ModalController } from '@ionic/angular';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { EventsService } from 'src/app/services/events/events.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -54,7 +51,7 @@ export class WorkSearchPage {
   showLoading = false;
   showFilter = true;
   objectType = 'work';
-  mdContent?: string;
+  mdContent: string = '';
 
   selectedLinkID?: string;
 
@@ -63,55 +60,25 @@ export class WorkSearchPage {
   from = 0;
   infiniteScrollNumber = 200;
 
-  languageSubscription?: Subscription;
-
   constructor(
               public semanticDataService: SemanticDataService,
-              protected langService: LanguageService,
               private mdContentService: MdContentService,
-              private platform: Platform,
               protected textService: TextService,
               public occurrenceService: OccurrenceService,
               protected storage: StorageService,
-              private toastCtrl: ToastController,
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
-              private events: EventsService,
               private cf: ChangeDetectorRef,
-              private router: Router
+              private router: Router,
+              @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.showFilter = config.WorkSearch.ShowFilter ?? false;
     this.infiniteScrollNumber = config.WorkSearch.InitialLoadNumber ?? 200;
   }
 
   ngOnInit() {
-    this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-      this.setData();
-      if (lang) {
-        this.getMdContent(lang + '-12-05');
-      }
-    });
-  }
-
-  ionViewDidLeave() {
-    this.storage.remove('filterCollections');
-  }
-
-  ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-  }
-
-  setData() {
-    this.storage.get(this.worksKey).then((works) => {
-      if (works) {
-        this.cacheItem = true;
-        this.getCacheText(this.worksKey);
-      } else {
-        this.getworks();
-      }
-    });
+    this.getworks();
+    this.getMdContent(this.activeLocale + '-12-05');
   }
 
   getworks() {
@@ -292,82 +259,6 @@ export class WorkSearchPage {
     }
   }
 
-  async download() {
-    this.cacheItem = !this.cacheItem;
-
-    if (this.cacheItem) {
-      await this.storeCacheText(this.worksKey, this.cacheData);
-    } else if (!this.cacheItem) {
-      this.removeFromCache(this.worksKey);
-    }
-  }
-
-  async storeCacheText(id: string, text: any) {
-    await this.storage.set(id, text);
-    await this.addedToCacheToast(id);
-  }
-
-  async removeFromCache(id: string) {
-    await this.storage.remove(id);
-    await this.removedFromCacheToast(id);
-  }
-
-  getCacheText(id: string) {
-    this.storage.get(id).then((works) => {
-      this.allData = works;
-
-      if (this.allData) {
-        this.sortListAlphabeticallyAndGroup(this.allData);
-
-        for (let i = 0; i < 30; i++) {
-          this.works.push(this.allData[this.count]);
-          this.worksCopy.push(this.allData[this.count]);
-          this.count++
-        }
-      }
-    });
-  }
-
-  async addedToCacheToast(id: string) {
-    let status = '';
-
-    await this.storage.get(id).then((content) => {
-      if (content) {
-        status = 'works downloaded successfully';
-      } else {
-        status = 'works were not added to cache';
-      }
-    });
-
-    const toast = await this.toastCtrl.create({
-      message: status,
-      duration: 3000,
-      position: 'bottom'
-    });
-
-    await toast.present();
-  }
-
-  async removedFromCacheToast(id: string) {
-    let status = '';
-
-    await this.storage.get(id).then((content) => {
-      if (content) {
-        status = 'works were not removed from cache';
-      } else {
-        status = 'works were successfully removed from cache';
-      }
-    });
-
-    const toast = await this.toastCtrl.create({
-      message: status,
-      duration: 3000,
-      position: 'bottom'
-    });
-
-    await toast.present();
-  }
-
   sortListAlphabeticallyAndGroup(list: any[]) {
     const data = list;
 
@@ -475,11 +366,11 @@ export class WorkSearchPage {
   }
 
   getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID)
-      .subscribe(
-        text => { this.mdContent = text.content; },
-        error => { this.mdContent = ''; }
-      );
+    this.mdContentService.getMdContent(fileID).subscribe({
+      next: (text) => {
+        this.mdContent = text.content;
+      }
+    });
   }
 
 }

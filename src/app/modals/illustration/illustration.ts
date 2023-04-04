@@ -1,10 +1,9 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { config } from "src/app/services/config/config";
 
 /**
@@ -30,7 +29,6 @@ export class IllustrationPage {
   latestDeltaY = 0;
   prevX = 0;
   prevY = 0;
-  language: String = 'sv';
   imgMetadata: any;
 
   constructor(
@@ -43,8 +41,8 @@ export class IllustrationPage {
     protected modalController: ModalController,
     public userSettingsService: UserSettingsService,
     private events: EventsService,
-    public languageService: LanguageService,
-    public router: Router
+    public router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     if (this.navParams.get('showDescription') !== undefined) {
       this.showDescription = this.navParams.get('showDescription');
@@ -52,12 +50,8 @@ export class IllustrationPage {
     if (this.navParams.get('zoomImage') !== undefined) {
       this.zoomImage = this.navParams.get('zoomImage');
     }
-    this.language = config.i18n?.locale ?? 'sv';
     this.imgMetadata = [];
-    this.languageService.getLanguage().subscribe((lang: string) => {
-      this.language = lang;
-      this.getImageMetadata();
-    });
+    this.getImageMetadata();
   }
 
   ngAfterViewInit() {
@@ -75,7 +69,7 @@ export class IllustrationPage {
   }
 
   getImageMetadata() {
-    this.galleryService.getMediaMetadata(this.navParams.get('imageNumber'), this.language)
+    this.galleryService.getMediaMetadata(this.navParams.get('imageNumber'), this.activeLocale)
       .subscribe(data => {
         this.imgMetadata = data;
         this.imgPath = config.app.apiEndpoint + '/' +

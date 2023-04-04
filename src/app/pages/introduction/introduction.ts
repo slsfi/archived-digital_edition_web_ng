@@ -1,25 +1,21 @@
-import { Component, Renderer2, ElementRef, SecurityContext, NgZone } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, Renderer2, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController, NavController, Platform, PopoverController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { config } from "src/app/services/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
 
@@ -31,7 +27,6 @@ import { isBrowser } from "src/standalone/utility-functions";
 })
 export class IntroductionPage {
 
-  errorMessage: any;
   id = '';
   text: SafeHtml;
   textMenu: SafeHtml;
@@ -70,7 +65,6 @@ export class IntroductionPage {
   simpleWorkMetadata?: Boolean;
   showTextDownloadButton: Boolean = false;
   usePrintNotDownloadIcon: Boolean = false;
-  languageSubscription: Subscription | null;
   hasTOCLabelTranslation: Boolean = false;
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
@@ -79,7 +73,6 @@ export class IntroductionPage {
 
   constructor(
     public navCtrl: NavController,
-    public langService: LanguageService,
     private textService: TextService,
     protected sanitizer: DomSanitizer,
     private renderer2: Renderer2,
@@ -88,16 +81,13 @@ export class IntroductionPage {
     private elementRef: ElementRef,
     protected popoverCtrl: PopoverController,
     public userSettingsService: UserSettingsService,
-    private events: EventsService,
-    private platform: Platform,
     protected tableOfContentsService: TableOfContentsService,
-    private storage: StorageService,
     public semanticDataService: SemanticDataService,
     public readPopoverService: ReadPopoverService,
     public commonFunctions: CommonFunctionsService,
-    public translate: TranslateService,
     private modalController: ModalController,
     private route: ActivatedRoute,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.pos = null;
     this.tocMenuOpen = false;
@@ -117,7 +107,6 @@ export class IntroductionPage {
       left: -1500 + 'px'
     };
     this.intervalTimerId = undefined;
-    this.languageSubscription = null;
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.readPopoverTogglesIntro = config.settings?.introToggles ?? undefined;
@@ -149,16 +138,11 @@ export class IntroductionPage {
     this.showViewOptionsButton = config.page?.introduction?.showViewOptionsButton ?? true;
     this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
 
-    this.translate.get('Read.Introduction.Contents').subscribe({
-      next: (translation) => {
-        if (translation && translation !== 'Read.Introduction.Contents') {
-          this.hasTOCLabelTranslation = true;
-        } else {
-          this.hasTOCLabelTranslation = false;
-        }
-      },
-      error: (e) => { this.hasTOCLabelTranslation = false; }
-    });
+    if ($localize`:@@Read.Introduction.Contents:Innehåll`) {
+      this.hasTOCLabelTranslation = true;
+    } else {
+      this.hasTOCLabelTranslation = false;
+    }
 
     try {
       const textDownloadOptions = config.textDownloadOptions ?? undefined;
@@ -179,11 +163,6 @@ export class IntroductionPage {
       this.showTextDownloadButton = false;
     }
 
-  }
-
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'introduction'});
   }
 
   ngOnInit() {
@@ -210,18 +189,8 @@ export class IntroductionPage {
       if (routeParams['collectionID']) {
         if (routeParams['collectionID'] !== this.id) {
           this.id = routeParams['collectionID'];
-
           this.setCollectionLegacyId(this.id);
-
-          if (this.languageSubscription) {
-            this.languageSubscription.unsubscribe();
-          }
-          this.languageSubscription = this.langService.languageSubjectChange().subscribe(lang => {
-            if (lang) {
-              this.loadIntroduction(lang, this.id);
-            }
-          });
-
+          this.loadIntroduction(this.activeLocale, this.id);
         } else {
           // Try to scroll to a position in the text
           this.scrollToPos();
@@ -266,22 +235,15 @@ export class IntroductionPage {
         this.scrollToPos();
       },
       error: (e) =>  {
-        this.errorMessage = <any>e;
         this.textLoading = false;
+        // TODO: Add translated error message.
         this.text = 'Could not load introduction.';
         this.hasSeparateIntroToc = false;
       }
     });
   }
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-
   ngOnDestroy() {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
     this.unlistenClickEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();
@@ -597,20 +559,14 @@ export class IntroductionPage {
     }
 
     this.tooltipService.getPersonTooltip(id).subscribe({
-      next: tooltip => {
-        console.log(tooltip);
+      next: (tooltip) => {
         const text = this.tooltipService.constructPersonTooltipText(tooltip, targetElem);
         this.setToolTipPosition(targetElem, text);
         this.setToolTipText(text);
         this.tooltips.persons[id] = text;
       },
-      error: e => {
-        let noInfoFound = 'Could not get person information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe({
-          next: translation => {
-            noInfoFound = translation;
-          }, error: errorT => { }
-        });
+      error: (e) => {
+        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
@@ -625,7 +581,7 @@ export class IntroductionPage {
     }
 
     this.tooltipService.getPlaceTooltip(id).subscribe({
-      next: tooltip => {
+      next: (tooltip) => {
         let text = '<b>' + tooltip.name.trim() + '</b>';
         if (tooltip.description) {
           text = text + ', ' + tooltip.description.trim();
@@ -634,14 +590,8 @@ export class IntroductionPage {
         this.setToolTipText(text);
         this.tooltips.places[id] = text;
       },
-      error: e => {
-        let noInfoFound = 'Could not get place information';
-        this.translate.get('Occurrences.NoInfoFound').subscribe({
-          next: (translation) => {
-            noInfoFound = translation;
-          },
-          error: (errorT) => { }
-        });
+      error: (e) => {
+        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
@@ -659,16 +609,12 @@ export class IntroductionPage {
       this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
     }
 
+    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
+
     if (this.simpleWorkMetadata === false) {
       this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
         next: (tooltip) => {
           if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
-            let noInfoFound = 'Could not get work information';
-            this.translate.get('Occurrences.NoInfoFound').subscribe({
-              next: translation => {
-                noInfoFound = translation;
-              }, error: err => { }
-            });
             this.setToolTipPosition(targetElem, noInfoFound);
             this.setToolTipText(noInfoFound);
             return;
@@ -680,30 +626,18 @@ export class IntroductionPage {
           this.tooltips.works[id] = description;
         },
         error: (e) => {
-          let noInfoFound = 'Could not get work information';
-          this.translate.get('Occurrences.NoInfoFound').subscribe({
-            next: translation => {
-              noInfoFound = translation;
-            }, error: err => { }
-          });
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
       });
     } else {
       this.tooltipService.getWorkTooltip(id).subscribe({
-        next: tooltip => {
+        next: (tooltip) => {
           this.setToolTipPosition(targetElem, tooltip.description);
           this.setToolTipText(tooltip.description);
           this.tooltips.works[id] = tooltip.description;
         },
-        error: e => {
-          let noInfoFound = 'Could not get work information';
-          this.translate.get('Occurrences.NoInfoFound').subscribe({
-            next: translation => {
-              noInfoFound = translation;
-            }, error: err => { }
-          });
+        error: (e) => {
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
@@ -747,11 +681,7 @@ export class IntroductionPage {
 
   showFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
     if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
-      this.translate.get('note').subscribe({
-        next: translation => {
-          this.setInfoOverlayTitle(translation);
-        }, error: e => { }
-      });
+      this.setInfoOverlayTitle($localize`:@@note:Not`);
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.footnotes[id]);
       return;
@@ -777,11 +707,7 @@ export class IntroductionPage {
     const footNoteHTML = this.sanitizer.sanitize(SecurityContext.HTML,
       this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
 
-    this.translate.get('note').subscribe({
-      next: translation => {
-        this.setInfoOverlayTitle(translation);
-      }, error: e => { }
-    });
+    this.setInfoOverlayTitle($localize`:@@note:Not`);
     this.setInfoOverlayPositionAndWidth(targetElem);
     this.setInfoOverlayText(footNoteHTML || '');
     if (this.userSettingsService.isDesktop()) {

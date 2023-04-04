@@ -44,7 +44,7 @@ export class ReadTextComponent {
     public commonFunctions: CommonFunctionsService
   ) {
     this.intervalTimerId = 0;
-    this.illustrationsViewAvailable = config.settings?.displayTypesToggles?.illustrations ?? false;
+    this.illustrationsViewAvailable = config.page?.read?.viewTypeSettings?.illustrations ?? false;
   }
 
   ngOnChanges(changes: SimpleChanges) {

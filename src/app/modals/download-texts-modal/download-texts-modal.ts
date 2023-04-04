@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -6,7 +6,6 @@ import { TextService } from 'src/app/services/texts/text.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { LanguageService } from 'src/app/services/languages/language.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/app/services/config/config";
 
@@ -56,8 +55,8 @@ export class DownloadTextsModalPage {
     public translate: TranslateService,
     public readPopoverService: ReadPopoverService,
     private tocService: TableOfContentsService,
-    private langService: LanguageService,
-    public commonFunctions: CommonFunctionsService
+    public commonFunctions: CommonFunctionsService,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     // Get configs
     this.appMachineName = config.app?.machineName ?? '';
@@ -254,25 +253,23 @@ export class DownloadTextsModalPage {
     }
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.langService.getLanguage().subscribe((lang: any) => {
-        this.textService.getDownloadableIntroduction(this.textId, format, lang).subscribe({
-          next: content => {
-            const blob = new Blob([String(content)], {type: mimetype});
-            const blobUrl = URL.createObjectURL(blob);
-            this.objectURLs.push(blobUrl);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle) + '.' + fileExtension;
-            link.target = '_blank'
-            link.click();
-            this.loadingIntro = false;
-          },
-          error: e => {
-            console.log('error getting introduction in ' + format + ' format');
-            this.loadingIntro = false;
-            this.showErrorMessage = true;
-          }
-        });
+      this.textService.getDownloadableIntroduction(this.textId, format, this.activeLocale).subscribe({
+        next: (content) => {
+          const blob = new Blob([String(content)], {type: mimetype});
+          const blobUrl = URL.createObjectURL(blob);
+          this.objectURLs.push(blobUrl);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle) + '.' + fileExtension;
+          link.target = '_blank'
+          link.click();
+          this.loadingIntro = false;
+        },
+        error: (e) => {
+          console.log('error getting introduction in ' + format + ' format');
+          this.loadingIntro = false;
+          this.showErrorMessage = true;
+        }
       });
     } else if (textType === 'est') {
       this.loadingEst = true;
@@ -340,35 +337,33 @@ export class DownloadTextsModalPage {
   }
 
   private openIntroductionForPrint() {
-    this.langService.getLanguage().subscribe((lang: any) => {
-      this.textService.getIntroduction(this.textId, lang).subscribe({
-        next: res => {
-          let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-          content = this.constructHtmlForPrint(content, 'intro');
+    this.textService.getIntroduction(this.textId, this.activeLocale).subscribe({
+      next: (res) => {
+        let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+        content = this.constructHtmlForPrint(content, 'intro');
 
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(content);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showErrorMessage = true;
-              console.log('unable to open new window');
-            }
-            this.loadingIntro = false;
-          } catch (e) {
-            this.loadingIntro = false;
+        try {
+          const newWindowRef = window.open();
+          if (newWindowRef) {
+            newWindowRef.document.write(content);
+            newWindowRef.document.close();
+            newWindowRef.focus();
+          } else {
             this.showErrorMessage = true;
-            console.log('error opening introduction in print format in new window', e);
+            console.log('unable to open new window');
           }
-        },
-        error: e => {
-          console.log('error loading introduction');
+          this.loadingIntro = false;
+        } catch (e) {
           this.loadingIntro = false;
           this.showErrorMessage = true;
+          console.log('error opening introduction in print format in new window', e);
         }
-      });
+      },
+      error: (e) => {
+        console.log('error loading introduction');
+        this.loadingIntro = false;
+        this.showErrorMessage = true;
+      }
     });
   }
 
