@@ -22,10 +22,6 @@
         <ng-container i18n="@@TopMenu.Info">Om</ng-container>
       </a>
     </ion-button>
-    <ion-button *ngIf="showTopSimpleSearchButton" class="simple-search-button" (click)="searchApp()" id="searchIcon">
-      <ion-icon slot="start" name="search"></ion-icon>
-      <span class="side-title" i18n="@@TopMenu.SimpleSearch">Sök</span>
-    </ion-button>
     <ion-button *ngIf="showTopElasticButton" class="elastic-search-button" id="elasticSearchIcon">
       <a [routerLink]="['/elastic-search']">
         <ion-icon slot="start" name="search"></ion-icon>

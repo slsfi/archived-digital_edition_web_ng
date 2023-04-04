@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
-import { SimpleSearchComponent } from './simple-search/simple-search';
 import { DigitalEditionListChildrenComponent } from './digital-edition-list-children/digital-edition-list-children';
 import { DateHistogram } from './date-histogram/date-histogram';
 import { IonicModule } from '@ionic/angular';
@@ -29,7 +28,6 @@ export function createTranslateLoader(http: HttpClient) {
 		TitleLogoComponent,
 		TopMenuComponent,
 		TextChangerComponent,
-		SimpleSearchComponent,
 		DigitalEditionListChildrenComponent,
 		IllustrationsComponent,
 		DateHistogram,
@@ -56,7 +54,6 @@ export function createTranslateLoader(http: HttpClient) {
     TitleLogoComponent,
     TopMenuComponent,
     TextChangerComponent,
-    SimpleSearchComponent,
     DigitalEditionListChildrenComponent,
     IllustrationsComponent,
     DateHistogram,

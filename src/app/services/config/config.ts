@@ -43,7 +43,6 @@ export const config: Config = {
       imageUrl: "assets/images/frontpage-image-portrait.jpg",
       portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
       portraitImageAltText: "Zacharias Topelius",
-      showSimpleSearch: false,
       showEditionList: false,
       showFooter: true
     },
@@ -87,7 +86,6 @@ export const config: Config = {
       showAboutButton: true,
       showContentButton: true,
       showElasticSearchButton: true,
-      showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: true
     },
@@ -516,7 +514,6 @@ export const config_soderholm: Config = {
       imageUrl: "assets/images/frontpage-image-portrait.jpg",
       portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
       portraitImageAltText: "",
-      showSimpleSearch: false,
       showEditionList: false,
       showFooter: false
     },
@@ -560,7 +557,6 @@ export const config_soderholm: Config = {
       showAboutButton: true,
       showContentButton: true,
       showElasticSearchButton: true,
-      showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: false
     },
@@ -1051,7 +1047,6 @@ export const config_mechelin: Config = {
       imageUrl: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg",
       portraitImageUrlInMobileMode: "",
       portraitImageAltText: "",
-      showSimpleSearch: false,
       showEditionList: false,
       showFooter: false
     },
@@ -1095,7 +1090,6 @@ export const config_mechelin: Config = {
       showAboutButton: true,
       showContentButton: true,
       showElasticSearchButton: false,
-      showSimpleSearchButton: false,
       showURNButton: false,
       showLanguageButton: true
     },

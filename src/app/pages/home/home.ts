@@ -17,7 +17,6 @@ export class HomePage {
   imageOrientationPortrait: Boolean = false;
   imageOnRight: Boolean = false;
   titleOnImage: Boolean = false;
-  showSimpleSearch: Boolean = false;
   showEditionList: Boolean = false;
   showFooter: Boolean = false;
   imageUrl = '';
@@ -40,7 +39,6 @@ export class HomePage {
     this.imageOnRight = config.page?.home?.imageOnRightIfPortrait ?? false;
     this.titleOnImage = config.page?.home?.siteTitleOnTopOfImageInMobileModeIfPortrait ?? false;
     this.portraitImageAltText = config.page?.home?.portraitImageAltText ?? 'front image';
-    this.showSimpleSearch = config.page?.home?.showSimpleSearch ?? false;
     this.showEditionList = config.page?.home?.showEditionList ?? false;
     this.showFooter = config.page?.home?.showFooter ?? false;
     this.imageUrl = config.page?.home?.imageUrl ?? 'assets/images/frontpage-image-landscape.jpg';

@@ -6,7 +6,6 @@ import { Observable, Subscription } from 'rxjs';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { SearchAppPage } from 'src/app/modals/search-app/search-app';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
@@ -378,14 +377,6 @@ export class ReadPage {
 
       return await occurrenceModal.present();
     }
-  }
-
-  async openSearchResult() {
-    const searchModal = await this.modalCtrl.create({
-      component: SearchAppPage,
-      componentProps: { searchResult: this.searchResult }
-    });
-    return await searchModal.present();
   }
 
   /**

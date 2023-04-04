@@ -7,7 +7,6 @@
         "Home": "Etusivu",
         "Read": "Sisältö",
         "Info": "Tietoja",
-        "SimpleSearch": "Hae",
         "AdvancedSearch": "Hae"
     },
     "Read": {
@@ -179,29 +178,17 @@
     "BackButton": {
         "default": "Takaisin"
     },
-    "SearchApp": {
-        "simpleSearch": "Hae",
-        "advancedSearch": "Tarkennettu haku",
-        "filter": "Rajaukset",
-        "matchesOn": "Osuma(a):",
-        "numberOf": "osumaa",
-        "pagenumber": "s.",
-        "search-holder": "Hakuteksti",
-        "hitCount": "Osumaa",
-        "type": "Tyyppi",
-        "timeline": "Aikajakso",
-        "freetext": "Vapaateksti",
-        "start": "Alku",
-        "end": "Loppu",
-        "relevance": "Relevanssi",
-        "alphabetical": "Aakkostus",
-        "oldest": "Vanhin",
-        "genre": "Tekstilaji",
-        "person-register": "Henkilöhakemisto",
-        "place-register": "Paikkahakemisto",
-        "tag-register": "Ämnesord",
-        "verk": "Teoshakemisto",
-        "sort-by": "Lajittele"
+    "IndexOfPersons": {
+        "searchPlaceholder": "Hae ..."
+    },
+    "IndexOfPlaces": {
+        "searchPlaceholder": "Hae ..."
+    },
+    "IndexOfTags": {
+        "searchPlaceholder": "Hae ..."
+    },
+    "IndexOfWorks": {
+        "searchPlaceholder": "Hae ..."
     },
     "Occurrences": {
         "Title": "Esiintymät",

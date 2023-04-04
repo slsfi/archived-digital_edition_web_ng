@@ -25,19 +25,6 @@
 <ng-container *ngIf="userSettingsService.isDesktop()">
   <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="true" [scrollY]="false">
     <div class="column-container">
-      <!-- TO DO: What to do with these fab buttons, they are currently not in use -->
-      <!--
-      <ion-fab *ngIf="showOccurrencesModal && hasOccurrenceResults" class="occurrenceButton">
-        <button ion-button small
-          (click)="openOccurrenceResult()">{{ (occurrenceResult?.name)?occurrenceResult?.name:("Read.ShowSearchResults" | translate) }}
-          &nbsp;<ion-icon name="search"></ion-icon></button>
-      </ion-fab>
-      <ion-fab class="occurrenceButton" *ngIf="searchResult!=null">
-        <button ion-button small (click)="openSearchResult()">{{searchResult}}&nbsp;<ion-icon name="search"></ion-icon>
-        </button>
-      </ion-fab>
-      -->
-
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
 
