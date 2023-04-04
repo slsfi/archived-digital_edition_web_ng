@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { ReadPage } from './read';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
 import { ReadRoutingModule } from './read-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -16,11 +13,6 @@ import { DragScrollModule } from 'src/directives/ngx-drag-scroll/public-api';
 import { VariationsModule } from 'src/app/components/variations/variations.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
     declarations: [
@@ -30,13 +22,6 @@ export function createTranslateLoader(http: HttpClient) {
       IonicModule,
       CommonModule,
       FormsModule,
-      TranslateModule.forChild({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }),
       ComponentsModule,
       ReadTextModule,
       CommentsModule,

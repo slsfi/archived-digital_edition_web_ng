@@ -2,7 +2,6 @@ import { Component, Input, EventEmitter, Output, SecurityContext } from '@angula
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { Facsimile } from 'src/app/models/facsimile.model';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -69,10 +68,9 @@ export class FacsimilesComponent {
     protected readPopoverService: ReadPopoverService,
     protected modalController: ModalController,
     protected facsimileService: FacsimileService,
-    public translate: TranslateService,
     protected events: EventsService,
     private alertCtrl: AlertController,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.deRegisterEventListeners();
     this.registerEventListeners();
@@ -144,8 +142,8 @@ export class FacsimilesComponent {
   }
 
   getFacsimilePageInfinite() {
-    this.facsimileService.getFacsimilePage(this.itemId).subscribe(
-      facs => {
+    this.facsimileService.getFacsimilePage(this.itemId).subscribe({
+      next: (facs) => {
         /* The facsimiles are returned ordered by priority (highest first) */
         // console.log(facs);
         const sectionId = this.chapter?.replace('ch', '');
@@ -240,21 +238,15 @@ export class FacsimilesComponent {
           }
           */
         } else {
-          this.translate.get('Read.Facsimiles.NoFacsimiles').subscribe(
-            translation => {
-              this.text = translation;
-            }, err => {
-              console.error(err);
-              this.text = 'Inga faksimil';
-            }
-          );
+          this.text = $localize`:@@Read.Facsimiles.NoFacsimiles:Inga faksimil tillgängliga.`;
         }
       },
-      error => {
-        this.errorMessage = <any>error;
-        console.error('Error loading facsimiles...', String(this.errorMessage));
+      error: (e) => {
+        // TODO: Add translated error message.
+        this.text = 'Kunde inte ladda faksimil.';
+        console.error('Error loading facsimiles...', e);
       }
-    );
+    });
   }
 
   getFacsimiles(itemId?: any) {
@@ -361,32 +353,13 @@ export class FacsimilesComponent {
   }
 
   async selectFacsimile() {
-    let facsTranslations = null as any;
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
-    this.translate.get('Read.Facsimiles').subscribe(
-      translation => {
-        facsTranslations = translation;
-      }, error => { }
-    );
-
-    let buttonTranslations = null as any;
-    this.translate.get('BasicActions').subscribe(
-      translation => {
-        buttonTranslations = translation;
-      }, error => { }
-    );
-
-    const alert = await this.alertCtrl.create({
-      header: facsTranslations.SelectFacsDialogTitle,
-      subHeader: facsTranslations.SelectFacsDialogSubtitle,
-      cssClass: 'custom-select-alert'
-    });
 
     if (this.externalFacsimilesExist && this.externalURLs.length > 0) {
       inputs.push({
         type: 'radio',
-        label: facsTranslations.ExternalHeading,
+        label: $localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`,
         value: '-1',
         checked: this.selectedFacsimileIsExternal
       });
@@ -395,10 +368,17 @@ export class FacsimilesComponent {
     this.facsimiles.forEach((facsimile: any, index: any) => {
       let checkedValue = false;
 
-      if (!this.selectedFacsimileIsExternal
-      && (this.selectedFacsimile.publication_facsimile_collection_id === facsimile.publication_facsimile_collection_id
-      && (this.selectedFacsimile.page === undefined && this.selectedFacsimile.first_page === facsimile.page
-      || this.selectedFacsimile.page === facsimile.page))) {
+      if (
+        !this.selectedFacsimileIsExternal &&
+        (
+          this.selectedFacsimile.publication_facsimile_collection_id === facsimile.publication_facsimile_collection_id &&
+          (
+            this.selectedFacsimile.page === undefined &&
+            this.selectedFacsimile.first_page === facsimile.page ||
+            this.selectedFacsimile.page === facsimile.page
+          )
+        )
+      ) {
         checkedValue = true;
       }
 
@@ -412,28 +392,26 @@ export class FacsimilesComponent {
       });
     });
 
-    if (buttonTranslations) {
-      buttons.push({
-        text: buttonTranslations.Cancel
-      });
-      buttons.push({
-        text: buttonTranslations.Ok,
-        handler: (index: string) => {
-  
-          console.log('changing facsimile, ', index);
-  
-          if (parseInt(index) < 0) {
-            // External facsimiles selected
-            this.changeFacsimile('external');
-          } else {
-            this.changeFacsimile(this.facsimiles[parseInt(index)]);
-          }
+    buttons.push({ text: $localize`:@@BasicActions.Cancel:Avbryt` });
+    buttons.push({
+      text: $localize`:@@BasicActions.Ok:Ok`,
+      handler: (index: string) => {
+        if (parseInt(index) < 0) {
+          // External facsimiles selected
+          this.changeFacsimile('external');
+        } else {
+          this.changeFacsimile(this.facsimiles[parseInt(index)]);
         }
-      });
-    }
+      }
+    });
 
-    alert.inputs = inputs;
-    alert.buttons = buttons;
+    const alert = await this.alertCtrl.create({
+      header: $localize`:@@Read.Facsimiles.SelectFacsDialogTitle:Välj faksimil`,
+      subHeader: $localize`:@@Read.Facsimiles.SelectFacsDialogSubtitle:Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.`,
+      cssClass: 'custom-select-alert',
+      buttons: buttons,
+      inputs: inputs
+    });
 
     await alert.present();
   }

@@ -1,6 +1,5 @@
 import { Component, Input, Renderer2, ElementRef, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateService } from '@ngx-translate/core';
 import { ModalController } from '@ionic/angular';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -35,7 +34,6 @@ export class CommentsComponent {
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
-    public translate: TranslateService,
     protected modalController: ModalController,
     public commonFunctions: CommonFunctionsService
   ) {
@@ -62,14 +60,7 @@ export class CommentsComponent {
           text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
         } else {
-          this.translate.get('Read.Comments.NoComments').subscribe({
-            next: (translation) => {
-              this.text = translation;
-            },
-            error: (e) => {
-              this.text = 'Inga kommentarer.';
-            }
-          });
+          this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
         }
       },
       error: (e) =>  {

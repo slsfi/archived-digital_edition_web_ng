@@ -4,12 +4,7 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { isBrowser } from 'src/standalone/utility-functions';
 
-/**
- * Class for the LegendComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'legend',
   templateUrl: 'legend.html',

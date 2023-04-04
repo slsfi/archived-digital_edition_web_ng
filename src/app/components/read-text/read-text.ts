@@ -1,7 +1,6 @@
 import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -39,7 +38,6 @@ export class ReadTextComponent {
     private ngZone: NgZone,
     private elementRef: ElementRef,
     public userSettingsService: UserSettingsService,
-    public translate: TranslateService,
     protected modalController: ModalController,
     public commonFunctions: CommonFunctionsService
   ) {
@@ -99,14 +97,7 @@ export class ReadTextComponent {
             this.scrollToTextPosition();
           }
         } else {
-          this.translate.get('Read.Established.NoEstablished').subscribe({
-            next: (translation) => {
-              this.text = translation;
-            },
-            error: (e) => {
-              this.text = 'Ingen lästext.';
-            }
-          });
+          this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
         }
       },
       error: (e) => {

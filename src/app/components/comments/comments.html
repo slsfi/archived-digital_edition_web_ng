@@ -8,27 +8,27 @@
   [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'">
   <div [innerHTML]="text"></div>
   <div class="ms" *ngIf="letter">
-    <h3>{{ "Read.Comments.Manuscript.Title" | translate }}</h3>
+    <h3 i18n="@@Read.Comments.Manuscript.Title">Manuskriptbeskrivning</h3>
     <ul>
-      <li>{{ "Read.Comments.Manuscript.LegacyId" | translate }}: {{letter['legacy_id']}}</li>
-      <li>{{ "Read.Comments.Manuscript.Sender" | translate }}: {{sender}}</li>
-      <li>{{ "Read.Comments.Manuscript.Receiver" | translate }}: {{receiver}}</li>
-      <li>{{ "Read.Comments.Manuscript.Archive" | translate }}: {{letter['source_archive']}}</li>
-      <li>{{ "Read.Comments.Manuscript.Collection" | translate }}: {{letter['source_collection_id']}}</li>
+      <li><ng-container i18n="@@Read.Comments.Manuscript.LegacyId">Brevsignum</ng-container>: {{letter['legacy_id']}}</li>
+      <li><ng-container i18n="@@Read.Comments.Manuscript.Sender">Avsändare</ng-container>: {{sender}}</li>
+      <li><ng-container i18n="@@Read.Comments.Manuscript.Receiver">Mottagare</ng-container>: {{receiver}}</li>
+      <li><ng-container i18n="@@Read.Comments.Manuscript.Archive">Arkiv</ng-container>: {{letter['source_archive']}}</li>
+      <li><ng-container i18n="@@Read.Comments.Manuscript.Collection">Samling, signum</ng-container>: {{letter['source_collection_id']}}</li>
     </ul>
     <ul>
-      <li *ngIf="letter['material_type']">{{ "Read.Comments.Manuscript.Type" | translate }}: {{letter['material_type']}}</li>
-      <li *ngIf="letter['material_source']">{{ "Read.Comments.Manuscript.Status" | translate }}: {{letter['material_source']}}</li>
-      <li *ngIf="letter['material_format']">{{ "Read.Comments.Manuscript.Format" | translate }}: {{letter['material_format']}}</li>
-      <li *ngIf="letter['leaf_count']">{{ "Read.Comments.Manuscript.Leafs" | translate }}: {{letter['leaf_count']}}</li>
-      <li *ngIf="letter['sheet_count']">{{ "Read.Comments.Manuscript.Sheets" | translate }}: {{letter['sheet_count']}}</li>
-      <li *ngIf="letter['page_count']">{{ "Read.Comments.Manuscript.Pages" | translate }}: {{letter['page_count']}}</li>
-      <li *ngIf="letter['material_color']">{{ "Read.Comments.Manuscript.Color" | translate }}: {{letter['material_color']}}</li>
-      <li *ngIf="letter['material_quality']">{{ "Read.Comments.Manuscript.Quality" | translate }}: {{letter['material_quality']}}</li>
-      <li *ngIf="letter['material_pattern']">{{ "Read.Comments.Manuscript.Pattern" | translate }}: {{letter['material_pattern']}}</li>
-      <li *ngIf="letter['material_state']">{{ "Read.Comments.Manuscript.State" | translate }}: {{letter['material_state']}}</li>
-      <li *ngIf="letter['material']">{{ "Read.Comments.Manuscript.Material" | translate }}: {{letter['material']}}</li>
-      <li *ngIf="letter['material_notes']">{{ "Read.Comments.Manuscript.Other" | translate }}: {{letter['material_notes']}}</li>
+      <li *ngIf="letter['material_type']"><ng-container i18n="@@Read.Comments.Manuscript.Type">Form</ng-container>: {{letter['material_type']}}</li>
+      <li *ngIf="letter['material_source']"><ng-container i18n="@@Read.Comments.Manuscript.Status">Status</ng-container>: {{letter['material_source']}}</li>
+      <li *ngIf="letter['material_format']"><ng-container i18n="@@Read.Comments.Manuscript.Format">Format</ng-container>: {{letter['material_format']}}</li>
+      <li *ngIf="letter['leaf_count']"><ng-container i18n="@@Read.Comments.Manuscript.Leafs">Lägg</ng-container>: {{letter['leaf_count']}}</li>
+      <li *ngIf="letter['sheet_count']"><ng-container i18n="@@Read.Comments.Manuscript.Sheets">Antal blad</ng-container>: {{letter['sheet_count']}}</li>
+      <li *ngIf="letter['page_count']"><ng-container i18n="@@Read.Comments.Manuscript.Pages">Sidor brevtext</ng-container>: {{letter['page_count']}}</li>
+      <li *ngIf="letter['material_color']"><ng-container i18n="@@Read.Comments.Manuscript.Color">Färg</ng-container>: {{letter['material_color']}}</li>
+      <li *ngIf="letter['material_quality']"><ng-container i18n="@@Read.Comments.Manuscript.Quality">Kvalitet</ng-container>: {{letter['material_quality']}}</li>
+      <li *ngIf="letter['material_pattern']"><ng-container i18n="@@Read.Comments.Manuscript.Pattern">Mönster</ng-container>: {{letter['material_pattern']}}</li>
+      <li *ngIf="letter['material_state']"><ng-container i18n="@@Read.Comments.Manuscript.State">Tillstånd</ng-container>: {{letter['material_state']}}</li>
+      <li *ngIf="letter['material']"><ng-container i18n="@@Read.Comments.Manuscript.Material">Skrivmaterial</ng-container>: {{letter['material']}}</li>
+      <li *ngIf="letter['material_notes']"><ng-container i18n="@@Read.Comments.Manuscript.Other">Övrigt</ng-container>: {{letter['material_notes']}}</li>
     </ul>
   </div>
 </div>
