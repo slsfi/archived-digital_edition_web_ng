@@ -54,6 +54,18 @@
         <target>eKr.</target>
       </segment>
     </unit>
+    <unit id="Collection">
+      <segment state="initial">
+        <source>Delutgåva</source>
+        <target>Editio</target>
+      </segment>
+    </unit>
+    <unit id="com">
+      <segment state="initial">
+        <source>Kommentar</source>
+        <target>Kommentti</target>
+      </segment>
+    </unit>
     <unit id="comments">
       <segment state="initial">
         <source>Kommentarer</source>
@@ -150,10 +162,130 @@
         <target>Normalisointi</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.AND">
+      <segment state="initial">
+        <source>och</source>
+        <target>ja</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.CommentsHitHeadingPrepend">
+      <segment state="initial">
+        <source>Kommentar till</source>
+        <target>Kommentti tekstiin</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.FilterResults">
+      <segment state="initial">
+        <source>Avgränsa sökningen</source>
+        <target>Rajaa hakua</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Found">
+      <segment state="initial">
+        <source>Texter med sökträffar:</source>
+        <target>Tekstejä, joissa hakutuloksia:</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.From">
       <segment state="initial">
         <source>Från</source>
         <target>Vuodesta</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.HideFacets">
+      <segment state="initial">
+        <source>Dölj avgränsningar</source>
+        <target>Piilota rajaukset</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LoadingError">
+      <segment state="initial">
+        <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
+        <target>Tapahtui virhe ladatessa hakutuloksia.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NewestFirst">
+      <segment state="initial">
+        <source>Nyast först</source>
+        <target>Uusimmat ensin</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoFacetOptions">
+      <segment state="initial">
+        <source>Inga sökord</source>
+        <target>Ei hakusanoja</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoHits">
+      <segment state="initial">
+        <source>Sökningen gav inga svar.</source>
+        <target>Haulla ei löytynyt yhtään tulosta.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OldestFirst">
+      <segment state="initial">
+        <source>Äldst först</source>
+        <target>Vanhimmat ensin</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OpenInNewWindow">
+      <segment state="initial">
+        <source>Länken öppnas i ett nytt fönster.</source>
+        <target>Linkki avautuu uuteen ikkunaan.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.PageTitle">
+      <segment state="initial">
+        <source>Sök i utgåvan</source>
+        <target>Hae editiosta</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Relevance">
+      <segment state="initial">
+        <source>Relevans</source>
+        <target>Relevanssi</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ScrollToTop">
+      <segment state="initial">
+        <source>Till början</source>
+        <target>Palaa alkuun</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Search">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Hae ...</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowAllHitHighlights">
+      <segment state="initial">
+        <source>Visa alla träffar i texten</source>
+        <target>Näytä tekstin kaikki hakutulokset</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowFacets">
+      <segment state="initial">
+        <source>Visa avgränsningar</source>
+        <target>Näytä rajaukset</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowLess">
+      <segment state="initial">
+        <source>Visa mindre</source>
+        <target>Näytä vähemmän</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMore">
+      <segment state="initial">
+        <source>Visa mera</source>
+        <target>Näytä enemmän</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMoreHits">
+      <segment state="initial">
+        <source>Visa fler sökträffar</source>
+        <target>Näytä lisää hakutuloksia</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.SortBy">
@@ -166,6 +298,12 @@
       <segment state="initial">
         <source>Till</source>
         <target>Vuoteen</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Years">
+      <segment state="initial">
+        <source>År</source>
+        <target>Vuodet</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">
@@ -204,10 +342,28 @@
         <target>Hakulause</target>
       </segment>
     </unit>
+    <unit id="est">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Lukuteksti</target>
+      </segment>
+    </unit>
     <unit id="established">
       <segment state="initial">
         <source>Lästext</source>
         <target>Lukuteksti</target>
+      </segment>
+    </unit>
+    <unit id="established_fi">
+      <segment state="initial">
+        <source>Lästext (på finska)</source>
+        <target>Lukuteksti (suomeksi)</target>
+      </segment>
+    </unit>
+    <unit id="established_sv">
+      <segment state="initial">
+        <source>Lästext (på svenska)</source>
+        <target>Lukuteksti (ruotsiksi)</target>
       </segment>
     </unit>
     <unit id="facsimiles">
@@ -258,10 +414,28 @@
         <target>Rajaukset</target>
       </segment>
     </unit>
+    <unit id="fore">
+      <segment state="initial">
+        <source>Förord</source>
+        <target>Esipuhe</target>
+      </segment>
+    </unit>
+    <unit id="Genre">
+      <segment>
+        <source>Genre</source>
+        <target>Tekstilaji</target>
+      </segment>
+    </unit>
     <unit id="illustrations">
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Kuvat</target>
+      </segment>
+    </unit>
+    <unit id="inl">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Johdanto</target>
       </segment>
     </unit>
     <unit id="introduction">
@@ -276,6 +450,30 @@
         <target>Lukuohje</target>
       </segment>
     </unit>
+    <unit id="LetterReceiverLocation">
+      <segment state="initial">
+        <source>Mottagarort (brev)</source>
+        <target>Vastaanottajan paikkakunta (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="LetterReceiverName">
+      <segment state="initial">
+        <source>Mottagare (brev)</source>
+        <target>Vastaanottaja (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="LetterSenderLocation">
+      <segment state="initial">
+        <source>Avsändarort (brev)</source>
+        <target>Lähettäjän paikkakunta (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="LetterSenderName">
+      <segment state="initial">
+        <source>Avsändare (brev)</source>
+        <target>Lähettäjä (kirjeet)</target>
+      </segment>
+    </unit>
     <unit id="manuscripts">
       <segment state="initial">
         <source>Manuskript</source>
@@ -286,6 +484,12 @@
       <segment state="initial">
         <source>Gå till bildbanken</source>
         <target>Kuvapankkiin</target>
+      </segment>
+    </unit>
+    <unit id="ms">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Käsikirjoitus</target>
       </segment>
     </unit>
     <unit id="note">
@@ -597,7 +801,7 @@
     <unit id="Read.CoverPage.ForewordPage">
       <segment state="initial">
         <source>Förord</source>
-        <target>Esipuhe</target>
+        <target>Förord</target>
       </segment>
     </unit>
     <unit id="Read.CoverPage.Introduction">
@@ -640,6 +844,12 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Faksimilet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.AltText">
+      <segment state="initial">
+        <source>Skannat faksimil</source>
+        <target>Skannattu faksimile</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.ChangeFacsimile">
@@ -1032,6 +1242,12 @@
         <target>Sivuston otsikko</target>
       </segment>
     </unit>
+    <unit id="tit">
+      <segment state="initial">
+        <source>Titelblad</source>
+        <target>Nimiölehti</target>
+      </segment>
+    </unit>
     <unit id="TOC.All">
       <segment state="initial">
         <source>Alla</source>
@@ -1128,10 +1344,22 @@
         <target>Sisältö</target>
       </segment>
     </unit>
+    <unit id="Type">
+      <segment state="initial">
+        <source>Texttyp</source>
+        <target>Tekstityyppi</target>
+      </segment>
+    </unit>
     <unit id="uncertainPersonCorresp">
       <segment state="initial">
         <source>ev.</source>
         <target>ev.</target>
+      </segment>
+    </unit>
+    <unit id="var">
+      <segment state="initial">
+        <source>Tryckt variant</source>
+        <target>Painettu variantti</target>
       </segment>
     </unit>
     <unit id="variations">

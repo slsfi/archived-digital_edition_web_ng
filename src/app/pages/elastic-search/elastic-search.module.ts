@@ -1,8 +1,4 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ElasticSearchPage } from './elastic-search';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicModule } from '@ionic/angular';
 import { MarkdownModule } from 'ngx-markdown';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
@@ -14,11 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ElasticSearchPageRoutingModule } from './elastic-search-routing.module';
 import { OccurrencesPageModule } from 'src/app/modals/occurrences/occurrences.module';
 import { FilterPageModule } from 'src/app/modals/filter/filter.module';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { ElasticSearchPage } from './elastic-search';
 
 @NgModule({
   schemas: [
@@ -32,18 +24,11 @@ export function createTranslateLoader(http: HttpClient) {
     CommonModule,
     FormsModule,
     PipesModule,
-      TranslateModule.forChild({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }),
-      ComponentsModule,
-      FilterPageModule,
-      OccurrencesPageModule,
-      MarkdownModule,
-      ElasticSearchPageRoutingModule
+    ComponentsModule,
+    FilterPageModule,
+    OccurrencesPageModule,
+    MarkdownModule,
+    ElasticSearchPageRoutingModule
   ],
   providers: [
     ElasticSearchService,

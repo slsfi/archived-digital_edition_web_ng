@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent, LoadingController, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import size from 'lodash/size';
@@ -82,7 +81,6 @@ export class ElasticSearchPage {
     public modalCtrl: ModalController,
     private platform: Platform,
     protected textService: TextService,
-    public translate: TranslateService,
     private mdContentService: MdContentService,
     public loadingCtrl: LoadingController,
     public elastic: ElasticSearchService,

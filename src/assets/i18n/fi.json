@@ -88,7 +88,8 @@
             "ChangeFacsimile": "Vaihda faksimilea",
             "NoFacsimiles": "Faksimileja ei ole saatavilla.",
             "SelectFacsDialogTitle": "Valitse faksimile",
-            "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen."
+            "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen.",
+            "AltText": "Skannattu faksimile"
         },
         "TitlePage": {
             "Title": "Nimiölehti"
@@ -320,6 +321,8 @@
         "missing": "Sivulla ei ole pysyvää osoitetta"
     },
     "established": "Lukuteksti",
+    "established_sv": "Lukuteksti (ruotsiksi)",
+    "established_fi": "Lukuteksti (suomeksi)",
     "comments": "Kommentaari",
     "facsimiles": "Faksimilet",
     "manuscripts": "Käsikirjoitukset",

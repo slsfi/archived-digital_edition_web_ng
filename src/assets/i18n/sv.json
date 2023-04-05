@@ -88,7 +88,8 @@
             "ChangeFacsimile": "Byt faksimil",
             "NoFacsimiles": "Inga faksimil tillgängliga.",
             "SelectFacsDialogTitle": "Välj faksimil",
-            "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade."
+            "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.",
+            "AltText": "Skannat faksimil"
         },
         "TitlePage": {
             "Title": "Titelblad"
@@ -320,6 +321,8 @@
         "missing": "Sidan saknar beständig webbadress"
     },
     "established": "Lästext",
+    "established_sv": "Lästext (på svenska)",
+    "established_fi": "Lästext (på finska)",
     "comments": "Kommentarer",
     "facsimiles": "Faksimil",
     "manuscripts": "Manuskript",

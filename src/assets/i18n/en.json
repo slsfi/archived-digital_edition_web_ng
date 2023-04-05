@@ -88,7 +88,8 @@
             "ChangeFacsimile": "Select facsimile",
             "NoFacsimiles": "No facsimiles available.",
             "SelectFacsDialogTitle": "Select facsimile",
-            "SelectFacsDialogSubtitle": "The facsimile will be shown in the column where you clicked."
+            "SelectFacsDialogSubtitle": "The facsimile will be shown in the column where you clicked.",
+            "AltText": "Scanned facsimile image"
         },
         "TitlePage": {
             "Title": "Title page"
@@ -320,6 +321,8 @@
         "missing": "This page does not have a persistent identifier"
     },
     "established": "Reading text",
+    "established_sv": "Reading text (in Swedish)",
+    "established_fi": "Reading text (in Finnish)",
     "comments": "Commentary",
     "facsimiles": "Fascimile",
     "manuscripts": "Manuscript",

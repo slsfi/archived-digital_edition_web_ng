@@ -54,6 +54,18 @@
         <target>f.Kr.</target>
       </segment>
     </unit>
+    <unit id="Collection">
+      <segment state="initial">
+        <source>Delutgåva</source>
+        <target>Delutgåva</target>
+      </segment>
+    </unit>
+    <unit id="com">
+      <segment state="initial">
+        <source>Kommentar</source>
+        <target>Kommentar</target>
+      </segment>
+    </unit>
     <unit id="comments">
       <segment state="initial">
         <source>Kommentarer</source>
@@ -150,10 +162,130 @@
         <target>Normalisering</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.AND">
+      <segment state="initial">
+        <source>och</source>
+        <target>och</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.CommentsHitHeadingPrepend">
+      <segment state="initial">
+        <source>Kommentar till</source>
+        <target>Kommentar till</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.FilterResults">
+      <segment state="initial">
+        <source>Avgränsa sökningen</source>
+        <target>Avgränsa sökningen</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Found">
+      <segment state="initial">
+        <source>Texter med sökträffar:</source>
+        <target>Texter med sökträffar:</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.From">
       <segment state="initial">
         <source>Från</source>
         <target>Från</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.HideFacets">
+      <segment state="initial">
+        <source>Dölj avgränsningar</source>
+        <target>Dölj avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LoadingError">
+      <segment state="initial">
+        <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
+        <target>Ett fel har uppstått när sökträffarna skulle laddas.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NewestFirst">
+      <segment state="initial">
+        <source>Nyast först</source>
+        <target>Nyast först</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoFacetOptions">
+      <segment state="initial">
+        <source>Inga sökord</source>
+        <target>Inga sökord</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoHits">
+      <segment state="initial">
+        <source>Sökningen gav inga svar.</source>
+        <target>Sökningen gav inga svar.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OldestFirst">
+      <segment state="initial">
+        <source>Äldst först</source>
+        <target>Äldst först</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OpenInNewWindow">
+      <segment state="initial">
+        <source>Länken öppnas i ett nytt fönster.</source>
+        <target>Länken öppnas i ett nytt fönster.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.PageTitle">
+      <segment state="initial">
+        <source>Sök i utgåvan</source>
+        <target>Sök i utgåvan</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Relevance">
+      <segment state="initial">
+        <source>Relevans</source>
+        <target>Relevans</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ScrollToTop">
+      <segment state="initial">
+        <source>Till början</source>
+        <target>Till början</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Search">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowAllHitHighlights">
+      <segment state="initial">
+        <source>Visa alla träffar i texten</source>
+        <target>Visa alla träffar i texten</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowFacets">
+      <segment state="initial">
+        <source>Visa avgränsningar</source>
+        <target>Visa avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowLess">
+      <segment state="initial">
+        <source>Visa mindre</source>
+        <target>Visa mindre</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMore">
+      <segment state="initial">
+        <source>Visa mera</source>
+        <target>Visa mera</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMoreHits">
+      <segment state="initial">
+        <source>Visa fler sökträffar</source>
+        <target>Visa fler sökträffar</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.SortBy">
@@ -166,6 +298,12 @@
       <segment state="initial">
         <source>Till</source>
         <target>Till</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Years">
+      <segment state="initial">
+        <source>År</source>
+        <target>År</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">
@@ -204,10 +342,28 @@
         <target>Söktext</target>
       </segment>
     </unit>
+    <unit id="est">
+      <segment state="initial">
+        <source>Lästext</source>
+        <target>Lästext</target>
+      </segment>
+    </unit>
     <unit id="established">
       <segment state="initial">
         <source>Lästext</source>
         <target>Lästext</target>
+      </segment>
+    </unit>
+    <unit id="established_fi">
+      <segment state="initial">
+        <source>Lästext (på finska)</source>
+        <target>Lästext (på finska)</target>
+      </segment>
+    </unit>
+    <unit id="established_sv">
+      <segment state="initial">
+        <source>Lästext (på svenska)</source>
+        <target>Lästext (på svenska)</target>
       </segment>
     </unit>
     <unit id="facsimiles">
@@ -258,10 +414,28 @@
         <target>Avgränsningar</target>
       </segment>
     </unit>
+    <unit id="fore">
+      <segment state="initial">
+        <source>Förord</source>
+        <target>Förord</target>
+      </segment>
+    </unit>
+    <unit id="Genre">
+      <segment>
+        <source>Genre</source>
+        <target>Genre</target>
+      </segment>
+    </unit>
     <unit id="illustrations">
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Illustrationer</target>
+      </segment>
+    </unit>
+    <unit id="inl">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Inledning</target>
       </segment>
     </unit>
     <unit id="introduction">
@@ -276,6 +450,30 @@
         <target>Teckenförklaringar</target>
       </segment>
     </unit>
+    <unit id="LetterReceiverLocation">
+      <segment state="initial">
+        <source>Mottagarort (brev)</source>
+        <target>Mottagarort (brev)</target>
+      </segment>
+    </unit>
+    <unit id="LetterReceiverName">
+      <segment state="initial">
+        <source>Mottagare (brev)</source>
+        <target>Mottagare (brev)</target>
+      </segment>
+    </unit>
+    <unit id="LetterSenderLocation">
+      <segment state="initial">
+        <source>Avsändarort (brev)</source>
+        <target>Avsändarort (brev)</target>
+      </segment>
+    </unit>
+    <unit id="LetterSenderName">
+      <segment state="initial">
+        <source>Avsändare (brev)</source>
+        <target>Avsändare (brev)</target>
+      </segment>
+    </unit>
     <unit id="manuscripts">
       <segment state="initial">
         <source>Manuskript</source>
@@ -286,6 +484,12 @@
       <segment state="initial">
         <source>Gå till bildbanken</source>
         <target>Gå till bildbanken</target>
+      </segment>
+    </unit>
+    <unit id="ms">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Manuskript</target>
       </segment>
     </unit>
     <unit id="note">
@@ -640,6 +844,12 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Faksimil</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.AltText">
+      <segment state="initial">
+        <source>Skannat faksimil</source>
+        <target>Skannat faksimil</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.ChangeFacsimile">
@@ -1032,6 +1242,12 @@
         <target>Webbplatsens titel</target>
       </segment>
     </unit>
+    <unit id="tit">
+      <segment state="initial">
+        <source>Titelblad</source>
+        <target>Titelblad</target>
+      </segment>
+    </unit>
     <unit id="TOC.All">
       <segment state="initial">
         <source>Alla</source>
@@ -1128,10 +1344,22 @@
         <target>Innehåll</target>
       </segment>
     </unit>
+    <unit id="Type">
+      <segment state="initial">
+        <source>Texttyp</source>
+        <target>Texttyp</target>
+      </segment>
+    </unit>
     <unit id="uncertainPersonCorresp">
       <segment state="initial">
         <source>ev.</source>
         <target>ev.</target>
+      </segment>
+    </unit>
+    <unit id="var">
+      <segment state="initial">
+        <source>Tryckt variant</source>
+        <target>Tryckt variant</target>
       </segment>
     </unit>
     <unit id="variations">

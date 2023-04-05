@@ -46,6 +46,16 @@
         <source>f.Kr.</source>
       </segment>
     </unit>
+    <unit id="Collection">
+      <segment>
+        <source>Delutgåva</source>
+      </segment>
+    </unit>
+    <unit id="com">
+      <segment>
+        <source>Kommentar</source>
+      </segment>
+    </unit>
     <unit id="comments">
       <segment>
         <source>Kommentarer</source>
@@ -126,9 +136,109 @@
         <source>Normalisering</source>
       </segment>
     </unit>
+    <unit id="ElasticSearch.AND">
+      <segment>
+        <source>och</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.CommentsHitHeadingPrepend">
+      <segment>
+        <source>Kommentar till</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.FilterResults">
+      <segment>
+        <source>Avgränsa sökningen</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Found">
+      <segment>
+        <source>Texter med sökträffar:</source>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.From">
       <segment>
         <source>Från</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.HideFacets">
+      <segment>
+        <source>Dölj avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LoadingError">
+      <segment>
+        <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NewestFirst">
+      <segment>
+        <source>Nyast först</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoFacetOptions">
+      <segment>
+        <source>Inga sökord</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.NoHits">
+      <segment>
+        <source>Sökningen gav inga svar.</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OldestFirst">
+      <segment>
+        <source>Äldst först</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.OpenInNewWindow">
+      <segment>
+        <source>Länken öppnas i ett nytt fönster.</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.PageTitle">
+      <segment>
+        <source>Sök i utgåvan</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Relevance">
+      <segment>
+        <source>Relevans</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ScrollToTop">
+      <segment>
+        <source>Till början</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Search">
+      <segment>
+        <source>Sök ...</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowAllHitHighlights">
+      <segment>
+        <source>Visa alla träffar i texten</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowFacets">
+      <segment>
+        <source>Visa avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowLess">
+      <segment>
+        <source>Visa mindre</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMore">
+      <segment>
+        <source>Visa mera</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.ShowMoreHits">
+      <segment>
+        <source>Visa fler sökträffar</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.SortBy">
@@ -139,6 +249,11 @@
     <unit id="ElasticSearch.To">
       <segment>
         <source>Till</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Years">
+      <segment>
+        <source>År</source>
       </segment>
     </unit>
     <unit id="Epub.Contents">
@@ -171,9 +286,24 @@
         <source>Söktext</source>
       </segment>
     </unit>
+    <unit id="est">
+      <segment>
+        <source>Lästext</source>
+      </segment>
+    </unit>
     <unit id="established">
       <segment>
         <source>Lästext</source>
+      </segment>
+    </unit>
+    <unit id="established_fi">
+      <segment>
+        <source>Lästext (på finska)</source>
+      </segment>
+    </unit>
+    <unit id="established_sv">
+      <segment>
+        <source>Lästext (på svenska)</source>
       </segment>
     </unit>
     <unit id="facsimiles">
@@ -216,9 +346,24 @@
         <source>Avgränsningar</source>
       </segment>
     </unit>
+    <unit id="fore">
+      <segment>
+        <source>Förord</source>
+      </segment>
+    </unit>
+    <unit id="Genre">
+      <segment>
+        <source>Genre</source>
+      </segment>
+    </unit>
     <unit id="illustrations">
       <segment>
         <source>Illustrationer</source>
+      </segment>
+    </unit>
+    <unit id="inl">
+      <segment>
+        <source>Inledning</source>
       </segment>
     </unit>
     <unit id="introduction">
@@ -231,6 +376,26 @@
         <source>Teckenförklaringar</source>
       </segment>
     </unit>
+    <unit id="LetterReceiverLocation">
+      <segment>
+        <source>Mottagarort (brev)</source>
+      </segment>
+    </unit>
+    <unit id="LetterReceiverName">
+      <segment>
+        <source>Mottagare (brev)</source>
+      </segment>
+    </unit>
+    <unit id="LetterSenderLocation">
+      <segment>
+        <source>Avsändarort (brev)</source>
+      </segment>
+    </unit>
+    <unit id="LetterSenderName">
+      <segment>
+        <source>Avsändare (brev)</source>
+      </segment>
+    </unit>
     <unit id="manuscripts">
       <segment>
         <source>Manuskript</source>
@@ -239,6 +404,11 @@
     <unit id="MediaCollections.GotoMediaCollection">
       <segment>
         <source>Gå till bildbanken</source>
+      </segment>
+    </unit>
+    <unit id="ms">
+      <segment>
+        <source>Manuskript</source>
       </segment>
     </unit>
     <unit id="note">
@@ -534,6 +704,11 @@
     <unit id="Read.Facsimiles.AddButtonText">
       <segment>
         <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.AltText">
+      <segment>
+        <source>Skannat faksimil</source>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.ChangeFacsimile">
@@ -861,6 +1036,11 @@
         <source>Webbplatsens titel</source>
       </segment>
     </unit>
+    <unit id="tit">
+      <segment>
+        <source>Titelblad</source>
+      </segment>
+    </unit>
     <unit id="TOC.All">
       <segment>
         <source>Alla</source>
@@ -941,9 +1121,19 @@
         <source>Läs</source>
       </segment>
     </unit>
+    <unit id="Type">
+      <segment>
+        <source>Texttyp</source>
+      </segment>
+    </unit>
     <unit id="uncertainPersonCorresp">
       <segment>
         <source>ev.</source>
+      </segment>
+    </unit>
+    <unit id="var">
+      <segment>
+        <source>Tryckt variant</source>
       </segment>
     </unit>
     <unit id="variations">
