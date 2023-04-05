@@ -17,7 +17,7 @@
   </ion-item>
 </div>
 
-<div class="tei teiContainer teiManuscript" [innerHTML]="text"
+<div class="tei teiContainer teiManuscript" [innerHTML]="text" [attr.lang]="textLanguage ? textLanguage : null"
   [class.show_personInfo]="readPopoverService.show.personInfo"
   [class.show_placeInfo]="readPopoverService.show.placeInfo"
   [class.show_workInfo]="readPopoverService.show.workInfo"

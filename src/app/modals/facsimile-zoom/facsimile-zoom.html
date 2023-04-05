@@ -47,6 +47,7 @@
                     <div *ngIf="!userSettingsService.isMobile() && !userSettingsService.isTablet()">
                         <img alt="facsimile" *ngIf="!facsimilePagesInfinite && (!showBackside || !backsides[activeImage])"
                           [src]="images[activeImage]"
+                          alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText"
                           class="facsimile-zoom-image"
                           [ngStyle]="{'transform':'scale('+zoom+') rotate('+angle+'deg) translate3d(' + prevX + 'px, ' + prevY + 'px, 0px)', 'max-height':'calc(100vh - '+toolbarHeight+'px)'}"
                           (wheel)="onMouseWheel($event)"
@@ -57,6 +58,7 @@
                         >
                         <img alt="facsimile" *ngIf="!facsimilePagesInfinite && showBackside && backsides[activeImage]"
                           [src]="getBacksideUrl(images[activeImage])"
+                          alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText"
                           class="facsimile-zoom-image"
                           [ngStyle]="{'transform':'scale('+zoom+') rotate('+angle+'deg) translate3d(' + prevX + 'px, ' + prevY + 'px, 0px)', 'max-height':'calc(100vh - '+toolbarHeight+'px)'}"
                           (wheel)="onMouseWheel($event)"
@@ -67,6 +69,7 @@
                         >
                         <img alt="facsimile" *ngIf="facsimilePagesInfinite && facsNumber"
                           [src]="facsUrl + facsNumber + '/' + facsSize"
+                          alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText"
                           class="facsimile-zoom-image"
                           [ngStyle]="{'transform':'scale('+zoom+') rotate('+angle+'deg) translate3d(' + prevX + 'px, ' + prevY + 'px, 0px)', 'max-height':'calc(100vh - '+toolbarHeight+'px)'}"
                           (wheel)="onMouseWheel($event)"
@@ -79,12 +82,12 @@
                     <div *ngIf="(userSettingsService.isMobile() || userSettingsService.isTablet())">
                         <div *ngIf="!facsimilePagesInfinite">
                             <pinch-zoom overflow="visible" backgroundColor="transparent" [limit-zoom]="40" [minPanScale]="0">
-                                <img alt="facsimile" [src]="images[activeImage]" class="facsimile-zoom-image" [ngStyle]="{'max-height':'calc(100vh - '+toolbarHeight+'px)'}">
+                                <img alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText" [src]="images[activeImage]" class="facsimile-zoom-image" [ngStyle]="{'max-height':'calc(100vh - '+toolbarHeight+'px)'}">
                             </pinch-zoom>
                         </div>
                         <div *ngIf="facsimilePagesInfinite && facsNumber">
                             <pinch-zoom overflow="visible" backgroundColor="transparent" [limit-zoom]="40" [minPanScale]="0">
-                                <img alt="facsimile" [src]="facsUrl + facsNumber" class="facsimile-zoom-image" [ngStyle]="{'max-height':'calc(100vh - '+toolbarHeight+'px)'}">
+                                <img alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText" [src]="facsUrl + facsNumber" class="facsimile-zoom-image" [ngStyle]="{'max-height':'calc(100vh - '+toolbarHeight+'px)'}">
                             </pinch-zoom>
                         </div>
                     </div>

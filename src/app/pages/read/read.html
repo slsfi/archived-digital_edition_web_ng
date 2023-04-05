@@ -85,6 +85,8 @@
           <ion-card>
             <ion-card-header class="column-card-title">
               <ng-container *ngIf="view.type == 'established'" i18n="@@established">Lästext</ng-container>
+              <ng-container *ngIf="view.type == 'established_sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
+              <ng-container *ngIf="view.type == 'established_fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
               <ng-container *ngIf="view.type == 'comments'" i18n="@@comments">Kommentarer</ng-container>
               <ng-container *ngIf="view.type == 'facsimiles'" i18n="@@facsimiles">Faksimil</ng-container>
               <ng-container *ngIf="view.type == 'manuscripts'" i18n="@@manuscripts">Manuskript</ng-container>

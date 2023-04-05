@@ -24,6 +24,7 @@ export class ReadTextComponent {
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
 
   public text: any;
+  textLanguage: string = '';
   illustrationsVisibleInReadtext: boolean = false;
   illustrationsViewAvailable: boolean = false;
   intervalTimerId: number;
@@ -98,6 +99,11 @@ export class ReadTextComponent {
           }
         } else {
           this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
+        }
+        if (res && res.language) {
+          this.textLanguage = res.language;
+        } else {
+          this.textLanguage = '';
         }
       },
       error: (e) => {

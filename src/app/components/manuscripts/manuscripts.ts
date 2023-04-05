@@ -24,6 +24,7 @@ export class ManuscriptsComponent {
   @Output() selectedMsID = new EventEmitter<string>();
 
   public text: any = '';
+  textLanguage: string = '';
   manuscripts: any = [];
   selectedManuscript: any = undefined;
   showNormalizedMs = false;
@@ -101,6 +102,11 @@ export class ManuscriptsComponent {
       text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
 
+      if (this.selectedManuscript.language) {
+        this.textLanguage = this.selectedManuscript.language;
+      } else {
+        this.textLanguage = '';
+      }
     }
   }
 
