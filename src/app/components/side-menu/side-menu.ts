@@ -78,7 +78,7 @@ export class SideMenu implements OnInit {
     this.getCollectionList();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const menuArray = ['/about', '/epub', '/collection', '/media-collection', '/tags', '/works', '/person-search', '/places']
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -92,7 +92,7 @@ export class SideMenu implements OnInit {
       this.selectedMenu.push(initialSelectedMenu)
     })
 
-    this.initializeApp();
+    await this.initializeApp();
     if (this._config.show?.TOC?.MediaCollections) {
       this.getMediaCollections().then((mediaCollectionMenu) => {
         if (mediaCollectionMenu && mediaCollectionMenu.length > 0) {
@@ -258,9 +258,9 @@ export class SideMenu implements OnInit {
     }
   }
 
-  initializeApp() {
+  async initializeApp() {
     this.getStaticPagesMenus();
-    this.getAboutPages();
+    await this.getAboutPages();
   }
 
   romanToInt(str1: any) {
