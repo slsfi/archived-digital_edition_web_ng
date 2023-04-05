@@ -6,6 +6,36 @@
         <target>Lyhenne</target>
       </segment>
     </unit>
+    <unit id="About.Language">
+      <segment state="initial">
+        <source>Språk</source>
+        <target>Kieli</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewMode">
+      <segment state="initial">
+        <source>Visningsläge</source>
+        <target>Näyttötila</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeAuto">
+      <segment state="initial">
+        <source>Auto</source>
+        <target>Auto</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeDesktop">
+      <segment state="initial">
+        <source>Desktop</source>
+        <target>Desktop</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeMobile">
+      <segment state="initial">
+        <source>Mobil</source>
+        <target>Mobiili</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -36,10 +66,76 @@
         <target>Toimittajan huomautus</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightNotice">
+      <segment state="initial">
+        <source>Licens: CC BY-NC-ND 4.0</source>
+        <target>Lisenssi: CC BY-NC-ND 4.0</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightNoticeIntroduction">
+      <segment state="initial">
+        <source>Licens: CC BY-NC-ND 4.0</source>
+        <target>Lisenssi: CC BY-NC-ND 4.0</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment state="initial">
         <source>Ladda ner</source>
         <target>Lataa</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.Print">
+      <segment state="initial">
+        <source>Utskrift</source>
+        <target>Tulosta</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.TXT">
+      <segment state="initial">
+        <source>TXT</source>
+        <target>TXT</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XML">
+      <segment state="initial">
+        <source>XML</source>
+        <target>XML</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Instructions">
+      <segment state="initial">
+        <source>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+        <target>Tästä voit ladata tekstit eri tiedostomuodoissa. Voit myös avata tekstit uuteen ikkunaan tulostusta varten (sinun on sallittava popup-ikkunat verkkosivustolta).</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.InstructionsIntroduction">
+      <segment state="initial">
+        <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+        <target>Tästä voit ladata johdannon tai avata sen uuteen ikkunaan tulostusta varten (sinun on sallittava popup-ikkunat verkkosivustolta).</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Print">
+      <segment state="initial">
+        <source>Skriv ut</source>
+        <target>Tulosta</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.TextLoadingError">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
+        <target>On syntynyt virhe. Tekstin lataus epäonnistui.</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Textsize">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Tekstin koko</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Title">
+      <segment state="initial">
+        <source>Ladda ner och skriv ut</source>
+        <target>Lataa ja tulosta</target>
       </segment>
     </unit>
     <unit id="editorialChange">
@@ -54,10 +150,58 @@
         <target>Normalisointi</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.From">
+      <segment state="initial">
+        <source>Från</source>
+        <target>Vuodesta</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.SortBy">
       <segment state="initial">
         <source>Sortera enligt</source>
         <target>Lajittele</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.To">
+      <segment state="initial">
+        <source>Till</source>
+        <target>Vuoteen</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Contents">
+      <segment state="initial">
+        <source>Innehåll</source>
+        <target>Sisältö</target>
+      </segment>
+    </unit>
+    <unit id="Epub.DisplayOptions">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Tekstikoko</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Lataa</target>
+      </segment>
+    </unit>
+    <unit id="Epub.FileNotFound">
+      <segment state="initial">
+        <source>Texten kunde inte laddas. Epub-filen saknas.</source>
+        <target>Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole.</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Haku</target>
+      </segment>
+    </unit>
+    <unit id="Epub.SearchPhrase">
+      <segment state="initial">
+        <source>Söktext</source>
+        <target>Hakulause</target>
       </segment>
     </unit>
     <unit id="established">
@@ -118,6 +262,12 @@
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Kuvat</target>
+      </segment>
+    </unit>
+    <unit id="introduction">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Johdanto</target>
       </segment>
     </unit>
     <unit id="legend">
@@ -294,6 +444,24 @@
         <target>Teosten esiintymät eivät ole saatavilla.</target>
       </segment>
     </unit>
+    <unit id="PersonSearch">
+      <segment state="initial">
+        <source>Personregister</source>
+        <target>Personregister</target>
+      </segment>
+    </unit>
+    <unit id="PersonSearch2">
+      <segment state="initial">
+        <source>Personregister 2</source>
+        <target>Personregister 2</target>
+      </segment>
+    </unit>
+    <unit id="PersonSearch3">
+      <segment state="initial">
+        <source>Personregister 3</source>
+        <target>Personregister 3</target>
+      </segment>
+    </unit>
     <unit id="Read.AddColumn">
       <segment state="initial">
         <source>Ny kolumn</source>
@@ -418,6 +586,12 @@
       <segment state="initial">
         <source>Inga kommentarer.</source>
         <target>Ei kommentteja.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Title">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Kommentaari</target>
       </segment>
     </unit>
     <unit id="Read.CoverPage.ForewordPage">
@@ -618,10 +792,88 @@
         <target>Näytä muutokset toteutettuina</target>
       </segment>
     </unit>
+    <unit id="Read.Popover.Abbreviations">
+      <segment state="initial">
+        <source>Förkortningar</source>
+        <target>Lyhennykset</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.All">
+      <segment state="initial">
+        <source>Välj alla</source>
+        <target>Valitse kaikki</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Changes">
+      <segment state="initial">
+        <source>Utgivarens ändringar</source>
+        <target>Toimittajan tekemät muutokset</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Comments">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Kommentit</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Normalisations">
+      <segment state="initial">
+        <source>Normaliseringar</source>
+        <target>Normalisoinnit</target>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Options">
       <segment state="initial">
         <source>Inställningar</source>
         <target>Asetukset</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakEdition">
+      <segment state="initial">
+        <source>Sidnummer i den tryckta utgåvan</source>
+        <target>Painetun edition sivunumerot</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakOriginal">
+      <segment state="initial">
+        <source>Sidnummer/-brytning i originalet</source>
+        <target>Alkuteoksen sivunumerot/sivunvaihdot</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.ParagraphNumbering">
+      <segment state="initial">
+        <source>Stycke-/radnumrering</source>
+        <target>Kappale-/rivinumerointi</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PersonInfo">
+      <segment state="initial">
+        <source>Personupplysningar</source>
+        <target>Henkilöt</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PlaceInfo">
+      <segment state="initial">
+        <source>Platsupplysningar</source>
+        <target>Paikannimet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Show">
+      <segment state="initial">
+        <source>Visningsalternativ</source>
+        <target>Näkymävaihtoehdot</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Textsize">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Tekstin koko</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.WorkInfo">
+      <segment state="initial">
+        <source>Verkupplysningar</source>
+        <target>Teokset</target>
       </segment>
     </unit>
     <unit id="Read.ShowAll">
@@ -690,10 +942,76 @@
         <target>Valitse variantti</target>
       </segment>
     </unit>
+    <unit id="Reference.established">
+      <segment state="initial">
+        <source>Hänvisa till denna lästext</source>
+        <target>Lähdevittaus tähän lukutekstiin</target>
+      </segment>
+    </unit>
+    <unit id="Reference.intro">
+      <segment state="initial">
+        <source>Hänvisa till denna inledning</source>
+        <target>Lähdevittaus tähän johdantoon</target>
+      </segment>
+    </unit>
+    <unit id="Reference.mediaCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna bildsamling</source>
+        <target>Lähdeviittaus tähän kuvakokoelmaan</target>
+      </segment>
+    </unit>
+    <unit id="Reference.missing">
+      <segment state="initial">
+        <source>Sidan saknar beständig webbadress</source>
+        <target>Sivulla ei ole pysyvää osoitetta</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageEpub">
+      <segment state="initial">
+        <source>Hänvisa till denna text</source>
+        <target>Lähdeviittaus tähän tekstiin</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageForeword">
+      <segment state="initial">
+        <source>Hänvisa till detta förord</source>
+        <target>Lähdeviittaus tähän esipuheeseen</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageTitle">
+      <segment state="initial">
+        <source>Hänvisa till denna delutgåva</source>
+        <target>Lähdeviittaus editioon</target>
+      </segment>
+    </unit>
+    <unit id="Reference.permaLink">
+      <segment state="initial">
+        <source>Beständig webbadress</source>
+        <target>Pysyvä osoite</target>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Viittaa</target>
+      </segment>
+    </unit>
+    <unit id="Reference.thisPage">
+      <segment state="initial">
+        <source>Hänvisa till denna sida</source>
+        <target>Lähdevittaus</target>
+      </segment>
+    </unit>
+    <unit id="Reference.title">
+      <segment state="initial">
+        <source>Källhänvisning</source>
+        <target>Viittausohje</target>
+      </segment>
+    </unit>
+    <unit id="Reference.topMenu">
+      <segment state="initial">
+        <source>Hänvisa till denna webbutgåva</source>
+        <target>Lähdeviittaus tähän digitaaliseen editioon</target>
       </segment>
     </unit>
     <unit id="revisionNote">
@@ -714,15 +1032,27 @@
         <target>Sivuston otsikko</target>
       </segment>
     </unit>
+    <unit id="TOC.All">
+      <segment state="initial">
+        <source>Alla</source>
+        <target>Kaikki</target>
+      </segment>
+    </unit>
+    <unit id="TOC.EPUBS">
+      <segment state="initial">
+        <source>Epub</source>
+        <target>Epub</target>
+      </segment>
+    </unit>
     <unit id="TOC.Home">
       <segment state="initial">
-        <source>Till startsidan</source>
-        <target>Etusivulle</target>
+        <source>Hem</source>
+        <target>Etusivu</target>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
       <segment state="initial">
-        <source>Album</source>
+        <source>Bildbank</source>
         <target>Kuvapankki</target>
       </segment>
     </unit>
@@ -736,6 +1066,36 @@
       <segment state="initial">
         <source>Ortregister</source>
         <target>Paikkahakemisto</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read">
+      <segment state="initial">
+        <source>Innehåll</source>
+        <target>Sisältö</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read1">
+      <segment state="initial">
+        <source>Innehåll 2</source>
+        <target>Sisältö 2</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read2">
+      <segment state="initial">
+        <source>Innehåll 3</source>
+        <target>Sisältö 3</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read3">
+      <segment state="initial">
+        <source>Innehåll 4</source>
+        <target>Sisältö 4</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read4">
+      <segment state="initial">
+        <source>Innehåll 5</source>
+        <target>Sisältö 5</target>
       </segment>
     </unit>
     <unit id="TOC.TagSearch">
@@ -766,12 +1126,6 @@
       <segment state="initial">
         <source>Läs</source>
         <target>Sisältö</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.SimpleSearch">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Hae</target>
       </segment>
     </unit>
     <unit id="uncertainPersonCorresp">

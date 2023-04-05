@@ -111,7 +111,7 @@ export const config: Config = {
       normalisations: true,
       workInfo: true,
       abbreviations: true,
-      pageNumbering: true,
+      paragraphNumbering: true,
       pageBreakOriginal: true,
       pageBreakEdition: true
     },
@@ -119,7 +119,7 @@ export const config: Config = {
       personInfo: true,
       placeInfo: false,
       workInfo: true,
-      pageNumbering: true,
+      paragraphNumbering: true,
       pageBreakEdition: true
     },
     toolTips: {
@@ -582,7 +582,7 @@ export const config_soderholm: Config = {
       normalisations: false,
       workInfo: false,
       abbreviations: false,
-      pageNumbering: false,
+      paragraphNumbering: false,
       pageBreakOriginal: false,
       pageBreakEdition: false
     },
@@ -590,7 +590,7 @@ export const config_soderholm: Config = {
       personInfo: false,
       placeInfo: false,
       workInfo: false,
-      pageNumbering: false,
+      paragraphNumbering: false,
       pageBreakEdition: false
     },
     toolTips: {
@@ -1115,7 +1115,7 @@ export const config_mechelin: Config = {
       normalisations: true,
       workInfo: false,
       abbreviations: true,
-      pageNumbering: false,
+      paragraphNumbering: false,
       pageBreakOriginal: true,
       pageBreakEdition: false
     },
@@ -1123,7 +1123,7 @@ export const config_mechelin: Config = {
       personInfo: false,
       placeInfo: false,
       workInfo: false,
-      pageNumbering: false,
+      paragraphNumbering: false,
       pageBreakEdition: false
     },
     toolTips: {

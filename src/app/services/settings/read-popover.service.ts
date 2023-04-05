@@ -20,7 +20,7 @@ export class ReadPopoverService {
     'workInfo': false,
     'changes': false,
     'normalisations': false,
-    'pageNumbering': false,
+    'paragraphNumbering': false,
     'pageBreakOriginal': false,
     'pageBreakEdition': false
   };

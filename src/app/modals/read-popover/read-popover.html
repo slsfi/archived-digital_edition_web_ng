@@ -1,6 +1,6 @@
 <ion-list lines="full">
   <ion-list-header>
-    <ion-label>{{'Read.Popover.Appearance' | translate}}</ion-label>
+    <ion-label i18n="@@Read.Popover.Textsize">Textstorlek</ion-label>
         <ion-button class="close" (click)="close()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
@@ -16,61 +16,61 @@
 
 <ion-list *ngIf="togglesCounter > 0" lines="full">
   <ion-list-header>
-    <ion-label>{{'Read.Popover.Show' | translate}}</ion-label>
+    <ion-label i18n="@@Read.Popover.Show">Visningsalternativ</ion-label>
   </ion-list-header>
 
   <ion-item *ngIf="togglesCounter > 1">
-    <ion-label>{{'Read.Popover.All' | translate}}</ion-label>
+    <ion-label i18n="@@Read.Popover.All">Välj alla</ion-label>
     <ion-toggle (ionChange)="toggleAll($event)" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.comments">
-    <ion-label class="show_comments"><img alt="asterix image" src="assets/images/asterix.svg" class="asterix"/>{{'Read.Popover.Comments' | translate}}</ion-label>
+    <ion-label class="show_comments"><img alt="asterix image" src="assets/images/asterix.svg" class="asterix"/><ng-container i18n="@@Read.Popover.Comments">Kommentarer</ng-container></ion-label>
     <ion-toggle [(ngModel)]="show.comments" (ionChange)="toggleComments()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.personInfo">
-    <ion-label class="show_personInfo">{{'Read.Popover.PersonInfo' | translate}}</ion-label>
+    <ion-label class="show_personInfo" i18n="@@Read.Popover.PersonInfo">Personupplysningar</ion-label>
     <ion-toggle [(ngModel)]="show.personInfo" (ionChange)="togglePersonInfo()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.placeInfo">
-    <ion-label class="show_placeInfo">{{'Read.Popover.PlaceInfo' | translate}}</ion-label>
+    <ion-label class="show_placeInfo" i18n="@@Read.Popover.PlaceInfo">Platsupplysningar</ion-label>
     <ion-toggle [(ngModel)]="show.placeInfo" (ionChange)="togglePlaceInfo()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.workInfo">
-    <ion-label class="show_workInfo">{{'Read.Popover.WorkInfo' | translate}}</ion-label>
+    <ion-label class="show_workInfo" i18n="@@Read.Popover.WorkInfo">Verkupplysningar</ion-label>
     <ion-toggle [(ngModel)]="show.workInfo" (ionChange)="toggleWorkInfo()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.abbreviations">
-    <ion-label class="show_abbreviations">{{'Read.Popover.Abbreviations' | translate}}</ion-label>
+    <ion-label class="show_abbreviations" i18n="@@Read.Popover.Abbreviations">Förkortningar</ion-label>
     <ion-toggle [(ngModel)]="show.abbreviations" (ionChange)="toggleAbbreviations()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.changes">
-    <ion-label class="show_changesInfo">{{'Read.Popover.Changes' | translate}}</ion-label>
+    <ion-label class="show_changesInfo" i18n="@@Read.Popover.Changes">Utgivarens ändringar</ion-label>
     <ion-toggle [(ngModel)]="show.changes" (ionChange)="toggleChanges()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.normalisations">
-    <ion-label class="show_normalisationsInfo">{{'Read.Popover.Normalisations' | translate}}</ion-label>
+    <ion-label class="show_normalisationsInfo" i18n="@@Read.Popover.Normalisations">Normaliseringar</ion-label>
     <ion-toggle [(ngModel)]="show.normalisations" (ionChange)="toggleNormalisations()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="readToggles.pageNumbering">
-    <ion-label>{{'Read.Popover.PageNumbering' | translate}}</ion-label>
-    <ion-toggle [(ngModel)]="show.pageNumbering" (ionChange)="togglePageNumbering()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
+  <ion-item *ngIf="readToggles.paragraphNumbering">
+    <ion-label i18n="@@Read.Popover.ParagraphNumbering">Stycke-/radnumrering</ion-label>
+    <ion-toggle [(ngModel)]="show.paragraphNumbering" (ionChange)="toggleParagraphNumbering()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.pageBreakOriginal">
-    <ion-label>{{'Read.Popover.PageBreakOriginal' | translate}}</ion-label>
+    <ion-label i18n="@@Read.Popover.PageBreakOriginal">Sidnummer/-brytning i originalet</ion-label>
     <ion-toggle [(ngModel)]="show.pageBreakOriginal" (ionChange)="togglePageBreakOriginal()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="readToggles.pageBreakEdition">
-    <ion-label>{{'Read.Popover.PageBreakEdition' | translate}}</ion-label>
+    <ion-label i18n="@@Read.Popover.PageBreakEdition">Sidnummer i den tryckta utgåvan</ion-label>
     <ion-toggle [(ngModel)]="show.pageBreakEdition" (ionChange)="togglePageBreakEdition()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
   </ion-item>
 </ion-list>

@@ -272,11 +272,11 @@ div.tei .dramaversereply .negIndent {
   text-indent: 0;
 }
 
-.tei.show_pageNumbering div.dramaversereply span.paragraph_number,
-.tei.show_pageNumbering p.lgIndent span.paragraph_number {
+.tei.show_paragraphNumbering div.dramaversereply span.paragraph_number,
+.tei.show_paragraphNumbering p.lgIndent span.paragraph_number {
   margin-left: -80px;
 }
-.tei.show_pageNumbering p.lgIndent.lIndent span.paragraph_number {
+.tei.show_paragraphNumbering p.lgIndent.lIndent span.paragraph_number {
   margin-left: -115px;
 }
 

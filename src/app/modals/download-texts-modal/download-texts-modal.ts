@@ -1,6 +1,5 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from 'src/app/services/events/events.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
@@ -52,7 +51,6 @@ export class DownloadTextsModalPage {
     private textService: TextService,
     private commentService: CommentService,
     private events: EventsService,
-    public translate: TranslateService,
     public readPopoverService: ReadPopoverService,
     private tocService: TableOfContentsService,
     public commonFunctions: CommonFunctionsService,
@@ -133,68 +131,60 @@ export class DownloadTextsModalPage {
     }
 
     // Get translations
-    this.translate.get('DownloadTexts').subscribe({
-      next: translation => {
-        if (this.readTextsMode) {
-          if (translation.Instructions) {
-            this.showInstructions = true;
-            this.instructionsText = translation.Instructions;
-          } else {
-            this.showInstructions = false;
-          }
-          if (translation.CopyrightNotice) {
-            this.showCopyright = true;
-            this.copyrightText = translation.CopyrightNotice;
-          } else {
-            this.showCopyright = false;
-          }
-        } else if (this.introductionMode) {
-          if (translation.InstructionsIntroduction) {
-            this.showInstructions = true;
-            this.instructionsText = translation.InstructionsIntroduction;
-          } else {
-            this.showInstructions = false;
-          }
-          if (translation.CopyrightNoticeIntroduction) {
-            this.showCopyright = true;
-            this.copyrightText = translation.CopyrightNoticeIntroduction;
-          } else {
-            this.showCopyright = false;
-          }
-        }
-        if (translation.Print) {
-          this.printTranslation = translation.Print;
-        } else {
-          this.printTranslation = 'Print';
-        }
-        if (translation.Textsize) {
-          this.textSizeTranslation = translation.Textsize;
-        } else {
-          this.textSizeTranslation = 'Text size';
-        }
-      },
-      error: e => {
+    if (this.readTextsMode) {
+      if ($localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
+        this.showInstructions = true;
+        this.instructionsText = $localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
+      } else {
         this.showInstructions = false;
+      }
+      if ($localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`) {
+        this.showCopyright = true;
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`;
+      } else {
         this.showCopyright = false;
       }
-    });
+    } else if (this.introductionMode) {
+      if ($localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
+        this.showInstructions = true;
+        this.instructionsText = $localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
+      } else {
+        this.showInstructions = false;
+      }
+      if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
+        this.showCopyright = true;
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
+      } else {
+        this.showCopyright = false;
+      }
+    }
+    if ($localize`:@@DownloadTexts.Print:Skriv ut`) {
+      this.printTranslation = $localize`:@@DownloadTexts.Print:Skriv ut`;
+    } else {
+      this.printTranslation = 'Skriv ut';
+    }
+    if ($localize`:@@DownloadTexts.Textsize:Textstorlek`) {
+      this.textSizeTranslation = $localize`:@@DownloadTexts.Textsize:Textstorlek`;
+    } else {
+      this.textSizeTranslation = 'Text storlek';
+    }
 
     // Get collection title from database
     this.textService.getCollection(this.collectionId as string).subscribe({
-      next: collectionData => {
+      next: (collectionData) => {
         if (collectionData[0] !== undefined) {
           this.collectionTitle = collectionData[0]['name'];
         } else {
           this.collectionTitle = '';
         }
       },
-      error: e => { this.collectionTitle = ''; }
+      error: (e) => { this.collectionTitle = ''; }
     });
 
     // Get publication title from TOC (this way we can also get correct chapter titles for publications with chapters)
     if (this.readTextsMode) {
-      this.tocService.getTableOfContents(this.collectionId as string).subscribe(
-        (toc: any) => {
+      this.tocService.getTableOfContents(this.collectionId as string).subscribe({
+        next: (toc: any) => {
           if (toc !== null) {
             if (toc.children) {
               let searchItemId = this.collectionId + '_' + this.publicationId;
@@ -210,35 +200,17 @@ export class DownloadTextsModalPage {
             }
           }
         }
-      );
+      });
     }
 
     // Get translation for comments-column title
     if (this.readTextsMode) {
-      this.translate.get('Read.Comments.Title').subscribe({
-        next: translation => {
-          if (translation && translation !== 'Read.Comments.Title') {
-            this.commentTitle = translation;
-          } else {
-            this.commentTitle = '';
-          }
-        },
-        error: e => { this.commentTitle = ''; }
-      });
+      this.commentTitle = $localize`:@@Read.Comments.Title:Kommentarer`;
     }
 
     // Get translation for introduction title
     if (this.introductionMode) {
-      this.translate.get('Read.Introduction.Title').subscribe({
-        next: translation => {
-          if (translation) {
-            this.introductionTitle = translation;
-          } else {
-            this.introductionTitle = '';
-          }
-        },
-        error: e => { this.introductionTitle = ''; }
-      });
+      this.introductionTitle = $localize`:@@Read.Introduction.Title:Inledning`;
     }
 
   }
@@ -443,79 +415,75 @@ export class DownloadTextsModalPage {
                 }
               }
               if (metadata['letter'] !== undefined && metadata['letter'] !== null) {
-                this.translate.get('Read.Comments.Manuscript').subscribe(
-                  translation => {
-                    let mContent = '';
-                    mContent += '<div class="ms">\n';
-                    mContent += '<h3>' + translation.Title + '</h3>\n';
-                    mContent += '<ul>\n';
-                    mContent += '<li>' + translation.LegacyId + ': ' + metadata.letter.legacy_id + '</li>\n';
-                    mContent += '<li>' + translation.Sender + ': ' + concatSenders + '</li>\n';
-                    mContent += '<li>' + translation.Receiver + ': ' + concatReceivers + '</li>\n';
-                    mContent += '<li>' + translation.Archive + ': ' + metadata.letter.source_archive + '</li>\n';
-                    mContent += '<li>' + translation.Collection + ': ' + metadata.letter.source_collection_id + '</li>\n';
-                    mContent += '</ul>\n';
-                    mContent += '<ul>\n';
-                    if (metadata.letter.material_type) {
-                      mContent += '<li>' + translation.Type + ': ' + metadata.letter.material_type + '</li>\n';
-                    }
-                    if (metadata.letter.material_source) {
-                      mContent += '<li>' + translation.Status + ': ' + metadata.letter.material_source + '</li>\n';
-                    }
-                    if (metadata.letter.material_format) {
-                      mContent += '<li>' + translation.Format + ': ' + metadata.letter.material_format + '</li>\n';
-                    }
-                    if (metadata.letter.leaf_count) {
-                      mContent += '<li>' + translation.Leafs + ': ' + metadata.letter.leaf_count + '</li>\n';
-                    }
-                    if (metadata.letter.sheet_count) {
-                      mContent += '<li>' + translation.Sheets + ': ' + metadata.letter.sheet_count + '</li>\n';
-                    }
-                    if (metadata.letter.page_count) {
-                      mContent += '<li>' + translation.Pages + ': ' + metadata.letter.page_count + '</li>\n';
-                    }
-                    if (metadata.letter.material_color) {
-                      mContent += '<li>' + translation.Color + ': ' + metadata.letter.material_color + '</li>\n';
-                    }
-                    if (metadata.letter.material_quality) {
-                      mContent += '<li>' + translation.Quality + ': ' + metadata.letter.material_quality + '</li>\n';
-                    }
-                    if (metadata.letter.material_pattern) {
-                      mContent += '<li>' + translation.Pattern + ': ' + metadata.letter.material_pattern + '</li>\n';
-                    }
-                    if (metadata.letter.material_state) {
-                      mContent += '<li>' + translation.State + ': ' + metadata.letter.material_state + '</li>\n';
-                    }
-                    if (metadata.letter.material) {
-                      mContent += '<li>' + translation.Material + ': ' + metadata.letter.material + '</li>\n';
-                    }
-                    if (metadata.letter.material_notes) {
-                      mContent += '<li>' + translation.Other + ': ' + metadata.letter.material_notes + '</li>\n';
-                    }
-                    mContent += '</ul>\n';
-                    mContent += '</div>\n';
+                let mContent = '';
+                mContent += '<div class="ms">\n';
+                mContent += '<h3>' + $localize`:@@Read.Comments.Manuscript.Title:Manuskriptbeskrivning` + '</h3>\n';
+                mContent += '<ul>\n';
+                mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.LegacyId:Brevsignum` + ': ' + metadata.letter.legacy_id + '</li>\n';
+                mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Sender:Avsändare` + ': ' + concatSenders + '</li>\n';
+                mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Receiver:Mottagare` + ': ' + concatReceivers + '</li>\n';
+                mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Archive:Arkiv` + ': ' + metadata.letter.source_archive + '</li>\n';
+                mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Collection:Samling, signum` + ': ' + metadata.letter.source_collection_id + '</li>\n';
+                mContent += '</ul>\n';
+                mContent += '<ul>\n';
+                if (metadata.letter.material_type) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Type:Form` + ': ' + metadata.letter.material_type + '</li>\n';
+                }
+                if (metadata.letter.material_source) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Status:Status` + ': ' + metadata.letter.material_source + '</li>\n';
+                }
+                if (metadata.letter.material_format) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Format:Format` + ': ' + metadata.letter.material_format + '</li>\n';
+                }
+                if (metadata.letter.leaf_count) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Leafs:Lägg` + ': ' + metadata.letter.leaf_count + '</li>\n';
+                }
+                if (metadata.letter.sheet_count) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Sheets:Antal blad` + ': ' + metadata.letter.sheet_count + '</li>\n';
+                }
+                if (metadata.letter.page_count) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Pages:Sidor brevtext` + ': ' + metadata.letter.page_count + '</li>\n';
+                }
+                if (metadata.letter.material_color) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Color:Färg` + ': ' + metadata.letter.material_color + '</li>\n';
+                }
+                if (metadata.letter.material_quality) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Quality:Kvalitet` + ': ' + metadata.letter.material_quality + '</li>\n';
+                }
+                if (metadata.letter.material_pattern) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Pattern:Mönster` + ': ' + metadata.letter.material_pattern + '</li>\n';
+                }
+                if (metadata.letter.material_state) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.State:Tillstånd` + ': ' + metadata.letter.material_state + '</li>\n';
+                }
+                if (metadata.letter.material) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Material:Skrivmaterial` + ': ' + metadata.letter.material + '</li>\n';
+                }
+                if (metadata.letter.material_notes) {
+                  mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Other:Övrigt` + ': ' + metadata.letter.material_notes + '</li>\n';
+                }
+                mContent += '</ul>\n';
+                mContent += '</div>\n';
 
-                    const contentParts = content.split('</div>\n</comments>');
-                    content = contentParts[0] + mContent + '</div>\n</comments>' + contentParts[1];
+                const contentParts = content.split('</div>\n</comments>');
+                content = contentParts[0] + mContent + '</div>\n</comments>' + contentParts[1];
 
-                    try {
-                      const newWindowRef = window.open();
-                      if (newWindowRef) {
-                        newWindowRef.document.write(content);
-                        newWindowRef.document.close();
-                        newWindowRef.focus();
-                      } else {
-                        this.showErrorMessage = true;
-                        console.log('unable to open new window');
-                      }
-                      this.loadingCom = false;
-                    } catch (e) {
-                      this.loadingCom = false;
-                      this.showErrorMessage = true;
-                      console.log('error opening comment text in print format in new window', e);
-                    }
+                try {
+                  const newWindowRef = window.open();
+                  if (newWindowRef) {
+                    newWindowRef.document.write(content);
+                    newWindowRef.document.close();
+                    newWindowRef.focus();
+                  } else {
+                    this.showErrorMessage = true;
+                    console.log('unable to open new window');
                   }
-                );
+                  this.loadingCom = false;
+                } catch (e) {
+                  this.loadingCom = false;
+                  this.showErrorMessage = true;
+                  console.log('error opening comment text in print format in new window', e);
+                }
               }
             } else {
               try {
@@ -576,7 +544,7 @@ export class DownloadTextsModalPage {
     header += '    div.tei.teiContainer { padding-bottom: 0; line-height: 1.45em; }\n';
     header += '    div.tei.teiContainer p { line-height: 1.45em; }\n';
     header += '    div.tei p.teiComment.note { margin-top: 0.25rem; margin-left: 1.5em; text-indent: -1.5em; }\n';
-    header += '    read-text .tei.show_pageNumbering, page-introduction .tei.show_pageNumbering { padding-left: 35px; }\n';
+    header += '    read-text .tei.show_paragraphNumbering, page-introduction .tei.show_paragraphNumbering { padding-left: 35px; }\n';
     header += '    div.tei ol.footnotesList li.footnoteItem a.footnoteReference { color: initial; }\n';
     header += '    page-introduction div.tei span.footnoteindicator { color: initial; }\n';
     header += '    h1, h2, h3, h4, h5, h6 { break-after: avoid; break-inside: avoid; }\n';
@@ -700,8 +668,8 @@ export class DownloadTextsModalPage {
   private getViewOptionsAsClassNames(textType: string) {
     let classes = 'xxxsmallFontSize '; // Default font size for printing, equals about 11pt
     if (textType === 'est' || textType === 'intro') {
-      if (this.readPopoverService.show.pageNumbering) {
-        classes += 'show_pageNumbering ';
+      if (this.readPopoverService.show.paragraphNumbering) {
+        classes += 'show_paragraphNumbering ';
       }
       if (this.readPopoverService.show.pageBreakEdition) {
         classes += 'show_pageBreakEdition ';

@@ -1,17 +1,10 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from 'src/app/services/events/events.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ReferenceDataService } from 'src/app/services/reference-data/reference-data.service';
 
-/*
-  Generated class for the ReferenceDataModal page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-reference-data-modal',
   templateUrl: './reference-data-modal.html',
@@ -29,10 +22,8 @@ export class ReferenceDataModalPage {
                 public viewCtrl: ModalController,
                 params: NavParams,
                 private storage: StorageService,
-                private sanitizer: DomSanitizer,
                 private referenceDataService: ReferenceDataService,
-                private events: EventsService,
-                public translate: TranslateService
+                private events: EventsService
   ) {
     // Get url to use for resolving URNs
     this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
@@ -45,27 +36,17 @@ export class ReferenceDataModalPage {
     }
 
     // Check if these label translations exist
-    this.translate.get('Reference.thisPage').subscribe({
-      next: translation => {
-        if (translation && translation !== 'Reference.thisPage') {
-          this.thisPageTranslation = true;
-        } else {
-          this.thisPageTranslation = false;
-        }
-      },
-      error: e => { this.thisPageTranslation = false; }
-    });
+    if ($localize`:@@Reference.thisPage:Hänvisa till denna sida`) {
+      this.thisPageTranslation = true;
+    } else {
+      this.thisPageTranslation = false;
+    }
 
-    this.translate.get('Reference.permaLink').subscribe({
-      next: translation => {
-        if (translation && translation !== 'Reference.permaLink') {
-          this.permaLinkTranslation = true;
-        } else {
-          this.permaLinkTranslation = false;
-        }
-      },
-      error: e => { this.permaLinkTranslation = false; }
-    });
+    if ($localize`:@@Reference.permaLink:Beständig webbadress`) {
+      this.permaLinkTranslation = true;
+    } else {
+      this.permaLinkTranslation = false;
+    }
 
     const id = decodeURIComponent(String(params.get('id')).split('#')[1]);
     const idParts = id.split('/');

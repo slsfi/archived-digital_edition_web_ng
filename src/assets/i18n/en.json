@@ -13,7 +13,7 @@
         "Popover": {
             "Options": "Options",
             "All": "Choose all",
-            "Appearance": "Text size",
+            "Textsize": "Text size",
             "Show": "Options",
             "Comments": "Comments",
             "PersonInfo": "People",
@@ -22,7 +22,7 @@
             "Changes": "Changes",
             "Normalisations": "Normalisations",
             "Abbreviations": "Abbreviations",
-            "PageNumbering": "Paragraph/Stanza numbering",
+            "ParagraphNumbering": "Paragraph/Stanza numbering",
             "PageBreakOriginal": "Original page breaks",
             "PageBreakEdition": "Edition page breaks"
         },

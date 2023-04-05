@@ -6,12 +6,6 @@ import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the IllustrationPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-illustration',

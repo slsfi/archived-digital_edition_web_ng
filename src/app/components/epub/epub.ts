@@ -525,7 +525,7 @@ export class EpubComponent {
       'changes': false,
       'normalisations': false,
       'abbreviations': false,
-      'pageNumbering': false,
+      'paragraphNumbering': false,
       'pageBreakOriginal': false,
       'pageBreakEdition': false
     };

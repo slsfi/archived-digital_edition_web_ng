@@ -41,7 +41,7 @@
       [class.show_personInfo]="readPopoverService.show.personInfo && readPopoverTogglesIntro.personInfo"
       [class.show_placeInfo]="readPopoverService.show.placeInfo && readPopoverTogglesIntro.placeInfo"
       [class.show_workInfo]="readPopoverService.show.workInfo && readPopoverTogglesIntro.workInfo"
-      [class.show_pageNumbering]="readPopoverService.show.pageNumbering && readPopoverTogglesIntro.pageNumbering"
+      [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering && readPopoverTogglesIntro.paragraphNumbering"
       [class.show_pageBreakEdition]="readPopoverService.show.pageBreakEdition && readPopoverTogglesIntro.pageBreakEdition"
     [innerHTML]="text" [ngClass]="(hasSeparateIntroToc ? 'hideIntro' : '') + ' ' +
     ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"></div>

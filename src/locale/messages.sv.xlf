@@ -6,6 +6,36 @@
         <target>Förkortning</target>
       </segment>
     </unit>
+    <unit id="About.Language">
+      <segment state="initial">
+        <source>Språk</source>
+        <target>Språk</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewMode">
+      <segment state="initial">
+        <source>Visningsläge</source>
+        <target>Visningsläge</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeAuto">
+      <segment state="initial">
+        <source>Auto</source>
+        <target>Auto</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeDesktop">
+      <segment state="initial">
+        <source>Desktop</source>
+        <target>Desktop</target>
+      </segment>
+    </unit>
+    <unit id="About.ViewModeMobile">
+      <segment state="initial">
+        <source>Mobil</source>
+        <target>Mobil</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -36,10 +66,76 @@
         <target>Utgivarens anmärkning</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightNotice">
+      <segment state="initial">
+        <source>Licens: CC BY-NC-ND 4.0</source>
+        <target>Licens: CC BY-NC-ND 4.0</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightNoticeIntroduction">
+      <segment state="initial">
+        <source>Licens: CC BY-NC-ND 4.0</source>
+        <target>Licens: CC BY-NC-ND 4.0</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment state="initial">
         <source>Ladda ner</source>
         <target>Ladda ner</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.Print">
+      <segment state="initial">
+        <source>Utskrift</source>
+        <target>Utskrift</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.TXT">
+      <segment state="initial">
+        <source>TXT</source>
+        <target>TXT</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XML">
+      <segment state="initial">
+        <source>XML</source>
+        <target>XML</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Instructions">
+      <segment state="initial">
+        <source>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+        <target>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.InstructionsIntroduction">
+      <segment state="initial">
+        <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
+        <target>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Print">
+      <segment state="initial">
+        <source>Skriv ut</source>
+        <target>Skriv ut</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.TextLoadingError">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
+        <target>Ett fel har uppstått. Texten kunde inte laddas.</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Textsize">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Textstorlek</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Title">
+      <segment state="initial">
+        <source>Ladda ner och skriv ut</source>
+        <target>Ladda ner och skriv ut</target>
       </segment>
     </unit>
     <unit id="editorialChange">
@@ -54,10 +150,58 @@
         <target>Normalisering</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.From">
+      <segment state="initial">
+        <source>Från</source>
+        <target>Från</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.SortBy">
       <segment state="initial">
         <source>Sortera enligt</source>
         <target>Sortera enligt</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.To">
+      <segment state="initial">
+        <source>Till</source>
+        <target>Till</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Contents">
+      <segment state="initial">
+        <source>Innehåll</source>
+        <target>Innehåll</target>
+      </segment>
+    </unit>
+    <unit id="Epub.DisplayOptions">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Textstorlek</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Ladda ner</target>
+      </segment>
+    </unit>
+    <unit id="Epub.FileNotFound">
+      <segment state="initial">
+        <source>Texten kunde inte laddas. Epub-filen saknas.</source>
+        <target>Texten kunde inte laddas. Epub-filen saknas.</target>
+      </segment>
+    </unit>
+    <unit id="Epub.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Sök</target>
+      </segment>
+    </unit>
+    <unit id="Epub.SearchPhrase">
+      <segment state="initial">
+        <source>Söktext</source>
+        <target>Söktext</target>
       </segment>
     </unit>
     <unit id="established">
@@ -118,6 +262,12 @@
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Illustrationer</target>
+      </segment>
+    </unit>
+    <unit id="introduction">
+      <segment state="initial">
+        <source>Inledning</source>
+        <target>Inledning</target>
       </segment>
     </unit>
     <unit id="legend">
@@ -294,6 +444,24 @@
         <target>Förekomster för verk är inte tillgängliga.</target>
       </segment>
     </unit>
+    <unit id="PersonSearch">
+      <segment state="initial">
+        <source>Personregister</source>
+        <target>Personregister</target>
+      </segment>
+    </unit>
+    <unit id="PersonSearch2">
+      <segment state="initial">
+        <source>Personregister 2</source>
+        <target>Personregister 2</target>
+      </segment>
+    </unit>
+    <unit id="PersonSearch3">
+      <segment state="initial">
+        <source>Personregister 3</source>
+        <target>Personregister 3</target>
+      </segment>
+    </unit>
     <unit id="Read.AddColumn">
       <segment state="initial">
         <source>Ny kolumn</source>
@@ -418,6 +586,12 @@
       <segment state="initial">
         <source>Inga kommentarer.</source>
         <target>Inga kommentarer.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Comments.Title">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Kommentarer</target>
       </segment>
     </unit>
     <unit id="Read.CoverPage.ForewordPage">
@@ -618,10 +792,88 @@
         <target>Visa ändringar inarbetade</target>
       </segment>
     </unit>
+    <unit id="Read.Popover.Abbreviations">
+      <segment state="initial">
+        <source>Förkortningar</source>
+        <target>Förkortningar</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.All">
+      <segment state="initial">
+        <source>Välj alla</source>
+        <target>Välj alla</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Changes">
+      <segment state="initial">
+        <source>Utgivarens ändringar</source>
+        <target>Utgivarens ändringar</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Comments">
+      <segment state="initial">
+        <source>Kommentarer</source>
+        <target>Kommentarer</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Normalisations">
+      <segment state="initial">
+        <source>Normaliseringar</source>
+        <target>Normaliseringar</target>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Options">
       <segment state="initial">
         <source>Inställningar</source>
         <target>Inställningar</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakEdition">
+      <segment state="initial">
+        <source>Sidnummer i den tryckta utgåvan</source>
+        <target>Sidnummer i den tryckta utgåvan</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PageBreakOriginal">
+      <segment state="initial">
+        <source>Sidnummer/-brytning i originalet</source>
+        <target>Sidnummer/-brytning i originalet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.ParagraphNumbering">
+      <segment state="initial">
+        <source>Stycke-/radnumrering</source>
+        <target>Stycke-/radnumrering</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PersonInfo">
+      <segment state="initial">
+        <source>Personupplysningar</source>
+        <target>Personupplysningar</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.PlaceInfo">
+      <segment state="initial">
+        <source>Platsupplysningar</source>
+        <target>Platsupplysningar</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Show">
+      <segment state="initial">
+        <source>Visningsalternativ</source>
+        <target>Visningsalternativ</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.Textsize">
+      <segment state="initial">
+        <source>Textstorlek</source>
+        <target>Textstorlek</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.WorkInfo">
+      <segment state="initial">
+        <source>Verkupplysningar</source>
+        <target>Verkupplysningar</target>
       </segment>
     </unit>
     <unit id="Read.ShowAll">
@@ -690,10 +942,76 @@
         <target>Välj variant</target>
       </segment>
     </unit>
+    <unit id="Reference.established">
+      <segment state="initial">
+        <source>Hänvisa till denna lästext</source>
+        <target>Hänvisa till denna lästext</target>
+      </segment>
+    </unit>
+    <unit id="Reference.intro">
+      <segment state="initial">
+        <source>Hänvisa till denna inledning</source>
+        <target>Hänvisa till denna inledning</target>
+      </segment>
+    </unit>
+    <unit id="Reference.mediaCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna bildsamling</source>
+        <target>Hänvisa till denna bildsamling</target>
+      </segment>
+    </unit>
+    <unit id="Reference.missing">
+      <segment state="initial">
+        <source>Sidan saknar beständig webbadress</source>
+        <target>Sidan saknar beständig webbadress</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageEpub">
+      <segment state="initial">
+        <source>Hänvisa till denna text</source>
+        <target>Hänvisa till denna text</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageForeword">
+      <segment state="initial">
+        <source>Hänvisa till detta förord</source>
+        <target>Hänvisa till detta förord</target>
+      </segment>
+    </unit>
+    <unit id="Reference.pageTitle">
+      <segment state="initial">
+        <source>Hänvisa till denna delutgåva</source>
+        <target>Hänvisa till denna delutgåva</target>
+      </segment>
+    </unit>
+    <unit id="Reference.permaLink">
+      <segment state="initial">
+        <source>Beständig webbadress</source>
+        <target>Beständig webbadress</target>
+      </segment>
+    </unit>
     <unit id="Reference.refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Hänvisa</target>
+      </segment>
+    </unit>
+    <unit id="Reference.thisPage">
+      <segment state="initial">
+        <source>Hänvisa till denna sida</source>
+        <target>Hänvisa till denna sida</target>
+      </segment>
+    </unit>
+    <unit id="Reference.title">
+      <segment state="initial">
+        <source>Källhänvisning</source>
+        <target>Källhänvisning</target>
+      </segment>
+    </unit>
+    <unit id="Reference.topMenu">
+      <segment state="initial">
+        <source>Hänvisa till denna webbutgåva</source>
+        <target>Hänvisa till denna webbutgåva</target>
       </segment>
     </unit>
     <unit id="revisionNote">
@@ -714,15 +1032,27 @@
         <target>Webbplatsens titel</target>
       </segment>
     </unit>
+    <unit id="TOC.All">
+      <segment state="initial">
+        <source>Alla</source>
+        <target>Alla</target>
+      </segment>
+    </unit>
+    <unit id="TOC.EPUBS">
+      <segment state="initial">
+        <source>Epub</source>
+        <target>Epub</target>
+      </segment>
+    </unit>
     <unit id="TOC.Home">
       <segment state="initial">
-        <source>Till startsidan</source>
-        <target>Till startsidan</target>
+        <source>Hem</source>
+        <target>Hem</target>
       </segment>
     </unit>
     <unit id="TOC.MediaCollections">
       <segment state="initial">
-        <source>Album</source>
+        <source>Bildbank</source>
         <target>Bildbank</target>
       </segment>
     </unit>
@@ -736,6 +1066,36 @@
       <segment state="initial">
         <source>Ortregister</source>
         <target>Ortregister</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read">
+      <segment state="initial">
+        <source>Innehåll</source>
+        <target>Innehåll</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read1">
+      <segment state="initial">
+        <source>Innehåll 2</source>
+        <target>Innehåll 2</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read2">
+      <segment state="initial">
+        <source>Innehåll 3</source>
+        <target>Innehåll 3</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read3">
+      <segment state="initial">
+        <source>Innehåll 4</source>
+        <target>Innehåll 4</target>
+      </segment>
+    </unit>
+    <unit id="TOC.Read4">
+      <segment state="initial">
+        <source>Innehåll 5</source>
+        <target>Innehåll 5</target>
       </segment>
     </unit>
     <unit id="TOC.TagSearch">
@@ -766,12 +1126,6 @@
       <segment state="initial">
         <source>Läs</source>
         <target>Innehåll</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.SimpleSearch">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Sök</target>
       </segment>
     </unit>
     <unit id="uncertainPersonCorresp">

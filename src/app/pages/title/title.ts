@@ -188,7 +188,7 @@ export class TitlePage {
       'changes': false,
       'normalisations': false,
       'abbreviations': false,
-      'pageNumbering': false,
+      'paragraphNumbering': false,
       'pageBreakOriginal': false,
       'pageBreakEdition': false
     };
