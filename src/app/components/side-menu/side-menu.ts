@@ -89,7 +89,7 @@ export class SideMenu implements OnInit {
         let index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)))
         initialSelectedMenu += index;
       }
-      this.selectedMenu.push(initialSelectedMenu)
+      !this.selectedMenu.includes(initialSelectedMenu) && this.selectedMenu.push(initialSelectedMenu)
     })
 
     await this.initializeApp();

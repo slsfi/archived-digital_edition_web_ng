@@ -1,13 +1,11 @@
 import { Component, Input, OnChanges } from "@angular/core";
 import {
-  NavigationEnd,
   Params, Router,
   UrlSegment
 } from "@angular/router";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
 import { config } from "src/app/services/config/config";
 import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
-import { filter } from "rxjs/operators";
 
 @Component({
   selector: 'collection-side-menu',
@@ -41,20 +39,22 @@ export class CollectionSideMenu implements OnChanges {
 
       let item = this.recursiveFinding(data.children, itemId);
       if(item) {
-        this.selectedMenu.unshift(item.itemId || item.text)
+        this.selectedMenu.push(item.itemId || item.text)
       } else {
         this.setTitleForDefaultPages();
       }
     });
-    this.router.events.pipe(
-      filter(events => events instanceof NavigationEnd),
-    ).subscribe((event: any) => {
-      this.setTitleForDefaultPages();
-    })
   }
-
   ngOnChanges() {
     this.highlightedMenu = this.getItemId();
+    // ngOnChanges also watches changes of collectionID, initialUrlSegments, initialQueryParams which are from router
+    // so, just for now, there's no need for router subscription
+    let isSet = this.setTitleForDefaultPages();
+    if(!isSet && this.collectionContent){
+      let item = this.recursiveFinding(this.collectionContent.children, this.getItemId());
+      if(item && !this.selectedMenu.includes(item.itemId || item.text))
+        this.selectedMenu.push(item.itemId || item.text)
+    }
   }
 
   setTitleForDefaultPages() {
@@ -62,18 +62,18 @@ export class CollectionSideMenu implements OnChanges {
     switch (pageTitle) {
       case 'cover':
         this.commonFunctions.setTitle($localize`:@@Read.CoverPage.Title:Omslag`,2);
-        return;
+        return true;
       case 'title':
         this.commonFunctions.setTitle($localize`:@@Read.CoverPage.TitlePage:Titelblad`,2);
-        return;
+        return true;
       case 'foreword':
         this.commonFunctions.setTitle($localize`:@@Read.CoverPage.ForewordPage:Förord`,2);
-        return;
+        return true;
       case 'introduction':
         this.commonFunctions.setTitle($localize`:@@Read.CoverPage.Introduction:Inledning`,2);
-        return;
+        return true;
       default:
-        return;
+        return false;
     }
   }
 
@@ -97,8 +97,8 @@ export class CollectionSideMenu implements OnChanges {
     return array.find(item => {
       if(item.children) {
         const result = this.recursiveFinding(item.children, stringForComparison)
-        if(result)
-          this.selectedMenu.unshift(result.itemId || result.text)
+        if(result && !this.selectedMenu.includes(result.itemId || result.text))
+          this.selectedMenu.push(result.itemId || result.text)
         return result;
       } else {
         if(item.itemId === stringForComparison) {
