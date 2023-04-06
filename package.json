@@ -35,7 +35,6 @@
     "express": "^4.15.2",
     "gulp-sass": "^5.1.0",
     "install": "^0.13.0",
-    "intro.js": "^6.0.0",
     "ionic-img-viewer": "^2.9.0",
     "ionic-plugin-deeplinks": "^1.0.24",
     "ionicons": "^6.0.4",
