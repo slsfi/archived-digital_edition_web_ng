@@ -35,7 +35,6 @@
     "express": "^4.15.2",
     "gulp-sass": "^5.1.0",
     "install": "^0.13.0",
-    "ionic-plugin-deeplinks": "^1.0.24",
     "ionicons": "^6.0.4",
     "leaflet": "^1.9.3",
     "lodash": "^4.17.21",
