@@ -10,7 +10,7 @@
       <ion-col col-10>
         <ion-row>
           <ion-col col-11>
-            <ion-searchbar placeholder="{{'IndexOfWorks.searchPlaceholder' | translate}}" class="searchbar" [(ngModel)]="searchText" (ionChange)=onChanged($event)>
+            <ion-searchbar placeholder="Sök ..." i18n-placeholder="@@IndexOfWorks.searchPlaceholder" class="searchbar" [(ngModel)]="searchText" (ionChange)=onChanged($event)>
             </ion-searchbar>
           </ion-col>
           <ion-col col-1 *ngIf="showFilter">

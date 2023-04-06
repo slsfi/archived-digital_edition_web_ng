@@ -142,7 +142,8 @@
         "subject": "Person",
         "collections": "Samlingar",
         "works": "Verk",
-        "photos": "foton"
+        "photos": "foton",
+        "altText": "Gallery image"
     },
 	"media": "Photos",
     "TOC": {

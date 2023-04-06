@@ -1,7 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import { router } from 'sw-toolbox';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -10,12 +9,6 @@ import { SemanticDataService } from 'src/app/services/semantic-data/semantic-dat
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the OccurrencesResultPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 // @IonicPage({
 //   name: 'occurrences-result',

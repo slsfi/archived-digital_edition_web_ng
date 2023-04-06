@@ -1,6 +1,6 @@
 type Config = { [key: string]: any }
 
-export const config: Config = {
+export const config_topelius: Config = {
   app: {
     machineName: "topelius",
     projectId: 10,
@@ -1012,7 +1012,7 @@ export const config_soderholm: Config = {
 /**
  * This is the config for leomechelin.fi, here only for testing purposes.
  */
-export const config_mechelin: Config = {
+export const config: Config = {
   app: {
     machineName: "leomechelin",
     projectId: 1,

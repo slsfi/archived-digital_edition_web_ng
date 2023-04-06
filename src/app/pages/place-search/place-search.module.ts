@@ -1,9 +1,4 @@
 import { NgModule } from '@angular/core';
-import { PlaceSearchPage } from './place-search';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { PlaceSearchRoutingModule } from './place-search-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,11 +6,8 @@ import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { PlaceSearchPage } from './place-search';
+import { PlaceSearchRoutingModule } from './place-search-routing.module';
 
 @NgModule({
   declarations: [
@@ -26,16 +18,9 @@ export function createTranslateLoader(http: HttpClient) {
     CommonModule,
     FormsModule,
     PipesModule,
-      TranslateModule.forChild({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }),
-      ComponentsModule,
-      MarkdownModule,
-      PlaceSearchRoutingModule
+    ComponentsModule,
+    MarkdownModule,
+    PlaceSearchRoutingModule
   ],
   providers: [
     SemanticDataService

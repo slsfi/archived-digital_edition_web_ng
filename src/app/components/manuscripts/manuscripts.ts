@@ -1,7 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -36,7 +35,6 @@ export class ManuscriptsComponent {
     protected textService: TextService,
     protected storage: StorageService,
     private alertCtrl: AlertController,
-    public translate: TranslateService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.showOpenLegendButton = config.showOpenLegendButton?.manuscripts ?? false;

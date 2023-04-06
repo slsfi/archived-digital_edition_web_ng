@@ -1,16 +1,12 @@
 import { Component, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { MdContent } from 'src/app/models/md-content.model';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
-// @IonicPage({
-//   name: 'media-collections',
-//   segment: 'media-collections'
-// })
+
 @Component({
   selector: 'media-collections',
   templateUrl: 'media-collections.html',
@@ -39,7 +35,6 @@ export class MediaCollectionsPage {
   constructor(
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
-    public translate: TranslateService,
     public cdRef: ChangeDetectorRef,
     private mdContentService: MdContentService,
     private router: Router,

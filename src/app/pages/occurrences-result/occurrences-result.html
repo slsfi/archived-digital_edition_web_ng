@@ -7,11 +7,9 @@
             <ng-container *ngIf="title">{{title}}</ng-container>
           </h2>
           <ion-segment [(ngModel)]="segments" color="primary" (ionChange)=onSegmentChanged($event)>
-            <ion-segment-button value="info" class="segment-header" [ngClass]="userSettingsService.isMobile() ? 'segment-header-mobile' : ''">
-              {{"Occurrences.Info" | translate}}
-            </ion-segment-button>
+            <ion-segment-button value="info" class="segment-header" [ngClass]="userSettingsService.isMobile() ? 'segment-header-mobile' : ''" i18n="@@Occurrences.Info">Information</ion-segment-button>
             <ion-segment-button value="occurrences" class="segment-header" [ngClass]="userSettingsService.isMobile() ? 'segment-header-mobile' : ''">
-              {{"Occurrences.Title" | translate}} <ng-container *ngIf="allOccurrences && allOccurrences.length">({{allOccurrences.length}})</ng-container>
+              <ng-container i18n="@@Occurrences.Title">Förekomster</ng-container> <ng-container *ngIf="allOccurrences && allOccurrences.length">({{allOccurrences.length}})</ng-container>
             </ion-segment-button>
           </ion-segment>
           <div *ngIf="segments=='info'" class="tei">
@@ -46,58 +44,49 @@
                   <ion-item style="margin-top: 10px;">
                       <ion-grid>
                         <ion-row *ngIf="infoData.city">
-                          <ion-col class="header">
-                            {{"Occurrences.city" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.city">Stad</ion-col>
                           <ion-col>
                             <span class="city">{{infoData.city}}</span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.region">
-                          <ion-col class="header">
-                            {{"Occurrences.region" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.region">Region</ion-col>
                           <ion-col>
                             <span class="region">{{infoData.region}}</span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.country">
-                          <ion-col class="header">
-                            {{"Occurrences.country" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.country">Land</ion-col>
                           <ion-col>
                             <span class="country">{{infoData.country}}</span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.place_of_birth">
-                          <ion-col class="header">
-                            {{"Occurrences.place_of_birth" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.place_of_birth">Ort</ion-col>
                           <ion-col>
                             <span class="place_of_birth">{{infoData.place_of_birth}}</span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.type">
-                          <ion-col class="header">
-                            {{"Occurrences.type" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.type">Typ</ion-col>
                           <ion-col>
-                              <span class="type" *ngIf="infoData.type_translation">{{infoData.type_translation | translate}}</span>
+                              <span class="type" *ngIf="infoData.type_translation">
+                                <!-- TODO: legacy, dynamic translations don't work with Angular's official i18n, is this needed?
+                                  {{infoData.type_translation | translate}}
+                                -->
+                                {{infoData.type}}
+                              </span>
                               <span class="type" *ngIf="!infoData.type_translation">{{infoData.type}}</span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.source">
-                          <ion-col class="header">
-                            {{"Occurrences.source" | translate}}
-                          </ion-col>
+                          <ion-col class="header" i18n="@@Occurrences.source">Källa</ion-col>
                           <ion-col>
                             <span class="source"><a href="{{infoData.source}}" target="_blank">{{infoData.source}}</a></span>
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.description">
-                          <ion-col col-12 class="header">
-                            {{"Occurrences.description" | translate}}
-                          </ion-col>
+                          <ion-col col-12 class="header" i18n="@@Occurrences.description">Beskrivning</ion-col>
                         </ion-row>
                         <ion-row *ngIf="infoData.description">
                           <ion-col col-12>
@@ -105,9 +94,7 @@
                           </ion-col>
                         </ion-row>
                         <ion-row *ngIf="articleData.length>0">
-                          <ion-col col-12 class="header">
-                            {{"Occurrences.articles" | translate}}
-                          </ion-col>
+                          <ion-col col-12 class="header" i18n="@@Occurrences.articles">Artiklar</ion-col>
                         </ion-row>
                         <ion-row *ngIf="articleData.length>0">
                           <ion-col *ngFor="let article of articleData; let i = index" col-12>
@@ -117,8 +104,8 @@
                               <div>{{article.description}}</div>
                               <div class="download-section" (click)="downloadArticle(article.pdf_path)">
                                 <a>
-                                {{"Occurrences.download" | translate}}
-                                <ion-icon class="download" name="cloud-download"></ion-icon>
+                                  <ng-container i18n="@@Occurrences.download">ladda ner pdf</ng-container>
+                                  <ion-icon class="download" name="cloud-download"></ion-icon>
                                 </a>
                               </div>
                             </ion-col>
@@ -138,9 +125,9 @@
               <div *ngIf="!hasInfoDataToDisplay">
                 <div>
                   <br>
-                  {{"Occurrences.NoInfoFound" | translate}}
+                  <ng-container i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</ng-container>
                   <ng-container *ngIf="allOccurrences && allOccurrences.length">
-                  {{"Occurrences.Found" | translate}} {{allOccurrences.length}} {{"Occurrences.OccurrencesSmall" | translate}}.
+                    <ng-container i18n="@@Occurrences.Found">Hittade</ng-container> {{allOccurrences.length}} <ng-container i18n="@@Occurrences.OccurrencesSmall">förekomster</ng-container>.
                   </ng-container>
                 </div>
               </div>

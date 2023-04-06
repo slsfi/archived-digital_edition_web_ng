@@ -142,7 +142,8 @@
         "subject": "Henkilö",
         "collections": "Kokoelmat",
         "works": "Teokset",
-        "photos": "kuvaa"
+        "photos": "kuvaa",
+        "altText": "Galleriakuva"
     },
 	"media": "Kuvat",
     "TOC": {

@@ -4,8 +4,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { DigitalEditionsApp } from './app.component';
@@ -40,11 +38,6 @@ import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module
 import { ReadPopoverPage } from './modals/read-popover/read-popover';
 import { UserSettingsPopoverPageModule } from './modals/user-settings-popover/user-settings-popover.module';
 import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-settings-popover';
-import {CustomTranslateHttpLoader} from "../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient): TranslateLoader {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -62,13 +55,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     ),
     AppRoutingModule,
     HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    }),
     IonicStorageModule.forRoot(),
     CommonModule,
     UserSettingsPopoverPageModule,
@@ -86,7 +72,6 @@ export function createTranslateLoader(http: HttpClient): TranslateLoader {
     HtmlContentService,
     MdContentService,
     TextService,
-    TranslateService,
     ReadPopoverService,
     Title,
     CommentService,

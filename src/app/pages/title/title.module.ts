@@ -1,20 +1,11 @@
 import { NgModule } from '@angular/core';
-import { TitlePage } from './title';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { TitlePageRoutingModule } from './title-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MarkdownModule } from 'ngx-markdown';
-import {CustomTranslateHttpLoader} from "../../../standalone/TranslateLoader-shim";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { TitlePage } from './title';
+import { TitlePageRoutingModule } from './title-routing.module';
 
 @NgModule({
   declarations: [
@@ -24,13 +15,6 @@ export function createTranslateLoader(http: HttpClient) {
     IonicModule,
     CommonModule,
     FormsModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    }),
     ComponentsModule,
     MarkdownModule.forRoot(),
     TitlePageRoutingModule

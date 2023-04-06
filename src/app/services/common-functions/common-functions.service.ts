@@ -1,5 +1,4 @@
 import { Injectable, NgZone } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { isBrowser } from 'src/standalone/utility-functions';
 import { Title } from "@angular/platform-browser";
 
@@ -11,7 +10,6 @@ export class CommonFunctionsService {
 
   constructor(
     public ngZone: NgZone,
-    public translate: TranslateService,
     private title: Title
   ) {
     this.intervalTimerId = 0;

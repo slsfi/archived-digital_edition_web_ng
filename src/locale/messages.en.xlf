@@ -48,6 +48,18 @@
         <target>Ok</target>
       </segment>
     </unit>
+    <unit id="BasicActions.ScrollToTop">
+      <segment state="initial">
+        <source>Till början</source>
+        <target>Scroll to top</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.ShowMore">
+      <segment state="initial">
+        <source>Visa fler</source>
+        <target>Show more</target>
+      </segment>
+    </unit>
     <unit id="BC">
       <segment state="initial">
         <source>f.Kr.</source>
@@ -378,6 +390,12 @@
         <target>historical figure:</target>
       </segment>
     </unit>
+    <unit id="Filter.activeFilters">
+      <segment state="initial">
+        <source>Aktiva avgränsningar</source>
+        <target>Active filters</target>
+      </segment>
+    </unit>
     <unit id="Filter.apply">
       <segment state="initial">
         <source>Verkställ</source>
@@ -414,6 +432,12 @@
         <target>Filter</target>
       </segment>
     </unit>
+    <unit id="Filter.year">
+      <segment state="initial">
+        <source>Född</source>
+        <target>Born</target>
+      </segment>
+    </unit>
     <unit id="fore">
       <segment state="initial">
         <source>Förord</source>
@@ -430,6 +454,30 @@
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Illustrations</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfPersons.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Search ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfPlaces.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Search ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfTags.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Search ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfWorks.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Search ...</target>
       </segment>
     </unit>
     <unit id="inl">
@@ -480,10 +528,40 @@
         <target>Manuscript</target>
       </segment>
     </unit>
+    <unit id="MediaCollections.altText">
+      <segment state="initial">
+        <source>Galleribild</source>
+        <target>Gallery image</target>
+      </segment>
+    </unit>
     <unit id="MediaCollections.GotoMediaCollection">
       <segment state="initial">
         <source>Gå till bildbanken</source>
         <target>Gå till bildbanken</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.locations">
+      <segment state="initial">
+        <source>Platser</source>
+        <target>Platser</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.photos">
+      <segment state="initial">
+        <source>foton</source>
+        <target>foton</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.subjects">
+      <segment state="initial">
+        <source>Personer</source>
+        <target>Personer</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.tags">
+      <segment state="initial">
+        <source>Ämnesord</source>
+        <target>Ämnesord</target>
       </segment>
     </unit>
     <unit id="ms">
@@ -524,7 +602,7 @@
     </unit>
     <unit id="Occurrences.country">
       <segment state="initial">
-        <source>Plats</source>
+        <source>Land</source>
         <target>Country</target>
       </segment>
     </unit>
@@ -550,6 +628,18 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Facsimile</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Found">
+      <segment state="initial">
+        <source>Hittade</source>
+        <target>Found</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Info">
+      <segment state="initial">
+        <source>Information</source>
+        <target>Information</target>
       </segment>
     </unit>
     <unit id="Occurrences.isbn">

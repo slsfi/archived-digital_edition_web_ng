@@ -2,7 +2,6 @@ import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform, PopoverController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
 import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
@@ -62,7 +61,6 @@ export class SingleEditionPage {
     protected tableOfContentsService: TableOfContentsService,
     protected textService: TextService,
     protected htmlService: HtmlContentService,
-    protected translate: TranslateService,
     protected events: EventsService,
     protected sanitizer: DomSanitizer,
     protected platform: Platform,
