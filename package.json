@@ -43,7 +43,6 @@
     "lodash": "^4.17.21",
     "marked": "^4.2.12",
     "ngx-markdown": "^15.1.0",
-    "ngx-sharebuttons": "^11.0.0",
     "node-sass": "^8.0.0",
     "npm": "^9.2.0",
     "rev-hash": "^3.0.0",
