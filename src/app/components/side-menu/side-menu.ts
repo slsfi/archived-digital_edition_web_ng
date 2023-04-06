@@ -1,6 +1,6 @@
 import { Component, Input, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { NavigationEnd, Router } from "@angular/router";
+import { NavigationEnd, PRIMARY_OUTLET, Router } from "@angular/router";
 import { MdContentService } from "../../services/md/md-content.service";
 import { UserSettingsService } from "../../services/settings/user-settings.service";
 import { DigitalEditionListService } from "../../services/toc/digital-edition-list.service";
@@ -42,6 +42,7 @@ export class SideMenu implements OnInit {
   galleryInReadMenu = true;
   splitReadCollections: Number[][] = [];
   selectedMenu: string[] = [];
+  urlRootSegment: string;
 
   constructor(
     public mdcontentService: MdContentService,
@@ -82,8 +83,10 @@ export class SideMenu implements OnInit {
     const menuArray = ['/about', '/epub', '/collection', '/media-collection', '/tags', '/works', '/person-search', '/places']
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe(event => {
-      let initialSelectedMenu= menuArray.find(item => (event as any).url.includes(item)) || '/';
+    ).subscribe((event: any) => {
+      const urlPrimaryOutlet = this.router.parseUrl(event.url).root.children[PRIMARY_OUTLET];
+      this.urlRootSegment = urlPrimaryOutlet ? urlPrimaryOutlet.segments[0].path : ''
+      let initialSelectedMenu= menuArray.find(item => event.url.includes(item)) || '/';
       if (initialSelectedMenu === '/collection') {
         let collectionId = (event as any).url.split('/')[2]
         let index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)))

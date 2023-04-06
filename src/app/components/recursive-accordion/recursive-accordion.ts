@@ -22,10 +22,12 @@ export class RecursiveAccordion implements OnInit {
   }
 
   ngOnInit() {
-    const selectedChild = this.children.find(item => this.router.url.includes(item.id))
-    selectedChild && this.selectedMenu.push(selectedChild.id)
-    if(selectedChild && !selectedChild.children) {
-      this.commonFunctions.setTitle(selectedChild.title, 1)
+    if(this.router.url.includes(this.parentPath)) {
+      const selectedChild = this.children.find(item => this.router.url.includes(item.id))
+      selectedChild && this.selectedMenu.push(selectedChild.id)
+      if (selectedChild && !selectedChild.children) {
+        this.commonFunctions.setTitle(selectedChild.title, 1)
+      }
     }
   }
 

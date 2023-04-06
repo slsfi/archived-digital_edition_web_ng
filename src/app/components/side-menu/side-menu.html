@@ -1,7 +1,7 @@
 <nav class="toc-menu-content list-item-spacing">
   <!--  *ngIf="!readMenuOpen && !galleryMenuOpen && !menuConditionals.songTypesMenuOpen"-->
   <ul>
-    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="selectedMenu.includes('/')">
+    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="!urlRootSegment">
       <a routerLink="/" i18n="@@TOC.Home">Hem</a>
     </li>
     <!-- Markdown "About"-pages: src/app/pages/about -->
@@ -75,7 +75,7 @@
     </ng-container>
 
     <!-- Person search: src/app/pages/person-search -->
-    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="selectedMenu.includes('/person-search')">
+    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="urlRootSegment === 'person-search'">
       <ng-container *ngFor="let ps of _config.PersonSearchTypes; let j = index">
         <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
           <ng-container *ngIf="j == 0" i18n="@@PersonSearch">Personregister</ng-container>
@@ -86,17 +86,17 @@
     </li>
 
     <!-- Place search: src/app/pages/place-search -->
-    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="selectedMenu.includes('/places')">
+    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="urlRootSegment === 'places'">
       <a routerLink="/places" i18n="@@TOC.PlaceSearch">Ortregister</a>
     </li>
 
     <!-- Tag search: src/app/pages/tag-search -->
-    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="selectedMenu.includes('/tags')">
+    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="urlRootSegment === 'tags'">
       <a routerLink="/tags" i18n="@@TOC.TagSearch">Ämnesord</a>
     </li>
 
     <!-- Work search: src/app/pages/work-search *ngIf="genericSettingsService.show('TOC.WorkSearch')"-->
-    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="selectedMenu.includes('/works')">
+    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="urlRootSegment === 'works'">
       <a routerLink="/works" i18n="@@TOC.WorkSearch">Verkregister</a>
     </li>
   </ul>
