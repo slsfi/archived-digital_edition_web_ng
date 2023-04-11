@@ -7,8 +7,9 @@
         "Menu": "Menu",
         "Home": "Home",
         "Content": "Content",
-        "Info": "About",
-        "Search": "Search"
+        "About": "About",
+        "Search": "Search",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {

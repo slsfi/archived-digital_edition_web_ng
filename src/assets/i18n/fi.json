@@ -7,8 +7,9 @@
         "Menu": "Valikko",
         "Home": "Etusivu",
         "Content": "Sisältö",
-        "Info": "Tietoja",
-        "Search": "Hae"
+        "About": "Tietoja",
+        "Search": "Hae",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {

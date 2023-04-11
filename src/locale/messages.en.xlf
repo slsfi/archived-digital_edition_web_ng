@@ -1404,6 +1404,12 @@
         <target>Works</target>
       </segment>
     </unit>
+    <unit id="TopMenu.About">
+      <segment state="initial">
+        <source>Om</source>
+        <target>About</target>
+      </segment>
+    </unit>
     <unit id="TopMenu.Content">
       <segment state="initial">
         <source>Innehåll</source>
@@ -1416,10 +1422,10 @@
         <target>Home</target>
       </segment>
     </unit>
-    <unit id="TopMenu.Info">
+    <unit id="TopMenu.LogoAltText">
       <segment state="initial">
-        <source>Om</source>
-        <target>About</target>
+        <source>Logo</source>
+        <target>Logo</target>
       </segment>
     </unit>
     <unit id="TopMenu.Menu">

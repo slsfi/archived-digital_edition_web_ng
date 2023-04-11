@@ -1171,6 +1171,11 @@
         <source>Verkregister</source>
       </segment>
     </unit>
+    <unit id="TopMenu.About">
+      <segment>
+        <source>Om</source>
+      </segment>
+    </unit>
     <unit id="TopMenu.Content">
       <segment>
         <source>Innehåll</source>
@@ -1181,9 +1186,9 @@
         <source>Hem</source>
       </segment>
     </unit>
-    <unit id="TopMenu.Info">
+    <unit id="TopMenu.LogoAltText">
       <segment>
-        <source>Om</source>
+        <source>Logo</source>
       </segment>
     </unit>
     <unit id="TopMenu.Menu">

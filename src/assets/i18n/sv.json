@@ -7,8 +7,9 @@
         "Menu": "Meny",
         "Home": "Hem",
         "Content": "Innehåll",
-        "Info": "Om utgåvan",
-        "Search": "Sök"
+        "About": "Om utgåvan",
+        "Search": "Sök",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {

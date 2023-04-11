@@ -1,9 +1,11 @@
 <ion-app>
 
   <header>
-    <top-menu (sideMenuClick)="toggleSideMenu()"
-      [showSideMenu]="showSideMenu">
-    </top-menu>
+    <nav class="top-navigation">
+      <top-menu (sideMenuClick)="toggleSideMenu()"
+        [showSideMenu]="showSideMenu">
+      </top-menu>
+    </nav>
   </header>
   <div class="content-container">
     <nav class="side-navigation" [class.visuallyhidden]="!showSideMenu">

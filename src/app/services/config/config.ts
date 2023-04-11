@@ -6,7 +6,6 @@ export const config: Config = {
     projectId: 10,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    siteLogoURL: "https://www.sls.fi/",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" },
@@ -90,7 +89,11 @@ export const config: Config = {
       showContentButton: true,
       showElasticSearchButton: true,
       showURNButton: false,
-      showLanguageButton: true
+      showLanguageButton: true,
+      showSiteLogo: true,
+      siteLogoDefaultImageUrl: "assets/images/logo.svg",
+      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
+      siteLogoLinkUrl: "https://www.sls.fi/"
     },
     sideMenu: {
       sortableCollectionsAlphabetic: ["211", "215", "219", "220"],
@@ -403,7 +406,6 @@ export const config_soderholm: Config = {
     projectId: 7,
     apiEndpoint: "https://api.sls.fi/digitaledition",
     simpleApi: '',
-    siteLogoURL: "https://www.sls.fi/",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" }
@@ -563,7 +565,11 @@ export const config_soderholm: Config = {
       showContentButton: true,
       showElasticSearchButton: true,
       showURNButton: false,
-      showLanguageButton: false
+      showLanguageButton: false,
+      showSiteLogo: true,
+      siteLogoDefaultImageUrl: "assets/images/logo.svg",
+      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
+      siteLogoLinkUrl: "https://www.sls.fi/"
     },
     sideMenu: {
       sortableCollectionsAlphabetic: [],
@@ -1024,7 +1030,6 @@ export const config_mechelin: Config = {
     apiEndpoint: "https://api-dot-leomechelin.ew.r.appspot.com/digitaledition",
     simpleApi: "https://leomechelin.ew.r.appspot.com",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
-    siteLogoURL: "https://leomechelin-dev.web.app",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" },
@@ -1099,7 +1104,11 @@ export const config_mechelin: Config = {
       showContentButton: true,
       showElasticSearchButton: false,
       showURNButton: false,
-      showLanguageButton: true
+      showLanguageButton: true,
+      showSiteLogo: false,
+      siteLogoDefaultImageUrl: "assets/images/logo.svg",
+      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
+      siteLogoLinkUrl: ""
     },
     sideMenu: {
       sortableCollectionsAlphabetic: [],

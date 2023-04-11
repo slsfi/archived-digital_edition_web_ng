@@ -1,3 +1,15 @@
+header {
+  height: var(--top-menu-height, 70px);
+  width: 100%;
+  overflow: hidden;
+  z-index: 10;
+
+  .top-navigation {
+    height: 100%;
+    width: 100%;
+  }
+}
+
 .content-container {
   display: flex;
   flex-flow: row nowrap;
