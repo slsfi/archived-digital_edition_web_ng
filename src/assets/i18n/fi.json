@@ -4,10 +4,11 @@
         "Subtitle": "Sivuston alaotsikko"
     },
     "TopMenu": {
+        "Menu": "Valikko",
         "Home": "Etusivu",
-        "Read": "Sisältö",
+        "Content": "Sisältö",
         "Info": "Tietoja",
-        "AdvancedSearch": "Hae"
+        "Search": "Hae"
     },
     "Read": {
         "Popover": {
@@ -177,9 +178,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Takaisin"
-    },
+    "BackButton": "Takaisin",
     "IndexOfPersons": {
         "searchPlaceholder": "Hae ..."
     },

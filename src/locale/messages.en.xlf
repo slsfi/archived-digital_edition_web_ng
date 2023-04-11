@@ -36,6 +36,12 @@
         <target>Mobile</target>
       </segment>
     </unit>
+    <unit id="BackButton">
+      <segment state="initial">
+        <source>Tillbaka</source>
+        <target>Go back</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -888,28 +894,10 @@
         <target>Comments</target>
       </segment>
     </unit>
-    <unit id="Read.CoverPage.ForewordPage">
-      <segment state="initial">
-        <source>Förord</source>
-        <target>Förord</target>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.Introduction">
-      <segment state="initial">
-        <source>Inledning</source>
-        <target>Inledning</target>
-      </segment>
-    </unit>
     <unit id="Read.CoverPage.Title">
       <segment state="initial">
         <source>Omslag</source>
         <target>Cover</target>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.TitlePage">
-      <segment state="initial">
-        <source>Titelblad</source>
-        <target>Titelblad</target>
       </segment>
     </unit>
     <unit id="Read.Established.AddButtonText">
@@ -1416,10 +1404,16 @@
         <target>Works</target>
       </segment>
     </unit>
-    <unit id="TopMenu.AdvancedSearch">
+    <unit id="TopMenu.Content">
       <segment state="initial">
-        <source>Sök</source>
-        <target>Advanced Search</target>
+        <source>Innehåll</source>
+        <target>Content</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Home">
+      <segment state="initial">
+        <source>Hem</source>
+        <target>Home</target>
       </segment>
     </unit>
     <unit id="TopMenu.Info">
@@ -1428,10 +1422,16 @@
         <target>About</target>
       </segment>
     </unit>
-    <unit id="TopMenu.Read">
+    <unit id="TopMenu.Menu">
       <segment state="initial">
-        <source>Läs</source>
-        <target>Content</target>
+        <source>Meny</source>
+        <target>Menu</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Search</target>
       </segment>
     </unit>
     <unit id="Type">

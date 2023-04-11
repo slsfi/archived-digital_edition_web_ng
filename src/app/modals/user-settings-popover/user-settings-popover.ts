@@ -24,7 +24,13 @@ export class UserSettingsPopoverPage {
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.enableLanguageChanges = config.app?.i18n?.enableLanguageChanges ?? true;
-    this.locales = config.app?.i18n?.languages ?? ['sv'];
+
+    const languages = config.app?.i18n?.languages ?? [];
+    languages.forEach((languageObj: any) => {
+      if (languageObj.code === LOCALE_ID) {
+        this.locales.push(languageObj.label + ' (' + languageObj.code + ')');
+      }
+    });
   }
 
   close() {

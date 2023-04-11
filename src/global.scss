@@ -599,6 +599,86 @@
 
   // OTHER GLOBAL STYLES
 
+  .visuallyhidden {
+    display: none;
+  }
+
+  /* --- Style block: common styles for the app side menu and collection side menu. --- */
+  app-side-menu, collection-side-menu {
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    ul {
+      padding-left: 16px;
+      list-style-type: none;
+      width: 100%;
+      position: relative;
+
+      app-recursive-accordion {
+        width: 100%;
+      }
+
+      li {
+        color: #000;
+        overflow-wrap: break-word;
+        position: relative;
+        width: 100%;
+        padding-right: 5px ;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        &.accordion-list {
+          display: none;
+          padding: 0;
+          width: 100%;
+          transition: display linear 0.2s;
+
+          &.open {
+            display: block;
+            transition: display linear 0.2s;
+          }
+        }
+
+        &.menu-highlight {
+          border-right: 5px solid var(--primary-color);
+        }
+
+        a {
+          width: 100%;
+          display: block;
+          text-decoration: none;
+          color: var(--toc-text-color);
+          max-width: 100%;
+          margin-right: 8px;
+
+          .description {
+            display: block;
+            color: var(--toc-description-text-color);
+            font-weight: normal;
+            font-size: .875rem;
+            line-height: 1.3;
+            margin-top: 5px;
+          }
+        }
+        > *:not(ul) {
+          padding: 10px 0;
+        }
+        ion-icon {
+          float: right;
+          flex-shrink: 0;
+          transform: rotate(0);
+          transition: transform ease-in-out 0.2s;
+          &.open {
+            transform: rotate(90deg);
+            transition: transform ease-in-out 0.2s;
+          }
+        }
+      }
+    }
+  }
+  /* --- */
+
   /* --- Style block: column containers for all publication pages: cover, title, foreword, introduction and read. --- */
   ion-content.publication-ion-content::part(scroll) {
     display: flex;

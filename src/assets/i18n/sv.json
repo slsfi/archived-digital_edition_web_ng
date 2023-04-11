@@ -4,10 +4,11 @@
         "Subtitle": "Webbplatsens undertitel"
     },
     "TopMenu": {
+        "Menu": "Meny",
         "Home": "Hem",
-        "Read": "Innehåll",
+        "Content": "Innehåll",
         "Info": "Om utgåvan",
-        "AdvancedSearch": "Sök"
+        "Search": "Sök"
     },
     "Read": {
         "Popover": {
@@ -177,9 +178,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Tillbaka"
-    },
+    "BackButton": "Tillbaka",
     "IndexOfPersons": {
         "searchPlaceholder": "Sök ..."
     },

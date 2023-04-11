@@ -31,6 +31,11 @@
         <source>Mobil</source>
       </segment>
     </unit>
+    <unit id="BackButton">
+      <segment>
+        <source>Tillbaka</source>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment>
         <source>Avbryt</source>
@@ -741,24 +746,9 @@
         <source>Kommentarer</source>
       </segment>
     </unit>
-    <unit id="Read.CoverPage.ForewordPage">
-      <segment>
-        <source>Förord</source>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.Introduction">
-      <segment>
-        <source>Inledning</source>
-      </segment>
-    </unit>
     <unit id="Read.CoverPage.Title">
       <segment>
         <source>Omslag</source>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.TitlePage">
-      <segment>
-        <source>Titelblad</source>
       </segment>
     </unit>
     <unit id="Read.Established.AddButtonText">
@@ -1181,9 +1171,14 @@
         <source>Verkregister</source>
       </segment>
     </unit>
-    <unit id="TopMenu.AdvancedSearch">
+    <unit id="TopMenu.Content">
       <segment>
-        <source>Sök</source>
+        <source>Innehåll</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Home">
+      <segment>
+        <source>Hem</source>
       </segment>
     </unit>
     <unit id="TopMenu.Info">
@@ -1191,9 +1186,14 @@
         <source>Om</source>
       </segment>
     </unit>
-    <unit id="TopMenu.Read">
+    <unit id="TopMenu.Menu">
       <segment>
-        <source>Läs</source>
+        <source>Meny</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Search">
+      <segment>
+        <source>Sök</source>
       </segment>
     </unit>
     <unit id="Type">

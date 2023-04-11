@@ -1,6 +1,6 @@
 type Config = { [key: string]: any }
 
-export const config_topelius: Config = {
+export const config: Config = {
   app: {
     machineName: "topelius",
     projectId: 10,
@@ -8,7 +8,10 @@ export const config_topelius: Config = {
     simpleApi: '',
     siteLogoURL: "https://www.sls.fi/",
     i18n: {
-      languages: ["sv", "fi"],
+      languages: [
+        { code: "sv", label: "Svenska" },
+        { code: "fi", label: "Suomi" }
+      ],
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -402,7 +405,9 @@ export const config_soderholm: Config = {
     simpleApi: '',
     siteLogoURL: "https://www.sls.fi/",
     i18n: {
-      languages: ["sv"],
+      languages: [
+        { code: "sv", label: "Svenska" }
+      ],
       enableLanguageChanges: false,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -1012,7 +1017,7 @@ export const config_soderholm: Config = {
 /**
  * This is the config for leomechelin.fi, here only for testing purposes.
  */
-export const config: Config = {
+export const config_mechelin: Config = {
   app: {
     machineName: "leomechelin",
     projectId: 1,
@@ -1021,7 +1026,10 @@ export const config: Config = {
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     siteLogoURL: "https://leomechelin-dev.web.app",
     i18n: {
-      languages: ["sv", "fi"],
+      languages: [
+        { code: "sv", label: "Svenska" },
+        { code: "fi", label: "Suomi" }
+      ],
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: true,
       multilingualReadingTextLanguages: ["sv", "fi"]

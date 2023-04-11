@@ -14,13 +14,16 @@ import { config } from "src/app/services/config/config";
 export class TopMenuComponent {
   @Input() splitPaneMobile?: boolean;
   @Input() showSideMenu: boolean;
-  @Output() hamburgerMenuClick = new EventEmitter();
+  @Output() sideMenuClick = new EventEmitter();
 
-  public showViewToggle: boolean;
+  public showLanguageButton: boolean;
   public showTopURNButton: boolean;
-  public showTopElasticButton: boolean;
+  public showTopSearchButton: boolean;
   public showTopContentButton: boolean;
   public showTopAboutButton: boolean;
+  public currentLanguageLabel: string = '';
+  public languages = [];
+  public languageMenuOpen: boolean = false;
   firstAboutPageId = '';
 
   constructor(
@@ -29,19 +32,33 @@ export class TopMenuComponent {
     private modalController: ModalController,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.showViewToggle = config.component?.topMenu?.showLanguageButton ?? true;
+    this.showLanguageButton = config.component?.topMenu?.showLanguageButton ?? true;
     this.showTopURNButton = config.component?.topMenu?.showURNButton ?? true;
-    this.showTopElasticButton = config.component?.topMenu?.showElasticSearchButton ?? true;
+    this.showTopSearchButton = config.component?.topMenu?.showElasticSearchButton ?? true;
     this.showTopContentButton = config.component?.topMenu?.showContentButton ?? true;
     this.showTopAboutButton = config.component?.topMenu?.showAboutButton ?? true;
 
     const aboutPagesFolderNumber = config.page?.about?.markdownFolderNumber ?? '03';
     const initialAboutPageNode = config.page?.about?.initialPageNode ?? '01';
     this.firstAboutPageId = aboutPagesFolderNumber + "-" + initialAboutPageNode;
+
+    this.languages = config.app?.i18n?.languages ?? [];
+    this.languages.forEach((languageObj: any) => {
+      if (languageObj.code === this.activeLocale) {
+        this.currentLanguageLabel = languageObj.label;
+      }
+    });
   }
 
-  public toggleSplitPane() {
-    this.hamburgerMenuClick.emit();
+  public toggleSideMenu(event: any) {
+    event.preventDefault();
+    this.sideMenuClick.emit();
+  }
+
+  public toggleLanguageMenu(event: any) {
+    event.preventDefault();
+    this.languageMenuOpen = !this.languageMenuOpen;
+    // TODO: menu for selecting language
   }
 
   public async showUserSettingsPopover(event: any) {

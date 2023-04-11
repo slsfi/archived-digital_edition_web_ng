@@ -4,10 +4,11 @@
         "Subtitle": "Website subtitle"
     },
     "TopMenu": {
+        "Menu": "Menu",
         "Home": "Home",
-        "Read": "Content",
+        "Content": "Content",
         "Info": "About",
-        "AdvancedSearch": "Advanced Search"
+        "Search": "Search"
     },
     "Read": {
         "Popover": {
@@ -177,9 +178,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Go back"
-    },
+    "BackButton": "Go back",
     "IndexOfPersons": {
         "searchPlaceholder": "Search ..."
     },

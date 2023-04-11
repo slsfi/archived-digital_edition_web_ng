@@ -3,13 +3,13 @@
 :host {
   top: 0;
   width: 100%;
-  height: var(--top-menu-toolbar-height, 70px);
+  height: var(--top-menu-height, 70px);
   font-family: var(--font-stack-top-menu);
 }
 
 ion-toolbar {
-  --min-height: var(--top-menu-toolbar-height, 70px);
-  max-height: var(--top-menu-toolbar-height, 70px);
+  --min-height: var(--top-menu-height, 70px);
+  max-height: var(--top-menu-height, 70px);
   border-bottom: var(--top-menu-toolbar-bottom-border);
 }
 
@@ -38,15 +38,23 @@ ion-toolbar ion-button:first-child {
 ion-toolbar ion-button ion-icon {
   font-size: var(--top-menu-toolbar-button-icons-font-size, 1.875rem);
   margin-right: 0;
+
+  &.toggle-language-menu-icon {
+    font-size: 1.25rem;
+    margin-left: 0.25rem;
+  }
+  &.hide-icon {
+    display: none;
+  }
 }
 
 ion-toolbar ion-button .side-title {
-  font-size: 0.625rem;
-  margin-left: 0.5em;
-  font-weight: normal;
+  font-size: 0.875rem;
+  margin-left: 0.5rem;
+  font-weight: 600;
 }
 
-@media only screen and (max-width: 820px) {
+@media only screen and (max-width: 930px) {
   ion-toolbar ion-button {
     margin-right: 0.5rem;
   }
@@ -55,8 +63,14 @@ ion-toolbar ion-button .side-title {
     margin-inline-start: 0.125rem;
   }
 
-  ion-toolbar ion-button .side-title {
-    display: none;
+  ion-toolbar ion-button .side-title,
+  ion-toolbar ion-button ion-icon.toggle-language-menu-icon {
+    position: absolute;
+    top: auto;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 }
 

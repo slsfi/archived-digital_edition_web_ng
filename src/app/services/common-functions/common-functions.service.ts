@@ -96,18 +96,21 @@ export class CommonFunctionsService {
    * Valid values for yPosition are 'top' and 'center'. The scroll behavior can
    * either be 'auto' or the default 'smooth'.
    */
-  scrollElementIntoView(element: HTMLElement, yPosition = 'center', offset = 0, scrollBehavior = 'smooth') {
+  scrollElementIntoView(element: HTMLElement, yPosition = 'center', offset = 0, scrollBehavior = 'smooth', container?: HTMLElement) {
     if (element === undefined || element === null || (yPosition !== 'center' && yPosition !== 'top')) {
       return;
     }
+
     // Find the scrollable container of the element which is to be scrolled into view
-    let container = element.parentElement;
-    while (container !== null && container.parentElement !== null &&
-      !container.classList.contains('scroll-content-container')) {
-      container = container.parentElement;
-    }
-    if (container === null || container.parentElement === null) {
-      return;
+    if (!container) {
+      container = element.parentElement as HTMLElement;
+      while (container !== null && container.parentElement !== null &&
+        !container.classList.contains('scroll-content-container')) {
+        container = container.parentElement;
+      }
+      if (container === null || container.parentElement === null) {
+        return;
+      }
     }
 
     const y = Math.floor(element.getBoundingClientRect().top + container.scrollTop - container.getBoundingClientRect().top);

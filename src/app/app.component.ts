@@ -5,7 +5,7 @@ import { Title } from "@angular/platform-browser";
 import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 
 @Component({
-  selector: 'ion-app-v2',
+  selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })

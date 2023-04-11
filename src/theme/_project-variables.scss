@@ -109,10 +109,10 @@ $opacity-hover-transition: opacity 0.2s;
   --toc-hover-color:                          var(--primary-color);
   --toc-description-text-color:             #515151;
   --toc-collection-title-text-color:          var(--toc-text-color);
-  --toc-collection-title-background-color:    var(--secondary-color);
+  --toc-collection-title-background-color:  #d1ceca;
   --toc-back-button-text-color:               var(--dark-color);
   --toc-back-button-arrow-color:              var(--toc-back-button-text-color);
-  --toc-back-button-background-color:       #e8e4df;
+  --toc-back-button-background-color:       var(--secondary-color);
   --toc-selected-item-text-color:             var(--dark-color);
   --toc-selected-item-font-weight:            bold;
   --toc-selected-item-arrow-color:            var(--toc-selected-item-text-color);
@@ -135,7 +135,7 @@ $opacity-hover-transition: opacity 0.2s;
   --page-read-add-column-background-color:                  var(--secondary-color);
 
   // Top-menu
-  --top-menu-toolbar-height:                                70px;
+  --top-menu-height:                                70px;
   --top-menu-toolbar-bottom-border:                         0;
   --top-menu-toolbar-button-icons-font-size:                1.875rem;
   --top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
