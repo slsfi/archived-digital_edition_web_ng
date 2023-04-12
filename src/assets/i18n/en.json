@@ -4,10 +4,12 @@
         "Subtitle": "Website subtitle"
     },
     "TopMenu": {
+        "Menu": "Menu",
         "Home": "Home",
-        "Read": "Content",
-        "Info": "About",
-        "AdvancedSearch": "Advanced Search"
+        "Content": "Content",
+        "About": "About",
+        "Search": "Search",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {
@@ -142,7 +144,8 @@
         "subject": "Person",
         "collections": "Samlingar",
         "works": "Verk",
-        "photos": "foton"
+        "photos": "foton",
+        "altText": "Gallery image"
     },
 	"media": "Photos",
     "TOC": {
@@ -176,9 +179,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Go back"
-    },
+    "BackButton": "Go back",
     "IndexOfPersons": {
         "searchPlaceholder": "Search ..."
     },

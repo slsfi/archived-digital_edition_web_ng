@@ -1,17 +1,24 @@
 <ion-app>
-  <top-menu (hamburgerMenuClick)="toggleSideMenu()"
-            [showSideMenu]="showSideMenu"></top-menu>
-  <ion-split-pane [when]="showSideMenu" contentId="content">
-    <!-- This is the default, main menu -->
-    <ion-menu contentId="content" id="contentMenu">
-      <app-side-menu *ngIf="!showCollectionSideMenu"></app-side-menu>
-      <collection-side-menu *ngIf="showCollectionSideMenu" [collectionID]="collectionID"
-                            [initialQueryParams]="initialQueryParams"
-                            [initialUrlSegments]="initialUrlSegments"></collection-side-menu>
-    </ion-menu>
-    <!-- Page content, which is displayed in the right container of <ion-split-pane> -->
-    <div class="ion-page" id="content">
+
+  <header>
+    <nav class="top-navigation">
+      <top-menu (sideMenuClick)="toggleSideMenu()"
+        [showSideMenu]="showSideMenu">
+      </top-menu>
+    </nav>
+  </header>
+  <div class="content-container">
+    <nav class="side-navigation" [class.visuallyhidden]="!showSideMenu">
+      <app-side-menu [class.visuallyhidden]="showCollectionSideMenu"></app-side-menu>
+      <collection-side-menu *ngIf="showCollectionSideMenu"
+        [collectionID]="collectionID"
+        [initialQueryParams]="initialQueryParams"
+        [initialUrlSegments]="initialUrlSegments">
+      </collection-side-menu>
+    </nav>
+    <div class="main-content">
       <ion-router-outlet [animated]="false"></ion-router-outlet>
     </div>
-  </ion-split-pane>
+  </div>
+
 </ion-app>

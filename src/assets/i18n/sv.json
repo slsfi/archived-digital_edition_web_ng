@@ -4,10 +4,12 @@
         "Subtitle": "Webbplatsens undertitel"
     },
     "TopMenu": {
+        "Menu": "Meny",
         "Home": "Hem",
-        "Read": "Innehåll",
-        "Info": "Om utgåvan",
-        "AdvancedSearch": "Sök"
+        "Content": "Innehåll",
+        "About": "Om utgåvan",
+        "Search": "Sök",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {
@@ -142,7 +144,8 @@
         "subject": "Person",
         "collections": "Samlingar",
         "works": "Verk",
-        "photos": "foton"
+        "photos": "foton",
+        "altText": "Galleribild"
     },
     "media": "Fotografier",
     "TOC": {
@@ -176,9 +179,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Tillbaka"
-    },
+    "BackButton": "Tillbaka",
     "IndexOfPersons": {
         "searchPlaceholder": "Sök ..."
     },

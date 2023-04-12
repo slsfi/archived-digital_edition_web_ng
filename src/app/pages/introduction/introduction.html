@@ -7,20 +7,20 @@
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
         <ion-icon slot="start" *ngIf="!usePrintNotDownloadIcon" class="download-icon" name="download"></ion-icon>
         <ion-icon slot="start" *ngIf="usePrintNotDownloadIcon" class="print-icon" name="print"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'DownloadTexts.Download' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@DownloadTexts.Download">Ladda ner</span>
       </ion-button>
       <ion-button *ngIf="showURNButton" (click)="showReference()" class="sec-menu-button">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Reference.refer' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
       <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showPopover($event)" class="sec-menu-button" id="settings-icon">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Read.Popover.Options' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
       <ion-button *ngIf="hasSeparateIntroToc" class="sec-menu-button" [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'"  (click)="toggleTocMenu()">
         <ion-icon slot="start" name="list" *ngIf="!tocMenuOpen"></ion-icon>
         <ion-icon slot="start" name="close" *ngIf="tocMenuOpen"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Read.Introduction.Contents' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Read.Introduction.Contents">Innehåll</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

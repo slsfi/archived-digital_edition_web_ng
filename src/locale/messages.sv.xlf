@@ -36,6 +36,12 @@
         <target>Mobil</target>
       </segment>
     </unit>
+    <unit id="BackButton">
+      <segment state="initial">
+        <source>Tillbaka</source>
+        <target>Tillbaka</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment state="initial">
         <source>Avbryt</source>
@@ -46,6 +52,18 @@
       <segment state="initial">
         <source>Ok</source>
         <target>Ok</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.ScrollToTop">
+      <segment state="initial">
+        <source>Till början</source>
+        <target>Till början</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.ShowMore">
+      <segment state="initial">
+        <source>Visa fler</source>
+        <target>Visa fler</target>
       </segment>
     </unit>
     <unit id="BC">
@@ -378,6 +396,12 @@
         <target>historisk förebild</target>
       </segment>
     </unit>
+    <unit id="Filter.activeFilters">
+      <segment state="initial">
+        <source>Aktiva avgränsningar</source>
+        <target>Aktiva avgränsningar</target>
+      </segment>
+    </unit>
     <unit id="Filter.apply">
       <segment state="initial">
         <source>Verkställ</source>
@@ -414,6 +438,12 @@
         <target>Avgränsningar</target>
       </segment>
     </unit>
+    <unit id="Filter.year">
+      <segment state="initial">
+        <source>Född</source>
+        <target>Född</target>
+      </segment>
+    </unit>
     <unit id="fore">
       <segment state="initial">
         <source>Förord</source>
@@ -430,6 +460,30 @@
       <segment state="initial">
         <source>Illustrationer</source>
         <target>Illustrationer</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfPersons.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfPlaces.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfTags.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
+      </segment>
+    </unit>
+    <unit id="IndexOfWorks.searchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
       </segment>
     </unit>
     <unit id="inl">
@@ -480,10 +534,40 @@
         <target>Manuskript</target>
       </segment>
     </unit>
+    <unit id="MediaCollections.altText">
+      <segment state="initial">
+        <source>Galleribild</source>
+        <target>Galleribild</target>
+      </segment>
+    </unit>
     <unit id="MediaCollections.GotoMediaCollection">
       <segment state="initial">
         <source>Gå till bildbanken</source>
         <target>Gå till bildbanken</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.locations">
+      <segment state="initial">
+        <source>Platser</source>
+        <target>Platser</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.photos">
+      <segment state="initial">
+        <source>foton</source>
+        <target>foton</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.subjects">
+      <segment state="initial">
+        <source>Personer</source>
+        <target>Personer</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.tags">
+      <segment state="initial">
+        <source>Ämnesord</source>
+        <target>Ämnesord</target>
       </segment>
     </unit>
     <unit id="ms">
@@ -524,7 +608,7 @@
     </unit>
     <unit id="Occurrences.country">
       <segment state="initial">
-        <source>Plats</source>
+        <source>Land</source>
         <target>Land</target>
       </segment>
     </unit>
@@ -550,6 +634,18 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Faksimil</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Found">
+      <segment state="initial">
+        <source>Hittade</source>
+        <target>Hittade</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Info">
+      <segment state="initial">
+        <source>Information</source>
+        <target>Information</target>
       </segment>
     </unit>
     <unit id="Occurrences.isbn">
@@ -798,28 +894,10 @@
         <target>Kommentarer</target>
       </segment>
     </unit>
-    <unit id="Read.CoverPage.ForewordPage">
-      <segment state="initial">
-        <source>Förord</source>
-        <target>Förord</target>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.Introduction">
-      <segment state="initial">
-        <source>Inledning</source>
-        <target>Inledning</target>
-      </segment>
-    </unit>
     <unit id="Read.CoverPage.Title">
       <segment state="initial">
         <source>Omslag</source>
         <target>Omslag</target>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.TitlePage">
-      <segment state="initial">
-        <source>Titelblad</source>
-        <target>Titelblad</target>
       </segment>
     </unit>
     <unit id="Read.Established.AddButtonText">
@@ -1326,22 +1404,40 @@
         <target>Verkregister</target>
       </segment>
     </unit>
-    <unit id="TopMenu.AdvancedSearch">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Sök</target>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Info">
+    <unit id="TopMenu.About">
       <segment state="initial">
         <source>Om</source>
         <target>Om utgåvan</target>
       </segment>
     </unit>
-    <unit id="TopMenu.Read">
+    <unit id="TopMenu.Content">
       <segment state="initial">
-        <source>Läs</source>
+        <source>Innehåll</source>
         <target>Innehåll</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Home">
+      <segment state="initial">
+        <source>Hem</source>
+        <target>Hem</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.LogoAltText">
+      <segment state="initial">
+        <source>Logo</source>
+        <target>Logo</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Menu">
+      <segment state="initial">
+        <source>Meny</source>
+        <target>Meny</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Sök</target>
       </segment>
     </unit>
     <unit id="Type">

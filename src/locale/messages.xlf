@@ -31,6 +31,11 @@
         <source>Mobil</source>
       </segment>
     </unit>
+    <unit id="BackButton">
+      <segment>
+        <source>Tillbaka</source>
+      </segment>
+    </unit>
     <unit id="BasicActions.Cancel">
       <segment>
         <source>Avbryt</source>
@@ -39,6 +44,16 @@
     <unit id="BasicActions.Ok">
       <segment>
         <source>Ok</source>
+      </segment>
+    </unit>
+    <unit id="BasicActions.ScrollToTop">
+      <segment>
+        <source>Till början</source>
+      </segment>
+    </unit>
+    <unit id="BasicActions.ShowMore">
+      <segment>
+        <source>Visa fler</source>
       </segment>
     </unit>
     <unit id="BC">
@@ -316,6 +331,11 @@
         <source>historisk förebild</source>
       </segment>
     </unit>
+    <unit id="Filter.activeFilters">
+      <segment>
+        <source>Aktiva avgränsningar</source>
+      </segment>
+    </unit>
     <unit id="Filter.apply">
       <segment>
         <source>Verkställ</source>
@@ -346,6 +366,11 @@
         <source>Avgränsningar</source>
       </segment>
     </unit>
+    <unit id="Filter.year">
+      <segment>
+        <source>Född</source>
+      </segment>
+    </unit>
     <unit id="fore">
       <segment>
         <source>Förord</source>
@@ -359,6 +384,26 @@
     <unit id="illustrations">
       <segment>
         <source>Illustrationer</source>
+      </segment>
+    </unit>
+    <unit id="IndexOfPersons.searchPlaceholder">
+      <segment>
+        <source>Sök ...</source>
+      </segment>
+    </unit>
+    <unit id="IndexOfPlaces.searchPlaceholder">
+      <segment>
+        <source>Sök ...</source>
+      </segment>
+    </unit>
+    <unit id="IndexOfTags.searchPlaceholder">
+      <segment>
+        <source>Sök ...</source>
+      </segment>
+    </unit>
+    <unit id="IndexOfWorks.searchPlaceholder">
+      <segment>
+        <source>Sök ...</source>
       </segment>
     </unit>
     <unit id="inl">
@@ -401,9 +446,34 @@
         <source>Manuskript</source>
       </segment>
     </unit>
+    <unit id="MediaCollections.altText">
+      <segment>
+        <source>Galleribild</source>
+      </segment>
+    </unit>
     <unit id="MediaCollections.GotoMediaCollection">
       <segment>
         <source>Gå till bildbanken</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.locations">
+      <segment>
+        <source>Platser</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.photos">
+      <segment>
+        <source>foton</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.subjects">
+      <segment>
+        <source>Personer</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollections.tags">
+      <segment>
+        <source>Ämnesord</source>
       </segment>
     </unit>
     <unit id="ms">
@@ -438,7 +508,7 @@
     </unit>
     <unit id="Occurrences.country">
       <segment>
-        <source>Plats</source>
+        <source>Land</source>
       </segment>
     </unit>
     <unit id="Occurrences.description">
@@ -459,6 +529,16 @@
     <unit id="Occurrences.Facsimile">
       <segment>
         <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Found">
+      <segment>
+        <source>Hittade</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.Info">
+      <segment>
+        <source>Information</source>
       </segment>
     </unit>
     <unit id="Occurrences.isbn">
@@ -666,24 +746,9 @@
         <source>Kommentarer</source>
       </segment>
     </unit>
-    <unit id="Read.CoverPage.ForewordPage">
-      <segment>
-        <source>Förord</source>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.Introduction">
-      <segment>
-        <source>Inledning</source>
-      </segment>
-    </unit>
     <unit id="Read.CoverPage.Title">
       <segment>
         <source>Omslag</source>
-      </segment>
-    </unit>
-    <unit id="Read.CoverPage.TitlePage">
-      <segment>
-        <source>Titelblad</source>
       </segment>
     </unit>
     <unit id="Read.Established.AddButtonText">
@@ -1106,19 +1171,34 @@
         <source>Verkregister</source>
       </segment>
     </unit>
-    <unit id="TopMenu.AdvancedSearch">
-      <segment>
-        <source>Sök</source>
-      </segment>
-    </unit>
-    <unit id="TopMenu.Info">
+    <unit id="TopMenu.About">
       <segment>
         <source>Om</source>
       </segment>
     </unit>
-    <unit id="TopMenu.Read">
+    <unit id="TopMenu.Content">
       <segment>
-        <source>Läs</source>
+        <source>Innehåll</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Home">
+      <segment>
+        <source>Hem</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.LogoAltText">
+      <segment>
+        <source>Logo</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Menu">
+      <segment>
+        <source>Meny</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.Search">
+      <segment>
+        <source>Sök</source>
       </segment>
     </unit>
     <unit id="Type">

@@ -4,10 +4,12 @@
         "Subtitle": "Sivuston alaotsikko"
     },
     "TopMenu": {
+        "Menu": "Valikko",
         "Home": "Etusivu",
-        "Read": "Sisältö",
-        "Info": "Tietoja",
-        "AdvancedSearch": "Hae"
+        "Content": "Sisältö",
+        "About": "Tietoja",
+        "Search": "Hae",
+        "LogoAltText": "Logo"
     },
     "Read": {
         "Popover": {
@@ -142,7 +144,8 @@
         "subject": "Henkilö",
         "collections": "Kokoelmat",
         "works": "Teokset",
-        "photos": "kuvaa"
+        "photos": "kuvaa",
+        "altText": "Galleriakuva"
     },
 	"media": "Kuvat",
     "TOC": {
@@ -176,9 +179,7 @@
         },
         "EPUBS": "Epub"
     },
-    "BackButton": {
-        "default": "Takaisin"
-    },
+    "BackButton": "Takaisin",
     "IndexOfPersons": {
         "searchPlaceholder": "Hae ..."
     },

@@ -6,7 +6,7 @@
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Reference.refer' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
       <!--
       <ion-button (click)="showSharePopover($event)">
@@ -16,7 +16,7 @@
       -->
       <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showReadSettingsPopover($event)" id="settings-icon">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Read.Popover.Options' | translate }}</span>
+        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

@@ -14,13 +14,20 @@ import { config } from "src/app/services/config/config";
 export class TopMenuComponent {
   @Input() splitPaneMobile?: boolean;
   @Input() showSideMenu: boolean;
-  @Output() hamburgerMenuClick = new EventEmitter();
+  @Output() sideMenuClick = new EventEmitter();
 
-  public showViewToggle: boolean;
+  public showLanguageButton: boolean;
   public showTopURNButton: boolean;
-  public showTopElasticButton: boolean;
+  public showTopSearchButton: boolean;
   public showTopContentButton: boolean;
   public showTopAboutButton: boolean;
+  public showSiteLogo: boolean;
+  public siteLogoLinkUrl: string;
+  public siteLogoDefaultImageUrl: string;
+  public siteLogoMobileImageUrl: string;
+  public currentLanguageLabel: string = '';
+  public languages = [];
+  public languageMenuOpen: boolean = false;
   firstAboutPageId = '';
 
   constructor(
@@ -29,19 +36,42 @@ export class TopMenuComponent {
     private modalController: ModalController,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.showViewToggle = config.component?.topMenu?.showLanguageButton ?? true;
+    this.showLanguageButton = config.component?.topMenu?.showLanguageButton ?? true;
     this.showTopURNButton = config.component?.topMenu?.showURNButton ?? true;
-    this.showTopElasticButton = config.component?.topMenu?.showElasticSearchButton ?? true;
+    this.showTopSearchButton = config.component?.topMenu?.showElasticSearchButton ?? true;
     this.showTopContentButton = config.component?.topMenu?.showContentButton ?? true;
     this.showTopAboutButton = config.component?.topMenu?.showAboutButton ?? true;
+    this.showSiteLogo = config.component?.topMenu?.showSiteLogo ?? false;
+
+    this.siteLogoLinkUrl = config.component?.topMenu?.siteLogoLinkUrl ?? 'https://www.sls.fi/';
+    this.siteLogoDefaultImageUrl = config.component?.topMenu?.siteLogoDefaultImageUrl ?? 'assets/images/logo.svg';
+    this.siteLogoMobileImageUrl = config.component?.topMenu?.siteLogoMobileImageUrl ?? 'assets/images/logo-mobile.svg';
+
+    if (!this.siteLogoMobileImageUrl && this.siteLogoDefaultImageUrl) {
+      this.siteLogoMobileImageUrl = this.siteLogoDefaultImageUrl;
+    }
 
     const aboutPagesFolderNumber = config.page?.about?.markdownFolderNumber ?? '03';
     const initialAboutPageNode = config.page?.about?.initialPageNode ?? '01';
     this.firstAboutPageId = aboutPagesFolderNumber + "-" + initialAboutPageNode;
+
+    this.languages = config.app?.i18n?.languages ?? [];
+    this.languages.forEach((languageObj: any) => {
+      if (languageObj.code === this.activeLocale) {
+        this.currentLanguageLabel = languageObj.label + ' (' + languageObj.code + ')';
+      }
+    });
   }
 
-  public toggleSplitPane() {
-    this.hamburgerMenuClick.emit();
+  public toggleSideMenu(event: any) {
+    event.preventDefault();
+    this.sideMenuClick.emit();
+  }
+
+  public toggleLanguageMenu(event: any) {
+    event.preventDefault();
+    this.languageMenuOpen = !this.languageMenuOpen;
+    // TODO: menu for selecting language
   }
 
   public async showUserSettingsPopover(event: any) {
@@ -52,6 +82,7 @@ export class TopMenuComponent {
   }
 
   public async showReference(event: any) {
+    event.preventDefault();
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModalPage,

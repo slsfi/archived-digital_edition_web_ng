@@ -1,7 +1,6 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { MdContent } from 'src/app/models/md-content.model';
@@ -11,12 +10,6 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
 
-/**
- * Generated class for the FacsimileCollectionPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 // @IonicPage({
 //   name: 'media-collection',
@@ -59,7 +52,6 @@ export class MediaCollectionPage {
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
     private modalController: ModalController,
-    public translate: TranslateService,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) public activeLocale: string

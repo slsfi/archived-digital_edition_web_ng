@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListChildrenComponent } from './digital-edition-list-children/digital-edition-list-children';
 import { DateHistogram } from './date-histogram/date-histogram';
-import { TitleLogoComponent } from './title-logo/title-logo';
 import { TextChangerComponent } from './text-changer/text-changer';
 import { MathJaxComponent } from './math-jax/math-jax';
 import { IllustrationsComponent } from './illustrations/illustrations';
@@ -18,7 +17,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 
 @NgModule({
 	declarations: [
-		TitleLogoComponent,
 		TopMenuComponent,
 		TextChangerComponent,
 		DigitalEditionListChildrenComponent,
@@ -37,7 +35,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 		RouterLink
 	],
   exports: [
-    TitleLogoComponent,
     TopMenuComponent,
     TextChangerComponent,
     DigitalEditionListChildrenComponent,

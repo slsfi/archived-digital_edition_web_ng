@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, Platform, PopoverController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 
 // @IonicPage({
@@ -17,12 +14,8 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 export class EpubPage {
 
   public epubFileName: string = '';
+
   constructor(
-    protected navCtrl: NavController,
-    protected popoverCtrl: PopoverController,
-    protected translate: TranslateService,
-    protected events: EventsService,
-    protected platform: Platform,
     private userSettingsService: UserSettingsService,
     private route: ActivatedRoute
   ) {

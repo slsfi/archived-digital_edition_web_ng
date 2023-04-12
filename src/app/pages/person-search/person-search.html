@@ -10,7 +10,7 @@
           <ion-col>
             <ion-row>
                 <ion-col class="searchbar-col" col-10>
-                  <ion-searchbar placeholder="{{'IndexOfPersons.searchPlaceholder' | translate}}" class="searchbar" [(ngModel)]="searchText" (ionInput)="onSearchInput()" (ionClear)="onSearchClear()"></ion-searchbar>
+                  <ion-searchbar placeholder="Sök ..." i18n-placeholder="@@IndexOfPersons.searchPlaceholder" class="searchbar" [(ngModel)]="searchText" (ionInput)="onSearchInput()" (ionClear)="onSearchClear()"></ion-searchbar>
                 </ion-col>
                 <ion-col class="filter-button-col" col-2 *ngIf="showFilter">
                     <button (click)="openFilterModal()" ion-button><ion-icon class="filter-button" name="funnel"></ion-icon></button>
@@ -19,12 +19,12 @@
 
             <ion-row class="active-filters-row" *ngIf="filters && (filters.filterPersonTypes || filters.filterYearMin || filters.filterYearMax) && !filters.isEmpty">
               <ion-item>
-                <span class="active-filters-heading">{{'Filter.activeFilters' | translate}}:</span>
+                <span class="active-filters-heading"><ng-container i18n="@@Filter.activeFilters">Aktiva avgränsningar</ng-container>:</span>
                 <ng-container *ngIf="filters.filterPersonTypes && filters.filterPersonTypes.length > 0">
                   <ng-container *ngFor="let fpt of filters.filterPersonTypes; let i = index">
                     <span class="active-person-type">{{fpt.name}}</span><ng-container *ngIf="i < filters.filterPersonTypes.length - 1">, </ng-container></ng-container></ng-container><ng-container *ngIf="filters.filterPersonTypes && filters.filterPersonTypes.length > 0 && (filters.filterYearMin || filters.filterYearMax)">, </ng-container>
                 <ng-container *ngIf="filters.filterYearMin || filters.filterYearMax">
-                  <span class="active-filter-year-heading">{{'Filter.year' | translate | lowercase}}</span>
+                  <span class="active-filter-year-heading">{{<ng-container i18n="@@Filter.year">Född</ng-container> | lowercase}}</span>
                   <span *ngIf="filters.filterYearMin">{{filters.filterYearMin}}</span>–<span *ngIf="filters.filterYearMax">{{filters.filterYearMax}}</span>
                 </ng-container>
               </ion-item>
@@ -45,11 +45,11 @@
               <div class="loading-spinner-wrapper">
                 <ion-spinner *ngIf="showLoading" class="loading" name="crescent"></ion-spinner>
               </div>
-              <button *ngIf="persons.length > 0 && hasMore()" ion-button (click)="loadMore($event)" [disabled]="showLoading">{{"BasicActions.ShowMore" | translate}}</button>
+              <ion-button *ngIf="persons.length > 0 && hasMore()" (click)="loadMore($event)" [disabled]="showLoading" i18n="@@BasicActions.ShowMore">Visa fler</ion-button>
             </ion-row>
 
             <ion-row class="hits-footer" *ngIf="persons.length > 100">
-              <button ion-button fill="outline" (click)="scrollToTop()">{{"BasicActions.ScrollToTop" | translate}}</button>
+              <ion-button fill="outline" (click)="scrollToTop()" i18n="@@BasicActions.ScrollToTop">Till början</ion-button>
             </ion-row>
           </ion-col>
           

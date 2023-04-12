@@ -1,0 +1,43 @@
+/* General styles for the component are defined in global.scss since they are common with the side-menu component. */
+
+.menu-header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
+    .go-back-menu-item {
+        background-color: var(--toc-back-button-background-color);
+        color: var(--toc-back-button-text-color);
+        font-size: 1rem;
+        text-decoration: none;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        font-weight: normal;
+        margin: 0;
+        border-left: 4px solid transparent;
+        padding: 11px 18px 11px 6px;
+
+        ion-icon {
+            color: var(--toc-back-button-arrow-color);
+            font-size: 1.75rem;
+            margin-right: 0.5rem;
+        }
+    }
+    .go-back-menu-item:hover {
+        border-left-color: var(--toc-hover-color);
+    }
+    h1 {
+        background-color: var(--toc-collection-title-background-color);
+        color: var(--toc-collection-title-text-color);
+        margin: 0;
+        padding: 16px 18px 16px 16px;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+}
+
+.menu-header + ul {
+    margin-top: 0;
+}
