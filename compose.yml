@@ -3,5 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: docker.io/slsfinland/digital_edition_web_ng:latest
     ports:
       - 2089:4201
