@@ -20,7 +20,7 @@ function run() {
     const server = express();
     server.use("/fi", appFi);
     server.use("/sv", appSv);
-    server.use("", appFi);
+    server.use("", appSv);
 
     server.listen(port, () => {
         console.log(`Node Express server listening on http://localhost:${port}`);
