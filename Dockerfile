@@ -13,7 +13,4 @@ RUN npm install -g @angular/cli@^15.2.2
 RUN npm install
 RUN npm run build:ssr
 
-# delete default locale directory. In this project, default locale is "aa"
-RUN rm -r /digital_edition_web_ng/dist/app/browser/aa
-
 CMD ["npm","run","serve:ssr"]

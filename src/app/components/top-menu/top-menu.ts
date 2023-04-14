@@ -1,9 +1,9 @@
-import { Component, Input, Inject, EventEmitter, LOCALE_ID, Output } from '@angular/core';
-import { ModalController, PopoverController } from '@ionic/angular';
+import { Component, Input, Inject, EventEmitter, LOCALE_ID, Output, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { UserSettingsPopoverPage } from 'src/app/modals/user-settings-popover/user-settings-popover';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/app/services/config/config";
+import { Router } from "@angular/router";
+import { DOCUMENT } from "@angular/common";
 
 
 @Component({
@@ -11,7 +11,7 @@ import { config } from "src/app/services/config/config";
   templateUrl: 'top-menu.html',
   styleUrls: ['top-menu.scss']
 })
-export class TopMenuComponent {
+export class TopMenuComponent implements OnInit{
   @Input() splitPaneMobile?: boolean;
   @Input() showSideMenu: boolean;
   @Output() sideMenuClick = new EventEmitter();
@@ -26,16 +26,23 @@ export class TopMenuComponent {
   public siteLogoDefaultImageUrl: string;
   public siteLogoMobileImageUrl: string;
   public currentLanguageLabel: string = '';
-  public languages = [];
+  public languages: {
+    code: string;
+    label: string
+  }[]= [];
   public languageMenuOpen: boolean = false;
   firstAboutPageId = '';
+  _window: Window;
 
   constructor(
-    private popoverCtrl: PopoverController,
-    public userSettingsService: UserSettingsService,
     private modalController: ModalController,
-    @Inject(LOCALE_ID) public activeLocale: string
-  ) {
+    private router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
+
+  ngOnInit() {
+    this._window = <any>this.document.defaultView;
     this.showLanguageButton = config.component?.topMenu?.showLanguageButton ?? true;
     this.showTopURNButton = config.component?.topMenu?.showURNButton ?? true;
     this.showTopSearchButton = config.component?.topMenu?.showElasticSearchButton ?? true;
@@ -68,17 +75,9 @@ export class TopMenuComponent {
     this.sideMenuClick.emit();
   }
 
-  public toggleLanguageMenu(event: any) {
-    event.preventDefault();
-    this.languageMenuOpen = !this.languageMenuOpen;
-    // TODO: menu for selecting language
-  }
-
-  public async showUserSettingsPopover(event: any) {
-    const popover = await this.popoverCtrl.create({
-      component: UserSettingsPopoverPage,
-    });
-    return await popover.present(event);
+  public toggleLanguageMenu(event: FocusEvent) {
+    if(!event.relatedTarget || !(event.currentTarget as Node).contains(event.relatedTarget as Node))
+      this.languageMenuOpen = !this.languageMenuOpen;
   }
 
   public async showReference(event: any) {

@@ -36,13 +36,12 @@
       <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
     </a>
   </li>
-  <li *ngIf="showLanguageButton && currentLanguageLabel">
-    <a href="#" (click)="toggleLanguageMenu($event)">
-      <ion-icon name="language-sharp"></ion-icon>
-      <span class="side-title">{{currentLanguageLabel}}</span>
-      <ion-icon class="toggle-language-menu-icon" [class.hide-icon]="languageMenuOpen" name="chevron-down-sharp"></ion-icon>
-      <ion-icon class="toggle-language-menu-icon" [class.hide-icon]="!languageMenuOpen" name="chevron-up-sharp"></ion-icon>
-    </a>
+  <li *ngIf="showLanguageButton && currentLanguageLabel" (focus)="toggleLanguageMenu($event)" (blur)="toggleLanguageMenu($event)" tabindex="0">
+    <ion-icon name="language-sharp"></ion-icon>
+    <span class="side-title">{{currentLanguageLabel}}</span>
+    <div [class.open]="languageMenuOpen">
+      <a *ngFor="let lang of languages" href="{{_window.location.origin + '/' + lang.code}}">{{lang.label}} ({{lang.code}})</a>
+    </div>
   </li>
   <li *ngIf="showSiteLogo" class="site-logo">
     <a href="{{siteLogoLinkUrl}}">

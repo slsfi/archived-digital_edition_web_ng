@@ -19,7 +19,6 @@ ul {
   padding: 0;
   margin: 0 0 0 1rem;
   width: 100%;
-
   li {
     display: flex;
     flex-flow: row nowrap;
@@ -27,8 +26,7 @@ ul {
     font-weight: 600;
     margin: 0 2rem 0 0;
     padding: 0;
-    filter: var(--top-menu-button-filter, 0);
-
+    filter: var(--top-menu-button-filter);
     a {
       color: inherit;
       text-decoration: none;
@@ -36,17 +34,29 @@ ul {
       flex-flow: row nowrap;
       align-items: center;
       transition: var(--opacity-hover-transition);
+      text-transform: uppercase;
     }
 
     a:hover {
       opacity: var(--opacity-hover);
     }
-
+    > div {
+      position: absolute;
+      display: none;
+      background: var(--primary-color);
+      &.open{
+        display: block;
+        white-space: nowrap;
+      }
+      a {
+        padding: 5px;
+      }
+    }
     ion-icon {
       font-size: var(--top-menu-toolbar-button-icons-font-size, 1.875rem);
       min-width: var(--top-menu-toolbar-button-icons-font-size, 1.875rem);
       margin-right: 0;
-    
+
       &.toggle-language-menu-icon {
         font-size: 1.25rem;
         margin-left: 0.25rem;
@@ -92,17 +102,17 @@ ul {
     a {
       display: block;
       text-decoration: none;
-    
+
       img {
         display: block;
         height: var(--top-menu-logo-height, 60px);
         width: auto;
       }
-    
+
       img.mobile-logo {
         display: none;
       }
-    
+
       @media only screen and (max-width: 1150px) {
         img.default-logo {
           display: none;
