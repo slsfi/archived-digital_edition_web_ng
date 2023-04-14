@@ -1,13 +1,15 @@
 FROM node:18-alpine
 
 RUN apk update
-RUN apk add --no-cache g++ gcc libgcc libstdc++ linux-headers make py3-pip git
+RUN apk add --no-cache g++ gcc libgcc libstdc++ linux-headers make py3-pip
 
-RUN git clone --depth 1 -b angular-15 https://github.com/slsfi/digital_edition_web_ng.git
+RUN mkdir /digital_edition_web_ng
 
 WORKDIR /digital_edition_web_ng
 
-RUN npm install -g @angular/cli
+ADD . /digital_edition_web_ng
+
+RUN npm install -g @angular/cli@^15.2.2
 RUN npm install
 RUN npm run build:ssr
 
