@@ -38,9 +38,11 @@
   </li>
   <li *ngIf="showLanguageButton && currentLanguageLabel" (focus)="toggleLanguageMenu($event)" (blur)="toggleLanguageMenu($event)" tabindex="0">
     <ion-icon name="language-sharp"></ion-icon>
-    <span class="side-title">{{currentLanguageLabel}}</span>
+    <span class="side-title">{{currentLanguageLabel}} ({{activeLocale}})</span>
     <div [class.open]="languageMenuOpen">
-      <a *ngFor="let lang of languages" href="{{_window.location.origin + '/' + lang.code}}">{{lang.label}} ({{lang.code}})</a>
+      <ng-container *ngFor="let lang of languages" >
+        <a *ngIf="lang.label !== currentLanguageLabel" href="{{_window.location.origin + '/' + lang.code}}">{{lang.label}} ({{lang.code}})</a>
+      </ng-container>
     </div>
   </li>
   <li *ngIf="showSiteLogo" class="site-logo">

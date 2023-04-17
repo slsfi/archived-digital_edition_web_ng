@@ -7,7 +7,7 @@
   font-family: var(--font-stack-top-menu);
   background-color: var(--primary-color);
   color: var(--text-color-on-primary-color-background);
-  contain: content;
+  contain: layout size;
   border-bottom: var(--top-menu-toolbar-bottom-border);
 }
 
@@ -44,6 +44,7 @@ ul {
       position: absolute;
       display: none;
       background: var(--primary-color);
+      top: 0;
       &.open{
         display: block;
         white-space: nowrap;

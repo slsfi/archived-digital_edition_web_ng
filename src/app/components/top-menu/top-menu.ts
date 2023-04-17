@@ -65,7 +65,7 @@ export class TopMenuComponent implements OnInit{
     this.languages = config.app?.i18n?.languages ?? [];
     this.languages.forEach((languageObj: any) => {
       if (languageObj.code === this.activeLocale) {
-        this.currentLanguageLabel = languageObj.label + ' (' + languageObj.code + ')';
+        this.currentLanguageLabel = languageObj.label;
       }
     });
   }
