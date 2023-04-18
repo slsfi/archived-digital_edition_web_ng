@@ -36,7 +36,7 @@
             "i18nDuplicateTranslation": "error",
             "i18nMissingTranslation": "ignore",
             "assets": [
-              "src/favicon.ico",
+              "src/assets/icon/favicon.ico",
               "src/assets",
               {
                 "glob": "**/*",
