@@ -14,16 +14,12 @@
       <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="site-subtitle" i18n="@@Site.Subtitle">Webbplatsens undertitel</p>
     </div>
 
-    <div class="site-presentation">
-      <markdown [data]="homeContent"></markdown>
-    </div>
+    <div class="site-presentation markdown" [innerHTML]="descriptionText$ | async"></div>
 
     <div *ngIf="showEditionList" class="front-page-edition-list">
       <digital-editions-list class="edition_boxes" [layoutType]="'auto'"></digital-editions-list>
     </div>
 
-    <footer *ngIf="showFooter" class="footer">
-      <markdown [data]="homeFooterContent"></markdown>
-    </footer>
+    <footer *ngIf="showFooter" class="footer markdown" [innerHTML]="footerText$ | async"></footer>
   </div>
 </ion-content>

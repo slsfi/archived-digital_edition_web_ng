@@ -1,9 +1,11 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { MdContent } from 'src/app/models/md-content.model';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -44,10 +46,11 @@ export class MediaCollectionPage {
   prevTag = '';
   prevLoc = '';
   prevSub = '';
-  mdContent?: MdContent;
+  mdContent$: Observable<SafeHtml>;
   showURNButton: boolean;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private events: EventsService,
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
@@ -136,11 +139,6 @@ export class MediaCollectionPage {
   }
 
   ngOnInit() {
-    console.log('ionViewDidLoad MediaCollectionPage');
-
-    let fileID = '11-' + this.mediaCollectionId;
-    this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
-
     this.route.params.subscribe(params => {
       this.mediaCollectionId = params['mediaCollectionId'];
       this.singleId = params['id'];
@@ -158,12 +156,11 @@ export class MediaCollectionPage {
 
   initStuff() {
     let fileID = '11-' + this.mediaCollectionId;
-    this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
     if (this.mediaCollectionId !== null && this.mediaCollectionId !== 'null') {
       if ( !String(fileID).startsWith(this.activeLocale) ) {
         fileID = this.activeLocale + '-' + fileID;
       }
-      this.getMdContent(fileID);
+      this.mdContent$ = this.getMdContent(fileID);
       this.getCollectionTags();
       this.getCollectionLocations();
       this.getCollectionSubjects();
@@ -409,17 +406,15 @@ export class MediaCollectionPage {
     return;
   }
 
-  getMdContent(fileID: string) {
-    // console.log(`Calling getMdContent from content.ts ${fileID}`);
-    this.mdContentService.getMdContent(fileID)
-        .subscribe(
-            text => {
-              if (this.mdContent) {
-                this.mdContent.content = text.content;
-              }
-            },
-            error =>  {}
-        );
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   async showReference() {

@@ -1,10 +1,8 @@
-<ion-content padding>
+<ion-content class="ion-padding">
     <div class="info">
         <h1 i18n="@@TOC.MediaCollections">Bildbank</h1>
     </div>
-    <div class="info markdown" *ngIf="mdContent.content">
-      <markdown [data]="mdContent.content"></markdown>
-    </div>
+    <div class="info markdown" *ngIf="mdContent$ | async" [innerHTML]="mdContent$ | async"></div>
     <div class="filters" *ngIf="galleryTags.length > 1 || galleryLocations.length > 1 || gallerySubjects.length > 1">
         <ion-item class="tagSelect" *ngIf="galleryTags.length > 1">
             <ion-label i18n="@@MediaCollections.tags">Ämnesord</ion-label>

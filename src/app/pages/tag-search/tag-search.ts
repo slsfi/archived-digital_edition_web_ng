@@ -1,6 +1,9 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import debounce from 'lodash/debounce';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
@@ -38,7 +41,7 @@ export class TagSearchPage{
   max_fetch_size = 500;
   filters: any = [];
   immediate_search = false;
-  mdContent?: string;
+  mdContent$: Observable<SafeHtml>;
   objectType = 'tag';
 
   // tslint:disable-next-line:max-line-length
@@ -47,6 +50,7 @@ export class TagSearchPage{
   debouncedSearch = debounce(this.searchTags, 500);
 
   constructor(
+              private sanitizer: DomSanitizer,
               public semanticDataService: SemanticDataService,
               private mdContentService: MdContentService,
               public occurrenceService: OccurrenceService,
@@ -65,7 +69,7 @@ export class TagSearchPage{
 
   ionViewDidLoad() {
     this.getTags();
-    this.getMdContent(this.activeLocale + '-12-04');
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-04');
   }
 
   getTags() {
@@ -233,12 +237,15 @@ export class TagSearchPage{
     return await filterModal.present();
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID)
-      .subscribe(
-        text => { this.mdContent = text.content; },
-        error => { this.mdContent = ''; }
-      );
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   scrollToTop() {

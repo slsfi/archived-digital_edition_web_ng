@@ -1,6 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { MarkdownModule } from 'ngx-markdown';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { PipesModule } from 'src/pipes/pipes.module';
@@ -27,7 +26,6 @@ import { ElasticSearchPage } from './elastic-search';
     ComponentsModule,
     FilterPageModule,
     OccurrencesPageModule,
-    MarkdownModule,
     ElasticSearchPageRoutingModule
   ],
   providers: [

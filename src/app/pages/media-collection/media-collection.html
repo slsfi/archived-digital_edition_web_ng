@@ -10,14 +10,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <div class="info">
     <h1>{{mediaTitle}}</h1>
     <p>{{mediaDescription}}</p>
   </div>
-  <div class="info markdown" *ngIf="mdContent?.content">
-    <markdown [data]="mdContent?.content"></markdown>
-  </div>
+  <div class="info markdown" *ngIf="mdContent$| async" [innerHTML]="mdContent$| async"></div>
   <div class="filters" *ngIf="galleryTags.length > 1 || galleryLocations.length > 1 || gallerySubjects.length > 1">
     <ion-item class="tagSelect" *ngIf="galleryTags.length > 1">
       <ion-label i18n="@@MediaCollections.tags">Ämnesord</ion-label>
@@ -48,7 +46,7 @@
       <ion-col *ngFor="let image of mediaCollection; index as i" col-md-4 col-sm-12 col-lg-3>
         <ion-card *ngIf="mediaCollectionId!=undefined" (click)="openImage(i, mediaCollectionId)">
           <div>
-            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{mediaCollectionId}}/{{asThumb(image.front)}}"/>
+            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy"/>
           </div>
           <ion-card-content>
             <div *ngIf="image.media_title_translation" class="img-desc title">
@@ -63,7 +61,7 @@
         </ion-card>
         <ion-card *ngIf="mediaCollectionId==undefined" (click)="openImage(i, image.mediaCollectionId)">
           <div>
-            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{image.mediaCollectionId}}/{{asThumb(image.front)}}"/>
+            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{image.mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy"/>
           </div>
           <ion-card-content>
             <div *ngIf="image.description" class="img-desc">

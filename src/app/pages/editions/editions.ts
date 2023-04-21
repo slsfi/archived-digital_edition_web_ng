@@ -1,38 +1,39 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 
-/**
- * List of collections.
- */
 
-// @IonicPage({
-//   segment: 'publications'
-// })
 @Component({
   selector: 'editions-page',
   templateUrl: 'editions.html',
   styleUrls: ['editions.scss']
 })
 export class EditionsPage {
-  readContent: string = '';
+  text$: Observable<SafeHtml>;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private mdContentService: MdContentService,
     public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {}
 
   ngOnInit() {
-    this.getMdContent(this.activeLocale + '-02');
+    this.text$ = this.getMdContent(this.activeLocale + '-02');
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.readContent = text.content.trim();
-      }
-    });
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError(e => {
+        return of('');
+      })
+    );
   }
 
 }

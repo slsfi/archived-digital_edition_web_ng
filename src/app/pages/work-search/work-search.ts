@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -51,7 +54,7 @@ export class WorkSearchPage {
   showLoading = false;
   showFilter = true;
   objectType = 'work';
-  mdContent: string = '';
+  mdContent$: Observable<SafeHtml>;
 
   selectedLinkID?: string;
 
@@ -61,6 +64,7 @@ export class WorkSearchPage {
   infiniteScrollNumber = 200;
 
   constructor(
+              private sanitizer: DomSanitizer,
               public semanticDataService: SemanticDataService,
               private mdContentService: MdContentService,
               protected textService: TextService,
@@ -365,12 +369,15 @@ export class WorkSearchPage {
     }
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.mdContent = text.content;
-      }
-    });
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
 }

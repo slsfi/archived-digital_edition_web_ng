@@ -1,5 +1,3 @@
 <ion-content class="ion-padding">
-  <div class="md_content">
-    <markdown [data]="mdText" [disableSanitizer]="true"></markdown>
-  </div>
+  <article class="md_content markdown" [innerHTML]="markdownText$ | async"></article>
 </ion-content>

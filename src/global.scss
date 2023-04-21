@@ -339,7 +339,7 @@
 
   // STYLES FOR ELEMENTS IN MARKDOWN
 
-  markdown {
+  .markdown {
     font-size: 1.125rem;
 
     h1, h2, h3, h4, h5, h6 {
@@ -828,7 +828,95 @@
   }
   /* --- */
 
+  /* --- Style block: Styles for the markdown content in the legend component. --- */
+  .legend-markdown-content {
+    h2,
+    h2:first-child {
+        font-size: 1.25em;
+        font-variant: small-caps;
+        font-weight: normal;
+        margin: 0 0 0.5em;
+    }
 
+    h3 {
+        font-size: 1.125em;
+        font-style: italic;
+        font-weight: bold;
+        margin: 2em 0 0.5em;
+    }
+
+    h4 {
+        font-size: 1.125em;
+        font-style: italic;
+        margin: 2em 0 0.5em;
+    }
+
+    h5 {
+        font-size: 1em;
+        font-weight: bold;
+        margin: 2em 0 0.5em;
+    }
+
+    h6 {
+        font-size: 1em;
+        font-style: italic;
+        margin: 2em 0 0.5em;
+    }
+
+    table {
+        margin: 1em 0;
+    }
+
+    table th {
+      text-align: left;
+    }
+
+    table td {
+        line-height: 1.25em;
+    }
+
+    table.first-col-highlight {
+        td:first-child {
+            font-weight: bold;
+        }
+    }
+
+    span.extVariantsTrigger {
+        cursor: default;
+    }
+  }
+  /* --- */
+
+  /* --- Style block: Styles for the markdown content in the search pages. --- */
+  page-elastic-search,
+  page-person-search,
+  page-place-search,
+  page-tag-search,
+  page-work-search {
+    .markdown {
+      > p:first-child {
+        margin-top: 0;
+      }
+
+      > p:last-child {
+          margin-bottom: 0;
+      }
+    }
+  }
+  page-elastic-search .markdown {
+    ul {
+      list-style-type: disc;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: var(--default-link-color);
+    }
+    details summary::marker {
+      color: initial;
+    }
+  }
+  /* --- */
 
   /*
 

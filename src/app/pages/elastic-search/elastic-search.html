@@ -2,9 +2,7 @@
   <ion-grid class="search-grid">
     <ion-row class="page-info-row">
       <h1 class="page-title" i18n="@@ElasticSearch.PageTitle">Sök i utgåvan</h1>
-      <div class="info markdown" *ngIf="mdContent">
-        <markdown [data]="mdContent"></markdown>
-      </div>
+      <div class="info markdown" *ngIf="mdContent$ | async" [innerHTML]="mdContent$ | async"></div>
     </ion-row>
 
     <!-- Search field -->

@@ -1,8 +1,10 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { DOCUMENT } from "@angular/common";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { marked } from 'marked';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { EventsService } from 'src/app/services/events/events.service';
@@ -21,7 +23,7 @@ import { config } from "src/app/services/config/config";
 })
 export class TitlePage {
 
-  mdContent: string = '';
+  mdContent$: Observable<SafeHtml>;
   hasMDTitle = '';
   hasDigitalEditionListChildren = false;
   childrenPdfs = [];
@@ -48,10 +50,10 @@ export class TitlePage {
     public readPopoverService: ReadPopoverService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) public activeLocale: string,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.titleSelected = true;
-    this.mdContent = '';
     this.hasMDTitle = config.ProjectStaticMarkdownTitleFolder ?? '';
     this.showURNButton = config.showURNButton?.pageTitle ?? false;
     this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
@@ -63,7 +65,7 @@ export class TitlePage {
       // TODO: Ideally we wouldn't have any side-effects
       tap(({collectionID}) => {       // tap is analogous to "touch", do something, for side-effects
         this.id = collectionID;       // NOTE: If there are no subscriptions then the code is not used
-        this.checkIfCollectionHasChildrenPdfs();
+        this.checkIfCollectionHasChildrenPdfs(collectionID);
       }),
 
       // "Let's wait something else instead"
@@ -73,8 +75,8 @@ export class TitlePage {
     );
   }
 
-  checkIfCollectionHasChildrenPdfs() {
-    let configChildrenPdfs = config.collectionChildrenPdfs?.[this.id] ?? [];
+  checkIfCollectionHasChildrenPdfs(collectionID: string) {
+    let configChildrenPdfs = config.collectionChildrenPdfs?.[collectionID] ?? [];
 
     if (configChildrenPdfs.length) {
       this.childrenPdfs = configChildrenPdfs;
@@ -82,58 +84,15 @@ export class TitlePage {
     }
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.mdContent = text.content;
-      }
-    });
-  }
-
-  loadTitle(lang: string, id: string) {
-    this.textLoading = true;
-    const isIdText = isNaN(Number(id));
-
-    if (this.hasMDTitle === '') {
-      if (isIdText === false) {
-        this.textService.getTitlePage(id, lang).subscribe({
-          next: (res) => {
-            this.text = this.sanitizer.bypassSecurityTrustHtml(
-              res.content.replace(/images\//g, 'assets/images/')
-                .replace(/\.png/g, '.svg')
-            );
-
-            this.textLoading = false;
-          },
-          error: (e) => {
-            this.textLoading = false;
-          }
-        });
-      }
-    } else {
-      if (isIdText === false) {
-        const fileID = `${lang}-${this.hasMDTitle}-${id}`;
-        this.mdContentService.getMdContent(fileID).subscribe({
-          next: (res) => {
-            this.mdContent = res.content;
-            this.textLoading = false;
-          },
-          error: (e) => {
-            this.textLoading = false;
-          }
-        });
-      } else {
-        this.mdContentService.getMdContent(`${lang}-gallery-intro`).subscribe({
-          next: (text) => {
-            this.mdContent = text.content;
-            this.textLoading = false;
-          },
-          error: (e) =>  {
-            this.textLoading = false;
-          }
-        });
-      }
-    }
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   getTitleContent(lang: string, id: string): Observable<SafeHtml> {
@@ -142,7 +101,7 @@ export class TitlePage {
     if (this.hasMDTitle === '') {
       if (!isIdText) {
         return this.textService.getTitlePage(id, lang).pipe(
-          map(res => {
+          map((res: any) => {
             return this.sanitizer.bypassSecurityTrustHtml(
               res.content.replace(/images\//g, 'assets/images/')
                 .replace(/\.png/g, '.svg')
@@ -157,24 +116,9 @@ export class TitlePage {
       }
     } else {
       if (!isIdText) {
-        const fileID = `${lang}-${this.hasMDTitle}-${id}`;
-        return this.mdContentService.getMdContent(fileID).pipe(
-          map(res => {
-            return this.sanitizer.bypassSecurityTrustHtml(res.content);
-          }),
-          catchError(e => {
-            return throwError(() => new Error(e));
-          })
-        );
+        return this.getMdContent(`${lang}-${this.hasMDTitle}-${id}`);
       } else {
-        return this.mdContentService.getMdContent(`${lang}-gallery-intro`).pipe(
-          map(res => {
-            return this.sanitizer.bypassSecurityTrustHtml(res.content);
-          }),
-          catchError(e => {
-            return throwError(() => new Error(e));
-          })
-        );
+        return this.getMdContent(`${lang}-gallery-intro`);
       }
     }
   }
@@ -207,7 +151,7 @@ export class TitlePage {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModalPage,
-      componentProps: {id: document.URL, type: 'reference', origin: 'page-title'}
+      componentProps: {id: this.document.URL, type: 'reference', origin: 'page-title'}
     });
     return await modal.present();
   }

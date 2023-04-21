@@ -1,9 +1,9 @@
-import { ErrorHandler, Injectable, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { DigitalEditionsApp } from './app.component';
@@ -25,7 +25,6 @@ import { CommonModule } from '@angular/common';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
-import { MarkdownModule } from 'ngx-markdown';
 import { MathJaxModule } from './components/math-jax/math-jax.module';
 import { ReferenceDataModalPage } from './modals/reference-data-modal/reference-data-modal';
 import { DownloadTextsModalPage } from './modals/download-texts-modal/download-texts-modal';
@@ -65,8 +64,7 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     FacsimileZoomPageModule,
     ReadPopoverPageModule,
     IllustrationPageModule,
-    MathJaxModule,
-    MarkdownModule.forRoot({ loader: HttpClient }),
+    MathJaxModule
   ],
   providers: [
     HtmlContentService,

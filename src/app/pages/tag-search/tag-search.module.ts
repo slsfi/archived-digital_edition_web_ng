@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { MarkdownModule } from 'ngx-markdown';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +18,6 @@ import { TagSearchPage } from './tag-search';
     FormsModule,
     PipesModule,
     ComponentsModule,
-    MarkdownModule,
     TagSearchRoutingModule
   ],
   providers: [

@@ -1,4 +1,7 @@
 import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, Renderer2 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { marked } from 'marked';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -14,8 +17,7 @@ export class LegendComponent {
 
   @Input() itemId?: string;
   @Input() scrollToElementId?: string;
-  text?: string;
-  textLoading: Boolean = true;
+  text$: Observable<SafeHtml>;
   staticMdLegendFolderNumber = '13';
   collectionId = '';
   publicationId = '';
@@ -28,6 +30,7 @@ export class LegendComponent {
     private ngZone: NgZone,
     protected readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
+    private sanitizer: DomSanitizer,
     public commonFunctions: CommonFunctionsService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
@@ -38,7 +41,7 @@ export class LegendComponent {
     this.collectionId = this.itemId?.split('_')[0] || '';
     this.publicationId = this.itemId?.split('_')[1].split(';')[0] || '';
 
-    this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId + '-' + this.publicationId);
+    this.text$ = this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId + '-' + this.publicationId);
     if (isBrowser()) {
       this.setUpTextListeners();
     }
@@ -48,26 +51,24 @@ export class LegendComponent {
     this.unlistenClickEvents?.();
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.text = text.content;
-        this.textLoading = false;
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
         if (isBrowser()) {
           this.scrollToInitialTextPosition();
         }
-      },
-      error: (e) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError(e => {
         if (fileID.split('-').length > 3) {
-          this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId);
+          return this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + this.collectionId);
         } else if (fileID.split('-')[2] !== '00') {
-          this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + '00');
+          return this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + '00');
         } else {
-          this.textLoading = false;
-          this.text = $localize`:@@Read.Legend.NoLegend:Inga teckenförklaringar tillgängliga.`;
+          return of($localize`:@@Read.Legend.NoLegend:Inga teckenförklaringar tillgängliga.`);
         }
-      }
-    });
+      })
+    );
   }
 
   private setUpTextListeners() {
@@ -114,7 +115,6 @@ export class LegendComponent {
         let iterationsLeft = 10;
         clearInterval(this.intervalTimerId);
 
-        console.log("#### WINDOW 13");
         this.intervalTimerId = window.setInterval(function() {
           if (iterationsLeft < 1) {
             clearInterval(that.intervalTimerId);

@@ -44,6 +44,7 @@ ion-row.page-info-row {
 
     h1.page-title {
         font-size: 1.8125rem;
+        font-weight: bold;
         text-transform: none !important;
         margin: 1rem 0 0 0;
     }
@@ -53,18 +54,6 @@ ion-row.page-info-row {
         width: 100%;
         margin-top: 1.5rem;
         margin-bottom: 1rem;
-
-        markdown > p:first-child {
-        margin-top: 0;
-        }
-
-        markdown > p:last-child {
-        margin-bottom: 0;
-        }
-    
-        p {
-        line-height: 1.5;
-        }
     }
 }
 

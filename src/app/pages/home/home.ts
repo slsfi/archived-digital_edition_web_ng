@@ -1,5 +1,7 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -12,8 +14,8 @@ import { config } from "src/app/services/config/config";
 })
 export class HomePage {
   siteHasSubtitle: boolean = false;
-  homeContent?: string;
-  homeFooterContent?: string;
+  descriptionText$: Observable<SafeHtml>;
+  footerText$: Observable<SafeHtml>;
   imageOrientationPortrait: Boolean = false;
   imageOnRight: Boolean = false;
   titleOnImage: Boolean = false;
@@ -24,15 +26,12 @@ export class HomePage {
   portraitImageAltText = '';
 
   constructor(
-    public navCtrl: NavController,
+    private sanitizer: DomSanitizer,
     private mdContentService: MdContentService,
     private userSettingsService: UserSettingsService,
     protected textService: TextService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    if (this.userSettingsService.isMobile()) {
-      this.userSettingsService.temporarilyHideSplitPane();
-    }
 
     // Get config for front page image and text content
     this.imageOrientationPortrait = config.page?.home?.imageOrientationIsPortrait ?? false;
@@ -62,9 +61,9 @@ export class HomePage {
   }
 
   ngOnInit() {
-    this.getMdContent(this.activeLocale + '-01');
+    this.descriptionText$ = this.getMdContent(this.activeLocale + '-01');
     if (this.showFooter) {
-      this.getFooterMdContent(this.activeLocale + '-06');
+      this.footerText$ = this.getMdContent(this.activeLocale + '-06');
     }
   }
 
@@ -82,21 +81,15 @@ export class HomePage {
     }
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.homeContent = text.content;
-      },
-      error: (e) => { console.error(e); }
-    });
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
-  getFooterMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
-        this.homeFooterContent = text.content;
-      },
-      error: (e) => { console.error(e); }
-    });
-  }
 }

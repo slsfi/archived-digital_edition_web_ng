@@ -1,6 +1,8 @@
 import { Component, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdContent } from 'src/app/models/md-content.model';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -30,9 +32,10 @@ export class MediaCollectionsPage {
   prevSub = '';
   public apiEndPoint: string;
   public projectMachineName: string;
-  mdContent: MdContent;
+  mdContent$: Observable<SafeHtml>;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
     public cdRef: ChangeDetectorRef,
@@ -43,10 +46,7 @@ export class MediaCollectionsPage {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
 
-    let fileID = activeLocale + '-11-all';
-    this.mdContent = new MdContent({id: fileID, title: '...', content: null, filename: null});
-
-    this.getMdContent(fileID);
+    this.mdContent$ = this.getMdContent(activeLocale + '-11-all');
     this.getMediaCollections();
     this.getCollectionTags();
     this.getCollectionLocations();
@@ -103,15 +103,15 @@ export class MediaCollectionsPage {
     }).bind(this)();
   }
 
-  getMdContent(fileID: string) {
-    // console.log(`Calling getMdContent from content.ts ${fileID}`);
-    this.mdContentService.getMdContent(fileID)
-        .subscribe(
-            text => {
-              this.mdContent.content = text.content;
-            },
-            error =>  {}
-        );
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   getCollectionLocations() {

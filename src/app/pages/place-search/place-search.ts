@@ -1,7 +1,10 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { OverlayEventDetail } from '@ionic/core';
 import { ModalController } from '@ionic/angular';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
@@ -39,7 +42,7 @@ export class PlaceSearchPage {
   filters: any = [];
   immediate_search = false;
   objectType = 'location';
-  mdContent?: string;
+  mdContent$: Observable<SafeHtml>;
 
   // tslint:disable-next-line:max-line-length
   alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
@@ -47,6 +50,7 @@ export class PlaceSearchPage {
   debouncedSearch = debounce(this.searchPlaces, 500);
 
   constructor(
+              private sanitizer: DomSanitizer,
               public semanticDataService: SemanticDataService,
               private mdContentService: MdContentService,
               public occurrenceService: OccurrenceService,
@@ -67,7 +71,7 @@ export class PlaceSearchPage {
 
   ngOnInit() {
     this.getPlaces();
-    this.getMdContent(this.activeLocale + '-12-03');
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-03');
   }
 
   getPlaces() {
@@ -236,12 +240,15 @@ export class PlaceSearchPage {
     return await filterModal.present();
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID)
-      .subscribe(
-        text => { this.mdContent = text.content; },
-        error => { this.mdContent = ''; }
-      );
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   scrollToTop() {

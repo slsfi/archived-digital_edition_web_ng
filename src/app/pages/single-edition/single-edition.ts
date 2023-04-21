@@ -1,9 +1,10 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform, PopoverController } from '@ionic/angular';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { DigitalEdition } from 'src/app/models/digital-edition.model';
 import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -47,7 +48,7 @@ export class SingleEditionPage {
   items: any;
   collectionDescription: any;
   defaultSelectedItem: string;
-  description?: string;
+  description$: Observable<SafeHtml>; // ! Not used anywhere!
   show?: string;
   hasCover: boolean;
   hasTitle: boolean;
@@ -128,8 +129,8 @@ export class SingleEditionPage {
 
   getDescriptions() {
     this.mdcontentService.getStaticPagesToc(this.activeLocale)
-      .subscribe(
-        staticToc => {
+      .subscribe({
+        next: (staticToc) => {
           let descriptions: any;
           try {
             if (staticToc.children[4].children !== undefined) {
@@ -156,24 +157,25 @@ export class SingleEditionPage {
 
           for (const d of descriptions) {
             if (d.basename.split('_desc')[0] === mdFileStartingNumber) {
-              this.getSingleDescription(d.id);
+              this.description$ = this.getSingleDescription(d.id);
             }
           }
         },
-        err => console.error(err),
-        () => console.log('get descriptions')
-      );
+        error: (err) => {
+          console.error(err);
+        }
+      });
   }
 
-  getSingleDescription(fileId: any) {
-    this.mdcontentService.getMdContent(fileId)
-      .subscribe(
-        description => {
-          this.description = description.content;
-        },
-        err => console.error(err),
-        () => console.log('get single description')
-      );
+  getSingleDescription(fileID: string): Observable<SafeHtml> {
+    return this.mdcontentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   async setCollectionTitle() {

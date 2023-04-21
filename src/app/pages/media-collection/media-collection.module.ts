@@ -3,7 +3,6 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PipesModule } from 'src/pipes/pipes.module';
-import { MarkdownModule } from 'ngx-markdown';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MediaCollectionRoutingModule } from './media-collection-routing.module';
 import { MediaCollectionPage } from './media-collection';
@@ -19,7 +18,6 @@ import { MediaCollectionPage } from './media-collection';
     FormsModule,
     PipesModule,
     ComponentsModule,
-    MarkdownModule,
     MediaCollectionRoutingModule
   ],
 })

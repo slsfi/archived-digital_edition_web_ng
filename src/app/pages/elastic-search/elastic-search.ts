@@ -1,15 +1,17 @@
 import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonContent, LoadingController, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import size from 'lodash/size';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
 import { config } from "src/app/services/config/config";
@@ -73,21 +75,19 @@ export class ElasticSearchPage {
   groupsOpenByDefault: any;
   debouncedSearch = debounce(this.search, 1500);
   sortSelectOptions: Record<string, any> = {};
-  mdContent?: string;
+  mdContent$: Observable<SafeHtml>;
 
   constructor(
+    private sanitizer: DomSanitizer,
     public navCtrl: NavController,
     public semanticDataService: SemanticDataService,
     public modalCtrl: ModalController,
-    private platform: Platform,
     protected textService: TextService,
     private mdContentService: MdContentService,
     public loadingCtrl: LoadingController,
     public elastic: ElasticSearchService,
     protected storage: StorageService,
-    private toastCtrl: ToastController,
     public userSettingsService: UserSettingsService,
-    private events: EventsService,
     private cf: ChangeDetectorRef,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute,
@@ -192,7 +192,7 @@ export class ElasticSearchPage {
       })
     }, 300);
 
-    this.getMdContent(this.activeLocale + '-12-01');
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
     this.sortSelectOptions = {
       title: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
       cssClass: 'custom-select-alert'
@@ -855,11 +855,15 @@ export class ElasticSearchPage {
     }
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: text => { this.mdContent = text.content; },
-      error: e => { this.mdContent = ''; }
-    });
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   showAllHitHighlights(event: any) {

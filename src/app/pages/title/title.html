@@ -31,11 +31,8 @@
     
     <ion-spinner *ngIf="(text$ | async) === null" class="loading" name="crescent"></ion-spinner>
 
-    <div *ngIf="hasMDTitle && mdContent && !hasDigitalEditionListChildren" class="tei teiContainer md_content" [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')">
-      <markdown [data]="mdContent"></markdown>
-    </div>
-    <div *ngIf="!hasMDTitle && !hasDigitalEditionListChildren" class="tei teiContainer"
-    [innerHTML]="text$ | async" [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"></div>
+    <div [innerHTML]="text$ | async" class="tei teiContainer"
+    [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')" [ngClass]="hasMDTitle ? 'md_content markdown' : ''"></div>
   </div>
 
 </ion-content>
