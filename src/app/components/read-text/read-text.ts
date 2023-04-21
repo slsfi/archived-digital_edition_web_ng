@@ -7,7 +7,7 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

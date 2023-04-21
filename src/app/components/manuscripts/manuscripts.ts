@@ -5,7 +5,7 @@ import { ReadPopoverService } from 'src/app/services/settings/read-popover.servi
 import { TextService } from 'src/app/services/texts/text.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 @Component({

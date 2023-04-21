@@ -13,7 +13,7 @@ import { SemanticDataService } from 'src/app/services/semantic-data/semantic-dat
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * Generated class for the worksearchPage page.

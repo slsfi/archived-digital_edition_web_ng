@@ -4,7 +4,7 @@ import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * Generated class for the ManuscriptsComponent component.

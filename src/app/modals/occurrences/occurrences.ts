@@ -10,7 +10,7 @@ import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * Generated class for the OccurrencesPage page.

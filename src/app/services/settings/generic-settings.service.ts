@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Injectable()
 export class GenericSettingsService {

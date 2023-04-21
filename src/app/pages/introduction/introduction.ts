@@ -16,7 +16,7 @@ import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.s
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
 
 

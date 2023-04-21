@@ -15,7 +15,7 @@ import { OccurrenceService } from 'src/app/services/occurrence/occurence.service
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * A page for searching place occurrences.

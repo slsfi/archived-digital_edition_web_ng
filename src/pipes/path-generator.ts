@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * Generated class for the SortPipe pipe.

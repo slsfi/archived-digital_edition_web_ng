@@ -1,7 +1,7 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Injectable()
 export class GalleryService {

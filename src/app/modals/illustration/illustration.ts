@@ -4,7 +4,7 @@ import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 @Component({

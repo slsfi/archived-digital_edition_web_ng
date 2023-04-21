@@ -13,7 +13,7 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { PdfService } from 'src/app/services/pdf/pdf.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { global } from '../../../app/global';
 
 

@@ -7,7 +7,7 @@ import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Component({
   selector: 'digital-editions-list',

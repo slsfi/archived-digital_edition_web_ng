@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 @Component({

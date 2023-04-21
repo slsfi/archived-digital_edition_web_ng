@@ -11,7 +11,7 @@ import { SemanticDataService } from 'src/app/services/semantic-data/semantic-dat
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * A page for searching person occurrences.

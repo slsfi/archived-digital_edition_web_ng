@@ -8,7 +8,7 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 declare var ePub: any;
 

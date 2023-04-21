@@ -7,7 +7,7 @@ import { EventsService } from 'src/app/services/events/events.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 // @IonicPage({

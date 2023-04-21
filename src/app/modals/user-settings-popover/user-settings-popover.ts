@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 /**

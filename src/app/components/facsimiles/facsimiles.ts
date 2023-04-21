@@ -7,7 +7,7 @@ import { Facsimile } from 'src/app/models/facsimile.model';
 import { EventsService } from 'src/app/services/events/events.service';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * Generated class for the FacsimilesComponent component.

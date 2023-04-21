@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {lastValueFrom, Observable} from 'rxjs';
-import { config } from "src/app/services/config/config";
+import { catchError, lastValueFrom, map, Observable, of } from 'rxjs';
+import { config } from "src/assets/config/config";
 
 @Injectable()
 export class MdContentService {
@@ -13,15 +13,14 @@ export class MdContentService {
     private http: HttpClient
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    try {
-      const simpleApi = config.app?.simpleApi;
-      if (simpleApi) {
-        this.apiEndpoint = simpleApi as string;
-      }
-    } catch (e) {}
+    const simpleApi = config.app?.simpleApi ?? '';
+    if (simpleApi) {
+      this.apiEndpoint = simpleApi as string;
+    }
   }
 
   getMdContent(fileID: string): Observable<any> {
+    // TODO: SK figure out why this "transformation" of fileID is here
     // This is a TEMPORARY bugfix, that is solved in this way because it
     // is 11 pm and there is to be a presentation tomorrow.
     const id_parts = fileID.split('-');
@@ -32,12 +31,7 @@ export class MdContentService {
       fileID = id_parts.join('-');
     }
 
-    const url =
-      this.apiEndpoint +
-      '/' +
-      config.app.machineName +
-      this.mdUrl +
-      fileID;
+    const url = this.apiEndpoint + '/' + config.app.machineName + this.mdUrl + fileID;
     return this.http.get(url);
   }
 
@@ -74,6 +68,22 @@ export class MdContentService {
     } else {
       return markdownData.children[0].children;
     }
+  }
+
+  getAboutPagesMenu(language: string, aboutPagesNodeID: any): Observable<any> {
+    const url = this.apiEndpoint + '/' + config.app.machineName + this.staticPagesURL + language;
+    return this.http.get(url).pipe(
+      map((res: any) => {
+        if (`${language}-${aboutPagesNodeID}`) {
+          return this.getNodeById(`${language}-${aboutPagesNodeID}`, res);
+        } else {
+          return res.children[0].children;
+        }
+      }),
+      catchError((e) => {
+        return of({});
+      })
+    );
   }
 
   /**

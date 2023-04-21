@@ -5,7 +5,7 @@ import { MdContentService } from "../../services/md/md-content.service";
 import { UserSettingsService } from "../../services/settings/user-settings.service";
 import { DigitalEditionListService } from "../../services/toc/digital-edition-list.service";
 import { GalleryService } from "../../services/gallery/gallery.service";
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { filter } from 'rxjs/operators';
 import { CommonFunctionsService } from "../../services/common-functions/common-functions.service";
 

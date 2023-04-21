@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 
 @Component({

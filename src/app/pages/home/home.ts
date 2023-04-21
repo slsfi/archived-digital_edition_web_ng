@@ -5,7 +5,7 @@ import { marked } from 'marked';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Component({
   selector: 'home-page',

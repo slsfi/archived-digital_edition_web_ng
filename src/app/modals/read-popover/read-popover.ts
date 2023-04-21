@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 /**
  * This is a popover accessed in ReadPage.

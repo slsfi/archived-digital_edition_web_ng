@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { CommentService } from '../comments/comment.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Injectable()
 export class TooltipService {

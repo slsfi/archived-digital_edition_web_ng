@@ -6,7 +6,7 @@ import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Component({
   selector: 'page-download-texts-modal',

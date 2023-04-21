@@ -14,7 +14,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 interface SearchOptions {
   done?: Function;

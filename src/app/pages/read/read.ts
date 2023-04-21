@@ -16,7 +16,7 @@ import { UserSettingsService } from 'src/app/services/settings/user-settings.ser
 import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { DragScrollComponent } from 'src/directives/ngx-drag-scroll/public-api';
 import { isBrowser } from 'src/standalone/utility-functions';
 

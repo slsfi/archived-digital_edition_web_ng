@@ -14,7 +14,7 @@ import { InnerMenuOptionModel } from 'src/app/models/inner-menu-option.model';
 import { SideMenuSettings } from 'src/app/models/side-menu-settings';
 import { SideMenuRedirectEventData } from 'src/app/models/sidemenu-redirect-events';
 import { TocAccordionMenuOptionModel } from 'src/app/models/toc-accordion-menu-option.model';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 
 @Component({
   selector: 'table-of-contents-accordion',

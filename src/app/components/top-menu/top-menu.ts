@@ -1,7 +1,7 @@
 import { Component, Input, Inject, EventEmitter, LOCALE_ID, Output, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { config } from "src/app/services/config/config";
+import { config } from "src/assets/config/config";
 import { Router } from "@angular/router";
 import { DOCUMENT } from "@angular/common";
 
