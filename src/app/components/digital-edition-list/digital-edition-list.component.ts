@@ -72,18 +72,7 @@ export class DigitalEditionList implements OnInit {
       this.grid = true;
     }
 
-    let loadCollectionsFromAssets = config.LoadCollectionsFromAssets ?? false;
-
-    if (loadCollectionsFromAssets) {
-      this.digitalEditionListService.getCollectionsFromAssets()
-        .subscribe(digitalEditions => {
-          this.digitalEditions = digitalEditions;
-          this.events.publishDigitalEditionListRecieveData({ digitalEditions })
-          this.setPDF(digitalEditions);
-        });
-    } else {
-      this.getDigitalEditions();
-    }
+    this.getDigitalEditions();
   }
 
   getDigitalEditions() {

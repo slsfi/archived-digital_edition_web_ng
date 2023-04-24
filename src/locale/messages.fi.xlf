@@ -744,24 +744,6 @@
         <target>Teosten esiintymät eivät ole saatavilla.</target>
       </segment>
     </unit>
-    <unit id="PersonSearch">
-      <segment state="initial">
-        <source>Personregister</source>
-        <target>Personregister</target>
-      </segment>
-    </unit>
-    <unit id="PersonSearch2">
-      <segment state="initial">
-        <source>Personregister 2</source>
-        <target>Personregister 2</target>
-      </segment>
-    </unit>
-    <unit id="PersonSearch3">
-      <segment state="initial">
-        <source>Personregister 3</source>
-        <target>Personregister 3</target>
-      </segment>
-    </unit>
     <unit id="Read.AddColumn">
       <segment state="initial">
         <source>Ny kolumn</source>
@@ -1332,10 +1314,10 @@
         <target>Kaikki</target>
       </segment>
     </unit>
-    <unit id="TOC.EPUBS">
+    <unit id="TOC.Ebooks">
       <segment state="initial">
-        <source>Epub</source>
-        <target>Epub</target>
+        <source>E-böcker</source>
+        <target>Sähkökirjat</target>
       </segment>
     </unit>
     <unit id="TOC.Home">
@@ -1354,6 +1336,18 @@
       <segment state="initial">
         <source>Personregister</source>
         <target>Henkilöhakemisto</target>
+      </segment>
+    </unit>
+    <unit id="TOC.PersonSearch2">
+      <segment state="initial">
+        <source>Personregister 2</source>
+        <target>Henkilöhakemisto 3</target>
+      </segment>
+    </unit>
+    <unit id="TOC.PersonSearch3">
+      <segment state="initial">
+        <source>Personregister 3</source>
+        <target>Personregister 3</target>
       </segment>
     </unit>
     <unit id="TOC.PlaceSearch">

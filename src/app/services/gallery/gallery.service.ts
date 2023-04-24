@@ -1,6 +1,6 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { config } from "src/assets/config/config";
 
 @Injectable()
@@ -9,24 +9,11 @@ export class GalleryService {
   constructor(
     private http: HttpClient,
     @Inject(LOCALE_ID) public activeLocale: string
-  ) {
-    // ! SK 3.4.2023: Why call this in the constructor?
-    this.getGalleries(this.activeLocale);
-  }
+  ) {}
 
-  async getGalleries(language: string): Promise<any> {
-    try {
-      // console.log("FETCH HERE 3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-      const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language
-      return await lastValueFrom(this.http.get(url));
-
-      /*const response = await fetch(
-        url
-      );
-      return response.json();*/
-
-    } catch (e) {}
+  getGalleries(language: string): Observable<any> {
+    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language;
+    return this.http.get(url);
   }
 
   async getGalleryTags(id?: any): Promise<any> {

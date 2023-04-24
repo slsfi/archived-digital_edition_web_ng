@@ -25,9 +25,7 @@ export class AboutPage {
   ngOnInit() {
     this.markdownText$ = this.route.params.pipe(
       switchMap(({id}) => {
-        return this.getMdContent(id);
-        // TODO: remove language from the route params id
-        // return this.getMdContent(this.activeLocale + '-' + id);
+        return this.getMdContent(this.activeLocale + '-' + id);
       })
     );
   }

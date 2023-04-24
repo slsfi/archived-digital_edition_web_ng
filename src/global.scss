@@ -676,6 +676,14 @@
         }
       }
     }
+
+    .no-indent > app-recursive-accordion {
+      padding: 0;
+      
+      > ul.accordion {
+        padding-left: 0;
+      }
+    }
   }
   /* --- */
 

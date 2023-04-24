@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
+import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -16,11 +17,11 @@ import { config } from "src/assets/config/config";
 })
 export class MediaCollectionsPage {
 
-  galleries = [] as any;
+  galleries: any[] = [];
   allTags = [];
   allLocations = [];
   allSubjects = [];
-  allGalleries = [];
+  allGalleries: any[] = [];
   galleryTags = [] as any;
   galleryLocations = [] as any;
   gallerySubjects = [] as any;
@@ -35,6 +36,7 @@ export class MediaCollectionsPage {
   mdContent$: Observable<SafeHtml>;
 
   constructor(
+    private commonFunctions: CommonFunctionsService,
     private sanitizer: DomSanitizer,
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
@@ -45,32 +47,37 @@ export class MediaCollectionsPage {
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
+  }
 
-    this.mdContent$ = this.getMdContent(activeLocale + '-11-all');
+  ngOnInit() {
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
     this.getMediaCollections();
     this.getCollectionTags();
     this.getCollectionLocations();
     this.getCollectionSubjects();
   }
 
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
+  }
+
   getMediaCollections() {
-    (async () => {
-      this.galleries = await this.galleryService.getGalleries(this.activeLocale);
-      this.allGalleries = this.galleries;
-      this.allGalleries.sort(function(a: any, b: any) {
-        const titleA = a.title.toLowerCase(); // ignore upper and lowercase
-        const titleB = b.title.toLowerCase(); // ignore upper and lowercase
-        if (titleA < titleB) {
-          return -1;
+    this.galleryService.getGalleries(this.activeLocale).subscribe({
+      next: (mediaCollections: any) => {
+        if (mediaCollections && mediaCollections.length > 0) {
+          this.commonFunctions.sortArrayOfObjectsAlphabetically(mediaCollections, 'title');
+          this.galleries = mediaCollections;
+          this.allGalleries = this.galleries;
         }
-        if (titleA > titleB) {
-          return 1;
-        }
-        return 0;
-      });
-      this.galleries = this.allGalleries;
-      this.cdRef.detectChanges();
-    }).bind(this)();
+      }
+    });
   }
 
   getCollectionTags() {
@@ -101,17 +108,6 @@ export class MediaCollectionsPage {
       });
       this.cdRef.detectChanges();
     }).bind(this)();
-  }
-
-  getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
-      map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
-      }),
-      catchError((e) => {
-        return of('');
-      })
-    );
   }
 
   getCollectionLocations() {

@@ -36,49 +36,22 @@ export class MdContentService {
   }
 
   getStaticPagesToc(language: string): Observable<any> {
-    const url =
-      this.apiEndpoint +
-      '/' +
-      config.app.machineName +
-      this.staticPagesURL +
-      language;
+    const url = this.apiEndpoint + '/' + config.app.machineName + this.staticPagesURL + language;
     return this.http.get(url);
   }
 
-  async getStaticPagesTocPromise(language: string): Promise<any> {
-    try {
-      const url = this.apiEndpoint + '/' + config.app.machineName + this.staticPagesURL + language;
-
-      // console.log("FETCH HERE 4!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-      return await lastValueFrom(this.http.get(url));
-
-      // const response = await fetch(url);
-      // return response.json();
-    } catch (e) {}
-  }
-
-  async getMarkdownMenu(lang: any, nodeID: any) {
-    const jsonObjectID = `${lang}-${nodeID}`;
-    const markdownData = await this.getStaticPagesTocPromise(lang);
-
-    if (jsonObjectID) {
-      const pages = this.getNodeById(jsonObjectID, markdownData);
-      return pages;
-    } else {
-      return markdownData.children[0].children;
-    }
-  }
-
-  getAboutPagesMenu(language: string, aboutPagesNodeID: any): Observable<any> {
+  getMarkdownMenu(language: string, nodeID: any): Observable<any> {
     const url = this.apiEndpoint + '/' + config.app.machineName + this.staticPagesURL + language;
     return this.http.get(url).pipe(
       map((res: any) => {
-        if (`${language}-${aboutPagesNodeID}`) {
-          return this.getNodeById(`${language}-${aboutPagesNodeID}`, res);
+        if (language && nodeID) {
+          res = this.getNodeById(`${language}-${nodeID}`, res);
         } else {
-          return res.children[0].children;
+          res = res.children[0].children;
         }
+        res.id = this.stripLocaleFromID(res.id);
+        this.stripLocaleFromAboutPagesIDs(res.children);
+        return res;
       }),
       catchError((e) => {
         return of({});
@@ -103,4 +76,18 @@ export class MdContentService {
     };
     return runner(null, tree);
   }
+
+  stripLocaleFromAboutPagesIDs(array: any[]) {
+    for (let i = 0; i < array.length; i++) {
+      array[i]["id"] = this.stripLocaleFromID(array[i]["id"]);
+      if (array[i]["children"] && array[i]["children"].length) {
+        this.stripLocaleFromAboutPagesIDs(array[i]["children"]);
+      }
+    }
+  }
+
+  stripLocaleFromID(id: string) {
+    return id.slice(id.indexOf('-') + 1);
+  }
+
 }

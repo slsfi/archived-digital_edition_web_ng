@@ -243,25 +243,11 @@ export const config: Config = {
     ShowFilter: false,
     ShowPublishedStatus: 2
   },
-  ImageGallery: {
-    ShowInReadMenu: false
-  },
   Occurrences: {
     HideTypeAndDescription: true,
     hideCityRegionCountry: true,
     ShowPublishedStatus: 2
   },
-  StaticPagesMenus: [{
-    menuID: "aboutMenu",
-    idNumber: "03",
-    hasMenuConditional: false
-  }],
-  StaticPagesMenusInTOC: [{
-    menuID: "aboutMenu",
-    idNumber: "03",
-    hasMenuConditional: false
-  }],
-  LoadCollectionsFromAssets: false,
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
   showOccurencesModalOnReadPageAfterSearch: {
@@ -271,10 +257,8 @@ export const config: Config = {
     workSearch: true
   },
   SortCollectionsByRomanNumerals: false,
-  AccordionTOC: true,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
-  AboutMenuAccordion: true,
   HasCover: true,
   HasTitle: true,
   HasForeword: true,
@@ -385,14 +369,13 @@ export const config: Config = {
       title: "Dummy epub",
       filename: "2685.epub",
       download: "https://www.sls.fi/",
-      cover: "",
-      id: "2685.epub"
-    },{
+      cover: ""
+    },
+    {
       title: "Another dummy epub",
       filename: "285.epub",
       download: "https://www.sls.fi/",
-      cover: "",
-      id: "285.epub",
+      cover: ""
     }
   ]
 }
@@ -909,25 +892,11 @@ export const config_soderholm: Config = {
     ShowFilter: false,
     ShowPublishedStatus: 2
   },
-  ImageGallery: {
-    ShowInReadMenu: false
-  },
   Occurrences: {
     HideTypeAndDescription: true,
     hideCityRegionCountry: true,
     ShowPublishedStatus: 2
   },
-  StaticPagesMenus: [{
-    menuID: "aboutMenu",
-    idNumber: "03",
-    hasMenuConditional: false
-  }],
-  StaticPagesMenusInTOC: [{
-    menuID: "aboutMenu",
-    idNumber: "03",
-    hasMenuConditional: false
-  }],
-  LoadCollectionsFromAssets: false,
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "05",
   showOccurencesModalOnReadPageAfterSearch: {
@@ -937,10 +906,8 @@ export const config_soderholm: Config = {
     workSearch: true
   },
   SortCollectionsByRomanNumerals: false,
-  AccordionTOC: true,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
-  AboutMenuAccordion: true,
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
@@ -996,8 +963,7 @@ export const config_soderholm: Config = {
       title: "Dagböcker",
       filename: "soderholm_dagbocker.epub",
       download: "https://www.sls.fi/sv/utgivning/kerstin-soderholms-dagbocker",
-      cover: "/assets/images/parmbilder/Kerstin-Soderholms-dagbocker-cover-web.jpg",
-      id: "soderholm_dagbocker.epub"
+      cover: "/assets/images/parmbilder/Kerstin-Soderholms-dagbocker-cover-web.jpg"
     }
   ],
   siteMetaData: {
@@ -1237,29 +1203,11 @@ export const config_mechelin: Config = {
       ShowFilter: false,
       ShowPublishedStatus: 2
   },
-  ImageGallery: {
-    ShowInReadMenu: false
-  },
   Occurrences: {
       HideTypeAndDescription: true,
       hideCityRegionCountry: true,
       ShowPublishedStatus: 2
   },
-  StaticPagesMenus: [
-      {
-          menuID: "aboutMenu",
-          idNumber: "03",
-          hasMenuConditional: false
-      }
-  ],
-  StaticPagesMenusInTOC: [
-      {
-          menuID: "aboutMenu",
-          idNumber: "03",
-          hasMenuConditional: false
-      }
-  ],
-  LoadCollectionsFromAssets: false,
   ProjectStaticMarkdownCoversFolder: "",
   ProjectStaticMarkdownTitleFolder: "",
   showOccurencesModalOnReadPageAfterSearch: {
@@ -1269,10 +1217,8 @@ export const config_mechelin: Config = {
     workSearch: true
   },
   SortCollectionsByRomanNumerals: false,
-  AccordionTOC: true,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
-  AboutMenuAccordion: true,
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
