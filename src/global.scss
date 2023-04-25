@@ -1584,7 +1584,7 @@
   ion-nav{
     transform: none !important;
     z-index: 1 !important;
-    background-color: $background-color !important;
+    background-color: var(--main-background-color) !important;
   }
 
   #tableOfContentsMenu{
@@ -1598,13 +1598,13 @@
   button.sec-menu-button.bar-button {
     color: var(--text-color-on-secondary-color-background);
     padding: 0;
-    transition: $opacity-hover-transition;
+    transition: var(--opacity-hover-transition);
   }
   button.sec-menu-button.button:hover:not(.disable-hover),
   button.sec-menu-button.bar-button:hover:not(.disable-hover) {
     color: var(--text-color-on-secondary-color-background);
     background-color: transparent !important;
-    opacity: $opacity-hover;
+    opacity: var(--opacity-hover);
   }
   button.sec-menu-button.button:active,
   button.sec-menu-button.bar-button:active {

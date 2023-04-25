@@ -1,5 +1,3 @@
-@import "../../../theme/variables.scss";
-
 /* This hides the vertical scrollbar on the right edge of the viewport area when it is not necessary to show it. Observe that there are two elements with class scroll-content, which is why this needs to be this specific. */
 ion-content > .scroll-content {
   overflow: auto;
@@ -209,25 +207,25 @@ ul {
   padding: 2px 4px;
   border-radius: var(--corner-border-radius);
   &.est {
-    color: $est-color;
+    color: var(--est-color);
   }
   &.com {
-    color: $com-color;
+    color: var(--com-color);
   }
   &.ms {
-    color: $ms-color;
+    color: var(--ms-color);
   }
   &.var {
-    color: $var-color;
+    color: var(--var-color);
   }
   &.inl {
-    color: $inl-color;
+    color: var(--inl-color);
   }
   &.fore {
-    color: $fore-color;
+    color: var(--fore-color);
   }
   &.tit {
-    color: $tit-color;
+    color: var(--tit-color);
   }
 }
 
@@ -387,7 +385,7 @@ ul {
 }
 
 .searchStatus {
-  color: $grey-color;
+  color: var(--grey-color);
   justify-content: center;
 }
 

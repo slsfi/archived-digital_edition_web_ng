@@ -1,5 +1,3 @@
-@import "../../../theme/variables.scss";
-
 ion-button.close {
 	--color: #000;
 }
@@ -25,10 +23,10 @@ ion-item ion-label.label {
 	top: 0.5rem;
 	right: 1rem;
 	cursor: pointer;
-	transition: $opacity-hover-transition;
+	transition: var(--opacity-hover-transition);
 }
 .close:hover {
-	opacity: $opacity-hover;
+	opacity: var(--opacity-hover);
 }
 .close:active {
 	opacity: 1;
