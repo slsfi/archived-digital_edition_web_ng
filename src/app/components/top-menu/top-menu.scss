@@ -9,6 +9,7 @@
   color: var(--text-color-on-primary-color-background);
   contain: layout size;
   border-bottom: var(--top-menu-toolbar-bottom-border);
+  overflow: visible;
 }
 
 ul {
@@ -19,6 +20,7 @@ ul {
   padding: 0;
   margin: 0 0 0 1rem;
   width: 100%;
+
   li {
     display: flex;
     flex-flow: row nowrap;
@@ -26,8 +28,10 @@ ul {
     font-weight: 600;
     margin: 0 2rem 0 0;
     padding: 0;
-    filter: var(--top-menu-button-filter);
-    a {
+    filter: var(--top-menu-button-filter, none);
+  
+    a,
+    button {
       color: inherit;
       text-decoration: none;
       display: flex;
@@ -37,22 +41,60 @@ ul {
       text-transform: uppercase;
     }
 
-    a:hover {
+    button {
+      background-color: transparent;
+    }
+
+    a:hover,
+    button:hover {
       opacity: var(--opacity-hover);
     }
-    > div {
+  
+    > ul {
       position: absolute;
       display: none;
-      background: var(--primary-color);
-      top: 0;
+      background: #fafafa;
+      top: calc(var(--top-menu-height) - 16px);
+      left: 50%;
+      transform: translate(-50%, 0);
+      margin: 0;
+      border: 1px solid var(--primary-color);
+      border-top: 0;
+      border-radius: 0 0 var(--corner-border-radius) var(--corner-border-radius);
+      padding: 0 10px;
+      width: fit-content;
+      z-index: 10001;
+
       &.open{
-        display: block;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
         white-space: nowrap;
+
+        > li {
+          filter: none;
+          margin: 0;
+          border-bottom: 1px solid #d4d4d4;
+          width: 100%;
+          padding: 16px 5px;
+        }
+
+        > li:last-of-type {
+          border-bottom: 0;
+        }
       }
+
       a {
-        padding: 5px;
+        font-size: 0.875rem;
+        color: #222;
+        width: 100%;
+      }
+      a:hover {
+        text-decoration: underline;
+        opacity: 1;
       }
     }
+
     ion-icon {
       font-size: var(--top-menu-toolbar-button-icons-font-size, 1.875rem);
       min-width: var(--top-menu-toolbar-button-icons-font-size, 1.875rem);
@@ -60,14 +102,15 @@ ul {
 
       &.toggle-language-menu-icon {
         font-size: 1.25rem;
-        margin-left: 0.25rem;
       }
+
       &.hide-icon {
         display: none;
       }
     }
 
-    .side-title {
+    .side-title,
+    button > .current-language {
       font-size: 0.875rem;
       margin-left: 0.5rem;
       font-weight: 600;
@@ -76,6 +119,7 @@ ul {
     }
 
     @media only screen and (max-width: 960px) {
+      .current-language-label,
       .side-title {
         position: absolute;
         top: auto;
@@ -84,7 +128,12 @@ ul {
         height: 1px;
         overflow: hidden;
       }
-      .toggle-language-menu-icon {
+      button > .current-language {
+        margin-left: 0.125rem;
+      }
+      .toggle-language-menu-icon,
+      &.content-button,
+      &.about-button {
         display: none;
       }
     }

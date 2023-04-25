@@ -4,19 +4,25 @@ import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class DigitalEditionsApp {
-
-  showSideMenu: boolean = true;
+  showSideMenu: boolean = false;
   showCollectionSideMenu: boolean = false;
   collectionID: string = '';
   initialUrlSegments: UrlSegment[];
   initialQueryParams: Params;
-  constructor(private router: Router, private title: Title, private commonFunctions: CommonFunctionsService) {}
+  currentRouterUrl: string = '';
+
+  constructor(
+    private router: Router,
+    private title: Title,
+    private commonFunctions: CommonFunctionsService
+  ) {}
 
   ngOnInit() {
     this.title.setTitle($localize`:@@Site.Title:Webbplatsens titel`);
@@ -24,6 +30,7 @@ export class DigitalEditionsApp {
       filter(event => event instanceof NavigationEnd)
     ).subscribe({
       next: (event: any) => {
+        this.currentRouterUrl = event.url;
         const collectionSegment = '/collection/';
         if (event.url.startsWith(collectionSegment)) {
           this.collectionID = event.url.slice(collectionSegment.length).split('/')[0] || '';

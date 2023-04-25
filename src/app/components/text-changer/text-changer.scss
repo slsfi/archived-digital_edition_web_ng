@@ -72,6 +72,7 @@ button {
     overflow: hidden;
     width: 100%;
     padding: 0 6px;
+    outline-offset: -0.125rem;
     &:hover .forwardBackward__nextpage-name,
     &:hover .forwardBackward__previouspage-name {
       text-shadow: 1px 0 0 currentColor;

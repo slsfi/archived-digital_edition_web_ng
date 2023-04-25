@@ -1171,6 +1171,11 @@
         <source>Om</source>
       </segment>
     </unit>
+    <unit id="TopMenu.ChooseLanguage">
+      <segment>
+        <source>Välj språk. Nuvarande språk:</source>
+      </segment>
+    </unit>
     <unit id="TopMenu.Content">
       <segment>
         <source>Innehåll</source>

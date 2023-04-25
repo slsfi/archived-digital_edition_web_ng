@@ -35,7 +35,7 @@
       }
 
       .scroll-content-container {
-        height: calc(100vh - 235px); // Previously: max-height: calc(100vh - 235px);
+        height: calc(100vh - 165px - var(--top-menu-height)); // Previously: max-height: calc(100vh - 235px);
       }
     }
   }

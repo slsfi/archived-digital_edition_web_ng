@@ -2,7 +2,7 @@
   <div class="backwardButtonDiv">
     <button *ngIf="!firstItem" class="backwardButton" (click)="previous()">
       <ion-icon name="arrow-back"></ion-icon>
-      <p *ngIf="!(userSettingsService.isMobile()) && !(userSettingsService.isTablet())" class="forwardBackward__previouspage-name">{{ prevItemTitle }}</p>
+      <span *ngIf="!(userSettingsService.isMobile()) && !(userSettingsService.isTablet())" class="forwardBackward__previouspage-name">{{ prevItemTitle }}</span>
     </button>
   </div>
   <div class="forwardBackward__currentpage-name">
@@ -10,7 +10,7 @@
   </div>
   <div class="forwardButtonDiv">
     <button *ngIf="!lastItem" class="forwardButton" (click)="next()">
-      <p *ngIf="!(userSettingsService.isMobile()) && !(userSettingsService.isTablet())" class="forwardBackward__nextpage-name">{{ nextItemTitle }}</p>
+      <span *ngIf="!(userSettingsService.isMobile()) && !(userSettingsService.isTablet())" class="forwardBackward__nextpage-name">{{ nextItemTitle }}</span>
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </div>

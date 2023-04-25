@@ -9,7 +9,8 @@
         "Content": "Sisältö",
         "About": "Tietoja",
         "Search": "Hae",
-        "LogoAltText": "Logo"
+        "LogoAltText": "Logo",
+        "ChooseLanguage": "Valitse kieli. Nykyinen kieli:"
     },
     "Read": {
         "Popover": {

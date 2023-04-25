@@ -12,7 +12,6 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
   styleUrls: ['about.scss']
 })
 export class AboutPage {
-
   markdownText$: Observable<SafeHtml>;
 
   constructor(

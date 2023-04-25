@@ -1,15 +1,12 @@
 <ion-app>
 
-  <header style="overflow: visible">
+  <header>
     <nav class="top-navigation">
-      <top-menu (sideMenuClick)="toggleSideMenu()"
-        [showSideMenu]="showSideMenu"
-        style="overflow: visible">
-      </top-menu>
+      <top-menu (sideMenuClick)="toggleSideMenu()" [showSideMenu]="showSideMenu" [currentRouterUrl]="currentRouterUrl"></top-menu>
     </nav>
   </header>
   <div class="content-container">
-    <nav class="side-navigation" [class.visuallyhidden]="!showSideMenu">
+    <nav id="side-menu" class="side-navigation" [class.visuallyhidden]="!showSideMenu">
       <app-side-menu [class.visuallyhidden]="showCollectionSideMenu"></app-side-menu>
       <collection-side-menu *ngIf="showCollectionSideMenu"
         [collectionID]="collectionID"

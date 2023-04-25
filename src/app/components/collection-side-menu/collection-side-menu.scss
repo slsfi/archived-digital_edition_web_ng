@@ -28,6 +28,9 @@
     .go-back-menu-item:hover {
         border-left-color: var(--toc-hover-color);
     }
+    .go-back-menu-item:focus {
+        outline-offset: -0.25rem;
+    }
     h1 {
         background-color: var(--toc-collection-title-background-color);
         color: var(--toc-collection-title-text-color);

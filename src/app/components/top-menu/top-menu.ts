@@ -1,9 +1,9 @@
-import { Component, Input, Inject, EventEmitter, LOCALE_ID, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output } from '@angular/core';
+import { DOCUMENT } from "@angular/common";
 import { ModalController } from '@ionic/angular';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { config } from "src/assets/config/config";
-import { Router } from "@angular/router";
-import { DOCUMENT } from "@angular/common";
+import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
@@ -11,9 +11,9 @@ import { DOCUMENT } from "@angular/common";
   templateUrl: 'top-menu.html',
   styleUrls: ['top-menu.scss']
 })
-export class TopMenuComponent implements OnInit{
-  @Input() splitPaneMobile?: boolean;
-  @Input() showSideMenu: boolean;
+export class TopMenuComponent {
+  @Input() showSideMenu: boolean = false;
+  @Input() currentRouterUrl: string = '';
   @Output() sideMenuClick = new EventEmitter();
 
   public showLanguageButton: boolean;
@@ -31,12 +31,13 @@ export class TopMenuComponent implements OnInit{
     label: string
   }[]= [];
   public languageMenuOpen: boolean = false;
+  languageMenuWidth: number | null;
   firstAboutPageId = '';
+  handleLanguageMenuClosure: any = null;
   _window: Window;
 
   constructor(
     private modalController: ModalController,
-    private router: Router,
     @Inject(LOCALE_ID) public activeLocale: string,
     @Inject(DOCUMENT) private document: Document
   ) {}
@@ -68,6 +69,14 @@ export class TopMenuComponent implements OnInit{
         this.currentLanguageLabel = languageObj.label;
       }
     });
+    this.languageMenuWidth = null;
+  }
+
+  ngOnDestroy() {
+    if (this.handleLanguageMenuClosure) {
+      window.removeEventListener('click', this.handleLanguageMenuClosure, false);
+      window.removeEventListener('focusin', this.handleLanguageMenuClosure, false);
+    }
   }
 
   public toggleSideMenu(event: any) {
@@ -75,9 +84,40 @@ export class TopMenuComponent implements OnInit{
     this.sideMenuClick.emit();
   }
 
-  public toggleLanguageMenu(event: FocusEvent) {
-    if(!event.relatedTarget || !(event.currentTarget as Node).contains(event.relatedTarget as Node))
-      this.languageMenuOpen = !this.languageMenuOpen;
+  public toggleLanguageMenu(event: any) {
+    event.stopPropagation();
+
+    if (!this.languageMenuOpen) {
+      // Set width of the language menu to the width of the toggle button
+      const languageToggleButtonElem = this.document.getElementById('language-menu-toggle-button');
+      if (languageToggleButtonElem && languageToggleButtonElem.offsetWidth > 100) {
+        this.languageMenuWidth = languageToggleButtonElem.offsetWidth;
+      } else {
+        this.languageMenuWidth = null;
+      }
+
+      // Open language menu
+      this.languageMenuOpen = true;
+
+      // Add event listeners so the language menu can be closed by clicking or moving focus outside it
+      if (isBrowser() && !this.handleLanguageMenuClosure) {
+        const languageMenuElem = this.document.getElementById('language-menu');
+        if (languageMenuElem) {
+          this.handleLanguageMenuClosure = (event: any) => !languageMenuElem.contains(event.target) && this.hideLanguageMenu();
+          window.addEventListener('click', this.handleLanguageMenuClosure, { passive: true });
+          window.addEventListener('focusin', this.handleLanguageMenuClosure, { passive: true });
+        }
+      }
+    } else {
+      // Close language menu
+      this.languageMenuOpen = false;
+    }
+  }
+
+  private hideLanguageMenu() {
+    if (this.languageMenuOpen) {
+      this.languageMenuOpen = false;
+    }
   }
 
   public async showReference(event: any) {
@@ -85,7 +125,7 @@ export class TopMenuComponent implements OnInit{
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModalPage,
-      id: document.URL,
+      id: this.document.URL,
       componentProps: {
         type: 'reference',
         origin: 'top-menu',

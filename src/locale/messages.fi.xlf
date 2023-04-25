@@ -1404,6 +1404,12 @@
         <target>Tietoja</target>
       </segment>
     </unit>
+    <unit id="TopMenu.ChooseLanguage">
+      <segment state="initial">
+        <source>Välj språk. Nuvarande språk:</source>
+        <target>Valitse kieli. Nykyinen kieli:</target>
+      </segment>
+    </unit>
     <unit id="TopMenu.Content">
       <segment state="initial">
         <source>Innehåll</source>

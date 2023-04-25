@@ -9,7 +9,8 @@
         "Content": "Innehåll",
         "About": "Om utgåvan",
         "Search": "Sök",
-        "LogoAltText": "Logo"
+        "LogoAltText": "Logo",
+        "ChooseLanguage": "Välj språk. Nuvarande språk:"
     },
     "Read": {
         "Popover": {

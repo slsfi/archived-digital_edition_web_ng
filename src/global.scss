@@ -703,6 +703,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 22px;
+    outline-offset: -0.125rem;
   }
   @media screen and (max-width: 820px) {
     // Reduce padding om small screens, center content.

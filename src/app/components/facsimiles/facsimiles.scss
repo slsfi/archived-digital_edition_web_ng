@@ -10,8 +10,7 @@
         height: 100%;
     }
     #facsimilies-image img {
-      max-height: -webkit-fill-available;
-      max-height: fill-available;
+      max-height: fit-content;
       object-fit: scale-down;
       object-position: top;
       width: 100%;

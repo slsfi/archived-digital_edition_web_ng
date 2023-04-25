@@ -9,7 +9,8 @@
         "Content": "Content",
         "About": "About",
         "Search": "Search",
-        "LogoAltText": "Logo"
+        "LogoAltText": "Logo",
+        "ChooseLanguage": "Choose your preferred language. Current language:"
     },
     "Read": {
         "Popover": {

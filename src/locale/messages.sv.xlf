@@ -1404,6 +1404,12 @@
         <target>Om utgåvan</target>
       </segment>
     </unit>
+    <unit id="TopMenu.ChooseLanguage">
+      <segment state="initial">
+        <source>Välj språk. Nuvarande språk:</source>
+        <target>Välj språk. Nuvarande språk:</target>
+      </segment>
+    </unit>
     <unit id="TopMenu.Content">
       <segment state="initial">
         <source>Innehåll</source>

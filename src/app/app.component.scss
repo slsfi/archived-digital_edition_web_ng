@@ -1,7 +1,7 @@
 header {
   height: var(--top-menu-height, 70px);
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   z-index: 10;
 
   .top-navigation {
