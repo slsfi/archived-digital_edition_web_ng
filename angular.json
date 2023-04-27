@@ -37,6 +37,7 @@
             "i18nMissingTranslation": "ignore",
             "assets": [
               "src/assets/icon/favicon.ico",
+              "src/robots.txt",
               "src/assets",
               {
                 "glob": "**/*",
