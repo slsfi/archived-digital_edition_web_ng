@@ -1,8 +1,8 @@
 <ng-container *ngIf="aboutPagesLoaded && collectionsLoaded && mediaCollectionsLoaded">
   <ul role="menu">
     <!-- Home -->
-    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="!urlRootSegment">
-      <a routerLink="/" role="menuitem" i18n="@@TOC.Home">Hem</a>
+    <li *ngIf="_config.show?.TOC?.Home" [class.menu-highlight]="!urlRootSegment" role="menuitem">
+      <a routerLink="/" i18n="@@TOC.Home">Hem</a>
     </li>
 
     <!-- About-pages -->
@@ -21,7 +21,7 @@
                   name="chevron-forward-outline"></ion-icon>
       </li>
       <li [class.open]="selectedMenu.includes('/about')"
-          class="accordion-list" role="menu">
+          class="accordion-list" role="menuitem">
         <app-recursive-accordion
           [children]="aboutPagesMenu.children"
           [parentPath]="'/about'">
@@ -47,7 +47,7 @@
             [class.open]="selectedMenu.includes('/epub')"
             [class.accordion-list]="epubsList.length > 1"
             [class.no-indent]="epubsList.length == 1"
-            [attr.role]="epubsList.length > 1 ? 'menu' : 'menuitem'"
+            role="menuitem"
       >
         <app-recursive-accordion
           [children]="epubsList"
@@ -74,7 +74,7 @@
           <ion-icon *ngIf="collection.length" [class.open]="selectedMenu.includes('/collection' + i)"
                     name="chevron-forward-outline"></ion-icon>
         </li>
-        <li [class.open]="selectedMenu.includes('/collection' + i)" class="accordion-list" role="menu">
+        <li [class.open]="selectedMenu.includes('/collection' + i)" class="accordion-list" role="menuitem">
           <app-recursive-accordion
             [children]="collection"
             [parentPath]="'/collection'">
@@ -97,7 +97,7 @@
                   name="chevron-forward-outline"></ion-icon>
       </li>
       <li *ngIf="mediaCollectionsList" [class.open]="selectedMenu.includes('/media-collection')"
-          class="accordion-list" role="menu">
+          class="accordion-list" role="menuitem">
         <app-recursive-accordion
           [children]="mediaCollectionsList"
           [parentPath]="'/media-collection'">
@@ -106,9 +106,9 @@
     </ng-container>
 
     <!-- Index of persons -->
-    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="urlRootSegment === 'person-search'">
+    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="urlRootSegment === 'person-search'" role="menuitem">
       <ng-container *ngFor="let ps of _config.PersonSearchTypes; let j = index">
-        <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}" role="menuitem">
+        <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
           <ng-container *ngIf="j == 0" i18n="@@TOC.PersonSearch">Personregister</ng-container>
           <ng-container *ngIf="j == 1" i18n="@@TOC.PersonSearch2">Personregister 2</ng-container>
           <ng-container *ngIf="j == 2" i18n="@@TOC.PersonSearch3">Personregister 3</ng-container>
@@ -117,18 +117,18 @@
     </li>
 
     <!-- Index of places -->
-    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="urlRootSegment === 'places'">
-      <a routerLink="/places" i18n="@@TOC.PlaceSearch" role="menuitem">Ortregister</a>
+    <li *ngIf="_config.show?.TOC?.PlaceSearch" [class.menu-highlight]="urlRootSegment === 'places'" role="menuitem">
+      <a routerLink="/places" i18n="@@TOC.PlaceSearch">Ortregister</a>
     </li>
 
     <!-- Index of tags -->
-    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="urlRootSegment === 'tags'">
-      <a routerLink="/tags" i18n="@@TOC.TagSearch" role="menuitem">Ämnesord</a>
+    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="urlRootSegment === 'tags'" role="menuitem">
+      <a routerLink="/tags" i18n="@@TOC.TagSearch">Ämnesord</a>
     </li>
 
     <!-- Index of works -->
-    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="urlRootSegment === 'works'">
-      <a routerLink="/works" i18n="@@TOC.WorkSearch" role="menuitem">Verkregister</a>
+    <li *ngIf="_config.show?.TOC?.WorkSearch" [class.menu-highlight]="urlRootSegment === 'works'" role="menuitem">
+      <a routerLink="/works" i18n="@@TOC.WorkSearch">Verkregister</a>
     </li>
   </ul>
 </ng-container>

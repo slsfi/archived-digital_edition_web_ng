@@ -4,17 +4,17 @@
     <h1>{{collectionTitle}}</h1>
   </div>
   <ul role="menu">
-    <li *ngIf="_config.HasCover" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'" [attr.aria-current]="initialUrlSegments[2].path === 'cover' ? 'page' : null">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" role="menuitem" i18n="@@Read.CoverPage.Title">Omslag</a>
+    <li *ngIf="_config.HasCover" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'" [attr.aria-current]="initialUrlSegments[2].path === 'cover' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" i18n="@@Read.CoverPage.Title">Omslag</a>
     </li>
-    <li *ngIf="_config.HasTitle" [class.menu-highlight]="initialUrlSegments[2].path === 'title'" [attr.aria-current]="initialUrlSegments[2].path === 'title' ? 'page' : null">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}" role="menuitem" i18n="@@Read.TitlePage.Title">Titelblad</a>
+    <li *ngIf="_config.HasTitle" [class.menu-highlight]="initialUrlSegments[2].path === 'title'" [attr.aria-current]="initialUrlSegments[2].path === 'title' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}" i18n="@@Read.TitlePage.Title">Titelblad</a>
     </li>
-    <li *ngIf="_config.HasForeword" [class.menu-highlight]="initialUrlSegments[2].path === 'foreword'" [attr.aria-current]="initialUrlSegments[2].path === 'foreword' ? 'page' : null">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}" role="menuitem" i18n="@@Read.ForewordPage.Title">Förord</a>
+    <li *ngIf="_config.HasForeword" [class.menu-highlight]="initialUrlSegments[2].path === 'foreword'" [attr.aria-current]="initialUrlSegments[2].path === 'foreword' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}" i18n="@@Read.ForewordPage.Title">Förord</a>
     </li>
-    <li *ngIf="_config.HasIntro" [class.menu-highlight]="initialUrlSegments[2].path === 'introduction'" [attr.aria-current]="initialUrlSegments[2].path === 'introduction' ? 'page' : null">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" role="menuitem" i18n="@@Read.Introduction.Title">Inledning</a>
+    <li *ngIf="_config.HasIntro" [class.menu-highlight]="initialUrlSegments[2].path === 'introduction'" [attr.aria-current]="initialUrlSegments[2].path === 'introduction' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" i18n="@@Read.Introduction.Title">Inledning</a>
     </li>
     <ng-container
       *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children}"></ng-container>
@@ -28,13 +28,13 @@
           [class.menu-highlight]="highlightedMenu === item.itemId"
           [attr.data-id]="item.itemId ? 'toc_' + item.itemId : ''"
           [attr.aria-current]="highlightedMenu === item.itemId ? 'page' : null"
-          [attr.role]="!item.itemId ? 'menuitem' : null"
           [attr.aria-haspopup]="!item.itemId ? 'menu' : null"
           [attr.aria-expanded]="!item.itemId ? selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId) : null"
           [attr.tabIndex]="!item.itemId ? '0' : null"
+          role="menuitem"
     >
       <a *ngIf="item.itemId" [queryParams]="item.itemId | positionParamGenerator"
-        routerLink="{{item.itemId | pagePathGenerator}}" role="menuitem">
+        routerLink="{{item.itemId | pagePathGenerator}}">
         {{item.text}}
         <span class="description" *ngIf="item.description">{{item.description}}</span>
       </a>
@@ -46,7 +46,7 @@
                 name="chevron-forward-outline"></ion-icon>
     </li>
     <li *ngIf="item.children" [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId)"
-        class="accordion-list">
+        class="accordion-list" role="menuitem">
       <ul role="menu">
         <ng-container
           *ngTemplateOutlet="recursiveTemplate; context: {$implicit: item.children}"></ng-container>

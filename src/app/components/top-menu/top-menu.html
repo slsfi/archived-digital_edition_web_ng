@@ -1,6 +1,6 @@
 <ul role="menubar">
-  <li class="main-menu-button">
-    <a href="#" (click)="toggleSideMenu($event)" role="menuitem"
+  <li class="main-menu-button" role="menuitem">
+    <a href="#" (click)="toggleSideMenu($event)"
           aria-haspopup="menu"
           [attr.aria-expanded]="showSideMenu"
           aria-controls="side-menu"
@@ -10,40 +10,39 @@
       <span class="side-title" i18n="@@TopMenu.Menu">Meny</span>
     </a>
   </li>
-  <li>
-    <a [routerLink]="['/']" class="home-button" role="menuitem">
+  <li role="menuitem">
+    <a [routerLink]="['/']" class="home-button">
       <ion-icon name="home-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Home">Hem</span>
     </a>
   </li>
-  <li *ngIf="showTopContentButton" class="content-button">
-    <a [routerLink]="['/publications']" role="menuitem">
+  <li *ngIf="showTopContentButton" class="content-button" role="menuitem">
+    <a [routerLink]="['/publications']">
       <ion-icon name="library-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Content">Innehåll</span>
     </a>
   </li>
-  <li *ngIf="showTopAboutButton" class="about-button">
-    <a [routerLink]="['/about', firstAboutPageId]" role="menuitem">
+  <li *ngIf="showTopAboutButton" class="about-button" role="menuitem">
+    <a [routerLink]="['/about', firstAboutPageId]">
       <ion-icon name="information-circle-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.About">Om</span>
     </a>
   </li>
-  <li *ngIf="showTopSearchButton" class="elastic-search-button">
-    <a [routerLink]="['/elastic-search']" role="menuitem">
+  <li *ngIf="showTopSearchButton" class="elastic-search-button" role="menuitem">
+    <a [routerLink]="['/elastic-search']">
       <ion-icon name="search-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Search">Sök</span>
     </a>
   </li>
-  <li *ngIf="showTopURNButton" class="reference-button">
-    <a href="#" (click)="showReference($event)" role="menuitem">
+  <li *ngIf="showTopURNButton" class="reference-button" role="menuitem">
+    <a href="#" (click)="showReference($event)">
       <ion-icon name="arrow-redo-sharp"></ion-icon>
       <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
     </a>
   </li>
-  <li *ngIf="showLanguageButton && currentLanguageLabel && languages.length > 1" class="language-menu-button">
+  <li *ngIf="showLanguageButton && currentLanguageLabel && languages.length > 1" class="language-menu-button" role="menuitem">
     <button (click)="toggleLanguageMenu($event)"
           type="button"
-          role="menuitem"
           id="language-menu-toggle-button"
           [attr.aria-expanded]="languageMenuOpen"
           aria-haspopup="menu"
@@ -58,14 +57,14 @@
     </button>
     <ul id="language-menu" role="menu" [class.open]="languageMenuOpen" [ngStyle]="{'min-width': languageMenuWidth + 'px'}">
       <ng-container *ngFor="let lang of languages">
-        <li *ngIf="lang.code !== activeLocale" lang="{{lang.code}}">
-          <a href="{{_window.location.origin + '/' + lang.code + currentRouterUrl}}" role="menuitem">{{lang.label}} ({{lang.code}})</a>
+        <li *ngIf="lang.code !== activeLocale" lang="{{lang.code}}" role="menuitem">
+          <a href="{{_window.location.origin + '/' + lang.code + currentRouterUrl}}">{{lang.label}} ({{lang.code}})</a>
         </li>
       </ng-container>
     </ul>
   </li>
-  <li *ngIf="showSiteLogo" class="site-logo">
-    <a href="{{siteLogoLinkUrl}}" role="menuitem">
+  <li *ngIf="showSiteLogo" class="site-logo" role="menuitem">
+    <a href="{{siteLogoLinkUrl}}">
       <img *ngIf="siteLogoDefaultImageUrl" class="default-logo" alt="Logo" i18n-alt="@@TopMenu.LogoAltText" src="{{siteLogoDefaultImageUrl}}">
       <img *ngIf="siteLogoMobileImageUrl" class="mobile-logo" alt="Logo" i18n-alt="@@TopMenu.LogoAltText" src="{{siteLogoMobileImageUrl}}">
     </a>
