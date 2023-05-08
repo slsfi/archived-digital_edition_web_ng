@@ -7,7 +7,7 @@
   </header>
   <div class="content-container">
     <nav id="side-menu" class="side-navigation" [class.visuallyhidden]="!showSideMenu">
-      <app-side-menu [class.visuallyhidden]="showCollectionSideMenu"></app-side-menu>
+      <main-side-menu [class.visuallyhidden]="showCollectionSideMenu"></main-side-menu>
       <collection-side-menu *ngIf="showCollectionSideMenu"
         [collectionID]="collectionID"
         [initialQueryParams]="initialQueryParams"

@@ -10,7 +10,7 @@ import { config } from "src/assets/config/config";
 
 
 @Component({
-  selector: 'app-side-menu',
+  selector: 'main-side-menu',
   templateUrl: './side-menu.html',
   styleUrls: ['./side-menu.scss'],
 })
