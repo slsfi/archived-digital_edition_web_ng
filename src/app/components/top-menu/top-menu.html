@@ -1,6 +1,7 @@
 <ul role="menubar">
   <li class="main-menu-button" role="menuitem">
-    <a href="#" (click)="toggleSideMenu($event)"
+    <button (click)="toggleSideMenu($event)"
+          type="button"
           aria-haspopup="menu"
           [attr.aria-expanded]="showSideMenu"
           aria-controls="side-menu"
@@ -8,7 +9,7 @@
       <ion-icon [class.visuallyhidden]="showSideMenu" name="menu-sharp"></ion-icon>
       <ion-icon [class.visuallyhidden]="!showSideMenu" name="close-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Menu">Meny</span>
-    </a>
+    </button>
   </li>
   <li role="menuitem">
     <a [routerLink]="['/']" class="home-button">
@@ -35,10 +36,10 @@
     </a>
   </li>
   <li *ngIf="showTopURNButton" class="reference-button" role="menuitem">
-    <a href="#" (click)="showReference($event)">
+    <button (click)="showReference($event)" type="button" aria-haspopup="dialog">
       <ion-icon name="arrow-redo-sharp"></ion-icon>
       <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
-    </a>
+    </button>
   </li>
   <li *ngIf="showLanguageButton && currentLanguageLabel && languages.length > 1" class="language-menu-button" role="menuitem">
     <button (click)="toggleLanguageMenu($event)"
