@@ -18,7 +18,7 @@
     </a>
   </li>
   <li *ngIf="showTopContentButton" class="content-button" role="menuitem">
-    <a [routerLink]="['/publications']">
+    <a [routerLink]="['/content']">
       <ion-icon name="library-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Content">Innehåll</span>
     </a>
@@ -29,8 +29,8 @@
       <span class="side-title" i18n="@@TopMenu.About">Om</span>
     </a>
   </li>
-  <li *ngIf="showTopSearchButton" class="elastic-search-button" role="menuitem">
-    <a [routerLink]="['/elastic-search']">
+  <li *ngIf="showTopSearchButton" class="search-button" role="menuitem">
+    <a [routerLink]="['/search']">
       <ion-icon name="search-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Search">Sök</span>
     </a>

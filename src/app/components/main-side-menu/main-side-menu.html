@@ -32,26 +32,26 @@
     <!-- Epubs -->
     <ng-container *ngIf="_config.show?.TOC?.EPUB">
       <li *ngIf="epubsList.length > 1"
-            (click)="toggleAccordion('/epub')"
-            (keyup.enter)="toggleAccordion('/epub')"
+            (click)="toggleAccordion('/ebook')"
+            (keyup.enter)="toggleAccordion('/ebook')"
             role="menuitem"
             aria-haspopup="menu"
-            [attr.aria-expanded]="selectedMenu.includes('/epub')"
+            [attr.aria-expanded]="selectedMenu.includes('/ebook')"
             tabIndex="0"
       >
         <span i18n="@@TOC.Ebooks">E-böcker</span>
-        <ion-icon [class.open]="selectedMenu.includes('/epub')"
+        <ion-icon [class.open]="selectedMenu.includes('/ebook')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
       <li *ngIf="epubsList.length"
-            [class.open]="selectedMenu.includes('/epub')"
+            [class.open]="selectedMenu.includes('/ebook')"
             [class.accordion-list]="epubsList.length > 1"
             [class.no-indent]="epubsList.length == 1"
             role="menuitem"
       >
         <app-recursive-accordion
           [children]="epubsList"
-          [parentPath]="'/epub'">
+          [parentPath]="'/ebook'">
         </app-recursive-accordion>
       </li>
     </ng-container>
@@ -106,9 +106,9 @@
     </ng-container>
 
     <!-- Index of persons -->
-    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="urlRootSegment === 'person-search'" role="menuitem">
+    <li *ngIf="_config.show?.TOC?.PersonSearch" [class.menu-highlight]="urlRootSegment === 'persons'" role="menuitem">
       <ng-container *ngFor="let ps of _config.PersonSearchTypes; let j = index">
-        <a routerLink="{{'/person-search/' + ps.object_type +'/' + ps.object_subtype}}">
+        <a routerLink="{{'/persons/' + ps.object_type +'/' + ps.object_subtype}}">
           <ng-container *ngIf="j == 0" i18n="@@TOC.PersonSearch">Personregister</ng-container>
           <ng-container *ngIf="j == 1" i18n="@@TOC.PersonSearch2">Personregister 2</ng-container>
           <ng-container *ngIf="j == 2" i18n="@@TOC.PersonSearch3">Personregister 3</ng-container>
@@ -122,8 +122,8 @@
     </li>
 
     <!-- Index of tags -->
-    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="urlRootSegment === 'tags'" role="menuitem">
-      <a routerLink="/tags" i18n="@@TOC.TagSearch">Ämnesord</a>
+    <li *ngIf="_config.show?.TOC?.TagSearch" [class.menu-highlight]="urlRootSegment === 'keywords'" role="menuitem">
+      <a routerLink="/keywords" i18n="@@TOC.TagSearch">Ämnesord</a>
     </li>
 
     <!-- Index of works -->

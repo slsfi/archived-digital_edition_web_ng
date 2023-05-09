@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule)
   },
   {
+    path: 'content',
+    loadChildren: () => import('./pages/editions/editions.module').then( m => m.EditionsPageModule)
+  },
+  {
     path: 'collection/:collectionID/cover',
     loadChildren: () => import('./pages/cover/cover.module').then( m => m.CoverPageModule)
   },
@@ -31,20 +35,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/read/read.module').then( m => m.ReadPageModule)
   },
   {
-    path: 'publications',
-    loadChildren: () => import('./pages/editions/editions.module').then( m => m.EditionsPageModule)
-  },
-  {
-    path: 'elastic-search',
-    loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
-  },
-  {
-    path: 'epub',
+    path: 'ebook',
     loadChildren: () => import('./pages/epub/epub.module').then( m => m.EpubModule)
   },
   {
-    path: 'person-search',
-    loadChildren: () => import('./pages/person-search/person-search.module').then( m => m.PersonSearchPageModule)
+    path: 'home',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+  {
+    path: 'keywords',
+    loadChildren: () => import('./pages/tag-search/tag-search.module').then( m => m.TagearchPageModule)
   },
   {
     path: 'media-collection',
@@ -55,8 +56,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/media-collections/media-collections.module').then( m => m.MediaCollectionsPageModule)
   },
   {
-    path: 'result',
-    loadChildren: () => import('./pages/occurrences-result/occurrences-result.module').then( m => m.OccurrencesResultPageModule)
+    path: 'persons',
+    loadChildren: () => import('./pages/person-search/person-search.module').then( m => m.PersonSearchPageModule)
   },
   {
     path: 'places',
@@ -67,18 +68,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/single-edition/single-edition.module').then( m => m.SingleEditionPageModule)
   },
   {
-    path: 'tags',
-    loadChildren: () => import('./pages/tag-search/tag-search.module').then( m => m.TagearchPageModule)
+    path: 'result',
+    loadChildren: () => import('./pages/occurrences-result/occurrences-result.module').then( m => m.OccurrencesResultPageModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
   },
   {
     path: 'works',
     loadChildren: () => import('./pages/work-search/work-search.module').then( m => m.WorkearchPageModule)
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
+  }
 ];
 
 @NgModule({
