@@ -1,11 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { config } from "src/assets/config/config";
 
-/**
- * Generated class for the SortPipe pipe.
- *
- * See https://angular.io/api/core/Pipe for more info on Angular Pipes.
- */
+
 @Pipe({
   name: 'initialPathGenerator',
 })
@@ -55,6 +51,7 @@ export class CollectionPathGenerator implements PipeTransform {
   }
 }
 
+
 @Pipe({
   name: 'pagePathGenerator'
 })
@@ -69,6 +66,7 @@ export class PagePathGenerator implements PipeTransform {
     return url;
   }
 }
+
 
 @Pipe({
   name: 'positionParamGenerator'

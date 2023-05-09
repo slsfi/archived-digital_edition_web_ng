@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
@@ -10,7 +10,8 @@ import { CommonFunctionsService } from "./services/common-functions/common-funct
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class DigitalEditionsApp {
+
+export class DigitalEditionsApp implements OnInit {
   showSideMenu: boolean = false;
   showCollectionSideMenu: boolean = false;
   collectionID: string = '';
@@ -57,6 +58,7 @@ export class DigitalEditionsApp {
   toggleSideMenu() {
     this.showSideMenu = !this.showSideMenu
   }
+
   setTitleForDefaultPages() {
     const pageTitle = this.router.url.split('/').slice(-1).join();
     switch (pageTitle) {
@@ -77,4 +79,5 @@ export class DigitalEditionsApp {
         return;
     }
   }
+
 }

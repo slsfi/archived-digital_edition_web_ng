@@ -7,7 +7,7 @@ page-title div.teiContainer,
 page-introduction div.teiContainer,
 read-text > div.teiContainer,
 comments > div.teiContainer,
-variations > div.teiContainer,
+variants > div.teiContainer,
 manuscripts > div.teiContainer,
 legend > div.teiContainer {
     padding-bottom: 20vh;
@@ -2200,11 +2200,11 @@ page-introduction .tei.show_paragraphNumbering {
     }
 }
 /* left padding if showing paragraph numbering in mobile view */
-page-read .mobile-mode-established .tei.show_paragraphNumbering {
+page-text .mobile-mode-established .tei.show_paragraphNumbering {
     padding-left: 28px;
 }
 /* Icons that open corresponding images in the illustrations-view are not clickable in mobile mode. */
-page-read .mobile-mode-established img.hide-illustration + span.tei.figureP.iconBefore::before {
+page-text .mobile-mode-established img.hide-illustration + span.tei.figureP.iconBefore::before {
     cursor: default;
 }
 

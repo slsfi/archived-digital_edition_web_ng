@@ -69,9 +69,9 @@ export class HomePage {
 
   ionViewWillEnter() {
     /* Update the variables in textService that keep track of which texts have
-       recently been opened in page-read. The purpose of this is to cause
+       recently been opened in page-text. The purpose of this is to cause
        texts that are cached in storage to be cleared upon the next visit
-       to page-read after visiting home. */
+       to page-text after visiting home. */
     if (
       this.textService.previousReadViewTextId !== undefined &&
       this.textService.readViewTextId !== undefined

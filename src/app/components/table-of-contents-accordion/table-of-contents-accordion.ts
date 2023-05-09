@@ -795,7 +795,7 @@ export class TableOfContentsAccordionComponent {
     } else {
       this.foundSelectedTocItem = false;
       this.getSelectedTocItemByItemId(this.activeMenuTree, item);
-      // console.log('selecting toc page-read item: ', item, this.selectedTocItem);
+      // console.log('selecting toc page-text item: ', item, this.selectedTocItem);
     }
 
     if (this.foundSelectedTocItem && this.selectedTocItem) {
@@ -855,7 +855,7 @@ export class TableOfContentsAccordionComponent {
         && this.selectedTocItem.itemId.indexOf(';') > -1
         && this.selectedTocItem.itemId.split(';')[0] === this.textService.readViewTextId.split(';')[0]) {
           // The read page we are navigating to is just a different position in the text that is already open
-          // --> no need to reload page-read, just scroll to correct position
+          // --> no need to reload page-text, just scroll to correct position
 
           this.events.publishUpdatePositionInPageRead(params);
           this.events.publishUpdatePositionInPageReadTextChanger(this.selectedTocItem.itemId);

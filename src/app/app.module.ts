@@ -15,6 +15,7 @@ import { ReadPopoverService } from './services/settings/read-popover.service';
 import { CommentService } from './services/comments/comment.service';
 import { CommonFunctionsService } from './services/common-functions/common-functions.service';
 import { SemanticDataService } from './services/semantic-data/semantic-data.service';
+import { OccurrenceService } from './services/occurrence/occurence.service';
 import { ReferenceDataService } from './services/reference-data/reference-data.service';
 import { UserSettingsService } from './services/settings/user-settings.service';
 import { GenericSettingsService } from './services/settings/generic-settings.service';
@@ -32,7 +33,6 @@ import { FacsimileZoomPageModule } from './modals/facsimile-zoom/facsimile-zoom.
 import { FacsimileZoomModalPage } from './modals/facsimile-zoom/facsimile-zoom';
 import { IllustrationPageModule } from './modals/illustration/illustration.module';
 import { IllustrationPage } from './modals/illustration/illustration';
-import { PersonSearchPageModule } from './pages/person-search/person-search.module';
 import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module';
 import { ReadPopoverPage } from './modals/read-popover/read-popover';
 import { UserSettingsPopoverPageModule } from './modals/user-settings-popover/user-settings-popover.module';
@@ -60,7 +60,6 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     ComponentsModule,
     PipesModule,
     DigitalEditionListModule,
-    PersonSearchPageModule,
     FacsimileZoomPageModule,
     ReadPopoverPageModule,
     IllustrationPageModule,
@@ -75,6 +74,7 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     CommentService,
     CommonFunctionsService,
     SemanticDataService,
+    OccurrenceService,
     ReferenceDataService,
     TooltipService,
     UserSettingsService,

@@ -177,7 +177,7 @@ export class ReadTextComponent {
             // Check if we have an image to show in the illustrations-view
             if (image !== null) {
               // Check if we have an illustrations-view open, if not, open and display the clicked image there
-              if (document.querySelector('page-read:not([ion-page-hidden]):not(.ion-page-hidden) illustrations') === null) {
+              if (document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations') === null) {
                 this.ngZone.run(() => {
                   this.openIllustrationInNewView(image);
                 });
@@ -238,7 +238,7 @@ export class ReadTextComponent {
           } else {
             iterationsLeft -= 1;
             let target = document.querySelector(
-              'page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+              'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
             ) as HTMLAnchorElement;
             if (
               target && (
@@ -248,7 +248,7 @@ export class ReadTextComponent {
             ) {
               // Position in footnote --> look for second target
               target = document.querySelectorAll(
-                'page-read:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
               )[1] as HTMLAnchorElement;
             }
             if (target) {
@@ -265,7 +265,7 @@ export class ReadTextComponent {
     if (isBrowser()) {
       this.ngZone.runOutsideAngular(() => {
         const target = document.querySelector(
-          'page-read:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+          'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
         ) as HTMLElement;
         if (target) {
           this.commonFunctions.scrollElementIntoView(target, 'top', 50);

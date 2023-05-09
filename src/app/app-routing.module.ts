@@ -12,31 +12,31 @@ const routes: Routes = [
   },
   {
     path: 'content',
-    loadChildren: () => import('./pages/editions/editions.module').then( m => m.EditionsPageModule)
+    loadChildren: () => import('./pages/content/content.module').then( m => m.ContentPageModule)
   },
   {
     path: 'collection/:collectionID/cover',
-    loadChildren: () => import('./pages/cover/cover.module').then( m => m.CoverPageModule)
+    loadChildren: () => import('./pages/collection-cover/collection-cover.module').then( m => m.CollectionCoverPageModule)
   },
   {
     path: 'collection/:collectionID/title',
-    loadChildren: () => import('./pages/title/title.module').then( m => m.TitlePageModule)
+    loadChildren: () => import('./pages/collection-title/collection-title.module').then( m => m.CollectionTitlePageModule)
   },
   {
     path: 'collection/:collectionID/foreword',
-    loadChildren: () => import('./pages/foreword/foreword.module').then( m => m.ForewordPageModule)
+    loadChildren: () => import('./pages/collection-foreword/collection-foreword.module').then( m => m.CollectionForewordPageModule)
   },
   {
     path: 'collection/:collectionID/introduction',
-    loadChildren: () => import('./pages/introduction/introduction.module').then( m => m.IntroductionPageModule)
+    loadChildren: () => import('./pages/collection-introduction/collection-introduction.module').then( m => m.CollectionIntroductionPageModule)
   },
   {
     path: 'collection/:collectionID/text',
-    loadChildren: () => import('./pages/read/read.module').then( m => m.ReadPageModule)
+    loadChildren: () => import('./pages/collection-text/collection-text.module').then( m => m.CollectionTextPageModule)
   },
   {
     path: 'ebook',
-    loadChildren: () => import('./pages/epub/epub.module').then( m => m.EpubModule)
+    loadChildren: () => import('./pages/ebook/ebook.module').then( m => m.EbookPageModule)
   },
   {
     path: 'home',
@@ -45,7 +45,7 @@ const routes: Routes = [
   },
   {
     path: 'keywords',
-    loadChildren: () => import('./pages/tag-search/tag-search.module').then( m => m.TagearchPageModule)
+    loadChildren: () => import('./pages/index-of-keywords/index-of-keywords.module').then( m => m.IndexOfKeywordsPageModule)
   },
   {
     path: 'media-collection',
@@ -57,11 +57,11 @@ const routes: Routes = [
   },
   {
     path: 'persons',
-    loadChildren: () => import('./pages/person-search/person-search.module').then( m => m.PersonSearchPageModule)
+    loadChildren: () => import('./pages/index-of-persons/index-of-persons.module').then( m => m.IndexOfPersonsPageModule)
   },
   {
     path: 'places',
-    loadChildren: () => import('./pages/place-search/place-search.module').then( m => m.PlaceSearchPageModule)
+    loadChildren: () => import('./pages/index-of-places/index-of-places.module').then( m => m.IndexOfPlacesPageModule)
   },
   {
     path: 'publication-toc',
@@ -77,7 +77,7 @@ const routes: Routes = [
   },
   {
     path: 'works',
-    loadChildren: () => import('./pages/work-search/work-search.module').then( m => m.WorkearchPageModule)
+    loadChildren: () => import('./pages/index-of-works/index-of-works.module').then( m => m.IndexOfWorksPageModule)
   }
 ];
 

@@ -810,11 +810,11 @@
     display: flex;
     padding: 26px;
   }
-  page-read ion-content.publication-ion-content::part(scroll) {
+  page-text ion-content.publication-ion-content::part(scroll) {
     padding: 26px 16px;
   }
   .scroll-content-container {
-    background-color: var(--page-read-columns-background-color);
+    background-color: var(--page-text-columns-background-color);
     height: 100%;
     width: 100%;
     max-width: 710px;
@@ -829,7 +829,7 @@
       justify-content: center;
       padding: 10px;
     }
-    page-read ion-content.publication-ion-content::part(scroll) {
+    page-text ion-content.publication-ion-content::part(scroll) {
       padding-left: 0;
       padding-right: 0;
     }
@@ -870,8 +870,8 @@
   }
   /* --- */
 
-  /* --- Style block: Inline popover in page-read to add new view. --- */
-  ion-popover.page-read-add-view-popover {
+  /* --- Style block: Inline popover in page-text to add new view. --- */
+  ion-popover.page-text-add-view-popover {
     --background: transparent;
     --box-shadow: none;
     --offset-y: 40px;
@@ -916,7 +916,7 @@
     padding: 0 0 1rem 0;
     margin: 0 0 1.5rem 0;
     border-bottom: 1px solid #666;
-    background-color: var(--page-read-columns-background-color);
+    background-color: var(--page-text-columns-background-color);
     width: 100%;
 
     h3 {
@@ -1016,10 +1016,10 @@
 
   /* --- Style block: Styles for the markdown content in the search pages. --- */
   page-elastic-search,
-  page-person-search,
-  page-place-search,
-  page-tag-search,
-  page-work-search {
+  page-persons,
+  page-places,
+  page-keywords,
+  page-works {
     .markdown {
       > p:first-child {
         margin-top: 0;

@@ -169,10 +169,10 @@ export class TooltipService {
    * @param targetElem The html element which has triggered the tooltip.
    * @param ttText The text that goes in the tooltip.
    * @param pageOrigin The name of the page that is calling the function. Currently
-   * either 'page-read' or 'page-introduction'.
+   * either 'page-text' or 'page-introduction'.
    * @returns Object with the following keys: maxWidth, scaleValue, top and left.
    */
-  getTooltipProperties(targetElem: HTMLElement, ttText: string, pageOrigin = 'page-read') {
+  getTooltipProperties(targetElem: HTMLElement, ttText: string, pageOrigin = 'page-text') {
     let toolTipMaxWidth = '';
     let toolTipScaleValue = 1;
 
@@ -212,7 +212,7 @@ export class TooltipService {
     let toolbarsHeight = 120; // A default value, true value calculated with getBoundingClientRect() below
     const contentElem = document.querySelector(
       pageOrigin + ':not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
-    ) as HTMLElement; // TODO: This selector works for page-introduction but not page-read
+    ) as HTMLElement; // TODO: This selector works for page-introduction but not page-text
     if (contentElem !== null) {
       scrollLeft = contentElem.scrollLeft;
       sidePaneOffsetWidth = contentElem.getBoundingClientRect().left;

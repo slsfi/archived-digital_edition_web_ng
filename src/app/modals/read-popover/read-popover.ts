@@ -4,8 +4,8 @@ import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-pop
 import { config } from "src/assets/config/config";
 
 /**
- * This is a popover accessed in ReadPage.
- * It lists different settings concerning reading publications in ReadPage.
+ * This is a popover accessed in CollectionTextPage.
+ * It lists different settings concerning reading publications in CollectionTextPage.
  */
 
 /*@IonicPage({

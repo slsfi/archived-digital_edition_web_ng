@@ -66,7 +66,7 @@ export class TextChangerComponent {
     }
 
     if (!this.parentPageType) {
-      this.parentPageType = 'page-read';
+      this.parentPageType = 'page-text';
     }
 
     this.collectionId = this.textItemID.split('_')[0];
@@ -77,7 +77,7 @@ export class TextChangerComponent {
 
     if (
       !firstChange &&
-      this.parentPageType === 'page-read' &&
+      this.parentPageType === 'page-text' &&
       (
         changes.textItemID === undefined ||
         this.textItemID === changes.textItemID.previousValue
@@ -89,7 +89,7 @@ export class TextChangerComponent {
       this.setCurrentPreviousAndNextItemsFromFlattenedToc(this.tocItemId);
     } else if (
       !firstChange &&
-      this.parentPageType === 'page-read' &&
+      this.parentPageType === 'page-text' &&
       this.flattened.length > 0 &&
       changes.textItemID &&
       this.collectionId === changes.textItemID.previousValue.split('_')[0]
@@ -203,7 +203,7 @@ export class TextChangerComponent {
       this.setFirstTocItemAsNext(this.collectionId);
 
     } else {
-      // Default functionality, e.g. as when initialised from page-read
+      // Default functionality, e.g. as when initialised from page-text
       this.firstItem = false;
       this.lastItem = false;
       this.next(true);
@@ -312,7 +312,7 @@ export class TextChangerComponent {
   }
 
   async previous(test?: boolean) {
-    if (this.parentPageType === 'page-read') {
+    if (this.parentPageType === 'page-text') {
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
           this.findNext(toc);
@@ -330,7 +330,7 @@ export class TextChangerComponent {
   }
 
   async next(test?: boolean) {
-    if (this.tocItemId !== 'mediaCollections' && this.parentPageType === 'page-read') {
+    if (this.tocItemId !== 'mediaCollections' && this.parentPageType === 'page-text') {
       this.tocService.getTableOfContents(this.collectionId).subscribe(
         toc => {
           this.findNext(toc);
@@ -400,9 +400,9 @@ export class TextChangerComponent {
       prevId = currentId - 1;
     }
 
-    // Set the new next, previous and current items only if on page-read in order to prevent these
+    // Set the new next, previous and current items only if on page-text in order to prevent these
     // from flashing before the new page is loaded.
-    if (this.parentPageType === 'page-read') {
+    if (this.parentPageType === 'page-text') {
       if (nextId !== null) {
         this.lastItem = false;
         this.nextItem = this.flattened[nextId];
@@ -419,7 +419,7 @@ export class TextChangerComponent {
     }
 
     if (prevId !== null) {
-      if (this.parentPageType === 'page-read') {
+      if (this.parentPageType === 'page-text') {
         this.firstItem = false;
         this.prevItem = this.flattened[prevId];
         if (this.prevItem !== undefined && this.prevItem.text !== undefined) {
@@ -448,7 +448,7 @@ export class TextChangerComponent {
       }
     }
 
-    if (this.parentPageType === 'page-read') {
+    if (this.parentPageType === 'page-text') {
       if (this.flattened[currentId] !== undefined) {
         this.currentItemTitle = String(this.flattened[currentId].text);
       } else {
@@ -519,7 +519,7 @@ export class TextChangerComponent {
         this.router.navigate(['/media-collections']);
       }
     } else {
-      // Open text in page-read
+      // Open text in page-text
       let itemIdParts = item.itemId.split(';');
       let positionId = '';
       if (itemIdParts.length > 1) {

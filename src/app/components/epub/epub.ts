@@ -747,7 +747,7 @@ export class EpubComponent {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModalPage,
-      componentProps: {id: document.URL, type: 'reference', origin: 'page-epub'}
+      componentProps: {id: document.URL, type: 'reference', origin: 'page-ebook'}
     });
     return await modal.present();
   }

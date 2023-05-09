@@ -14,6 +14,7 @@ import { config } from "src/assets/config/config";
   templateUrl: './main-side-menu.html',
   styleUrls: ['./main-side-menu.scss'],
 })
+
 export class MainSideMenu implements OnInit {
   _config = config;
   aboutPagesLoaded: boolean = false;

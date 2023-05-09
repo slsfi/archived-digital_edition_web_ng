@@ -25,8 +25,8 @@
             <label *ngIf="origin == 'page-title'" class="ref-category-label"><ng-container i18n="@@Reference.pageTitle">Hänvisa till denna delutgåva</ng-container>:</label>
             <label *ngIf="origin == 'page-foreword'" class="ref-category-label"><ng-container i18n="@@Reference.pageForeword">Hänvisa till detta förord</ng-container>:</label>
             <label *ngIf="origin == 'page-introduction'" class="ref-category-label"><ng-container i18n="@@Reference.intro">Hänvisa till denna inledning</ng-container>:</label>
-            <label *ngIf="origin == 'page-read'" class="ref-category-label"><ng-container i18n="@@Reference.established">Hänvisa till denna lästext</ng-container>:</label>
-            <label *ngIf="origin == 'page-epub'" class="ref-category-label"><ng-container i18n="@@Reference.pageEpub">Hänvisa till denna text</ng-container>:</label>
+            <label *ngIf="origin == 'page-text'" class="ref-category-label"><ng-container i18n="@@Reference.established">Hänvisa till denna lästext</ng-container>:</label>
+            <label *ngIf="origin == 'page-ebook'" class="ref-category-label"><ng-container i18n="@@Reference.pageEpub">Hänvisa till denna text</ng-container>:</label>
             <label *ngIf="origin == 'media-collection'" class="ref-category-label"><ng-container i18n="@@Reference.mediaCollection">Hänvisa till denna bildsamling</ng-container>:</label>
             <label *ngIf="origin == 'top-menu'" class="ref-category-label"><ng-container i18n="@@Reference.topMenu">Hänvisa till denna webbutgåva</ng-container>:</label>
             <div class="urn" [innerHTML]="referenceData['reference_text'] + urnResolverUrl + referenceData['urn']"></div>

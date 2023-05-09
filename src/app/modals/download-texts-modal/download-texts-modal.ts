@@ -95,7 +95,7 @@ export class DownloadTextsModalPage {
     // Get which page has initiated the download modal from nav params
     try {
       const origin = String(params.get('origin'));
-      if (origin === 'page-read') {
+      if (origin === 'page-text') {
         this.readTextsMode = true;
       } else if (origin === 'page-introduction') {
         this.introductionMode = true;
@@ -539,7 +539,7 @@ export class DownloadTextsModalPage {
     });
     header += '<style>\n';
     header += '    body  { position: static; overflow: auto; height: initial; max-height: initial; width: initial; }\n';
-    header += '    page-read, page-introduction { display: block; padding: 0 1.5em 4em 1.5em; }\n';
+    header += '    page-text, page-introduction { display: block; padding: 0 1.5em 4em 1.5em; }\n';
     header += '    div.tei.teiContainer * { cursor: auto !important; }\n';
     header += '    div.tei.teiContainer { padding-bottom: 0; line-height: 1.45em; }\n';
     header += '    div.tei.teiContainer p { line-height: 1.45em; }\n';
@@ -564,7 +564,7 @@ export class DownloadTextsModalPage {
     header += '    .slide-container .range-labels .largest { font-size: 1.375rem; }\n';
     header += '    @media only print {\n';
     header += '        .print-header, .print-header button { display: none; }\n';
-    header += '        page-read, page-introduction { padding: 0; }\n';
+    header += '        page-text, page-introduction { padding: 0; }\n';
     header += '    }\n';
     header += '    @page { size: auto; margin: 25mm 20mm 25mm 20mm; }\n';
     header += '</style>\n';
@@ -590,7 +590,7 @@ export class DownloadTextsModalPage {
     if (textType === 'intro') {
       header += '<page-introduction>\n';
     } else {
-      header += '<page-read>\n';
+      header += '<page-text>\n';
     }
     header += '<div class="content">\n';
     if (textType === 'est') {
@@ -613,7 +613,7 @@ export class DownloadTextsModalPage {
     if (textType === 'intro') {
       closer += '</page-introduction>\n';
     } else {
-      closer += '</page-read>\n';
+      closer += '</page-text>\n';
     }
     closer += '<script>\n';
     closer += '    const slider = document.getElementById("textSizeSlider");\n';
