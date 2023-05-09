@@ -1,9 +1,10 @@
-import { Component, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { Params, UrlSegment } from "@angular/router";
 import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
 import { config } from "src/assets/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
+
 
 @Component({
   selector: 'collection-side-menu',
@@ -11,7 +12,7 @@ import { isBrowser } from "src/standalone/utility-functions";
   styleUrls: ['collection-side-menu.scss']
 })
 
-export class CollectionSideMenu implements OnChanges {
+export class CollectionSideMenu implements OnInit, OnChanges {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
@@ -21,6 +22,7 @@ export class CollectionSideMenu implements OnChanges {
   _config = config;
   selectedMenu: string[] = [];
   highlightedMenu: string;
+
   constructor(
     private tocService: TableOfContentsService,
     public commonFunctions: CommonFunctionsService,
@@ -48,6 +50,7 @@ export class CollectionSideMenu implements OnChanges {
       }
     });
   }
+
   ngOnChanges(changes: SimpleChanges) {
     if (this.collectionContent) {
       // Check if the changed input values are relevant, i.e. require the side menu to be updated.
@@ -126,10 +129,8 @@ export class CollectionSideMenu implements OnChanges {
 
   toggle(menuItem: any) {
     this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
-    if(menuItem.itemId) {
-      this.commonFunctions.setTitle(menuItem.text, 2);
-    }
   }
+
   recursiveFinding(array: any[], stringForComparison: string): any {
     return array.find(item => {
       if (item.itemId === stringForComparison) {
@@ -174,7 +175,7 @@ export class CollectionSideMenu implements OnChanges {
     if (isBrowser()) {
       setTimeout(() => {
         const container = document.querySelector('.side-navigation') as HTMLElement;
-        const target = document.querySelector('collection-side-menu .menu-highlight[data-id="' + 'toc_' + itemId + '"]') as HTMLElement;
+        const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
         if (container && target) {
           this.commonFunctions.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }

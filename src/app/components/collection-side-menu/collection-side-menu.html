@@ -4,53 +4,68 @@
     <h1>{{collectionTitle}}</h1>
   </div>
   <ul role="menu">
-    <li *ngIf="_config.HasCover" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'" [attr.aria-current]="initialUrlSegments[2].path === 'cover' ? 'page' : null" role="menuitem">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" i18n="@@Read.CoverPage.Title">Omslag</a>
+    <li *ngIf="_config.HasCover" [attr.aria-current]="initialUrlSegments[2].path === 'cover' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'">
+        <span class="label" i18n="@@Read.CoverPage.Title">Omslag</span>
+      </a>
     </li>
-    <li *ngIf="_config.HasTitle" [class.menu-highlight]="initialUrlSegments[2].path === 'title'" [attr.aria-current]="initialUrlSegments[2].path === 'title' ? 'page' : null" role="menuitem">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}" i18n="@@Read.TitlePage.Title">Titelblad</a>
+    <li *ngIf="_config.HasTitle" [attr.aria-current]="initialUrlSegments[2].path === 'title' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'title'}}" [class.menu-highlight]="initialUrlSegments[2].path === 'title'">
+        <span class="label" i18n="@@Read.TitlePage.Title">Titelblad</span>
+      </a>
     </li>
-    <li *ngIf="_config.HasForeword" [class.menu-highlight]="initialUrlSegments[2].path === 'foreword'" [attr.aria-current]="initialUrlSegments[2].path === 'foreword' ? 'page' : null" role="menuitem">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}" i18n="@@Read.ForewordPage.Title">Förord</a>
+    <li *ngIf="_config.HasForeword" [attr.aria-current]="initialUrlSegments[2].path === 'foreword' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'foreword'}}" [class.menu-highlight]="initialUrlSegments[2].path === 'foreword'">
+        <span class="label" i18n="@@Read.ForewordPage.Title">Förord</span>
+      </a>
     </li>
-    <li *ngIf="_config.HasIntro" [class.menu-highlight]="initialUrlSegments[2].path === 'introduction'" [attr.aria-current]="initialUrlSegments[2].path === 'introduction' ? 'page' : null" role="menuitem">
-      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" i18n="@@Read.Introduction.Title">Inledning</a>
+    <li *ngIf="_config.HasIntro" [attr.aria-current]="initialUrlSegments[2].path === 'introduction' ? 'page' : null" role="menuitem">
+      <a routerLink="{{collectionID | collectionPathGenerator: 'introduction'}}" [class.menu-highlight]="initialUrlSegments[2].path === 'introduction'">
+        <span class="label" i18n="@@Read.Introduction.Title">Inledning</span>
+      </a>
     </li>
-    <ng-container
-      *ngTemplateOutlet="recursiveTemplate; context: {$implicit: collectionContent.children}"></ng-container>
+    <ng-container *ngTemplateOutlet="recursiveMenu; context: {$implicit: collectionContent.children}"/>
   </ul>
 </ng-container>
 
-<ng-template #recursiveTemplate let-list >
+<ng-template #recursiveMenu let-list>
   <ng-container *ngFor="let item of list">
-    <li (click)="toggle(item)"
-          (keyup.enter)="toggle(item)"
-          [class.menu-highlight]="highlightedMenu === item.itemId"
+    <li 
           [attr.data-id]="item.itemId ? 'toc_' + item.itemId : ''"
           [attr.aria-current]="highlightedMenu === item.itemId ? 'page' : null"
-          [attr.aria-haspopup]="!item.itemId ? 'menu' : null"
-          [attr.aria-expanded]="!item.itemId ? selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId) : null"
-          [attr.tabIndex]="!item.itemId ? '0' : null"
+          [attr.aria-haspopup]="item.children ? 'menu' : null"
+          [attr.aria-expanded]="item.children ? selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId) : null"
           role="menuitem"
     >
-      <a *ngIf="item.itemId" [queryParams]="item.itemId | positionParamGenerator"
-        routerLink="{{item.itemId | pagePathGenerator}}">
-        {{item.text}}
-        <span class="description" *ngIf="item.description">{{item.description}}</span>
+      <a *ngIf="item.itemId"
+            [routerLink]="item.itemId | pagePathGenerator"
+            [queryParams]="item.itemId | positionParamGenerator"
+            [class.menu-highlight]="highlightedMenu === item.itemId"
+            [class.submenu-label]="item.children"
+      >
+        <ng-container *ngTemplateOutlet="menuItemContent; context: {$implicit: item}"/>
       </a>
-      <span *ngIf="!item.itemId">
-        {{item.text}}
-      </span>
-      <ion-icon *ngIf="item.children"
-                [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId)"
-                name="chevron-forward-outline"></ion-icon>
-    </li>
-    <li *ngIf="item.children" [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId)"
-        class="accordion-list" role="menuitem">
-      <ul role="menu">
-        <ng-container
-          *ngTemplateOutlet="recursiveTemplate; context: {$implicit: item.children}"></ng-container>
+      <button *ngIf="!item.itemId"
+            (click)="toggle(item)"
+            [class.submenu-label]="item.children"
+      >
+        <ng-container *ngTemplateOutlet="menuItemContent; context: {$implicit: item}"/>
+      </button>
+      <ul *ngIf="item.children" role="menu"
+            [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId)"
+      >
+        <ng-container *ngTemplateOutlet="recursiveMenu; context: {$implicit: item.children}"/>
       </ul>
     </li>
   </ng-container>
+</ng-template>
+
+<ng-template #menuItemContent let-item>
+    <span class="label">
+      {{item.text}}
+      <span class="description" *ngIf="item.description">{{item.description}}</span>
+    </span>
+    <ion-icon *ngIf="item.children" name="chevron-forward-outline" class="toggle-icon"
+          [class.open]="selectedMenu.includes(item.itemId) || selectedMenu.includes(item.nodeId)"
+    ></ion-icon>
 </ng-template>
