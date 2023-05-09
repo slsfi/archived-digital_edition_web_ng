@@ -11,7 +11,7 @@ import { TextChangerComponent } from './text-changer/text-changer';
 import { MathJaxComponent } from './math-jax/math-jax';
 import { IllustrationsComponent } from './illustrations/illustrations';
 import { TopMenuComponent } from "./top-menu/top-menu";
-import { SideMenu} from "./side-menu/side-menu";
+import { MainSideMenu } from "./main-side-menu/main-side-menu";
 import { RecursiveAccordion } from "./recursive-accordion/recursive-accordion";
 import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu";
 
@@ -23,7 +23,7 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 		IllustrationsComponent,
 		DateHistogram,
 		MathJaxComponent,
-		SideMenu,
+		MainSideMenu,
 		RecursiveAccordion,
     	CollectionSideMenu
 	],
@@ -41,7 +41,7 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
     IllustrationsComponent,
     DateHistogram,
     MathJaxComponent,
-    SideMenu,
+    MainSideMenu,
     CollectionSideMenu
   ]
 })

@@ -11,10 +11,10 @@ import { config } from "src/assets/config/config";
 
 @Component({
   selector: 'main-side-menu',
-  templateUrl: './side-menu.html',
-  styleUrls: ['./side-menu.scss'],
+  templateUrl: './main-side-menu.html',
+  styleUrls: ['./main-side-menu.scss'],
 })
-export class SideMenu implements OnInit {
+export class MainSideMenu implements OnInit {
   _config = config;
   aboutPagesLoaded: boolean = false;
   aboutPagesMenu: {
