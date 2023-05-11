@@ -174,9 +174,10 @@
         "SortOptions": {
             "Sort": "Sorting",
             "SortTOC": "Select sorting for the table of contents",
-            "Thematic": "Default",
+            "Default": "Default",
             "Chronological": "Chronological",
-            "Alphabetical": "Alphabetical"
+            "Alphabetical": "Alphabetical",
+            "Categorical": "Categorical"
         },
         "Ebooks": "E-books"
     },

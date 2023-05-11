@@ -174,9 +174,10 @@
         "SortOptions": {
             "Sort": "Järjestys",
             "SortTOC": "Valitse sisällysluettelolle järjestys",
-            "Thematic": "Oletus",
+            "Default": "Oletus",
             "Chronological": "Kronologinen",
-            "Alphabetical": "Aakkosellinen"
+            "Alphabetical": "Aakkosellinen",
+            "Categorical": "Kategorioittain"
         },
         "Ebooks": "Sähkökirjat"
     },

@@ -16,12 +16,19 @@ export class CollectionSideMenu implements OnInit, OnChanges {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
-  collectionContent: any;
+  collectionMenu: any[] = [];
   collectionTitle: string = '';
   isLoading: boolean = true;
   _config = config;
   selectedMenu: string[] = [];
   highlightedMenu: string;
+  sortOptions: string[] = [];
+  defaultMenu: any;
+  alphabeticalMenu: any[] = [];
+  chronologicalMenu: any[] = [];
+  categoricalMenu: any[] = [];
+  activeMenuSorting: string = 'default';
+  sortSelectOptions: Record<string, any> = {};
 
   constructor(
     private tocService: TableOfContentsService,
@@ -30,29 +37,44 @@ export class CollectionSideMenu implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
+    this.sortOptions = this.setSortOptions(this.collectionID);
     this.tocService.getTableOfContents(this.collectionID).subscribe(data => {
       if (data && data.children && data.children.length) {
         this.recursiveInitializeSelectedMenu(data.children);
-        this.collectionContent = data;
-        this.collectionTitle = data.text;
+        this.collectionTitle = data.text || '';
+        this.collectionMenu = data.children;
+        this.defaultMenu = data.children;
         this.isLoading = false;
         this.commonFunctions.setTitle(this.collectionTitle, 1);
-        const itemId = this.getItemId();
-        this.highlightedMenu = itemId;
+        this.updateHighlightedMenuItem();
 
-        const item = this.recursiveFinding(data.children, itemId);
-        if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
-          this.selectedMenu.push(item.itemId || item.nodeId);
-        } else {
-          this.setTitleForFrontMatterPages();
+        // Construct sorted menus
+        if (this.sortOptions.length > 0) {
+          const flattenedMenu = this.commonFunctions.flattenObjectTree(data);
+          // console.log('flattened menu: ', flattenedMenu);
+          if (this.sortOptions.includes('alphabetical')) {
+            this.alphabeticalMenu = this.constructAlphabeticalMenu(flattenedMenu);
+          }
+          if (this.sortOptions.includes('chronological')) {
+            this.chronologicalMenu = this.constructCategoricalMenu(flattenedMenu, 'date');
+          }
+          if (this.sortOptions.includes('categorical')) {
+            const primaryKey = this._config.component?.sideMenu?.categoricalSortingPrimaryKey ?? 'date';
+            const secondaryKey = this._config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
+            this.categoricalMenu = this.constructCategoricalMenu(flattenedMenu, primaryKey, secondaryKey);
+            console.log('categorical menu: ', this.categoricalMenu);
+          }
+          this.sortSelectOptions = {
+            header: $localize`:@@TOC.SortOptions.SortTOC:Välj sortering för innehållsförteckningen`,
+            cssClass: 'custom-select-alert'
+          }
         }
-        this.scrollHighlightedMenuItemIntoView(itemId);
       }
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.collectionContent) {
+    if (this.collectionMenu) {
       // Check if the changed input values are relevant, i.e. require the side menu to be updated.
       // If just some other queryParams than position have changed, no action is necessary in the menu.
       let relevantChange = false;
@@ -81,20 +103,24 @@ export class CollectionSideMenu implements OnInit, OnChanges {
       }
 
       if (relevantChange) {
-        const itemId = this.getItemId();
-        this.highlightedMenu = itemId;
-        const isFrontMatterPage = this.setTitleForFrontMatterPages();
-        if (!isFrontMatterPage) {
-          const item = this.recursiveFinding(this.collectionContent.children, itemId);
-          if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
-            this.selectedMenu.push(item.itemId || item.nodeId);
-            // Angular is not good at detecting changes within arrays and objects, so we have to manually trigger an update of the view
-            this.cref.detectChanges();
-          }
-        }
-        this.scrollHighlightedMenuItemIntoView(itemId);
+        this.updateHighlightedMenuItem();
       }
     }
+  }
+
+  updateHighlightedMenuItem() {
+    const itemId = this.getItemId();
+    this.highlightedMenu = itemId;
+    const isFrontMatterPage = this.setTitleForFrontMatterPages();
+    if (!isFrontMatterPage) {
+      const item = this.recursiveFinding(this.collectionMenu, itemId);
+      if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
+        this.selectedMenu.push(item.itemId || item.nodeId);
+        // Angular is not good at detecting changes within arrays and objects, so we have to manually trigger an update of the view
+        this.cref.detectChanges();
+      }
+    }
+    this.scrollHighlightedMenuItemIntoView(itemId);
   }
 
   setTitleForFrontMatterPages() {
@@ -173,6 +199,7 @@ export class CollectionSideMenu implements OnInit, OnChanges {
 
   scrollHighlightedMenuItemIntoView(itemId: string) {
     if (isBrowser()) {
+      // TODO: change to setinterval
       setTimeout(() => {
         const container = document.querySelector('.side-navigation') as HTMLElement;
         const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
@@ -180,6 +207,122 @@ export class CollectionSideMenu implements OnInit, OnChanges {
           this.commonFunctions.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }
       }, 600);
+    }
+  }
+
+  setSortOptions(collectionID: string) {
+    const sortOptions: string[] = [];
+    if (this._config.component?.sideMenu?.sortableCollectionsAlphabetical?.includes(collectionID)) {
+      sortOptions.push('alphabetical');
+    }
+    if (this._config.component?.sideMenu?.sortableCollectionsChronological?.includes(collectionID)) {
+      sortOptions.push('chronological');
+    }
+    if (this._config.component?.sideMenu?.sortableCollectionsCategorical?.includes(collectionID)) {
+      sortOptions.push('categorical');
+    }
+    return sortOptions;
+  }
+
+  constructAlphabeticalMenu(flattenedMenuData: any[]) {
+    const alphabeticalMenu: any[] = [];
+
+    for (const child of flattenedMenuData) {
+      if (child.itemId) {
+        alphabeticalMenu.push(child);
+      }
+    }
+
+    this.commonFunctions.sortArrayOfObjectsAlphabetically(alphabeticalMenu, 'text');
+    return alphabeticalMenu;
+  }
+
+  constructCategoricalMenu(flattenedMenuData: any[], primarySortKey: string, secondarySortKey?: string) {
+    const orderedList: any[] = [];
+
+    for (const child of flattenedMenuData) {
+      if (
+        child[primarySortKey] &&
+        ((secondarySortKey && child[secondarySortKey]) || !secondarySortKey) &&
+        child.itemId
+      ) {
+        orderedList.push(child);
+      }
+    }
+
+    if (primarySortKey === 'date') {
+      this.commonFunctions.sortArrayOfObjectsNumerically(orderedList, primarySortKey, 'asc');
+    } else {
+      this.commonFunctions.sortArrayOfObjectsAlphabetically(orderedList, primarySortKey);
+    }
+
+    const categoricalMenu: any[] = [];
+    let childItems: any[] = [];
+    let prevCategory = '';
+
+    for (let i = 0; i < orderedList.length; i++) {
+      let currentCategory = orderedList[i][primarySortKey];
+      if (primarySortKey === 'date') {
+        currentCategory = String(currentCategory).split('-')[0];
+      }
+
+      if (prevCategory === '') {
+        prevCategory = currentCategory;
+        categoricalMenu.push({type: 'subtitle', collapsed: true, text: prevCategory, children: []});
+      }
+
+      if (prevCategory !== currentCategory) {
+        if (secondarySortKey === 'date') {
+          this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+        } else if (secondarySortKey) {
+          this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+        }
+        categoricalMenu[categoricalMenu.length - 1].children = childItems;
+        childItems = [];
+        prevCategory = currentCategory;
+        categoricalMenu.push({type: 'subtitle', collapsed: true, text: prevCategory, children: []});
+      }
+      childItems.push(orderedList[i]);
+    }
+
+    if (childItems.length > 0) {
+      if (secondarySortKey === 'date') {
+        this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+      } else if (secondarySortKey) {
+        this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+      }
+    }
+
+    if (categoricalMenu.length > 0) {
+      categoricalMenu[categoricalMenu.length - 1].children = childItems;
+    } else {
+      categoricalMenu[0] = {};
+      categoricalMenu[0].children = childItems;
+    }
+
+    return categoricalMenu;
+  }
+
+  setActiveMenuSorting(event: any) {
+    if (this.activeMenuSorting !== event.detail.value) {
+      this.isLoading = true;
+      this.activeMenuSorting = event.detail.value;
+      this.selectedMenu = [];
+
+      if (this.activeMenuSorting === 'alphabetical') {
+        this.collectionMenu = this.alphabeticalMenu;
+      } else if (this.activeMenuSorting === 'chronological') {
+        this.collectionMenu = this.chronologicalMenu;
+      } else if (this.activeMenuSorting === 'categorical') {
+        this.collectionMenu = this.categoricalMenu;
+      } else {
+        this.collectionMenu = this.defaultMenu;
+      }
+
+      this.recursiveInitializeSelectedMenu(this.collectionMenu);
+      this.isLoading = false;
+      this.updateHighlightedMenuItem();
+      this.cref.detectChanges();
     }
   }
 

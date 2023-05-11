@@ -174,9 +174,10 @@
         "SortOptions": {
             "Sort": "Sortering",
             "SortTOC": "Välj sortering för innehållsförteckningen",
-            "Thematic": "Standard",
+            "Default": "Standard",
             "Chronological": "Kronologisk",
-            "Alphabetical": "Alfabetisk"
+            "Alphabetical": "Alfabetisk",
+            "Categorical": "Kategorivis"
         },
         "Ebooks": "E-böcker"
     },

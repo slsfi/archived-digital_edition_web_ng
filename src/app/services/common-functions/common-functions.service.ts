@@ -5,7 +5,6 @@ import { Title } from "@angular/platform-browser";
 
 @Injectable()
 export class CommonFunctionsService {
-
   intervalTimerId: number;
 
   constructor(
@@ -70,16 +69,27 @@ export class CommonFunctionsService {
   }
 
   /**
-   * Function for sorting an array of objects numerically descendingly based on the given object key (field).
+   * Function for sorting an array of objects numerically based on the given object key (field).
+   * The order can be either ascendingly 'asc' or descendingly 'desc'.
    */
-  sortArrayOfObjectsNumerically(arrayToSort: any, fieldToSortOn: string) {
+  sortArrayOfObjectsNumerically(arrayToSort: any, fieldToSortOn: string, order: string = 'desc') {
     if (Array.isArray(arrayToSort)) {
       arrayToSort.sort((a, b) => {
-        if (a[fieldToSortOn] > b[fieldToSortOn]) {
-          return -1;
-        }
-        if (a[fieldToSortOn] < b[fieldToSortOn]) {
-          return 1;
+        if (a[fieldToSortOn] && b[fieldToSortOn]) {
+          if (a[fieldToSortOn] > b[fieldToSortOn]) {
+            if (order === 'desc') {
+              return -1;
+            } else {
+              return 1;
+            }
+          }
+          if (a[fieldToSortOn] < b[fieldToSortOn]) {
+            if (order === 'desc') {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
         }
         return 0;
       });
@@ -299,6 +309,7 @@ export class CommonFunctionsService {
     })();
   }
 
+
   setTitle(pageTitle: string, position: number){
     let title = this.title.getTitle().split(' - ')
     let siteTitle: string[] = [];
@@ -310,6 +321,7 @@ export class CommonFunctionsService {
     this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`)
   }
 
+
   addOrRemoveValueInArray(array: any[], value: any){
     let index = array.indexOf(value);
     if(index > -1)
@@ -317,4 +329,21 @@ export class CommonFunctionsService {
     else
       array.push(value);
   }
+
+  /**
+   * Given an object with nested objects in the property 'branchingPropertyName',
+   * returns a flattened array of the object.
+   */
+  flattenObjectTree(data: any, branchingPropertyName: string = 'children') {
+    const dataWithoutChildren = (({[branchingPropertyName]: _, ...d}) => d)(data);
+    let list = [dataWithoutChildren];
+    if (!data[branchingPropertyName]) {
+      return list;
+    }
+    for (const child of data[branchingPropertyName]) {
+      list = list.concat(this.flattenObjectTree(child, branchingPropertyName));
+    }
+    return list;
+  }
+
 }

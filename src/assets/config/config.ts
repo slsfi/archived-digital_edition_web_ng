@@ -96,9 +96,11 @@ export const config: Config = {
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
     sideMenu: {
-      sortableCollectionsAlphabetic: ["211", "215", "219", "220"],
-      sortableCollectionsChronologic: ["215", "219", "220"],
-      sortableCollectionsGenre: []
+      sortableCollectionsAlphabetical: ["211", "215", "219", "220"],
+      sortableCollectionsChronological: ["215", "219", "220"],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -555,9 +557,11 @@ export const config_soderholm: Config = {
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
     sideMenu: {
-      sortableCollectionsAlphabetic: [],
-      sortableCollectionsChronologic: [],
-      sortableCollectionsGenre: []
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1077,9 +1081,11 @@ export const config_mechelin: Config = {
       siteLogoLinkUrl: ""
     },
     sideMenu: {
-      sortableCollectionsAlphabetic: [],
-      sortableCollectionsChronologic: ["1"],
-      sortableCollectionsGenre: ["1"]
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: ["1"],
+      sortableCollectionsCategorical: ["1"],
+      categoricalSortingPrimaryKey: "genre",
+      categoricalSortingSecondaryKey: "date"
     }
   },
   urnResolverUrl: "https://urn.fi/",
