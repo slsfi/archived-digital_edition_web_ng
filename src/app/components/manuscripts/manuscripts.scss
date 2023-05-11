@@ -1,4 +1,10 @@
-ion-item.item.show-normalized-toggle {
-  --background: var(--main-background-color);
-  --inner-border-width: 0;
+.show-normalized-toggle {
+  background-color: var(--main-background-color);
+  margin-top: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  width: 100%;
+
+  ion-toggle {
+    width: 100%;
+  }
 }

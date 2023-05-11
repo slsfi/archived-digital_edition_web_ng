@@ -534,8 +534,9 @@
 
   // Ion-toggle styles
   ion-toggle {
-    --background-checked: rgba(var(--button-background-color-rgb), 0.2);
+    --track-background-checked: rgba(var(--button-background-color-rgb), 0.2);
     --handle-background-checked: var(--button-background-color);
+    font-size: 1rem;
   }
 
   // Crescent ion-spinner styles

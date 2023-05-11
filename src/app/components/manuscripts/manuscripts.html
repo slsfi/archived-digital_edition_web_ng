@@ -11,10 +11,9 @@
       <ion-icon name="help-outline"></ion-icon>
     </ion-button>
   </div>
-  <ion-item class="show-normalized-toggle">
-    <ion-label i18n="@@Read.Manuscripts.ShowNormalized">Visa ändringar inarbetade</ion-label>
-    <ion-toggle (ionChange)="toggleNormalizedManuscript()" slot="end" [enableOnOffLabels]="true"></ion-toggle>
-  </ion-item>
+  <div class="show-normalized-toggle">
+    <ion-toggle (ionChange)="toggleNormalizedManuscript()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Manuscripts.ShowNormalized">Visa ändringar inarbetade</ion-toggle>
+  </div>
 </div>
 
 <div class="tei teiContainer teiManuscript" [innerHTML]="text" [attr.lang]="textLanguage ? textLanguage : null"
