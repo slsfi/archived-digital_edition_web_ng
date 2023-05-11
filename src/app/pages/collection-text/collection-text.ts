@@ -797,9 +797,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 containerElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) #' + targetColumnId);
               } else {
                 containerElem = anchorElem.parentElement;
-                while (containerElem !== null && containerElem.parentElement !== null &&
-                !(containerElem.classList.contains('scroll-content') &&
-                containerElem.parentElement.tagName === 'ION-SCROLL')) {
+                while (
+                  containerElem !== null &&
+                  containerElem.parentElement !== null &&
+                  !containerElem.classList.contains('scroll-content-container')
+                ) {
                   containerElem = containerElem.parentElement;
                 }
                 if (containerElem?.parentElement === null) {
@@ -811,7 +813,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                   && anchorElem.parentElement.parentElement !== null
                   && anchorElem.parentElement.parentElement.hasAttribute('class')
                   && anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')) {
-                    containerElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) .mobile-mode-read-content > .scroll-content > ion-scroll > .scroll-content');
+                    containerElem = document.querySelector(
+                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) .mobile-mode-read-content > .scroll-content > ion-scroll > .scroll-content'
+                    ); // TODO: Fix this for mobile mode, the template needs to be fixed first
                   }
                 }
               }
@@ -1670,7 +1674,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   /**
    * Set position and width of infoOverlay element. This function is not exactly
-   * the same as in introduction.ts due to different page structure on read page.
+   * the same as in introduction.ts due to different page structure on text page.
    */
   private setInfoOverlayPositionAndWidth(triggerElement: HTMLElement, defaultMargins = 20, maxWidth = 600) {
     let margins = defaultMargins;
@@ -1679,26 +1683,29 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
-    // Get read page content element and adjust viewport height with horizontal
-    // scrollbar height if such is present. Also get how much the read page has
+    // Get text page content element and adjust viewport height with horizontal
+    // scrollbar height if such is present. Also get how much the text page has
     // scrolled horizontally to the left.
     let scrollLeft = 0;
     let horizontalScrollbarOffsetHeight = 0;
-    const contentElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content > .scroll-content') as HTMLElement;
+    const contentElem = document.querySelector(
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
+    )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (contentElem !== null) {
       scrollLeft = contentElem.scrollLeft;
-
       if (contentElem.clientHeight < contentElem.offsetHeight) {
         horizontalScrollbarOffsetHeight = contentElem.offsetHeight - contentElem.clientHeight;
       }
     }
 
-    // Get bounding rectangle of the div.scroll-content element which is the
+    // Get bounding rectangle of the div.scroll-content-container element which is the
     // container for the column that the trigger element resides in.
     let containerElem = triggerElement.parentElement;
-    while (containerElem !== null && containerElem.parentElement !== null &&
-      !(containerElem.classList.contains('scroll-content') &&
-      containerElem.parentElement.tagName === 'ION-SCROLL')) {
+    while (
+      containerElem !== null &&
+      containerElem.parentElement !== null &&
+      !containerElem.classList.contains('scroll-content-container')
+    ) {
       containerElem = containerElem.parentElement;
     }
 
@@ -1999,11 +2006,14 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     this.events.publishZoomFacsimile();
   }
 
+  // TODO: currently not in use, should be used in read-text to scroll the column into view when changing textPosition
   private scrollColumnIntoView(columnElement: HTMLElement, offset = 26) {
     if (columnElement === undefined || columnElement === null) {
       return;
     }
-    const scrollingContainer = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content > div.scroll-content');
+    const scrollingContainer = document.querySelector(
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
+    )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (scrollingContainer !== null) {
       const x = columnElement.getBoundingClientRect().left + scrollingContainer.scrollLeft -
       scrollingContainer.getBoundingClientRect().left - offset;

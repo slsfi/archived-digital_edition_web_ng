@@ -192,14 +192,8 @@ export class TooltipService {
     const resizedToolTipMaxWidth = 600;
 
     // Get viewport width and height.
-    const vw = Math.max(
-      document.documentElement.clientWidth,
-      window.innerWidth || 0
-    );
-    let vh = Math.max(
-      document.documentElement.clientHeight,
-      window.innerHeight || 0
-    );
+    const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
     // Get how much the page has scrolled horizontally to the left.
     // Get the page content element and adjust viewport height with horizontal
@@ -212,12 +206,11 @@ export class TooltipService {
     let toolbarsHeight = 120; // A default value, true value calculated with getBoundingClientRect() below
     const contentElem = document.querySelector(
       pageOrigin + ':not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
-    ) as HTMLElement; // TODO: This selector works for page-introduction but not page-text
+    )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (contentElem !== null) {
       scrollLeft = contentElem.scrollLeft;
       sidePaneOffsetWidth = contentElem.getBoundingClientRect().left;
       toolbarsHeight = contentElem.getBoundingClientRect().top;
-
       if (contentElem.clientHeight < contentElem.offsetHeight) {
         horizontalScrollbarOffsetHeight = contentElem.offsetHeight - contentElem.clientHeight;
       }
