@@ -1,6 +1,8 @@
 /* General styles for the component are defined in global.scss since they are common with the side-menu component. */
 
 .menu-header {
+    display: flex;
+    flex-flow: column nowrap;
     width: 100%;
     position: sticky;
     top: 0;
@@ -43,4 +45,18 @@
 
 .menu-header + ul {
     margin-top: 0;
+}
+
+.sort-select-wrapper {
+    background-color: var(--toc-sort-select-wrapper-background-color);
+	border-radius: 2px;
+	color: #000;
+	margin: 12px 10px;
+	max-width: 100%;
+	padding: 8px;
+}
+
+.sort-select {
+    --background: #fafafa;
+    --highlight-color-focused: var(--toc-sort-select-highlight-color);
 }

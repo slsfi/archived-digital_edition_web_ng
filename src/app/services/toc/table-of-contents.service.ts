@@ -1,13 +1,16 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { config } from "src/assets/config/config";
+
 
 @Injectable()
 export class TableOfContentsService {
-  private tableOfContentsUrl = '/toc/'; // plus an id...
-  private multilingualTOC = false;
+  tocPath = '/toc/';
+  multilingualTOC = false;
+  cachedTableOfContents: any = {};
   apiEndpoint: string;
+  activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
 
   constructor(
     private http: HttpClient,
@@ -22,18 +25,23 @@ export class TableOfContentsService {
   }
 
   getTableOfContents(id: string): Observable<any> {
-    let url =
-      this.apiEndpoint +
-      '/' +
-      config.app.machineName +
-      this.tableOfContentsUrl +
-      id;
+    if (this.cachedTableOfContents?.collectionId === id) {
+      return of(this.cachedTableOfContents);
+    } else {
+      let url = this.apiEndpoint + '/' + config.app.machineName + this.tocPath + id;
 
-    if (this.multilingualTOC) {
-      url += '/' + this.activeLocale;
+      if (this.multilingualTOC) {
+        url += '/' + this.activeLocale;
+      }
+
+      return this.http.get(url).pipe(
+        map((res: any) => {
+          this.cachedTableOfContents = res;
+          return res;
+        }),
+        catchError(this.handleError)
+      );
     }
-
-    return this.http.get(url);
   }
 
   getTableOfContentsRoot(id: string): Observable<any> {
@@ -42,15 +50,9 @@ export class TableOfContentsService {
 
   getTableOfContentsGroup(id: string, group_id: string): Observable<any> {
     // @TODO add multilingual support to this as well...
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        this.tableOfContentsUrl +
-        id +
-        '/group/' +
-        group_id
-    );
+    const url = config.app.apiEndpoint + '/' + config.app.machineName +
+                this.tocPath + id + '/group/' + group_id;
+    return this.http.get(url);
   }
 
   getPrevNext(id: string): Observable<any> {
@@ -58,15 +60,9 @@ export class TableOfContentsService {
     const arr = id.split('_');
     const ed_id = arr[0];
     const item_id = arr[1];
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        this.tableOfContentsUrl +
-        ed_id +
-        '/prevnext/' +
-        item_id
-    );
+    const url = config.app.apiEndpoint + '/' + config.app.machineName +
+                this.tocPath + ed_id + '/prevnext/' + item_id;
+    return this.http.get(url);
   }
 
   /**
@@ -84,4 +80,25 @@ export class TableOfContentsService {
 
     return this.http.get(url);
   }
+
+  setActiveTocOrder(newTocOrder: string) {
+    this.activeTocOrder.next(newTocOrder);
+  }
+
+  getActiveTocOrder(): Observable<string> {
+    return this.activeTocOrder.asObservable();
+  }
+
+  private async handleError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = (await error.json()) || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    throw errMsg;
+  }
+
 }

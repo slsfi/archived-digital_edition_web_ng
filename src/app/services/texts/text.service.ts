@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { config } from "src/assets/config/config";
 
 @Injectable()
@@ -14,11 +14,6 @@ export class TextService {
   variationsOrder: number[] = [];
   recentPageReadViews: Array<any> = [];
 
-  /* A more logical place for the activeTocOrder variable would be the table-of-contents service,
-     but due to the way it's set up it can't be a singleton service. That's why activeTocOrder
-     is in this service. */
-  activeTocOrder: string;
-
   constructor(
     private http: HttpClient
   ) {
@@ -29,7 +24,6 @@ export class TextService {
     this.readViewTextId = '';
     this.previousReadViewTextId = '';
     this.variationsOrder = [];
-    this.activeTocOrder = 'thematic';
   }
 
   getEstablishedText(id: string): Observable<any> {

@@ -1,8 +1,8 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { EventsService } from 'src/app/services/events/events.service';
+import { Subscription } from 'rxjs';
+import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { config } from "src/assets/config/config";
 
@@ -13,7 +13,6 @@ import { config } from "src/assets/config/config";
   styleUrls: ['text-changer.scss'],
 })
 export class TextChangerComponent {
-
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
   @Input() parentPageType: string = '';
@@ -31,12 +30,13 @@ export class TextChangerComponent {
   collectionHasTitle: boolean = false;
   collectionHasForeword: boolean = false;
   collectionHasIntro: boolean = false;
+  activeTocOrder: string = '';
+  activeTocOrderSubscription: Subscription;
 
   constructor(
-    public events: EventsService,
+    public commonFunctions: CommonFunctionsService,
     public tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService,
-    private textService: TextService,
     private router: Router
   ) {
     this.collectionHasCover = config.HasCover ?? false;
@@ -103,17 +103,22 @@ export class TextChangerComponent {
   }
 
   ngOnInit() {
-    if (this.textItemID) {
-      this.loadData();
-    }
-
-    // TODO: Reload when the TOC sorting changes and set current item
-    /*
-    this.events.getTocActiveSorting().complete();
-    this.events.getTocActiveSorting().subscribe((sortType) => {
-      this.loadData();
+    this.activeTocOrderSubscription = this.tocService.getActiveTocOrder().subscribe({
+      next: (tocOrder) => {
+        if (tocOrder !== this.activeTocOrder) {
+          this.activeTocOrder = tocOrder;
+          if (this.textItemID) {
+            this.loadData();
+          }
+        }
+      }
     });
-    */
+  }
+
+  ngOnDestroy() {
+    if (this.activeTocOrderSubscription) {
+      this.activeTocOrderSubscription.unsubscribe();
+    }
   }
 
   loadData() {
@@ -216,10 +221,12 @@ export class TextChangerComponent {
         next: (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {
             this.flatten(toc);
-            if (this.textService.activeTocOrder === 'alphabetical') {
+            if (this.activeTocOrder === 'alphabetical') {
               this.sortFlattenedTocAlphabetically();
-            } else if (this.textService.activeTocOrder === 'chronological') {
+            } else if (this.activeTocOrder === 'chronological') {
               this.sortFlattenedTocChronologically();
+            } else if (this.activeTocOrder === 'categorical') {
+              this.sortFlattenedTocCategorically();
             }
             for (let i = 0; i < this.flattened.length; i++) {
               if (
@@ -351,10 +358,12 @@ export class TextChangerComponent {
     if (this.flattened.length < 1) {
       this.flatten(toc);
     }
-    if (this.textService.activeTocOrder === 'alphabetical') {
+    if (this.activeTocOrder === 'alphabetical') {
       this.sortFlattenedTocAlphabetically();
-    } else if (this.textService.activeTocOrder === 'chronological') {
+    } else if (this.activeTocOrder === 'chronological') {
       this.sortFlattenedTocChronologically();
+    } else if (this.activeTocOrder === 'categorical') {
+      this.sortFlattenedTocCategorically();
     }
     let itemFound = this.setCurrentPreviousAndNextItemsFromFlattenedToc(this.tocItemId);
     if (!itemFound) {
@@ -488,6 +497,50 @@ export class TextChangerComponent {
         (a: any, b: any) =>
           (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0
       );
+    }
+  }
+
+  sortFlattenedTocCategorically() {
+    const primarySortKey = config.component?.sideMenu?.categoricalSortingPrimaryKey ?? '';
+    const secondarySortKey = config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
+
+    if (this.flattened.length > 0 && primarySortKey && secondarySortKey) {
+      if (primarySortKey === 'date') {
+        this.commonFunctions.sortArrayOfObjectsNumerically(this.flattened, primarySortKey, 'asc');
+      } else {
+        this.commonFunctions.sortArrayOfObjectsAlphabetically(this.flattened, primarySortKey);
+      }
+
+      const categorized: any[] = [];
+      let categoryItems: any[] = [];
+      let prevCategory = '';
+
+      for (let i = 0; i < this.flattened.length; i++) {
+        const currentCategory = this.flattened[i][primarySortKey];
+        if (i < 1) {
+          prevCategory = currentCategory;
+        }
+        if (currentCategory !== prevCategory) {
+          if (secondarySortKey === 'date') {
+            this.commonFunctions.sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
+          } else if (secondarySortKey) {
+            this.commonFunctions.sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
+          }
+          categorized.push(categoryItems);
+          categoryItems = [];
+        }
+        categoryItems.push(this.flattened[i]);
+      }
+
+      if (categoryItems.length > 0) {
+        if (secondarySortKey === 'date') {
+          this.commonFunctions.sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
+        } else if (secondarySortKey) {
+          this.commonFunctions.sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
+        }
+        categorized.push(categoryItems);
+      }
+      this.flattened = categorized.flat();
     }
   }
 

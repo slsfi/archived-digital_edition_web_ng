@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { isBrowser } from 'src/standalone/utility-functions';
 import { Title } from "@angular/platform-browser";
+import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Injectable()
@@ -310,38 +310,42 @@ export class CommonFunctionsService {
   }
 
 
-  setTitle(pageTitle: string, position: number){
-    let title = this.title.getTitle().split(' - ')
+  setTitle(pageTitle: string, position: number) {
+    const title = this.title.getTitle().split(' - ');
     let siteTitle: string[] = [];
-    if(position === 1 ) { // From primary side menu
+    if (position === 1) { // From primary side menu
       siteTitle = title.slice(-1);
-    } else if(position === 2) { //From collection side menu
+    } else if (position === 2) { //From collection side menu
       siteTitle = title.slice(-2);
     }
-    this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`)
+    this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`);
   }
 
 
-  addOrRemoveValueInArray(array: any[], value: any){
+  addOrRemoveValueInArray(array: any[], value: any) {
     let index = array.indexOf(value);
-    if(index > -1)
-      array.splice(index,1);
-    else
+    if (index > -1) {
+      array.splice(index, 1);
+    } else {
       array.push(value);
+    }
   }
+
 
   /**
-   * Given an object with nested objects in the property 'branchingPropertyName',
-   * returns a flattened array of the object.
+   * Given an object with nested objects in the property 'branchingKey',
+   * returns a flattened array of the object. If 'requiredKey' is not
+   * undefined, only objects that have a non-empty 'requiredKey' property
+   * are included.
    */
-  flattenObjectTree(data: any, branchingPropertyName: string = 'children') {
-    const dataWithoutChildren = (({[branchingPropertyName]: _, ...d}) => d)(data);
+  flattenObjectTree(data: any, branchingKey: string = 'children', requiredKey?: string) {
+    const dataWithoutChildren = (({[branchingKey]: _, ...d}) => d)(data);
     let list = [dataWithoutChildren];
-    if (!data[branchingPropertyName]) {
+    if (!data[branchingKey] && (!requiredKey || (requiredKey && data[requiredKey]))) {
       return list;
     }
-    for (const child of data[branchingPropertyName]) {
-      list = list.concat(this.flattenObjectTree(child, branchingPropertyName));
+    for (const child of data[branchingKey]) {
+      list = list.concat(this.flattenObjectTree(child, branchingKey, requiredKey));
     }
     return list;
   }

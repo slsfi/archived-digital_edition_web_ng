@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from "@angular/core";
 import { Params, UrlSegment } from "@angular/router";
 import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
@@ -11,8 +11,7 @@ import { isBrowser } from "src/standalone/utility-functions";
   templateUrl: 'collection-side-menu.html',
   styleUrls: ['collection-side-menu.scss']
 })
-
-export class CollectionSideMenu implements OnInit, OnChanges {
+export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
@@ -38,35 +37,35 @@ export class CollectionSideMenu implements OnInit, OnChanges {
 
   ngOnInit() {
     this.sortOptions = this.setSortOptions(this.collectionID);
-    this.tocService.getTableOfContents(this.collectionID).subscribe(data => {
-      if (data && data.children && data.children.length) {
-        this.recursiveInitializeSelectedMenu(data.children);
-        this.collectionTitle = data.text || '';
-        this.collectionMenu = data.children;
-        this.defaultMenu = data.children;
-        this.isLoading = false;
-        this.commonFunctions.setTitle(this.collectionTitle, 1);
-        this.updateHighlightedMenuItem();
+    this.tocService.getTableOfContents(this.collectionID).subscribe({
+      next: (data) => {
+        if (data && data.children && data.children.length) {
+          this.recursiveInitializeSelectedMenu(data.children);
+          this.collectionTitle = data.text || '';
+          this.collectionMenu = data.children;
+          this.defaultMenu = data.children;
+          this.isLoading = false;
+          this.commonFunctions.setTitle(this.collectionTitle, 1);
+          this.updateHighlightedMenuItem();
 
-        // Construct sorted menus
-        if (this.sortOptions.length > 0) {
-          const flattenedMenu = this.commonFunctions.flattenObjectTree(data);
-          // console.log('flattened menu: ', flattenedMenu);
-          if (this.sortOptions.includes('alphabetical')) {
-            this.alphabeticalMenu = this.constructAlphabeticalMenu(flattenedMenu);
-          }
-          if (this.sortOptions.includes('chronological')) {
-            this.chronologicalMenu = this.constructCategoricalMenu(flattenedMenu, 'date');
-          }
-          if (this.sortOptions.includes('categorical')) {
-            const primaryKey = this._config.component?.sideMenu?.categoricalSortingPrimaryKey ?? 'date';
-            const secondaryKey = this._config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
-            this.categoricalMenu = this.constructCategoricalMenu(flattenedMenu, primaryKey, secondaryKey);
-            console.log('categorical menu: ', this.categoricalMenu);
-          }
-          this.sortSelectOptions = {
-            header: $localize`:@@TOC.SortOptions.SortTOC:Välj sortering för innehållsförteckningen`,
-            cssClass: 'custom-select-alert'
+          // Construct sorted menus
+          if (this.sortOptions.length > 0) {
+            const flattenedMenu = this.commonFunctions.flattenObjectTree(data);
+            if (this.sortOptions.includes('alphabetical')) {
+              this.alphabeticalMenu = this.constructAlphabeticalMenu(flattenedMenu);
+            }
+            if (this.sortOptions.includes('chronological')) {
+              this.chronologicalMenu = this.constructCategoricalMenu(flattenedMenu, 'date');
+            }
+            if (this.sortOptions.includes('categorical')) {
+              const primaryKey = this._config.component?.sideMenu?.categoricalSortingPrimaryKey ?? 'date';
+              const secondaryKey = this._config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
+              this.categoricalMenu = this.constructCategoricalMenu(flattenedMenu, primaryKey, secondaryKey);
+            }
+            this.sortSelectOptions = {
+              header: $localize`:@@TOC.SortOptions.SortTOC:Välj sortering för innehållsförteckningen`,
+              cssClass: 'custom-select-alert'
+            }
           }
         }
       }
@@ -84,6 +83,9 @@ export class CollectionSideMenu implements OnInit, OnChanges {
             propName === 'collectionID' &&
             changes.collectionID.previousValue !== changes.collectionID.currentValue
           ) {
+            if (!changes.collectionID.firstChange) {
+              this.tocService.setActiveTocOrder('default');
+            }
             relevantChange = true;
             break;
           } else if (
@@ -108,7 +110,12 @@ export class CollectionSideMenu implements OnInit, OnChanges {
     }
   }
 
-  updateHighlightedMenuItem() {
+  ngOnDestroy() {
+    console.log('destroying collection side menu');
+    this.tocService.setActiveTocOrder('default');
+  }
+
+  updateHighlightedMenuItem(scrollTimeout: number = 600) {
     const itemId = this.getItemId();
     this.highlightedMenu = itemId;
     const isFrontMatterPage = this.setTitleForFrontMatterPages();
@@ -116,11 +123,11 @@ export class CollectionSideMenu implements OnInit, OnChanges {
       const item = this.recursiveFinding(this.collectionMenu, itemId);
       if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
         this.selectedMenu.push(item.itemId || item.nodeId);
-        // Angular is not good at detecting changes within arrays and objects, so we have to manually trigger an update of the view
-        this.cref.detectChanges();
       }
     }
-    this.scrollHighlightedMenuItemIntoView(itemId);
+    // Angular is not good at detecting changes within arrays and objects, so we have to manually trigger an update of the view
+    this.cref.detectChanges();
+    this.scrollHighlightedMenuItemIntoView(itemId, scrollTimeout);
   }
 
   setTitleForFrontMatterPages() {
@@ -197,16 +204,15 @@ export class CollectionSideMenu implements OnInit, OnChanges {
     }
   }
 
-  scrollHighlightedMenuItemIntoView(itemId: string) {
+  scrollHighlightedMenuItemIntoView(itemId: string, scrollTimeout: number = 600) {
     if (isBrowser()) {
-      // TODO: change to setinterval
       setTimeout(() => {
         const container = document.querySelector('.side-navigation') as HTMLElement;
         const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
         if (container && target) {
           this.commonFunctions.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }
-      }, 600);
+      }, scrollTimeout);
     }
   }
 
@@ -305,8 +311,8 @@ export class CollectionSideMenu implements OnInit, OnChanges {
 
   setActiveMenuSorting(event: any) {
     if (this.activeMenuSorting !== event.detail.value) {
-      this.isLoading = true;
       this.activeMenuSorting = event.detail.value;
+      this.tocService.setActiveTocOrder(event.detail.value);
       this.selectedMenu = [];
 
       if (this.activeMenuSorting === 'alphabetical') {
@@ -320,9 +326,7 @@ export class CollectionSideMenu implements OnInit, OnChanges {
       }
 
       this.recursiveInitializeSelectedMenu(this.collectionMenu);
-      this.isLoading = false;
-      this.updateHighlightedMenuItem();
-      this.cref.detectChanges();
+      this.updateHighlightedMenuItem(800);
     }
   }
 

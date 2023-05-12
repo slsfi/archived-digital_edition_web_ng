@@ -3,7 +3,9 @@
     <a class="go-back-menu-item" [routerLink]="['/']"><ion-icon name="arrow-back-sharp"></ion-icon> <span i18n="@@BackButton">Tillbaka</span></a>
     <h1>{{collectionTitle}}</h1>
   </div>
-  <ion-select *ngIf="sortOptions.length > 0"
+  <div class="sort-select-wrapper" *ngIf="sortOptions.length > 0">
+    <ion-select
+          class="sort-select"
           label="Sortering"
           i18n-label="@@TOC.SortOptions.Sort"
           label-placement="floating"
@@ -14,25 +16,26 @@
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="sortSelectOptions"
           (ionChange)="setActiveMenuSorting($event)"
-          value="default"
-  >
-    <ion-select-option
-          value="default"
-          i18n="@@TOC.SortOptions.Default"
-    >Standard</ion-select-option>
-    <ion-select-option *ngIf="sortOptions.includes('alphabetical')"
-          value="alphabetical"
-          i18n="@@TOC.SortOptions.Alphabetical"
-    >Alfabetisk</ion-select-option>
-    <ion-select-option *ngIf="sortOptions.includes('chronological')"
-          value="chronological"
-          i18n="@@TOC.SortOptions.Chronological"
-    >Kronologisk</ion-select-option>
-    <ion-select-option *ngIf="sortOptions.includes('categorical')"
-          value="categorical"
-          i18n="@@TOC.SortOptions.Categorical"
-    >Kategorivis</ion-select-option>
-  </ion-select>
+          [value]="activeMenuSorting"
+    >
+      <ion-select-option
+            value="default"
+            i18n="@@TOC.SortOptions.Default"
+      >Standard</ion-select-option>
+      <ion-select-option *ngIf="sortOptions.includes('alphabetical')"
+            value="alphabetical"
+            i18n="@@TOC.SortOptions.Alphabetical"
+      >Alfabetisk</ion-select-option>
+      <ion-select-option *ngIf="sortOptions.includes('chronological')"
+            value="chronological"
+            i18n="@@TOC.SortOptions.Chronological"
+      >Kronologisk</ion-select-option>
+      <ion-select-option *ngIf="sortOptions.includes('categorical')"
+            value="categorical"
+            i18n="@@TOC.SortOptions.Categorical"
+      >Kategorivis</ion-select-option>
+    </ion-select>
+  </div>
   <ul role="menu" [ngClass]="activeMenuSorting + '-menu-sorting'">
     <li *ngIf="_config.HasCover" [attr.aria-current]="initialUrlSegments[2].path === 'cover' ? 'page' : null" role="menuitem">
       <a routerLink="{{collectionID | collectionPathGenerator: 'cover'}}" [class.menu-highlight]="initialUrlSegments[2].path === 'cover'">
