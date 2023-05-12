@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, QueryList, Renderer2, SecurityContext, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, SecurityContext, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
@@ -26,7 +26,6 @@ import { isBrowser } from 'src/standalone/utility-functions';
   templateUrl: 'collection-text.html',
   styleUrls: ['collection-text.scss'],
 })
-
 export class CollectionTextPage implements OnInit, OnDestroy {
   @ViewChild('nav', { read: DragScrollComponent }) ds!: DragScrollComponent;
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
@@ -147,7 +146,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     public userSettingsService: UserSettingsService,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.searchResult = null;
 
@@ -607,26 +607,34 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         // Loop needed for finding correct tooltip trigger when there are nested triggers.
         while (!modalShown && eventTarget['classList'].contains('tooltiptrigger')) {
           if (eventTarget.hasAttribute('data-id')) {
-            if (eventTarget['classList'].contains('person')
-            && this.readPopoverService.show.personInfo) {
+            if (
+              eventTarget['classList'].contains('person') &&
+              this.readPopoverService.show.personInfo
+            ) {
               this.ngZone.run(() => {
                 this.showPersonModal(eventTarget.getAttribute('data-id'));
               });
               modalShown = true;
-            } else if (eventTarget['classList'].contains('placeName')
-            && this.readPopoverService.show.placeInfo) {
+            } else if (
+              eventTarget['classList'].contains('placeName') &&
+              this.readPopoverService.show.placeInfo
+            ) {
               this.ngZone.run(() => {
                 this.showPlaceModal(eventTarget.getAttribute('data-id'));
               });
               modalShown = true;
-            } else if (eventTarget['classList'].contains('title')
-            && this.readPopoverService.show.workInfo) {
+            } else if (
+              eventTarget['classList'].contains('title') &&
+              this.readPopoverService.show.workInfo
+            ) {
               this.ngZone.run(() => {
                 this.showWorkModal(eventTarget.getAttribute('data-id'));
               });
               modalShown = true;
-            } else if (eventTarget['classList'].contains('comment')
-            && this.readPopoverService.show.comments) {
+            } else if (
+              eventTarget['classList'].contains('comment') &&
+              this.readPopoverService.show.comments
+            ) {
               /* The user has clicked a comment lemma ("asterisk") in the reading-text.
                 Check if comments view is shown. */
               const viewTypesShown = this.getViewTypesShown();
@@ -637,7 +645,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 const targetId = 'start' + numId;
                 let lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
                 lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
-                if (lemmaStart.parentElement !== null && lemmaStart.parentElement.classList.contains('ttFixed')) {
+                if (
+                  lemmaStart.parentElement !== null &&
+                  lemmaStart.parentElement.classList.contains('ttFixed')
+                ) {
                   // The lemma is in a footnote, so we should get the second element with targetId.
                   lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
                   lemmaStart = lemmaStart.querySelectorAll('[data-id="' + targetId + '"]')[1] as HTMLElement;
@@ -723,9 +734,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
              child of a change. */
           if (!modalShown) {
             eventTarget = eventTarget['parentNode'];
-            if (!eventTarget['classList'].contains('tooltiptrigger')
-            && eventTarget['parentNode']
-            && eventTarget['parentNode']['classList'].contains('tooltiptrigger')) {
+            if (
+              !eventTarget['classList'].contains('tooltiptrigger') &&
+              eventTarget['parentNode'] &&
+              eventTarget['parentNode']['classList'].contains('tooltiptrigger')
+            ) {
               /* The parent isn't a tooltiptrigger, but the parent of the parent
                  is, use it for the next iteration. */
               eventTarget = eventTarget['parentNode'];
@@ -734,7 +747,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         }
 
         eventTarget = this.getEventTarget(event);
-        if (eventTarget['classList'].contains('variantScrollTarget') || eventTarget['classList'].contains('anchorScrollTarget')) {
+        if (
+          eventTarget['classList'].contains('variantScrollTarget') ||
+          eventTarget['classList'].contains('anchorScrollTarget')
+        ) {
           // Click on variant lemma --> highlight and scroll all variant columns.
 
           eventTarget.classList.add('highlight');
@@ -746,12 +762,19 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           }.bind(null, eventTarget), 5000);
         } else if (eventTarget['classList'].contains('extVariantsTrigger')) {
           // Click on trigger for showing links to external variants
-          if (eventTarget.nextElementSibling !== null && eventTarget.nextElementSibling !== undefined) {
-            if (eventTarget.nextElementSibling.classList.contains('extVariants')
-            && !eventTarget.nextElementSibling.classList.contains('show-extVariants')) {
+          if (
+            eventTarget.nextElementSibling !== null &&
+            eventTarget.nextElementSibling !== undefined
+          ) {
+            if (
+              eventTarget.nextElementSibling.classList.contains('extVariants') &&
+              !eventTarget.nextElementSibling.classList.contains('show-extVariants')
+            ) {
               eventTarget.nextElementSibling.classList.add('show-extVariants');
-            } else if (eventTarget.nextElementSibling.classList.contains('extVariants')
-            && eventTarget.nextElementSibling.classList.contains('show-extVariants')) {
+            } else if (
+              eventTarget.nextElementSibling.classList.contains('extVariants') &&
+              eventTarget.nextElementSibling.classList.contains('show-extVariants')
+            ) {
               eventTarget.nextElementSibling.classList.remove('show-extVariants');
             }
           }
@@ -976,14 +999,16 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                     hrefString += '?position=' + positionId;
                   }
                   if (newWindowRef) {
-                    newWindowRef.location.href = hrefString;
+                    newWindowRef.location.href = '/' + this.activeLocale + hrefString;
                   }
                 });
               }
 
             } else if (anchorElem.classList.contains('ref_introduction')) {
-              // Link to introduction.
+              // Link to introduction, open in new window/tab.
               publicationId = hrefTargetItems[0];
+
+              const newWindowRef = window.open();
 
               this.textService.getCollectionAndPublicationByLegacyId(publicationId).subscribe(data => {
                 if (data[0] !== undefined) {
@@ -995,7 +1020,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                   hrefString += '?position=' + positionId;
                 }
                 // Open the link in a new window/tab.
-                window.open(hrefString, '_blank');
+                if (newWindowRef) {
+                  newWindowRef.location.href = '/' + this.activeLocale + hrefString;
+                }
               });
             }
           }
@@ -1523,7 +1550,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     });
   }
 
-  /* This method is used for showing infoOverlays for changes, normalisations and abbreviations. */
+  /* This method is used for showing infoOverlays for changes, normalisations and abbreviations, and
+     also comments if they are present inline in the text. */
   showInfoOverlayFromInlineHtml(targetElem: HTMLElement) {
     if (targetElem.nextElementSibling !== null
     && targetElem.nextElementSibling.classList.contains('tooltip')) {
@@ -1535,11 +1563,15 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.setInfoOverlayTitle($localize`:@@editorialChange:Utgivarändring`);
         if (targetElem.classList.contains('corr_red')) {
           lemma = targetElem.innerHTML;
-        } else if (targetElem.firstElementChild !== null
-        && targetElem.firstElementChild.classList.contains('corr_hide')) {
+        } else if (
+          targetElem.firstElementChild !== null &&
+          targetElem.firstElementChild.classList.contains('corr_hide')
+        ) {
           lemma = '<span class="corr_hide">' + targetElem.firstElementChild.innerHTML + '</span>';
-        } else if (targetElem.firstElementChild !== null
-        && targetElem.firstElementChild.classList.contains('corr')) {
+        } else if (
+          targetElem.firstElementChild !== null &&
+          targetElem.firstElementChild.classList.contains('corr')
+        ) {
           lemma = targetElem.firstElementChild.innerHTML;
         }
         text = '<p class="infoOverlayText"><span class="ioLemma">'
@@ -1559,21 +1591,23 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       } else if (targetElem.nextElementSibling.classList.contains('ttAbbreviations')) {
         // Abbreviation.
         this.setInfoOverlayTitle($localize`:@@abbreviation:Förkortning`);
-        if (targetElem.firstElementChild !== null
-        && targetElem.firstElementChild.classList.contains('abbr')) {
+        if (
+          targetElem.firstElementChild !== null &&
+          targetElem.firstElementChild.classList.contains('abbr')
+        ) {
           text = '<p class="infoOverlayText"><span class="ioLemma">'
           + targetElem.firstElementChild.innerHTML
           + '</span><span class="ioDescription">'
           + targetElem.nextElementSibling.innerHTML + '</span></p>';
         }
       } else if (targetElem.nextElementSibling.classList.contains('ttComment')) {
-        // Abbreviation.
+        // Comment.
         this.setInfoOverlayTitle($localize`:@@comments:Kommentarer`);
-        if (targetElem.firstElementChild !== null
-        && targetElem.firstElementChild.classList.contains('noteText')) {
-          text = '<p class="infoOverlayText"><span class="ioLemma">'
-          + targetElem.firstElementChild.innerHTML
-          + '</span><span class="ioDescription">'
+        if (
+          targetElem.nextElementSibling !== null &&
+          targetElem.nextElementSibling.classList.contains('noteText')
+        ) {
+          text = '<p class="infoOverlayText"><span class="ioDescription">'
           + targetElem.nextElementSibling.innerHTML + '</span></p>';
         }
       } else if (
@@ -1582,8 +1616,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         targetElem.nextElementSibling.classList.contains('ttFoot')
       ) {
         // Some other note coded as a footnote (but lacking id and data-id attributes).
-        if (targetElem.nextElementSibling.firstElementChild !== null
-        && targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')) {
+        if (
+          targetElem.nextElementSibling.firstElementChild !== null &&
+          targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
+        ) {
           if (targetElem.classList.contains('revision')) {
             this.setInfoOverlayTitle($localize`:@@revisionNote:Repetitionsanteckning`);
             lemma = '';
