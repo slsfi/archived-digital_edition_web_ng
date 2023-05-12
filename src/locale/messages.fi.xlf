@@ -1386,6 +1386,42 @@
         <target>Sisältö 5</target>
       </segment>
     </unit>
+    <unit id="TOC.SortOptions.Alphabetical">
+      <segment state="initial">
+        <source>Alfabetisk</source>
+        <target>Aakkosellinen</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Categorical">
+      <segment state="initial">
+        <source>Kategorivis</source>
+        <target>Kategorioittain</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Chronological">
+      <segment state="initial">
+        <source>Kronologisk</source>
+        <target>Kronologinen</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Default">
+      <segment state="initial">
+        <source>Standard</source>
+        <target>Oletus</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Sort">
+      <segment state="initial">
+        <source>Sortering</source>
+        <target>Järjestys</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.SortTOC">
+      <segment state="initial">
+        <source>Välj sortering för innehållsförteckningen</source>
+        <target>Valitse sisällysluettelolle järjestys</target>
+      </segment>
+    </unit>
     <unit id="TOC.TagSearch">
       <segment state="initial">
         <source>Ämnesord</source>

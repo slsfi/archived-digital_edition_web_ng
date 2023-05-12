@@ -1386,6 +1386,42 @@
         <target>Content 5</target>
       </segment>
     </unit>
+    <unit id="TOC.SortOptions.Alphabetical">
+      <segment state="initial">
+        <source>Alfabetisk</source>
+        <target>Alphabetical</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Categorical">
+      <segment state="initial">
+        <source>Kategorivis</source>
+        <target>Categorical</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Chronological">
+      <segment state="initial">
+        <source>Kronologisk</source>
+        <target>Chronological</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Default">
+      <segment state="initial">
+        <source>Standard</source>
+        <target>Default</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.Sort">
+      <segment state="initial">
+        <source>Sortering</source>
+        <target>Sorting</target>
+      </segment>
+    </unit>
+    <unit id="TOC.SortOptions.SortTOC">
+      <segment state="initial">
+        <source>Välj sortering för innehållsförteckningen</source>
+        <target>Select sorting for the table of contents</target>
+      </segment>
+    </unit>
     <unit id="TOC.TagSearch">
       <segment state="initial">
         <source>Ämnesord</source>
