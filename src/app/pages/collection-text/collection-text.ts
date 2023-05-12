@@ -1914,7 +1914,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       {
         relativeTo: this.route,
         queryParams: { views: JSON.stringify(views) },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: 'merge',
+        replaceUrl: true
       }
     );
   }
