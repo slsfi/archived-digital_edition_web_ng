@@ -20,7 +20,7 @@ export class ManuscriptsComponent {
   @Input() searchMatches: Array<string> = [];
   @Output() openNewManView = new EventEmitter<any>();
   @Output() openNewLegendView = new EventEmitter<any>();
-  @Output() selectedMsID = new EventEmitter<string>();
+  @Output() selectedMsID = new EventEmitter<number>();
 
   public text: any = '';
   textLanguage: string = '';
@@ -166,7 +166,7 @@ export class ManuscriptsComponent {
   }
 
   emitSelectedManuscriptId(id: number) {
-    this.selectedMsID.emit(String(id));
+    this.selectedMsID.emit(id);
   }
 
   openNewMan(event: Event, id: any) {

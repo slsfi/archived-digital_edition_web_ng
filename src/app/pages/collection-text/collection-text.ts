@@ -1844,7 +1844,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  addView(type: string, id?: string | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
+  addView(type: string, id?: number | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
 
     // TODO: Adding the correct unique variations still requires some work
     if (type === 'variations' && variationSortOrder === undefined) {
@@ -1939,7 +1939,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     return reorderedArray;
   }
 
-  updateViewManuscriptID(manuscriptID: string, viewIndex: number) {
+  updateViewManuscriptID(manuscriptID: number, viewIndex: number) {
     this.views[viewIndex]['id'] = manuscriptID;
     this.updateViewsInRouterQueryParams(this.views);
   }
