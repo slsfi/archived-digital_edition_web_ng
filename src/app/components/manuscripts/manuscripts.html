@@ -1,6 +1,6 @@
 <ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
 
-<div id="ms" *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
+<div *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
   <h3 [innerHTML]="selectedManuscript.name"></h3>
   <div class="flex-buttons">
     <ion-button *ngIf="manuscripts.length>1" class="custom-button" (click)="selectManuscript()" i18n="@@Read.Manuscripts.ChangeManuscript">Byt manuskript</ion-button>

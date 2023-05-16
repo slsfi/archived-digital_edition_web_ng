@@ -111,7 +111,6 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('destroying collection side menu');
     this.tocService.setActiveTocOrder('default');
   }
 

@@ -1,6 +1,6 @@
-import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -13,15 +13,14 @@ import { isBrowser } from 'src/standalone/utility-functions';
   templateUrl: 'legend.html',
   styleUrls: ['legend.scss']
 })
-export class LegendComponent {
-
+export class LegendComponent implements OnInit, OnDestroy {
   @Input() itemId?: string;
   @Input() scrollToElementId?: string;
   text$: Observable<SafeHtml>;
   staticMdLegendFolderNumber = '13';
   collectionId = '';
   publicationId = '';
-  intervalTimerId: number;
+  intervalTimerId: number = 0;
   private unlistenClickEvents?: () => void;
 
   constructor(
@@ -33,9 +32,7 @@ export class LegendComponent {
     private sanitizer: DomSanitizer,
     public commonFunctions: CommonFunctionsService,
     @Inject(LOCALE_ID) public activeLocale: string
-  ) {
-    this.intervalTimerId = 0;
-  }
+  ) {}
 
   ngOnInit() {
     this.collectionId = this.itemId?.split('_')[0] || '';

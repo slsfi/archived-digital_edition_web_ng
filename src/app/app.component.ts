@@ -10,7 +10,6 @@ import { CommonFunctionsService } from "./services/common-functions/common-funct
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-
 export class DigitalEditionsApp implements OnInit {
   showSideMenu: boolean = false;
   showCollectionSideMenu: boolean = false;

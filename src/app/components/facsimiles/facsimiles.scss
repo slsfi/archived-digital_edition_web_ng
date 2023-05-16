@@ -1,107 +1,128 @@
-.leftFacsimileArrow {
-    left: 0;
-    right: auto !important;
-}
-
-#facsimilies-image {
-    max-height: 100%;
+:host {
+    display: block;
     height: 100%;
 }
-#facsimilies-image img {
-    max-height: fit-content;
-    object-fit: scale-down;
-    object-position: top;
+
+.external-urls-header {
+    .flex-buttons {
+        margin-bottom: 0.25rem;
+   }
+}
+
+.external-urls-wrapper {
+    font-family: var(--font-stack-app-base) !important;
+    height: calc(100% - 1.375rem);
     width: 100%;
-    height: 100%;
-}
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 16px 16px 16px;
 
-.external_url a {
-    white-space: normal;
-}
+    div.tei {
+        font-family: var(--font-stack-app-base);
+        padding-bottom: 100px;
+    }
 
-img {
-    cursor: move;
-    // https://github.com/hammerjs/hammer.js/issues/1050#issuecomment-267595556
-    // Need to use !important because something is trying to override the value.
-    touch-action: none !important;
-}
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: table;
+    }
 
-.external_urls_wrapper > .scroll-content {
-    padding: 0 !important;
-}
-.external_urls_wrapper div.tei {
-    font-family: var(--font-stack-app-base);
-    padding-bottom: 100px;
-}
-.external_urls_wrapper ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: table;
-}
-.external_urls_wrapper ul > li {
-    padding: 0 0 0.5em 0;
-    display: table-row;
-}
+    ul > li {
+        padding: 0 0 0.5em 0;
+        display: table-row;
+    }
 
-.external_urls_wrapper ul > li::before {
-    content: "\203A";
-    padding-right: 0.5em;
-    display: table-cell;
-    text-align: right;
-}
-
-ion-item.item.page-number-wrapper {
-    background-color: var(--facsimile-column-page-number-wrapper-background-color);
-    padding-left: 0;
-
-    div.item-inner {
-        padding: 8px 0;
-        box-shadow: inset 0 -1px 0 0 var(--fab-button-primary-background-color) !important;
-        border-bottom: 0;
-
-        div.input-wrapper {
-            display: inline-block;
-
-            ion-label.page_number_label {
-                float: left;
-                margin: 9px 8px;
-                color: var(--dark-color);
-                max-width: max-content;
-            }
-
-            ion-input.page_number_input {
-                float: left;
-                width: auto;
-
-                input {
-                    width: 4.5rem;
-                    padding: 5px;
-                    border: 1px solid #666;
-                    margin: 0;
-                    border-radius: var(--corner-border-radius);
-                    background-color: #fafafa;
-                }
-                input:focus {
-                    border-color: var(--fab-button-primary-background-color);
-                    filter: brightness(110%);
-                }
-            }
-        }
+    ul > li::before {
+        content: "\203A";
+        padding-right: 0.5em;
+        display: table-cell;
+        text-align: right;
     }
 }
 
+.facsimile-header.facs-change-possible + .external-urls-wrapper {
+    height: 100%;
+}
+
+.facsimile-image-wrapper {
+    height: calc(100% - 121px);
+    touch-action: none;
+
+    img {
+        cursor: move;
+        display: block;
+        margin: 0 auto;
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        object-position: top;
+        height: auto;
+        width: auto;
+        touch-action: none;
+        user-select: none;
+        will-change: transform;
+        position: relative;
+    }
+}
+
+ion-input + .facsimile-image-wrapper {
+    height: calc(100% - 35px);
+}
+
+.facsimile-header.facs-change-possible + ion-input + .facsimile-image-wrapper {
+    height: calc(100% - 115px);
+}
+
+.facsimile-header.facs-change-possible + .facsimile-image-wrapper {
+    height: calc(100% - 60px);
+}
+
+.facsimile-header:not(.facs-change-possible) + .facsimile-image-wrapper {
+    height: calc(100% - 15px);
+}
+
+
+.left-facs-controls,
+.right-facs-controls {
+    position: fixed;
+    top: 40%;
+
+    ion-fab-button {
+        --box-shadow: none;
+        --background: var(--fab-button-primary-background-color);
+        --color: var(--fab-button-primary-icon-color);
+        & + ion-fab-button {
+            --background: var(--fab-button-secondary-background-color);
+            --color: var(--fab-button-secondary-icon-color);
+        }
+    }
+
+    ion-icon {
+        --ionicon-stroke-width: 36px;
+    }
+}
+.left-facs-controls {
+    left: 0;
+}
+.right-facs-controls {
+    right: 0;
+}
+
+
+/* TODO: these selectors don't work here, move to global.scss */
 .mobile-mode-facsimiles facsimiles .facsimile-header {
   display: none;
 }
 
-.mobile-mode-facsimiles facsimiles #facsimilies-image {
+.mobile-mode-facsimiles facsimiles .facsimile-image-wrapper {
   padding-top: 1rem;
 }
 
 .mobile-mode-facsimiles facsimiles {
-    .leftFacsimileArrow,
-    .rightFacsimileArrowAndControls {
+    .left-facs-controls,
+    .right-facs-controls {
         margin-top: -60px;
     }
 }

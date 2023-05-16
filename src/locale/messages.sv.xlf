@@ -938,8 +938,8 @@
     </unit>
     <unit id="Read.Facsimiles.Page">
       <segment state="initial">
-        <source>Bild</source>
-        <target>Bild</target>
+        <source>Bild:</source>
+        <target>Bild:</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">

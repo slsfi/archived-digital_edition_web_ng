@@ -783,7 +783,7 @@
     </unit>
     <unit id="Read.Facsimiles.Page">
       <segment>
-        <source>Bild</source>
+        <source>Bild:</source>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, SecurityContext } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
@@ -9,26 +9,20 @@ import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { config } from "src/assets/config/config";
 
-/**
- * Generated class for the FacsimilesComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
   selector: 'facsimiles',
   templateUrl: 'facsimiles.html',
   styleUrls: ['facsimiles.scss']
 })
 export class FacsimilesComponent {
-
   @Input() itemId: any;
   @Input() selectedFacsimile: any;
   @Input() matches?: Array<string>;
   @Input() facsID?: any;
   @Input() facsNr?: any;
   @Output() openNewFacsimileView: EventEmitter<any> = new EventEmitter();
-
+  
   public text: any;
   protected errorMessage?: string;
 
@@ -68,7 +62,7 @@ export class FacsimilesComponent {
     protected readPopoverService: ReadPopoverService,
     protected modalController: ModalController,
     protected facsimileService: FacsimileService,
-    protected events: EventsService,
+    private events: EventsService,
     private alertCtrl: AlertController,
     private route: ActivatedRoute
   ) {

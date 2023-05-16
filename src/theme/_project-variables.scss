@@ -149,6 +149,7 @@ $opacity-hover-transition: opacity 0.2s;
 
   // Facsimile column in read-page
   --facsimile-column-page-number-wrapper-background-color:  var(--main-background-color);
+  --facsimile-column-highlight-color:                       var(--fab-button-primary-background-color);
 
   // Elastic search
   --elastic-search-facet-background-color:                    transparent;

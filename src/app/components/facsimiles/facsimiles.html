@@ -1,24 +1,40 @@
 
-<div *ngIf="externalFacsimilesExist || facsimiles.length>0" class="text-select-wrapper facsimile-header" [ngClass]="selectedFacsimileIsExternal?'external-urls-header':''">
-  <h3 *ngIf="!selectedFacsimileIsExternal" [innerHTML]="selectedFacsimileName"></h3>
+<div *ngIf="externalFacsimilesExist || facsimiles.length>0"
+      class="text-select-wrapper facsimile-header"
+      [class.external-urls-header]="selectedFacsimileIsExternal"
+      [class.facs-change-possible]="facsimiles.length>1 || (facsimiles.length==1 && externalFacsimilesExist)"
+>
+  <h3 *ngIf="!selectedFacsimileIsExternal">{{selectedFacsimileName}}</h3>
   <h3 *ngIf="selectedFacsimileIsExternal" i18n="@@Read.Facsimiles.ExternalHeading">Externa faksimil</h3>
   <div *ngIf="facsimiles.length>1 || (facsimiles.length==1 && externalFacsimilesExist)" class="flex-buttons">
     <ion-button class="custom-button" (click)="selectFacsimile()" i18n="@@Read.Facsimiles.ChangeFacsimile">Byt faksimil</ion-button>
   </div>
 </div>
 
-<div [ngClass]="(readPopoverService.fontsize==0)?'tei teiContainer xsmallFontSize':(readPopoverService.fontsize==1)?'tei teiContainer smallFontSize':(readPopoverService.fontsize==2)?'tei teiContainer mediumFontSize':(readPopoverService.fontsize==3)?'tei teiContainer largeFontSize':'tei teiContainer xlargeFontSize'">
+<div *ngIf="selectedFacsimileIsExternal" class="external-urls-wrapper tei teiContainer"
+      [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+>
   <ul>
-    <li *ngFor="let ext of externalURLs"><a target="_blank" href="{{ext.url}}" [innerHTML]="ext.title"></a></li>
+    <li *ngFor="let ext of externalURLs"><a target="_blank" [href]="ext.url" [innerHTML]="ext.title"></a></li>
   </ul>
 </div>
 
-<ion-item *ngIf="externalURLs.length===0 && numberOfPages && numberOfPages>1" class="page-number-wrapper">
-  <ion-label class="page_number_label"><ng-container i18n="@@Read.Facsimiles.Page">Bild</ng-container> (<ng-container i18n="@@Read.Facsimiles.Of">av</ng-container> {{numberOfPages ? numberOfPages : (images ? images.length : 0)}}):</ion-label>
-  <ion-input class="page_number_input" type="number" (change)="setPage($event)" [(ngModel)]="manualPageNumber"></ion-input>
-</ion-item>
+<ion-input *ngIf="!selectedFacsimileIsExternal && numberOfPages && numberOfPages>1"
+      class="page-number-input"
+      fill="solid"
+      label="Bild:"
+      i18n-label="@@Read.Facsimiles.Page"
+      [helperText]="'/' + (numberOfPages ? numberOfPages : (images ? images.length : 1))"
+      type="number"
+      inputmode="numeric"
+      min="1"
+      [max]="numberOfPages ? numberOfPages : 1"
+      (ionChange)="setPage($event)"
+      [(ngModel)]="manualPageNumber"
+></ion-input>
 
-<div id="facsimilies-image" *ngIf="!facsimilePagesInfinite && !selectedFacsimileIsExternal">
+<!--
+<div class="facsimile-image-wrapper" *ngIf="!facsimilePagesInfinite && !selectedFacsimileIsExternal">
   <img
     [src]="images ? images[activeImage] : ''"
     alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText"
@@ -30,48 +46,50 @@
     (mousedown)="$event.preventDefault();"
   >
 </div>
+-->
 
-<div id="facsimilies-image" *ngIf="facsimilePagesInfinite && facsNumber && !selectedFacsimileIsExternal">
+<div class="facsimile-image-wrapper" *ngIf="facsimilePagesInfinite && facsNumber && !selectedFacsimileIsExternal">
   <img
     [src]="facsBase ? facsBase +'/'+ facsPage['publication_facsimile_collection_id'] +'/'+ facsSize + '/' + facsNumber + '.jpg' : facsUrl + facsNumber + (facsSize ? '/' + facsSize : '')"
-    alt="Skannat faksimil" i18n-alt="@@Read.Facsimiles.AltText"
+    alt="Skannat faksimil"
+    i18n-alt="@@Read.Facsimiles.AltText"
     [ngStyle]="{'transform':'scale('+zoom+') rotate('+angle+'deg) translate3d(' + prevX + 'px, ' + prevY + 'px, 0px)'}"
     (wheel)="onMouseWheel($event)"
     (pan)="handleSwipeEvent($event)"
-    (mouseup)="onMouseUp($event)"
     (touchend)="onTouchEnd($event)"
+    (mouseup)="onMouseUp($event)"
     (mousedown)="$event.preventDefault();"
   >
 </div>
 
 <ng-container *ngIf="facsimiles.length>0">
-  <ion-fab *ngIf="numberOfPages && numberOfPages > 1 && !selectedFacsimileIsExternal" vertical="center" horizontal="start" class="leftFacsimileArrow">
-    <ion-fab-button *ngIf="numberOfPages && numberOfPages > 1" color="primary" (click)="previous()">
+  <ion-fab *ngIf="numberOfPages && numberOfPages > 1 && !selectedFacsimileIsExternal" class="left-facs-controls">
+    <ion-fab-button size="small" (click)="previous()">
       <ion-icon name="arrow-back"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab middle right *ngIf="!selectedFacsimileIsExternal" class="rightFacsimileArrowAndControls">
-    <ion-fab-button *ngIf="numberOfPages && numberOfPages > 1" color="primary" (click)="next()">
+  <ion-fab *ngIf="!selectedFacsimileIsExternal" class="right-facs-controls">
+    <ion-fab-button *ngIf="numberOfPages && numberOfPages > 1" size="small" (click)="next()">
       <ion-icon name="arrow-forward"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="secondary" (click)="openZoom()">
-      <ion-icon name="expand"></ion-icon>
+    <ion-fab-button size="small" (click)="openZoom()">
+      <ion-icon name="expand-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="secondary" (click)="zoomIn()">
-      <ion-icon name="add"></ion-icon>
+    <ion-fab-button size="small" (click)="zoomIn()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="secondary" (click)="zoomOut()">
-      <ion-icon name="remove"></ion-icon>
+    <ion-fab-button size="small" (click)="zoomOut()">
+      <ion-icon name="remove-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="secondary" (click)="rotate()">
-      <ion-icon name="refresh"></ion-icon>
+    <ion-fab-button size="small" (click)="rotate()">
+      <ion-icon name="refresh-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="secondary" (click)="resetFacsimile()">
-      <ion-icon name="undo"></ion-icon>
+    <ion-fab-button size="small" (click)="resetFacsimile()">
+      <ion-icon name="arrow-undo-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ng-container>
 
-<div class="tei teiContainer" [innerHTML]="text"
+<div *ngIf="text" class="tei teiContainer" [innerHTML]="text"
   [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'">
 </div>
