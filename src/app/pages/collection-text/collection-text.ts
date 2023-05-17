@@ -697,9 +697,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           ) {
             if (
               eventTarget['classList'].contains('unclear') ||
-              eventTarget['classList'].contains('gap')
+              eventTarget['classList'].contains('gap') ||
+              eventTarget['classList'].contains('marginalia')
             ) {
-              /* Editorial note about unclear text, should be clickable only in
+              /* Editorial note about unclear text or text in margin, should be clickable only in
                  the reading text column. */
               let parentElem: any = eventTarget;
               parentElem = parentElem.parentElement;
@@ -1139,9 +1140,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               // since ttMs should generally only be triggered there.
               if (
                 eventTarget['classList'].contains('unclear') ||
-                eventTarget['classList'].contains('gap')
+                eventTarget['classList'].contains('gap') ||
+                eventTarget['classList'].contains('marginalia')
               ) {
-                // Tooltips for text with class unclear or gap should be shown in other columns too.
+                // Tooltips for text with class unclear, gap or marginalia should be shown in other columns too.
                 this.ngZone.run(() => {
                   this.showTooltipFromInlineHtml(eventTarget);
                 });
