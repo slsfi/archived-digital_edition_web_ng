@@ -66,7 +66,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   private unlistenMouseoutEvents?: () => void;
 
   // Used for infinite facsimile
-  facs_id: any;
   facs_nr: any;
   search_title: any;
 
@@ -320,12 +319,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           this.textPosition = queryParams['position'];
         }
 
-        // TODO: Not sure facs_id and facs_nr are needed, or if they should be passed in the view object for facsimiles instead
-        if (queryParams['facs_id']) {
-          // console.log('facs_id in queryparams:', queryParams['facs_id']);
-          this.facs_id = queryParams['facs_id'];
-        }
-
+        // TODO: facs_nr should be passed in the view object for facsimiles instead
         if (queryParams['facs_nr']) {
           // console.log('facs_nr in queryparams:', queryParams['facs_nr']);
           this.facs_nr = queryParams['facs_nr'];
@@ -643,15 +637,21 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 // Scroll to comment in comments view and scroll lemma in reading-text view.
                 const numId = eventTarget.getAttribute('data-id').replace( /^\D+/g, '');
                 const targetId = 'start' + numId;
-                let lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
+                let lemmaStart = document.querySelector(
+                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+                ) as HTMLElement;
                 lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
                 if (
                   lemmaStart.parentElement !== null &&
                   lemmaStart.parentElement.classList.contains('ttFixed')
                 ) {
                   // The lemma is in a footnote, so we should get the second element with targetId.
-                  lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
-                  lemmaStart = lemmaStart.querySelectorAll('[data-id="' + targetId + '"]')[1] as HTMLElement;
+                  lemmaStart = document.querySelector(
+                    'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+                  ) as HTMLElement;
+                  lemmaStart = lemmaStart.querySelectorAll(
+                    '[data-id="' + targetId + '"]'
+                  )[1] as HTMLElement;
                 }
                 if (lemmaStart !== null && lemmaStart !== undefined) {
                   // Scroll to start of lemma in reading text and temporarily prepend arrow.
@@ -666,7 +666,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 });
               }
               modalShown = true;
-            } else if (eventTarget['classList'].contains('ttFoot') && eventTarget['classList'].contains('teiManuscript')) {
+            } else if (
+              eventTarget['classList'].contains('ttFoot') &&
+              eventTarget['classList'].contains('teiManuscript')
+            ) {
               // Footnote reference clicked in manuscript column
               this.ngZone.run(() => {
                 this.showManuscriptFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), eventTarget);
@@ -679,19 +682,23 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               });
               modalShown = true;
             }
-          } else if ((eventTarget['classList'].contains('ttChanges')
-          && this.readPopoverService.show.changes)
-          || (eventTarget['classList'].contains('ttNormalisations')
-          && this.readPopoverService.show.normalisations)
-          || (eventTarget['classList'].contains('ttAbbreviations')
-          && this.readPopoverService.show.abbreviations)) {
+          } else if (
+            (eventTarget['classList'].contains('ttChanges') && this.readPopoverService.show.changes) ||
+            (eventTarget['classList'].contains('ttNormalisations') && this.readPopoverService.show.normalisations) ||
+            (eventTarget['classList'].contains('ttAbbreviations') && this.readPopoverService.show.abbreviations)
+          ) {
             this.ngZone.run(() => {
               this.showInfoOverlayFromInlineHtml(eventTarget);
             });
             modalShown = true;
-          } else if (eventTarget['classList'].contains('ttMs')
-          || eventTarget['classList'].contains('tooltipMs')) {
-            if (eventTarget['classList'].contains('unclear') || eventTarget['classList'].contains('gap')) {
+          } else if (
+            eventTarget['classList'].contains('ttMs') ||
+            eventTarget['classList'].contains('tooltipMs')
+          ) {
+            if (
+              eventTarget['classList'].contains('unclear') ||
+              eventTarget['classList'].contains('gap')
+            ) {
               /* Editorial note about unclear text, should be clickable only in
                  the reading text column. */
               let parentElem: any = eventTarget;
@@ -706,17 +713,21 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 modalShown = true;
               }
             }
-          } else if (eventTarget.hasAttribute('id')
-          && eventTarget['classList'].contains('ttFoot')
-          && eventTarget['classList'].contains('teiVariant')) {
+          } else if (
+            eventTarget.hasAttribute('id') &&
+            eventTarget['classList'].contains('ttFoot') &&
+            eventTarget['classList'].contains('teiVariant')
+          ) {
             // Footnote reference clicked in variant.
             this.ngZone.run(() => {
               this.showVariantFootnoteInfoOverlay(eventTarget.getAttribute('id'), eventTarget);
             });
             modalShown = true;
-          } else if (eventTarget['classList'].contains('ttFoot')
-          && !eventTarget.hasAttribute('id')
-          && !eventTarget.hasAttribute('data-id')) {
+          } else if (
+            eventTarget['classList'].contains('ttFoot') &&
+            !eventTarget.hasAttribute('id') &&
+            !eventTarget.hasAttribute('data-id')
+          ) {
             this.ngZone.run(() => {
               this.showInfoOverlayFromInlineHtml(eventTarget);
             });
@@ -800,7 +811,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             let targetId = '';
             if (anchorElem.hasAttribute('href')) {
               targetId = anchorElem.getAttribute('href') || '';
-            } else if (anchorElem.parentElement && anchorElem.parentElement.hasAttribute('href')) {
+            } else if (
+              anchorElem.parentElement &&
+              anchorElem.parentElement.hasAttribute('href')
+            ) {
               targetId = anchorElem.parentElement.getAttribute('href') || '';
             }
 
@@ -817,7 +831,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               // Find the containing scrollable element.
               let containerElem = null;
               if (targetColumnId) {
-                containerElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) #' + targetColumnId);
+                containerElem = document.querySelector(
+                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) #' + targetColumnId
+                );
               } else {
                 containerElem = anchorElem.parentElement;
                 while (
@@ -832,10 +848,12 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 }
                 if (containerElem === null) {
                   // Check if a footnotereference link in infoOverlay. This method is used to find the container element if in mobile mode.
-                  if (anchorElem.parentElement !== null
-                  && anchorElem.parentElement.parentElement !== null
-                  && anchorElem.parentElement.parentElement.hasAttribute('class')
-                  && anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')) {
+                  if (
+                    anchorElem.parentElement !== null &&
+                    anchorElem.parentElement.parentElement !== null &&
+                    anchorElem.parentElement.parentElement.hasAttribute('class') &&
+                    anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')
+                  ) {
                     containerElem = document.querySelector(
                       'page-text:not([ion-page-hidden]):not(.ion-page-hidden) .mobile-mode-read-content > .scroll-content > ion-scroll > .scroll-content'
                     ); // TODO: Fix this for mobile mode, the template needs to be fixed first
@@ -883,12 +901,15 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                       }.bind(null, refVariant), 5000);
                     });
 
-                    if (marginElem.firstElementChild !== null && marginElem.firstElementChild !== undefined
-                      && marginElem.firstElementChild.classList.contains('extVariantsTrigger')) {
-                        marginElem.firstElementChild.classList.add('highlight');
-                        window.setTimeout(function(elem: any) {
-                          elem.classList.remove('highlight');
-                        }.bind(null, marginElem.firstElementChild), 5000);
+                    if (
+                      marginElem.firstElementChild !== null &&
+                      marginElem.firstElementChild !== undefined &&
+                      marginElem.firstElementChild.classList.contains('extVariantsTrigger')
+                    ) {
+                      marginElem.firstElementChild.classList.add('highlight');
+                      window.setTimeout(function(elem: any) {
+                        elem.classList.remove('highlight');
+                      }.bind(null, marginElem.firstElementChild), 5000);
                     }
                   }
                 }
@@ -905,13 +926,18 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             // Link to a reading-text, comment or introduction.
             // Get the href parts for the targeted text.
             const hrefLink = anchorElem.href;
-            const hrefTargetItems: Array<string> = decodeURIComponent(String(hrefLink).split('/').pop() || '').trim().split(' ');
+            const hrefTargetItems: Array<string> = decodeURIComponent(
+              String(hrefLink).split('/').pop() || ''
+            ).trim().split(' ');
             let publicationId = '';
             let textId = '';
             let chapterId = '';
             let positionId = '';
 
-            if (anchorElem.classList.contains('ref_readingtext') || anchorElem.classList.contains('ref_comment')) {
+            if (
+              anchorElem.classList.contains('ref_readingtext') ||
+              anchorElem.classList.contains('ref_comment')
+            ) {
               // Link to reading text or comment.
 
               let comparePageId = '';
@@ -947,7 +973,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('#', '');
 
                 // Find the element in the correct column (read-text or comments) based on ref type.
-                const matchingElements = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + positionId + '"]');
+                const matchingElements = document.querySelectorAll(
+                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + positionId + '"]'
+                );
                 let targetElement = null;
                 let refType = 'READ-TEXT';
                 if (anchorElem.classList.contains('ref_comment')) {
@@ -1037,48 +1065,68 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           // Loop needed for finding correct tooltip trigger when there are nested triggers.
           while (!this.tooltipVisible && eventTarget['classList'].contains('tooltiptrigger')) {
             if (eventTarget.hasAttribute('data-id')) {
-              if (this.toolTipsSettings?.['personInfo']
-              && eventTarget['classList'].contains('person')
-              && this.readPopoverService.show.personInfo) {
+              if (
+                this.toolTipsSettings?.['personInfo'] &&
+                eventTarget['classList'].contains('person') &&
+                this.readPopoverService.show.personInfo
+              ) {
                 this.ngZone.run(() => {
                   this.showPersonTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
                 });
-              } else if (this.toolTipsSettings?.['placeInfo']
-              && eventTarget['classList'].contains('placeName')
-              && this.readPopoverService.show.placeInfo) {
+              } else if (
+                this.toolTipsSettings?.['placeInfo'] &&
+                eventTarget['classList'].contains('placeName') &&
+                this.readPopoverService.show.placeInfo
+              ) {
                 this.ngZone.run(() => {
                   this.showPlaceTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
                 });
-              } else if (this.toolTipsSettings?.['workInfo']
-              && eventTarget['classList'].contains('title')
-              && this.readPopoverService.show.workInfo) {
+              } else if (
+                this.toolTipsSettings?.['workInfo'] &&
+                eventTarget['classList'].contains('title') &&
+                this.readPopoverService.show.workInfo
+              ) {
                 this.ngZone.run(() => {
                   this.showWorkTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
                 });
-              } else if (this.toolTipsSettings?.['comments']
-              && eventTarget['classList'].contains('comment')
-              && this.readPopoverService.show.comments) {
+              } else if (
+                this.toolTipsSettings?.['comments'] &&
+                eventTarget['classList'].contains('comment') &&
+                this.readPopoverService.show.comments
+              ) {
                 this.ngZone.run(() => {
                   this.showCommentTooltip(eventTarget.getAttribute('data-id'), eventTarget);
                 });
-              } else if (this.toolTipsSettings?.['footNotes']
-              && eventTarget['classList'].contains('teiManuscript')
-              && eventTarget['classList'].contains('ttFoot')) {
+              } else if (
+                this.toolTipsSettings?.['footNotes'] &&
+                eventTarget['classList'].contains('teiManuscript') &&
+                eventTarget['classList'].contains('ttFoot')
+              ) {
                 this.ngZone.run(() => {
                   this.showManuscriptFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
                 });
-              } else if (this.toolTipsSettings?.['footNotes']
-              && eventTarget['classList'].contains('ttFoot')) {
+              } else if (
+                this.toolTipsSettings?.['footNotes'] &&
+                eventTarget['classList'].contains('ttFoot')
+              ) {
                 this.ngZone.run(() => {
                   this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
                 });
               }
-            } else if ( (this.toolTipsSettings && this.toolTipsSettings['changes'] && eventTarget['classList'].contains('ttChanges')
-            && this.readPopoverService.show.changes)
-            || (this.toolTipsSettings && this.toolTipsSettings['normalisations'] && eventTarget['classList'].contains('ttNormalisations')
-            && this.readPopoverService.show.normalisations)
-            || (this.toolTipsSettings && this.toolTipsSettings['abbreviations'] && eventTarget['classList'].contains('ttAbbreviations')
-            && this.readPopoverService.show.abbreviations) ) {
+            } else if (
+              (
+                this.toolTipsSettings && this.toolTipsSettings['changes'] &&
+                eventTarget['classList'].contains('ttChanges') && this.readPopoverService.show.changes
+              ) ||
+              (
+                this.toolTipsSettings && this.toolTipsSettings['normalisations'] &&
+                eventTarget['classList'].contains('ttNormalisations') && this.readPopoverService.show.normalisations
+              ) ||
+              (
+                this.toolTipsSettings && this.toolTipsSettings['abbreviations'] &&
+                eventTarget['classList'].contains('ttAbbreviations') && this.readPopoverService.show.abbreviations
+              )
+            ) {
               this.ngZone.run(() => {
                 this.showTooltipFromInlineHtml(eventTarget);
               });
@@ -1089,7 +1137,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             } else if (eventTarget['classList'].contains('ttMs')) {
               // Check if the tooltip trigger element is in a manuscripts column
               // since ttMs should generally only be triggered there.
-              if (eventTarget['classList'].contains('unclear') || eventTarget['classList'].contains('gap')) {
+              if (
+                eventTarget['classList'].contains('unclear') ||
+                eventTarget['classList'].contains('gap')
+              ) {
                 // Tooltips for text with class unclear or gap should be shown in other columns too.
                 this.ngZone.run(() => {
                   this.showTooltipFromInlineHtml(eventTarget);
@@ -1106,20 +1157,28 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                   });
                 }
               }
-            } else if (this.toolTipsSettings?.['footNotes'] && eventTarget.hasAttribute('id')
-            && eventTarget['classList'].contains('teiVariant') && eventTarget['classList'].contains('ttFoot')) {
+            } else if (
+              this.toolTipsSettings?.['footNotes'] &&
+              eventTarget.hasAttribute('id') &&
+              eventTarget['classList'].contains('teiVariant') &&
+              eventTarget['classList'].contains('ttFoot')
+            ) {
               this.ngZone.run(() => {
                 this.showVariantFootnoteTooltip(eventTarget.getAttribute('id'), eventTarget);
               });
-            } else if (eventTarget['classList'].contains('ttFoot')
-            && !eventTarget.hasAttribute('id')
-            && !eventTarget.hasAttribute('data-id')) {
+            } else if (
+              eventTarget['classList'].contains('ttFoot') &&
+              !eventTarget.hasAttribute('id') &&
+              !eventTarget.hasAttribute('data-id')
+            ) {
               this.ngZone.run(() => {
                 this.showTooltipFromInlineHtml(eventTarget);
               });
-            } else if (eventTarget['classList'].contains('ttComment')
-            && !eventTarget.hasAttribute('id')
-            && !eventTarget.hasAttribute('data-id')) {
+            } else if (
+              eventTarget['classList'].contains('ttComment') &&
+              !eventTarget.hasAttribute('id') &&
+              !eventTarget.hasAttribute('data-id')
+            ) {
               this.ngZone.run(() => {
                 this.showTooltipFromInlineHtml(eventTarget);
               });
@@ -1129,8 +1188,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             * This is for finding nested tooltiptriggers, i.e. a person can be a child of a change. */
             if (!this.tooltipVisible) {
               eventTarget = eventTarget['parentNode'];
-              if (!eventTarget['classList'].contains('tooltiptrigger')
-              && eventTarget['parentNode']['classList'].contains('tooltiptrigger')) {
+              if (
+                !eventTarget['classList'].contains('tooltiptrigger') &&
+                eventTarget['parentNode']['classList'].contains('tooltiptrigger')
+              ) {
                 /* The parent isn't a tooltiptrigger, but the parent of the parent is, use it for the next iteration. */
                 eventTarget = eventTarget['parentNode'];
               }
@@ -1138,11 +1199,16 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           }
 
           /* Check if mouse over doodle image which has a parent tooltiptrigger */
-          if (eventTarget.hasAttribute('data-id')
-          && eventTarget['classList'].contains('doodle')
-          && eventTarget['classList'].contains('unknown')) {
-            if (eventTarget['parentNode'] !== undefined && eventTarget['parentNode'] !== null
-            && eventTarget['parentNode']['classList'].contains('tooltiptrigger')) {
+          if (
+            eventTarget.hasAttribute('data-id') &&
+            eventTarget['classList'].contains('doodle') &&
+            eventTarget['classList'].contains('unknown')
+          ) {
+            if (
+              eventTarget['parentNode'] !== undefined &&
+              eventTarget['parentNode'] !== null &&
+              eventTarget['parentNode']['classList'].contains('tooltiptrigger')
+            ) {
               eventTarget = eventTarget['parentNode'];
               this.ngZone.run(() => {
                 this.showTooltipFromInlineHtml(eventTarget);
@@ -1939,8 +2005,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     return reorderedArray;
   }
 
-  updateViewManuscriptID(manuscriptID: number, viewIndex: number) {
-    this.views[viewIndex]['id'] = manuscriptID;
+  updateViewProperty(propertyName: string, value: any, viewIndex: number) {
+    this.views[viewIndex][propertyName] = value;
     this.updateViewsInRouterQueryParams(this.views);
   }
 
@@ -2017,30 +2083,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       }
     } catch (e) {
     }
-  }
-
-  keyPress(event: any) {
-    console.log(event);
-  }
-
-  moveLeft() {
-    this.ds.moveLeft();
-  }
-
-  moveRight() {
-    this.ds.moveRight();
-  }
-
-  nextFacs() {
-    this.events.publishNextFacsimile();
-  }
-
-  prevFacs() {
-    this.events.publishPreviousFacsimile();
-  }
-
-  zoomFacs() {
-    this.events.publishZoomFacsimile();
   }
 
   // TODO: currently not in use, should be used in read-text to scroll the column into view when changing textPosition
