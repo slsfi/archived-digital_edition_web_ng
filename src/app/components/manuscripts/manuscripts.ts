@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -13,10 +13,9 @@ import { config } from "src/assets/config/config";
   templateUrl: 'manuscripts.html',
   styleUrls: ['manuscripts.scss']
 })
-export class ManuscriptsComponent {
-
+export class ManuscriptsComponent implements OnInit {
   @Input() textItemID: string = '';
-  @Input() msID: string = '';
+  @Input() msID: number | undefined = undefined;
   @Input() searchMatches: Array<string> = [];
   @Output() openNewManView = new EventEmitter<any>();
   @Output() openNewLegendView = new EventEmitter<any>();
@@ -24,7 +23,7 @@ export class ManuscriptsComponent {
 
   public text: any = '';
   textLanguage: string = '';
-  manuscripts: any = [];
+  manuscripts: any[] = [];
   selectedManuscript: any = undefined;
   showNormalizedMs = false;
   showOpenLegendButton: boolean = false;
@@ -70,7 +69,7 @@ export class ManuscriptsComponent {
   setManuscript() {
     if (this.msID) {
       const inputManuscript = this.manuscripts.filter((item: any) => {
-        return (String(item.id) === String(this.msID));
+        return (item.id === this.msID);
       })[0];
       if (inputManuscript) {
         this.selectedManuscript = inputManuscript;
