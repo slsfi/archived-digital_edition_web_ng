@@ -85,14 +85,21 @@
             "Title": "Faksimile",
             "AddButtonText": "Faksimilet",
             "Page": "Kuva",
-            "Of": "/",
             "OpenManuscript": "Käsikirjoitus",
             "ExternalHeading": "Ulkopuoliset faksimilet",
             "ChangeFacsimile": "Vaihda faksimilea",
             "NoFacsimiles": "Faksimileja ei ole saatavilla.",
             "SelectFacsDialogTitle": "Valitse faksimile",
             "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen.",
-            "AltText": "Skannattu faksimile"
+            "AltText": "Skannattu faksimile",
+            "Previous": "Edellinen kuva",
+            "Next": "Seuraava kuva",
+            "Fullscreen": "Näytä kokonäytön tilassa",
+            "ZoomIn": "Suurenna",
+            "ZoomOut": "Pienennä",
+            "Rotate": "Käännä",
+            "Reset": "Palauta",
+            "Error": "Tapahtui virhe. Faksimileja ei voitu ladata."
         },
         "TitlePage": {
             "Title": "Nimiölehti"

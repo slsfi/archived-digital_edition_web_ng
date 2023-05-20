@@ -47,8 +47,10 @@
 }
 
 .facsimile-image-wrapper {
-    height: calc(100% - 121px);
+    height: 100%;
+    position: relative;
     touch-action: none;
+    z-index: 3;
 
     img {
         cursor: move;
@@ -61,26 +63,37 @@
         height: auto;
         width: auto;
         touch-action: none;
-        user-select: none;
         will-change: transform;
         position: relative;
     }
 }
 
 ion-input + .facsimile-image-wrapper {
-    height: calc(100% - 35px);
+    height: calc(100% - 57px); //ok
 }
 
-.facsimile-header.facs-change-possible + ion-input + .facsimile-image-wrapper {
-    height: calc(100% - 115px);
+.facsimile-header.facs-change-possible.facs-title-shown + ion-input + .facsimile-image-wrapper {
+    height: calc(100% - 138px); //ok
 }
 
-.facsimile-header.facs-change-possible + .facsimile-image-wrapper {
-    height: calc(100% - 60px);
+.facsimile-header.facs-change-possible:not(.facs-title-shown) + ion-input + .facsimile-image-wrapper {
+    height: calc(100% - 110px); //ok
 }
 
-.facsimile-header:not(.facs-change-possible) + .facsimile-image-wrapper {
-    height: calc(100% - 15px);
+.facsimile-header.facs-title-shown:not(.facs-change-possible) + ion-input + .facsimile-image-wrapper {
+    height: calc(100% - 92px); //ok
+}
+
+.facsimile-header.facs-change-possible.facs-title-shown + .facsimile-image-wrapper {
+    height: calc(100% - 82px); //ok
+}
+
+.facsimile-header.facs-change-possible:not(.facs-title-shown) + .facsimile-image-wrapper {
+    height: calc(100% - 55px); //ok
+}
+
+.facsimile-header.facs-title-shown:not(.facs-change-possible) + .facsimile-image-wrapper {
+    height: calc(100% - 35px); //ok
 }
 
 
@@ -91,11 +104,11 @@ ion-input + .facsimile-image-wrapper {
 
     ion-fab-button {
         --box-shadow: none;
-        --background: var(--fab-button-primary-background-color);
-        --color: var(--fab-button-primary-icon-color);
-        & + ion-fab-button {
-            --background: var(--fab-button-secondary-background-color);
-            --color: var(--fab-button-secondary-icon-color);
+        --background: var(--fab-button-secondary-background-color);
+        --color: var(--fab-button-secondary-icon-color);
+        &.primary-fab-button {
+            --background: var(--fab-button-primary-background-color);
+            --color: var(--fab-button-primary-icon-color);
         }
     }
 

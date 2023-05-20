@@ -85,14 +85,21 @@
             "Title": "Facsimiles",
             "AddButtonText": "Facsimile view",
             "Page": "Image",
-            "Of": "of",
             "OpenManuscript": "Open manuscript",
             "ExternalHeading": "External facsimiles",
             "ChangeFacsimile": "Select facsimile",
             "NoFacsimiles": "No facsimiles available.",
             "SelectFacsDialogTitle": "Select facsimile",
             "SelectFacsDialogSubtitle": "The facsimile will be shown in the column where you clicked.",
-            "AltText": "Scanned facsimile image"
+            "AltText": "Scanned facsimile image",
+            "Previous": "Previous image",
+            "Next": "Next image",
+            "Fullscreen": "View in fullscreen mode",
+            "ZoomIn": "Zoom in",
+            "ZoomOut": "Zoom out",
+            "Rotate": "Rotate",
+            "Reset": "Reset",
+            "Error": "An error occurred. Facsimiles could not be loaded."
         },
         "TitlePage": {
             "Title": "Title page"

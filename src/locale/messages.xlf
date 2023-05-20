@@ -766,9 +766,24 @@
         <source>Byt faksimil</source>
       </segment>
     </unit>
+    <unit id="Read.Facsimiles.Error">
+      <segment>
+        <source>Ett fel har uppstått. Faksimil kunde inte hämtas.</source>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.ExternalHeading">
       <segment>
         <source>Externa faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Fullscreen">
+      <segment>
+        <source>Visa i helskärmsläge</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Next">
+      <segment>
+        <source>Följande bild</source>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.NoFacsimiles">
@@ -776,14 +791,24 @@
         <source>Inga faksimil tillgängliga.</source>
       </segment>
     </unit>
-    <unit id="Read.Facsimiles.Of">
-      <segment>
-        <source>av</source>
-      </segment>
-    </unit>
     <unit id="Read.Facsimiles.Page">
       <segment>
         <source>Bild:</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Previous">
+      <segment>
+        <source>Föregående bild</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Reset">
+      <segment>
+        <source>Återställ</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Rotate">
+      <segment>
+        <source>Rotera</source>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">
@@ -799,6 +824,16 @@
     <unit id="Read.Facsimiles.Title">
       <segment>
         <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomIn">
+      <segment>
+        <source>Zooma in</source>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomOut">
+      <segment>
+        <source>Zooma ut</source>
       </segment>
     </unit>
     <unit id="Read.ForewordPage.NoForeword">

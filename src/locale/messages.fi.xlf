@@ -918,10 +918,28 @@
         <target>Vaihda faksimilea</target>
       </segment>
     </unit>
+    <unit id="Read.Facsimiles.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Faksimil kunde inte hämtas.</source>
+        <target>Tapahtui virhe. Faksimileja ei voitu ladata.</target>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.ExternalHeading">
       <segment state="initial">
         <source>Externa faksimil</source>
         <target>Ulkopuoliset faksimilet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Fullscreen">
+      <segment state="initial">
+        <source>Visa i helskärmsläge</source>
+        <target>Näytä kokonäytön tilassa</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Next">
+      <segment state="initial">
+        <source>Följande bild</source>
+        <target>Seuraava kuva</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.NoFacsimiles">
@@ -930,16 +948,28 @@
         <target>Faksimileja ei ole saatavilla.</target>
       </segment>
     </unit>
-    <unit id="Read.Facsimiles.Of">
-      <segment state="initial">
-        <source>av</source>
-        <target>/</target>
-      </segment>
-    </unit>
     <unit id="Read.Facsimiles.Page">
       <segment state="initial">
-        <source>Bild</source>
+        <source>Bild:</source>
         <target>Kuva</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Previous">
+      <segment state="initial">
+        <source>Föregående bild</source>
+        <target>Edellinen kuva</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Reset">
+      <segment state="initial">
+        <source>Återställ</source>
+        <target>Palauta</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Rotate">
+      <segment state="initial">
+        <source>Rotera</source>
+        <target>Käännä</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">
@@ -958,6 +988,18 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Faksimile</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomIn">
+      <segment state="initial">
+        <source>Zooma in</source>
+        <target>Suurenna</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomOut">
+      <segment state="initial">
+        <source>Zooma ut</source>
+        <target>Pienennä</target>
       </segment>
     </unit>
     <unit id="Read.ForewordPage.NoForeword">

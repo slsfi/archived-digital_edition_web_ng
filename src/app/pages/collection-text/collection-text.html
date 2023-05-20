@@ -113,12 +113,11 @@
                   </comments>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'facsimiles'">
-                  <facsimiles [itemId]="textItemID" [selectedFacsimile]="view.id" [matches]="searchMatches"
-                    [facsID]="facs_id" [facsNr]="facs_nr" (openNewFacsimileView)="openNewView($event)">
+                  <facsimiles [textItemID]="textItemID" [facsID]="view.id" [imageNr]="view.nr" (selectedFacsID)="updateViewProperty('id', $event, i)" (selectedImageNr)="updateViewProperty('nr', $event, i)">
                   </facsimiles>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'manuscripts'">
-                  <manuscripts [msID]="view.id" [textItemID]="textItemID" [searchMatches]="searchMatches" (selectedMsID)="updateViewManuscriptID($event, i)" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
+                  <manuscripts [msID]="view.id" [textItemID]="textItemID" [searchMatches]="searchMatches" (selectedMsID)="updateViewProperty('id', $event, i)" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'variations'">
                   <variants [linkID]="view.id" [itemId]="textItemID" [matches]="searchMatches" [sortOrder]="view.variationSortOrder"
@@ -255,7 +254,7 @@
           <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
         </div-->
         <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-          <facsimiles [itemId]="textItemID" [matches]="searchMatches" [facsID]="facs_id" [facsNr]="facs_nr"></facsimiles>
+          <facsimiles [textItemID]="textItemID"></facsimiles>
         </div>
       </div>
     </ng-container>

@@ -8,7 +8,9 @@ export class Facsimile {
   public itemId: string;
   public manuscript_id: number;
   public publication_facsimile_collection_id: number;
+  public facsimile_id: number;
   public number_of_pages: number;
+  public priority: number;
 
   public title: any;
   public content = '';
@@ -29,35 +31,8 @@ export class Facsimile {
     this.itemId = facsimileInfo.itemId;
     this.manuscript_id = facsimileInfo.manuscript_id;
     this.publication_facsimile_collection_id = facsimileInfo.publication_facsimile_collection_id;
+    this.facsimile_id = facsimileInfo.publication_facsimile_id;
     this.number_of_pages = facsimileInfo.number_of_pages;
+    this.priority = facsimileInfo.priority;
   }
 }
-
-/*
-
-
-description
-f_p_id
-facs_id
-ms_id
-page_nr
-pages
-pages_modifier_after
-pages_modifier_before
-pdf
-pre_page_count
-priority
-publications_id
-section_id
-start_url: "digitaledition/topelius/faksimil/1/1"
-title: "Hertiginnan af Finland"
-type :1
-
-      {
-        title: 'Facsimile IV',
-        content: '<h3 class="title1">Facsimile With a Vengence</h3>' +
-                  '<p class="l">There comes a time in onces life</p>' +
-                  '<p class="l">When good is not enough...</p>',
-        images: ['https://upload.wikimedia.org/wikipedia/commons/1/15/Temple_Scroll.png']
-      }
-*/

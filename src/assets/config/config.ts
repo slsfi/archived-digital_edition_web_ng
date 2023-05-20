@@ -101,6 +101,15 @@ export const config: Config = {
       sortableCollectionsCategorical: [],
       categoricalSortingPrimaryKey: "",
       categoricalSortingSecondaryKey: ""
+    },
+    facsimileColumn: {
+      imageQuality: 4,
+      showFacsimileTitle: true
+    }
+  },
+  modal: {
+    fullscreenImageViewer: {
+      imageQuality: 4
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -142,9 +151,6 @@ export const config: Config = {
       footNotes: true
     },
     enableModeToggle: true,
-    getFacsimilePagesInfinite: true,
-    facsimileDefaultZoomLevel: 4,
-    facsimileZoomPageLevel: 1,
     galleryCollectionMapping: { 214: 44, 206: 19 },
     showReadTextIllustrations: ["20212", "20213", "206"]
   },
@@ -562,6 +568,15 @@ export const config_soderholm: Config = {
       sortableCollectionsCategorical: [],
       categoricalSortingPrimaryKey: "",
       categoricalSortingSecondaryKey: ""
+    },
+    facsimileColumn: {
+      imageQuality: 2,
+      showFacsimileTitle: false
+    }
+  },
+  modal: {
+    fullscreenImageViewer: {
+      imageQuality: 2
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -603,9 +618,6 @@ export const config_soderholm: Config = {
         footNotes: false
     },
     enableModeToggle: true,
-    getFacsimilePagesInfinite: true,
-    facsimileDefaultZoomLevel: 2,
-    facsimileZoomPageLevel: 2,
     galleryCollectionMapping: {},
     showReadTextIllustrations: []
   },
@@ -998,7 +1010,7 @@ export const config_mechelin: Config = {
     machineName: "leomechelin",
     projectId: 1,
     apiEndpoint: "https://api-dot-leomechelin.ew.r.appspot.com/digitaledition",
-    simpleApi: "https://leomechelin.ew.r.appspot.com",
+    simpleApi: "https://leomechelin.fi/api",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     i18n: {
       languages: [
@@ -1012,7 +1024,7 @@ export const config_mechelin: Config = {
   },
   collections: {
     order: [
-      [1, 2, 3, 4, 5, 6, 7, 8 ,9]
+      [1, 2, 3, 4, 5, 6, 7, 8, 9]
     ],
     firstReadItem: {
       1: "1_1199"
@@ -1086,6 +1098,15 @@ export const config_mechelin: Config = {
       sortableCollectionsCategorical: ["1"],
       categoricalSortingPrimaryKey: "genre",
       categoricalSortingSecondaryKey: "date"
+    },
+    facsimileColumn: {
+      imageQuality: 1,
+      showFacsimileTitle: false
+    }
+  },
+  modal: {
+    fullscreenImageViewer: {
+      imageQuality: 1
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1127,9 +1148,6 @@ export const config_mechelin: Config = {
       footNotes: true
     },
     enableModeToggle: true,
-    getFacsimilePagesInfinite: true,
-    facsimileDefaultZoomLevel: 1,
-    facsimileZoomPageLevel: 1,
     galleryCollectionMapping: {},
     showReadTextIllustrations: []
   },

@@ -918,10 +918,28 @@
         <target>Select facsimile</target>
       </segment>
     </unit>
+    <unit id="Read.Facsimiles.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Faksimil kunde inte hämtas.</source>
+        <target>An error occurred. Facsimiles could not be loaded.</target>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.ExternalHeading">
       <segment state="initial">
         <source>Externa faksimil</source>
         <target>External facsimiles</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Fullscreen">
+      <segment state="initial">
+        <source>Visa i helskärmsläge</source>
+        <target>View in fullscreen mode</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Next">
+      <segment state="initial">
+        <source>Följande bild</source>
+        <target>Next image</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.NoFacsimiles">
@@ -930,16 +948,28 @@
         <target>No facsimiles available.</target>
       </segment>
     </unit>
-    <unit id="Read.Facsimiles.Of">
-      <segment state="initial">
-        <source>av</source>
-        <target>of</target>
-      </segment>
-    </unit>
     <unit id="Read.Facsimiles.Page">
       <segment state="initial">
-        <source>Bild</source>
+        <source>Bild:</source>
         <target>Image</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Previous">
+      <segment state="initial">
+        <source>Föregående bild</source>
+        <target>Previous image</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Reset">
+      <segment state="initial">
+        <source>Återställ</source>
+        <target>Reset</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.Rotate">
+      <segment state="initial">
+        <source>Rotera</source>
+        <target>Rotate</target>
       </segment>
     </unit>
     <unit id="Read.Facsimiles.SelectFacsDialogSubtitle">
@@ -958,6 +988,18 @@
       <segment state="initial">
         <source>Faksimil</source>
         <target>Facsimiles</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomIn">
+      <segment state="initial">
+        <source>Zooma in</source>
+        <target>Zoom in</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ZoomOut">
+      <segment state="initial">
+        <source>Zooma ut</source>
+        <target>Zoom out</target>
       </segment>
     </unit>
     <unit id="Read.ForewordPage.NoForeword">

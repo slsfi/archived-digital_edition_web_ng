@@ -9,7 +9,6 @@ import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -140,7 +139,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private tooltipService: TooltipService,
     public tocService: TableOfContentsService,
-    private events: EventsService,
     public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
     public commonFunctions: CommonFunctionsService,
@@ -293,7 +291,15 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             viewsChanged = true;
           } else {
             for (let i = 0; i < this.views.length; i++) {
+              // Comparison on the entire view objects doesn't work for texts that have
+              // just positions that can change, hence checking only if types unequal
+              /*
               if (JSON.stringify(this.views[i]) !== JSON.stringify(parsedViews[i])) {
+                viewsChanged = true;
+                break;
+              }
+              */
+              if (this.views[i].type !== parsedViews[i].type) {
                 viewsChanged = true;
                 break;
               }
@@ -317,12 +323,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         if (queryParams['position'] || (this.textPosition && queryParams['position'] === undefined)) {
           // console.log('position in queryparams:', queryParams['position']);
           this.textPosition = queryParams['position'];
-        }
-
-        // TODO: facs_nr should be passed in the view object for facsimiles instead
-        if (queryParams['facs_nr']) {
-          // console.log('facs_nr in queryparams:', queryParams['facs_nr']);
-          this.facs_nr = queryParams['facs_nr'];
         }
 
       },
@@ -926,7 +926,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           } else {
             // Link to a reading-text, comment or introduction.
             // Get the href parts for the targeted text.
-            const hrefLink = anchorElem.href;
+            const hrefLink = anchorElem.href.replace('_', ' ');
             const hrefTargetItems: Array<string> = decodeURIComponent(
               String(hrefLink).split('/').pop() || ''
             ).trim().split(' ');
@@ -2008,7 +2008,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   updateViewProperty(propertyName: string, value: any, viewIndex: number) {
-    this.views[viewIndex][propertyName] = value;
+    if (value !== null) {
+      this.views[viewIndex][propertyName] = value;
+    } else if (this.views[viewIndex].hasOwnProperty(propertyName)) {
+      delete this.views[viewIndex][propertyName];
+    }
     this.updateViewsInRouterQueryParams(this.views);
   }
 

@@ -85,14 +85,21 @@
             "Title": "Faksimil",
             "AddButtonText": "Faksimil",
             "Page": "Bild:",
-            "Of": "av",
             "OpenManuscript": "Öppna manuskript",
             "ExternalHeading": "Externa faksimil",
             "ChangeFacsimile": "Byt faksimil",
             "NoFacsimiles": "Inga faksimil tillgängliga.",
             "SelectFacsDialogTitle": "Välj faksimil",
             "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.",
-            "AltText": "Skannat faksimil"
+            "AltText": "Skannat faksimil",
+            "Previous": "Föregående bild",
+            "Next": "Följande bild",
+            "Fullscreen": "Visa i helskärmsläge",
+            "ZoomIn": "Zooma in",
+            "ZoomOut": "Zooma ut",
+            "Rotate": "Rotera",
+            "Reset": "Återställ",
+            "Error": "Ett fel har uppstått. Faksimil kunde inte hämtas."
         },
         "TitlePage": {
             "Title": "Titelblad"
