@@ -131,19 +131,17 @@ ion-fab.column-options {
 }
 
 ion-segment {
+  --background: var(--button-background-color);
   justify-content: center;
+  margin: 2px;
 }
-
 ion-segment-button {
-  --indicator-color: var(--button-background-color);
-  font-weight: 600;
+  font-size: 0.875rem;
 }
-
-ion-segment-button.segment-button-checked {
-  background-color: var(--button-background-color);
+ion-segment-button:not(.segment-button-checked) {
   color: var(--button-text-color);
-
 }
+
 
 /*
 
@@ -345,9 +343,11 @@ ion-fab {
 div.mobile-mode-established {
   padding: 12px;
   background-color: var(--page-text-columns-background-color);
+  height: calc(100% - 40px); // full height minus text-changer height
 }
 
 div.mobile-mode-facsimiles {
+  height: calc(100% - 40px); // full height minus text-changer height
 
   div.external-urls-header {
     padding-left: 0.75rem !important;

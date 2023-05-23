@@ -220,10 +220,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
-    const defaultColumns = config.defaults?.ReadModeView ?? ['established'];
-    const mobileModeColumns = ['established', 'facsimiles'];
-    this.activeMobileModeViewType = defaultColumns.filter(
-      (value: string) => mobileModeColumns.includes(value) && this.viewTypes[value]
+    const defaultViews = config.defaults?.ReadModeView ?? ['established'];
+    const availableMobileModeViews = ['established', 'facsimiles'];
+    this.activeMobileModeViewType = defaultViews.filter(
+      (value: string) => availableMobileModeViews.includes(value) && this.viewTypes[value]
     )[0] || 'established';
   }
 

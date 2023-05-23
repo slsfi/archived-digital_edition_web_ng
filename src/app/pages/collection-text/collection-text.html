@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!(userSettingsService.isMobile())" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-view"></text-changer>
+    <text-changer *ngIf="!userSettingsService.isMobile()" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-view"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
@@ -234,29 +234,33 @@
       <ion-button class="readpage-occurrences-mobile" (click)="openOccurrenceResult()"><ng-container i18n="@@Read.ShowSearchResults">Förekomster</ng-container>&nbsp;<ion-icon name="search"></ion-icon></ion-button>
     </div>
     -->
-    <ion-segment [scrollable]="true" [(ngModel)]="activeMobileModeViewType">
+    <ion-segment [scrollable]="true" mode="ios" [(ngModel)]="activeMobileModeViewType">
       <ion-segment-button value="established" *ngIf="viewTypes['established']">
         <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
       </ion-segment-button>
-      <!--ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
-        {{ "Read.Manuscripts.Title" | translate }}
-      </ion-segment-button-->
       <ion-segment-button value="facsimiles" *ngIf="viewTypes['facsimiles']">
         <ion-label i18n="@@Read.Facsimiles.Title">Faksimil</ion-label>
       </ion-segment-button>
+      <!--
+      <ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
+        <ion-label i18n="@@Read.Manuscripts.Title">Manuskript</ion-label>
+      </ion-segment-button>
+      -->
     </ion-segment>
     <ng-container [ngSwitch]="activeMobileModeViewType">
       <div *ngSwitchCase="'established'" class="mobile-mode-established scroll-content-container">
           <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
       </div>
-      <!--div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts">
-        <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
-      </div-->
       <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
         <facsimiles [textItemID]="textItemID"></facsimiles>
       </div>
+      <!--
+      <div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts scroll-content-container">
+        <manuscripts [textItemID]="textItemID" [searchMatches]="searchMatches" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
+      </div>
+      -->
     </ng-container>
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="userSettingsService.isMobile() && (activeMobileModeViewType=='established' || activeMobileModeViewType=='facsimiles')" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-view"></text-changer>

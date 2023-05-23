@@ -65,7 +65,7 @@
                 [src]="showBackside && backsides[activeImageIndex] ? getBacksideUrl(imageURLs[activeImageIndex]) : imageURLs[activeImageIndex]"
                 alt="Skannat faksimil"
                 i18n-alt="@@Read.Facsimiles.AltText"
-                [ngStyle]="{'transform':'rotate('+angle+'deg)', 'max-height':'calc(100vh - '+toolbarHeight+'px)'}"
+                [ngStyle]="{'transform':'scale('+zoom+') translate3d('+prevX+'px, '+prevY+'px, 0px) rotate('+angle+'deg)', 'max-height':'calc(100vh - '+toolbarHeight+'px)'}"
             >
         </pinch-zoom>
     </div>
