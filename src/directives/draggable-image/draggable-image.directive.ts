@@ -13,6 +13,7 @@ export class DraggableImageDirective {
     private activeDrag: boolean = false;
     private offsetX: number = 0;
     private offsetY: number = 0;
+    private currentCoordinates: number[] = [0, 0];
 
     constructor(
         private elRef: ElementRef,
@@ -60,11 +61,11 @@ export class DraggableImageDirective {
     private dragElement(event: any) {
         if (this.activeDrag) {
             this.ngZone.runOutsideAngular(() => {
-                const newCoordinates = this.calculateCoordinates(event);
+                this.currentCoordinates = this.calculateCoordinates(event);
                 if (this.elRef.nativeElement) {
                     this.renderer.setStyle(
                         this.elRef.nativeElement,
-                        'transform', 'scale('+this.zoom+') translate3d('+newCoordinates[0]+'px, '+newCoordinates[1]+'px, 0px) rotate('+this.angle+'deg)'
+                        'transform', 'scale('+this.zoom+') translate3d('+this.currentCoordinates[0]+'px, '+this.currentCoordinates[1]+'px, 0px) rotate('+this.angle+'deg)'
                     );
                 }
             });
@@ -74,8 +75,7 @@ export class DraggableImageDirective {
     private stopDrag(event: any) {
         if (this.activeDrag) {
             this.activeDrag = false;
-            const newCoordinates = this.calculateCoordinates(event);
-            this.finalCoordinates.emit([newCoordinates[0], newCoordinates[1]]);
+            this.finalCoordinates.emit([this.currentCoordinates[0], this.currentCoordinates[1]]);
         }
     }
 
@@ -85,10 +85,11 @@ export class DraggableImageDirective {
         let deltaX = 0;
         let deltaY = 0;
 
-        if (event.type === "touchmove" || event.type === "touchend") {
+        if (event.type === "touchmove") {
             deltaX = event.touches[0].clientX - this.offsetX;
             deltaY = event.touches[0].clientY - this.offsetY;
-        } else {
+        } else if (event.type !== "touchend") {
+            // touchend event has no touches
             deltaX = event.clientX - this.offsetX;
             deltaY = event.clientY - this.offsetY;
         }
