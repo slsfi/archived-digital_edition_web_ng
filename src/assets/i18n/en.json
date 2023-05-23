@@ -99,7 +99,9 @@
             "ZoomOut": "Zoom out",
             "Rotate": "Rotate",
             "Reset": "Reset",
-            "Error": "An error occurred. Facsimiles could not be loaded."
+            "Error": "An error occurred. Facsimiles could not be loaded.",
+            "ToggleReverseSide": "Show/hide reverse side",
+            "ToggleDescription": "Show/hide description"
         },
         "TitlePage": {
             "Title": "Title page"
@@ -351,7 +353,8 @@
         "Ok": "Ok",
         "Cancel": "Cancel",
         "ShowMore": "Show more",
-        "ScrollToTop": "Scroll to top"
+        "ScrollToTop": "Scroll to top",
+        "Close": "Close"
     },
     "Epub": {
         "DisplayOptions": "Text size",

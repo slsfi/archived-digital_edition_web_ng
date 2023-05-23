@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
-import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { Facsimile } from 'src/app/models/facsimile.model';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -244,7 +244,7 @@ export class FacsimilesComponent implements OnInit {
     this.selectedImageNr.emit(nr);
   }
 
-  setImageNr(e: any) {
+  setImageNr(e?: any) {
     if (this.facsNumber < 1) {
       this.facsNumber = 1;
     } else if (this.facsNumber > this.numberOfImages) {
@@ -255,28 +255,36 @@ export class FacsimilesComponent implements OnInit {
 
   async openFullScreen() {
     const fullscreenImageSize = config.modal?.fullscreenImageViewer?.imageQuality || this.facsSize;
-    const images = [];
+    const imageURLs = [];
     for (let i = 1; i < (this.numberOfImages || 0) + 1; i++) {
-      images.push(this.facsURLDefault + i + '/' + fullscreenImageSize);
+      const url = (
+          this.facsURLAlternate ?
+              this.facsURLAlternate+'/'+this.selectedFacsimile.publication_facsimile_collection_id+'/'+fullscreenImageSize+'/'+i+'.jpg' :
+              this.facsURLDefault+i+(fullscreenImageSize ? '/'+fullscreenImageSize : '')
+      )
+      imageURLs.push(url);
     }
 
     const params = {
-      facsimilePagesInfinite: false,
-      facsUrl: this.facsURLDefault,
-      facsID: this.facsID,
-      facsNr: this.imageNr,
-      facsSize: fullscreenImageSize,
-      images,
-      activeImage: this.facsNumber - 1,
+      activeImageIndex: this.facsNumber - 1,
+      imageURLs: imageURLs
     };
 
     const modal = await this.modalCtrl.create({
-      component: FacsimileZoomModalPage,
-      componentProps: { params },
-      cssClass: 'facsimile-zoom-modal',
+      component: FullscreenImageViewerModal,
+      componentProps: params,
+      cssClass: 'fullscreen-image-viewer-modal',
     });
 
-    await modal.present();
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data);
+    console.log(role);
+    if (role === 'imageNr' && data) {
+      this.facsNumber = data;
+      this.setImageNr();
+    }
   }
   
   previous() {
@@ -300,6 +308,7 @@ export class FacsimilesComponent implements OnInit {
   zoomIn() {
     this.zoom = this.zoom + 0.1;
   }
+
   zoomOut() {
     this.zoom = this.zoom - 0.1;
     if (this.zoom < 0.5) {

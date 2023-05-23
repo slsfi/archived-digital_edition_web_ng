@@ -79,7 +79,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   views = [] as any;
 
-  show = 'established'; // Mobile tabs
+  activeMobileModeViewType = 'established';
 
   enabledViewTypes: Array<string> = [];
 
@@ -220,7 +220,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
-    this.show = config.defaults?.ReadModeView ?? 'established';
+    const defaultColumns = config.defaults?.ReadModeView ?? ['established'];
+    const mobileModeColumns = ['established', 'facsimiles'];
+    this.activeMobileModeViewType = defaultColumns.filter(
+      (value: string) => mobileModeColumns.includes(value) && this.viewTypes[value]
+    )[0] || 'established';
   }
 
   ngOnInit() {
@@ -392,7 +396,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     viewmodes.forEach((viewmode: any) => {
       if (!defaultReadModeForMobileSelected && this.viewTypes[viewmode]) {
         /* Sets the default view on mobile to the first default read mode view which is available. */
-        this.show = viewmode;
+        this.activeMobileModeViewType = viewmode;
         defaultReadModeForMobileSelected = true;
       }
 
@@ -431,16 +435,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   setDefaultViewsFromConfig() {
     const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
     let newViews: Array<any> = [];
-    let defaultReadModeForMobileSelected = false;
 
     defaultReadModes.forEach((val: any) => {
-      // TODO: Fix setting default view for mobile
-      if (!defaultReadModeForMobileSelected && this.viewTypes[val]) {
-        /* Sets the default view on mobile to the first default read mode view which is available. */
-        this.show = val;
-        defaultReadModeForMobileSelected = true;
-      }
-
       if (this.enabledViewTypes.indexOf(val) !== -1) {
         const view = { type: val } as any;
         newViews.push(view);
@@ -458,8 +454,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.viewTypeShouldBeShown(type) &&
         viewTypesShown.indexOf(type) === -1
       ) {
-        // TODO: this.show sets the shown view in mobile mode, fix if changing to responsive design
-        this.show = type;
+        // TODO: this.activeMobileModeViewType sets the shown view in mobile mode, fix if changing to responsive design
+        this.activeMobileModeViewType = type;
         if (type.startsWith('established') && type.split('_')[1]) {
           this.addView('established', null, null, type.split('_')[1]);
         } else {
@@ -504,19 +500,19 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.addView(v.type, v.id);
       }
       if (v.type === 'manuscripts' || v.type === 'ms') {
-        this.show = 'manuscripts';
+        this.activeMobileModeViewType = 'manuscripts';
         this.typeVersion = v.id;
       } else if (v.type === 'variation' || v.type === 'var') {
-        this.show = 'variations';
+        this.activeMobileModeViewType = 'variations';
         this.typeVersion = v.id;
       } else if ((v.type === 'comments' || v.type === 'com')) {
-        this.show = 'comments';
+        this.activeMobileModeViewType = 'comments';
       } else if (v.type === 'established' || v.type === 'est') {
-        this.show = 'established';
+        this.activeMobileModeViewType = 'established';
       } else if (v.type === 'facsimiles' || v.type === 'facs') {
-        this.show = 'facsimiles';
+        this.activeMobileModeViewType = 'facsimiles';
       } else if (v.type === 'song-example') {
-        this.show = 'song-example';
+        this.activeMobileModeViewType = 'song-example';
       }
     }
   }

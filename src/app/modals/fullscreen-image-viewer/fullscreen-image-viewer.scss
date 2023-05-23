@@ -1,0 +1,93 @@
+.full-page-modal {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  .facsimile-button-group {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin: 4px auto;
+    z-index: 2;
+  
+    .action-buttons {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      margin: 4px auto;
+  
+      ion-fab {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        position: relative;
+      }
+
+      ion-fab-button {
+        --background: var(--fab-button-primary-background-color);
+        --box-shadow: none;
+        --color: var(--fab-button-primary-icon-color);
+      }
+
+      ion-icon {
+        --ionicon-stroke-width: 48px;
+      }
+
+      ion-input {
+        width: fit-content;
+      }
+    }
+
+    .image-description {
+      margin: 4px 0;
+      max-width: 800px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: var(--main-background-color);
+      border-radius: var(--corner-border-radius);
+      padding: 10px;
+      white-space: normal;
+      line-height: 1.4rem;
+
+      .image-title {
+        font-weight: bold;
+      }
+
+      &.visuallyhidden {
+        display: none;
+      }
+    }
+  }
+
+  .facsimile-image-wrapper {
+    height: 100%;
+    position: relative;
+    touch-action: none;
+    z-index: 1;
+  
+    img {
+      cursor: move;
+      display: block;
+      margin: 0 auto;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: top;
+      height: auto;
+      width: auto;
+      touch-action: none;
+      will-change: transform;
+      position: relative;
+    }
+
+    pinch-zoom{
+      min-width: 100%;
+      min-height: 100%;
+    }
+  }
+}

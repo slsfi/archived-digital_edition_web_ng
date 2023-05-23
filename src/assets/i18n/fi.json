@@ -99,7 +99,9 @@
             "ZoomOut": "Pienennä",
             "Rotate": "Käännä",
             "Reset": "Palauta",
-            "Error": "Tapahtui virhe. Faksimileja ei voitu ladata."
+            "Error": "Tapahtui virhe. Faksimileja ei voitu ladata.",
+            "ToggleReverseSide": "Näytä/piilota kääntöpuoli",
+            "ToggleDescription": "Näytä/piilota kuvaus"
         },
         "TitlePage": {
             "Title": "Nimiölehti"
@@ -351,7 +353,8 @@
         "Ok": "Ok",
         "Cancel": "Peruuta",
         "ShowMore": "Näytä lisää",
-        "ScrollToTop": "Palaa alkuun"
+        "ScrollToTop": "Palaa alkuun",
+        "Close": "Sulje"
     },
     "Epub": {
         "DisplayOptions": "Tekstikoko",

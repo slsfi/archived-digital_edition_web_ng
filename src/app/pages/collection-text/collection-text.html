@@ -22,7 +22,7 @@
 </ion-header>
 
 <!-- Main content with scroll -->
-<ng-container *ngIf="userSettingsService.isDesktop()">
+<ng-container *ngIf="!userSettingsService.isMobile()">
   <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="true" [scrollY]="false">
     <div class="column-container">
       <!-- Wrapper for all columns -->
@@ -135,13 +135,13 @@
         </div>
 
         <!-- Add view -->
-        <div *ngIf="!userSettingsService.isMobile() && enabledViewTypes.length > 1" class="add-view-column">
+        <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
           <!--
           <div class="fab-backdrop" [ngClass]="showAddViewsFabBackdrop ? 'show-fab-backdrop' : ''" [ngStyle]="{'width':backdropWidth+'px'}" (click)="toggleFabBackdrop(); fabmenuadd.close()"></div>
           -->
           <ion-fab id="add-view-fab" #fabmenuadd>
-            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" i18n-aria-label="@@Read.AddColumn" aria-label="Ny kolumn" (click)="showAddViewPopover($event)">
-              <ion-icon name="add-outline" [attr.aria-hidden]="true"></ion-icon>
+            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" (click)="showAddViewPopover($event)">
+              <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
             </ion-fab-button>
           </ion-fab>
           <ion-popover #addViewPopover class="page-text-add-view-popover" reference="trigger" side="bottom" alignment="end" [isOpen]="addViewPopoverisOpen" (didDismiss)="addViewPopoverisOpen = false" [dismissOnSelect]="true">
@@ -189,7 +189,7 @@
             </ng-template>
           </ion-popover>
           <div class="add-column">
-            <p i18n="@@Read.AddColumn">Ny kolumn</p>
+            <p id="add-column-label" i18n="@@Read.AddColumn">Ny kolumn</p>
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@
 
 <!-- Mobile Read -->
 <ng-container *ngIf="userSettingsService.isMobile()">
-  <ion-content [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="true">
+  <ion-content [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
     <div
       [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
       [class.show_comments]="readPopoverService.show.comments"
@@ -228,37 +228,35 @@
       </div>
       <div class="infoOverlayContent" [MathJax]="infoOverlayText"></div>
     </div>
+    <!--
     <div
       *ngIf="hasOccurrenceResults && showOccurrencesModal">
       <ion-button class="readpage-occurrences-mobile" (click)="openOccurrenceResult()"><ng-container i18n="@@Read.ShowSearchResults">Förekomster</ng-container>&nbsp;<ion-icon name="search"></ion-icon></ion-button>
     </div>
-    <ng-container *ngIf="textItemID$ | async as textItemID">
-      <div>
-        <ion-segment [(ngModel)]="show">
-          <ion-segment-button value="established" *ngIf="viewTypes['established']">
-            <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
-          </ion-segment-button>
-          <!--ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
-            {{ "Read.Manuscripts.Title" | translate }}
-          </ion-segment-button-->
-          <ion-segment-button value="facsimiles" *ngIf="viewTypes['facsimiles']">
-            <ion-label i18n="@@Read.Facsimiles.Title">Faksimil</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-      </div>
-      <div [ngSwitch]="show">
-        <div *ngSwitchCase="'established'" class="mobile-mode-established">
+    -->
+    <ion-segment [scrollable]="true" [(ngModel)]="activeMobileModeViewType">
+      <ion-segment-button value="established" *ngIf="viewTypes['established']">
+        <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
+      </ion-segment-button>
+      <!--ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
+        {{ "Read.Manuscripts.Title" | translate }}
+      </ion-segment-button-->
+      <ion-segment-button value="facsimiles" *ngIf="viewTypes['facsimiles']">
+        <ion-label i18n="@@Read.Facsimiles.Title">Faksimil</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <ng-container [ngSwitch]="activeMobileModeViewType">
+      <div *ngSwitchCase="'established'" class="mobile-mode-established scroll-content-container">
           <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
-        </div>
-        <!--div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts">
-          <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
-        </div-->
-        <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-          <facsimiles [textItemID]="textItemID"></facsimiles>
-        </div>
+      </div>
+      <!--div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts">
+        <manuscripts [linkID]="views[0].manuscripts.id" [itemId]="textItemID" [matches]="searchMatches"></manuscripts>
+      </div-->
+      <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
+        <facsimiles [textItemID]="textItemID"></facsimiles>
       </div>
     </ng-container>
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="(userSettingsService.isMobile()) && (show=='established' || show=='manuscripts' || show=='facsimiles')" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="userSettingsService.isMobile() && (activeMobileModeViewType=='established' || activeMobileModeViewType=='facsimiles')" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-view"></text-changer>

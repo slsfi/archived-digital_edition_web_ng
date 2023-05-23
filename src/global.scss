@@ -598,6 +598,19 @@
     }
   }
 
+  // Ion-modal styles
+  ion-modal {
+    &.fullscreen-image-viewer-modal {
+      --backdrop-opacity: 0.6;
+      --background: transparent;
+      --height: 100%;
+      --width: 100%;
+
+
+    }
+  }
+
+  // Ion-input styles
   ion-input.page-number-input.input-fill-solid {
     --background: var(--facsimile-column-page-number-wrapper-background-color) !important;
     --border-radius: 0;
@@ -640,6 +653,24 @@
 
       .helper-text {
         color: initial;
+      }
+    }
+  }
+  ion-modal {
+    &.fullscreen-image-viewer-modal {
+      ion-input.page-number-input.input-fill-solid {
+        --border-style: none;
+
+        .input-wrapper {
+          border-top-left-radius: var(--corner-border-radius);
+          border-bottom-left-radius: var(--corner-border-radius);
+        }
+
+        .input-bottom {
+          border-bottom: none;
+          border-top-right-radius: var(--corner-border-radius);
+          border-bottom-right-radius: var(--corner-border-radius);
+        }
       }
     }
   }
@@ -960,7 +991,7 @@
   /* --- */
 
   /* --- Style block: Style for the block in read columns where a different variant, manuscript or facsimile text can be selected. --- */
-  .text-select-wrapper {
+  div.text-select-wrapper {
     padding: 0 0 1rem 0;
     margin: 0 0 1.5rem 0;
     border-bottom: 1px solid #666;
@@ -1245,7 +1276,7 @@
     border-radius: $popover-md-border-radius;
   }
 
-  .facsimile-zoom-modal, .illustration-modal {
+  .fullscreen-image-viewer-modal, .illustration-modal {
 
     .close-button {
       font-size: 3rem;

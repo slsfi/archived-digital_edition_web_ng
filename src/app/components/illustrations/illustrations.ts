@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -68,14 +68,21 @@ export class IllustrationsComponent {
     this.images = this.imagesCache;
   }
 
-  async zoomImage(image: any) {
-    this.selectedImage = [image];
+  async zoomImage(imageSrc: string) {
+    this.selectedImage = [imageSrc];
+
+    const params = {
+      activeImageIndex: 0,
+      imageURLs: this.selectedImage
+    };
+
     const illustrationZoomModal = await this.modalCtrl.create({
-      component: FacsimileZoomModalPage,
-      componentProps: { 'images': this.selectedImage, 'activeImage': 0 },
-      cssClass: 'facsimile-zoom-modal'
+      component: FullscreenImageViewerModal,
+      componentProps: params,
+      cssClass: 'fullscreen-image-viewer-modal'
     });
-    return await illustrationZoomModal.present();
+
+    illustrationZoomModal.present();
   }
 
   scrollToPositionInText(image: any) {

@@ -22,6 +22,7 @@ import { GenericSettingsService } from './services/settings/generic-settings.ser
 import { GalleryService } from './services/gallery/gallery.service';
 import { TooltipService } from './services/tooltips/tooltip.service';
 import { TableOfContentsService } from './services/toc/table-of-contents.service';
+import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { CommonModule } from '@angular/common';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
@@ -29,8 +30,8 @@ import { ComponentsModule } from './components/components.module';
 import { MathJaxModule } from './components/math-jax/math-jax.module';
 import { ReferenceDataModalPage } from './modals/reference-data-modal/reference-data-modal';
 import { DownloadTextsModalPage } from './modals/download-texts-modal/download-texts-modal';
-import { FacsimileZoomPageModule } from './modals/facsimile-zoom/facsimile-zoom.module';
-import { FacsimileZoomModalPage } from './modals/facsimile-zoom/facsimile-zoom';
+import { FullscreenImageViewerModalModule } from './modals/fullscreen-image-viewer/fullscreen-image-viewer.module';
+import { FullscreenImageViewerModal } from './modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { IllustrationPageModule } from './modals/illustration/illustration.module';
 import { IllustrationPage } from './modals/illustration/illustration';
 import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module';
@@ -60,7 +61,7 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     ComponentsModule,
     PipesModule,
     DigitalEditionListModule,
-    FacsimileZoomPageModule,
+    FullscreenImageViewerModalModule,
     ReadPopoverPageModule,
     IllustrationPageModule,
     MathJaxModule
@@ -82,7 +83,8 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     GalleryService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     EventsService,
-    TableOfContentsService
+    TableOfContentsService,
+    FacsimileService
   ],
   bootstrap: [DigitalEditionsApp],
   entryComponents: [
@@ -90,7 +92,7 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     ReadPopoverPage,
     UserSettingsPopoverPage,
     ReferenceDataModalPage,
-    FacsimileZoomModalPage,
+    FullscreenImageViewerModal,
     DownloadTextsModalPage,
     IllustrationPage
   ]

@@ -2,24 +2,24 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FacsimileZoomModalPage } from './facsimile-zoom';
+import { FullscreenImageViewerModal } from './fullscreen-image-viewer';
 import { PinchZoomModule } from 'src/app/components/pinch-zoom/pinch-zoom.module';
+import { DraggableImageDirective } from 'src/directives/draggable-image/draggable-image.directive';
 
 @NgModule({
     declarations: [
-      FacsimileZoomModalPage
+      FullscreenImageViewerModal
     ],
     imports: [
         IonicModule,
         CommonModule,
         FormsModule,
-        PinchZoomModule
+        PinchZoomModule,
+        DraggableImageDirective
     ],
     entryComponents: [
-      FacsimileZoomModalPage
+      FullscreenImageViewerModal
     ],
-    providers: [
-        // FacsimileServce perhaps..
-    ]
+    providers: []
   })
-  export class FacsimileZoomPageModule {}
+  export class FullscreenImageViewerModalModule {}

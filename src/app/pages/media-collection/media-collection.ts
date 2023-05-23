@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { FacsimileZoomModalPage } from 'src/app/modals/facsimile-zoom/facsimile-zoom';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
@@ -185,12 +185,21 @@ export class MediaCollectionPage {
     const descriptions = this.mediaCollection.map((i: any) => i.description);
     const imageTitles = this.mediaCollection.map((i: any) => i.media_title_translation);
 
+    const params = {
+      activeImageIndex: index,
+      backsides: backsides,
+      imageDescriptions: descriptions,
+      imageTitles: imageTitles,
+      imageURLs: zoomedImages
+    };
+
     const modal = await this.modalController.create({
-      component: FacsimileZoomModalPage,
-      componentProps: { 'images': zoomedImages, 'activeImage': index, 'backsides': backsides, 'descriptions': descriptions, 'imageTitles': imageTitles },
-      cssClass: 'facsimile-zoom-modal',
+      component: FullscreenImageViewerModal,
+      componentProps: params,
+      cssClass: 'fullscreen-image-viewer-modal',
     });
-    return await modal.present();
+    
+    modal.present();
   }
 
   getCollectionTags(filter?: any) {

@@ -48,6 +48,12 @@
         <target>Peruuta</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Close">
+      <segment state="initial">
+        <source>Stäng</source>
+        <target>Sulje</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Ok">
       <segment state="initial">
         <source>Ok</source>
@@ -990,6 +996,18 @@
         <target>Faksimile</target>
       </segment>
     </unit>
+    <unit id="Read.Facsimiles.ToggleDescription">
+      <segment state="initial">
+        <source>Visa/dölj beskrivning</source>
+        <target>Näytä/piilota kuvaus</target>
+      </segment>
+    </unit>
+    <unit id="Read.Facsimiles.ToggleReverseSide">
+      <segment state="initial">
+        <source>Visa/dölj frånsida</source>
+        <target>Näytä/piilota kääntöpuoli</target>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.ZoomIn">
       <segment state="initial">
         <source>Zooma in</source>
@@ -1192,12 +1210,6 @@
       <segment state="initial">
         <source>Visa alla</source>
         <target>Näytä kaikki</target>
-      </segment>
-    </unit>
-    <unit id="Read.ShowSearchResults">
-      <segment state="initial">
-        <source>Förekomster</source>
-        <target>Esiintymät</target>
       </segment>
     </unit>
     <unit id="Read.TitlePage.Title">

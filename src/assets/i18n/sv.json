@@ -99,7 +99,9 @@
             "ZoomOut": "Zooma ut",
             "Rotate": "Rotera",
             "Reset": "Återställ",
-            "Error": "Ett fel har uppstått. Faksimil kunde inte hämtas."
+            "Error": "Ett fel har uppstått. Faksimil kunde inte hämtas.",
+            "ToggleReverseSide": "Visa/dölj frånsida",
+            "ToggleDescription": "Visa/dölj beskrivning"
         },
         "TitlePage": {
             "Title": "Titelblad"
@@ -351,7 +353,8 @@
         "Ok": "Ok",
         "Cancel": "Avbryt",
         "ShowMore": "Visa fler",
-        "ScrollToTop": "Till början"
+        "ScrollToTop": "Till början",
+        "Close": "Stäng"
     },
     "Epub": {
         "DisplayOptions": "Textstorlek",

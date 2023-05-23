@@ -130,6 +130,20 @@ ion-fab.column-options {
   visibility: visible;
 }
 
+ion-segment {
+  justify-content: center;
+}
+
+ion-segment-button {
+  --indicator-color: var(--button-background-color);
+  font-weight: 600;
+}
+
+ion-segment-button.segment-button-checked {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+
+}
 
 /*
 

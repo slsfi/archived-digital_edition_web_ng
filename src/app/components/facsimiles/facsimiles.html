@@ -44,7 +44,7 @@
           facsURLAlternate
           ? facsURLAlternate+'/'+selectedFacsimile.publication_facsimile_collection_id+'/'+facsSize+'/'+facsNumber+'.jpg'
           : facsURLDefault+facsNumber+(facsSize ? '/'+facsSize : '')
-    "
+          "
     alt="Skannat faksimil"
     i18n-alt="@@Read.Facsimiles.AltText"
     [ngStyle]="{'transform':'scale('+zoom+') translate3d('+prevX+'px, '+prevY+'px, 0px) rotate('+angle+'deg)'}"
@@ -65,7 +65,7 @@
           title="Föregående bild"
           i18n-title="@@Read.Facsimiles.Previous"
     >
-      <ion-icon name="arrow-back"></ion-icon>
+      <ion-icon name="arrow-back" aria-label="Föregående bild" i18n-aria-label="@@Read.Facsimiles.Previous"></ion-icon>
     </ion-fab-button>
   </ion-fab>
   <ion-fab *ngIf="!selectedFacsimileIsExternal" class="right-facs-controls">
@@ -76,22 +76,22 @@
           title="Följande bild"
           i18n-title="@@Read.Facsimiles.Next"
     >
-      <ion-icon name="arrow-forward"></ion-icon>
+      <ion-icon name="arrow-forward" aria-label="Följande bild" i18n-aria-label="@@Read.Facsimiles.Next"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button size="small" (click)="openFullScreen()" title="Visa i helskärmsläge" i18n-title="@@Read.Facsimiles.Fullscreen">
-      <ion-icon name="expand-outline"></ion-icon>
+    <ion-fab-button size="small" (click)="openFullScreen()" title="Visa i helskärmsläge" i18n-title="@@Read.Facsimiles.Fullscreen" aria-haspopup="dialog">
+      <ion-icon name="expand-outline" aria-label="Visa i helskärmsläge" i18n-aria-label="@@Read.Facsimiles.Fullscreen"></ion-icon>
     </ion-fab-button>
     <ion-fab-button size="small" (click)="zoomIn()" title="Zooma in" i18n-title="@@Read.Facsimiles.ZoomIn">
-      <ion-icon name="add-outline"></ion-icon>
+      <ion-icon name="add-outline" aria-label="Zooma in" i18n-aria-label="@@Read.Facsimiles.ZoomIn"></ion-icon>
     </ion-fab-button>
     <ion-fab-button size="small" (click)="zoomOut()" title="Zooma ut" i18n-title="@@Read.Facsimiles.ZoomOut">
-      <ion-icon name="remove-outline"></ion-icon>
+      <ion-icon name="remove-outline" aria-label="Zooma ut" i18n-aria-label="@@Read.Facsimiles.ZoomOut"></ion-icon>
     </ion-fab-button>
     <ion-fab-button size="small" (click)="rotate()" title="Rotera" i18n-title="@@Read.Facsimiles.Rotate">
-      <ion-icon name="refresh-outline"></ion-icon>
+      <ion-icon name="refresh-outline" aria-label="Rotera" i18n-aria-label="@@Read.Facsimiles.Rotate"></ion-icon>
     </ion-fab-button>
     <ion-fab-button size="small" (click)="reset()" title="Återställ" i18n-title="@@Read.Facsimiles.Reset">
-      <ion-icon name="arrow-undo-outline"></ion-icon>
+      <ion-icon name="arrow-undo-outline" aria-label="Återställ" i18n-aria-label="@@Read.Facsimiles.Reset"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ng-container>
