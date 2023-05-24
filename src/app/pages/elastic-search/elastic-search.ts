@@ -10,7 +10,6 @@ import { marked } from 'marked';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
@@ -86,7 +85,6 @@ export class ElasticSearchPage {
     private mdContentService: MdContentService,
     public loadingCtrl: LoadingController,
     public elastic: ElasticSearchService,
-    protected storage: StorageService,
     public userSettingsService: UserSettingsService,
     private cf: ChangeDetectorRef,
     public commonFunctions: CommonFunctionsService,

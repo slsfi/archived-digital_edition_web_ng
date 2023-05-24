@@ -6,7 +6,6 @@ import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
@@ -49,7 +48,6 @@ export class IndexOfPersonsPage implements OnInit {
               public modalCtrl: ModalController,
               public loadingCtrl: LoadingController,
               public occurrenceService: OccurrenceService,
-              protected storage: StorageService,
               private tooltipService: TooltipService,
               public commonFunctions: CommonFunctionsService,
               private router: Router,

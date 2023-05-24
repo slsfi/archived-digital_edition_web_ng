@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/assets/config/config";
 
@@ -32,7 +31,6 @@ export class ManuscriptsComponent implements OnInit {
     protected sanitizer: DomSanitizer,
     protected readPopoverService: ReadPopoverService,
     protected textService: TextService,
-    protected storage: StorageService,
     private alertCtrl: AlertController,
     public commonFunctions: CommonFunctionsService
   ) {

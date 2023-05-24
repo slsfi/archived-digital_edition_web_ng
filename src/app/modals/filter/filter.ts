@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { EventsService } from 'src/app/services/events/events.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 
 /**
  * This is a modal/page used to filter results.
@@ -30,7 +29,6 @@ export class FilterPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public viewCtrl: ModalController,
-              public storage: StorageService,
               public semanticDataService: SemanticDataService,
               private events: EventsService
   ) {
@@ -218,7 +216,6 @@ export class FilterPage {
     filters['isEmpty'] = this.isEmpty;
 
     this.viewCtrl.dismiss(filters);
-    this.updateFilterCache(filterCollections);
   }
 
   checkIfFiltersEmpty(filters: any) {
@@ -245,13 +242,6 @@ export class FilterPage {
       if (filters['filterCategoryTypes'].length < 1) {
         this.isEmpty = true;
       }
-    }
-  }
-
-  updateFilterCache(filterCollections?: any) {
-    if (filterCollections) {
-      this.storage.remove('filterCollections');
-      this.storage.set('filterCollections', this.filterCollections);
     }
   }
 

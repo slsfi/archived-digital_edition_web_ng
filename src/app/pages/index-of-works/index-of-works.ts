@@ -11,7 +11,6 @@ import { MdContentService } from 'src/app/services/md/md-content.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { config } from "src/assets/config/config";
 
@@ -54,7 +53,6 @@ export class IndexOfWorksPage implements OnInit {
               private mdContentService: MdContentService,
               protected textService: TextService,
               public occurrenceService: OccurrenceService,
-              protected storage: StorageService,
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
               private cf: ChangeDetectorRef,

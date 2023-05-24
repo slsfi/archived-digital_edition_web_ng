@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
 import { EventsService } from 'src/app/services/events/events.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { ReferenceDataService } from 'src/app/services/reference-data/reference-data.service';
 
 
@@ -21,7 +20,6 @@ export class ReferenceDataModalPage {
   constructor(  public navCtrl: NavController,
                 public viewCtrl: ModalController,
                 params: NavParams,
-                private storage: StorageService,
                 private referenceDataService: ReferenceDataService,
                 private events: EventsService
   ) {
@@ -91,6 +89,7 @@ export class ReferenceDataModalPage {
             this.getReferenceData(newId);
           }
         } else {
+          /*
           this.storage.get('currentTOCItemTitle').then((currentTOCItemTitle) => {
             if ( currentTOCItemTitle !== '' && currentTOCItemTitle !== undefined && this.referenceData['reference_text'] ) {
               this.referenceData['reference_text'] =
@@ -104,6 +103,7 @@ export class ReferenceDataModalPage {
               this.referenceData['reference_text'] = this.referenceData['reference_text'] + ' ';
             }
           });
+          */
         }
       },
       error: e => { this.referenceData = 'Unable to get referenceData'; }

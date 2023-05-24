@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { StorageService } from '../storage/storage.service';
+
 
 @Injectable()
 export class UserSettingsService {
@@ -10,8 +10,7 @@ export class UserSettingsService {
   private _mode?: string;
 
   constructor(
-    private platform: Platform,
-    private storage: StorageService,
+    private platform: Platform
   ) {
     this.detectPlatform();
   }
@@ -51,7 +50,6 @@ export class UserSettingsService {
 
   setAuto() {
     this._mode = 'auto';
-    this.storage.set('mode', 'auto');
   }
 
   isAuto() {
@@ -60,7 +58,6 @@ export class UserSettingsService {
 
   setMobile() {
     this._mode = 'mobile';
-    this.storage.set('mode', 'mobile');
   }
 
   isMobile() {
@@ -73,7 +70,6 @@ export class UserSettingsService {
 
   setDesktop() {
     this._mode = 'desktop';
-    this.storage.set('mode', 'desktop');
   }
 
   isTablet() {
@@ -90,7 +86,6 @@ export class UserSettingsService {
 
   setReadFocus() {
     this._mode = 'read';
-    this.storage.set('mode', 'read');
   }
 
   isReadFocus() {
@@ -130,7 +125,6 @@ export class UserSettingsService {
   set splitPaneOpen(maybe: boolean) {
     this._splitPaneOpen = maybe;
     // console.log(this._splitPaneOpen);
-    this.storage.set('splitPane', maybe);
   }
 
   set splitPanePossible(maybe: boolean) {

@@ -12,7 +12,6 @@ import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/assets/config/config";
@@ -48,7 +47,6 @@ export class IndexOfPlacesPage implements OnInit {
               public semanticDataService: SemanticDataService,
               private mdContentService: MdContentService,
               public occurrenceService: OccurrenceService,
-              protected storage: StorageService,
               public modalCtrl: ModalController,
               private userSettingsService: UserSettingsService,
               public commonFunctions: CommonFunctionsService,
