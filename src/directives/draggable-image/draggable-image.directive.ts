@@ -30,6 +30,7 @@ export class DraggableImageDirective {
     @HostListener('mouseup', ['$event']) onMouseUp(event: any) {
         this.stopDrag(event);
     }
+    /*
     @HostListener('touchstart', ['$event']) onTouchStart(event: any) {
         this.startDrag(event);
     }
@@ -39,6 +40,7 @@ export class DraggableImageDirective {
     @HostListener('touchend', ['$event']) onTouchEnd(event: any) {
         this.stopDrag(event);
     }
+    */
 
     private startDrag(event: any) {
         if (!this.activeDrag) {
