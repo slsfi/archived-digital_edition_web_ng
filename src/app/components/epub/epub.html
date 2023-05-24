@@ -3,17 +3,17 @@
     <ion-buttons *ngIf="epubFileExists">
         <ion-grid>
             <ion-row class="secondary-toolbar-icons-wrapper" class="ion-align-items-center" justify-content-end>
-              <ion-col class="navigation-buttons-col" *ngIf="(userSettingsService.isMobile() === false && userSettingsService.isTablet() === false)">
+              <ion-col class="navigation-buttons-col" *ngIf="userSettingsService.isDesktop()">
                 <ion-button fill="clear" class="navigation-buttons" [ngClass]="atStart ? 'disabled-nav-button' : ''" id="epub-arrow-prev" (click)="prev()" *ngIf="!loading">
                   <ion-icon name="arrow-back"></ion-icon>
                 </ion-button>
               </ion-col>
-              <ion-col class="navigation-buttons-col current-section-label-col" *ngIf="(userSettingsService.isMobile() === false && userSettingsService.isTablet() === false)">
+              <ion-col class="navigation-buttons-col current-section-label-col" *ngIf="userSettingsService.isDesktop()">
                 <div class="current-section-label" *ngIf="!loading">
                   <span [innerHTML]="currentSectionLabel"></span>
                 </div>
               </ion-col>
-              <ion-col class="navigation-buttons-col" *ngIf="(userSettingsService.isMobile() === false && userSettingsService.isTablet() === false)">
+              <ion-col class="navigation-buttons-col" *ngIf="userSettingsService.isDesktop()">
                 <ion-button fill="clear" class="navigation-buttons" [ngClass]="atEnd ? 'disabled-nav-button' : ''" id="epub-arrow-next" (click)="next()" *ngIf="!loading">
                   <ion-icon name="arrow-forward"></ion-icon>
                 </ion-button>
@@ -87,7 +87,7 @@
   <p class="epub-error-message" *ngIf="!epubFileExists" i18n="@@Epub.FileNotFound">Texten kunde inte laddas. Epub-filen saknas.</p>
 </div>
 
-<div class="text-changer-mobile-view" *ngIf="(userSettingsService.isMobile() === true || userSettingsService.isTablet() === true) && epubFileExists">
+<div class="text-changer-mobile-view" *ngIf="userSettingsService.isMobile() && epubFileExists">
   <ion-grid class="forwardBackward">
       <ion-row class="secondary-toolbar-icons-wrapper" class="ion-align-items-center">
         <ion-col class="navigation-buttons-col">

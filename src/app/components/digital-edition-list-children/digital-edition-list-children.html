@@ -1,5 +1,5 @@
 <div *ngIf="layoutType == 'auto' && show">
-  <ion-grid *ngIf="userSettingsService.isDesktop() && !userSettingsService.isTablet()">
+  <ion-grid *ngIf="userSettingsService.isDesktop()">
       <ion-row>
         <ion-col style="display: flex;justify-content: center;" *ngFor="let edition of childrenPdfs" menuClose col-md-4 col-sm-6 col-lg-3>
             <ion-card class="digital-edition" style="padding: 20px; margin: 20px; position: relative; background-color: white;">
@@ -21,6 +21,7 @@
       </ion-row>
   </ion-grid>
 
+  <!--
   <ion-grid *ngIf="userSettingsService.isTablet()">
       <ion-row>
         <ion-col style="display: flex;justify-content: center;" *ngFor="let edition of childrenPdfs" menuClose col-md-6>
@@ -41,7 +42,9 @@
         </ion-col>
       </ion-row>
   </ion-grid>
-  <ion-grid *ngIf="userSettingsService.isMobile() && !userSettingsService.isTablet()" class="grid-mobile">
+  -->
+
+  <ion-grid *ngIf="userSettingsService.isMobile()" class="grid-mobile">
     <ion-row>
         <ion-col class="col-mobile">
             <ion-list>

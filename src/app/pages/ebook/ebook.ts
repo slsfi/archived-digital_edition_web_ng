@@ -24,7 +24,7 @@ export class EbookPage implements OnInit {
   }
 
   printContentClasses() {
-    if (this.userSettingsService.isMobile() || this.userSettingsService.isTablet()) {
+    if (this.userSettingsService.isMobile()) {
       return 'mobile-view-epub';
     } else {
       return '';

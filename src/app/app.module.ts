@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -23,7 +24,6 @@ import { GalleryService } from './services/gallery/gallery.service';
 import { TooltipService } from './services/tooltips/tooltip.service';
 import { TableOfContentsService } from './services/toc/table-of-contents.service';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
-import { CommonModule } from '@angular/common';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
@@ -36,8 +36,6 @@ import { IllustrationPageModule } from './modals/illustration/illustration.modul
 import { IllustrationPage } from './modals/illustration/illustration';
 import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module';
 import { ReadPopoverPage } from './modals/read-popover/read-popover';
-import { UserSettingsPopoverPageModule } from './modals/user-settings-popover/user-settings-popover.module';
-import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-settings-popover';
 
 @NgModule({
   declarations: [
@@ -57,7 +55,6 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
     HttpClientModule,
     IonicStorageModule.forRoot(),
     CommonModule,
-    UserSettingsPopoverPageModule,
     ComponentsModule,
     PipesModule,
     DigitalEditionListModule,
@@ -90,7 +87,6 @@ import { UserSettingsPopoverPage } from './modals/user-settings-popover/user-set
   entryComponents: [
     DigitalEditionsApp,
     ReadPopoverPage,
-    UserSettingsPopoverPage,
     ReferenceDataModalPage,
     FullscreenImageViewerModal,
     DownloadTextsModalPage,
