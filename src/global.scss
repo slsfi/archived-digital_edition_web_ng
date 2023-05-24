@@ -652,7 +652,7 @@
       flex-grow: 1;
 
       .helper-text {
-        color: initial;
+        color: #000;
       }
     }
   }
@@ -1003,13 +1003,17 @@
       font-weight: 600;
       word-wrap: break-word;
       white-space: normal;
-      margin: 0 0 0.5rem 0 !important;
+      margin: 0;
     }
 
     .flex-buttons {
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
+    }
+
+    h3 + .flex-buttons {
+      margin-top: 0.5rem;
     }
 
     .flex-buttons + ion-item {
@@ -1029,8 +1033,13 @@
     margin-bottom: 0;
   }
   .mobile-mode-read-content .text-select-wrapper.facsimile-header {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 710px;
     padding: 0.5rem;
+  }
+  .mobile-mode-facsimiles facsimiles ion-input.page-number-input {
+    margin: 0 auto;
+    max-width: 710px;
   }
   /* --- */
 

@@ -132,10 +132,14 @@ ion-fab.column-options {
 
 ion-segment {
   --background: var(--button-background-color);
+  border-radius: 0;
   justify-content: center;
-  margin: 2px;
+  margin: 0 auto;
+  max-width: 710px;
+  width: calc(100% - 2px);
 }
 ion-segment-button {
+  --border-radius: 0;
   font-size: 0.875rem;
 }
 ion-segment-button:not(.segment-button-checked) {
@@ -341,13 +345,15 @@ ion-fab {
 
 /* Adjust padding and background color of text and facsimile columns in mobile mode. */
 div.mobile-mode-established {
-  padding: 12px;
   background-color: var(--page-text-columns-background-color);
-  height: calc(100% - 40px); // full height minus text-changer height
+  display: block;
+  height: calc(100% - 32px); // full height minus ion-segment height
+  margin: 0 auto;
+  padding: 12px;
 }
 
 div.mobile-mode-facsimiles {
-  height: calc(100% - 40px); // full height minus text-changer height
+  height: calc(100% - 32px); // full height minus ion-segment height
 
   div.external-urls-header {
     padding-left: 0.75rem !important;

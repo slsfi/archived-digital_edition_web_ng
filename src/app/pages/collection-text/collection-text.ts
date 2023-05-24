@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
@@ -1877,21 +1878,21 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     return await popover.present(event);
   }
 
-  public async showReference() {
+  async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalCtrl.create({
-      component: DownloadTextsModalPage,
+      component: ReferenceDataModalPage,
       componentProps: { id: document.URL, type: 'reference', origin: 'page-text' }
     })
-    return await modal.present();
+    modal.present();
   }
 
-  public async showDownloadModal() {
+  async showDownloadModal() {
     const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
       componentProps: { textId: this.textItemID, origin: 'page-text' }
     })
-    return await modal.present();
+    modal.present();
   }
 
   openNewView(event: any) {

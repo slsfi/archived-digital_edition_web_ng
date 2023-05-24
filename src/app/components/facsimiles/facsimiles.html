@@ -40,19 +40,19 @@
 
 <div class="facsimile-image-wrapper" *ngIf="facsNumber && !selectedFacsimileIsExternal && selectedFacsimile">
   <img
-    [src]="
-          facsURLAlternate
-          ? facsURLAlternate+'/'+selectedFacsimile.publication_facsimile_collection_id+'/'+facsSize+'/'+facsNumber+'.jpg'
-          : facsURLDefault+facsNumber+(facsSize ? '/'+facsSize : '')
-          "
-    alt="Skannat faksimil"
-    i18n-alt="@@Read.Facsimiles.AltText"
-    [ngStyle]="{'transform':'scale('+zoom+') translate3d('+prevX+'px, '+prevY+'px, 0px) rotate('+angle+'deg)'}"
-    (wheel)="zoomWithMouseWheel($event)"
-    [draggableImage]="[prevX, prevY]"
-    [angle]="angle"
-    [zoom]="zoom"
-    (finalCoordinates)="setImageCoordinates($event)"
+        [src]="
+              facsURLAlternate
+              ? facsURLAlternate+'/'+selectedFacsimile.publication_facsimile_collection_id+'/'+facsSize+'/'+facsNumber+'.jpg'
+              : facsURLDefault+facsNumber+(facsSize ? '/'+facsSize : '')
+              "
+        alt="Skannat faksimil"
+        i18n-alt="@@Read.Facsimiles.AltText"
+        [ngStyle]="{'transform':'scale('+zoom+') translate3d('+prevX+'px, '+prevY+'px, 0px) rotate('+angle+'deg)'}"
+        (wheel)="zoomWithMouseWheel($event)"
+        [draggableImage]="[prevX, prevY]"
+        [angle]="angle"
+        [zoom]="zoom"
+        (finalCoordinates)="setImageCoordinates($event)"
   >
 </div>
 
