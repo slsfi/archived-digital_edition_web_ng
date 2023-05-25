@@ -853,8 +853,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                     anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')
                   ) {
                     containerElem = document.querySelector(
-                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) .mobile-mode-read-content > .scroll-content > ion-scroll > .scroll-content'
-                    ); // TODO: Fix this for mobile mode, the template needs to be fixed first
+                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content.mobile-mode-content .scroll-content-container'
+                    ) as HTMLElement;
                   }
                 }
               }
@@ -2105,7 +2105,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   printMainContentClasses() {
     if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-read-content';
+      return 'mobile-mode-content';
     } else {
       return '';
     }

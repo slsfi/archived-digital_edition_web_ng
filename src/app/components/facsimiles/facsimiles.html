@@ -25,7 +25,7 @@
 </div>
 
 <ion-input *ngIf="!selectedFacsimileIsExternal && numberOfImages && numberOfImages > 1"
-      class="page-number-input"
+      class="image-nr-input"
       fill="solid"
       label="Bild:"
       i18n-label="@@Read.Facsimiles.Page"
@@ -38,7 +38,7 @@
       [(ngModel)]="facsNumber"
 ></ion-input>
 
-<div class="facsimile-image-wrapper" *ngIf="facsNumber && !selectedFacsimileIsExternal && selectedFacsimile">
+<div *ngIf="facsNumber && !selectedFacsimileIsExternal && selectedFacsimile" class="facsimile-image-wrapper">
   <img
         [src]="
               facsURLAlternate

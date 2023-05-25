@@ -20,7 +20,6 @@ import { config } from "src/assets/config/config";
   templateUrl: 'index-of-works.html',
   styleUrls: ['index-of-works.scss']
 })
-
 export class IndexOfWorksPage implements OnInit {
   // @ViewChild('content') content!: ElementRef;
   works: any[] = [];
@@ -70,8 +69,8 @@ export class IndexOfWorksPage implements OnInit {
 
   getworks() {
     this.showLoading = true;
-    this.semanticDataService.getWorksElastic(this.from, this.searchText).subscribe(
-      works => {
+    this.semanticDataService.getWorksElastic(this.from, this.searchText).subscribe({
+      next: (works) => {
         works = works.hits.hits;
         this.showLoading = false;
 
@@ -122,8 +121,11 @@ export class IndexOfWorksPage implements OnInit {
         this.cacheData = this.works;
         this.sortListAlphabeticallyAndGroup(this.allData);
       },
-      err => {console.error(err); this.showLoading = false; }
-    );
+      error: (err) => {
+        console.error(err);
+        this.showLoading = false;
+      }
+    });
   }
 
   loadMoreworks() {

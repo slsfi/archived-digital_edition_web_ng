@@ -76,7 +76,7 @@
   </ion-grid>
 </div>
 
-<div id="toc_text" [ngClass]="tocMenuOpen ? 'menuOpen' : 'menuClosed'" (click)="toggleTocMenu()">
+<div id="toc-text" [ngClass]="tocMenuOpen ? 'menuOpen' : 'menuClosed'" (click)="toggleTocMenu()">
 </div>
 
 <div class="toc-epub-container">
@@ -87,8 +87,8 @@
   <p class="epub-error-message" *ngIf="!epubFileExists" i18n="@@Epub.FileNotFound">Texten kunde inte laddas. Epub-filen saknas.</p>
 </div>
 
-<div class="text-changer-mobile-view" *ngIf="userSettingsService.isMobile() && epubFileExists">
-  <ion-grid class="forwardBackward">
+<div class="text-changer-mobile-mode" *ngIf="userSettingsService.isMobile() && epubFileExists">
+  <ion-grid class="text-changer-wrapper">
       <ion-row class="secondary-toolbar-icons-wrapper" class="ion-align-items-center">
         <ion-col class="navigation-buttons-col">
           <ion-button fill="clear" class="navigation-buttons" [ngClass]="atStart ? 'disabled-nav-button' : ''" id="epub-arrow-prev" (click)="prev()" *ngIf="!loading">

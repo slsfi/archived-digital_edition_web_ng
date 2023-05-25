@@ -2354,7 +2354,7 @@ page-introduction {
 /* Headings in introductions */
 page-introduction {
     /* Headings in intro TOC */
-    div#toc_text {
+    div#toc-text {
         h1.title,
         h2.heading2,
         h3.heading3,
@@ -2578,7 +2578,7 @@ page-foreword {
     }
 }
 
-/* Misc. styles on elements in page-introduction. Moved from introduction.scss since these apply to dynamically loaded content with innerHTML */
+/* Misc. styles on elements in page-introduction. Moved from introduction.scss since these apply to dynamically loaded content within innerHTML */
 page-introduction {    
     #TOC h2 {
         font-size: 1.1rem;
@@ -2623,7 +2623,8 @@ page-introduction {
         line-height: 1;
     }
     
-    #TOC #toc_text > div > :first-child {
+    #TOC #toc-text > div > :first-child,
+    #toc-close-button + #toc-text :first-child {
         margin-top: 0.125rem;
     }
     

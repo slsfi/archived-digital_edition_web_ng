@@ -655,7 +655,7 @@ export class DownloadTextsModalPage {
       const matches = text.match(pattern);
       if ( matches !== null ) {
         let edited_toc_div = matches[0].replace('<div data-id="content">', '<div>');
-        edited_toc_div = '<nav id="TOC">\n<div id="toc_text">\n' + edited_toc_div + '</div>\n</nav>\n';
+        edited_toc_div = '<nav id="TOC">\n<div id="toc-text">\n' + edited_toc_div + '</div>\n</nav>\n';
         text = text.replace(matches[0], edited_toc_div);
       }
     }

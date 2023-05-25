@@ -393,7 +393,7 @@ export class EpubComponent {
     const _this = this;
     this.book.loaded.navigation.then(
       function( toc: any ) {
-        const tocDiv = <HTMLDivElement> document.getElementById('toc_text');
+        const tocDiv = <HTMLDivElement> document.getElementById('toc-text');
         const tocUl = document.createElement('ol');
         tocUl.className = 'topchapter';
         const docfrag = <DocumentFragment> document.createDocumentFragment();

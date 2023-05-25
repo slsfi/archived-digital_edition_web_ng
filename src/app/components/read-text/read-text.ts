@@ -231,15 +231,20 @@ export class ReadTextComponent {
         let iterationsLeft = 10;
         clearInterval(this.intervalTimerId);
         const that = this;
+        const nElement: HTMLElement = this.elementRef.nativeElement;
 
         this.intervalTimerId = window.setInterval(function() {
           if (iterationsLeft < 1) {
             clearInterval(that.intervalTimerId);
           } else {
             iterationsLeft -= 1;
+            /*
             let target = document.querySelector(
               'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
             ) as HTMLAnchorElement;
+            */
+           // TODO: test this way of finding the target and use elsewhere as well, i.e. nElement. This way all read-text columns that are displayed will scroll to the new textPosition, not just the first one.
+            let target = nElement.querySelector('[name="' + that.textPosition + '"]') as HTMLAnchorElement;
             if (
               target && (
                 (target.parentElement && target.parentElement.classList.contains('ttFixed')) ||
@@ -247,9 +252,12 @@ export class ReadTextComponent {
               )
             ) {
               // Position in footnote --> look for second target
+              /*
               target = document.querySelectorAll(
                 'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
               )[1] as HTMLAnchorElement;
+              */
+              target = nElement.querySelectorAll('[name="' + that.textPosition + '"]')[1] as HTMLAnchorElement;
             }
             if (target) {
               that.commonFunctions.scrollToHTMLElement(target);

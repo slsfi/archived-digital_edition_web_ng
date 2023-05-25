@@ -1,6 +1,9 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LoadingController, ModalController } from '@ionic/angular';
+import { catchError, map, Observable, of } from 'rxjs';
+import { marked } from 'marked';
 import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
@@ -18,7 +21,6 @@ import { config } from "src/assets/config/config";
   templateUrl: 'index-of-persons.html',
   styleUrls: ['index-of-persons.scss']
 })
-
 export class IndexOfPersonsPage implements OnInit {
   persons: any[] = [];
   searchText?: string;
@@ -33,7 +35,7 @@ export class IndexOfPersonsPage implements OnInit {
   subType: any;
   objectType = 'subject';
   pageTitle?: string | null;
-  mdContent?: string;
+  mdContent$: Observable<SafeHtml>;
 
   // tslint:disable-next-line:max-line-length
   alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
@@ -43,6 +45,7 @@ export class IndexOfPersonsPage implements OnInit {
   debouncedSearch = debounce(this.searchPersons, 500);
 
   constructor(
+              private sanitizer: DomSanitizer,
               public semanticDataService: SemanticDataService,
               private mdContentService: MdContentService,
               public modalCtrl: ModalController,
@@ -65,7 +68,7 @@ export class IndexOfPersonsPage implements OnInit {
 
   ngOnInit() {
     this.getParamsData();
-    this.getMdContent(this.activeLocale + '-12-02');
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-02');
   }
 
   getParamsData() {
@@ -98,8 +101,8 @@ export class IndexOfPersonsPage implements OnInit {
 
   getPersons() {
     this.showLoading = true;
-    this.semanticDataService.getSubjectsElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe(
-      persons => {
+    this.semanticDataService.getSubjectsElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe({
+      next: (persons) => {
         // console.log('Elastic response: ', persons);
         if (persons.error !== undefined) {
           console.error('Elastic search error getting persons: ', persons);
@@ -147,13 +150,13 @@ export class IndexOfPersonsPage implements OnInit {
         this.sortListAlphabeticallyAndGroup(this.persons);
         this.showLoading = false;
       },
-      err => {
+      error: (err) => {
         console.error(err);
         this.showLoading = false;
         this.agg_after_key = {};
         this.last_fetch_size = 0;
       }
-    );
+    });
   }
 
   sortListAlphabeticallyAndGroup(listOfPersons: any[]) {
@@ -275,11 +278,15 @@ export class IndexOfPersonsPage implements OnInit {
     }
   }
 
-  getMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => { this.mdContent = text.content; },
-      error: (e) => { this.mdContent = ''; }
-    });
+  getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   scrollToTop() {

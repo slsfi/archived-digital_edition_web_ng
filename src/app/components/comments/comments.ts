@@ -1,4 +1,4 @@
-import { Component, Input, Renderer2, ElementRef, NgZone } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
@@ -15,11 +15,10 @@ import { isBrowser } from 'src/standalone/utility-functions';
   styleUrls: ['comments.scss']
 })
 export class CommentsComponent {
-
   @Input() textItemID: string = '';
   @Input() searchMatches: Array<string> = [];
 
-  public text: any;
+  text: any;
   manuscript: any;
   sender: any;
   receiver: any;
@@ -36,8 +35,7 @@ export class CommentsComponent {
     private elementRef: ElementRef,
     protected modalController: ModalController,
     public commonFunctions: CommonFunctionsService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     if (this.textItemID) {
@@ -112,10 +110,17 @@ export class CommentsComponent {
           let targetIsLink = false;
           let targetElem: HTMLElement | null = event.target as HTMLElement;
 
-          if ( targetElem.classList.contains('xreference')
-          || (targetElem.parentElement !== null && targetElem.parentElement.classList.contains('xreference'))
-          || (targetElem.parentElement?.parentElement !== null &&
-            targetElem.parentElement?.parentElement.classList.contains('xreference')) ) {
+          if (
+            targetElem.classList.contains('xreference') ||
+            (
+              targetElem.parentElement !== null &&
+              targetElem.parentElement.classList.contains('xreference')
+            ) ||
+            (
+              targetElem.parentElement?.parentElement !== null &&
+              targetElem.parentElement?.parentElement.classList.contains('xreference')
+            )
+          ) {
             targetIsLink = true;
           }
 
@@ -127,9 +132,11 @@ export class CommentsComponent {
             // Find the comment element that has been clicked in the comment-column.
             if (!targetElem.classList.contains('commentScrollTarget')) {
               targetElem = targetElem.parentElement;
-              while (targetElem !== null
-              && !targetElem.classList.contains('commentScrollTarget')
-              && targetElem.tagName !== 'COMMENT') {
+              while (
+                targetElem !== null &&
+                !targetElem.classList.contains('commentScrollTarget') &&
+                targetElem.tagName !== 'COMMENT'
+              ) {
                 targetElem = targetElem.parentElement;
               }
             }
@@ -137,15 +144,27 @@ export class CommentsComponent {
               // Find the lemma in the reading text. Remove all non-digits at the start of the comment's id.
               const numId = targetElem.classList[targetElem.classList.length - 1].replace( /^\D+/g, '');
               const targetId = 'start' + numId;
-              let lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
+              let lemmaStart = document.querySelector(
+                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+              ) as HTMLElement;
               lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
-              if ( (lemmaStart.parentElement !== null
-              && lemmaStart.parentElement.classList.contains('ttFixed'))
-              || (lemmaStart.parentElement?.parentElement !== null
-              && lemmaStart.parentElement?.parentElement.classList.contains('ttFixed')) ) {
+              if (
+                (
+                  lemmaStart.parentElement !== null &&
+                  lemmaStart.parentElement.classList.contains('ttFixed')
+                ) ||
+                (
+                  lemmaStart.parentElement?.parentElement !== null &&
+                  lemmaStart.parentElement?.parentElement.classList.contains('ttFixed')
+                )
+              ) {
                 // The lemma is in a footnote, so we should get the second element with targetId
-                lemmaStart = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text') as HTMLElement;
-                lemmaStart = lemmaStart.querySelectorAll('[data-id="' + targetId + '"]')[1] as HTMLElement;
+                lemmaStart = document.querySelector(
+                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+                ) as HTMLElement;
+                lemmaStart = lemmaStart.querySelectorAll(
+                  '[data-id="' + targetId + '"]'
+                )[1] as HTMLElement;
               }
               if (lemmaStart !== null && lemmaStart !== undefined) {
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
@@ -174,10 +193,9 @@ export class CommentsComponent {
   async openIllustration(imageNumber: any) {
     const modal = await this.modalController.create({
       component: IllustrationPage,
-      cssClass: 'foo',
       componentProps: { 'imageNumber': imageNumber }
     });
-    return await modal.present();
+    modal.present();
   }
 
 }

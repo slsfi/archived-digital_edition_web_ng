@@ -6,6 +6,7 @@ import { Facsimile } from 'src/app/models/facsimile.model';
 import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
+import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/assets/config/config";
 
 
@@ -38,12 +39,13 @@ export class FacsimilesComponent implements OnInit {
   zoom: number = 1.0;
 
   constructor(
-    protected sanitizer: DomSanitizer,
-    protected readPopoverService: ReadPopoverService,
-    protected modalCtrl: ModalController,
-    protected facsimileService: FacsimileService,
     private alertCtrl: AlertController,
-    private commonFunctions: CommonFunctionsService
+    private commonFunctions: CommonFunctionsService,
+    private facsimileService: FacsimileService,
+    private modalCtrl: ModalController,
+    public readPopoverService: ReadPopoverService,
+    private sanitizer: DomSanitizer,
+    public userSettingsService: UserSettingsService
   ) {
     this.facsSize = config.component?.facsimileColumn?.imageQuality ?? 1;
     this.facsURLAlternate = config.app?.facsimileBase ?? '';

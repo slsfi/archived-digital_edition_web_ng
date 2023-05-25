@@ -1,2 +1,6 @@
-<ion-spinner *ngIf="(text$ | async) === null" class="loading" name="crescent"></ion-spinner>
-<div class="tei teiContainer legend-markdown-content markdown" [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'" [innerHTML]="text$ | async"></div>
+<ng-container *ngIf="(text$ | async) as text; else loading">
+    <div [innerHTML]="text" class="tei teiContainer legend-markdown-content markdown" [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"></div>
+</ng-container>
+<ng-template #loading>
+    <ion-spinner class="loading" name="crescent"></ion-spinner>
+</ng-template>

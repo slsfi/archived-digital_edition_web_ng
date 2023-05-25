@@ -1,22 +1,16 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer slot="start" *ngIf="!(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-desktop-view"></text-changer>
+    <text-changer slot="start" *ngIf="!userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+        <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
-      <!--
-      <ion-button (click)="showSharePopover($event)">
-        <ion-icon slot="start" class="share-icon" name="social-share"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title">{{'Reference.share' | translate }}</span>
-      </ion-button>
-      -->
       <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showReadSettingsPopover($event)" id="settings-icon">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
+        <span class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -28,13 +22,15 @@
   </div>
 
   <div class="scroll-content-container" *ngIf="!hasDigitalEditionListChildren">
-    
-    <ion-spinner *ngIf="(text$ | async) === null" class="loading" name="crescent"></ion-spinner>
-
-    <div [innerHTML]="text$ | async" class="tei teiContainer"
-    [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')" [ngClass]="hasMDTitle ? 'md_content markdown' : ''"></div>
+    <ng-container *ngIf="(text$ | async) as text; else loading">
+      <div [innerHTML]="text" class="tei teiContainer"
+      [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')" [ngClass]="hasMDTitle ? 'md_content markdown' : ''"></div>
+    </ng-container>
+    <ng-template #loading>
+      <ion-spinner class="loading" name="crescent"></ion-spinner>
+    </ng-template>
   </div>
 
 </ion-content>
 
-<text-changer *ngIf="(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-title'" class="text-changer-mobile-mode"></text-changer>

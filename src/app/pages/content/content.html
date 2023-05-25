@@ -1,6 +1,6 @@
 <ion-content class="ion-padding">
-  <div *ngIf="text$ | async" [ngClass]="(userSettingsService.isMobile())?'markdown-container-mobile':'markdown-container'">
-    <div class="markdown" [innerHTML]="text$ | async"></div>
+  <div *ngIf="(text$ | async) as text" [ngClass]="userSettingsService.isMobile()?'markdown-container-mobile':'markdown-container'">
+    <div class="markdown" [innerHTML]="text"></div>
   </div>
   <digital-editions-list [layoutType]="'auto'"></digital-editions-list>
 </ion-content>

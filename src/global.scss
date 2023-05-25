@@ -611,7 +611,7 @@
   }
 
   // Ion-input styles
-  ion-input.page-number-input.input-fill-solid {
+  ion-input.image-nr-input.input-fill-solid {
     --background: var(--facsimile-column-page-number-wrapper-background-color) !important;
     --border-radius: 0;
     --highlight-color-focused: var(--facsimile-column-highlight-color);
@@ -658,7 +658,7 @@
   }
   ion-modal {
     &.fullscreen-image-viewer-modal {
-      ion-input.page-number-input.input-fill-solid {
+      ion-input.image-nr-input.input-fill-solid {
         --border-style: none;
 
         .input-wrapper {
@@ -673,6 +673,10 @@
         }
       }
     }
+  }
+  .mobile-mode-facsimiles ion-input.image-nr-input.input-fill-solid {
+    margin: 0 auto;
+    max-width: 710px;
   }
 
 
@@ -884,7 +888,7 @@
   }
   /* --- */
 
-  /* --- Style block: column containers for all publication pages: cover, title, foreword, introduction and read. --- */
+  /* --- Style block: column containers for all publication pages: cover, title, foreword, introduction and text. --- */
   ion-content.publication-ion-content::part(scroll) {
     display: flex;
     padding: 26px;
@@ -916,10 +920,11 @@
       padding: 12px;
     }
   }
-  // Make room for the text-changer at the bottom in mobile mode.
   ion-content.publication-ion-content.mobile-mode-content::part(scroll) {
-    padding-bottom: 0;
-    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    padding: 0;
   }
   /* --- */
 
@@ -990,7 +995,7 @@
   }
   /* --- */
 
-  /* --- Style block: Style for the block in read columns where a different variant, manuscript or facsimile text can be selected. --- */
+  /* --- Style block: Style for the block in text columns where a different variant, manuscript or facsimile text can be selected. --- */
   div.text-select-wrapper {
     padding: 0 0 1rem 0;
     margin: 0 0 1.5rem 0;
@@ -1032,14 +1037,10 @@
   .text-select-wrapper.facsimile-header.external-urls-header {
     margin-bottom: 0;
   }
-  .mobile-mode-read-content .text-select-wrapper.facsimile-header {
+  page-text .mobile-mode-facsimiles .text-select-wrapper {
     margin: 0 auto;
     max-width: 710px;
     padding: 0.5rem;
-  }
-  .mobile-mode-facsimiles facsimiles ion-input.page-number-input {
-    margin: 0 auto;
-    max-width: 710px;
   }
   /* --- */
 
@@ -1132,6 +1133,27 @@
     }
   }
   /* --- */
+
+  /* --- Style block: Misc. mobile mode styles that can't be applied in the components’ scss. --- */
+  page-text {
+    .mobile-mode-facsimiles {
+      .external-urls-wrapper.teiContainer {
+        background-color: var(--page-text-columns-background-color);
+        height: calc(100% - 35px);
+        margin: 0 auto;
+        max-width: 710px;
+        padding-top: 0;
+    
+        ul {
+          padding-bottom: 3rem;
+        }
+      }
+    }
+  }
+  /* --- */
+
+
+
 
   /*
 

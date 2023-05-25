@@ -348,32 +348,14 @@ div.mobile-mode-established {
   background-color: var(--page-text-columns-background-color);
   display: block;
   height: calc(100% - 32px); // full height minus ion-segment height
-  margin: 0 auto;
   padding: 12px;
+  width: 100%;
 }
 
 div.mobile-mode-facsimiles {
   height: calc(100% - 32px); // full height minus ion-segment height
-
-  div.external-urls-header {
-    padding-left: 0.75rem !important;
-    padding-bottom: 0 !important;
-  }
-  ion-scroll.external-urls-wrapper {
-    background-color: var(--page-text-columns-background-color);
-    height: 100vh !important;
-    max-height: calc(100vh - 280px) !important;
-
-    ul {
-      margin-left: 10px !important;
-    }
-  }
+  width: 100%;
 }
-
-div.mobile-mode-facsimiles > facsimiles > div.tei {
-  padding: 10px;
-}
-
 
 /*
 @media(max-width: 820px) {

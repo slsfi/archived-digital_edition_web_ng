@@ -1,16 +1,16 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer slot="start" *ngIf="!(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-desktop-view"></text-changer>
+    <text-changer slot="start" *ngIf="!userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton" (click)="showReference()" class="sec-menu-button">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+        <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
       <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showReadSettingsPopover($event)" class="sec-menu-button" id="settings-icon">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
-        <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
+        <span class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,4 +24,4 @@
   </div>
 </ion-content>
 
-<text-changer *ngIf="(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-mobile-view"></text-changer>
+<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-mobile-mode"></text-changer>

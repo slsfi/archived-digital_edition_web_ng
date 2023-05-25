@@ -2,7 +2,9 @@
   <ion-grid>
       <ion-row class="page-info-row">
         <h1 class="page-title" i18n="@@TOC.PlaceSearch">Ortregister</h1>
-        <div class="info markdown" *ngIf="mdContent$ | async" [innerHTML]="mdContent$ | async"></div>
+        <ng-container *ngIf="(mdContent$ | async) as mdContent">
+          <div class="info markdown" [innerHTML]="mdContent"></div>
+        </ng-container>
       </ion-row>
       <ion-row class="search-area-row">
           <ion-col>

@@ -21,7 +21,6 @@ import { config } from "src/assets/config/config";
   templateUrl: 'index-of-keywords.html',
   styleUrls: ['index-of-keywords.scss']
 })
-
 export class IndexOfKeywordsPage implements OnInit {
   tags: any[] = [];
   tagsCopy: any[] = [];
@@ -67,8 +66,8 @@ export class IndexOfKeywordsPage implements OnInit {
 
   getTags() {
     this.showLoading = true;
-    this.semanticDataService.getTagElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe(
-      tags => {
+    this.semanticDataService.getTagElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe({
+      next: (tags) => {
         // console.log('Elastic response: ', tags);
         if (tags.error !== undefined) {
           console.error('Elastic search error getting tags: ', tags);
@@ -107,13 +106,13 @@ export class IndexOfKeywordsPage implements OnInit {
         this.sortListAlphabeticallyAndGroup(this.tags);
         this.showLoading = false;
       },
-      err => {
+      error: (err) => {
         console.error(err);
         this.showLoading = false;
         this.agg_after_key = {};
         this.last_fetch_size = 0;
       }
-    );
+    });
   }
 
   showAll() {

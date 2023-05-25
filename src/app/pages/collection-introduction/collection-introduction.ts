@@ -512,8 +512,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               targetId = anchorElem.parentElement.getAttribute('href');
             }
             const dataIdSelector = '[data-id="' + String(targetId).replace('#', '') + '"]';
-            let target = anchorElem.ownerDocument.querySelector('page-introduction:not([ion-page-hidden]):not(.ion-page-hidden)') as HTMLElement;
-            target = target.querySelector(dataIdSelector) as HTMLElement;
+            let target = nElement.querySelector(dataIdSelector) as HTMLElement;
             if (target !== null) {
               this.router.navigate(
                 [],
@@ -883,7 +882,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id, type: 'subject' },
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showPlaceModal(id: string) {
@@ -891,7 +890,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id, type: 'location' },
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showWorkModal(id: string) {
@@ -899,7 +898,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id, type: 'work' },
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showIllustrationModal(imageNumber: string) {
@@ -908,7 +907,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       componentProps: { 'imageNumber': imageNumber },
       cssClass: 'foo',
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showPopover(event: any) {
@@ -921,24 +920,24 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       side: 'bottom',
       alignment: 'end'
     });
-    return await popover.present(event);
+    popover.present(event);
   }
 
-  public async showReference() {
+  async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModalPage,
       componentProps: {id: document.URL, type: 'reference', origin: 'page-introduction'}
     });
-    return await modal.present();
+    modal.present();
   }
 
-  public async showDownloadModal() {
+  async showDownloadModal() {
     const modal = await this.modalController.create({
       component: DownloadTextsModalPage,
       componentProps: {textId: this.id, origin: 'page-introduction'}
     });
-    return await modal.present();
+    modal.present();
   }
 
   toggleTocMenu() {

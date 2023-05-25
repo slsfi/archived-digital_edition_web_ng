@@ -22,7 +22,6 @@ import { config } from "src/assets/config/config";
   templateUrl: 'index-of-places.html',
   styleUrls: ['index-of-places.scss']
 })
-
 export class IndexOfPlacesPage implements OnInit {
   // @ViewChild(Content) content: Content;
   places: any[] = [];
@@ -68,8 +67,8 @@ export class IndexOfPlacesPage implements OnInit {
 
   getPlaces() {
     this.showLoading = true;
-    this.semanticDataService.getLocationElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe(
-      places => {
+    this.semanticDataService.getLocationElastic(this.agg_after_key, this.searchText, this.filters, this.max_fetch_size).subscribe({
+      next: (places) => {
         // console.log('Elastic response: ', places);
         if (places.error !== undefined) {
           console.error('Elastic search error getting places: ', places);
@@ -108,13 +107,13 @@ export class IndexOfPlacesPage implements OnInit {
         this.sortListAlphabeticallyAndGroup(this.places);
         this.showLoading = false;
       },
-      err => {
+      error: (err) => {
         console.error(err);
         this.showLoading = false;
         this.agg_after_key = {};
         this.last_fetch_size = 0;
       }
-    );
+    });
   }
 
   showAll() {
