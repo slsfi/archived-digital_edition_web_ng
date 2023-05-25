@@ -279,8 +279,6 @@ export class FacsimilesComponent implements OnInit {
     modal.present();
 
     const { data, role } = await modal.onWillDismiss();
-    console.log(data);
-    console.log(role);
     if (role === 'imageNr' && data) {
       this.facsNumber = data;
       this.setImageNr();
