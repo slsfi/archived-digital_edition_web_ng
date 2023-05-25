@@ -11,7 +11,7 @@ export type MouseHandler = 'handleMousedown' | 'handleMousemove' | 'handleMouseu
 export class Touches {
     properties: Properties;
     element: HTMLElement;
-    elementPosition: ClientRect;
+    elementPosition: DOMRect;
     eventType: EventType = undefined;
     handlers: any = {};
     startX = 0;
