@@ -9,7 +9,6 @@ import { ReadTextModule } from 'src/app/components/read-text/read-text.module';
 import { FacsimilesModule } from 'src/app/components/facsimiles/facsimiles.module';
 import { ManuscriptsModule } from 'src/app/components/manuscripts/manuscripts.module';
 import { LegendModule } from 'src/app/components/legend/legend.module';
-import { DragScrollModule } from 'src/directives/ngx-drag-scroll/public-api';
 import { VariantsModule } from 'src/app/components/variants/variants.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +27,6 @@ import { FormsModule } from '@angular/forms';
       FacsimilesModule,
       ManuscriptsModule,
       VariantsModule,
-      DragScrollModule,
       MathJaxModule,
       LegendModule,
       CollectionTextPageRoutingModule
