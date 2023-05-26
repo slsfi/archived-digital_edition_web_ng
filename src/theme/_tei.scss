@@ -4,6 +4,7 @@
 
 /* Padding below the columns so their height won't end precisely after the texts */
 page-title div.teiContainer,
+page-foreword div.teiContainer,
 page-introduction div.teiContainer,
 read-text > div.teiContainer,
 comments > div.teiContainer,
@@ -19,6 +20,7 @@ div.teiContainer {
     line-height: 1.6em;
     white-space: normal;
     max-width: 100%;
+    position: relative;
 }
 
 /* Font sizes. */
