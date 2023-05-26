@@ -9,7 +9,7 @@ import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
-  selector: 'legend',
+  selector: 'text-legend',
   templateUrl: 'legend.html',
   styleUrls: ['legend.scss']
 })
@@ -85,7 +85,7 @@ export class LegendComponent implements OnInit, OnDestroy {
             if (targetHref && targetHref.startsWith('#')) {
               // Assume link to data-id in same legend text --> find element and scroll it into view
               let containerElem = clickedElem.parentElement;
-              while (containerElem !== null && containerElem.tagName !== 'LEGEND') {
+              while (containerElem !== null && containerElem.tagName !== 'TEXT-LEGEND') {
                 containerElem = containerElem.parentElement;
               }
               if (containerElem) {
@@ -103,7 +103,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   /**
    * Function for scrolling an element with matching data-id attribute in the
-   * last legend-element into view.
+   * last text-legend-element into view.
    */
   scrollToInitialTextPosition() {
     if (this.scrollToElementId) {
@@ -117,7 +117,7 @@ export class LegendComponent implements OnInit, OnDestroy {
             clearInterval(that.intervalTimerId);
           } else {
             iterationsLeft -= 1;
-            const legendElements = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) legend');
+            const legendElements = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) text-legend');
             const element = legendElements[legendElements.length - 1].querySelector('[data-id="' + that.scrollToElementId + '"]') as any;
             if (element) {
               that.commonFunctions.scrollElementIntoView(element, 'top');
