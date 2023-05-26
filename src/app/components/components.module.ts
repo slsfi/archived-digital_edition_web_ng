@@ -42,7 +42,8 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
     DateHistogram,
     MathJaxComponent,
     MainSideMenu,
-    CollectionSideMenu
+    CollectionSideMenu,
+	RecursiveAccordion
   ]
 })
 export class ComponentsModule { }
