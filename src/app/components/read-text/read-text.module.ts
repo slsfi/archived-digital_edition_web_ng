@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { MathJaxModule } from '../math-jax/math-jax.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReadTextComponent } from './read-text';
+import { MathJaxDirective } from 'src/directives/math-jax.directive';
 
 @NgModule({
   declarations: [ReadTextComponent],
@@ -11,7 +11,7 @@ import { ReadTextComponent } from './read-text';
     IonicModule,
     CommonModule,
     FormsModule,
-    MathJaxModule
+    MathJaxDirective
   ],
   exports: [ReadTextComponent]
 })

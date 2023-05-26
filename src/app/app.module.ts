@@ -27,7 +27,6 @@ import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
-import { MathJaxModule } from './components/math-jax/math-jax.module';
 import { ReferenceDataModalPage } from './modals/reference-data-modal/reference-data-modal';
 import { DownloadTextsModalPage } from './modals/download-texts-modal/download-texts-modal';
 import { FullscreenImageViewerModalModule } from './modals/fullscreen-image-viewer/fullscreen-image-viewer.module';
@@ -60,8 +59,7 @@ import { ReadPopoverPage } from './modals/read-popover/read-popover';
     DigitalEditionListModule,
     FullscreenImageViewerModalModule,
     ReadPopoverPageModule,
-    IllustrationPageModule,
-    MathJaxModule
+    IllustrationPageModule
   ],
   providers: [
     HtmlContentService,
