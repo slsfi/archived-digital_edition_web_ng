@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { OrderByPipe } from './order-by/order-by';
-import { SearchPipe } from './search/search';
-import { SortPipe } from './sort/sort';
 import {
   CollectionPathGenerator,
   InitialPathGeneratorPipe,
@@ -10,18 +7,14 @@ import {
 } from "./path-generator";
 
 @NgModule({
-  declarations: [OrderByPipe,
-    SearchPipe,
-    SortPipe,
+  declarations: [
     InitialPathGeneratorPipe,
     CollectionPathGenerator,
     PagePathGenerator,
     PositionParamGenerator
   ],
   imports: [],
-  exports: [OrderByPipe,
-    SearchPipe,
-    SortPipe,
+  exports: [
     InitialPathGeneratorPipe,
     CollectionPathGenerator,
     PagePathGenerator,
