@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import {
-  CollectionPathGenerator,
+  CollectionPathGeneratorPipe,
   InitialPathGeneratorPipe,
-  PagePathGenerator,
-  PositionParamGenerator
-} from "./path-generator";
+  PagePathGeneratorPipe,
+  PositionParamGeneratorPipe
+} from "./path-generator.pipe";
 
 @NgModule({
   declarations: [
     InitialPathGeneratorPipe,
-    CollectionPathGenerator,
-    PagePathGenerator,
-    PositionParamGenerator
+    CollectionPathGeneratorPipe,
+    PagePathGeneratorPipe,
+    PositionParamGeneratorPipe
   ],
   imports: [],
   exports: [
     InitialPathGeneratorPipe,
-    CollectionPathGenerator,
-    PagePathGenerator,
-    PositionParamGenerator
+    CollectionPathGeneratorPipe,
+    PagePathGeneratorPipe,
+    PositionParamGeneratorPipe
   ]
 })
 export class PipesModule {

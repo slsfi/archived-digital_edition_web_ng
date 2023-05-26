@@ -34,7 +34,7 @@ export class InitialPathGeneratorPipe implements PipeTransform {
 @Pipe({
   name: 'collectionPathGenerator'
 })
-export class CollectionPathGenerator implements PipeTransform {
+export class CollectionPathGeneratorPipe implements PipeTransform {
   transform(collectionId: string, typeOfPage?: string): any {
     switch (typeOfPage) {
       case 'cover':
@@ -55,7 +55,7 @@ export class CollectionPathGenerator implements PipeTransform {
 @Pipe({
   name: 'pagePathGenerator'
 })
-export class PagePathGenerator implements PipeTransform {
+export class PagePathGeneratorPipe implements PipeTransform {
   transform(itemId: string): any {
     const idList = itemId.split('_');
     let url = `/collection/${idList[0]}/text/${idList[1]}`;
@@ -71,7 +71,7 @@ export class PagePathGenerator implements PipeTransform {
 @Pipe({
   name: 'positionParamGenerator'
 })
-export class PositionParamGenerator implements PipeTransform {
+export class PositionParamGeneratorPipe implements PipeTransform {
   transform(itemId: string): any {
     const idList = itemId.split(';');
     if (idList.length > 1) {
