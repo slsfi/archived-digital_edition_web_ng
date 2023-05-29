@@ -41,7 +41,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   toolTipPosition: any;
   toolTipMaxWidth: string | null;
   toolTipScaleValue: number | null;
-  toolTipText?: string;
+  toolTipText: string = '';
   tooltipVisible: Boolean = false;
   tooltips = {
     'persons': {} as any,
@@ -54,8 +54,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   infoOverlayPosType: string;
   infoOverlayPosition: any;
   infoOverlayWidth: string | null;
-  infoOverlayText: string;
-  infoOverlayTitle: string;
+  infoOverlayText: string = '';
+  infoOverlayTitle: string = '';
   textLoading: Boolean = true;
   tocItems?: any;
   intervalTimerId: ReturnType<typeof setInterval> | undefined;

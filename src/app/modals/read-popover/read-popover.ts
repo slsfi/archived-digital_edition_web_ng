@@ -76,8 +76,7 @@ export class ReadPopoverPage {
   }
 
   toggleAll( e: any ) {
-    console.log(e);
-    if ( e.detail.checked === true ) {
+    if (e.detail.checked === true) {
       if (this.readToggles.comments) {
         this.show.comments = true;
       }

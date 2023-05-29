@@ -45,8 +45,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   infoOverlayPosType: string;
   infoOverlayPosition: any;
   infoOverlayWidth: string | null;
-  infoOverlayText: string;
-  infoOverlayTitle: string;
+  infoOverlayText: string = '';
+  infoOverlayTitle: string = '';
   userIsTouching: Boolean = false;
   collectionAndPublicationLegacyId: string = '';
   illustrationsViewShown: Boolean = false;

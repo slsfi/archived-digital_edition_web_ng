@@ -27,25 +27,47 @@
 </ion-header>
 
 <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()">
+
   <div class="scroll-content-container">
-    <div [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')" [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}" [innerHTML]="toolTipText"></div>
-    <div [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')" [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}">
+
+    <!-- Tooltip wrapper -->
+    <div
+      [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':
+            (readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+      [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+      [innerHTML]="toolTipText"
+    ></div>
+    
+    <!-- Info overlay wrapper -->
+    <div
+      [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':
+            (readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+      [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+    >
       <div class="infoOverlayHeader">
         <h6 class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></h6>
         <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()"></ion-icon>
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText"></div>
     </div>
+    
+    <!-- Loading spinner -->
     <ion-spinner *ngIf="textLoading" class="loading" name="crescent"></ion-spinner>
+    
+    <!-- Introduction text wrapper -->
     <div class="tei teiContainer"
       [class.show_personInfo]="readPopoverService.show.personInfo && readPopoverTogglesIntro.personInfo"
       [class.show_placeInfo]="readPopoverService.show.placeInfo && readPopoverTogglesIntro.placeInfo"
       [class.show_workInfo]="readPopoverService.show.workInfo && readPopoverTogglesIntro.workInfo"
       [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering && readPopoverTogglesIntro.paragraphNumbering"
       [class.show_pageBreakEdition]="readPopoverService.show.pageBreakEdition && readPopoverTogglesIntro.pageBreakEdition"
-    [innerHTML]="text" [ngClass]="(hasSeparateIntroToc ? 'hideIntro' : '') + ' ' +
-    ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"></div>
+      [ngClass]="(hasSeparateIntroToc ? 'hideIntro' : '') + ' ' +
+            ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+      [innerHTML]="text"
+    ></div>
   </div>
+
+  <!-- Introduction table of contents -->
   <nav id="TOC" *ngIf="hasSeparateIntroToc && tocMenuOpen">
     <div *ngIf="!userSettingsService.isMobile()" id="toc-close-button" (click)="toggleTocMenu()">
       <ion-button class="close" fill="clear">
@@ -54,6 +76,7 @@
     </div>
     <div id="toc-text" [innerHTML]="textMenu"></div>
   </nav>
+
 </ion-content>
 
 <text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-introduction'" class="text-changer-mobile-mode"></text-changer>
