@@ -22,8 +22,8 @@ export class Facsimile {
   constructor(facsimileInfo: any) {
     this.id = facsimileInfo.id;
     this.zoom = 1;
-    this.page = facsimileInfo.start_page_number + facsimileInfo.page_nr;
-    this.page_nr = facsimileInfo.page_nr;
+    this.page = (facsimileInfo.start_page_number || 0) + (facsimileInfo.page_nr || 0);
+    this.page_nr = (facsimileInfo.page_nr || 0);
     this.pages = facsimileInfo.pages;
     this.pre_page_count = facsimileInfo.start_page_number;
     this.type = facsimileInfo.type;

@@ -59,7 +59,7 @@ export class FacsimilesComponent implements OnInit {
   }
 
   loadFacsimiles() {
-    this.facsimileService.getFacsimilePage(this.textItemID).subscribe({
+    this.facsimileService.getFacsimiles(this.textItemID).subscribe({
       next: (facs) => {
         if (facs && facs.length > 0) {
           const sectionId = this.textItemID.split('_')[2]?.split(';')[0]?.replace('ch', '') || '';
