@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
-import { filter } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
+import { filter } from "rxjs/operators";
 import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 import { UserSettingsService } from './services/settings/user-settings.service';
 
@@ -12,6 +12,7 @@ import { UserSettingsService } from './services/settings/user-settings.service';
   styleUrls: ['app.component.scss'],
 })
 export class DigitalEditionsApp implements OnInit {
+  appIsStarting: boolean = true;
   collectionID: string = '';
   collectionSideMenuInitialUrlSegments: UrlSegment[];
   collectionSideMenuInitialQueryParams: Params;
@@ -26,10 +27,14 @@ export class DigitalEditionsApp implements OnInit {
     private title: Title,
     private commonFunctions: CommonFunctionsService,
     private userSettingsService: UserSettingsService
-  ) {}
+  ) {
+    // Side menu is shown by default in desktop mode but not in mobile mode.
+    this.userSettingsService.isDesktop() ? this.showSideNav = true : this.showSideNav = false;
+  }
 
   ngOnInit() {
     this.title.setTitle($localize`:@@Site.Title:Webbplatsens titel`);
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe({
@@ -39,8 +44,7 @@ export class DigitalEditionsApp implements OnInit {
         const currentUrlTree: UrlTree = this.router.parseUrl(event.url);
         const currentUrlSegments: UrlSegment[] = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
 
-        // Check if a collection-page in order to show collection side menu instead of
-        // main side menu.
+        // Check if a collection-page in order to show collection side menu instead of main side menu.
         if (currentUrlSegments && currentUrlSegments[0]?.path === 'collection') {
           this.collectionID = currentUrlSegments[1]?.path || '';
           this.collectionSideMenuInitialUrlSegments = currentUrlSegments;
@@ -55,13 +59,25 @@ export class DigitalEditionsApp implements OnInit {
           this.showCollectionSideMenu = false;
         }
 
-        // Hide side menu after navigation event in mobile mode if navigating to a new url
-        // (queryParams not taken into account).
+        // Hide side menu:
+        // 1. After navigation event in mobile mode if navigating to a new url (queryParams not taken into account).
+        // 2. App is starting on the home page in desktop mode.
         if (
-          this.userSettingsService.isMobile() &&
-          this.currentRouterUrl.split('?')[0] !== this.previousRouterUrl.split('?')[0]
+          (
+            this.userSettingsService.isMobile() &&
+            this.currentRouterUrl.split('?')[0] !== this.previousRouterUrl.split('?')[0]
+          ) ||
+          (
+            this.appIsStarting &&
+            !currentUrlSegments &&
+            this.userSettingsService.isDesktop()
+          )
         ) {
           this.showSideNav = false;
+        }
+
+        if (this.appIsStarting) {
+          this.appIsStarting = false;
         }
 
         this.setTitleForDefaultPages(currentUrlSegments && currentUrlSegments[0]?.path || '');
