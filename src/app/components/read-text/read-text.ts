@@ -220,7 +220,7 @@ export class ReadTextComponent {
       component: IllustrationPage,
       componentProps: { 'imageNumber': imageNumber }
     });
-    return await modal.present();
+    modal.present();
   }
 
   scrollToTextPosition() {

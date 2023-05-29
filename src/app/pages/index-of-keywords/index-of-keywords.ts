@@ -176,7 +176,7 @@ export class IndexOfKeywordsPage implements OnInit {
         }
       });
 
-      return await occurrenceModal.present();
+      occurrenceModal.present();
     }
   }
 
@@ -226,7 +226,7 @@ export class IndexOfKeywordsPage implements OnInit {
         this.getTags();
       }
     });
-    return await filterModal.present();
+    filterModal.present();
   }
 
   getMdContent(fileID: string): Observable<SafeHtml> {

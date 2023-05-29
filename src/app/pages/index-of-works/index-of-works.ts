@@ -244,7 +244,7 @@ export class IndexOfWorksPage implements OnInit {
         }
       });
 
-      return await occurrenceModal.present();
+      occurrenceModal.present();
     }
   }
 
@@ -330,7 +330,7 @@ export class IndexOfWorksPage implements OnInit {
         }
       }
     });
-    return await filterModal.present();
+    filterModal.present();
   }
 
   getSubjectsOccurrencesByCollection(filterCollections: any, callback: any) {

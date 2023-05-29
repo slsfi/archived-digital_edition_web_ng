@@ -176,7 +176,7 @@ export class IndexOfPlacesPage implements OnInit {
         }
       });
 
-      return await occurrenceModal.present();
+      occurrenceModal.present();
     }
   }
 
@@ -228,7 +228,7 @@ export class IndexOfPlacesPage implements OnInit {
         this.getPlaces();
       }
     });
-    return await filterModal.present();
+    filterModal.present();
   }
 
   getMdContent(fileID: string): Observable<SafeHtml> {

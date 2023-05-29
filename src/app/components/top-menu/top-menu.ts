@@ -131,7 +131,7 @@ export class TopMenuComponent {
         origin: 'top-menu',
       }
     });
-    return await modal.present();
+    modal.present();
   }
 
 }

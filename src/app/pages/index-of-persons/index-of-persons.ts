@@ -210,7 +210,7 @@ export class IndexOfPersonsPage implements OnInit {
         this.getPersons();
       }
     });
-    return await filterModal.present();
+    filterModal.present();
   }
 
   showAll() {
@@ -274,7 +274,7 @@ export class IndexOfPersonsPage implements OnInit {
         }
       });
 
-      return await occurrenceModal.present();
+      occurrenceModal.present();
     }
   }
 

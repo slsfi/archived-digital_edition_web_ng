@@ -144,7 +144,7 @@ export class CollectionTitlePage implements OnInit {
       side: 'bottom',
       alignment: 'end'
     })
-    return await popover.present(event);
+    popover.present(event);
   }
 
   public async showReference() {
@@ -153,7 +153,7 @@ export class CollectionTitlePage implements OnInit {
       component: ReferenceDataModalPage,
       componentProps: {id: this.document.URL, type: 'reference', origin: 'page-title'}
     });
-    return await modal.present();
+    modal.present();
   }
 
   printMainContentClasses() {

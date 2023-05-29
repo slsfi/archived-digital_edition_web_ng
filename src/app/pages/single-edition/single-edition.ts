@@ -243,7 +243,7 @@ export class SingleEditionPage {
     const popover = await this.popoverCtrl.create({
       component: ReadPopoverPage,
     });
-    return await popover.present(myEvent);
+    popover.present(myEvent);
   }
 
   openFirstPage() {

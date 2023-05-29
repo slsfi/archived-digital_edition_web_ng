@@ -93,7 +93,7 @@ export class CollectionForewordPage implements OnInit {
       side: 'bottom',
       alignment: 'end'
     });
-    return await popover.present(event);
+    popover.present(event);
   }
 
   public async showReference() {
@@ -102,7 +102,7 @@ export class CollectionForewordPage implements OnInit {
       component: ReferenceDataModalPage,
       componentProps: {id: document.URL, type: 'reference', origin: 'page-foreword'},
     });
-    return await modal.present();
+    modal.present();
   }
 
   printMainContentClasses() {

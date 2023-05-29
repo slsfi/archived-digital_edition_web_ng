@@ -432,6 +432,6 @@ export class MediaCollectionPage {
       component: ReferenceDataModalPage,
       componentProps: {id: document.URL, type: 'reference', origin: 'media-collection'}
     });
-    return await modal.present();
+    modal.present();
   }
 }

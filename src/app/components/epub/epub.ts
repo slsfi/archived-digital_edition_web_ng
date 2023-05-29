@@ -537,7 +537,7 @@ export class EpubComponent {
       side: 'bottom',
       alignment: 'end'
     });
-    return await popover.present(event);
+    popover.present(event);
   }
 
   downloadEpub() {
@@ -749,6 +749,6 @@ export class EpubComponent {
       component: ReferenceDataModalPage,
       componentProps: {id: document.URL, type: 'reference', origin: 'page-ebook'}
     });
-    return await modal.present();
+    modal.present();
   }
 }
