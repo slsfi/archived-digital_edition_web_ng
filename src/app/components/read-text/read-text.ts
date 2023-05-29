@@ -17,13 +17,12 @@ import { isBrowser } from 'src/standalone/utility-functions';
   styleUrls: ['read-text.scss']
 })
 export class ReadTextComponent {
-
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
   @Input() searchMatches: Array<string> = [];
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
 
-  public text: any;
+  text: any;
   textLanguage: string = '';
   illustrationsVisibleInReadtext: boolean = false;
   illustrationsViewAvailable: boolean = false;

@@ -1,5 +1,9 @@
 <ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
-<div class="tei teiContainer" [MathJax]="text" [attr.lang]="textLanguage ? textLanguage : null"
+<div
+  [innerHTML]="text"
+  [MathJax]="text"
+  [attr.lang]="textLanguage ? textLanguage : null"
+  class="tei teiContainer"
   [class.show_comments]="readPopoverService.show.comments"
   [class.show_personInfo]="readPopoverService.show.personInfo"
   [class.show_placeInfo]="readPopoverService.show.placeInfo"
