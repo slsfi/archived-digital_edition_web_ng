@@ -12,9 +12,9 @@ import { isBrowser } from 'src/standalone/utility-functions';
   styleUrls: ['top-menu.scss']
 })
 export class TopMenuComponent {
-  @Input() showSideMenu: boolean = false;
+  @Input() showSideNav: boolean = false;
   @Input() currentRouterUrl: string = '';
-  @Output() sideMenuClick = new EventEmitter();
+  @Output() sideNavClick = new EventEmitter();
 
   public showLanguageButton: boolean;
   public showTopURNButton: boolean;
@@ -81,7 +81,7 @@ export class TopMenuComponent {
 
   public toggleSideMenu(event: any) {
     event.preventDefault();
-    this.sideMenuClick.emit();
+    this.sideNavClick.emit();
   }
 
   public toggleLanguageMenu(event: any) {

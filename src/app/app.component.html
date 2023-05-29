@@ -2,16 +2,16 @@
 
   <header>
     <nav class="top-navigation">
-      <top-menu (sideMenuClick)="toggleSideMenu()" [showSideMenu]="showSideMenu" [currentRouterUrl]="currentRouterUrl"></top-menu>
+      <top-menu (sideNavClick)="toggleSideNav()" [showSideNav]="showSideNav" [currentRouterUrl]="currentRouterUrl"></top-menu>
     </nav>
   </header>
   <div class="content-container">
-    <nav id="side-menu" class="side-navigation" [class.visuallyhidden]="!showSideMenu">
-      <main-side-menu [class.visuallyhidden]="showCollectionSideMenu"></main-side-menu>
+    <nav id="side-navigation" class="side-navigation" [class.visuallyhidden]="!showSideNav">
+      <main-side-menu *ngIf="mountMainSideMenu" [class.visuallyhidden]="showCollectionSideMenu"></main-side-menu>
       <collection-side-menu *ngIf="showCollectionSideMenu"
         [collectionID]="collectionID"
-        [initialQueryParams]="initialQueryParams"
-        [initialUrlSegments]="initialUrlSegments">
+        [initialQueryParams]="collectionSideMenuInitialQueryParams"
+        [initialUrlSegments]="collectionSideMenuInitialUrlSegments">
       </collection-side-menu>
     </nav>
     <div class="main-content">

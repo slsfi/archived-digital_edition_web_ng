@@ -3,11 +3,11 @@
     <button (click)="toggleSideMenu($event)"
           type="button"
           aria-haspopup="menu"
-          [attr.aria-expanded]="showSideMenu"
-          aria-controls="side-menu"
+          [attr.aria-expanded]="showSideNav"
+          aria-controls="side-navigation"
     >
-      <ion-icon [class.visuallyhidden]="showSideMenu" name="menu-sharp"></ion-icon>
-      <ion-icon [class.visuallyhidden]="!showSideMenu" name="close-sharp"></ion-icon>
+      <ion-icon [class.visuallyhidden]="showSideNav" name="menu-sharp"></ion-icon>
+      <ion-icon [class.visuallyhidden]="!showSideNav" name="close-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Menu">Meny</span>
     </button>
   </li>
