@@ -1,5 +1,8 @@
 type Config = { [key: string]: any }
 
+/**
+ * Default config, currently the one for topelius.sls.fi.
+ */
 export const config: Config = {
   app: {
     machineName: "topelius",
@@ -15,6 +18,7 @@ export const config: Config = {
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
     },
+    enableCollectionLegacyIDs: true
   },
   collections: {
     order: [
@@ -1003,14 +1007,342 @@ export const config_soderholm: Config = {
 }
 
 /**
+ * This is the config for vonwright.sls.fi, here only for testing purposes.
+ */
+export const config_vonWright: Config = {
+  app: {
+    machineName: "vonwright",
+    projectId: 6,
+    apiEndpoint: "https://api.sls.fi/digitaledition",
+    simpleApi: '',
+    i18n: {
+      languages: [
+        { code: "sv", label: "Svenska" }
+      ],
+      enableLanguageChanges: false,
+      multilingualCollectionTableOfContents: false,
+      multilingualReadingTextLanguages: []
+    },
+  },
+  collections: {
+    order: [
+      [146, 225]
+    ],
+    firstReadItem: {
+      146: "", 225: ""
+    },
+    enableMathJax: true
+  },
+  page: {
+    about: {
+      markdownFolderNumber: "03",
+      initialPageNode: "01-01"
+    },
+    home: {
+      imageOrientationIsPortrait: false,
+      imageOnRightIfPortrait: false,
+      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
+      imageUrl: "assets/images/frontpage-image-landscape.jpg",
+      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
+      portraitImageAltText: "Svartvitt fotografi av Georg Henrik von Wright 1950",
+      showEditionList: false,
+      showFooter: false
+    },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    introduction: {
+      hasSeparateTOC: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    mediaCollection: {
+      showURNButton: true
+    },
+    read: {
+      showURNButton: true,
+      showViewOptionsButton: true,
+      viewTypeSettings: {
+        showAll: true,
+        established: true,
+        comments: true,
+        manuscripts: false,
+        variations: false,
+        facsimiles: true,
+        illustrations: false,
+        legend: false
+      }
+    },
+    title: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    }
+  },
+  component: {
+    topMenu: {
+      showAboutButton: true,
+      showContentButton: true,
+      showElasticSearchButton: true,
+      showURNButton: false,
+      showLanguageButton: false,
+      showSiteLogo: true,
+      siteLogoDefaultImageUrl: "assets/images/logo.svg",
+      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
+      siteLogoLinkUrl: "https://www.sls.fi/"
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
+    facsimileColumn: {
+      imageQuality: 4,
+      showFacsimileTitle: false
+    }
+  },
+  modal: {
+    fullscreenImageViewer: {
+      imageQuality: 4
+    }
+  },
+  urnResolverUrl: "https://urn.fi/",
+  useSimpleWorkMetadata: false,
+  showOpenLegendButton: {
+    manuscripts: false,
+    variations: false
+  },
+  settings: {
+    disableReadToggles: false,
+    readToggles: {
+      comments: true,
+      personInfo: true,
+      placeInfo: true,
+      changes: true,
+      normalisations: true,
+      workInfo: true,
+      abbreviations: false,
+      paragraphNumbering: true,
+      pageBreakOriginal: true,
+      pageBreakEdition: false
+    },
+    introToggles: {
+      personInfo: false,
+      placeInfo: false,
+      workInfo: false,
+      paragraphNumbering: true,
+      pageBreakEdition: false
+    },
+    toolTips: {
+      comments: true,
+      personInfo: true,
+      placeInfo: true,
+      changes: true,
+      normalisations: true,
+      variations: false,
+      abbreviations: false,
+      workInfo: true,
+      footNotes: true
+    },
+    enableModeToggle: true,
+    galleryCollectionMapping: { "225": 46 },
+    showReadTextIllustrations: []
+  },
+  collectionDownloads: {
+    isDownloadOnly: false,
+    pdf: {},
+    epub: {}
+  },
+  textDownloadOptions: {
+    enabledIntroductionFormats: {
+        xml: true,
+        print: true
+    },
+    enabledEstablishedFormats: {
+        xml: true,
+        txt: false,
+        print: true
+    },
+    enabledCommentsFormats: {
+        xml: true,
+        txt: false,
+        print: true
+    },
+    usePrintNotDownloadIcon: false
+  },
+  simpleSearch: {
+    showPageNumbers: false,
+    user_defined_search_fields: ["textData"]
+  },
+  editionImages: {
+    default: "assets/images/edition-default-cover.jpg",
+    146: "assets/images/omslag_146.jpg",
+    225: "assets/images/omslag_225_omwittgenstein.jpg"
+  },
+  show: {
+    TOC: {
+      Home: false,
+      About: true,
+      Read: true,
+      Facsimiles: false,
+      ImageGallery: false,
+      PersonSearch: true,
+      PlaceSearch: true,
+      MediaCollections: false,
+      TagSearch: true,
+      WorkSearch: true,
+      Books: false,
+      EPUB: false
+    },
+    highlightedSearchMatches: true
+  },
+  defaults: {
+    ReadModeView: ["established", "comments"]
+  },
+  defaultSelectedItem: "cover",
+  cache: {
+    viewmodes: {
+      daysUntilExpires: 1
+    }
+  },
+  PersonSearchTypes: [{
+    object_type: "subject",
+    object_subtype: "",
+    translation: "TOC.PersonSearch"
+  }],
+  PersonSearch: {
+    ShowFilter: true,
+    ShowPublishedStatus: 2,
+    InitialLoadNumber: 500
+  },
+  LocationSearch: {
+    ShowFilter: false,
+    ShowPublishedStatus: 2,
+    InitialLoadNumber: 500
+  },
+  TagSearch: {
+    ShowFilter: false,
+    ShowPublishedStatus: 2
+  },
+  Occurrences: {
+    HideTypeAndDescription: true,
+    hideCityRegionCountry: true,
+    ShowPublishedStatus: 2
+  },
+  ProjectStaticMarkdownCoversFolder: "08",
+  ProjectStaticMarkdownTitleFolder: "",
+  showOccurencesModalOnReadPageAfterSearch: {
+    tagSearch: true,
+    personSearch: true,
+    placeSearch: true,
+    workSearch: true
+  },
+  SortCollectionsByRomanNumerals: false,
+  OpenCollectionFromToc: true,
+  SearchTocItemInAccordionByTitle: false,
+  HasCover: true,
+  HasTitle: true,
+  HasForeword: false,
+  HasIntro: true,
+  OpenOccurrencesAndInfoOnNewPage: false,
+  SingleOccurrenceType: null,
+  ElasticSearch: {
+    show: {
+      sortOptions: false,
+      facets: true
+    },
+    textTitleHighlightType: "fvh",
+    textHighlightType: "fvh",
+    groupOpenByDefault: {
+      type: true,
+      collection: true
+    },
+    indices: [
+      "vonwright"
+    ],
+    fixedFilters: [
+      {
+        terms: {
+          deleted: [
+            "0"
+          ]
+        }
+      },
+      {
+        terms: {
+          published: [
+            "2"
+          ]
+        }
+      }
+    ],
+    hitsPerPage: 15,
+    source: [],
+    aggregations: {
+      Type: {
+        terms: {
+          field: "text_type",
+          size: 40
+        }
+      },
+      Collection: {
+        terms: {
+          field: "publication_data.collection_name.keyword",
+          size: 40
+        }
+      }
+    },
+    suggestions: {}
+  },
+  siteMetaData: {
+    keywords: "Den okände von Wright, Digital Edition, digital utgåva",
+    description: "Brevväxlingen med Eino Kaila 1937–1958 och skrifter om Wittgenstein 1936–2001",
+    website: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "vonwright.sls.fi",
+      alternateName: "Den okände von Wright",
+      url: "https://vonwright.sls.fi",
+      sameAs: ["vonwright.sls.fi", ""]
+    },
+    organization: {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      url:"https://vonwright.sls.fi",
+      logo:"https://vonwright.sls.fi/assets/images/logo.svg"
+    }
+  },
+  AvailableEpubs: [
+    {
+      title: "Dummy epub",
+      filename: "2685.epub",
+      download: "https://www.sls.fi/",
+      cover: ""
+    },
+    {
+      title: "Another dummy epub",
+      filename: "285.epub",
+      download: "https://www.sls.fi/",
+      cover: ""
+    }
+  ]
+}
+
+/**
  * This is the config for leomechelin.fi, here only for testing purposes.
  */
 export const config_mechelin: Config = {
   app: {
     machineName: "leomechelin",
     projectId: 1,
-    apiEndpoint: "https://api-dot-leomechelin.ew.r.appspot.com/digitaledition",
-    simpleApi: "https://leomechelin.fi/api",
+    apiEndpoint: "https://leomechelin.fi/api",
+    simpleApi: "",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     i18n: {
       languages: [
