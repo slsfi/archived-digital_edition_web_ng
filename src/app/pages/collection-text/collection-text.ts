@@ -48,7 +48,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   infoOverlayText: string;
   infoOverlayTitle: string;
   userIsTouching: Boolean = false;
-  collectionAndPublicationLegacyId?: string;
+  collectionAndPublicationLegacyId: string = '';
   illustrationsViewShown: Boolean = false;
   simpleWorkMetadata?: Boolean;
   showURNButton: Boolean;
@@ -257,7 +257,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.paramCollectionID = params['collectionID'];
         this.paramPublicationID = params['publicationID'];
 
-        this.setCollectionAndPublicationLegacyId();
+        if (config.app?.enableCollectionLegacyIDs) {
+          this.setCollectionAndPublicationLegacyId(this.paramPublicationID);
+        }
       },
       error: (e) => {},
       complete: () => {}
@@ -373,7 +375,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         }
       });
 
-      return await occurrenceModal.present();
+      occurrenceModal.present();
     }
   }
 
@@ -956,7 +958,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               }
 
               let legacyPageId = this.collectionAndPublicationLegacyId;
-              if (this.paramChapterID) {
+              if (legacyPageId && this.paramChapterID) {
                 legacyPageId += '_' + this.paramChapterID;
               }
 
@@ -1846,7 +1848,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id: id, type: 'subject' }
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showPlaceModal(id: string) {
@@ -1854,7 +1856,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id: id, type: 'location' }
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showWorkModal(id: string) {
@@ -1862,7 +1864,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       component: OccurrencesPage,
       componentProps: { id: id, type: 'work' }
     });
-    return await modal.present();
+    modal.present();
   }
 
   async showPopover(event: any) {
@@ -1873,7 +1875,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       side: 'bottom',
       alignment: 'end'
     });
-    return await popover.present(event);
+    popover.present(event);
   }
 
   async showReference() {
@@ -2109,8 +2111,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  setCollectionAndPublicationLegacyId() {
-    this.textService.getLegacyIdByPublicationId(this.paramPublicationID).subscribe({
+  setCollectionAndPublicationLegacyId(publicationID: string) {
+    this.textService.getLegacyIdByPublicationId(publicationID).subscribe({
       next: (publication) => {
         this.collectionAndPublicationLegacyId = '';
         if (publication[0].legacy_id) {

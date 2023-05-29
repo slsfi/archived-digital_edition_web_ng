@@ -60,7 +60,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   tocItems?: any;
   intervalTimerId: ReturnType<typeof setInterval> | undefined;
   userIsTouching: Boolean = false;
-  collectionLegacyId?: string;
+  collectionLegacyId: string = '';
   simpleWorkMetadata?: Boolean;
   showTextDownloadButton: Boolean = false;
   usePrintNotDownloadIcon: Boolean = false;
@@ -193,7 +193,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       if (routeParams['collectionID']) {
         if (routeParams['collectionID'] !== this.id) {
           this.id = routeParams['collectionID'];
-          this.setCollectionLegacyId(this.id);
+          if (config.app?.enableCollectionLegacyIDs) {
+            this.setCollectionLegacyId(this.id);
+          }
           this.loadIntroduction(this.activeLocale, this.id);
         } else {
           // Try to scroll to a position in the text
