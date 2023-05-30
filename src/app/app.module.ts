@@ -5,7 +5,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { DigitalEditionsApp } from './app.component';
 import { EventsService } from './services/events/events.service';
@@ -52,7 +51,6 @@ import { ReadPopoverPage } from './modals/read-popover/read-popover';
     ),
     AppRoutingModule,
     HttpClientModule,
-    IonicStorageModule.forRoot(),
     CommonModule,
     ComponentsModule,
     PipesModule,
