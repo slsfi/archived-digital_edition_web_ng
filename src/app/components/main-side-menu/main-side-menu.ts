@@ -1,7 +1,6 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { NavigationEnd, PRIMARY_OUTLET, Router } from "@angular/router";
-import { filter } from 'rxjs/operators';
+import { UrlSegment } from "@angular/router";
 import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { DigitalEditionListService } from "src/app/services/toc/digital-edition-list.service";
 import { GalleryService } from "src/app/services/gallery/gallery.service";
@@ -14,8 +13,9 @@ import { config } from "src/assets/config/config";
   templateUrl: './main-side-menu.html',
   styleUrls: ['./main-side-menu.scss'],
 })
+export class MainSideMenu implements OnInit, OnChanges {
+  @Input() urlSegments: UrlSegment[] = [];
 
-export class MainSideMenu implements OnInit {
   _config = config;
   aboutPagesLoaded: boolean = false;
   aboutPagesMenu: {
@@ -26,10 +26,16 @@ export class MainSideMenu implements OnInit {
   collectionsLoaded: boolean = false;
   collectionsList: any[] = [];
   epubsList: any[] = [];
+  menuItemsWithSubOptions: string[] = [
+    'about',
+    'collection',
+    'ebook',
+    'media-collection'
+  ];
   mediaCollectionsLoaded: boolean = false;
   mediaCollectionsList: any[] = [];
   selectedMenu: string[] = [];
-  urlRootSegment: string;
+  urlRootSegment: string = '';
 
   constructor(
     private commonFunctions: CommonFunctionsService,
@@ -37,7 +43,6 @@ export class MainSideMenu implements OnInit {
     public titleService: Title,
     public digitalEditionListService: DigitalEditionListService,
     private galleryService: GalleryService,
-    private router: Router,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.aboutPagesRootNodeID = this._config.page?.about?.markdownFolderNumber ?? '03';
@@ -54,31 +59,33 @@ export class MainSideMenu implements OnInit {
     this.getAboutPages();
     this.getCollectionList();
     this.getMediaCollectionsList();
+  }
 
-    const menuArray = [
-      '/about',
-      '/collection',
-      '/epub',
-      '/media-collection',
-      '/person-search',
-      '/places',
-      '/tags',
-      '/works'
-    ];
-
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      const urlPrimaryOutlet = this.router.parseUrl(event.url).root.children[PRIMARY_OUTLET];
-      this.urlRootSegment = urlPrimaryOutlet ? urlPrimaryOutlet.segments[0].path : ''
-      let initialSelectedMenu = menuArray.find(item => event.url.includes(item)) || '/';
-      if (initialSelectedMenu === '/collection') {
-        const collectionId = (event as any).url.split('/')[2];
-        const index = this._config.collections.order.findIndex((item: any[]) => item.includes(Number(collectionId)));
-        initialSelectedMenu += index;
-      }
-      !this.selectedMenu.includes(initialSelectedMenu) && this.selectedMenu.push(initialSelectedMenu);
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    // Check if url root segment has changed or if collection-page collection ID has changed
+    // and update selected menu.
+    if (
+      changes.urlSegments.firstChange ||
+      (
+        changes.urlSegments.previousValue && !changes.urlSegments.currentValue
+      ) ||
+      (
+        !changes.urlSegments.previousValue && changes.urlSegments.currentValue
+      ) ||
+      (
+        changes.urlSegments.previousValue &&
+        changes.urlSegments.currentValue &&
+        (
+          changes.urlSegments.previousValue[0]?.path !== changes.urlSegments.currentValue[0]?.path ||
+          (
+            changes.urlSegments.previousValue[0]?.path === 'collection' &&
+            changes.urlSegments.previousValue[1]?.path !== changes.urlSegments.currentValue[1]?.path
+          )
+        )
+      )
+    ) {
+      this.updateSelectedMenu();
+    }
   }
 
   getAboutPages() {
@@ -89,6 +96,7 @@ export class MainSideMenu implements OnInit {
           this.aboutPagesLoaded = true;
         },
         error: (e: any) => {
+          console.error(e);
           this.aboutPagesMenu = { title: '' };
           this.aboutPagesLoaded = true;
         }
@@ -105,6 +113,7 @@ export class MainSideMenu implements OnInit {
         this.collectionsLoaded = true;
       },
       error: (e: any) => {
+        console.error(e);
         this.collectionsList = [];
         this.collectionsLoaded = true;
       }
@@ -123,6 +132,7 @@ export class MainSideMenu implements OnInit {
           this.mediaCollectionsLoaded = true;
         },
         error: (e: any) => {
+          console.error(e);
           this.mediaCollectionsList = [];
           this.mediaCollectionsLoaded = true;
         }
@@ -150,6 +160,19 @@ export class MainSideMenu implements OnInit {
     } else {
       return collections;
     }
+  }
+
+  private updateSelectedMenu() {
+    this.urlRootSegment = this.urlSegments && this.urlSegments[0]?.path || '';
+    let currentSelectedMenu = this.menuItemsWithSubOptions.find(item => item === this.urlRootSegment) || '';
+
+    if (currentSelectedMenu === 'collection') {
+      const collectionId = this.urlSegments[1]?.path || '';
+      const index = this._config.collections.order.findIndex((collectionSet: number[]) => collectionSet.includes(Number(collectionId)));
+      currentSelectedMenu += index;
+    }
+
+    currentSelectedMenu && !this.selectedMenu.includes(currentSelectedMenu) && this.selectedMenu.push(currentSelectedMenu);
   }
 
   toggleAccordion(value: string) {

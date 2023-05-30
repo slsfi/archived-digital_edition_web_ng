@@ -7,12 +7,15 @@
   </header>
   <div class="content-container">
     <nav id="side-navigation" class="side-navigation" [class.visuallyhidden]="!showSideNav">
-      <main-side-menu *ngIf="mountMainSideMenu" [class.visuallyhidden]="showCollectionSideMenu"></main-side-menu>
+      <main-side-menu *ngIf="mountMainSideMenu"
+            [class.visuallyhidden]="showCollectionSideMenu"
+            [urlSegments]="currentUrlSegments"
+      ></main-side-menu>
       <collection-side-menu *ngIf="showCollectionSideMenu"
-        [collectionID]="collectionID"
-        [initialQueryParams]="collectionSideMenuInitialQueryParams"
-        [initialUrlSegments]="collectionSideMenuInitialUrlSegments">
-      </collection-side-menu>
+            [collectionID]="collectionID"
+            [initialQueryParams]="collectionSideMenuInitialQueryParams"
+            [initialUrlSegments]="collectionSideMenuInitialUrlSegments"
+      ></collection-side-menu>
     </nav>
     <div class="main-content">
       <ion-router-outlet [animated]="false"></ion-router-outlet>

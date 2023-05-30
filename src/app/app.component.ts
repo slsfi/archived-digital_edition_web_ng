@@ -17,6 +17,7 @@ export class DigitalEditionsApp implements OnInit {
   collectionSideMenuInitialUrlSegments: UrlSegment[];
   collectionSideMenuInitialQueryParams: Params;
   currentRouterUrl: string = '';
+  currentUrlSegments: UrlSegment[] = [];
   mountMainSideMenu: boolean = false;
   previousRouterUrl: string = '';
   showCollectionSideMenu: boolean = false;
@@ -42,12 +43,12 @@ export class DigitalEditionsApp implements OnInit {
         this.previousRouterUrl = this.currentRouterUrl;
         this.currentRouterUrl = event.url;
         const currentUrlTree: UrlTree = this.router.parseUrl(event.url);
-        const currentUrlSegments: UrlSegment[] = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
+        this.currentUrlSegments = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
 
         // Check if a collection-page in order to show collection side menu instead of main side menu.
-        if (currentUrlSegments && currentUrlSegments[0]?.path === 'collection') {
-          this.collectionID = currentUrlSegments[1]?.path || '';
-          this.collectionSideMenuInitialUrlSegments = currentUrlSegments;
+        if (this.currentUrlSegments && this.currentUrlSegments[0]?.path === 'collection') {
+          this.collectionID = this.currentUrlSegments[1]?.path || '';
+          this.collectionSideMenuInitialUrlSegments = this.currentUrlSegments;
           this.collectionSideMenuInitialQueryParams = currentUrlTree?.queryParams;
           this.showCollectionSideMenu = true;
         } else {
@@ -69,7 +70,7 @@ export class DigitalEditionsApp implements OnInit {
           ) ||
           (
             this.appIsStarting &&
-            !currentUrlSegments &&
+            !this.currentUrlSegments &&
             this.userSettingsService.isDesktop()
           )
         ) {
@@ -80,7 +81,7 @@ export class DigitalEditionsApp implements OnInit {
           this.appIsStarting = false;
         }
 
-        this.setTitleForDefaultPages(currentUrlSegments && currentUrlSegments[0]?.path || '');
+        this.setTitleForDefaultPages(this.currentUrlSegments && this.currentUrlSegments[0]?.path || '');
       }
     });
   }

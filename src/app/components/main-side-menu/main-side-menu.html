@@ -7,20 +7,20 @@
 
     <!-- About-pages -->
     <ng-container *ngIf="_config.show?.TOC?.About && aboutPagesMenu.children">
-      <li (click)="toggleAccordion('/about')"
-            (keyup.enter)="toggleAccordion('/about')"
+      <li (click)="toggleAccordion('about')"
+            (keyup.enter)="toggleAccordion('about')"
             role="menuitem"
             aria-haspopup="menu"
-            [attr.aria-expanded]="selectedMenu.includes('/about')"
+            [attr.aria-expanded]="selectedMenu.includes('about')"
             tabIndex="0"
       >
         <span>
           {{aboutPagesMenu.title}}
         </span>
-        <ion-icon [class.open]="selectedMenu.includes('/about')"
+        <ion-icon [class.open]="selectedMenu.includes('about')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li [class.open]="selectedMenu.includes('/about')"
+      <li [class.open]="selectedMenu.includes('about')"
           class="accordion-list" role="menuitem">
         <app-recursive-accordion
           [children]="aboutPagesMenu.children"
@@ -32,19 +32,19 @@
     <!-- Epubs -->
     <ng-container *ngIf="_config.show?.TOC?.EPUB">
       <li *ngIf="epubsList.length > 1"
-            (click)="toggleAccordion('/ebook')"
-            (keyup.enter)="toggleAccordion('/ebook')"
+            (click)="toggleAccordion('ebook')"
+            (keyup.enter)="toggleAccordion('ebook')"
             role="menuitem"
             aria-haspopup="menu"
-            [attr.aria-expanded]="selectedMenu.includes('/ebook')"
+            [attr.aria-expanded]="selectedMenu.includes('ebook')"
             tabIndex="0"
       >
         <span i18n="@@TOC.Ebooks">E-böcker</span>
-        <ion-icon [class.open]="selectedMenu.includes('/ebook')"
+        <ion-icon [class.open]="selectedMenu.includes('ebook')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
       <li *ngIf="epubsList.length"
-            [class.open]="selectedMenu.includes('/ebook')"
+            [class.open]="selectedMenu.includes('ebook')"
             [class.accordion-list]="epubsList.length > 1"
             [class.no-indent]="epubsList.length == 1"
             role="menuitem"
@@ -59,11 +59,11 @@
     <!-- Collections -->
     <ng-container *ngIf="_config.show?.TOC?.Read &&_config.collections.order">
       <ng-container *ngFor="let collection of collectionsList; let i = index">
-        <li (click)="toggleAccordion('/collection' + i)"
-              (keyup.enter)="toggleAccordion('/collection' + i)"
+        <li (click)="toggleAccordion('collection' + i)"
+              (keyup.enter)="toggleAccordion('collection' + i)"
               role="menuitem"
               aria-haspopup="menu"
-              [attr.aria-expanded]="selectedMenu.includes('/collection' + i)"
+              [attr.aria-expanded]="selectedMenu.includes('collection' + i)"
               tabIndex="0"
         >
           <span *ngIf="i == 0" i18n="@@TOC.Read">Innehåll</span>
@@ -71,10 +71,10 @@
           <span *ngIf="i == 2" i18n="@@TOC.Read2">Innehåll 3</span>
           <span *ngIf="i == 3" i18n="@@TOC.Read3">Innehåll 4</span>
           <span *ngIf="i == 4" i18n="@@TOC.Read4">Innehåll 5</span>
-          <ion-icon *ngIf="collection.length" [class.open]="selectedMenu.includes('/collection' + i)"
+          <ion-icon *ngIf="collection.length" [class.open]="selectedMenu.includes('collection' + i)"
                     name="chevron-forward-outline"></ion-icon>
         </li>
-        <li [class.open]="selectedMenu.includes('/collection' + i)" class="accordion-list" role="menuitem">
+        <li [class.open]="selectedMenu.includes('collection' + i)" class="accordion-list" role="menuitem">
           <app-recursive-accordion
             [children]="collection"
             [parentPath]="'/collection'">
@@ -85,18 +85,18 @@
 
     <!-- Media collections -->
     <ng-container *ngIf="_config.show?.TOC?.MediaCollections">
-      <li (click)="toggleAccordion('/media-collection')"
-            (keyup.enter)="toggleAccordion('/media-collection')"
+      <li (click)="toggleAccordion('media-collection')"
+            (keyup.enter)="toggleAccordion('media-collection')"
             role="menuitem"
             aria-haspopup="menu"
-            [attr.aria-expanded]="selectedMenu.includes('/media-collection')"
+            [attr.aria-expanded]="selectedMenu.includes('media-collection')"
             tabIndex="0"
       >
         <span i18n="@@TOC.MediaCollections">Bildbank</span>
-        <ion-icon [class.open]="selectedMenu.includes('/media-collection')"
+        <ion-icon [class.open]="selectedMenu.includes('media-collection')"
                   name="chevron-forward-outline"></ion-icon>
       </li>
-      <li *ngIf="mediaCollectionsList" [class.open]="selectedMenu.includes('/media-collection')"
+      <li *ngIf="mediaCollectionsList" [class.open]="selectedMenu.includes('media-collection')"
           class="accordion-list" role="menuitem">
         <app-recursive-accordion
           [children]="mediaCollectionsList"
