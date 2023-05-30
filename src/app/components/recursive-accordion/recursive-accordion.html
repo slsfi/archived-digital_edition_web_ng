@@ -2,7 +2,7 @@
   <ng-container *ngFor="let child of children; let i = index">
     <li (click)="toggleAccordion(child)"
           (keyup.enter)="toggleAccordion(child)"
-          [class.menu-highlight]="router.url.includes(parentPath) && router.url.includes(child.id) && !child.children"
+          [class.menu-highlight]="router.url.startsWith(parentPath) && (router.url.split('/').at(-1) || '').startsWith(child.id) && !child.children"
           class="mainMenuItem"
           role="menuitem"
           [attr.aria-haspopup]="!!child.children?.length ? 'menu' : null"
@@ -13,13 +13,19 @@
         <a *ngSwitchDefault routerLink="{{parentPath | initialPathGenerator: child.id}}">{{child.title}}</a>
         <span *ngSwitchCase="true">{{child.title}}</span>
       </ng-container>
-      <ion-icon *ngIf="child.children" [class.open]="selectedMenu.includes(child.id)"
-                name="chevron-forward-outline"></ion-icon>
+      <ion-icon *ngIf="child.children"
+            [class.open]="selectedMenu.includes(child.id)"
+            name="chevron-forward-outline"
+      ></ion-icon>
     </li>
-    <li *ngIf="child.children" [class.open]="selectedMenu.includes(child.id)" class="accordion-list" role="menuitem">
+    <li *ngIf="child.children"
+          [class.open]="selectedMenu.includes(child.id)"
+          class="accordion-list"
+          role="menuitem"
+    >
       <app-recursive-accordion
-        [children]="child.children"
-        [parentPath]="parentPath">
+            [children]="child.children"
+            [parentPath]="parentPath">
       </app-recursive-accordion>
     </li>
   </ng-container>
