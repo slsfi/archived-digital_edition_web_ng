@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
+import JsonURL from '@jsonurl/jsonurl';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
@@ -289,7 +290,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
         if (queryParams['views']) {
           // console.log('views in queryparams:', queryParams['views']);
-          const parsedViews = JSON.parse(queryParams['views']);
+          const parsedViews = JsonURL.parse(queryParams['views'], {
+            AQF: true,
+            impliedArray: []
+          });
+          // console.log('parsed views: ', parsedViews);
 
           let viewsChanged = false;
           if (this.views.length !== parsedViews.length) {
@@ -2018,7 +2023,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       [],
       {
         relativeTo: this.route,
-        queryParams: { views: JSON.stringify(views) },
+        queryParams: { views: JsonURL.stringify(views, { AQF: true, impliedArray: true }) },
         queryParamsHandling: 'merge',
         replaceUrl: true
       }
