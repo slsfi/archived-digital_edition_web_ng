@@ -51,7 +51,6 @@
               }
             ],
             "styles": [
-              "src/theme/variables.scss",
               "src/global.scss",
               "src/assets/custom_css/custom.scss"
             ],
@@ -182,8 +181,8 @@
               }
             ],
             "styles": [
-              "src/theme/variables.scss",
-              "src/global.scss"
+              "src/global.scss",
+              "src/assets/custom_css/custom.scss"
             ],
             "scripts": []
           },
