@@ -8,6 +8,7 @@ export class DigitalEdition {
   isDownload: boolean;
   expanded: boolean;
   isDownloadOnly?: boolean;
+  type: string;
 
   constructor(pubInfo: any) {
     this.title = pubInfo.title;
@@ -17,5 +18,6 @@ export class DigitalEdition {
     this.isDownload = pubInfo.isDownload;
     this.expanded = pubInfo.expanded;
     this.isDownloadOnly = pubInfo.isDownloadOnly || false;
+    this.type = pubInfo.type || (pubInfo.epub ? 'ebook' : null) || (pubInfo.pdf ? 'pdf' : null) || 'collection';
   }
 }

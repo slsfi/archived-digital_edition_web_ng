@@ -16,7 +16,7 @@ import { config } from "src/assets/config/config";
 })
 export class DigitalEditionList implements OnInit {
   errorMessage?: string;
-  digitalEditions?: any;
+  digitalEditions: DigitalEdition[] = [];
   digitalEditionsFirstHalf: any = [];
   digitalEditionsSecondHalf: any = [];
   projectMachineName: string;
@@ -59,7 +59,7 @@ export class DigitalEditionList implements OnInit {
     this.collectionSortOrder = config.collections?.order ?? [];
     this.hasMediaCollections = config.show?.TOC?.MediaCollections ?? false;
     this.galleryInReadMenu = config.ImageGallery?.ShowInReadMenu ?? false;
-    this.showEpubsInList = config.show?.epubsInDigitalEditionList ?? false;
+    this.showEpubsInList = config.show?.epubsInDigitalEditionList ?? true;
     this.availableEpubs = config.AvailableEpubs ?? [];
     this.pdfsAreDownloadOnly = config.collectionDownloads?.isDownloadOnly ?? false;
     this.hideBooks = config.show?.TOC?.Books ?? false;
@@ -80,12 +80,16 @@ export class DigitalEditionList implements OnInit {
     this.digitalEditionsSecondHalf = [];
     this.digitalEditionListService.getDigitalEditions().subscribe({
       next: (digitalEditions) => {
-        this.digitalEditions = digitalEditions;
+        for (const e of digitalEditions) {
+          const edition = new DigitalEdition(e);
+          this.digitalEditions.push(edition);
+        }
+
         if ( this.hasMediaCollections && this.galleryInReadMenu ) {
-          const mediaColl = new DigitalEdition({id: 'mediaCollections', title: 'media'});
+          const mediaColl = new DigitalEdition({id: 'mediaCollections', title: 'media', type: 'media-collection'});
           this.digitalEditions?.unshift(mediaColl);
         }
-        let de = digitalEditions;
+        let de = this.digitalEditions;
         this.setPDF(de);
         if (
           this.collectionSortOrder !== undefined &&
@@ -262,14 +266,12 @@ export class DigitalEditionList implements OnInit {
   }
 
   prependEpubsToDigitalEditions() {
-    const epubNames = Object.keys(this.availableEpubs);
-    const epubCollections: any = [];
-    epubNames.forEach(name => {
-      const epubFilename = this.availableEpubs[name as any]['filename'];
-      const epubColl = new DigitalEdition({id: epubFilename, title: name});
+    const epubCollections: any[] = [];
+    this.availableEpubs.forEach((epub: any) => {
+      const epubColl = new DigitalEdition({id: epub.filename, title: epub.title, type: 'ebook'});
       epubCollections.push(epubColl);
-      if (this.availableEpubs[name as any]['cover'] !== undefined) {
-        this.editionImages[epubFilename] = this.availableEpubs[name as any]['cover'];
+      if (epub.cover) {
+        this.editionImages[epub.filename] = epub.cover;
       }
     });
     this.digitalEditions = epubCollections.concat(this.digitalEditions);

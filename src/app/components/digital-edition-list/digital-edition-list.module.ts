@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from "@angular/router";
 import { IonicModule } from '@ionic/angular';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-list.service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { DigitalEditionList } from './digital-edition-list.component';
 
 @NgModule({
@@ -12,7 +13,8 @@ import { DigitalEditionList } from './digital-edition-list.component';
     IonicModule,
     CommonModule,
     FormsModule,
-    PipesModule
+    PipesModule,
+    RouterLink
   ],
   exports: [DigitalEditionList],
   providers: [DigitalEditionListService]
