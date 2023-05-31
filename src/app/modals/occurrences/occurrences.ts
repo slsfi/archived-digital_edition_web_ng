@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
-import leaflet from 'leaflet';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -232,7 +231,7 @@ export class OccurrencesPage {
   }
 
   ionViewDidEnter() {
-    this.loadmap();
+    // this.loadmap();
   }
 
   showFilters() {
@@ -244,6 +243,7 @@ export class OccurrencesPage {
   }
 
   loadmap() {
+    // Leaflet has been removed from the Angular 15-ported app
     /*try {
       const latlng = leaflet.latLng(this.latitude || 0, this.longitude || 0);
       this.map = leaflet.map('map', {
