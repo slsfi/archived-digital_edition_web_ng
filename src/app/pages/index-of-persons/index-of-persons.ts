@@ -4,7 +4,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -42,7 +41,8 @@ export class IndexOfPersonsPage implements OnInit {
 
   personSearchTypes = [] as any;
 
-  debouncedSearch = debounce(this.searchPersons, 500);
+  // debouncedSearch = debounce(this.searchPersons, 500); // lodash/debounce has been removed from dependencies. Implement with Ionic's debounce instead.
+  debouncedSearch = this.searchPersons;
 
   constructor(
               private sanitizer: DomSanitizer,

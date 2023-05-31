@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import debounce from 'lodash/debounce';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -39,7 +38,8 @@ export class IndexOfKeywordsPage implements OnInit {
   // tslint:disable-next-line:max-line-length
   alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
 
-  debouncedSearch = debounce(this.searchTags, 500);
+  // debouncedSearch = debounce(this.searchTags, 500); // lodash/debounce has been removed from dependencies. Implement with Ionic's debounce instead.
+  debouncedSearch = this.searchTags;
 
   constructor(
               private sanitizer: DomSanitizer,

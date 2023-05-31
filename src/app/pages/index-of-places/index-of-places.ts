@@ -5,7 +5,6 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import debounce from 'lodash/debounce';
 import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -39,7 +38,8 @@ export class IndexOfPlacesPage implements OnInit {
   // tslint:disable-next-line:max-line-length
   alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
 
-  debouncedSearch = debounce(this.searchPlaces, 500);
+  // debouncedSearch = debounce(this.searchPlaces, 500); // lodash/debounce has been removed from dependencies. Implement with Ionic's debounce instead.
+  debouncedSearch = this.searchPlaces;
 
   constructor(
               private sanitizer: DomSanitizer,

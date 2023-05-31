@@ -2,9 +2,6 @@ import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@ang
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
-import get from 'lodash/get';
-import debounce from 'lodash/debounce';
-import size from 'lodash/size';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -31,7 +28,6 @@ interface SearchOptions {
   styleUrls: ['elastic-search.scss']
 })
 export class ElasticSearchPage {
-
   @ViewChild(IonContent) content?: IonContent;
   @ViewChild('myInput') myInput?: any;
 
@@ -72,7 +68,7 @@ export class ElasticSearchPage {
 
   range?: TimeRange | null;
   groupsOpenByDefault: any;
-  debouncedSearch = debounce(this.search, 1500);
+  // debouncedSearch = debounce(this.search, 1500); // lodash/debounce has been removed from dependencies
   sortSelectOptions: Record<string, any> = {};
   mdContent$: Observable<SafeHtml>;
 
@@ -303,6 +299,7 @@ export class ElasticSearchPage {
   /**
    * Triggers a new search and clears suggested facets. DEPRECATED
    */
+  /*
   onQueryChange() {
     // this.autoExpandSearchfields();
     this.reset();
@@ -310,6 +307,7 @@ export class ElasticSearchPage {
     this.debouncedSearch();
     this.cf.detectChanges();
   }
+  */
 
   /**
    * Triggers a new search with selected facets.
@@ -501,7 +499,7 @@ export class ElasticSearchPage {
   }
 
   hasSelectedFacetsByGroup(groupKey: string) {
-    return size(this.selectedFacetGroups[groupKey]) > 0;
+    return (this.selectedFacetGroups[groupKey] ? Object.keys(this.selectedFacetGroups[groupKey]).length : 0) > 0;
   }
 
   hasSelectedNormalFacets() {
@@ -511,15 +509,17 @@ export class ElasticSearchPage {
   }
 
   hasFacets(facetGroupKey: string) {
-    return size(this.facetGroups[facetGroupKey]) > 0;
+    return (this.facetGroups[facetGroupKey] ? Object.keys(this.facetGroups[facetGroupKey]).length : 0) > 0;
   }
 
   hasSuggestedFacetsByGroup(groupKey: string) {
-    return size(this.suggestedFacetGroups[groupKey]) > 0;
+    return (this.suggestedFacetGroups[groupKey] ? Object.keys(this.suggestedFacetGroups[groupKey]).length : 0) > 0;
   }
 
   hasSuggestedFacets() {
-    return Object.values(this.suggestedFacetGroups).some(facets => size(facets) > 0);
+    return Object.values(this.suggestedFacetGroups).some(
+      (facets: Facets) => (facets ? Object.keys(facets).length : 0) > 0
+    );
   }
 
   getFacets(facetGroupKey: string): any {
@@ -584,7 +584,7 @@ export class ElasticSearchPage {
     }
 
     // Set or delete facet group from selected facet groups
-    if (size(facetGroup) === 0) {
+    if ((facetGroup ? Object.keys(facetGroup).length : 0) === 0) {
       delete this.selectedFacetGroups[facetGroupKey];
     } else {
       this.selectedFacetGroups[facetGroupKey] = facetGroup;
@@ -647,11 +647,11 @@ export class ElasticSearchPage {
   }
 
   getTextName(source: any) {
-    return get(source, 'text_title');
+    return source?.text_title;
   }
 
   getPublicationName(source: any) {
-    return get(source, 'publication_data[0].publication_name');
+    return source?.publication_data?.[0]?.publication_name;
   }
 
   getHiglightedTextName(highlight: any) {
@@ -671,7 +671,7 @@ export class ElasticSearchPage {
   }
 
   getPublicationCollectionName(source: any) {
-    return get(source, 'publication_data[0].collection_name');
+    return source?.publication_data?.[0]?.collection_name;
   }
 
   // Returns the title from the xml title element in the teiHeader
@@ -680,7 +680,7 @@ export class ElasticSearchPage {
   }
 
   getGenre(source: any) {
-    return get(source, 'publication_data[0].genre');
+    return source?.publication_data?.[0]?.genre;
   }
 
   private formatISO8601DateToLocale(date: string) {
@@ -688,7 +688,7 @@ export class ElasticSearchPage {
   }
 
   hasDate(source: any) {
-    const dateData = get(source, 'publication_data[0].original_publication_date', source.orig_date_certain);
+    const dateData = source?.publication_data?.[0]?.original_publication_date ?? source?.orig_date_certain;
     if (dateData === undefined || dateData === null || dateData === '') {
       if (source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
         return true;
@@ -701,7 +701,7 @@ export class ElasticSearchPage {
   }
 
   public getDate(source: any) {
-    let date = get(source, 'publication_data[0].original_publication_date', this.formatISO8601DateToLocale(source.orig_date_certain));
+    let date = source?.publication_data?.[0]?.original_publication_date ?? this.formatISO8601DateToLocale(source?.orig_date_certain);
     if ((date === undefined || date === '' || date === null)
     && source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
       date = source.orig_date_year;
