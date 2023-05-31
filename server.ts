@@ -21,9 +21,16 @@ export function app(lang: string): express.Express
     const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
     // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
+    
+    // SK 31.5.2023: Added inlineCriticalCss: false. See:
+    // https://github.com/angular/universal/issues/2106
+    // https://github.com/angular/angular/issues/42098
+    // Also added optimization property that disables inlineCritical
+    // in angular.json: architect.build.configurations.production
     server.engine('html', ngExpressEngine({
         bootstrap: AppServerModule,
         extraProviders: [{ provide: LOCALE_ID, useValue: lang }],
+        inlineCriticalCss: false,
     } as any));
 
     server.set('view engine', 'html');
