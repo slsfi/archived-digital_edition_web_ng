@@ -7,7 +7,7 @@ export const config: Config = {
   app: {
     machineName: "topelius",
     projectId: 10,
-    apiEndpoint: "https://api.sls.fi/digitaledition",
+    apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
     simpleApi: '',
     i18n: {
       languages: [
@@ -379,7 +379,7 @@ export const config: Config = {
   AvailableEpubs: [
     {
       title: "Dummy epub",
-      filename: "2685.epub",
+      filename: "norrback-brod-och-bot.epub",
       download: "https://www.sls.fi/",
       cover: ""
     },
