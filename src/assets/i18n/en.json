@@ -136,11 +136,6 @@
     "About": {
         "Title": "About the Edition",
         "UI": "User Interface",
-        "Language": "Language",
-        "ViewMode": "View mode",
-        "ViewModeAuto": "Auto",
-        "ViewModeDesktop": "Desktop",
-        "ViewModeMobile": "Mobile",
         "Information": "Information"
 	},
     "MediaCollections": {
@@ -170,8 +165,6 @@
         "ImageGallery": "Image Gallery",
         "MediaCollections": "Media",
         "PersonSearch": "Persons",
-        "PersonSearch1": "Persons 2",
-        "PersonSearch2": "Persons 3",
         "PlaceSearch": "Places",
         "TagSearch": "Subjects",
         "WorkSearch": "Works",

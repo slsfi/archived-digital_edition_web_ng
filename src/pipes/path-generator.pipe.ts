@@ -25,7 +25,7 @@ export class InitialPathGeneratorPipe implements PipeTransform {
       }
       return '';
     } else {
-      return childId === 'media-collections' ? `/media-collections` : `${parentPath}/${childId}`
+      return childId ? `${parentPath}/${childId}` : `${parentPath}`
     }
   }
 }

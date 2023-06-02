@@ -81,7 +81,7 @@ export class DigitalEditionsApp implements OnInit {
           this.appIsStarting = false;
         }
 
-        this.setTitleForDefaultPages(this.currentUrlSegments && this.currentUrlSegments[0]?.path || '');
+        this.setTitleForTopMenuPages(this.currentUrlSegments && this.currentUrlSegments[0]?.path || '');
       }
     });
   }
@@ -90,25 +90,13 @@ export class DigitalEditionsApp implements OnInit {
     this.showSideNav = !this.showSideNav;
   }
 
-  setTitleForDefaultPages(routeBasePath?: string) {
+  private setTitleForTopMenuPages(routeBasePath?: string) {
     switch (routeBasePath) {
       case 'content':
         this.commonFunctions.setTitle($localize`:@@TopMenu.Content:Innehåll`, 1);
         return;
-      case 'keywords':
-          this.commonFunctions.setTitle($localize`:@@TOC.TagSearch:Ämnesord`, 1);
-          return;
-      case 'persons':
-        this.commonFunctions.setTitle($localize`:@@TOC.PersonSearch:Personregister`, 1);
-        return;
-      case 'places':
-        this.commonFunctions.setTitle($localize`:@@TOC.PlaceSearch:Ortregister`, 1);
-        return;
       case 'search':
-          this.commonFunctions.setTitle($localize`:@@TopMenu.Search:Sök`, 1);
-          return;
-      case 'works':
-        this.commonFunctions.setTitle($localize`:@@TOC.WorkSearch:Verkregister`, 1);
+        this.commonFunctions.setTitle($localize`:@@TopMenu.Search:Sök`, 1);
         return;
       default:
         !routeBasePath && this.commonFunctions.setTitle($localize`:@@TOC.Home:Hem`, 1);

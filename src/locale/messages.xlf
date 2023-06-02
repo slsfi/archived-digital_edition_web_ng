@@ -6,31 +6,6 @@
         <source>Förkortning</source>
       </segment>
     </unit>
-    <unit id="About.Language">
-      <segment>
-        <source>Språk</source>
-      </segment>
-    </unit>
-    <unit id="About.ViewMode">
-      <segment>
-        <source>Visningsläge</source>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeAuto">
-      <segment>
-        <source>Auto</source>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeDesktop">
-      <segment>
-        <source>Desktop</source>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeMobile">
-      <segment>
-        <source>Mobil</source>
-      </segment>
-    </unit>
     <unit id="BackButton">
       <segment>
         <source>Tillbaka</source>
@@ -1159,16 +1134,6 @@
     <unit id="TOC.PersonSearch">
       <segment>
         <source>Personregister</source>
-      </segment>
-    </unit>
-    <unit id="TOC.PersonSearch2">
-      <segment>
-        <source>Personregister 2</source>
-      </segment>
-    </unit>
-    <unit id="TOC.PersonSearch3">
-      <segment>
-        <source>Personregister 3</source>
       </segment>
     </unit>
     <unit id="TOC.PlaceSearch">

@@ -136,11 +136,6 @@
     "About": {
         "Title": "Om",
         "UI": "Användargränssnitt",
-        "Language": "Språk",
-        "ViewMode": "Visningsläge",
-        "ViewModeAuto": "Auto",
-        "ViewModeDesktop": "Desktop",
-        "ViewModeMobile": "Mobil",
         "Information": "Information"
     },
     "MediaCollections": {
@@ -170,8 +165,6 @@
         "ImageGallery": "Bildgalleri",
         "MediaCollections": "Bildbank",
         "PersonSearch": "Personregister",
-        "PersonSearch1": "Personregister 2",
-        "PersonSearch2": "Personregister 3",
         "PlaceSearch": "Ortregister",
         "TagSearch": "Ämnesord",
         "WorkSearch": "Verkregister",

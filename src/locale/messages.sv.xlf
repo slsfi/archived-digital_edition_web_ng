@@ -6,36 +6,6 @@
         <target>Förkortning</target>
       </segment>
     </unit>
-    <unit id="About.Language">
-      <segment state="initial">
-        <source>Språk</source>
-        <target>Språk</target>
-      </segment>
-    </unit>
-    <unit id="About.ViewMode">
-      <segment state="initial">
-        <source>Visningsläge</source>
-        <target>Visningsläge</target>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeAuto">
-      <segment state="initial">
-        <source>Auto</source>
-        <target>Auto</target>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeDesktop">
-      <segment state="initial">
-        <source>Desktop</source>
-        <target>Desktop</target>
-      </segment>
-    </unit>
-    <unit id="About.ViewModeMobile">
-      <segment state="initial">
-        <source>Mobil</source>
-        <target>Mobil</target>
-      </segment>
-    </unit>
     <unit id="BackButton">
       <segment state="initial">
         <source>Tillbaka</source>
@@ -1390,18 +1360,6 @@
       <segment state="initial">
         <source>Personregister</source>
         <target>Personregister</target>
-      </segment>
-    </unit>
-    <unit id="TOC.PersonSearch2">
-      <segment state="initial">
-        <source>Personregister 2</source>
-        <target>Personregister 3</target>
-      </segment>
-    </unit>
-    <unit id="TOC.PersonSearch3">
-      <segment state="initial">
-        <source>Personregister 3</source>
-        <target>Personregister 3</target>
       </segment>
     </unit>
     <unit id="TOC.PlaceSearch">

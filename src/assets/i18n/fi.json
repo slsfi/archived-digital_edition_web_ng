@@ -136,11 +136,6 @@
     "About": {
         "Title": "Tietoja",
         "UI": "Käyttöliittymä",
-        "Language": "Kieli",
-        "ViewMode": "Näyttötila",
-        "ViewModeAuto": "Auto",
-        "ViewModeDesktop": "Desktop",
-        "ViewModeMobile": "Mobiili",
         "Information": "Tietoa"
     },
     "MediaCollections": {
@@ -170,8 +165,6 @@
         "ImageGallery": "Kuvagalleria",
         "MediaCollections": "Kuvapankki",
         "PersonSearch": "Henkilöhakemisto",
-        "PersonSearch1": "Henkilöhakemisto 2",
-        "PersonSearch2": "Henkilöhakemisto 3",
         "PlaceSearch": "Paikkahakemisto",
         "TagSearch": "Ämnesord",
         "WorkSearch": "Teoshakemisto",
