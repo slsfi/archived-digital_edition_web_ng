@@ -1,11 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
 import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-list.service';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/assets/config/config";
 
@@ -44,9 +42,7 @@ export class DigitalEditionList implements OnInit {
     private digitalEditionListService: DigitalEditionListService,
     private platform: Platform,
     protected tableOfContentsService: TableOfContentsService,
-    private events: EventsService,
-    public userSettingsService: UserSettingsService,
-    private router: Router
+    public userSettingsService: UserSettingsService
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
@@ -164,6 +160,7 @@ export class DigitalEditionList implements OnInit {
     this.digitalEditions = filtered;
   }
 
+  /*
   getTocRoot(collection: DigitalEdition) {
     this.tableOfContentsService.getTableOfContents(collection.id).subscribe({
       next: tocItems => {
@@ -173,6 +170,7 @@ export class DigitalEditionList implements OnInit {
       error: e => { this.errorMessage = <any>e; }
     });
   }
+  */
 
   setPDF(de: any) {
     let tresh = false;
@@ -231,6 +229,7 @@ export class DigitalEditionList implements OnInit {
     }
   }
 
+  /*
   openFirstPage(collection: DigitalEdition) {
     const params = { tocItem: null, fetch: false, collection: { title: collection.title } } as any;
     params['collectionID'] = collection.id
@@ -245,7 +244,9 @@ export class DigitalEditionList implements OnInit {
     // TODO Sami
     this.router.navigate(['/read'], { queryParams: params })
   }
+  */
 
+  /*
   openCollection(collection: DigitalEdition, animate = true) {
     if ( (collection.isDownload === undefined || collection.isDownload === false) ) {
       if (String(collection.id).endsWith('.epub')) {
@@ -260,10 +261,13 @@ export class DigitalEditionList implements OnInit {
       this.openMediaCollections(collection);
     }
   }
+  */
 
+  /*
   openMediaCollections(collection: any) {
     this.events.publishOpenMediaCollections({});
   }
+  */
 
   prependEpubsToDigitalEditions() {
     const epubCollections: any[] = [];

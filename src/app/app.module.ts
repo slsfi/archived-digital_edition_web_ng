@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
 import { DigitalEditionsApp } from './app.component';
-import { EventsService } from './services/events/events.service';
 import { HtmlContentService } from './services/html/html-content.service';
 import { MdContentService } from './services/md/md-content.service';
 import { TextService } from './services/texts/text.service';
@@ -75,7 +74,6 @@ import { ReadPopoverPage } from './modals/read-popover/read-popover';
     GenericSettingsService,
     GalleryService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    EventsService,
     TableOfContentsService,
     FacsimileService
   ],

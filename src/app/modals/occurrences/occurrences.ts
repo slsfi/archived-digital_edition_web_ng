@@ -7,7 +7,6 @@ import { SemanticDataService } from 'src/app/services/semantic-data/semantic-dat
 import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/assets/config/config";
 
@@ -76,7 +75,6 @@ export class OccurrencesPage {
               private tooltipService: TooltipService,
               public occurrenceService: OccurrenceService,
               public viewCtrl: ModalController,
-              private events: EventsService,
               public commonFunctions: CommonFunctionsService,
               public router: Router
   ) {
@@ -131,13 +129,6 @@ export class OccurrencesPage {
     this.getMediaData();
     this.getArticleData();
     this.getGalleryOccurrences();
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
   }
 
   setObjectType() {

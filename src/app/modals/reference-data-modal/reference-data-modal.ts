@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { EventsService } from 'src/app/services/events/events.service';
 import { ReferenceDataService } from 'src/app/services/reference-data/reference-data.service';
 
 
@@ -20,8 +19,7 @@ export class ReferenceDataModalPage {
   constructor(  public navCtrl: NavController,
                 public viewCtrl: ModalController,
                 params: NavParams,
-                private referenceDataService: ReferenceDataService,
-                private events: EventsService
+                private referenceDataService: ReferenceDataService
   ) {
     // Get url to use for resolving URNs
     this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
@@ -112,6 +110,5 @@ export class ReferenceDataModalPage {
 
    dismiss() {
      this.viewCtrl.dismiss();
-     this.events.publishShareDismiss();
    }
 }

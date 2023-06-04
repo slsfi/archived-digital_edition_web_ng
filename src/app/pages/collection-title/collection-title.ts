@@ -7,7 +7,6 @@ import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxj
 import { marked } from 'marked';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { EventsService } from 'src/app/services/events/events.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -42,7 +41,6 @@ export class CollectionTitlePage implements OnInit {
   constructor(
     private textService: TextService,
     protected sanitizer: DomSanitizer,
-    protected events: EventsService,
     public userSettingsService: UserSettingsService,
     protected tableOfContentsService: TableOfContentsService,
     public mdContentService: MdContentService,

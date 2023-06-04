@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { TextService } from 'src/app/services/texts/text.service';
 
@@ -29,7 +28,6 @@ export class IllustrationsComponent {
     protected readPopoverService: ReadPopoverService,
     private textService: TextService,
     private modalCtrl: ModalController,
-    private events: EventsService,
     public commonFunctions: CommonFunctionsService
   ) {
     this.registerEventListeners();
@@ -43,13 +41,17 @@ export class IllustrationsComponent {
   }
 
   registerEventListeners() {
+    // TODO: Fix without events service
+    /*
     this.events.getGiveIllustration().subscribe((image: any) => {
       this.showSingleImage(image);
     });
+    */
   }
 
   deRegisterEventListeners() {
-    this.events.getGiveIllustration().complete();
+    // TODO: Fix without events service
+    // this.events.getGiveIllustration().complete();
   }
 
   showSingleImage(image: any) {

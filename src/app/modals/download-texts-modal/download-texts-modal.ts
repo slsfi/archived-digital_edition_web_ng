@@ -1,6 +1,5 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { EventsService } from 'src/app/services/events/events.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
@@ -50,7 +49,6 @@ export class DownloadTextsModalPage {
     params: NavParams,
     private textService: TextService,
     private commentService: CommentService,
-    private events: EventsService,
     public readPopoverService: ReadPopoverService,
     private tocService: TableOfContentsService,
     public commonFunctions: CommonFunctionsService,
@@ -305,7 +303,6 @@ export class DownloadTextsModalPage {
       URL.revokeObjectURL(object);
     });
     this.viewCtrl.dismiss();
-    this.events.publishDownloadTextsModalDismiss();
   }
 
   private openIntroductionForPrint() {

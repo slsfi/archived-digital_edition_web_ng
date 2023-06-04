@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -31,7 +30,6 @@ export class CollectionForewordPage implements OnInit {
     public navCtrl: NavController,
     private textService: TextService,
     protected sanitizer: DomSanitizer,
-    protected events: EventsService,
     public userSettingsService: UserSettingsService,
     protected tableOfContentsService: TableOfContentsService,
     protected popoverCtrl: PopoverController,

@@ -6,7 +6,6 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -51,7 +50,6 @@ export class MediaCollectionPage {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private events: EventsService,
     private galleryService: GalleryService,
     public userSettingsService: UserSettingsService,
     private modalController: ModalController,
@@ -124,18 +122,6 @@ export class MediaCollectionPage {
 
   asThumb(url: any) {
     return url.replace('.jpg', '_thumb.jpg');
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
-    this.events.publishTableOfContentsUnSelectSelectedTocItem({'selected': 'media-collection'});
-    this.events.publishSelectedItemInMenu({
-      menuID: this.mediaCollectionId,
-      component: 'media-collection'
-    });
   }
 
   ngOnInit() {

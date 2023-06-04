@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { TextService } from 'src/app/services/texts/text.service';
@@ -30,7 +29,6 @@ export class ReadTextComponent {
   private unlistenClickEvents?: () => void;
 
   constructor(
-    public events: EventsService,
     protected readPopoverService: ReadPopoverService,
     protected textService: TextService,
     protected sanitizer: DomSanitizer,
@@ -183,7 +181,8 @@ export class ReadTextComponent {
               } else {
                 // Display image in an illustrations-view which is already open
                 this.ngZone.run(() => {
-                  this.events.publishGiveIllustration(image);
+                  // TODO: Fix without events service
+                  // this.events.publishGiveIllustration(image);
                 });
               }
             }

@@ -9,12 +9,10 @@ import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
 import { TextService } from 'src/app/services/texts/text.service';
 import { HtmlContentService } from 'src/app/services/html/html-content.service';
-import { EventsService } from 'src/app/services/events/events.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { PdfService } from 'src/app/services/pdf/pdf.service';
 import { config } from "src/assets/config/config";
-import { global } from '../../../app/global';
 
 
 /**
@@ -62,7 +60,6 @@ export class SingleEditionPage {
     protected tableOfContentsService: TableOfContentsService,
     protected textService: TextService,
     protected htmlService: HtmlContentService,
-    protected events: EventsService,
     protected sanitizer: DomSanitizer,
     protected platform: Platform,
     protected userSettingsService: UserSettingsService,
@@ -88,27 +85,26 @@ export class SingleEditionPage {
 
       if (this.collection !== undefined && this.collection.id !== undefined && this.collection.id !== 'mediaCollections') {
         if (this.collection.title !== undefined) {
-          global.setSubtitle(this.collection.title);
+          // global.setSubtitle(this.collection.title);
         }
         this.getCollectionDescription(this.collection.id);
       }
   
       if (this.collection) {
-        this.collection.title = global.getSubtitle();
+        // this.collection.title = global.getSubtitle();
       }
 
       const collectionImages = config.editionImages;
       if ( this.collection?.id !== undefined  && this.collection.id !== 'mediaCollections' ) {
         this.image = collectionImages[this.collection.id];
-        this.setCollectionTitle();
-        this.events.publishTitleLogoCollectionTitle(this.subTitle);
+        // this.setCollectionTitle();
         this.getDescriptions();
         this.childrenPdfs = this.pdfService.getCollectionChildrenPdfs(this.collection.id);
       }
 
       if ( this.childrenPdfs !== undefined && Array.isArray(this.childrenPdfs) && this.childrenPdfs.length) {
         this.hasDigitalEditionListChildren = true;
-        this.events.publishCollectionWithChildrenPdfsHighlight(this.collection?.id);
+        // this.events.publishCollectionWithChildrenPdfsHighlight(this.collection?.id);
       }
     });
 
@@ -178,6 +174,7 @@ export class SingleEditionPage {
     );
   }
 
+  /*
   async setCollectionTitle() {
     if ( this.collection.id !== 'mediaCollections' ) {
       await this.textService.getCollection(this.collection.id).subscribe(
@@ -192,10 +189,9 @@ export class SingleEditionPage {
       );
     }
   }
+  */
 
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
+  /*
   ionViewWillEnter() {
     this.events.publishIonViewWillEnter(this.constructor.name);
     this.events.publishTableOfContentsUnSelectSelectedTocItem(true);
@@ -209,6 +205,7 @@ export class SingleEditionPage {
     // this.events.publishPageLoadedSingleEdition({ 'title': this.subTitle });
     // this.events.publish('pageLoaded:single-edition', { 'title': this.subTitle });
   }
+  */
 
   getTocRoot(id: string) {
     this.tableOfContentsService.getTableOfContents(id)

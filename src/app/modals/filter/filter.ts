@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
-import { EventsService } from 'src/app/services/events/events.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 
 /**
@@ -29,8 +28,7 @@ export class FilterPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public viewCtrl: ModalController,
-              public semanticDataService: SemanticDataService,
-              private events: EventsService
+              public semanticDataService: SemanticDataService
   ) {
 
     if ( navParams.get('activeFilters') !== undefined ) {
@@ -55,13 +53,6 @@ export class FilterPage {
     if (navParams.get('searchType') === 'tag-search') {
       this.getFilterCategoryTypes();
     }
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
   }
 
   /*

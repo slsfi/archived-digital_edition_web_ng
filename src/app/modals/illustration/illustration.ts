@@ -1,7 +1,6 @@
 import { Component, ElementRef, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
-import { EventsService } from 'src/app/services/events/events.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/assets/config/config";
@@ -34,7 +33,6 @@ export class IllustrationPage {
     private galleryService: GalleryService,
     protected modalController: ModalController,
     public userSettingsService: UserSettingsService,
-    private events: EventsService,
     public router: Router,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
@@ -93,13 +91,6 @@ export class IllustrationPage {
 
   cancel() {
     this.viewCtrl.dismiss();
-  }
-
-  ionViewWillLeave() {
-    this.events.publishIonViewWillLeave(this.constructor.name);
-  }
-  ionViewWillEnter() {
-    this.events.publishIonViewWillEnter(this.constructor.name);
   }
 
   goToMediaCollection() {

@@ -3,7 +3,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
-import { EventsService } from 'src/app/services/events/events.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
@@ -73,7 +72,6 @@ export class OccurrencesResultPage {
     public loadingCtrl: LoadingController,
     public userSettingsService: UserSettingsService,
     public modalCtrl: ModalController,
-    private events: EventsService,
     private cf: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
