@@ -4,6 +4,8 @@ import { Title } from "@angular/platform-browser";
 import { filter } from "rxjs/operators";
 import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 import { UserSettingsService } from './services/settings/user-settings.service';
+import { isBrowser } from 'src/standalone/utility-functions';
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -18,6 +20,8 @@ export class DigitalEditionsApp implements OnInit {
   collectionSideMenuInitialQueryParams: Params;
   currentRouterUrl: string = '';
   currentUrlSegments: UrlSegment[] = [];
+  enableRouterLoadingBar: boolean = false;
+  loadingBarHidden: boolean = false;
   mountMainSideMenu: boolean = false;
   previousRouterUrl: string = '';
   showCollectionSideMenu: boolean = false;
@@ -31,6 +35,8 @@ export class DigitalEditionsApp implements OnInit {
   ) {
     // Side menu is shown by default in desktop mode but not in mobile mode.
     this.userSettingsService.isDesktop() ? this.showSideNav = true : this.showSideNav = false;
+
+    this.enableRouterLoadingBar = config.app?.enableRouterLoadingBar ?? false;
   }
 
   ngOnInit() {
@@ -101,6 +107,16 @@ export class DigitalEditionsApp implements OnInit {
       default:
         !routeBasePath && this.commonFunctions.setTitle($localize`:@@TOC.Home:Hem`, 1);
         return;
+    }
+  }
+
+  hideLoadingBar(hide: boolean): void {
+    if (hide && isBrowser()) {
+      setTimeout(() => {
+        this.loadingBarHidden = hide;
+      }, 700);
+    } else {
+      this.loadingBarHidden = hide;
     }
   }
 

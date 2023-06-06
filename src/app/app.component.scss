@@ -1,5 +1,6 @@
 header {
   height: var(--top-menu-height, 70px);
+  position: relative;
   width: 100%;
   overflow: visible;
   z-index: 10;
@@ -8,6 +9,18 @@ header {
   .top-navigation {
     height: 100%;
     width: 100%;
+  }
+
+  ion-progress-bar {
+    --background: transparent;
+    --progress-background: var(--route-loading-progress-bar-color);
+    top: 0;
+    display: none;
+    position: absolute;
+
+    &.showLoadingBar {
+      display: block;
+    }
   }
 }
 
