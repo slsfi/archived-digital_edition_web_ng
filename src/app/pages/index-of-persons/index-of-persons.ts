@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
+import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
@@ -266,7 +266,7 @@ export class IndexOfPersonsPage implements OnInit {
 
     } else {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesPage,
+        component: OccurrencesModal,
         id: occurrenceResult.id,
         componentProps: {
           type: this.objectType,

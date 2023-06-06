@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { OccurrencesPage } from './occurrences';
+import { OccurrencesModal } from './occurrences.modal';
 
 @NgModule({
   declarations: [
-    OccurrencesPage,
+    OccurrencesModal,
   ],
   imports: [
     IonicModule,
@@ -18,4 +18,4 @@ import { OccurrencesPage } from './occurrences';
     FormsModule
   ],
 })
-export class OccurrencesPageModule {}
+export class OccurrencesModalModule {}

@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { FilterPage } from 'src/app/modals/filter/filter';
-import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
+import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -168,7 +168,7 @@ export class IndexOfKeywordsPage implements OnInit {
 
     } else {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesPage,
+        component: OccurrencesModal,
         componentProps: {
           id: occurrenceResult.id,
         type: this.objectType,

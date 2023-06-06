@@ -10,22 +10,13 @@ import { OccurrenceService } from 'src/app/services/occurrence/occurence.service
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/assets/config/config";
 
-/**
- * Generated class for the OccurrencesPage page.
- *
- * A modal/page for displaying occurrence results.
- * Used by pages person-search and place-search.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
-  selector: 'page-occurrences',
-  templateUrl: 'occurrences.html',
-  styleUrls: ['occurrences.scss']
+  selector: 'modal-occurrences',
+  templateUrl: 'occurrences.modal.html',
+  styleUrls: ['occurrences.modal.scss']
 })
-export class OccurrencesPage {
+export class OccurrencesModal {
   map: any;
   title?: string;
   occurrenceResult: OccurrenceResult;

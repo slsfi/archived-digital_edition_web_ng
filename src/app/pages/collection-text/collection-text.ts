@@ -5,7 +5,7 @@ import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverControlle
 import { Observable, Subscription } from 'rxjs';
 import JsonURL from '@jsonurl/jsonurl';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
-import { OccurrencesPage } from 'src/app/modals/occurrences/occurrences';
+import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -372,7 +372,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
     if (this.hasOccurrenceResults && this.occurrenceResult) {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesPage,
+        component: OccurrencesModal,
         componentProps: {
           occurrenceResult: this.occurrenceResult,
           showOccurrencesModalOnRead: showOccurrencesModalOnRead,
@@ -1850,7 +1850,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showPersonModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesPage,
+      component: OccurrencesModal,
       componentProps: { id: id, type: 'subject' }
     });
     modal.present();
@@ -1858,7 +1858,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showPlaceModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesPage,
+      component: OccurrencesModal,
       componentProps: { id: id, type: 'location' }
     });
     modal.present();
@@ -1866,7 +1866,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showWorkModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesPage,
+      component: OccurrencesModal,
       componentProps: { id: id, type: 'work' }
     });
     modal.present();
