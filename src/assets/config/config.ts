@@ -18,7 +18,8 @@ export const config: Config = {
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
     },
-    enableCollectionLegacyIDs: true
+    enableCollectionLegacyIDs: true,
+    enableRouterLoadingBar: true
   },
   collections: {
     order: [
@@ -1404,7 +1405,8 @@ export const config_mechelin: Config = {
         variations: false,
         facsimiles: true,
         illustrations: false,
-        legend: false
+        legend: false,
+        metadata: true
       },
     },
     title: {
