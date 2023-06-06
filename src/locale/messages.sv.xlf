@@ -546,6 +546,12 @@
         <target>Ämnesord</target>
       </segment>
     </unit>
+    <unit id="metadata">
+      <segment state="initial">
+        <source>Metadata</source>
+        <target>Metadata</target>
+      </segment>
+    </unit>
     <unit id="ms">
       <segment state="initial">
         <source>Manuskript</source>
@@ -1090,6 +1096,150 @@
       <segment state="initial">
         <source>Visa ändringar inarbetade</source>
         <target>Visa ändringar inarbetade</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.AddButtonText">
+      <segment state="initial">
+        <source>Metadata</source>
+        <target>Metadata</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ArchiveInfo">
+      <segment state="initial">
+        <source>Arkivkälla för faksimilet</source>
+        <target>Arkivkälla för faksimilet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Author">
+      <segment state="initial">
+        <source>Författare</source>
+        <target>Författare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Authors">
+      <segment state="initial">
+        <source>Författare</source>
+        <target>Författare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.DocumentType">
+      <segment state="initial">
+        <source>Dokumenttyp</source>
+        <target>Dokumenttyp</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ExternalUrl">
+      <segment state="initial">
+        <source>Extern länk för faksimilet</source>
+        <target>Extern länk för faksimilet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Facsimile">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Faksimil</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Facsimiles">
+      <segment state="initial">
+        <source>Faksimil</source>
+        <target>Faksimil</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.FacsimileTitle">
+      <segment state="initial">
+        <source>Faksimilets titel</source>
+        <target>Faksimilets titel</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ImageNumberInfo">
+      <segment state="initial">
+        <source>Bildernas nummer i digitalarkivet</source>
+        <target>Bildernas nummer i digitalarkivet</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.NoMetadata">
+      <segment state="initial">
+        <source>Ingen metadata tillgänglig.</source>
+        <target>Ingen metadata tillgänglig.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.NumberOfImages">
+      <segment state="initial">
+        <source>Antal bilder</source>
+        <target>Antal bilder</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.OriginalLanguage">
+      <segment state="initial">
+        <source>Originalspråk</source>
+        <target>Originalspråk</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationDate">
+      <segment state="initial">
+        <source>Datering</source>
+        <target>Datering</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationSubtitle">
+      <segment state="initial">
+        <source>Undertitel</source>
+        <target>Undertitel</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationTitle">
+      <segment state="initial">
+        <source>Dokumentets titel</source>
+        <target>Dokumentets titel</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublishedBy">
+      <segment state="initial">
+        <source>Publicerat i</source>
+        <target>Publicerat i</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Recipient">
+      <segment state="initial">
+        <source>Mottagare</source>
+        <target>Mottagare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Recipients">
+      <segment state="initial">
+        <source>Mottagare</source>
+        <target>Mottagare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Sender">
+      <segment state="initial">
+        <source>Avsändare</source>
+        <target>Avsändare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Senders">
+      <segment state="initial">
+        <source>Avsändare</source>
+        <target>Avsändare</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Title">
+      <segment state="initial">
+        <source>Metadata</source>
+        <target>Metadata</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Translation">
+      <segment state="initial">
+        <source>Översättning</source>
+        <target>Översättning</target>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Translations">
+      <segment state="initial">
+        <source>Översättningar</source>
+        <target>Översättningar</target>
       </segment>
     </unit>
     <unit id="Read.Popover.Abbreviations">

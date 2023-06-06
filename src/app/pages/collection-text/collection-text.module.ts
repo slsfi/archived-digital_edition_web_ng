@@ -11,6 +11,7 @@ import { FacsimilesModule } from 'src/app/components/facsimiles/facsimiles.modul
 import { ManuscriptsModule } from 'src/app/components/manuscripts/manuscripts.module';
 import { LegendModule } from 'src/app/components/legend/legend.module';
 import { VariantsModule } from 'src/app/components/variants/variants.module';
+import { MetadataComponent } from 'src/app/components/metadata/metadata';
 import { MathJaxDirective } from 'src/directives/math-jax.directive';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { MathJaxDirective } from 'src/directives/math-jax.directive';
       ManuscriptsModule,
       VariantsModule,
       LegendModule,
+      MetadataComponent,
       CollectionTextPageRoutingModule,
       MathJaxDirective
     ],

@@ -95,6 +95,7 @@
               <ng-container *ngIf="view.type == 'variations'" i18n="@@variations">Tryckta varianter</ng-container>
               <ng-container *ngIf="view.type == 'illustrations'" i18n="@@illustrations">Illustrationer</ng-container>
               <ng-container *ngIf="view.type == 'legend'" i18n="@@legend">Teckenförklaringar</ng-container>
+              <ng-container *ngIf="view.type == 'metadata'" i18n="@@metadata">Metadata</ng-container>
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
@@ -130,6 +131,9 @@
                 </ng-container>
                 <ng-container *ngIf="view.type == 'legend'">
                   <text-legend [itemId]="textItemID" [scrollToElementId]="view.id"></text-legend>
+                </ng-container>
+                <ng-container *ngIf="view.type == 'metadata'">
+                  <text-metadata [textItemID]="textItemID"></text-metadata>
                 </ng-container>
               </div>
             </ion-card-content>
@@ -186,6 +190,10 @@
                 <ion-chip *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="bulb-outline"></ion-icon>
                   <ion-label i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ion-label>
+                </ion-chip>
+                <ion-chip *ngIf="viewTypes['metadata']" (click)="addView('metadata'); commonFunctions.scrollLastViewIntoView()">
+                  <ion-icon name="server-outline"></ion-icon>
+                  <ion-label i18n="@@Read.Metadata.AddButtonText">Metadata</ion-label>
                 </ion-chip>
               </ion-content>
             </ng-template>

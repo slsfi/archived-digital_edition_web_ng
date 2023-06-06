@@ -129,6 +129,32 @@
             "NoLegend": "Inga teckenförklaringar tillgängliga.",
             "AddButtonText": "Teckenförklaringar"
         },
+        "Metadata": {
+            "Title": "Metadata",
+            "NoMetadata": "Ingen metadata tillgänglig.",
+            "AddButtonText": "Metadata",
+            "PublicationTitle": "Dokumentets titel",
+            "PublicationSubtitle": "Undertitel",
+            "PublishedBy": "Publicerat i",
+            "DocumentType": "Dokumenttyp",
+            "OriginalLanguage": "Originalspråk",
+            "PublicationDate": "Datering",
+            "Author": "Författare",
+            "Authors": "Författare",
+            "Sender": "Avsändare",
+            "Senders": "Avsändare",
+            "Recipient": "Mottagare",
+            "Recipients": "Mottagare",
+            "Translation": "Översättning",
+            "Translations": "Översättningar",
+            "Facsimile": "Faksimil",
+            "Facsimiles": "Faksimil",
+            "FacsimileTitle": "Faksimilets titel",
+            "ArchiveInfo": "Arkivkälla för faksimilet",
+            "NumberOfImages": "Antal bilder",
+            "ImageNumberInfo": "Bildernas nummer i digitalarkivet",
+            "ExternalUrl": "Extern länk för faksimilet"
+        },
         "ShowAll": "Visa alla",
         "ShowSearchResults": "Förekomster",
         "AddColumn": "Ny kolumn"
@@ -335,6 +361,7 @@
     "introduction": "Inledning",
     "illustrations": "Illustrationer",
     "legend": "Teckenförklaringar",
+    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"

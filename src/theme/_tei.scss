@@ -10,7 +10,8 @@ read-text > div.teiContainer,
 comments > div.teiContainer,
 variants > div.teiContainer,
 manuscripts > div.teiContainer,
-text-legend > div.teiContainer {
+text-legend > div.teiContainer,
+text-metadata > div.teiContainer {
     padding-bottom: 20vh;
 }
 

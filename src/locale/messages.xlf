@@ -456,6 +456,11 @@
         <source>Ämnesord</source>
       </segment>
     </unit>
+    <unit id="metadata">
+      <segment>
+        <source>Metadata</source>
+      </segment>
+    </unit>
     <unit id="ms">
       <segment>
         <source>Manuskript</source>
@@ -909,6 +914,126 @@
     <unit id="Read.Manuscripts.ShowNormalized">
       <segment>
         <source>Visa ändringar inarbetade</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.AddButtonText">
+      <segment>
+        <source>Metadata</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ArchiveInfo">
+      <segment>
+        <source>Arkivkälla för faksimilet</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Author">
+      <segment>
+        <source>Författare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Authors">
+      <segment>
+        <source>Författare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.DocumentType">
+      <segment>
+        <source>Dokumenttyp</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ExternalUrl">
+      <segment>
+        <source>Extern länk för faksimilet</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Facsimile">
+      <segment>
+        <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Facsimiles">
+      <segment>
+        <source>Faksimil</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.FacsimileTitle">
+      <segment>
+        <source>Faksimilets titel</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.ImageNumberInfo">
+      <segment>
+        <source>Bildernas nummer i digitalarkivet</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.NoMetadata">
+      <segment>
+        <source>Ingen metadata tillgänglig.</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.NumberOfImages">
+      <segment>
+        <source>Antal bilder</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.OriginalLanguage">
+      <segment>
+        <source>Originalspråk</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationDate">
+      <segment>
+        <source>Datering</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationSubtitle">
+      <segment>
+        <source>Undertitel</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublicationTitle">
+      <segment>
+        <source>Dokumentets titel</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.PublishedBy">
+      <segment>
+        <source>Publicerat i</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Recipient">
+      <segment>
+        <source>Mottagare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Recipients">
+      <segment>
+        <source>Mottagare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Sender">
+      <segment>
+        <source>Avsändare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Senders">
+      <segment>
+        <source>Avsändare</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Title">
+      <segment>
+        <source>Metadata</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Translation">
+      <segment>
+        <source>Översättning</source>
+      </segment>
+    </unit>
+    <unit id="Read.Metadata.Translations">
+      <segment>
+        <source>Översättningar</source>
       </segment>
     </unit>
     <unit id="Read.Popover.Abbreviations">

@@ -129,6 +129,32 @@
             "NoLegend": "Lukuohjetta ei ole saatavilla.",
             "AddButtonText": "Lukuohje"
         },
+        "Metadata": {
+            "Title": "Metadata",
+            "NoMetadata": "Dokumentin metadata ei ole saatavilla.",
+            "AddButtonText": "Metadata",
+            "PublicationTitle": "Dokumentin nimi",
+            "PublicationSubtitle": "Alaotsikko",
+            "PublishedBy": "Julkaistu",
+            "DocumentType": "Dokumentin tyyppi",
+            "OriginalLanguage": "Alkuperäiskieli",
+            "PublicationDate": "Päiväys",
+            "Author": "Tekijä",
+            "Authors": "Tekijät",
+            "Sender": "Lähettäjä",
+            "Senders": "Lähettäjät",
+            "Recipient": "Vastaanottaja",
+            "Recipients": "Vastaanottajat",
+            "Translation": "Käännös",
+            "Translations": "Käännökset",
+            "Facsimile": "Faksimile",
+            "Facsimiles": "Faksimilet",
+            "FacsimileTitle": "Faksimilen nimi",
+            "ArchiveInfo": "Faksimilen aineistotiedot",
+            "NumberOfImages": "Kuvien määrä",
+            "ImageNumberInfo": "Kuvien numerot digitaalisessa arkistossa",
+            "ExternalUrl": "Faksimilen linkki"
+        },
         "ShowAll": "Näytä kaikki",
         "ShowSearchResults": "Esiintymät",
         "AddColumn": "Lisää sarake"
@@ -335,6 +361,7 @@
     "introduction": "Johdanto",
     "illustrations": "Kuvat",
     "legend": "Lukuohje",
+    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"

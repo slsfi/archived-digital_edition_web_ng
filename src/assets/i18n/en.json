@@ -129,6 +129,32 @@
             "NoLegend": "No legend available.",
             "AddButtonText": "Legend"
         },
+        "Metadata": {
+            "Title": "Metadata",
+            "NoMetadata": "No metadata available.",
+            "AddButtonText": "Metadata",
+            "PublicationTitle": "Document title",
+            "PublicationSubtitle": "Subtitle",
+            "PublishedBy": "Published by",
+            "DocumentType": "Document type",
+            "OriginalLanguage": "Original language",
+            "PublicationDate": "Date",
+            "Author": "Author",
+            "Authors": "Authors",
+            "Sender": "Sender",
+            "Senders": "Senders",
+            "Recipient": "Recipient",
+            "Recipients": "Recipients",
+            "Translation": "Translation",
+            "Translations": "Translations",
+            "Facsimile": "Facsimile",
+            "Facsimiles": "Facsimiles",
+            "FacsimileTitle": "Facsimile title",
+            "ArchiveInfo": "Archive",
+            "NumberOfImages": "Number of images",
+            "ImageNumberInfo": "Image number info",
+            "ExternalUrl": "Link"
+        },
         "ShowAll": "Show all",
         "ShowSearchResults": "Occurrences",
         "AddColumn": "Add column"
@@ -335,6 +361,7 @@
     "introduction": "Introduction",
     "illustrations": "Illustrations",
     "legend": "Legend",
+    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"
