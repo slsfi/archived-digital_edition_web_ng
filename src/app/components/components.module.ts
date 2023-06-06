@@ -11,7 +11,6 @@ import { TextChangerComponent } from './text-changer/text-changer';
 import { IllustrationsComponent } from './illustrations/illustrations';
 import { TopMenuComponent } from "./top-menu/top-menu";
 import { MainSideMenu } from "./main-side-menu/main-side-menu";
-import { RecursiveAccordion } from "./recursive-accordion/recursive-accordion";
 import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu";
 
 @NgModule({
@@ -22,7 +21,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 		IllustrationsComponent,
 		DateHistogram,
 		MainSideMenu,
-		RecursiveAccordion,
     	CollectionSideMenu
 	],
 	imports: [
@@ -39,8 +37,7 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
     IllustrationsComponent,
     DateHistogram,
     MainSideMenu,
-    CollectionSideMenu,
-	RecursiveAccordion
+    CollectionSideMenu
   ]
 })
 export class ComponentsModule { }
