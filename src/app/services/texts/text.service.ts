@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { config } from "src/assets/config/config";
 
 @Injectable()
@@ -52,8 +52,13 @@ export class TextService {
   }
 
   getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/${legacyId}`;
-    return this.http.get(url);
+    if (config.app?.enableCollectionLegacyIDs) {
+      return this.http.get(
+        `${this.apiEndPoint}/${this.appMachineName}/legacy/${legacyId}`
+      );
+    } else {
+      return of([{coll_id: Number(legacyId.split('_')[0]), pub_id: Number(legacyId.split('_')[1])}]);
+    }
   }
 
   getTitlePage(id: string, lang: string): Observable<any> {

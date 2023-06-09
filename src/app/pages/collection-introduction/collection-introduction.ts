@@ -423,29 +423,33 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
               publicationId = hrefTargetItems[0];
               textId = hrefTargetItems[1];
-              this.textService.getCollectionAndPublicationByLegacyId(publicationId + '_' + textId).subscribe(data => {
-                if (data[0] !== undefined) {
-                  publicationId = data[0]['coll_id'];
-                  textId = data[0]['pub_id'];
-                }
+              this.textService.getCollectionAndPublicationByLegacyId(
+                publicationId + '_' + textId
+              ).subscribe({
+                next: (data: any) => {
+                  if (data?.length && data[0]['coll_id'] && data[0]['pub_id']) {
+                    publicationId = data[0]['coll_id'];
+                    textId = data[0]['pub_id'];
+                  }
 
-                if (hrefTargetItems.length > 2 && !hrefTargetItems[2].startsWith('#')) {
-                  chapterId = hrefTargetItems[2];
-                }
+                  if (hrefTargetItems.length > 2 && !hrefTargetItems[2].startsWith('#')) {
+                    chapterId = hrefTargetItems[2];
+                  }
 
-                let hrefString = '/collection/' + publicationId + '/text/' + textId;
-                if (chapterId) {
-                  hrefString += '/' + chapterId;
-                  if (hrefTargetItems.length > 3 && hrefTargetItems[3].startsWith('#')) {
-                    positionId = hrefTargetItems[3].replace('#', '');
+                  let hrefString = '/collection/' + publicationId + '/text/' + textId;
+                  if (chapterId) {
+                    hrefString += '/' + chapterId;
+                    if (hrefTargetItems.length > 3 && hrefTargetItems[3].startsWith('#')) {
+                      positionId = hrefTargetItems[3].replace('#', '');
+                      hrefString += '?position=' + positionId;
+                    }
+                  } else if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
+                    positionId = hrefTargetItems[2].replace('#', '');
                     hrefString += '?position=' + positionId;
                   }
-                } else if (hrefTargetItems.length > 2 && hrefTargetItems[2].startsWith('#')) {
-                  positionId = hrefTargetItems[2].replace('#', '');
-                  hrefString += '?position=' + positionId;
-                }
-                if (newWindowRef) {
-                  newWindowRef.location.href = '/' + this.activeLocale + hrefString;
+                  if (newWindowRef) {
+                    newWindowRef.location.href = '/' + this.activeLocale + hrefString;
+                  }
                 }
               });
 
@@ -485,17 +489,21 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               } else {
                 // Different introduction, open in new window.
                 const newWindowRef = window.open();
-                this.textService.getCollectionAndPublicationByLegacyId(publicationId).subscribe(data => {
-                  if (data[0] !== undefined) {
-                    publicationId = data[0]['coll_id'];
-                  }
-                  let hrefString = '/collection/' + publicationId + '/introduction';
-                  if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
-                    positionId = hrefTargetItems[1].replace('#', '');
-                    hrefString += '?position=' + positionId;
-                  }
-                  if (newWindowRef) {
-                    newWindowRef.location.href = '/' + this.activeLocale + hrefString;
+                this.textService.getCollectionAndPublicationByLegacyId(
+                  publicationId
+                ).subscribe({
+                  next: (data: any) => {
+                    if (data?.length && data[0]['coll_id']) {
+                      publicationId = data[0]['coll_id'];
+                    }
+                    let hrefString = '/collection/' + publicationId + '/introduction';
+                    if (hrefTargetItems.length > 1 && hrefTargetItems[1].startsWith('#')) {
+                      positionId = hrefTargetItems[1].replace('#', '');
+                      hrefString += '?position=' + positionId;
+                    }
+                    if (newWindowRef) {
+                      newWindowRef.location.href = '/' + this.activeLocale + hrefString;
+                    }
                   }
                 });
               }
