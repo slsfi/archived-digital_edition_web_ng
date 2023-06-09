@@ -48,6 +48,16 @@ export class TooltipService {
     return this.http.get(url);
   }
 
+  getSingleSemanticObject(type: string, id: string): Observable<any> {
+    type === 'person' ? type = 'subject'
+      : type === 'place' ? type = 'location'
+      : type === 'keyword' ? type = 'tag'
+      : type;
+    return this.http.get(
+      `${this.apiEndPoint}/${this.projectMachineName}/${type}/${id}`
+    );
+  }
+
   // TODO: This function is never used.
   decodeHtmlEntity(str: string) {
     return str.replace(/&#(\d+);/g, function (match, dec) {
