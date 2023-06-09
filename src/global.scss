@@ -514,13 +514,12 @@ ion-button.button.circular-icon-button ion-icon {
   --ionicon-stroke-width: 48px;
   font-size: 1.25rem;
 }
-ion-button.close {
+ion-button.button.close {
   --background-hover: transparent;
-  --color: #000;
-  --padding-end: 0.85em;
+  --color: inherit;
   transition: var(--opacity-hover-transition);
 }
-ion-button.close:hover {
+ion-button.button.close:hover {
   opacity: var(--opacity-hover);
 }
 
@@ -605,8 +604,6 @@ ion-modal {
     --background: transparent;
     --height: 100%;
     --width: 100%;
-
-
   }
 }
 
