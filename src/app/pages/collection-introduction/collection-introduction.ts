@@ -636,7 +636,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
     const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
 
-    if (this.simpleWorkMetadata === false) {
+    if (!this.simpleWorkMetadata) {
       this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
         next: (tooltip) => {
           if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
@@ -658,9 +658,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     } else {
       this.tooltipService.getWorkTooltip(id).subscribe({
         next: (tooltip) => {
-          this.setToolTipPosition(targetElem, tooltip.description);
-          this.setToolTipText(tooltip.description);
-          this.tooltips.works[id] = tooltip.description;
+          this.setToolTipPosition(targetElem, tooltip.title);
+          this.setToolTipText(tooltip.title);
+          this.tooltips.works[id] = tooltip.title;
         },
         error: (e) => {
           this.setToolTipPosition(targetElem, noInfoFound);

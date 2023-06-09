@@ -1928,6 +1928,11 @@ div.tei {
     match {
         background-color: var(--search-match-background-color);
     }
+
+    /* Work titles in tooltips */
+    .work_title {
+        font-style: italic;
+    }
 }
 
 /* Style for tooltip boxes. The tooltips also inherit styles from div.tei */
@@ -2633,10 +2638,6 @@ page-introduction {
     
     .hideIntro.tei #content {
         display: none !important;
-    }
-    
-    .work_title {
-        font-style: italic;
     }
     
     div[data-id="cont_introduction"] h2.tei.section {

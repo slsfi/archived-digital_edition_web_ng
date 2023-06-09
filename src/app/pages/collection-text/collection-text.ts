@@ -1300,11 +1300,12 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
     }
 
-    if (this.simpleWorkMetadata === false) {
+    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
+
+    if (!this.simpleWorkMetadata) {
       this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
         next: (tooltip) => {
           if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
-            const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
             this.setToolTipPosition(targetElem, noInfoFound);
             this.setToolTipText(noInfoFound);
             return;
@@ -1316,7 +1317,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           this.tooltips.works[id] = description;
         },
         error: (e) => {
-          const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
@@ -1324,12 +1324,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     } else {
       this.tooltipService.getWorkTooltip(id).subscribe({
         next: (tooltip) => {
-          this.setToolTipPosition(targetElem, tooltip.description);
-          this.setToolTipText(tooltip.description);
-          this.tooltips.works[id] = tooltip.description;
+          this.setToolTipPosition(targetElem, tooltip.title);
+          this.setToolTipText(tooltip.title);
+          this.tooltips.works[id] = tooltip.title;
         },
         error: (e) => {
-          const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
           this.setToolTipPosition(targetElem, noInfoFound);
           this.setToolTipText(noInfoFound);
         }
