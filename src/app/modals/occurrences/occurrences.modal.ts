@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { Occurrence, OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -16,8 +16,7 @@ import { config } from "src/assets/config/config";
   templateUrl: 'occurrences.modal.html',
   styleUrls: ['occurrences.modal.scss']
 })
-export class OccurrencesModal {
-  map: any;
+export class OccurrencesModal implements OnInit {
   title?: string;
   occurrenceResult: OccurrenceResult;
   texts: any[] = [];
@@ -38,18 +37,17 @@ export class OccurrencesModal {
   journal: string | null = null;
   isbn: string | null = null;
   authors: any = [];
-  filterToggle: Boolean = true;
   singleOccurrenceType: string | null = null;
   galleryOccurrenceData: any = [];
   hideTypeAndDescription = false;
   hideCityRegionCountry = false;
-  isLoading: Boolean = true;
-  infoLoading: Boolean = true;
+  isLoading: boolean = true;
+  infoLoading: boolean = true;
   showPublishedStatus: Number = 2;
-  noData: Boolean = false;
-  simpleWorkMetadata: Boolean;
+  noData: boolean = false;
+  simpleWorkMetadata: boolean = false;
 
-  objectType = '';
+  objectType: string = '';
 
   mediaData = {
     imageUrl: null,
@@ -58,19 +56,22 @@ export class OccurrencesModal {
 
   articleData: any = [];
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public semanticDataService: SemanticDataService,
-              public modalCtrl: ModalController,
-              protected textService: TextService,
-              private tooltipService: TooltipService,
-              public occurrenceService: OccurrenceService,
-              public viewCtrl: ModalController,
-              public commonFunctions: CommonFunctionsService,
-              public router: Router
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public semanticDataService: SemanticDataService,
+    public modalCtrl: ModalController,
+    protected textService: TextService,
+    private tooltipService: TooltipService,
+    public occurrenceService: OccurrenceService,
+    public viewCtrl: ModalController,
+    public commonFunctions: CommonFunctionsService,
+    public router: Router
   ) {
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+  }
 
+  ngOnInit() {
     this.occurrenceResult = this.navParams.get('occurrenceResult');
     if ( this.occurrenceResult !== undefined ) {
       // console.log('Getting occurrenceResult from navParams:');
@@ -107,8 +108,9 @@ export class OccurrencesModal {
       this.authors = [];
     }
 
-    this.year_born_deceased_string = this.tooltipService.constructYearBornDeceasedString(this.occurrenceResult.date_born,
-      this.occurrenceResult.date_deceased);
+    this.year_born_deceased_string = this.tooltipService.constructYearBornDeceasedString(
+      this.occurrenceResult.date_born, this.occurrenceResult.date_deceased
+    );
 
     this.singleOccurrenceType = config.SingleOccurrenceType ?? null;
     this.hideTypeAndDescription = config.Occurrences?.HideTypeAndDescription ?? false;
@@ -131,9 +133,9 @@ export class OccurrencesModal {
   getObjectData(type: any, id: any) {
     this.infoLoading = true;
 
-    if (this.simpleWorkMetadata !== undefined && this.simpleWorkMetadata === true && type === 'work') {
-      this.semanticDataService.getWork(id).subscribe(
-        data => {
+    if (this.simpleWorkMetadata && type === 'work') {
+      this.semanticDataService.getWork(id).subscribe({
+        next: (data: any) => {
           this.infoLoading = false;
           this.objectType = type;
           if (data.title === undefined) {
@@ -147,14 +149,17 @@ export class OccurrencesModal {
           }
           this.init();
         },
-        err => {console.error(err); this.infoLoading = false; }
-      );
+        error: (err: any) => {
+          console.error('error getting work data', err);
+          this.infoLoading = false;
+        }
+      });
     } else {
-      this.semanticDataService.getSingleObjectElastic(type, id).subscribe(
-        data => {
+      // Attempt to get semantic data from elasticsearch API
+      this.semanticDataService.getSingleObjectElastic(type, id).subscribe({
+        next: (data: any) => {
           this.infoLoading = false;
           this.objectType = type;
-          const personsTmp = [];
           if ( data.hits.hits.length <= 0 ) {
             this.noData = true;
           } else {
@@ -167,8 +172,35 @@ export class OccurrencesModal {
           }
           this.init();
         },
-        err => {console.error(err); this.infoLoading = false; }
-      );
+        error: (err: any) => {
+          // Attempt to get semantic data from backend API instead
+          this.tooltipService.getSingleSemanticObject(type, id).subscribe({
+            next: (res: any) => {
+              this.infoLoading = false;
+              this.objectType = type;
+              this.occurrenceResult.id = res?.id ?? null;
+              this.occurrenceResult.name = res?.name ?? undefined;
+              this.occurrenceResult.first_name = res?.first_name ?? '';
+              this.occurrenceResult.last_name = res?.last_name ?? '';
+              this.occurrenceResult.full_name = res?.full_name ?? '';
+              this.occurrenceResult.date_born = res?.date_born ?? null;
+              this.occurrenceResult.date_deceased = res?.date_deceased ?? null;
+              this.occurrenceResult.description = res?.description ?? '';
+              this.occurrenceResult.occupation = res?.occupation ?? '';
+              this.occurrenceResult.place_of_birth = res?.place_of_birth ?? '';
+              this.occurrenceResult.source = res?.source ?? '';
+              this.occurrenceResult.type = res?.type ?? '';
+              this.init();
+            },
+            error: (e: any) => {
+              console.error('error getting single object from elastic', err);
+              console.error('error getting single object from backend', e);
+              this.noData = true;
+              this.infoLoading = false;
+            }
+          });
+        }
+      });
     }
   }
 
@@ -177,13 +209,13 @@ export class OccurrencesModal {
       return;
     }
 
-    this.occurrenceService.getMediaData(this.objectType, this.occurrenceResult.id).subscribe(
-      (mediaData: any) => {
+    this.occurrenceService.getMediaData(this.objectType, this.occurrenceResult.id).subscribe({
+      next: (mediaData: any) => {
         this.mediaData.imageUrl = mediaData.image_path;
         this.mediaData.description = mediaData.description;
       },
-      (error: any) =>  console.log(error)
-    );
+      error: (e: any) => {}
+    });
   }
 
   getGalleryOccurrences() {
@@ -191,12 +223,12 @@ export class OccurrencesModal {
       return;
     }
 
-    this.occurrenceService.getGalleryOccurrences(this.objectType, this.occurrenceResult.id).subscribe(
-      (occurrenceData: any) => {
+    this.occurrenceService.getGalleryOccurrences(this.objectType, this.occurrenceResult.id).subscribe({
+      next: (occurrenceData: any) => {
         this.galleryOccurrenceData = occurrenceData;
       },
-      (error: any) =>  console.log(error)
-    );
+      error: (e: any) => {}
+    });
   }
 
   getArticleData() {
@@ -204,44 +236,12 @@ export class OccurrencesModal {
       return;
     }
 
-    this.occurrenceService.getArticleData(this.objectType, this.occurrenceResult.id).subscribe(
-      (data: any) => {
+    this.occurrenceService.getArticleData(this.objectType, this.occurrenceResult.id).subscribe({
+      next: (data: any) => {
         this.articleData = data;
       },
-      (error: any) =>  console.log(error)
-    );
-  }
-
-  ionViewDidEnter() {
-    // this.loadmap();
-  }
-
-  showFilters() {
-    this.filterToggle = !this.filterToggle;
-  }
-
-  isFiltersShown() {
-    return this.filterToggle;
-  }
-
-  loadmap() {
-    // Leaflet has been removed from the Angular 15-ported app
-    /*try {
-      const latlng = leaflet.latLng(this.latitude || 0, this.longitude || 0);
-      this.map = leaflet.map('map', {
-          center: latlng,
-          zoom: 8
-      });
-      leaflet.marker(latlng).addTo(this.map);
-      leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, \
-        GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-        maxZoom: 18
-      }).addTo(this.map);
-      this.map.invalidateSize();
-    } catch ( e ) {
-
-    }*/
+      error: (e: any) => {}
+    });
   }
 
   getOccurrence(occurrence: Occurrence) {
@@ -277,13 +277,13 @@ export class OccurrencesModal {
     this.texts = [];
     this.groupedTexts = [];
     let occurrences: Occurrence[] = [];
-    if ( occurrenceResult.occurrences !== undefined ) {
+    if (occurrenceResult?.occurrences?.length) {
       occurrences = occurrenceResult.occurrences;
       for (const occurence of occurrences) {
         this.getOccurrence(occurence);
       }
     } else {
-      if ( occurrenceResult !== undefined && occurrenceResult.id !== undefined && occurrenceResult.id ) {
+      if (occurrenceResult?.id) {
         this.getOccurrences(occurrenceResult.id);
       }
     }
@@ -428,15 +428,15 @@ export class OccurrencesModal {
 
   getOccurrences(id: any) {
     this.isLoading = true;
-    if ( this.objectType === 'work' ) {
+    if (this.objectType === 'work') {
       this.objectType = 'work_manifestation';
     }
-    this.semanticDataService.getOccurrences(this.objectType, id).subscribe(
-      occ => {
+    this.semanticDataService.getOccurrences(this.objectType, id).subscribe({
+      next: (occ: any) => {
         this.groupedTexts = [];
         this.infoLoading = false;
         occ.forEach((item: any) => {
-          if ( item.occurrences !== undefined ) {
+          if (item.occurrences?.length) {
             for (const occurence of item.occurrences) {
               this.getOccurrence(occurence);
             }
@@ -451,12 +451,11 @@ export class OccurrencesModal {
         this.isLoading = false;
         this.infoLoading = false;
       },
-      err => {
+      error: (err: any) => {
         this.isLoading = false;
         this.infoLoading = false;
-      },
-      () => console.log('Fetched tags...')
-    );
+      }
+    });
   }
 
   sortPublicationNamesInOccurrenceResults() {
@@ -470,13 +469,14 @@ export class OccurrencesModal {
     // Loop through each collection with occurrence results, get TOC for each collection,
     // then loop through each publication with occurrence results in each collection and
     // update publication names from TOC-files. Finally, sort the publication names.
-    this.groupedTexts.forEach(item => {
-      if (item.collection_id !== undefined && item.publications !== undefined) {
-        this.semanticDataService.getPublicationTOC(item.collection_id).subscribe(
-          tocData => {
+    this.groupedTexts.forEach((item: any) => {
+      if (item.collection_id && item.publications) {
+        this.semanticDataService.getPublicationTOC(item.collection_id).subscribe({
+          next: (tocData: any) => {
+            const flattenedTocData: any[] = this.commonFunctions.flattenObjectTree(tocData, 'children', 'itemId');
             item.publications.forEach((pub: any) => {
               const id = item.collection_id + '_' + pub.publication_id;
-              tocData.forEach((tocItem: any) => {
+              flattenedTocData.forEach((tocItem: any) => {
                 if (id === tocItem['itemId']) {
                   pub.occurrences[0].displayName = String(tocItem['text']);
                   pub.name = String(tocItem['text']);
@@ -486,8 +486,8 @@ export class OccurrencesModal {
             if (item.publications !== undefined) {
               this.commonFunctions.sortArrayOfObjectsAlphabetically(item.publications, 'name');
             }
-          }, error => { }
-        );
+          }
+        });
       }
     });
   }
