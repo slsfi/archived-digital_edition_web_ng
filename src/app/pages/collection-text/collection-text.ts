@@ -5,7 +5,7 @@ import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverControlle
 import { Observable, Subscription } from 'rxjs';
 import JsonURL from '@jsonurl/jsonurl';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
-import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
@@ -358,6 +358,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     this.unlistenFirstTouchStartEvent?.();
   }
 
+  /*
   async openOccurrenceResult() {
     let showOccurrencesModalOnRead = false;
     let objectType = '';
@@ -372,7 +373,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
     if (this.hasOccurrenceResults && this.occurrenceResult) {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesModal,
+        component: SemanticDataObjectModal,
         componentProps: {
           occurrenceResult: this.occurrenceResult,
           showOccurrencesModalOnRead: showOccurrencesModalOnRead,
@@ -383,6 +384,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       occurrenceModal.present();
     }
   }
+  */
 
   /**
    * TODO: This function is no longer used, it is here only for reference while refactoring the code.
@@ -1857,7 +1859,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showPersonModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id: id, type: 'subject' }
     });
     modal.present();
@@ -1865,7 +1867,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showPlaceModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id: id, type: 'location' }
     });
     modal.present();
@@ -1873,7 +1875,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showWorkModal(id: string) {
     const modal = await this.modalCtrl.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id: id, type: 'work' }
     });
     modal.present();

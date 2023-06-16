@@ -8,7 +8,7 @@
         h2 {
             font-size: 1.3125rem;
             line-height: 1.25;
-            margin: 0.25rem 0 1.125rem 0;
+            margin: 0.25rem 0 0.125rem 0;
     
             .date,
             .coordinates {
@@ -30,7 +30,8 @@
         }
     }
 
-    .sd-box {
+    .sd-box,
+    occurrences-accordion {
         background: var(--ion-modal-item-background-color);
         line-height: 1.4;
         margin: 0;
@@ -70,6 +71,7 @@
                 dd {
                     overflow-wrap: break-word;
                     vertical-align: bottom;
+                    width: 100%;
 
                     a {
                         overflow-wrap: anywhere;
@@ -104,77 +106,10 @@
         p + ion-button {
             margin-top: 0.75rem;
         }
+    }
 
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-
-            li {
-                padding:0.5rem 0;
-                width: 100%;
-
-                &:first-child {
-                    padding-top: 0;
-                }
-
-                &:last-child {
-                    padding-bottom: 0;
-                }
-
-                + li {
-                    border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
-                }
-
-                button {
-                    align-items: center;
-                    background: transparent;
-                    cursor: pointer;
-                    display: flex;
-                    font-size: inherit;
-                    line-height: inherit;
-                    text-align: start;
-                    transition: color 0.2s linear;
-                    width: 100%;
-
-                    &:hover {
-                        color: var(--default-link-color);
-                    }
-
-                    ion-icon.toggle-icon {
-                        font-size: 1.25rem;
-                        flex-shrink: 0;
-                        margin: 0 0 0 auto;
-                        transform: rotate(0);
-                        transition: transform ease-in-out 0.2s;
-                
-                        &.open {
-                          transform: rotate(90deg);
-                        }
-                    }
-                }
-
-                ul {
-                    border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
-                    margin-top: 0.5rem;
-                    padding: 0.5rem 0 0 1.5rem;
-
-                    li {
-                        display: flex;
-                        align-items: center;
-
-                        .text-name {
-                            padding-right: 0.75rem;
-                        }
-
-                        ion-button {
-                            margin: 0 0 0 auto;
-                        }
-                    }
-                }
-            }
-        }
+    .sd-header + .sd-box {
+        margin-top: 1rem;
     }
 
     h3 {
@@ -183,5 +118,27 @@
         font-weight: normal;
         margin: 0 0 0.75rem 0;
         padding: 0.75rem 0 0 1rem;
+    }
+
+    .sd-header + h3 {
+        margin-top: 1rem;
+    }
+
+    a.button-link {
+        background-color: transparent;
+        border: 1px solid var(--button-background-color);
+        border-radius: 2px;
+        color: var(--button-background-color);
+        display: block;
+        font-size: 0.8125rem;
+        letter-spacing: 0;
+        padding: 0.375em 1em;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: background-color 0.1s linear;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
     }
 }

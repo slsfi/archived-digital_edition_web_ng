@@ -7,7 +7,7 @@ import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-se
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElasticSearchPageRoutingModule } from './elastic-search-routing.module';
-import { OccurrencesModalModule } from 'src/app/modals/occurrences/occurrences.modal.module';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { FilterPageModule } from 'src/app/modals/filter/filter.module';
 import { ElasticSearchPage } from './elastic-search';
 
@@ -25,7 +25,7 @@ import { ElasticSearchPage } from './elastic-search';
     PipesModule,
     ComponentsModule,
     FilterPageModule,
-    OccurrencesModalModule,
+    SemanticDataObjectModal,
     ElasticSearchPageRoutingModule
   ],
   providers: [

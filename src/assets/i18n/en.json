@@ -251,7 +251,11 @@
         "isbn": "ISBN",
         "published_year": "Year of publication",
         "authors": "Authors",
-        "workOccurrencesDisabled": "Occurrences for works are disabled."
+        "workOccurrencesDisabled": "Occurrences for works are disabled.",
+        "person": "Person",
+        "place": "Place",
+        "keyword": "Keyword",
+        "work": "Work"
     },
     "ElasticSearch": {
         "PageTitle": "Search the edition",

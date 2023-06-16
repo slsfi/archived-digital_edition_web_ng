@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
-import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
@@ -889,7 +889,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showPersonModal(id: string) {
     const modal = await this.modalController.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id, type: 'subject' },
     });
     modal.present();
@@ -897,7 +897,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showPlaceModal(id: string) {
     const modal = await this.modalController.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id, type: 'location' },
     });
     modal.present();
@@ -905,7 +905,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showWorkModal(id: string) {
     const modal = await this.modalController.create({
-      component: OccurrencesModal,
+      component: SemanticDataObjectModal,
       componentProps: { id, type: 'work' },
     });
     modal.present();

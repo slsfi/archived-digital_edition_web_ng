@@ -251,7 +251,11 @@
         "isbn": "ISBN",
         "published_year": "Julkaisuvuosi",
         "authors": "Kirjoittaja",
-        "workOccurrencesDisabled": "Teosten esiintymät eivät ole saatavilla."
+        "workOccurrencesDisabled": "Teosten esiintymät eivät ole saatavilla.",
+        "person": "Henkilö",
+        "place": "Paikka",
+        "keyword": "Asiasana",
+        "work": "Teos"
     },
     "ElasticSearch": {
         "PageTitle": "Hae editiosta",

@@ -24,6 +24,21 @@ export class SemanticDataService {
     this.flattened = [];
   }
 
+  /**
+   * Get single semantic data object details from the backend API.
+   * @param type should be one of the following: keyword/tag, person/subject,
+   * place/location, work.
+   */
+  getSingleSemanticDataObject(type: string, id: string): Observable<any> {
+    type === 'person' ? type = 'subject'
+      : type === 'place' ? type = 'location'
+      : type === 'keyword' ? type = 'tag'
+      : type;
+    return this.http.get(
+      `${config.app.apiEndpoint}/${config.app.machineName}/${type}/${id}`
+    );
+  }
+
   getFilterCollections(): Observable<any> {
     return this.http.get('assets/filterCollections.json');
   }

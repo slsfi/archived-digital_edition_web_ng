@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
@@ -137,10 +137,7 @@ export class IndexOfPersonsPage implements OnInit {
             element['year_born_deceased'] = this.tooltipService.constructYearBornDeceasedString(element['date_born'],
             element['date_deceased']);
 
-            if ( this.subType !== '' && this.subType !== null && element['type'] !== this.subType ) {
-            } else {
-              this.persons.push(element);
-            }
+            this.persons.push(element);
           });
         } else {
           this.agg_after_key = {};
@@ -266,9 +263,9 @@ export class IndexOfPersonsPage implements OnInit {
 
     } else {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesModal,
-        id: occurrenceResult.id,
+        component: SemanticDataObjectModal,
         componentProps: {
+          id: occurrenceResult.id,
           type: this.objectType,
           showOccurrencesModalOnRead: showOccurrencesModalOnRead
         }

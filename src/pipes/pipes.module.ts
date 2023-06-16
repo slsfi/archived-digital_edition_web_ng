@@ -3,7 +3,8 @@ import {
   CollectionPathGeneratorPipe,
   InitialPathGeneratorPipe,
   PagePathGeneratorPipe,
-  PositionParamGeneratorPipe
+  PositionParamGeneratorPipe,
+  OccurrenceTextQueryParamGeneratorPipe
 } from "./path-generator.pipe";
 
 @NgModule({
@@ -11,14 +12,16 @@ import {
     InitialPathGeneratorPipe,
     CollectionPathGeneratorPipe,
     PagePathGeneratorPipe,
-    PositionParamGeneratorPipe
+    PositionParamGeneratorPipe,
+    OccurrenceTextQueryParamGeneratorPipe
   ],
   imports: [],
   exports: [
     InitialPathGeneratorPipe,
     CollectionPathGeneratorPipe,
     PagePathGeneratorPipe,
-    PositionParamGeneratorPipe
+    PositionParamGeneratorPipe,
+    OccurrenceTextQueryParamGeneratorPipe
   ]
 })
 export class PipesModule {

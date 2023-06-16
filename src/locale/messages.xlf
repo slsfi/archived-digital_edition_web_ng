@@ -536,6 +536,11 @@
         <source>Journal</source>
       </segment>
     </unit>
+    <unit id="Occurrences.keyword">
+      <segment>
+        <source>Ämnesord</source>
+      </segment>
+    </unit>
     <unit id="Occurrences.latitude">
       <segment>
         <source>lat.</source>
@@ -559,6 +564,16 @@
     <unit id="Occurrences.OccurrencesSmall">
       <segment>
         <source>förekomster</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.person">
+      <segment>
+        <source>Person</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.place">
+      <segment>
+        <source>Plats</source>
       </segment>
     </unit>
     <unit id="Occurrences.place_of_birth">
@@ -599,6 +614,11 @@
     <unit id="Occurrences.Variation">
       <segment>
         <source>Variant</source>
+      </segment>
+    </unit>
+    <unit id="Occurrences.work">
+      <segment>
+        <source>Verk</source>
       </segment>
     </unit>
     <unit id="Occurrences.workOccurrencesDisabled">

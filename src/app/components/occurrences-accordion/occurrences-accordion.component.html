@@ -1,0 +1,38 @@
+<ion-spinner *ngIf="isLoading" class="loading" name="crescent"></ion-spinner>
+
+<ul class="sd-occurrences" role="menu">
+    <li *ngFor="let collection of occurrenceData" [attr.aria-expanded]="!collection.hidden" [attr.aria-haspopup]="'menu'" role="menuitem">
+        <button (click)="toggleList(collection.collection_id)">
+            <span class="coll-name">{{collection.name}}</span>
+            <ion-icon [class.open]="!collection.hidden" name="chevron-forward-outline" class="toggle-icon"></ion-icon>
+        </button>
+        <ul *ngIf="!collection.hidden" role="menu">
+            <li *ngFor="let publication of collection['publications']" role="menuitem">
+                <span class="text-name">{{publication.occurrences[0].displayName}}<ng-container *ngIf="publication.occurrences.length > 1"> ({{publication.occurrences.length}}&nbsp;<ng-container i18n="@@Occurrences.OccurrencesSmall">förekomster</ng-container>)</ng-container></span>
+
+                <div class="text-links">
+                    <ng-container *ngFor="let occ of publication.occurrences; index as i">
+                        <a *ngIf="i < 1 || (i > 0 && (publication.occurrences[i].textType === 'facs' || publication.occurrences[i].textType !== publication.occurrences[i-1].textType))"
+                                    class="button-link"
+                                    [routerLink]="occ.linkID | pagePathGenerator"
+                                    [queryParams]="occ | occurrenceTextQueryParamGenerator"
+                        >
+                            <ng-container *ngIf="occ.textType == 'ms'" i18n="@@Occurrences.Manuscript">Manuskript</ng-container>
+        
+                            <ng-container *ngIf="occ.textType == 'var'" i18n="@@Occurrences.Variation">Variant</ng-container>
+        
+                            <ng-container *ngIf="occ.textType == 'com'" i18n="@@Occurrences.Commentary">Kommentar</ng-container>
+        
+                            <ng-container *ngIf="occ.textType == 'facs'" i18n="@@Occurrences.Facsimile">Faksimil</ng-container><ng-container *ngIf="occ.facsimilePage">:&nbsp;{{occ.facsimilePage}}</ng-container>
+        
+                            <ng-container *ngIf="occ.textType == 'est'" i18n="@@Occurrences.Established">Lästext</ng-container>
+                        </a>
+                    </ng-container>
+                </div>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p *ngIf="simpleWorkMetadata && (type === 'work' || type === 'work_manifestation')" i18n="@@Occurrences.workOccurrencesDisabled">Förekomster för verk är inte tillgängliga.</p>
+<p *ngIf="!isLoading && occurrenceData.length < 1 && !simpleWorkMetadata" i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</p>

@@ -251,7 +251,11 @@
         "isbn": "ISBN",
         "published_year": "Utgivningsår",
         "authors": "Författare",
-        "workOccurrencesDisabled": "Förekomster för verk är inte tillgängliga."
+        "workOccurrencesDisabled": "Förekomster för verk är inte tillgängliga.",
+        "person": "Person",
+        "place": "Plats",
+        "keyword": "Ämnesord",
+        "work": "Verk"
     },
     "ElasticSearch": {
         "PageTitle": "Sök i utgåvan",

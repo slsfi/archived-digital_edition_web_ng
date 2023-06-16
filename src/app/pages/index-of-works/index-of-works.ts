@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { FilterPage } from 'src/app/modals/filter/filter';
-import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { MdContentService } from 'src/app/services/md/md-content.service';
 import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
@@ -236,11 +236,12 @@ export class IndexOfWorksPage implements OnInit {
 
     } else {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesModal,
+        component: SemanticDataObjectModal,
         componentProps: {
           occurrenceResult: occurrenceResult,
           showOccurrencesModalOnRead: showOccurrencesModalOnRead,
-          objectType: this.objectType
+          objectType: this.objectType,
+          type: this.objectType
         }
       });
 

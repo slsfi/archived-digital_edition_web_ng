@@ -642,6 +642,12 @@
         <target>Journal</target>
       </segment>
     </unit>
+    <unit id="Occurrences.keyword">
+      <segment state="initial">
+        <source>Ämnesord</source>
+        <target>Ämnesord</target>
+      </segment>
+    </unit>
     <unit id="Occurrences.latitude">
       <segment state="initial">
         <source>lat.</source>
@@ -670,6 +676,18 @@
       <segment state="initial">
         <source>förekomster</source>
         <target>förekomster</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.person">
+      <segment state="initial">
+        <source>Person</source>
+        <target>Person</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.place">
+      <segment state="initial">
+        <source>Plats</source>
+        <target>Plats</target>
       </segment>
     </unit>
     <unit id="Occurrences.place_of_birth">
@@ -718,6 +736,12 @@
       <segment state="initial">
         <source>Variant</source>
         <target>Tryckt variant</target>
+      </segment>
+    </unit>
+    <unit id="Occurrences.work">
+      <segment state="initial">
+        <source>Verk</source>
+        <target>Verk</target>
       </segment>
     </unit>
     <unit id="Occurrences.workOccurrencesDisabled">

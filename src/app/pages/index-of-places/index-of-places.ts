@@ -5,7 +5,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { OccurrencesModal } from 'src/app/modals/occurrences/occurrences.modal';
+import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -168,7 +168,7 @@ export class IndexOfPlacesPage implements OnInit {
       this.router.navigate([`/result/${this.objectType}/${occurrenceResult.id}`]);
     } else {
       const occurrenceModal = await this.modalCtrl.create({
-        component: OccurrencesModal,
+        component: SemanticDataObjectModal,
         componentProps: {
           id: occurrenceResult.id,
           type: this.objectType,
