@@ -344,8 +344,10 @@ export class CommonFunctionsService {
     if (!data[branchingKey] && (!requiredKey || (requiredKey && data[requiredKey]))) {
       return list;
     }
-    for (const child of data[branchingKey]) {
-      list = list.concat(this.flattenObjectTree(child, branchingKey, requiredKey));
+    if (data[branchingKey]?.length) {
+      for (const child of data[branchingKey]) {
+        list = list.concat(this.flattenObjectTree(child, branchingKey, requiredKey));
+      }
     }
     return list;
   }
