@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from "@angular/core";
 import { Params, UrlSegment } from "@angular/router";
+
 import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
 import { TableOfContentsService } from "src/app/services/toc/table-of-contents.service";
 import { config } from "src/assets/config/config";
@@ -15,28 +16,71 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
+
+  _config = config;
+  activeMenuSorting: string = 'default';
+  alphabeticalMenu: any[] = [];
+  categoricalMenu: any[] = [];
+  chronologicalMenu: any[] = [];
   collectionMenu: any[] = [];
   collectionTitle: string = '';
-  isLoading: boolean = true;
-  _config = config;
-  selectedMenu: string[] = [];
+  defaultMenu: any[] = [];
   highlightedMenu: string;
+  isLoading: boolean = true;
+  selectedMenu: string[] = [];
   sortOptions: string[] = [];
-  defaultMenu: any;
-  alphabeticalMenu: any[] = [];
-  chronologicalMenu: any[] = [];
-  categoricalMenu: any[] = [];
-  activeMenuSorting: string = 'default';
   sortSelectOptions: Record<string, any> = {};
 
   constructor(
     private tocService: TableOfContentsService,
-    public commonFunctions: CommonFunctionsService,
-    public cref: ChangeDetectorRef
+    private commonFunctions: CommonFunctionsService,
+    private cref: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    this.loadMenu();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Check if the changed input values are relevant, i.e. require the side menu to be updated.
+    // If just some other queryParams than position have changed, no action is necessary in the menu.
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        if (
+          propName === 'collectionID' &&
+          changes.collectionID.previousValue !== changes.collectionID.currentValue
+        ) {
+          !changes.collectionID.firstChange && this.loadMenu();
+          break;
+        } else if (
+          (
+            propName === 'initialUrlSegments' &&
+            JSON.stringify(changes.initialUrlSegments.previousValue) !== JSON.stringify(changes.initialUrlSegments.currentValue)
+          ) || (
+            propName === 'initialQueryParams' &&
+            changes.initialQueryParams.previousValue.position !== changes.initialQueryParams.currentValue.position
+          )
+        ) {
+          this.collectionMenu?.length && this.updateHighlightedMenuItem();
+          break;
+        }
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    this.tocService.setActiveTocOrder('default');
+  }
+
+  private loadMenu() {
+    this.isLoading = true;
+    this.collectionMenu = [];
+    this.selectedMenu = [];
+    this.highlightedMenu = '';
     this.sortOptions = this.setSortOptions(this.collectionID);
+    this.activeMenuSorting = 'default';
+    this.tocService.setActiveTocOrder('default');
+  
     this.tocService.getTableOfContents(this.collectionID).subscribe({
       next: (data) => {
         if (data && data.children && data.children.length) {
@@ -72,49 +116,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.collectionMenu) {
-      // Check if the changed input values are relevant, i.e. require the side menu to be updated.
-      // If just some other queryParams than position have changed, no action is necessary in the menu.
-      let relevantChange = false;
-      for (const propName in changes) {
-        if (changes.hasOwnProperty(propName)) {
-          if (
-            propName === 'collectionID' &&
-            changes.collectionID.previousValue !== changes.collectionID.currentValue
-          ) {
-            if (!changes.collectionID.firstChange) {
-              this.tocService.setActiveTocOrder('default');
-            }
-            relevantChange = true;
-            break;
-          } else if (
-            propName === 'initialUrlSegments' &&
-            JSON.stringify(changes.initialUrlSegments.previousValue) !== JSON.stringify(changes.initialUrlSegments.currentValue)
-          ) {
-            relevantChange = true;
-            break;
-          } else if (
-            propName === 'initialQueryParams' &&
-            changes.initialQueryParams.previousValue.position !== changes.initialQueryParams.currentValue.position
-          ) {
-            relevantChange = true;
-            break;
-          }
-        }
-      }
-
-      if (relevantChange) {
-        this.updateHighlightedMenuItem();
-      }
-    }
-  }
-
-  ngOnDestroy() {
-    this.tocService.setActiveTocOrder('default');
-  }
-
-  updateHighlightedMenuItem(scrollTimeout: number = 600) {
+  private updateHighlightedMenuItem(scrollTimeout: number = 600) {
     const itemId = this.getItemId();
     this.highlightedMenu = itemId;
     const isFrontMatterPage = this.setTitleForFrontMatterPages();
@@ -129,7 +131,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     this.scrollHighlightedMenuItemIntoView(itemId, scrollTimeout);
   }
 
-  setTitleForFrontMatterPages() {
+  private setTitleForFrontMatterPages() {
     const pageTitle = this.initialUrlSegments[2].path;
     switch (pageTitle) {
       case 'cover':
@@ -149,7 +151,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getItemId(): string {
+  private getItemId(): string {
     let itemId = '';
     itemId += this.initialUrlSegments[1]?.path ? `${this.initialUrlSegments[1].path}` : '';
     itemId += this.initialUrlSegments[3]?.path ? `_${this.initialUrlSegments[3].path}` : '';
@@ -159,11 +161,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     return itemId;
   }
 
-  toggle(menuItem: any) {
-    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
-  }
-
-  recursiveFinding(array: any[], stringForComparison: string): any {
+  private recursiveFinding(array: any[], stringForComparison: string): any {
     return array.find(item => {
       if (item.itemId === stringForComparison) {
         this.commonFunctions.setTitle(item.text, 2);
@@ -187,7 +185,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
    * dash and the counter is reset. For example: n1-1-2. This way each item gets
    * a unique identifier.
    */
-  recursiveInitializeSelectedMenu(array: any[], parentNodeId?: string) {
+  private recursiveInitializeSelectedMenu(array: any[], parentNodeId?: string) {
     for (let i = 0; i < array.length; i++) {
       array[i]["nodeId"] = (parentNodeId ? parentNodeId + '-' : 'n') + (i+1);
       if (array[i]["collapsed"] === false) {
@@ -203,7 +201,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  scrollHighlightedMenuItemIntoView(itemId: string, scrollTimeout: number = 600) {
+  private scrollHighlightedMenuItemIntoView(itemId: string, scrollTimeout: number = 600) {
     if (isBrowser()) {
       setTimeout(() => {
         const container = document.querySelector('.side-navigation') as HTMLElement;
@@ -215,7 +213,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  setSortOptions(collectionID: string) {
+  private setSortOptions(collectionID: string) {
     const sortOptions: string[] = [];
     if (this._config.component?.sideMenu?.sortableCollectionsAlphabetical?.includes(collectionID)) {
       sortOptions.push('alphabetical');
@@ -229,7 +227,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     return sortOptions;
   }
 
-  constructAlphabeticalMenu(flattenedMenuData: any[]) {
+  private constructAlphabeticalMenu(flattenedMenuData: any[]) {
     const alphabeticalMenu: any[] = [];
 
     for (const child of flattenedMenuData) {
@@ -242,7 +240,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     return alphabeticalMenu;
   }
 
-  constructCategoricalMenu(flattenedMenuData: any[], primarySortKey: string, secondarySortKey?: string) {
+  private constructCategoricalMenu(flattenedMenuData: any[], primarySortKey: string, secondarySortKey?: string) {
     const orderedList: any[] = [];
 
     for (const child of flattenedMenuData) {
@@ -306,6 +304,10 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
 
     return categoricalMenu;
+  }
+
+  toggle(menuItem: any) {
+    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
   }
 
   setActiveMenuSorting(event: any) {
