@@ -40,6 +40,11 @@ div.teiContainer {
             dd {
                 overflow-wrap: break-word;
                 vertical-align: bottom;
+                width: 100%;
+
+                a {
+                    overflow-wrap: anywhere;
+                }
             }
 
             + div {
@@ -52,12 +57,36 @@ div.teiContainer {
 
         &.dl-group {
             border: 1px solid #e6e6e6;
+            display: block;
             margin: 0.125em;
             padding: 0.25em 0.5em;
 
-            div dt {
-                white-space: normal;
+            div {
+                display: block;
+
+                dt,
+                dd {
+                    display: block;
+                    padding: 0;
+                    white-space: normal;
+                }
+
+                dd {
+                    margin-left: 1.25rem;
+                    width: auto;
+                }
+
+                + div {
+                    border-top: 1px solid #e6e6e6;
+
+                    dt,
+                    dd {
+                        border-top: 0;
+                    }
+                }
             }
+
+            
 
             + .dl-group {
                 margin-top: 0.75em;

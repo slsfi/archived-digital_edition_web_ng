@@ -30,7 +30,7 @@ export class MetadataComponent implements OnInit {
       this.textItemID.split('_')[1] || '0', this.activeLocale
     ).pipe(
       catchError((error) => {
-        console.error("Error loading metadata", error);
+        console.error('Error loading metadata', error);
         this.loadingError$.next(true);
         return of();
       })
