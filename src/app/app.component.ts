@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
-import { Title } from "@angular/platform-browser";
 import { filter } from "rxjs/operators";
 import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
 import { UserSettingsService } from './services/settings/user-settings.service';
@@ -29,7 +28,6 @@ export class DigitalEditionsApp implements OnInit {
 
   constructor(
     private router: Router,
-    private title: Title,
     private commonFunctions: CommonFunctionsService,
     private userSettingsService: UserSettingsService
   ) {
@@ -40,8 +38,6 @@ export class DigitalEditionsApp implements OnInit {
   }
 
   ngOnInit() {
-    this.title.setTitle($localize`:@@Site.Title:Webbplatsens titel`);
-
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe({
@@ -99,13 +95,13 @@ export class DigitalEditionsApp implements OnInit {
   private setTitleForTopMenuPages(routeBasePath?: string) {
     switch (routeBasePath) {
       case 'content':
-        this.commonFunctions.setTitle($localize`:@@TopMenu.Content:Innehåll`, 1);
+        this.commonFunctions.setTitle([$localize`:@@TopMenu.Content:Innehåll`]);
         return;
       case 'search':
-        this.commonFunctions.setTitle($localize`:@@TopMenu.Search:Sök`, 1);
+        this.commonFunctions.setTitle([$localize`:@@TopMenu.Search:Sök`]);
         return;
       default:
-        !routeBasePath && this.commonFunctions.setTitle($localize`:@@TOC.Home:Hem`, 1);
+        !routeBasePath && this.commonFunctions.setTitle([$localize`:@@TOC.Home:Hem`]);
         return;
     }
   }

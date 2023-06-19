@@ -89,7 +89,6 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
           this.collectionMenu = data.children;
           this.defaultMenu = data.children;
           this.isLoading = false;
-          this.commonFunctions.setTitle(this.collectionTitle, 1);
           this.updateHighlightedMenuItem();
 
           // Construct sorted menus
@@ -135,16 +134,16 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     const pageTitle = this.initialUrlSegments[2].path;
     switch (pageTitle) {
       case 'cover':
-        this.commonFunctions.setTitle($localize`:@@Read.CoverPage.Title:Omslag`, 2);
+        this.commonFunctions.setTitle([$localize`:@@Read.CoverPage.Title:Omslag`, this.collectionTitle]);
         return true;
       case 'title':
-        this.commonFunctions.setTitle($localize`:@@Read.TitlePage.Title:Titelblad`, 2);
+        this.commonFunctions.setTitle([$localize`:@@Read.TitlePage.Title:Titelblad`, this.collectionTitle]);
         return true;
       case 'foreword':
-        this.commonFunctions.setTitle($localize`:@@Read.ForewordPage.Title:Förord`, 2);
+        this.commonFunctions.setTitle([$localize`:@@Read.ForewordPage.Title:Förord`, this.collectionTitle]);
         return true;
       case 'introduction':
-        this.commonFunctions.setTitle($localize`:@@Read.Introduction.Title:Inledning`, 2);
+        this.commonFunctions.setTitle([$localize`:@@Read.Introduction.Title:Inledning`, this.collectionTitle]);
         return true;
       default:
         return false;
@@ -164,7 +163,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   private recursiveFinding(array: any[], stringForComparison: string): any {
     return array.find(item => {
       if (item.itemId === stringForComparison) {
-        this.commonFunctions.setTitle(item.text, 2);
+        this.commonFunctions.setTitle([item.text, this.collectionTitle]);
         return item;
       } else if (item.children) {
         const result = this.recursiveFinding(item.children, stringForComparison);

@@ -309,9 +309,12 @@ export class MainSideMenu implements OnInit, OnChanges {
       }
       if (itemPath === stringForComparison) {
         this.highlightedMenu = item.nodeId;
-        if (!this.topMenuItems.includes(item.parentPath)) {
-          // For top menu items the title is set by app.component
-          this.commonFunctions.setTitle(item.title, 1);
+        if (item.parentPath === '/media-collections' || item.parentPath === '/media-collection') {
+          this.commonFunctions.setTitle([item.title, $localize`:@@TOC.MediaCollections:Bildbank`]);
+        } else if (!this.topMenuItems.includes(item.parentPath) && this.urlSegments[0]?.path !== 'collection') {
+          // For top menu items the title is set by app.component, and
+          // for collections the title is set by the collection side menu
+          this.commonFunctions.setTitle([item.title]);
         }
         return item;
       } else if (item.children) {

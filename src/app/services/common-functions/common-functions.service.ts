@@ -310,15 +310,22 @@ export class CommonFunctionsService {
   }
 
 
-  setTitle(pageTitle: string, position: number) {
-    const title = this.title.getTitle().split(' - ');
-    let siteTitle: string[] = [];
-    if (position === 1) { // From primary side menu
-      siteTitle = title.slice(-1);
-    } else if (position === 2) { //From collection side menu
-      siteTitle = title.slice(-2);
+  setTitle(pageTitleParts: string[] = []) {
+    let pageTitle = '';
+    for (let i = 0; i < pageTitleParts.length; i++) {
+      if (pageTitleParts[i]) {
+        if (pageTitleParts[i].at(-1) === '.') {
+          pageTitleParts[i] = pageTitleParts[i].slice(0, -1);
+        }
+        i > 0 ? pageTitle += ' - ' + pageTitleParts[i]
+          : pageTitle += pageTitleParts[i];
+      }
     }
-    this.title.setTitle(`${pageTitle} - ${siteTitle.join(' - ')}`);
+
+    pageTitle ? pageTitle += ' - ' + $localize`:@@Site.Title:Webbplatsens titel`
+      : pageTitle = $localize`:@@Site.Title:Webbplatsens titel`;
+
+    this.title.setTitle(pageTitle);
   }
 
 
