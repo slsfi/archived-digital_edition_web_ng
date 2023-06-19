@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Platform, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
 import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
@@ -61,7 +61,6 @@ export class SingleEditionPage {
     protected textService: TextService,
     protected htmlService: HtmlContentService,
     protected sanitizer: DomSanitizer,
-    protected platform: Platform,
     protected userSettingsService: UserSettingsService,
     protected mdcontentService: MdContentService,
     protected pdfService: PdfService,

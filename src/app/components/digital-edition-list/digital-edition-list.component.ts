@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Platform } from '@ionic/angular';
 import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
 import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-list.service';
@@ -40,7 +39,6 @@ export class DigitalEditionList implements OnInit {
 
   constructor(
     private digitalEditionListService: DigitalEditionListService,
-    private platform: Platform,
     protected tableOfContentsService: TableOfContentsService,
     public userSettingsService: UserSettingsService
   ) {
@@ -62,7 +60,7 @@ export class DigitalEditionList implements OnInit {
   }
 
   ngOnInit() {
-    if (this.platform.is('mobile')) {
+    if (this.userSettingsService.isMobile()) {
       this.grid = false;
     } else {
       this.grid = true;
