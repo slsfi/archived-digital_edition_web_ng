@@ -1,7 +1,7 @@
-import { Component, Input, NgZone, Renderer2 } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, NgZone, Renderer2 } from '@angular/core';
+import { DOCUMENT } from "@angular/common";
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import {} from 'fs';
 import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { MdContentService } from 'src/app/services/md/md-content.service';
@@ -9,6 +9,7 @@ import { CommonFunctionsService } from 'src/app/services/common-functions/common
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { config } from "src/assets/config/config";
+import { isBrowser } from 'src/standalone/utility-functions';
 
 declare var ePub: any;
 
@@ -23,7 +24,7 @@ export class Book {
   styleUrls: ['epub.scss']
 })
 export class EpubComponent {
-
+  _window: Window;
   text?: string;
   book: any;
   rendition: any;
@@ -71,8 +72,11 @@ export class EpubComponent {
     public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private ngZone: NgZone,
-    public commonFunctions: CommonFunctionsService
+    public commonFunctions: CommonFunctionsService,
+    @Inject(LOCALE_ID) private activeLocale: string,
+    @Inject(DOCUMENT) private document: Document
   ) {
+    this._window = <any>this.document.defaultView;
     this.tocMenuOpen = false;
     this.searchMenuOpen = false;
     this.loading = true;
@@ -124,10 +128,10 @@ export class EpubComponent {
   }
 
   ngAfterViewInit() {
-    const epubFilePath = '/assets/books/' + this.epubFileName;
+    const epubFilePath = this._window.location.origin + (this._window.location.pathname.split('/')[1] === this.activeLocale ? '/' + this.activeLocale : '') + '/assets/books/' + this.epubFileName;
     this.commonFunctions.urlExists(epubFilePath).then((res) => {
       if (res > 0) {
-        this.loadEpub('..' + epubFilePath);
+        this.loadEpub(epubFilePath);
       } else {
         this.epubFileExists = false;
         this.loading = false;
@@ -299,7 +303,7 @@ export class EpubComponent {
 
       this.setUpInputListeners();
 
-      this.setUpDOMMutationObservers();
+      // this.setUpDOMMutationObservers();
 
       this.setUpWindowResizeListener();
 
