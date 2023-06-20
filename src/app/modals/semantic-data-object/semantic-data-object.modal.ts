@@ -30,7 +30,6 @@ export class SemanticDataObjectModal implements OnInit {
   objectData$: Observable<any>;
   routerEventsSubscription: Subscription;
   showOccurrences: boolean = true;
-  showPublishedStatus: Number = 2;
   simpleWorkMetadata: boolean = false;
 
   constructor(
@@ -42,10 +41,9 @@ export class SemanticDataObjectModal implements OnInit {
     public router: Router
   ) {
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
-    this.hideTypeAndDescription = config.Occurrences?.HideTypeAndDescription ?? false;
-    this.hideCityRegionCountry = config.Occurrences?.hideCityRegionCountry ?? false;
+    this.hideTypeAndDescription = config.component?.occurrencesAccordion?.hideTypeAndDescription ?? false;
+    this.hideCityRegionCountry = config.component?.occurrencesAccordion?.hideCityRegionCountry ?? false;
     this.showOccurrences = config.modal?.semanticDataObject?.showOccurrences ?? true;
-    this.showPublishedStatus = config.Occurrences?.ShowPublishedStatus ?? 2;
   }
 
   ngOnInit() {

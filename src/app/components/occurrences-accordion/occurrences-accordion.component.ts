@@ -32,7 +32,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     private commonFunctions: CommonFunctionsService,
     private semanticDataService: SemanticDataService
   ) {
-    this.showPublishedStatus = config.Occurrences?.ShowPublishedStatus ?? 2;
+    this.showPublishedStatus = config.component?.occurrencesAccordion?.publishedStatus ?? 2;
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
   }
 
