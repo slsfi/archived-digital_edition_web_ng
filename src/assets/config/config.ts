@@ -110,6 +110,11 @@ export const config: Config = {
     facsimileColumn: {
       imageQuality: 4,
       showFacsimileTitle: true
+    },
+    occurrencesAccordion: {
+      hideCityRegionCountry: true,
+      hideTypeAndDescription: true,
+      publishedStatus: 2
     }
   },
   modal: {
@@ -256,19 +261,8 @@ export const config: Config = {
     ShowFilter: false,
     ShowPublishedStatus: 2
   },
-  Occurrences: {
-    HideTypeAndDescription: true,
-    hideCityRegionCountry: true,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
-  showOccurencesModalOnReadPageAfterSearch: {
-    tagSearch: true,
-    personSearch: true,
-    placeSearch: true,
-    workSearch: true
-  },
   SortCollectionsByRomanNumerals: false,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
@@ -276,8 +270,6 @@ export const config: Config = {
   HasTitle: true,
   HasForeword: true,
   HasIntro: true,
-  OpenOccurrencesAndInfoOnNewPage: false,
-  SingleOccurrenceType: null,
   ElasticSearch: {
     show: {
       sortOptions: true,
@@ -508,7 +500,7 @@ export const config_soderholm: Config = {
   page: {
     about: {
       markdownFolderNumber: "03",
-      initialPageNode: "01-01"
+      initialPageNode: "01"
     },
     home: {
       imageOrientationIsPortrait: false,
@@ -577,6 +569,11 @@ export const config_soderholm: Config = {
     facsimileColumn: {
       imageQuality: 2,
       showFacsimileTitle: false
+    },
+    occurrencesAccordion: {
+      hideCityRegionCountry: true,
+      hideTypeAndDescription: true,
+      publishedStatus: 2
     }
   },
   modal: {
@@ -913,19 +910,8 @@ export const config_soderholm: Config = {
     ShowFilter: false,
     ShowPublishedStatus: 2
   },
-  Occurrences: {
-    HideTypeAndDescription: true,
-    hideCityRegionCountry: true,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "05",
-  showOccurencesModalOnReadPageAfterSearch: {
-    tagSearch: true,
-    personSearch: true,
-    placeSearch: true,
-    workSearch: true
-  },
   SortCollectionsByRomanNumerals: false,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
@@ -933,8 +919,6 @@ export const config_soderholm: Config = {
   HasTitle: false,
   HasForeword: false,
   HasIntro: false,
-  OpenOccurrencesAndInfoOnNewPage: false,
-  SingleOccurrenceType: null,
   ElasticSearch: {
     show: {
       sortOptions: false,
@@ -1106,6 +1090,11 @@ export const config_vonWright: Config = {
     facsimileColumn: {
       imageQuality: 4,
       showFacsimileTitle: false
+    },
+    occurrencesAccordion: {
+      hideCityRegionCountry: true,
+      hideTypeAndDescription: true,
+      publishedStatus: 2
     }
   },
   modal: {
@@ -1231,19 +1220,8 @@ export const config_vonWright: Config = {
     ShowFilter: false,
     ShowPublishedStatus: 2
   },
-  Occurrences: {
-    HideTypeAndDescription: true,
-    hideCityRegionCountry: true,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
-  showOccurencesModalOnReadPageAfterSearch: {
-    tagSearch: true,
-    personSearch: true,
-    placeSearch: true,
-    workSearch: true
-  },
   SortCollectionsByRomanNumerals: false,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
@@ -1251,8 +1229,6 @@ export const config_vonWright: Config = {
   HasTitle: true,
   HasForeword: false,
   HasIntro: true,
-  OpenOccurrencesAndInfoOnNewPage: false,
-  SingleOccurrenceType: null,
   ElasticSearch: {
     show: {
       sortOptions: false,
@@ -1318,21 +1294,303 @@ export const config_vonWright: Config = {
       url:"https://vonwright.sls.fi",
       logo:"https://vonwright.sls.fi/assets/images/logo.svg"
     }
-  },
-  AvailableEpubs: [
-    {
-      title: "Dummy epub",
-      filename: "2685.epub",
-      download: "https://www.sls.fi/",
-      cover: ""
+  }
+}
+
+/**
+ * This is the config for granqvist.sls.fi, here only for testing purposes.
+ */
+export const config_granqvist: Config = {
+  app: {
+    machineName: "granqvist",
+    projectId: 2,
+    apiEndpoint: "https://api.sls.fi/digitaledition",
+    simpleApi: '',
+    i18n: {
+      languages: [
+        { code: "sv", label: "Svenska" },
+        { code: "en", label: "English" },
+        { code: "ar", label: "Arabic" },
+      ],
+      enableLanguageChanges: true,
+      multilingualCollectionTableOfContents: false,
+      multilingualReadingTextLanguages: []
     },
-    {
-      title: "Another dummy epub",
-      filename: "285.epub",
-      download: "https://www.sls.fi/",
-      cover: ""
+  },
+  collections: {
+    order: [
+      [537, 538, 539, 29, 147, 148, 149, 30, 31]
+    ],
+    firstReadItem: {
     }
-  ]
+  },
+  page: {
+    about: {
+      markdownFolderNumber: "03",
+      initialPageNode: "01-01"
+    },
+    home: {
+      imageOrientationIsPortrait: false,
+      imageOnRightIfPortrait: false,
+      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
+      imageUrl: "assets/images/frontpage-image-landscape.jpg",
+      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
+      portraitImageAltText: "Hilma Granqvist",
+      showEditionList: true,
+      showFooter: true
+    },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    introduction: {
+      hasSeparateTOC: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    mediaCollection: {
+      showURNButton: true
+    },
+    read: {
+      showURNButton: true,
+      showViewOptionsButton: true,
+      viewTypeSettings: {
+        showAll: false,
+        established: false,
+        comments: false,
+        manuscripts: false,
+        variations: false,
+        facsimiles: true,
+        illustrations: false,
+        legend: false
+      }
+    },
+    title: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    }
+  },
+  component: {
+    topMenu: {
+      showAboutButton: true,
+      showContentButton: true,
+      showElasticSearchButton: true,
+      showURNButton: false,
+      showLanguageButton: true,
+      showSiteLogo: true,
+      siteLogoDefaultImageUrl: "assets/images/logo.svg",
+      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
+      siteLogoLinkUrl: "https://www.sls.fi/"
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
+    facsimileColumn: {
+      imageQuality: 1,
+      showFacsimileTitle: false
+    },
+    occurrencesAccordion: {
+      hideCityRegionCountry: true,
+      hideTypeAndDescription: true,
+      publishedStatus: 2
+    }
+  },
+  modal: {
+    fullscreenImageViewer: {
+      imageQuality: 1
+    }
+  },
+  urnResolverUrl: "https://urn.fi/",
+  useSimpleWorkMetadata: false,
+  showOpenLegendButton: {
+    manuscripts: false,
+    variations: false
+  },
+  settings: {
+    disableReadToggles: false,
+    readToggles: {
+      comments: true,
+      personInfo: true,
+      placeInfo: true,
+      changes: true,
+      normalisations: true,
+      workInfo: true,
+      abbreviations: false,
+      paragraphNumbering: true,
+      pageBreakOriginal: true,
+      pageBreakEdition: false
+    },
+    introToggles: {
+      personInfo: false,
+      placeInfo: false,
+      workInfo: false,
+      paragraphNumbering: true,
+      pageBreakEdition: false
+    },
+    toolTips: {
+      comments: true,
+      personInfo: true,
+      placeInfo: true,
+      changes: true,
+      normalisations: true,
+      variations: false,
+      abbreviations: false,
+      workInfo: true,
+      footNotes: true
+    },
+    enableModeToggle: true,
+    galleryCollectionMapping: { "225": 46 },
+    showReadTextIllustrations: []
+  },
+  collectionDownloads: {
+    isDownloadOnly: false,
+    pdf: {},
+    epub: {}
+  },
+  textDownloadOptions: {
+    enabledIntroductionFormats: {
+        xml: true,
+        print: true
+    },
+    enabledEstablishedFormats: {
+        xml: true,
+        txt: false,
+        print: true
+    },
+    enabledCommentsFormats: {
+        xml: true,
+        txt: false,
+        print: true
+    },
+    usePrintNotDownloadIcon: false
+  },
+  simpleSearch: {
+    showPageNumbers: false,
+    user_defined_search_fields: ["textData"]
+  },
+  editionImages: {
+    default: "assets/images/edition-default-cover.jpg",
+    29: "assets/images/cover_pages/1.jpg",
+		30: "assets/images/cover_pages/marriage_conditions_1_001.jpg",
+		31: "assets/images/cover_pages/marriage_conditions_2_001.jpg",
+		147: "assets/images/cover_pages/147_11675.jpg",
+		148: "assets/images/cover_pages/148_11676.jpg",
+		149: "assets/images/cover_pages/149_11677.jpg",
+		537: "assets/images/cover_pages/537.jpg",
+		538: "assets/images/cover_pages/538.jpg",
+		539: "assets/images/cover_pages/539.jpg",
+		mediaCollections: "assets/images/cover_pages/mediaCollections.jpg"
+  },
+  show: {
+    TOC: {
+      Home: false,
+      About: true,
+      Read: true,
+      Facsimiles: false,
+      ImageGallery: false,
+      PersonSearch: true,
+      PlaceSearch: true,
+      MediaCollections: true,
+      TagSearch: true,
+      WorkSearch: false,
+      Books: true,
+      EPUB: false
+    },
+    highlightedSearchMatches: true
+  },
+  defaults: {
+    ReadModeView: ["facsimiles"]
+  },
+  defaultSelectedItem: "title",
+  cache: {
+    viewmodes: {
+      daysUntilExpires: 1
+    }
+  },
+  PersonSearchTypes: [{
+    object_type: "subject",
+    object_subtype: "",
+    translation: "TOC.PersonSearch"
+  }],
+  PersonSearch: {
+    ShowFilter: true,
+    ShowPublishedStatus: 2,
+    InitialLoadNumber: 500
+  },
+  LocationSearch: {
+    ShowFilter: false,
+    ShowPublishedStatus: 2,
+    InitialLoadNumber: 500
+  },
+  TagSearch: {
+    ShowFilter: false,
+    ShowPublishedStatus: 2
+  },
+  ProjectStaticMarkdownCoversFolder: "",
+  ProjectStaticMarkdownTitleFolder: "09",
+  SortCollectionsByRomanNumerals: false,
+  OpenCollectionFromToc: true,
+  SearchTocItemInAccordionByTitle: false,
+  HasCover: false,
+  HasTitle: true,
+  HasForeword: false,
+  HasIntro: false,
+  ElasticSearch: {
+    show: {
+      sortOptions: false,
+      facets: true
+    },
+    textTitleHighlightType: "fvh",
+    textHighlightType: "fvh",
+    groupOpenByDefault: {
+      type: true,
+      collection: true
+    },
+    indices: [
+      "granqvist"
+    ],
+    fixedFilters: [
+      {
+        terms: {
+          deleted: [
+            "0"
+          ]
+        }
+      },
+      {
+        terms: {
+          published: [
+            "2"
+          ]
+        }
+      }
+    ],
+    hitsPerPage: 15,
+    source: [],
+    aggregations: {
+      Type: {
+        terms: {
+          field: "text_type",
+          size: 40
+        }
+      },
+      Collection: {
+        terms: {
+          field: "publication_data.collection_name.keyword",
+          size: 40
+        }
+      }
+    },
+    suggestions: {}
+  }
 }
 
 /**
@@ -1436,11 +1694,19 @@ export const config_mechelin: Config = {
     facsimileColumn: {
       imageQuality: 1,
       showFacsimileTitle: false
+    },
+    occurrencesAccordion: {
+      hideCityRegionCountry: true,
+      hideTypeAndDescription: true,
+      publishedStatus: 2
     }
   },
   modal: {
     fullscreenImageViewer: {
       imageQuality: 1
+    },
+    semanticDataObject: {
+      showOccurrences: false
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1561,19 +1827,8 @@ export const config_mechelin: Config = {
       ShowFilter: false,
       ShowPublishedStatus: 2
   },
-  Occurrences: {
-      HideTypeAndDescription: true,
-      hideCityRegionCountry: true,
-      ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "",
   ProjectStaticMarkdownTitleFolder: "",
-  showOccurencesModalOnReadPageAfterSearch: {
-    tagSearch: true,
-    personSearch: true,
-    placeSearch: true,
-    workSearch: true
-  },
   SortCollectionsByRomanNumerals: false,
   OpenCollectionFromToc: true,
   SearchTocItemInAccordionByTitle: false,
@@ -1581,8 +1836,6 @@ export const config_mechelin: Config = {
   HasTitle: false,
   HasForeword: false,
   HasIntro: true,
-  OpenOccurrencesAndInfoOnNewPage: false,
-  SingleOccurrenceType: null,
   ElasticSearch: {
     groupOpenByDefault: {
         type: true,
