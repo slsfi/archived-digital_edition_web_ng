@@ -255,24 +255,15 @@ export class IndexOfPersonsPage implements OnInit {
   }
 
   async openPerson(occurrenceResult: OccurrenceResult) {
-    const showOccurrencesModalOnRead = config.showOccurencesModalOnReadPageAfterSearch?.personSearch ?? true;
-    const openOccurrencesAndInfoOnNewPage = config.OpenOccurrencesAndInfoOnNewPage ?? false;
+    const occurrenceModal = await this.modalCtrl.create({
+      component: SemanticDataObjectModal,
+      componentProps: {
+        id: occurrenceResult.id,
+        type: this.objectType
+      }
+    });
 
-    if (openOccurrencesAndInfoOnNewPage) {
-      this.router.navigate([`/result/${this.objectType}/${occurrenceResult.id}`])
-
-    } else {
-      const occurrenceModal = await this.modalCtrl.create({
-        component: SemanticDataObjectModal,
-        componentProps: {
-          id: occurrenceResult.id,
-          type: this.objectType,
-          showOccurrencesModalOnRead: showOccurrencesModalOnRead
-        }
-      });
-
-      occurrenceModal.present();
-    }
+    occurrenceModal.present();
   }
 
   getMdContent(fileID: string): Observable<SafeHtml> {

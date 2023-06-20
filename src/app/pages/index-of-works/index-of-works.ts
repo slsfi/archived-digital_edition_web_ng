@@ -216,37 +216,15 @@ export class IndexOfWorksPage implements OnInit {
   }
 
   async openWork(occurrenceResult: OccurrenceResult) {
-    const showOccurrencesModalOnRead = config.showOccurencesModalOnReadPageAfterSearch?.workSearch ?? true;
-    const openOccurrencesAndInfoOnNewPage = config.OpenOccurrencesAndInfoOnNewPage ?? false;
+    const occurrenceModal = await this.modalCtrl.create({
+      component: SemanticDataObjectModal,
+      componentProps: {
+        occurrenceResult: occurrenceResult,
+        type: this.objectType
+      }
+    });
 
-    if (openOccurrencesAndInfoOnNewPage) {
-      // const nav = this.app.getActiveNavs();
-
-      // const params = {
-      //   id: occurrenceResult.id,
-      //   objectType: this.objectType
-      // }
-
-      // if ((this.platform.is('mobile') || this.userSettingsService.isMobile()) && !this.userSettingsService.isDesktop()) {
-      //   nav[0].push('occurrences-result', params);
-      // } else {
-      //   nav[0].setRoot('occurrences-result', params);
-      // }
-      this.router.navigate([`/result/${this.objectType}/${occurrenceResult.id}`])
-
-    } else {
-      const occurrenceModal = await this.modalCtrl.create({
-        component: SemanticDataObjectModal,
-        componentProps: {
-          occurrenceResult: occurrenceResult,
-          showOccurrencesModalOnRead: showOccurrencesModalOnRead,
-          objectType: this.objectType,
-          type: this.objectType
-        }
-      });
-
-      occurrenceModal.present();
-    }
+    occurrenceModal.present();
   }
 
   sortListAlphabeticallyAndGroup(list: any[]) {

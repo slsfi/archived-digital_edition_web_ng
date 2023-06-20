@@ -68,10 +68,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/single-edition/single-edition.module').then( m => m.SingleEditionPageModule)
   },
   {
-    path: 'result',
-    loadChildren: () => import('./pages/occurrences-result/occurrences-result.module').then( m => m.OccurrencesResultPageModule)
-  },
-  {
     path: 'search',
     loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
   },

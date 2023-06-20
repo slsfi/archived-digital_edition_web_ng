@@ -160,24 +160,15 @@ export class IndexOfKeywordsPage implements OnInit {
   }
 
   async openTag(occurrenceResult: OccurrenceResult) {
-    const showOccurrencesModalOnRead = config.showOccurencesModalOnReadPageAfterSearch?.tagSearch ?? true;
-    const openOccurrencesAndInfoOnNewPage = config.OpenOccurrencesAndInfoOnNewPage ?? false;
+    const occurrenceModal = await this.modalCtrl.create({
+      component: SemanticDataObjectModal,
+      componentProps: {
+        id: occurrenceResult.id,
+        type: this.objectType
+      }
+    });
 
-    if (openOccurrencesAndInfoOnNewPage) {
-      this.router.navigate([`/result/${this.objectType}/${occurrenceResult.id}`])
-
-    } else {
-      const occurrenceModal = await this.modalCtrl.create({
-        component: SemanticDataObjectModal,
-        componentProps: {
-          id: occurrenceResult.id,
-        type: this.objectType,
-        showOccurrencesModalOnRead: showOccurrencesModalOnRead
-        }
-      });
-
-      occurrenceModal.present();
-    }
+    occurrenceModal.present();
   }
 
   sortListAlphabeticallyAndGroup(list: any[]) {
