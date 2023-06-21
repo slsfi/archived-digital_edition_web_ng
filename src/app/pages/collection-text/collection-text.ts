@@ -42,20 +42,20 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   toolTipMaxWidth: string | null;
   toolTipScaleValue: number | null;
   toolTipText: string = '';
-  tooltipVisible: Boolean = false;
+  tooltipVisible: boolean = false;
   infoOverlayPosType: string;
   infoOverlayPosition: any;
   infoOverlayWidth: string | null;
   infoOverlayText: string = '';
   infoOverlayTitle: string = '';
-  userIsTouching: Boolean = false;
+  userIsTouching: boolean = false;
   collectionAndPublicationLegacyId: string = '';
-  illustrationsViewShown: Boolean = false;
-  simpleWorkMetadata?: Boolean;
-  showURNButton: Boolean;
-  showViewOptionsButton: Boolean = true;
-  showTextDownloadButton: Boolean = false;
-  usePrintNotDownloadIcon: Boolean = false;
+  illustrationsViewShown: boolean = false;
+  simpleWorkMetadata: boolean = false;
+  showURNButton: boolean;
+  showViewOptionsButton: boolean = true;
+  showTextDownloadButton: boolean = false;
+  usePrintNotDownloadIcon: boolean = false;
 
   addViewPopoverisOpen: boolean = false;
 
@@ -84,11 +84,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   enabledViewTypes: Array<string> = [];
 
   tooltips = {
-    'persons': {} as any,
     'comments': {} as any,
-    'works': {} as any,
-    'places': {} as any,
-    'abbreviations': {} as any,
     'footnotes': {} as any
   };
 
@@ -225,6 +221,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     this.activeMobileModeViewType = defaultViews.filter(
       (value: string) => availableMobileModeViews.includes(value) && this.viewTypes[value]
     )[0] || 'established';
+    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {
@@ -610,7 +607,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               this.readPopoverService.show.personInfo
             ) {
               this.ngZone.run(() => {
-                this.showPersonModal(eventTarget.getAttribute('data-id'));
+                this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'subject');
               });
               modalShown = true;
             } else if (
@@ -618,7 +615,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               this.readPopoverService.show.placeInfo
             ) {
               this.ngZone.run(() => {
-                this.showPlaceModal(eventTarget.getAttribute('data-id'));
+                this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'location');
               });
               modalShown = true;
             } else if (
@@ -626,7 +623,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               this.readPopoverService.show.workInfo
             ) {
               this.ngZone.run(() => {
-                this.showWorkModal(eventTarget.getAttribute('data-id'));
+                this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'work');
               });
               modalShown = true;
             } else if (
@@ -676,13 +673,13 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             ) {
               // Footnote reference clicked in manuscript column
               this.ngZone.run(() => {
-                this.showManuscriptFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), eventTarget);
+                this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), 'manuscript', eventTarget);
               });
               modalShown = true;
             } else if (eventTarget['classList'].contains('ttFoot')) {
               // Footnote reference clicked in reading text
               this.ngZone.run(() => {
-                this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), eventTarget);
+                this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), 'read-text', eventTarget);
               });
               modalShown = true;
             }
@@ -725,7 +722,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           ) {
             // Footnote reference clicked in variant.
             this.ngZone.run(() => {
-              this.showVariantFootnoteInfoOverlay(eventTarget.getAttribute('id'), eventTarget);
+              this.showFootnoteInfoOverlay(eventTarget.getAttribute('id'), 'variant', eventTarget);
             });
             modalShown = true;
           } else if (
@@ -1084,7 +1081,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 this.readPopoverService.show.personInfo
               ) {
                 this.ngZone.run(() => {
-                  this.showPersonTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
+                  this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
                 });
               } else if (
                 this.toolTipsSettings?.['placeInfo'] &&
@@ -1092,7 +1089,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 this.readPopoverService.show.placeInfo
               ) {
                 this.ngZone.run(() => {
-                  this.showPlaceTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
+                  this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
                 });
               } else if (
                 this.toolTipsSettings?.['workInfo'] &&
@@ -1100,7 +1097,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 this.readPopoverService.show.workInfo
               ) {
                 this.ngZone.run(() => {
-                  this.showWorkTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
+                  this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
                 });
               } else if (
                 this.toolTipsSettings?.['comments'] &&
@@ -1116,26 +1113,24 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                 eventTarget['classList'].contains('ttFoot')
               ) {
                 this.ngZone.run(() => {
-                  this.showManuscriptFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
+                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'manuscript', eventTarget);
                 });
               } else if (
                 this.toolTipsSettings?.['footNotes'] &&
                 eventTarget['classList'].contains('ttFoot')
               ) {
                 this.ngZone.run(() => {
-                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
+                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'read-text', eventTarget);
                 });
               }
             } else if (
               (
                 this.toolTipsSettings && this.toolTipsSettings['changes'] &&
                 eventTarget['classList'].contains('ttChanges') && this.readPopoverService.show.changes
-              ) ||
-              (
+              ) || (
                 this.toolTipsSettings && this.toolTipsSettings['normalisations'] &&
                 eventTarget['classList'].contains('ttNormalisations') && this.readPopoverService.show.normalisations
-              ) ||
-              (
+              ) || (
                 this.toolTipsSettings && this.toolTipsSettings['abbreviations'] &&
                 eventTarget['classList'].contains('ttAbbreviations') && this.readPopoverService.show.abbreviations
               )
@@ -1178,18 +1173,13 @@ export class CollectionTextPage implements OnInit, OnDestroy {
               eventTarget['classList'].contains('ttFoot')
             ) {
               this.ngZone.run(() => {
-                this.showVariantFootnoteTooltip(eventTarget.getAttribute('id'), eventTarget);
+                this.showFootnoteTooltip(eventTarget.getAttribute('id'), 'variant', eventTarget);
               });
             } else if (
-              eventTarget['classList'].contains('ttFoot') &&
-              !eventTarget.hasAttribute('id') &&
-              !eventTarget.hasAttribute('data-id')
-            ) {
-              this.ngZone.run(() => {
-                this.showTooltipFromInlineHtml(eventTarget);
-              });
-            } else if (
-              eventTarget['classList'].contains('ttComment') &&
+              (
+                eventTarget['classList'].contains('ttFoot') ||
+                eventTarget['classList'].contains('ttComment')
+              ) &&
               !eventTarget.hasAttribute('id') &&
               !eventTarget.hasAttribute('data-id')
             ) {
@@ -1216,18 +1206,14 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           if (
             eventTarget.hasAttribute('data-id') &&
             eventTarget['classList'].contains('doodle') &&
-            eventTarget['classList'].contains('unknown')
+            eventTarget['classList'].contains('unknown') &&
+            eventTarget['parentNode'] &&
+            eventTarget['parentNode']['classList'].contains('tooltiptrigger')
           ) {
-            if (
-              eventTarget['parentNode'] !== undefined &&
-              eventTarget['parentNode'] !== null &&
-              eventTarget['parentNode']['classList'].contains('tooltiptrigger')
-            ) {
-              eventTarget = eventTarget['parentNode'];
-              this.ngZone.run(() => {
-                this.showTooltipFromInlineHtml(eventTarget);
-              });
-            }
+            eventTarget = eventTarget['parentNode'];
+            this.ngZone.run(() => {
+              this.showTooltipFromInlineHtml(eventTarget);
+            });
           }
         }
       });
@@ -1244,242 +1230,95 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     });
   }
 
-  showPersonTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.persons[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.persons[id]);
-      this.setToolTipText(this.tooltips.persons[id]);
-      return;
-    }
-
-    this.tooltipService.getPersonTooltip(id).subscribe({
-      next: (tooltip) => {
-        const text = this.tooltipService.constructPersonTooltipText(tooltip, targetElem);
+  showSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement) {
+    this.tooltipService.getSemanticDataObjectTooltip(id, type, targetElem).subscribe(
+      (text) => {
         this.setToolTipPosition(targetElem, text);
         this.setToolTipText(text);
-        this.tooltips.persons[id] = text;
-      },
-      error: (e) => {
-        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-        this.setToolTipPosition(targetElem, noInfoFound);
-        this.setToolTipText(noInfoFound);
       }
-    });
+    );
   }
 
-  showPlaceTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.places[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.places[id]);
-      this.setToolTipText(this.tooltips.places[id]);
-      return;
-    }
-
-    this.tooltipService.getPlaceTooltip(id).subscribe({
-      next: (tooltip) => {
-        let text = '<b>' + tooltip.name.trim() + '</b>';
-        if (tooltip.description) {
-          text = text + ', ' + tooltip.description.trim();
-        }
-        this.setToolTipPosition(targetElem, text);
-        this.setToolTipText(text);
-        this.tooltips.places[id] = text;
-      },
-      error: (e) => {
-        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-        this.setToolTipPosition(targetElem, noInfoFound);
-        this.setToolTipText(noInfoFound);
-      }
-    });
-  }
-
-  showWorkTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.works[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.works[id]);
-      this.setToolTipText(this.tooltips.works[id]);
-      return;
-    }
-
-    if (this.simpleWorkMetadata === undefined) {
-      this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
-    }
-
-    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-
-    if (!this.simpleWorkMetadata) {
-      this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
-        next: (tooltip) => {
-          if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
-            this.setToolTipPosition(targetElem, noInfoFound);
-            this.setToolTipText(noInfoFound);
-            return;
-          }
-          tooltip = tooltip.hits.hits[0]['_source'];
-          const description = '<span class="work_title">' + tooltip.title  + '</span><br/>' + tooltip.reference;
-          this.setToolTipPosition(targetElem, description);
-          this.setToolTipText(description);
-          this.tooltips.works[id] = description;
-        },
-        error: (e) => {
-          this.setToolTipPosition(targetElem, noInfoFound);
-          this.setToolTipText(noInfoFound);
-        }
-      });
-    } else {
-      this.tooltipService.getWorkTooltip(id).subscribe({
-        next: (tooltip) => {
-          this.setToolTipPosition(targetElem, tooltip.title);
-          this.setToolTipText(tooltip.title);
-          this.tooltips.works[id] = tooltip.title;
-        },
-        error: (e) => {
-          this.setToolTipPosition(targetElem, noInfoFound);
-          this.setToolTipText(noInfoFound);
-        }
-      });
-    }
-  }
-
-  showFootnoteTooltip(id: string, targetElem: HTMLElement) {
-    if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
+  showFootnoteTooltip(id: string, textType: string, targetElem: HTMLElement) {
+    if (
+      textType === 'read-text' &&
+      this.tooltips.footnotes[id] &&
+      this.userSettingsService.isDesktop()
+    ) {
       this.setToolTipPosition(targetElem, this.tooltips.footnotes[id]);
       this.setToolTipText(this.tooltips.footnotes[id]);
       return;
     }
 
-    let footnoteText: any = '';
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.firstElementChild !== null
-    && targetElem.nextElementSibling.classList.contains('ttFoot')
-    && targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-    && targetElem.nextElementSibling.firstElementChild.getAttribute('data-id') === id) {
-      footnoteText = targetElem.nextElementSibling.firstElementChild.innerHTML;
-      // MathJx problem with resolving the actual formula, not the translated formula.
-      if (targetElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
-        const tmpElem = <HTMLElement> targetElem.nextElementSibling.firstElementChild.lastChild;
-        footnoteText = '$' + tmpElem.innerHTML + '$';
+    const footnoteText = this.getFootnoteText(id, textType, targetElem);
+    if (footnoteText) {
+      this.setToolTipPosition(targetElem, footnoteText);
+      this.setToolTipText(footnoteText);
+      if (textType === 'read-text' && this.userSettingsService.isDesktop()) {
+        this.tooltips.footnotes[id] = footnoteText;
       }
-    } else {
-      return;
     }
+  }
 
-    footnoteText = footnoteText.replace(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
+  private getFootnoteText(id: string, textType: string, triggerElem: HTMLElement): string {
+    const textTypeClass = (textType === 'variant') ? 'teiVariant'
+      : (textType === 'manuscript') ? 'teiManuscript'
+      : '';
 
-    // Get column id of the column where the footnote is.
-    let containerElem = targetElem.parentElement;
-    while (containerElem !== null && !(containerElem.classList.contains('read-column') &&
-     containerElem.hasAttribute('id'))) {
-      containerElem = containerElem.parentElement;
-    }
-    if (containerElem !== null) {
-      const columnId = containerElem.getAttribute('id');
-
-      // Prepend the footnoteindicator to the footnote text.
-      const footnoteWithIndicator: string = '<div class="footnoteWrapper"><a class="xreference footnoteReference targetColumnId_'
-      + columnId + '" href="#' + id + '">' + targetElem.textContent
-      + '</a>' + '<p class="footnoteText">' + footnoteText  + '</p></div>';
-      const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
-        this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-
-      if (footNoteHTML) {
-        this.setToolTipPosition(targetElem, footNoteHTML);
-        this.setToolTipText(footNoteHTML);
+    if (
+      (
+        (
+          textTypeClass &&
+          triggerElem.nextElementSibling?.classList.contains(textTypeClass)
+        ) || !textTypeClass
+      ) &&
+      triggerElem.nextElementSibling?.classList.contains('ttFoot') &&
+      triggerElem.nextElementSibling?.firstElementChild?.classList.contains('ttFixed') &&
+      (
+        (
+          (!textTypeClass || textType === 'manuscript') &&
+          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('data-id') === id
+        ) || (
+          textType === 'variant' &&
+          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('id') === id
+        )
+      )
+    ) {
+      let ttText = triggerElem.nextElementSibling.firstElementChild.innerHTML;
+      // MathJax problem with resolving the actual formula, not the translated formula.
+      if (triggerElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
+        const tmpElem = <HTMLElement> triggerElem.nextElementSibling.firstElementChild.lastChild;
+        ttText = '$' + tmpElem.innerHTML + '$';
       }
+
+      ttText = ttText.replaceAll(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
+
+      let columnId = '';
       if (this.userSettingsService.isDesktop()) {
-        this.tooltips.footnotes[id] = footNoteHTML;
-      }
-    }
-  }
-
-  showVariantFootnoteTooltip(id: string, targetElem: HTMLElement) {
-    const footNoteHTML: string | null = this.getVariantFootnoteText(id, targetElem);
-    if (footNoteHTML) {
-      this.setToolTipPosition(targetElem, footNoteHTML);
-      this.setToolTipText(footNoteHTML);
-    }
-  }
-
-  showManuscriptFootnoteTooltip(id: string, targetElem: HTMLElement) {
-    const footNoteHTML: string | null = this.getManuscriptFootnoteText(id, targetElem);
-    if (footNoteHTML) {
-      this.setToolTipPosition(targetElem, footNoteHTML);
-      this.setToolTipText(footNoteHTML);
-    }
-  }
-
-  /* Use this method to get a footnote text in a variant text. Returns a string with the footnote html. */
-  private getVariantFootnoteText(id: string, triggerElem: HTMLElement) {
-    if (triggerElem.nextElementSibling !== null
-    && triggerElem.nextElementSibling.firstElementChild !== null
-    && triggerElem.nextElementSibling.classList.contains('teiVariant')
-    && triggerElem.nextElementSibling.classList.contains('ttFoot')
-    && triggerElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-    && triggerElem.nextElementSibling.firstElementChild.getAttribute('id') === id) {
-      let ttText = triggerElem.nextElementSibling.firstElementChild.innerHTML;
-      // MathJx problem with resolving the actual formula, not the translated formula.
-      if (triggerElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
-        const tmpElem = <HTMLElement> triggerElem.nextElementSibling.firstElementChild.lastChild;
-        ttText = '$' + tmpElem.innerHTML + '$';
+        // Get column id of the column where the footnote is.
+        let containerElem = triggerElem.parentElement;
+        while (
+          containerElem !== null &&
+          !(containerElem.classList.contains('read-column') && containerElem.hasAttribute('id'))
+        ) {
+          containerElem = containerElem.parentElement;
+        }
+        if (containerElem !== null) {
+          columnId = containerElem.getAttribute('id') || '';
+        }
       }
 
-      // Get column id of the column where the footnote is.
-      let containerElem = triggerElem.parentElement;
-      while (containerElem !== null && !(containerElem.classList.contains('read-column') &&
-       containerElem.hasAttribute('id'))) {
-        containerElem = containerElem.parentElement;
-      }
-      if (containerElem !== null) {
-        const columnId = containerElem.getAttribute('id');
-
-        // Prepend the footnoteindicator to the the footnote text.
-        const footnoteWithIndicator: string = '<div class="footnoteWrapper">'
-        + '<a class="xreference footnoteReference teiVariant targetColumnId_'
-        + columnId + '" href="#' + id + '">' + triggerElem.textContent
+      // Prepend the footnoteindicator to the the footnote text.
+      const footnoteWithIndicator: string = '<div class="footnoteWrapper">'
+        + '<a class="xreference footnoteReference'
+        + (textTypeClass ? ' ' + textTypeClass : '')
+        + (columnId ? ' targetColumnId_' + columnId : '')
+        + '" href="#' + id + '">' + triggerElem.textContent
         + '</a>' + '<p class="footnoteText">' + ttText  + '</p></div>';
-        const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
-        this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-        return footNoteHTML;
-      } else {
-        return '';
-      }
-    } else {
-      return '';
-    }
-  }
-
-  /* Use this method to get a footnote text in a manuscript text. Returns a string with the footnote html. */
-  private getManuscriptFootnoteText(id: string, triggerElem: HTMLElement) {
-    if (triggerElem.nextElementSibling !== null
-    && triggerElem.nextElementSibling.firstElementChild !== null
-    && triggerElem.nextElementSibling.classList.contains('teiManuscript')
-    && triggerElem.nextElementSibling.classList.contains('ttFoot')
-    && triggerElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-    && triggerElem.nextElementSibling.firstElementChild.getAttribute('data-id') === id) {
-      let ttText = triggerElem.nextElementSibling.firstElementChild.innerHTML;
-      // MathJx problem with resolving the actual formula, not the translated formula.
-      if (triggerElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
-        const tmpElem = <HTMLElement> triggerElem.nextElementSibling.firstElementChild.lastChild;
-        ttText = '$' + tmpElem.innerHTML + '$';
-      }
-
-      // Get column id of the column where the footnote is.
-      let containerElem = triggerElem.parentElement;
-      while (containerElem !== null && !(containerElem.classList.contains('read-column') &&
-       containerElem.hasAttribute('id'))) {
-        containerElem = containerElem.parentElement;
-      }
-      if (containerElem !== null) {
-        const columnId = containerElem.getAttribute('id');
-
-        // Prepend the footnoteindicator to the the footnote text.
-        const footnoteWithIndicator: string = '<div class="footnoteWrapper">'
-        + '<a class="xreference footnoteReference teiManuscript targetColumnId_'
-        + columnId + '" href="#' + id + '">' + triggerElem.textContent
-        + '</a>' + '<p class="footnoteText">' + ttText  + '</p></div>';
-        const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
-        this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-        return footNoteHTML;
-      } else {
-        return '';
-      }
+      const footNoteHTML: string | null = this.sanitizer.sanitize(
+        SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator)
+      );
+      return footNoteHTML || '';
     } else {
       return '';
     }
@@ -1487,8 +1326,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   /* This method is used for showing tooltips for changes, normalisations, abbreviations and explanations in manuscripts. */
   showTooltipFromInlineHtml(targetElem: HTMLElement) {
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.classList.contains('tooltip')) {
+    if (targetElem.nextElementSibling?.classList.contains('tooltip')) {
       this.setToolTipPosition(targetElem, targetElem.nextElementSibling.innerHTML);
       this.setToolTipText(targetElem.nextElementSibling.innerHTML);
     }
@@ -1516,93 +1354,35 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   showVariantTooltip(targetElem: HTMLElement) {
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.classList.contains('tooltip')) {
-      if (targetElem.nextElementSibling.textContent) {
-        this.setToolTipPosition(targetElem, targetElem.nextElementSibling.textContent);
-        this.setToolTipText(targetElem.nextElementSibling.textContent);
-      }
+    if (
+      targetElem.nextElementSibling?.classList.contains('tooltip') &&
+      targetElem.nextElementSibling?.textContent
+    ) {
+      this.setToolTipPosition(targetElem, targetElem.nextElementSibling.textContent);
+      this.setToolTipText(targetElem.nextElementSibling.textContent);
     }
   }
 
-  showFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
+  showFootnoteInfoOverlay(id: string, textType: string, targetElem: HTMLElement) {
+    if (
+      textType === 'read-text' &&
+      this.tooltips.footnotes[id] &&
+      this.userSettingsService.isDesktop()
+    ) {
       this.setInfoOverlayTitle($localize`:@@note:Not`);
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(this.tooltips.footnotes[id]);
       return;
     }
 
-    let footnoteText: any = '';
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.firstElementChild !== null
-    && targetElem.nextElementSibling.classList.contains('ttFoot')
-    && targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-    && targetElem.nextElementSibling.firstElementChild.getAttribute('data-id') === id) {
-      footnoteText = targetElem.nextElementSibling.firstElementChild.innerHTML;
-      // MathJx problem with resolving the actual formula, not the translated formula.
-      if (targetElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
-        const tmpElem = <HTMLElement> targetElem.nextElementSibling.firstElementChild.lastChild;
-        footnoteText = '$' + tmpElem.innerHTML + '$';
+    const footnoteText = this.getFootnoteText(id, textType, targetElem);
+    if (footnoteText) {
+      this.setInfoOverlayTitle($localize`:@@note:Not`);
+      this.setInfoOverlayPositionAndWidth(targetElem);
+      this.setInfoOverlayText(footnoteText);
+      if (textType === 'read-text' && this.userSettingsService.isDesktop()) {
+        this.tooltips.footnotes[id] = footnoteText;
       }
-    } else {
-      return;
-    }
-
-    footnoteText = footnoteText.replace(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
-
-    let footnoteWithIndicator = '';
-    if (this.userSettingsService.isDesktop()) {
-      // Get column id of the column where the footnote is.
-      let containerElem = targetElem.parentElement;
-      while (containerElem !== null && !(containerElem.classList.contains('read-column') &&
-      containerElem.hasAttribute('id'))) {
-        containerElem = containerElem.parentElement;
-      }
-      if (containerElem !== null) {
-        const columnId = containerElem.getAttribute('id');
-
-        // Prepend the footnoteindicator to the footnote text.
-        footnoteWithIndicator = '<div class="footnoteWrapper"><a class="xreference footnoteReference targetColumnId_'
-        + columnId + '" href="#' + id + '">' + targetElem.textContent + '</a>'
-        + '<p class="footnoteText">' + footnoteText + '</p></div>';
-      }
-    } else {
-      // This is for mobile view.
-      // Prepend the footnoteindicator to the footnote text.
-      footnoteWithIndicator = '<div class="footnoteWrapper"><a class="xreference footnoteReference" href="#' + id + '">'
-      + targetElem.textContent + '</a>' + '<p class="footnoteText">'
-      + footnoteText + '</p></div>';
-    }
-
-    const footNoteHTML: string | null = this.sanitizer.sanitize(SecurityContext.HTML,
-      this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-
-    this.setInfoOverlayTitle($localize`:@@note:Not`);
-    this.setInfoOverlayPositionAndWidth(targetElem);
-    if (footNoteHTML) {
-      this.setInfoOverlayText(footNoteHTML);
-    }
-    if (this.userSettingsService.isDesktop()) {
-      this.tooltips.footnotes[id] = footNoteHTML;
-    }
-  }
-
-  showManuscriptFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.setInfoOverlayTitle($localize`:@@note:Not`);
-    const footNoteHTML: string | null = this.getManuscriptFootnoteText(id, targetElem);
-    this.setInfoOverlayPositionAndWidth(targetElem);
-    if (footNoteHTML) {
-      this.setInfoOverlayText(footNoteHTML);
-    }
-  }
-
-  showVariantFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    this.setInfoOverlayTitle($localize`:@@note:Not`);
-    const footNoteHTML: string | null = this.getVariantFootnoteText(id, targetElem);
-    this.setInfoOverlayPositionAndWidth(targetElem);
-    if (footNoteHTML) {
-      this.setInfoOverlayText(footNoteHTML);
     }
   }
 
@@ -1632,8 +1412,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   /* This method is used for showing infoOverlays for changes, normalisations and abbreviations, and
      also comments if they are present inline in the text. */
   showInfoOverlayFromInlineHtml(targetElem: HTMLElement) {
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.classList.contains('tooltip')) {
+    if (targetElem.nextElementSibling?.classList.contains('tooltip')) {
       let text = '';
       let lemma = '';
 
@@ -1642,20 +1421,14 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.setInfoOverlayTitle($localize`:@@editorialChange:Utgivarändring`);
         if (targetElem.classList.contains('corr_red')) {
           lemma = targetElem.innerHTML;
-        } else if (
-          targetElem.firstElementChild !== null &&
-          targetElem.firstElementChild.classList.contains('corr_hide')
-        ) {
+        } else if (targetElem.firstElementChild?.classList.contains('corr_hide')) {
           lemma = '<span class="corr_hide">' + targetElem.firstElementChild.innerHTML + '</span>';
-        } else if (
-          targetElem.firstElementChild !== null &&
-          targetElem.firstElementChild.classList.contains('corr')
-        ) {
+        } else if (targetElem.firstElementChild?.classList.contains('corr')) {
           lemma = targetElem.firstElementChild.innerHTML;
         }
         text = '<p class="infoOverlayText"><span class="ioLemma">'
-        + lemma + '</span><span class="ioDescription">'
-        + targetElem.nextElementSibling.innerHTML + '</span></p>';
+          + lemma + '</span><span class="ioDescription">'
+          + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttNormalisations')) {
         // Normalisation.
         this.setInfoOverlayTitle($localize`:@@editorialNormalisation:Normalisering`);
@@ -1665,40 +1438,30 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           lemma = targetElem.innerHTML;
         }
         text = '<p class="infoOverlayText"><span class="ioLemma">'
-        + lemma + '</span><span class="ioDescription">'
-        + targetElem.nextElementSibling.innerHTML + '</span></p>';
+          + lemma + '</span><span class="ioDescription">'
+          + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttAbbreviations')) {
         // Abbreviation.
         this.setInfoOverlayTitle($localize`:@@abbreviation:Förkortning`);
-        if (
-          targetElem.firstElementChild !== null &&
-          targetElem.firstElementChild.classList.contains('abbr')
-        ) {
+        if (targetElem.firstElementChild?.classList.contains('abbr')) {
           text = '<p class="infoOverlayText"><span class="ioLemma">'
-          + targetElem.firstElementChild.innerHTML
-          + '</span><span class="ioDescription">'
-          + targetElem.nextElementSibling.innerHTML + '</span></p>';
+            + targetElem.firstElementChild.innerHTML
+            + '</span><span class="ioDescription">'
+            + targetElem.nextElementSibling.innerHTML + '</span></p>';
         }
       } else if (targetElem.nextElementSibling.classList.contains('ttComment')) {
         // Comment.
         this.setInfoOverlayTitle($localize`:@@comments:Kommentarer`);
-        if (
-          targetElem.nextElementSibling !== null &&
-          targetElem.nextElementSibling.classList.contains('noteText')
-        ) {
+        if (targetElem.nextElementSibling?.classList.contains('noteText')) {
           text = '<p class="infoOverlayText"><span class="ioDescription">'
-          + targetElem.nextElementSibling.innerHTML + '</span></p>';
+            + targetElem.nextElementSibling.innerHTML + '</span></p>';
         }
       } else if (
         targetElem.classList.contains('ttFoot') &&
-        targetElem.nextElementSibling !== null &&
-        targetElem.nextElementSibling.classList.contains('ttFoot')
+        targetElem.nextElementSibling?.classList.contains('ttFoot')
       ) {
         // Some other note coded as a footnote (but lacking id and data-id attributes).
-        if (
-          targetElem.nextElementSibling.firstElementChild !== null &&
-          targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-        ) {
+        if (targetElem.nextElementSibling.firstElementChild?.classList.contains('ttFixed')) {
           if (targetElem.classList.contains('revision')) {
             this.setInfoOverlayTitle($localize`:@@revisionNote:Repetitionsanteckning`);
             lemma = '';
@@ -1707,8 +1470,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             lemma = '<span class="ioLemma">' + targetElem.innerHTML + '</span>';
           }
           text = '<p class="infoOverlayText">'
-          + lemma + '<span class="ioDescription">'
-          + targetElem.nextElementSibling.firstElementChild.innerHTML + '</span></p>';
+            + lemma + '<span class="ioDescription">'
+            + targetElem.nextElementSibling.firstElementChild.innerHTML + '</span></p>';
         }
       } else {
         // Some other note, generally editorial remarks pertaining to a manuscript.
@@ -1719,8 +1482,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         }
         lemma = targetElem.textContent || '';
         if (
-          targetElem.classList.contains('deletion') ||
-          (
+          targetElem.classList.contains('deletion') || (
             targetElem.parentElement !== null &&
             targetElem.classList.contains('tei_deletion_medium_wrapper')
           )
@@ -1728,8 +1490,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           lemma = '<span class="deletion">' + lemma + '</span>';
         }
         text = '<p class="infoOverlayText"><span class="ioLemma">'
-        + lemma + '</span><span class="ioDescription">'
-        + targetElem.nextElementSibling.innerHTML + '</span></p>';
+          + lemma + '</span><span class="ioDescription">'
+          + targetElem.nextElementSibling.innerHTML + '</span></p>';
       }
       this.setInfoOverlayPositionAndWidth(targetElem);
       this.setInfoOverlayText(text);
@@ -1857,26 +1619,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  async showPersonModal(id: string) {
+  async showSemanticDataObjectModal(id: string, type: string) {
     const modal = await this.modalCtrl.create({
       component: SemanticDataObjectModal,
-      componentProps: { id: id, type: 'subject' }
-    });
-    modal.present();
-  }
-
-  async showPlaceModal(id: string) {
-    const modal = await this.modalCtrl.create({
-      component: SemanticDataObjectModal,
-      componentProps: { id: id, type: 'location' }
-    });
-    modal.present();
-  }
-
-  async showWorkModal(id: string) {
-    const modal = await this.modalCtrl.create({
-      component: SemanticDataObjectModal,
-      componentProps: { id: id, type: 'work' }
+      componentProps: { id: id, type: type }
     });
     modal.present();
   }

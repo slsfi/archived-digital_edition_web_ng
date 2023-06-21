@@ -1,68 +1,97 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { CommentService } from '../comments/comment.service';
+import { catchError, map, Observable, of } from 'rxjs';
+
+import { CommentService } from 'src/app/services/comments/comment.service';
+import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { config } from "src/assets/config/config";
 
 @Injectable()
 export class TooltipService {
-  private apiEndPoint: string;
-  private projectMachineName: string;
-  uncertainPersonCorrespTranslation = '';
-  fictionalPersonCorrespTranslation = '';
-  BCTranslation = 'BC';
+  private API: string = '';
+  private cachedTooltips: Record<string, any> = {
+    'persons': new Map(),
+    'works': new Map(),
+    'places': new Map()
+  };
+  private project: string = '';
+  private maxTooltipCacheSize: number = 50;
+  private simpleWorkMetadata: boolean = false;
 
   constructor(
+    private http: HttpClient,
     private commentService: CommentService,
-    private http: HttpClient
+    private semanticDataService: SemanticDataService
   ) {
-    this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.projectMachineName = config.app?.machineName ?? '';
-
-    this.uncertainPersonCorrespTranslation = $localize`:@@uncertainPersonCorresp:ev.`;
-    this.fictionalPersonCorrespTranslation = $localize`:@@fictionalPersonCorresp:historisk förebild`;
-    this.BCTranslation = $localize`:@@BC:f.Kr.`;
+    this.API = config.app?.apiEndpoint ?? '';
+    this.project = config.app?.machineName ?? '';
+    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
   }
 
-  getPersonTooltip(id: string): Observable<any> {
-    let url = '';
-    url = `${this.apiEndPoint}/${this.projectMachineName}/subject/${id}`;
-    return this.http.get(url);
-  }
-
-  getPlaceTooltip(id: string): Observable<any> {
-    let url = '';
-    url = `${this.apiEndPoint}/${this.projectMachineName}/location/${id}`;
-    return this.http.get(url);
-  }
-
-  getTagTooltip(id: string): Observable<any> {
-    let url = '';
-    url = `${this.apiEndPoint}/${this.projectMachineName}/tag/${id}`;
-    return this.http.get(url);
-  }
-
-  getWorkTooltip(id: string): Observable<any> {
-    let url = '';
-    url = `${this.apiEndPoint}/${this.projectMachineName}/work/${id}`;
-    return this.http.get(url);
-  }
-
-  getSingleSemanticObject(type: string, id: string): Observable<any> {
-    type === 'person' ? type = 'subject'
-      : type === 'place' ? type = 'location'
-      : type === 'keyword' ? type = 'tag'
+  getSingleSemanticObject(id: string, type: string): Observable<any> {
+    type = type === 'person' ? 'subject'
+      : type === 'place' ? 'location'
+      : type === 'keyword' ? 'tag'
       : type;
     return this.http.get(
-      `${this.apiEndPoint}/${this.projectMachineName}/${type}/${id}`
+      `${this.API}/${this.project}/${type}/${id}`
     );
   }
 
-  // TODO: This function is never used.
-  decodeHtmlEntity(str: string) {
-    return str.replace(/&#(\d+);/g, function (match, dec) {
-      return String.fromCharCode(dec);
-    });
+  getSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement): Observable<string> {
+    const cachedTooltip =
+      (type === 'person' && this.cachedTooltips.persons.has(id)) ? this.cachedTooltips.persons.get(id)
+      : (type === 'place' && this.cachedTooltips.places.has(id)) ? this.cachedTooltips.places.get(id)
+      : (type === 'work' && this.cachedTooltips.works.has(id)) ? this.cachedTooltips.works.get(id)
+      : '';
+
+    if (cachedTooltip) {
+      return of(cachedTooltip);
+    }
+
+    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
+
+    if (type === 'work' && !this.simpleWorkMetadata) {
+      return this.semanticDataService.getSingleObjectElastic('work', id).pipe(
+        map((tooltip) => {
+          let text = noInfoFound;
+          if (tooltip?.hits?.hits?.[0]?.['_source']) {
+            tooltip = tooltip.hits.hits[0]['_source'];
+            text = '<span class="work_title">' + tooltip.title  + '</span><br/>' + tooltip.reference;
+            this.cachedTooltips.works.size > this.maxTooltipCacheSize && this.cachedTooltips.works.clear();
+            this.cachedTooltips.works.set(id, text);
+          }
+          return text || noInfoFound;
+        }),
+        catchError((e) => {
+          return noInfoFound;
+        })
+      );
+    } else {
+      return this.getSingleSemanticObject(id, type).pipe(
+        map((tooltip) => {
+          let text = '';
+          if (type === 'person') {
+            text = this.constructPersonTooltipText(tooltip, targetElem);
+            this.cachedTooltips.persons.size > this.maxTooltipCacheSize && this.cachedTooltips.persons.clear();
+            this.cachedTooltips.persons.set(id, text);
+          } else if (type === 'place') {
+            text = '<b>' + tooltip.name.trim() + '</b>';
+            tooltip.description && (text += ', ' + tooltip.description.trim());
+            this.cachedTooltips.places.size > this.maxTooltipCacheSize && this.cachedTooltips.places.clear();
+            this.cachedTooltips.places.set(id, text);
+          } else if (type === 'work') {
+            text = tooltip.title;
+            this.cachedTooltips.works.size > this.maxTooltipCacheSize && this.cachedTooltips.works.clear();
+            this.cachedTooltips.works.set(id, text);
+          }
+          return text || noInfoFound;
+        }),
+        catchError((e) => {
+          return noInfoFound;
+        })
+      );
+    }
   }
 
   /**
@@ -82,47 +111,26 @@ export class TooltipService {
     );
   }
 
-  private async handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = (await error.json()) || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    throw errMsg;
-  }
-
   constructPersonTooltipText(tooltip: any, targetElem: HTMLElement) {
     let text = '';
     let uncertainPretext = '';
     let fictionalPretext = '';
-    if (targetElem.classList.contains('uncertain')) {
-      if (this.uncertainPersonCorrespTranslation !== '') {
-        uncertainPretext = this.uncertainPersonCorrespTranslation + ' ';
-      }
-    }
-    if (targetElem.classList.contains('fictional')) {
-      if (this.fictionalPersonCorrespTranslation !== '') {
-        fictionalPretext = this.fictionalPersonCorrespTranslation + ':<br/>';
-      }
-    }
+
+    (targetElem.classList.contains('uncertain') &&
+      $localize`:@@uncertainPersonCorresp:ev.`) &&
+      (uncertainPretext = $localize`:@@uncertainPersonCorresp:ev.` + ' ');
+
+    (targetElem.classList.contains('fictional') &&
+      $localize`:@@fictionalPersonCorresp:historisk förebild`) &&
+      (fictionalPretext = $localize`:@@fictionalPersonCorresp:historisk förebild` + ':<br/>');
 
     text = '<b>' + tooltip.full_name.trim() + '</b>';
-
     const yearBornDeceasedString = this.constructYearBornDeceasedString(
       tooltip.date_born,
       tooltip.date_deceased
     );
-    if (yearBornDeceasedString !== '') {
-      text += ' ' + yearBornDeceasedString;
-    }
-
-    if (tooltip.description !== null) {
-      text += ', ' + tooltip.description;
-    }
-
+    (yearBornDeceasedString !== '') && (text += ' ' + yearBornDeceasedString);
+    (tooltip.description !== null) && (text += ', ' + tooltip.description);
     text = uncertainPretext + text;
     text = fictionalPretext + text;
     return text;
@@ -139,10 +147,10 @@ export class TooltipService {
         ? String(dateDeceased).split('-')[0].replace(/^0+/, '').split(' ')[0]
         : null;
     const bcIndicatorDeceased = String(dateDeceased).includes('BC')
-      ? ' ' + this.BCTranslation
+      ? ' ' + $localize`:@@BC:f.Kr.`
       : '';
     let bcIndicatorBorn = String(dateBorn).includes('BC')
-      ? ' ' + this.BCTranslation
+      ? ' ' + $localize`:@@BC:f.Kr.`
       : '';
     if (
       String(dateBorn).includes('BC') &&
@@ -561,4 +569,5 @@ export class TooltipService {
     };
     return dimensions;
   }
+
 }

@@ -32,9 +32,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   pos: string | null;
   public urlParameters$: Observable<any>;
   public tocMenuOpen: boolean;
-  public hasSeparateIntroToc: Boolean = false;
+  public hasSeparateIntroToc: boolean = false;
   public showURNButton: boolean;
-  showViewOptionsButton: Boolean = true;
+  showViewOptionsButton: boolean = true;
   readPopoverTogglesIntro: any = {};
   toolTipsSettings: any = {};
   toolTipPosType: string;
@@ -42,13 +42,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   toolTipMaxWidth: string | null;
   toolTipScaleValue: number | null;
   toolTipText: string = '';
-  tooltipVisible: Boolean = false;
+  tooltipVisible: boolean = false;
   tooltips = {
-    'persons': {} as any,
-    'comments': {} as any,
-    'works': {} as any,
-    'places': {} as any,
-    'abbreviations': {} as any,
     'footnotes': {} as any,
   };
   infoOverlayPosType: string;
@@ -56,15 +51,15 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   infoOverlayWidth: string | null;
   infoOverlayText: string = '';
   infoOverlayTitle: string = '';
-  textLoading: Boolean = true;
+  textLoading: boolean = true;
   tocItems?: any;
   intervalTimerId: ReturnType<typeof setInterval> | undefined;
-  userIsTouching: Boolean = false;
+  userIsTouching: boolean = false;
   collectionLegacyId: string = '';
-  simpleWorkMetadata?: Boolean;
-  showTextDownloadButton: Boolean = false;
-  usePrintNotDownloadIcon: Boolean = false;
-  hasTOCLabelTranslation: Boolean = false;
+  simpleWorkMetadata?: boolean;
+  showTextDownloadButton: boolean = false;
+  usePrintNotDownloadIcon: boolean = false;
+  hasTOCLabelTranslation: boolean = false;
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
   private unlistenMouseoutEvents?: () => void;
@@ -84,7 +79,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     public semanticDataService: SemanticDataService,
     public readPopoverService: ReadPopoverService,
     public commonFunctions: CommonFunctionsService,
-    private modalController: ModalController,
+    private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router,
     @Inject(LOCALE_ID) public activeLocale: string
@@ -362,11 +357,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         if (eventTarget.classList.contains('tooltiptrigger') && eventTarget.hasAttribute('data-id')) {
           this.ngZone.run(() => {
             if (eventTarget.classList.contains('person') && this.readPopoverService.show.personInfo) {
-              this.showPersonModal(eventTarget.getAttribute('data-id') || '');
+              this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'subject');
             } else if (eventTarget.classList.contains('placeName') && this.readPopoverService.show.placeInfo) {
-              this.showPlaceModal(eventTarget.getAttribute('data-id') || '');
+              this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'location');
             } else if (eventTarget.classList.contains('title') && this.readPopoverService.show.workInfo) {
-              this.showWorkModal(eventTarget.getAttribute('data-id') || '');
+              this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'work');
             } else if (eventTarget.classList.contains('ttFoot')) {
               this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id') || '', eventTarget);
             }
@@ -543,23 +538,36 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           // Mouseover effects only if using a cursor, not if the user is touching the screen
           const eventTarget = this.getEventTarget(event) as any;
 
-          if (eventTarget.classList.contains('tooltiptrigger')) {
-            if (eventTarget.hasAttribute('data-id')) {
-              this.ngZone.run(() => {
-                if (this.toolTipsSettings.personInfo && eventTarget.classList.contains('person')
-                && this.readPopoverService.show.personInfo) {
-                  this.showPersonTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
-                } else if (this.toolTipsSettings.placeInfo && eventTarget.classList.contains('placeName')
-                && this.readPopoverService.show.placeInfo) {
-                  this.showPlaceTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
-                } else if (this.toolTipsSettings.workInfo && eventTarget.classList.contains('title')
-                && this.readPopoverService.show.workInfo) {
-                  this.showWorkTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
-                } else if (this.toolTipsSettings.footNotes && eventTarget.classList.contains('ttFoot')) {
-                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
-                }
-              });
-            }
+          if (
+            eventTarget.classList.contains('tooltiptrigger') &&
+            eventTarget.hasAttribute('data-id')
+          ) {
+            this.ngZone.run(() => {
+              if (
+                this.toolTipsSettings.personInfo &&
+                eventTarget.classList.contains('person') &&
+                this.readPopoverService.show.personInfo
+              ) {
+                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
+              } else if (
+                this.toolTipsSettings.placeInfo &&
+                eventTarget.classList.contains('placeName') &&
+                this.readPopoverService.show.placeInfo
+              ) {
+                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
+              } else if (
+                this.toolTipsSettings.workInfo &&
+                eventTarget.classList.contains('title') &&
+                this.readPopoverService.show.workInfo
+              ) {
+                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
+              } else if (
+                this.toolTipsSettings.footNotes &&
+                eventTarget.classList.contains('ttFoot')
+              ) {
+                this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
+              }
+            });
           }
         }
       });
@@ -576,98 +584,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     });
   }
 
-  showPersonTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.persons[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.persons[id]);
-      this.setToolTipText(this.tooltips.persons[id]);
-      return;
-    }
-
-    this.tooltipService.getPersonTooltip(id).subscribe({
-      next: (tooltip) => {
-        const text = this.tooltipService.constructPersonTooltipText(tooltip, targetElem);
+  showSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement) {
+    this.tooltipService.getSemanticDataObjectTooltip(id, type, targetElem).subscribe(
+      (text) => {
         this.setToolTipPosition(targetElem, text);
         this.setToolTipText(text);
-        this.tooltips.persons[id] = text;
-      },
-      error: (e) => {
-        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-        this.setToolTipPosition(targetElem, noInfoFound);
-        this.setToolTipText(noInfoFound);
       }
-    });
-  }
-
-  showPlaceTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.places[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.places[id]);
-      this.setToolTipText(this.tooltips.places[id]);
-      return;
-    }
-
-    this.tooltipService.getPlaceTooltip(id).subscribe({
-      next: (tooltip) => {
-        let text = '<b>' + tooltip.name.trim() + '</b>';
-        if (tooltip.description) {
-          text = text + ', ' + tooltip.description.trim();
-        }
-        this.setToolTipPosition(targetElem, text);
-        this.setToolTipText(text);
-        this.tooltips.places[id] = text;
-      },
-      error: (e) => {
-        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-        this.setToolTipPosition(targetElem, noInfoFound);
-        this.setToolTipText(noInfoFound);
-      }
-    });
-  }
-
-  showWorkTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.works[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.works[id]);
-      this.setToolTipText(this.tooltips.works[id]);
-      return;
-    }
-
-    if (this.simpleWorkMetadata === undefined) {
-      this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
-    }
-
-    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
-
-    if (!this.simpleWorkMetadata) {
-      this.semanticDataService.getSingleObjectElastic('work', id).subscribe({
-        next: (tooltip) => {
-          if ( tooltip.hits.hits[0] === undefined || tooltip.hits.hits[0]['_source'] === undefined ) {
-            this.setToolTipPosition(targetElem, noInfoFound);
-            this.setToolTipText(noInfoFound);
-            return;
-          }
-          tooltip = tooltip.hits.hits[0]['_source'];
-          const description = '<span class="work_title">' + tooltip.title  + '</span><br/>' + tooltip.reference;
-          this.setToolTipPosition(targetElem, description);
-          this.setToolTipText(description);
-          this.tooltips.works[id] = description;
-        },
-        error: (e) => {
-          this.setToolTipPosition(targetElem, noInfoFound);
-          this.setToolTipText(noInfoFound);
-        }
-      });
-    } else {
-      this.tooltipService.getWorkTooltip(id).subscribe({
-        next: (tooltip) => {
-          this.setToolTipPosition(targetElem, tooltip.title);
-          this.setToolTipText(tooltip.title);
-          this.tooltips.works[id] = tooltip.title;
-        },
-        error: (e) => {
-          this.setToolTipPosition(targetElem, noInfoFound);
-          this.setToolTipText(noInfoFound);
-        }
-      });
-    }
+    );
   }
 
   showFootnoteTooltip(id: string, targetElem: HTMLElement, origin: any) {
@@ -887,32 +810,16 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     };
   }
 
-  async showPersonModal(id: string) {
-    const modal = await this.modalController.create({
+  async showSemanticDataObjectModal(id: string, type: string) {
+    const modal = await this.modalCtrl.create({
       component: SemanticDataObjectModal,
-      componentProps: { id, type: 'subject' },
-    });
-    modal.present();
-  }
-
-  async showPlaceModal(id: string) {
-    const modal = await this.modalController.create({
-      component: SemanticDataObjectModal,
-      componentProps: { id, type: 'location' },
-    });
-    modal.present();
-  }
-
-  async showWorkModal(id: string) {
-    const modal = await this.modalController.create({
-      component: SemanticDataObjectModal,
-      componentProps: { id, type: 'work' },
+      componentProps: { id: id, type: type }
     });
     modal.present();
   }
 
   async showIllustrationModal(imageNumber: string) {
-    const modal = await this.modalController.create({
+    const modal = await this.modalCtrl.create({
       component: IllustrationPage,
       componentProps: { 'imageNumber': imageNumber },
       cssClass: 'foo',
@@ -935,7 +842,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showReference() {
     // Get URL of Page and then the URI
-    const modal = await this.modalController.create({
+    const modal = await this.modalCtrl.create({
       component: ReferenceDataModalPage,
       componentProps: {id: document.URL, type: 'reference', origin: 'page-introduction'}
     });
@@ -943,7 +850,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   async showDownloadModal() {
-    const modal = await this.modalController.create({
+    const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
       componentProps: {textId: this.id, origin: 'page-introduction'}
     });
