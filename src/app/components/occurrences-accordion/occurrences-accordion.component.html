@@ -1,6 +1,6 @@
 <ion-spinner *ngIf="isLoading" class="loading" name="crescent"></ion-spinner>
 
-<ul class="sd-occurrences" role="menu">
+<ul *ngIf="occurrenceData.length" class="sd-occurrences" role="menu">
     <li *ngFor="let collection of occurrenceData" [attr.aria-expanded]="!collection.hidden" [attr.aria-haspopup]="'menu'" role="menuitem">
         <button (click)="toggleList(collection.collection_id)">
             <span class="coll-name">{{collection.name}}</span>
@@ -34,5 +34,8 @@
     </li>
 </ul>
 
-<p *ngIf="simpleWorkMetadata && (type === 'work' || type === 'work_manifestation')" i18n="@@Occurrences.workOccurrencesDisabled">Förekomster för verk är inte tillgängliga.</p>
-<p *ngIf="!isLoading && occurrenceData.length < 1 && !simpleWorkMetadata" i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</p>
+<p *ngIf="simpleWorkMetadata && (type === 'work' || type === 'work_manifestation'); else noOccurrences" i18n="@@Occurrences.workOccurrencesDisabled">Förekomster för verk är inte tillgängliga.</p>
+
+<ng-template #noOccurrences>
+    <p *ngIf="!isLoading && occurrenceData.length < 1" i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</p>
+</ng-template>
