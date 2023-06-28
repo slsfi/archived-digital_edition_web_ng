@@ -1,10 +1,13 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+
 import { config } from "src/assets/config/config";
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TableOfContentsService {
   tocPath = '/toc/';
   multilingualTOC = false;

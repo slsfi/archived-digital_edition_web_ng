@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { CommonFunctionsService } from './common-functions.service';
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class SemanticDataService {
   textCache: any;
   elasticSubjectIndex: string;

@@ -8,7 +8,10 @@ import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class TooltipService {
   private API: string = '';
   private cachedTooltips: Record<string, any> = {

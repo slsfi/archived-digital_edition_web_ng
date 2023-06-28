@@ -1,9 +1,12 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Title } from "@angular/platform-browser";
+
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CommonFunctionsService {
   intervalTimerId: number;
 

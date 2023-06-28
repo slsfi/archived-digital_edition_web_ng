@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class HtmlContentService {
   private htmlUrl = '/html/';
 

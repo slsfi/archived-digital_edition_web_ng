@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class TextService {
   appMachineName: string = '';
   apiEndPoint: string = '';
   simpleApi: string = '';
-
   readViewTextId: string;
   previousReadViewTextId: string;
   variationsOrder: number[] = [];

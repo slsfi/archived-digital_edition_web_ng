@@ -1,9 +1,13 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class DigitalEditionListService {
   private digitalEditionsUrl = '/collections';
   private multilingualTOC = false;

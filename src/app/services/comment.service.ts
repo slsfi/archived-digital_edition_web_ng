@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
+
 import { CommonFunctionsService } from './common-functions.service';
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class CommentService {
   cachedCollectionComments: Record<string, any> = {};
   activeCommentHighlight: any;

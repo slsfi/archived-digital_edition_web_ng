@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
-export class PdfService {
 
+@Injectable({
+  providedIn: 'root',
+})
+export class PdfService {
   private apiEndPoint: string;
   private projectMachineName: string;
   private collectionPdfs: Array<any>;

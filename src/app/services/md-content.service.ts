@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, lastValueFrom, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class MdContentService {
   private mdUrl = '/md/';
   private staticPagesURL = '/static-pages-toc/';

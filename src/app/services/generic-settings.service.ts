@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
+
 import { config } from "src/assets/config/config";
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root',
+})
 export class GenericSettingsService {
 
-  constructor() {
-  }
+  constructor() {}
 
   appName() {
     return config.app.machineName;
