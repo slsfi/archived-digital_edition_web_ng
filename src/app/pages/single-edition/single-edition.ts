@@ -6,12 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { HtmlContentService } from 'src/app/services/html/html-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { PdfService } from 'src/app/services/pdf/pdf.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { TextService } from 'src/app/services/text.service';
+import { HtmlContentService } from 'src/app/services/html-content.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { PdfService } from 'src/app/services/pdf.service';
 import { config } from "src/assets/config/config";
 
 

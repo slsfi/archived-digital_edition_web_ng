@@ -2,9 +2,9 @@ import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnI
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

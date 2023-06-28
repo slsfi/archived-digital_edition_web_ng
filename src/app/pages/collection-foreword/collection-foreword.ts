@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { config } from "src/assets/config/config";
 
 

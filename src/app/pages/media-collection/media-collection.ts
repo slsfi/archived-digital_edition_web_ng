@@ -6,9 +6,9 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { GalleryService } from 'src/app/services/gallery/gallery.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { GalleryService } from 'src/app/services/gallery.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 

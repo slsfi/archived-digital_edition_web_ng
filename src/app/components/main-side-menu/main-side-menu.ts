@@ -1,10 +1,10 @@
 import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit } from '@angular/core';
 import { UrlSegment } from "@angular/router";
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
-import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
-import { DigitalEditionListService } from "src/app/services/toc/digital-edition-list.service";
-import { GalleryService } from "src/app/services/gallery/gallery.service";
-import { MdContentService } from "src/app/services/md/md-content.service";
+import { CommonFunctionsService } from "src/app/services/common-functions.service";
+import { DigitalEditionListService } from "src/app/services/digital-edition-list.service";
+import { GalleryService } from "src/app/services/gallery.service";
+import { MdContentService } from "src/app/services/md-content.service";
 import { config } from "src/assets/config/config";
 
 

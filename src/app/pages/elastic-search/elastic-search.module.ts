@@ -1,9 +1,9 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
+import { OccurrenceService } from 'src/app/services/occurence.service';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { PipesModule } from 'src/pipes/pipes.module';
-import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
+import { ElasticSearchService } from 'src/app/services/elastic-search.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElasticSearchPageRoutingModule } from './elastic-search-routing.module';

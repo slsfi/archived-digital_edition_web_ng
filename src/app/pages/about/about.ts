@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { marked } from 'marked';
-import { MdContentService } from 'src/app/services/md/md-content.service';
+import { MdContentService } from 'src/app/services/md-content.service';
 
 
 @Component({

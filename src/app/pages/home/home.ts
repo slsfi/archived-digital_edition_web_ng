@@ -2,9 +2,9 @@ import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
 import { config } from "src/assets/config/config";
 
 @Component({

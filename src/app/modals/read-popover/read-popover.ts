@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
-import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
+import { Fontsize, ReadPopoverService } from 'src/app/services/read-popover.service';
 import { config } from "src/assets/config/config";
 
 /**

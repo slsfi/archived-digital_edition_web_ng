@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, NgZone, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { CommentService } from 'src/app/services/comments/comment.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { TextService } from 'src/app/services/text.service';
+import { CommentService } from 'src/app/services/comment.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { isBrowser } from 'src/standalone/utility-functions';
 

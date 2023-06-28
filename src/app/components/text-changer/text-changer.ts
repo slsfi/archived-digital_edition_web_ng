@@ -1,9 +1,9 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CommonFunctionsService } from "src/app/services/common-functions/common-functions.service";
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
+import { CommonFunctionsService } from "src/app/services/common-functions.service";
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { config } from "src/assets/config/config";
 
 

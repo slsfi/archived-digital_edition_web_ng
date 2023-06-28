@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 
 
 @Component({

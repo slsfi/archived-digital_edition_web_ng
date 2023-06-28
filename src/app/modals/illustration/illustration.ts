@@ -1,8 +1,8 @@
 import { Component, ElementRef, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
-import { GalleryService } from 'src/app/services/gallery/gallery.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { GalleryService } from 'src/app/services/gallery.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 

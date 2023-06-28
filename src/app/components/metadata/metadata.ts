@@ -2,8 +2,8 @@ import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { catchError, Observable, of, Subject } from 'rxjs';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { MetadataService } from 'src/app/services/metadata/metadata.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { MetadataService } from 'src/app/services/metadata.service';
 
 
 @Component({

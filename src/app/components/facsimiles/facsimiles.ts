@@ -3,10 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { Facsimile } from 'src/app/models/facsimile.model';
-import { FacsimileService } from 'src/app/services/facsimile/facsimile.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { FacsimileService } from 'src/app/services/facsimile.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 

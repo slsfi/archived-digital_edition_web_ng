@@ -1,10 +1,10 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { TextService } from 'src/app/services/texts/text.service';
-import { CommentService } from 'src/app/services/comments/comment.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
+import { TextService } from 'src/app/services/text.service';
+import { CommentService } from 'src/app/services/comment.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { config } from "src/assets/config/config";
 
 @Component({

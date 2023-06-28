@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GeneralTocItem } from 'src/app/models/table-of-contents.model';
 import { DigitalEdition } from 'src/app/models/digital-edition.model';
-import { DigitalEditionListService } from 'src/app/services/toc/digital-edition-list.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { DigitalEditionListService } from 'src/app/services/digital-edition-list.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 @Component({

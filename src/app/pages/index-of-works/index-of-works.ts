@@ -7,11 +7,11 @@ import { marked } from 'marked';
 import { FilterPage } from 'src/app/modals/filter/filter';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { OccurrenceResult } from 'src/app/models/occurrence.model';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { OccurrenceService } from 'src/app/services/occurence.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
 import { config } from "src/assets/config/config";
 
 

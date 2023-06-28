@@ -2,10 +2,10 @@ import { Component, Inject, Input, LOCALE_ID, NgZone, Renderer2 } from '@angular
 import { DOCUMENT } from "@angular/common";
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Fontsize, ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
+import { Fontsize, ReadPopoverService } from 'src/app/services/read-popover.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { config } from "src/assets/config/config";

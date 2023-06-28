@@ -6,10 +6,10 @@ import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subj
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { OccurrencesAccordionComponent } from 'src/app/components/occurrences-accordion/occurrences-accordion.component';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { OccurrenceService } from 'src/app/services/occurrence/occurence.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { OccurrenceService } from 'src/app/services/occurence.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { TooltipService } from 'src/app/services/tooltip.service';
 import { config } from "src/assets/config/config";
 
 

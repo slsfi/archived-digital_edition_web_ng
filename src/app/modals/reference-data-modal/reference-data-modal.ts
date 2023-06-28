@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { ReferenceDataService } from 'src/app/services/reference-data/reference-data.service';
+import { ReferenceDataService } from 'src/app/services/reference-data.service';
 
 
 @Component({

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { TextService } from 'src/app/services/text.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { config } from "src/assets/config/config";
 
 

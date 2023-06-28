@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
 import { filter } from "rxjs/operators";
-import { CommonFunctionsService } from "./services/common-functions/common-functions.service";
-import { UserSettingsService } from './services/settings/user-settings.service';
+import { CommonFunctionsService } from "./services/common-functions.service";
+import { UserSettingsService } from './services/user-settings.service';
 import { isBrowser } from 'src/standalone/utility-functions';
 import { config } from 'src/assets/config/config';
 

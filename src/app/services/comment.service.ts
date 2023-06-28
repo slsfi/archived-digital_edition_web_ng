@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
-import { CommonFunctionsService } from '../common-functions/common-functions.service';
+import { CommonFunctionsService } from './common-functions.service';
 import { config } from "src/assets/config/config";
 
 @Injectable()

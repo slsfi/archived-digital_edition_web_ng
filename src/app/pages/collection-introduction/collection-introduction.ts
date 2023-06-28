@@ -9,11 +9,11 @@ import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/refe
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { TextService } from 'src/app/services/texts/text.service';
-import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
+import { TextService } from 'src/app/services/text.service';
+import { TooltipService } from 'src/app/services/tooltip.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { config } from "src/assets/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
 

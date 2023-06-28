@@ -1,7 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

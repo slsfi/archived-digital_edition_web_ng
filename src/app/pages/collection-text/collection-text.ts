@@ -4,18 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import JsonURL from '@jsonurl/jsonurl';
+
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { CommentService } from 'src/app/services/comments/comment.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
+import { CommentService } from 'src/app/services/comment.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { TooltipService } from 'src/app/services/tooltip.service';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 

@@ -6,8 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { Occurrence } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { config } from "src/assets/config/config";
 
 

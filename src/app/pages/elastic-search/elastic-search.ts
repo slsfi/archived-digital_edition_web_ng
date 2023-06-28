@@ -4,12 +4,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
-import { ElasticSearchService } from 'src/app/services/elastic-search/elastic-search.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { TextService } from 'src/app/services/text.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { ElasticSearchService } from 'src/app/services/elastic-search.service';
 import { config } from "src/assets/config/config";
 
 interface SearchOptions {

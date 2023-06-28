@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 
-import { CommentService } from 'src/app/services/comments/comment.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
+import { CommentService } from 'src/app/services/comment.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 @Injectable()

@@ -7,11 +7,11 @@ import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxj
 import { marked } from 'marked';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { config } from "src/assets/config/config";
 
 

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IndexOfPersonsPage } from './index-of-persons';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { IndexOfPersonsPageRoutingModule } from './index-of-persons-routing.module';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { FilterPageModule } from 'src/app/modals/filter/filter.module';

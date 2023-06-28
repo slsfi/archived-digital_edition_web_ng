@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { HtmlContentService } from 'src/app/services/html/html-content.service';
+import { HtmlContentService } from 'src/app/services/html-content.service';
 import { IonicModule, NavParams } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

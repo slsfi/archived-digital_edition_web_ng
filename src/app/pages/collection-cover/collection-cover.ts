@@ -1,9 +1,9 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { MdContentService } from 'src/app/services/md/md-content.service';
-import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TextService } from 'src/app/services/texts/text.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { TextService } from 'src/app/services/text.service';
 import { config } from "src/assets/config/config";
 
 
