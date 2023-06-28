@@ -1,9 +1,9 @@
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2, SecurityContext } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
-import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ModalController, PopoverController } from '@ionic/angular';
+import { combineLatest, map, Observable, Subscription } from 'rxjs';
+
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
@@ -12,8 +12,6 @@ import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { TextService } from 'src/app/services/texts/text.service';
 import { TooltipService } from 'src/app/services/tooltips/tooltip.service';
 import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
-import { TableOfContentsService } from 'src/app/services/toc/table-of-contents.service';
-import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/settings/read-popover.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { config } from "src/assets/config/config";
@@ -26,59 +24,54 @@ import { isBrowser } from "src/standalone/utility-functions";
   styleUrls: ['collection-introduction.scss']
 })
 export class CollectionIntroductionPage implements OnInit, OnDestroy {
+  collectionLegacyId: string = '';
+  hasSeparateIntroToc: boolean = false;
+  hasTOCLabelTranslation: boolean = false;
   id = '';
-  text: SafeHtml;
-  textMenu: SafeHtml;
+  infoOverlayPosType: string;
+  infoOverlayPosition: any;
+  infoOverlayWidth: string | null;
+  infoOverlayText: SafeHtml = '';
+  infoOverlayTitle: string = '';
+  intervalTimerId: ReturnType<typeof setInterval> | undefined;
   pos: string | null;
-  public urlParameters$: Observable<any>;
-  public tocMenuOpen: boolean;
-  public hasSeparateIntroToc: boolean = false;
-  public showURNButton: boolean;
-  showViewOptionsButton: boolean = true;
   readPopoverTogglesIntro: any = {};
+  showTextDownloadButton: boolean = false;
+  showURNButton: boolean;
+  showViewOptionsButton: boolean = true;
+  simpleWorkMetadata?: boolean;
+  text: SafeHtml;
+  textLoading: boolean = true;
+  textMenu: SafeHtml;
+  tocMenuOpen: boolean;
   toolTipsSettings: any = {};
   toolTipPosType: string;
   toolTipPosition: any;
   toolTipMaxWidth: string | null;
   toolTipScaleValue: number | null;
-  toolTipText: string = '';
+  toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
-  tooltips = {
-    'footnotes': {} as any,
-  };
-  infoOverlayPosType: string;
-  infoOverlayPosition: any;
-  infoOverlayWidth: string | null;
-  infoOverlayText: string = '';
-  infoOverlayTitle: string = '';
-  textLoading: boolean = true;
-  tocItems?: any;
-  intervalTimerId: ReturnType<typeof setInterval> | undefined;
-  userIsTouching: boolean = false;
-  collectionLegacyId: string = '';
-  simpleWorkMetadata?: boolean;
-  showTextDownloadButton: boolean = false;
+  urlParameters$: Observable<any>;
+  urlParametersSubscription: Subscription | null = null;
   usePrintNotDownloadIcon: boolean = false;
-  hasTOCLabelTranslation: boolean = false;
+  userIsTouching: boolean = false;
+
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
   private unlistenMouseoutEvents?: () => void;
   private unlistenFirstTouchStartEvent?: () => void;
 
   constructor(
-    public navCtrl: NavController,
-    private textService: TextService,
-    protected sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private tooltipService: TooltipService,
     private elementRef: ElementRef,
-    protected popoverCtrl: PopoverController,
+    private popoverCtrl: PopoverController,
     public userSettingsService: UserSettingsService,
-    protected tableOfContentsService: TableOfContentsService,
-    public semanticDataService: SemanticDataService,
     public readPopoverService: ReadPopoverService,
-    public commonFunctions: CommonFunctionsService,
+    private textService: TextService,
+    private commonFunctions: CommonFunctionsService,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router,
@@ -171,7 +164,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       map(([params, queryParams]) => ({...params, ...queryParams}))
     );
      
-    this.urlParameters$.subscribe(routeParams => {
+    this.urlParametersSubscription = this.urlParameters$.subscribe(routeParams => {
       
       // Check if there is a text position in the route params
       // (comes from queryParams)
@@ -204,7 +197,15 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     }
   }
 
-  loadIntroduction(lang: string, id: string) {
+  ngOnDestroy() {
+    this.urlParametersSubscription?.unsubscribe();
+    this.unlistenClickEvents?.();
+    this.unlistenMouseoverEvents?.();
+    this.unlistenMouseoutEvents?.();
+    this.unlistenFirstTouchStartEvent?.();
+  }
+
+  private loadIntroduction(lang: string, id: string) {
     this.text = '';
     this.textLoading = true;
     this.textService.getIntroduction(id, lang).subscribe({
@@ -244,13 +245,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.unlistenClickEvents?.();
-    this.unlistenMouseoverEvents?.();
-    this.unlistenMouseoutEvents?.();
-    this.unlistenFirstTouchStartEvent?.();
-  }
-
   /**
    * Try to scroll to an element in the text, checks if this.pos
    * is null. Interval, to give text some time to load on the page.
@@ -266,7 +260,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         this.intervalTimerId = setInterval(function() {
           if (iterationsLeft < 1) {
             clearInterval(that.intervalTimerId);
-            that.pos = null;
           } else {
             iterationsLeft -= 1;
             if (that.pos !== undefined && that.pos !== null) {
@@ -303,7 +296,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                 } else {
                   that.commonFunctions.scrollElementIntoView(posElem, 'top');
                 }
-                that.pos = null;
                 clearInterval(that.intervalTimerId);
               }
             } else {
@@ -315,7 +307,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     }
   }
 
-  setCollectionLegacyId(id: string) {
+  private setCollectionLegacyId(id: string) {
     this.textService.getLegacyIdByCollectionId(id).subscribe({
       next: (collection) => {
         this.collectionLegacyId = '';
@@ -403,7 +395,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             // Link to reading text, comment or introduction.
             // Get the href parts for the targeted text.
             const link = anchorElem.href;
-            const hrefTargetItems: Array<string> = decodeURIComponent(String(link).split('/').pop() || '').trim().split(' ');
+            const hrefTargetItems: Array<string> = decodeURIComponent(
+              String(link).split('/').pop() || ''
+            ).trim().split(' ');
             let publicationId = '';
             let textId = '';
             let chapterId = '';
@@ -473,14 +467,20 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               ) {
                 // Same introduction.
                 positionId = positionId.replace('#', '');
-                this.router.navigate(
-                  [],
-                  {
-                    relativeTo: this.route,
-                    queryParams: { position: positionId },
-                    queryParamsHandling: 'merge'
+                this.ngZone.run(() => {
+                  if (positionId !== this.pos) {
+                    this.router.navigate(
+                      [],
+                      {
+                        relativeTo: this.route,
+                        queryParams: { position: positionId },
+                        queryParamsHandling: 'merge'
+                      }
+                    );
+                  } else {
+                    this.scrollToPos(100);
                   }
-                );
+                });
               } else {
                 // Different introduction, open in new window.
                 const newWindowRef = window.open();
@@ -516,17 +516,24 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             } else if (anchorElem.parentElement?.hasAttribute('href')) {
               targetId = anchorElem.parentElement.getAttribute('href');
             }
-            const dataIdSelector = '[data-id="' + String(targetId).replace('#', '') + '"]';
+            targetId = String(targetId).replace('#', '');
+            const dataIdSelector = '[data-id="' + targetId + '"]';
             let target = nElement.querySelector(dataIdSelector) as HTMLElement;
             if (target !== null) {
-              this.router.navigate(
-                [],
-                {
-                  relativeTo: this.route,
-                  queryParams: { position: String(targetId).replace('#', '') },
-                  queryParamsHandling: 'merge'
+              this.ngZone.run(() => {
+                if (targetId !== this.pos) {
+                  this.router.navigate(
+                    [],
+                    {
+                      relativeTo: this.route,
+                      queryParams: { position: targetId },
+                      queryParamsHandling: 'merge'
+                    }
+                  );
+                } else {
+                  this.scrollToPos(100);
                 }
-              );
+              });
             }
           }
         }
@@ -565,7 +572,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                 this.toolTipsSettings.footNotes &&
                 eventTarget.classList.contains('ttFoot')
               ) {
-                this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget, event);
+                this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
               }
             });
           }
@@ -593,76 +600,27 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     );
   }
 
-  showFootnoteTooltip(id: string, targetElem: HTMLElement, origin: any) {
-    if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
-      this.setToolTipPosition(targetElem, this.tooltips.footnotes[id]);
-      this.setToolTipText(this.tooltips.footnotes[id]);
-      return;
-    }
-
-    let footnoteText: any = '';
-    if (
-      targetElem.nextElementSibling !== null &&
-      targetElem.nextElementSibling.firstElementChild !== null &&
-      targetElem.nextElementSibling.classList.contains('ttFoot') &&
-      targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed') &&
-      targetElem.nextElementSibling.firstElementChild.getAttribute('data-id') === id
-    ) {
-      footnoteText = targetElem.nextElementSibling.firstElementChild.innerHTML;
-    } else {
-      return;
-    }
-
-    footnoteText = footnoteText.replace(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
-
-    // Prepend the footnoteindicator to the the footnote text.
-    const footnoteWithIndicator: string = '<div class="footnoteWrapper"><a class="xreference footnoteReference" href="#' + id + '">'
-    + targetElem.textContent + '</a>' + '<p class="footnoteText">'
-    + footnoteText + '</p></div>';
-    const footNoteHTML = this.sanitizer.sanitize(SecurityContext.HTML,
-      this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-
-    this.setToolTipPosition(targetElem, footNoteHTML || '');
-    this.setToolTipText(footNoteHTML || '');
-    if (this.userSettingsService.isDesktop()) {
-      this.tooltips.footnotes[id] = footNoteHTML;
-    }
+  showFootnoteTooltip(id: string, targetElem: HTMLElement) {
+    this.tooltipService.getFootnoteTooltip(id, 'introduction', targetElem).subscribe(
+      (footnoteHTML: string) => {
+        if (footnoteHTML) {
+          this.setToolTipPosition(targetElem, footnoteHTML);
+          this.setToolTipText(footnoteHTML);
+        }
+      }
+    );
   }
 
   showFootnoteInfoOverlay(id: string, targetElem: HTMLElement) {
-    if (this.tooltips.footnotes[id] && this.userSettingsService.isDesktop()) {
-      this.setInfoOverlayTitle($localize`:@@note:Not`);
-      this.setInfoOverlayPositionAndWidth(targetElem);
-      this.setInfoOverlayText(this.tooltips.footnotes[id]);
-      return;
-    }
-
-    let footnoteText: any = '';
-    if (targetElem.nextElementSibling !== null
-    && targetElem.nextElementSibling.firstElementChild !== null
-    && targetElem.nextElementSibling.classList.contains('ttFoot')
-    && targetElem.nextElementSibling.firstElementChild.classList.contains('ttFixed')
-    && targetElem.nextElementSibling.firstElementChild.getAttribute('data-id') === id) {
-      footnoteText = targetElem.nextElementSibling.firstElementChild.innerHTML;
-    } else {
-      return;
-    }
-
-    footnoteText = footnoteText.replace(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
-
-    // Prepend the footnoteindicator to the the footnote text.
-    const footnoteWithIndicator: string = '<div class="footnoteWrapper"><a class="xreference footnoteReference" href="#' + id + '">'
-    + targetElem.textContent + '</a>' + '<p class="footnoteText">'
-    + footnoteText + '</p></div>';
-    const footNoteHTML = this.sanitizer.sanitize(SecurityContext.HTML,
-      this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator));
-
-    this.setInfoOverlayTitle($localize`:@@note:Not`);
-    this.setInfoOverlayPositionAndWidth(targetElem);
-    this.setInfoOverlayText(footNoteHTML || '');
-    if (this.userSettingsService.isDesktop()) {
-      this.tooltips.footnotes[id] = footNoteHTML;
-    }
+    this.tooltipService.getFootnoteTooltip(id, 'introduction', targetElem).subscribe(
+      (footnoteHTML: string) => {
+        if (footnoteHTML) {
+          this.setInfoOverlayTitle($localize`:@@note:Not`);
+          this.setInfoOverlayPositionAndWidth(targetElem);
+          this.setInfoOverlayText(footnoteHTML);
+        }
+      }
+    );
   }
 
   setToolTipPosition(targetElem: HTMLElement, ttText: string) {
@@ -779,11 +737,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   setToolTipText(text: string) {
-    this.toolTipText = text;
+    this.toolTipText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
   setInfoOverlayText(text: string) {
-    this.infoOverlayText = text;
+    this.infoOverlayText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
   setInfoOverlayTitle(title: string) {

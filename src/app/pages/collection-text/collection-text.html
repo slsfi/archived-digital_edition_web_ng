@@ -240,12 +240,6 @@
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
     </div>
-    <!--
-    <div
-      *ngIf="hasOccurrenceResults && showOccurrencesModal">
-      <ion-button class="readpage-occurrences-mobile" (click)="openOccurrenceResult()"><ng-container i18n="@@Read.ShowSearchResults">Förekomster</ng-container>&nbsp;<ion-icon name="search"></ion-icon></ion-button>
-    </div>
-    -->
     <ion-segment [scrollable]="true" mode="ios" [(ngModel)]="activeMobileModeViewType">
       <ion-segment-button value="established" *ngIf="viewTypes['established']">
         <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>

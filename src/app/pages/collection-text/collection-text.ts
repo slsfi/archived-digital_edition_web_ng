@@ -1,14 +1,13 @@
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, SecurityContext, ViewChild, ViewChildren } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import JsonURL from '@jsonurl/jsonurl';
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
-import { OccurrenceResult } from 'src/app/models/occurrence.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions/common-functions.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
@@ -31,97 +30,46 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
 
-  multilingualReadingTextLanguages = [];
-  popover?: ReadPopoverPage;
-  hasOccurrenceResults = false;
-  showOccurrencesModal = false;
-  searchResult: string | null;
+  activeMobileModeViewType: string = 'established';
+  addViewPopoverisOpen: boolean = false;
+  collectionAndPublicationLegacyId: string = '';
+  enabledViewTypes: string[] = [];
+  illustrationsViewShown: boolean = false;
+  infoOverlayPosType: string;
+  infoOverlayPosition: any;
+  infoOverlayWidth: string | null;
+  infoOverlayText: SafeHtml = '';
+  infoOverlayTitle: string = '';
+  legacyId: string = '';
+  multilingualReadingTextLanguages: any[] = [];
+  paramChapterID: any;
+  paramCollectionID: any;
+  paramPublicationID: any;
+  routeParamsSubscription: Subscription | null = null;
+  routeQueryParamsSubscription: Subscription | null = null;
+  searchMatches: string[] = [];
+  simpleWorkMetadata: boolean = false;
+  showTextDownloadButton: boolean = false;
+  showURNButton: boolean;
+  showViewOptionsButton: boolean = true;
+  textItemID: string = '';
+  textPosition: string = '';
   toolTipsSettings?: Record<string, any> = {};
   toolTipPosType: string;
   toolTipPosition: any;
   toolTipMaxWidth: string | null;
   toolTipScaleValue: number | null;
-  toolTipText: string = '';
+  toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
-  infoOverlayPosType: string;
-  infoOverlayPosition: any;
-  infoOverlayWidth: string | null;
-  infoOverlayText: string = '';
-  infoOverlayTitle: string = '';
-  userIsTouching: boolean = false;
-  collectionAndPublicationLegacyId: string = '';
-  illustrationsViewShown: boolean = false;
-  simpleWorkMetadata: boolean = false;
-  showURNButton: boolean;
-  showViewOptionsButton: boolean = true;
-  showTextDownloadButton: boolean = false;
   usePrintNotDownloadIcon: boolean = false;
-
-  addViewPopoverisOpen: boolean = false;
-
+  userIsTouching: boolean = false;
+  views: any[] = [];
+  viewTypes: any;
+  
   private unlistenFirstTouchStartEvent?: () => void;
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
   private unlistenMouseoutEvents?: () => void;
-
-  // Used for infinite facsimile
-  facs_nr: any;
-  search_title: any;
-
-  searchMatches: Array<string> = [];
-
-  typeVersion?: string;
-  viewTypes: any;
-
-  occurrenceResult?: OccurrenceResult;
-
-  legacyId = '';
-
-  views = [] as any;
-
-  activeMobileModeViewType = 'established';
-
-  enabledViewTypes: Array<string> = [];
-
-  tooltips = {
-    'comments': {} as any,
-    'footnotes': {} as any
-  };
-
-  paramCollectionID: any;
-  paramPublicationID: any;
-  paramChapterID: any;
-  paramFacsId: any;
-  paramFacsNr: any;
-  paramSearchTitle: any;
-  paramViews: any;
-
-  queryParamTocItem: any
-  queryParamRoot: any
-  queryParamViews: any
-  queryParamSearchResult: any
-  queryParamOccurrenceResult: any
-  queryParamId: any
-  queryParamLegacyId: any
-  queryParamSelectedItemInAccordion: any
-  queryParamObjectType: any
-  queryParamMatches: any
-  queryParamShowOccurrencesModalOnRead: any
-  queryParamTocLinkId: any
-
-  paramsLoaded?: boolean
-  queryParamsLoaded?: boolean
-
-
-  // TODO OLLIN UUDET
-  public views$: Observable<any>;
-  public textItemID$: Observable<string>;
-
-  textItemID: string = '';
-  textPosition: string = '';
-
-  routeQueryParamsSubscription: Subscription | null = null;
-  routeParamsSubscription: Subscription | null = null;
 
   constructor(
     private textService: TextService,
@@ -142,8 +90,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     private router: Router,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.searchResult = null;
-
     this.toolTipPosType = 'fixed';
     this.toolTipMaxWidth = null;
     this.toolTipScaleValue = null;
@@ -225,16 +171,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /*
-    this.urlParameters$ = combineLatest(
-      [this.route.params, this.route.queryParams]
-    ).pipe(
-      map(([params, queryParams]) => ({...params, ...queryParams}))
-    );
-    */
-
-    this.routeParamsSubscription = this.route.params.subscribe({
-      next: (params) => {
+    this.routeParamsSubscription = this.route.params.subscribe(
+      (params: any) => {
         let textItemID;
 
         if (params['chapterID'] !== undefined && params['chapterID'] !== '') {
@@ -258,13 +196,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         if (config.app?.enableCollectionLegacyIDs) {
           this.setCollectionAndPublicationLegacyId(this.paramPublicationID);
         }
-      },
-      error: (e) => {},
-      complete: () => {}
-    });
+      }
+    );
 
-    this.routeQueryParamsSubscription = this.route.queryParams.subscribe({
-      next: (queryParams) => {
+    this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
+      (queryParams: any) => {
 
         if (queryParams['search']) {
           // console.log('search in queryparams:', queryParams['search']);
@@ -332,10 +268,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           this.textPosition = queryParams['position'];
         }
 
-      },
-      error: (e) => {},
-      complete: () => {}
-    });
+      }
+    );
 
     if (isBrowser()) {
       this.setUpTextListeners();
@@ -343,45 +277,13 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.routeQueryParamsSubscription) {
-      this.routeQueryParamsSubscription.unsubscribe();
-    }
-    if (this.routeParamsSubscription) {
-      this.routeParamsSubscription.unsubscribe();
-    }
+    this.routeParamsSubscription?.unsubscribe();
+    this.routeQueryParamsSubscription?.unsubscribe();
     this.unlistenClickEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();
     this.unlistenFirstTouchStartEvent?.();
   }
-
-  /*
-  async openOccurrenceResult() {
-    let showOccurrencesModalOnRead = false;
-    let objectType = '';
-
-    if (this.showOccurrencesModal) {
-      showOccurrencesModalOnRead = true;
-    }
-
-    if (this.queryParamObjectType) {
-      objectType = this.queryParamObjectType;
-    }
-
-    if (this.hasOccurrenceResults && this.occurrenceResult) {
-      const occurrenceModal = await this.modalCtrl.create({
-        component: SemanticDataObjectModal,
-        componentProps: {
-          occurrenceResult: this.occurrenceResult,
-          showOccurrencesModalOnRead: showOccurrencesModalOnRead,
-          objectType: objectType
-        }
-      });
-
-      occurrenceModal.present();
-    }
-  }
-  */
 
   /**
    * TODO: This function is no longer used, it is here only for reference while refactoring the code.
@@ -496,32 +398,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
     return true;
   }
-
-  /*
-  setViewsFromSearchResults() {
-    for (const v of this.queryParamViews) {
-      if (v.type) {
-        // console.log(`Aading view ${v.type}, ${v.id}`);
-        this.addView(v.type, v.id);
-      }
-      if (v.type === 'manuscripts' || v.type === 'ms') {
-        this.activeMobileModeViewType = 'manuscripts';
-        this.typeVersion = v.id;
-      } else if (v.type === 'variation' || v.type === 'var') {
-        this.activeMobileModeViewType = 'variations';
-        this.typeVersion = v.id;
-      } else if ((v.type === 'comments' || v.type === 'com')) {
-        this.activeMobileModeViewType = 'comments';
-      } else if (v.type === 'established' || v.type === 'est') {
-        this.activeMobileModeViewType = 'established';
-      } else if (v.type === 'facsimiles' || v.type === 'facs') {
-        this.activeMobileModeViewType = 'facsimiles';
-      } else if (v.type === 'song-example') {
-        this.activeMobileModeViewType = 'song-example';
-      }
-    }
-  }
-  */
 
   private getEventTarget(event: any) {
     let eventTarget: HTMLElement = document.createElement('div');
@@ -1232,7 +1108,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   showSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement) {
     this.tooltipService.getSemanticDataObjectTooltip(id, type, targetElem).subscribe(
-      (text) => {
+      (text: string) => {
         this.setToolTipPosition(targetElem, text);
         this.setToolTipText(text);
       }
@@ -1240,88 +1116,14 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   showFootnoteTooltip(id: string, textType: string, targetElem: HTMLElement) {
-    if (
-      textType === 'read-text' &&
-      this.tooltips.footnotes[id] &&
-      this.userSettingsService.isDesktop()
-    ) {
-      this.setToolTipPosition(targetElem, this.tooltips.footnotes[id]);
-      this.setToolTipText(this.tooltips.footnotes[id]);
-      return;
-    }
-
-    const footnoteText = this.getFootnoteText(id, textType, targetElem);
-    if (footnoteText) {
-      this.setToolTipPosition(targetElem, footnoteText);
-      this.setToolTipText(footnoteText);
-      if (textType === 'read-text' && this.userSettingsService.isDesktop()) {
-        this.tooltips.footnotes[id] = footnoteText;
-      }
-    }
-  }
-
-  private getFootnoteText(id: string, textType: string, triggerElem: HTMLElement): string {
-    const textTypeClass = (textType === 'variant') ? 'teiVariant'
-      : (textType === 'manuscript') ? 'teiManuscript'
-      : '';
-
-    if (
-      (
-        (
-          textTypeClass &&
-          triggerElem.nextElementSibling?.classList.contains(textTypeClass)
-        ) || !textTypeClass
-      ) &&
-      triggerElem.nextElementSibling?.classList.contains('ttFoot') &&
-      triggerElem.nextElementSibling?.firstElementChild?.classList.contains('ttFixed') &&
-      (
-        (
-          (!textTypeClass || textType === 'manuscript') &&
-          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('data-id') === id
-        ) || (
-          textType === 'variant' &&
-          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('id') === id
-        )
-      )
-    ) {
-      let ttText = triggerElem.nextElementSibling.firstElementChild.innerHTML;
-      // MathJax problem with resolving the actual formula, not the translated formula.
-      if (triggerElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
-        const tmpElem = <HTMLElement> triggerElem.nextElementSibling.firstElementChild.lastChild;
-        ttText = '$' + tmpElem.innerHTML + '$';
-      }
-
-      ttText = ttText.replaceAll(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
-
-      let columnId = '';
-      if (this.userSettingsService.isDesktop()) {
-        // Get column id of the column where the footnote is.
-        let containerElem = triggerElem.parentElement;
-        while (
-          containerElem !== null &&
-          !(containerElem.classList.contains('read-column') && containerElem.hasAttribute('id'))
-        ) {
-          containerElem = containerElem.parentElement;
-        }
-        if (containerElem !== null) {
-          columnId = containerElem.getAttribute('id') || '';
+    this.tooltipService.getFootnoteTooltip(id, textType, targetElem).subscribe(
+      (footnoteHTML: string) => {
+        if (footnoteHTML) {
+          this.setToolTipPosition(targetElem, footnoteHTML);
+          this.setToolTipText(footnoteHTML);
         }
       }
-
-      // Prepend the footnoteindicator to the the footnote text.
-      const footnoteWithIndicator: string = '<div class="footnoteWrapper">'
-        + '<a class="xreference footnoteReference'
-        + (textTypeClass ? ' ' + textTypeClass : '')
-        + (columnId ? ' targetColumnId_' + columnId : '')
-        + '" href="#' + id + '">' + triggerElem.textContent
-        + '</a>' + '<p class="footnoteText">' + ttText  + '</p></div>';
-      const footNoteHTML: string | null = this.sanitizer.sanitize(
-        SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator)
-      );
-      return footNoteHTML || '';
-    } else {
-      return '';
-    }
+    );
   }
 
   /* This method is used for showing tooltips for changes, normalisations, abbreviations and explanations in manuscripts. */
@@ -1333,17 +1135,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   showCommentTooltip(id: string, targetElem: HTMLElement) {
-    if (this.tooltips.comments[id]) {
-      this.setToolTipPosition(targetElem, this.tooltips.comments[id]);
-      this.setToolTipText(this.tooltips.comments[id]);
-      return;
-    }
-
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
         this.setToolTipPosition(targetElem, tooltip.description);
         this.setToolTipText(tooltip.description);
-        this.tooltips.comments[id] = tooltip.description
       },
       error: (e) => {
         const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
@@ -1364,42 +1159,23 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   showFootnoteInfoOverlay(id: string, textType: string, targetElem: HTMLElement) {
-    if (
-      textType === 'read-text' &&
-      this.tooltips.footnotes[id] &&
-      this.userSettingsService.isDesktop()
-    ) {
-      this.setInfoOverlayTitle($localize`:@@note:Not`);
-      this.setInfoOverlayPositionAndWidth(targetElem);
-      this.setInfoOverlayText(this.tooltips.footnotes[id]);
-      return;
-    }
-
-    const footnoteText = this.getFootnoteText(id, textType, targetElem);
-    if (footnoteText) {
-      this.setInfoOverlayTitle($localize`:@@note:Not`);
-      this.setInfoOverlayPositionAndWidth(targetElem);
-      this.setInfoOverlayText(footnoteText);
-      if (textType === 'read-text' && this.userSettingsService.isDesktop()) {
-        this.tooltips.footnotes[id] = footnoteText;
+    this.tooltipService.getFootnoteTooltip(id, textType, targetElem).subscribe(
+      (footnoteHTML: string) => {
+        if (footnoteHTML) {
+          this.setInfoOverlayTitle($localize`:@@note:Not`);
+          this.setInfoOverlayPositionAndWidth(targetElem);
+          this.setInfoOverlayText(footnoteHTML);
+        }
       }
-    }
+    );
   }
 
   showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
-    if (this.tooltips.comments[id as keyof typeof this.tooltips.comments]) {
-      this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
-      this.setInfoOverlayPositionAndWidth(targetElem);
-      this.setInfoOverlayText(this.tooltips.comments[id as keyof typeof this.tooltips.comments]);
-      return;
-    }
-
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
         this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(tooltip.description);
-        this.tooltips.comments[id] = tooltip.description
       },
       error: (errorC) => {
         this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
@@ -1499,11 +1275,11 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   setToolTipText(text: string) {
-    this.toolTipText = text;
+    this.toolTipText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
   setInfoOverlayText(text: string) {
-    this.infoOverlayText = text;
+    this.infoOverlayText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
   setInfoOverlayTitle(title: string) {

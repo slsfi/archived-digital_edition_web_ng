@@ -1,18 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, SecurityContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 
 import { CommentService } from 'src/app/services/comments/comment.service';
 import { SemanticDataService } from 'src/app/services/semantic-data/semantic-data.service';
+import { UserSettingsService } from 'src/app/services/settings/user-settings.service';
 import { config } from "src/assets/config/config";
 
 @Injectable()
 export class TooltipService {
   private API: string = '';
   private cachedTooltips: Record<string, any> = {
+    'comments': new Map(),
+    'footnotes': new Map(),
     'persons': new Map(),
-    'works': new Map(),
-    'places': new Map()
+    'places': new Map(),
+    'works': new Map()
   };
   private project: string = '';
   private maxTooltipCacheSize: number = 50;
@@ -20,8 +24,10 @@ export class TooltipService {
 
   constructor(
     private http: HttpClient,
+    private sanitizer: DomSanitizer,
     private commentService: CommentService,
-    private semanticDataService: SemanticDataService
+    private semanticDataService: SemanticDataService,
+    private userSettingsService: UserSettingsService
   ) {
     this.API = config.app?.apiEndpoint ?? '';
     this.project = config.app?.machineName ?? '';
@@ -101,14 +107,96 @@ export class TooltipService {
    */
   getCommentTooltip(textItemID: string, elementID: string): Observable<any> {
     elementID = elementID.replace('end', 'en');
+    const cachedTooltip = this.cachedTooltips.comments.has(elementID)
+      ? this.cachedTooltips.comments.get(elementID) : '';
+
+    if (cachedTooltip) {
+      return of({ name: 'Comment', description: cachedTooltip });
+    }
+
     return this.commentService.getSingleComment(textItemID, elementID).pipe(
       map((comment: any) => {
+        this.cachedTooltips.comments.size > this.maxTooltipCacheSize && this.cachedTooltips.comments.clear();
+        this.userSettingsService.isDesktop() && this.cachedTooltips.comments.set(elementID, comment);
         return (
           { name: 'Comment', description: comment } ||
           { name: 'Error', description: '' }
         );
       })
     );
+  }
+
+  getFootnoteTooltip(id: string, textType: string, triggerElem: HTMLElement): Observable<any> {
+    const cachedTooltip = this.cachedTooltips.footnotes.has(textType + '_' + id)
+      ? this.cachedTooltips.footnotes.get(textType + '_' + id) : '';
+
+    if (cachedTooltip) {
+      return of(cachedTooltip);
+    }
+
+    const textTypeClass = (textType === 'variant') ? 'teiVariant'
+      : (textType === 'manuscript') ? 'teiManuscript'
+      : '';
+
+    if (
+      (
+        (
+          textTypeClass &&
+          triggerElem.nextElementSibling?.classList.contains(textTypeClass)
+        ) || !textTypeClass
+      ) &&
+      triggerElem.nextElementSibling?.classList.contains('ttFoot') &&
+      triggerElem.nextElementSibling?.firstElementChild?.classList.contains('ttFixed') &&
+      (
+        (
+          (!textTypeClass || textType === 'manuscript') &&
+          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('data-id') === id
+        ) || (
+          textType === 'variant' &&
+          triggerElem.nextElementSibling?.firstElementChild?.getAttribute('id') === id
+        )
+      )
+    ) {
+      let ttText = triggerElem.nextElementSibling.firstElementChild.innerHTML;
+      // MathJax problem with resolving the actual formula, not the translated formula.
+      if (triggerElem.nextElementSibling.firstElementChild.lastChild?.nodeName === 'SCRIPT') {
+        const tmpElem = <HTMLElement> triggerElem.nextElementSibling.firstElementChild.lastChild;
+        ttText = '$' + tmpElem.innerHTML + '$';
+      }
+
+      ttText = ttText.replaceAll(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
+
+      let columnId = '';
+      if (this.userSettingsService.isDesktop()) {
+        // Get column id of the column where the footnote is.
+        let containerElem = triggerElem.parentElement;
+        while (
+          containerElem !== null &&
+          !(containerElem.classList.contains('read-column') && containerElem.hasAttribute('id'))
+        ) {
+          containerElem = containerElem.parentElement;
+        }
+        if (containerElem !== null) {
+          columnId = containerElem.getAttribute('id') || '';
+        }
+      }
+
+      // Prepend the footnoteindicator to the the footnote text.
+      const footnoteWithIndicator: string = '<div class="footnoteWrapper">'
+        + '<a class="xreference footnoteReference'
+        + (textTypeClass ? ' ' + textTypeClass : '')
+        + (columnId ? ' targetColumnId_' + columnId : '')
+        + '" href="#' + id + '">' + triggerElem.textContent
+        + '</a>' + '<p class="footnoteText">' + ttText  + '</p></div>';
+      const footnoteHTML: string | null = this.sanitizer.sanitize(
+        SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator)
+      );
+      this.cachedTooltips.footnotes.size > this.maxTooltipCacheSize && this.cachedTooltips.footnotes.clear();
+      this.userSettingsService.isDesktop() && this.cachedTooltips.footnotes.set(textType + '_' + id, footnoteHTML);
+      return of(footnoteHTML || '');
+    } else {
+      return of('');
+    }
   }
 
   constructPersonTooltipText(tooltip: any, targetElem: HTMLElement) {
