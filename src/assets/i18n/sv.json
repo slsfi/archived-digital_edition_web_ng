@@ -1,7 +1,10 @@
 {
     "Site": {
         "Title": "Webbplatsens titel",
-        "Subtitle": "Webbplatsens undertitel"
+        "Subtitle": "Webbplatsens undertitel",
+        "MetaDescription": {
+            "Home": "En generell beskrivning av webbplatsen för sökmotorer."
+        }
     },
     "TopMenu": {
         "Menu": "Meny",

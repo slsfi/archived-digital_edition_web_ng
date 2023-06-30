@@ -516,16 +516,6 @@
         <source>Faksimil</source>
       </segment>
     </unit>
-    <unit id="Occurrences.Found">
-      <segment>
-        <source>Hittade</source>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Info">
-      <segment>
-        <source>Information</source>
-      </segment>
-    </unit>
     <unit id="Occurrences.isbn">
       <segment>
         <source>ISBN</source>
@@ -1239,6 +1229,11 @@
     <unit id="revisionNote">
       <segment>
         <source>Repetitionsanteckning</source>
+      </segment>
+    </unit>
+    <unit id="Site.MetaDescription.Home">
+      <segment>
+        <source>En generell beskrivning av webbplatsen för sökmotorer.</source>
       </segment>
     </unit>
     <unit id="Site.Subtitle">

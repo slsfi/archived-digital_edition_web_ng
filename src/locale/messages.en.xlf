@@ -618,18 +618,6 @@
         <target>Facsimile</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Found">
-      <segment state="initial">
-        <source>Hittade</source>
-        <target>Found</target>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Info">
-      <segment state="initial">
-        <source>Information</source>
-        <target>Information</target>
-      </segment>
-    </unit>
     <unit id="Occurrences.isbn">
       <segment state="initial">
         <source>ISBN</source>
@@ -1486,6 +1474,12 @@
       <segment state="initial">
         <source>Repetitionsanteckning</source>
         <target>Revision note</target>
+      </segment>
+    </unit>
+    <unit id="Site.MetaDescription.Home">
+      <segment state="initial">
+        <source>En generell beskrivning av webbplatsen för sökmotorer.</source>
+        <target>A general description of the website for search engines.</target>
       </segment>
     </unit>
     <unit id="Site.Subtitle">

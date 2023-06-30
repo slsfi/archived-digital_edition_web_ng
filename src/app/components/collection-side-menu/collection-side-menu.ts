@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, 
 import { Params, UrlSegment } from "@angular/router";
 
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
+import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { TableOfContentsService } from "src/app/services/table-of-contents.service";
 import { config } from "src/assets/config/config";
 import { isBrowser } from "src/standalone/utility-functions";
@@ -32,9 +33,10 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   sortSelectOptions: Record<string, any> = {};
 
   constructor(
-    private tocService: TableOfContentsService,
+    private cref: ChangeDetectorRef,
     private commonFunctions: CommonFunctionsService,
-    private cref: ChangeDetectorRef
+    private headService: DocumentHeadService,
+    private tocService: TableOfContentsService
   ) {}
 
   ngOnInit() {
@@ -134,16 +136,16 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     const pageTitle = this.initialUrlSegments[2].path;
     switch (pageTitle) {
       case 'cover':
-        this.commonFunctions.setTitle([$localize`:@@Read.CoverPage.Title:Omslag`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@Read.CoverPage.Title:Omslag`, this.collectionTitle]);
         return true;
       case 'title':
-        this.commonFunctions.setTitle([$localize`:@@Read.TitlePage.Title:Titelblad`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@Read.TitlePage.Title:Titelblad`, this.collectionTitle]);
         return true;
       case 'foreword':
-        this.commonFunctions.setTitle([$localize`:@@Read.ForewordPage.Title:Förord`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@Read.ForewordPage.Title:Förord`, this.collectionTitle]);
         return true;
       case 'introduction':
-        this.commonFunctions.setTitle([$localize`:@@Read.Introduction.Title:Inledning`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@Read.Introduction.Title:Inledning`, this.collectionTitle]);
         return true;
       default:
         return false;
@@ -163,7 +165,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   private recursiveFinding(array: any[], stringForComparison: string): any {
     return array.find(item => {
       if (item.itemId === stringForComparison) {
-        this.commonFunctions.setTitle([item.text, this.collectionTitle]);
+        this.headService.setTitle([item.text, this.collectionTitle]);
         return item;
       } else if (item.children) {
         const result = this.recursiveFinding(item.children, stringForComparison);

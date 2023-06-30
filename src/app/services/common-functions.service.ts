@@ -1,5 +1,4 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Title } from "@angular/platform-browser";
 
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -11,8 +10,7 @@ export class CommonFunctionsService {
   intervalTimerId: number;
 
   constructor(
-    public ngZone: NgZone,
-    private title: Title
+    public ngZone: NgZone
   ) {
     this.intervalTimerId = 0;
   }
@@ -310,25 +308,6 @@ export class CommonFunctionsService {
       }
       return false;
     })();
-  }
-
-
-  setTitle(pageTitleParts: string[] = []) {
-    let pageTitle = '';
-    for (let i = 0; i < pageTitleParts.length; i++) {
-      if (pageTitleParts[i]) {
-        if (pageTitleParts[i].at(-1) === '.') {
-          pageTitleParts[i] = pageTitleParts[i].slice(0, -1);
-        }
-        i > 0 ? pageTitle += ' - ' + pageTitleParts[i]
-          : pageTitle += pageTitleParts[i];
-      }
-    }
-
-    pageTitle ? pageTitle += ' - ' + $localize`:@@Site.Title:Webbplatsens titel`
-      : pageTitle = $localize`:@@Site.Title:Webbplatsens titel`;
-
-    this.title.setTitle(pageTitle);
   }
 
 

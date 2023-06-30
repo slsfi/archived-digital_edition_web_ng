@@ -1,7 +1,10 @@
 {
     "Site": {
         "Title": "Website title",
-        "Subtitle": "Website subtitle"
+        "Subtitle": "Website subtitle",
+        "MetaDescription": {
+            "Home": "A general description of the website for search engines."
+        }
     },
     "TopMenu": {
         "Menu": "Menu",

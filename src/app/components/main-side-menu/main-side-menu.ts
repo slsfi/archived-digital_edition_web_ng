@@ -1,7 +1,9 @@
 import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit } from '@angular/core';
 import { UrlSegment } from "@angular/router";
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
+import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { DigitalEditionListService } from "src/app/services/digital-edition-list.service";
 import { GalleryService } from "src/app/services/gallery.service";
 import { MdContentService } from "src/app/services/md-content.service";
@@ -30,6 +32,7 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   constructor(
     private commonFunctions: CommonFunctionsService,
+    private headService: DocumentHeadService,
     private mdcontentService: MdContentService,
     private digitalEditionListService: DigitalEditionListService,
     private galleryService: GalleryService,
@@ -126,7 +129,7 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   private getEbookPagesMenu(): Observable<any> {
     let menuData: any[] = [];
-    if (this._config.show?.TOC?.EPUB && this.epubsList && this.epubsList.length) {
+    if (this._config.show?.TOC?.EPUB && this.epubsList?.length) {
       this.epubsList.forEach(epub => {
         menuData.push({
           id: epub.id,
@@ -310,11 +313,11 @@ export class MainSideMenu implements OnInit, OnChanges {
       if (itemPath === stringForComparison) {
         this.highlightedMenu = item.nodeId;
         if (item.parentPath === '/media-collections' || item.parentPath === '/media-collection') {
-          this.commonFunctions.setTitle([item.title, $localize`:@@TOC.MediaCollections:Bildbank`]);
+          this.headService.setTitle([item.title, $localize`:@@TOC.MediaCollections:Bildbank`]);
         } else if (!this.topMenuItems.includes(item.parentPath) && this.urlSegments[0]?.path !== 'collection') {
           // For top menu items the title is set by app.component, and
           // for collections the title is set by the collection side menu
-          this.commonFunctions.setTitle([item.title]);
+          this.headService.setTitle([item.title]);
         }
         return item;
       } else if (item.children) {

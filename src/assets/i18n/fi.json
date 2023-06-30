@@ -1,7 +1,10 @@
 {
     "Site": {
         "Title": "Sivuston otsikko",
-        "Subtitle": "Sivuston alaotsikko"
+        "Subtitle": "Sivuston alaotsikko",
+        "MetaDescription": {
+            "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
+        }
     },
     "TopMenu": {
         "Menu": "Valikko",

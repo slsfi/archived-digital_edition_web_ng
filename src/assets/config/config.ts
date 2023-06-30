@@ -5,6 +5,7 @@ type Config = { [key: string]: any }
  */
 export const config: Config = {
   app: {
+    siteURLOrigin: "https://topelius.sls.fi",
     machineName: "topelius",
     projectId: 10,
     apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
@@ -14,6 +15,7 @@ export const config: Config = {
         { code: "sv", label: "Svenska" },
         { code: "fi", label: "Suomi" }
       ],
+      defaultLanguage: "sv",
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -390,6 +392,7 @@ export const config: Config = {
  */
 export const config_soderholm: Config = {
   app: {
+    siteURLOrigin: "https://soderholm.sls.fi",
     machineName: "soderholm",
     projectId: 7,
     apiEndpoint: "https://api.sls.fi/digitaledition",
@@ -398,6 +401,7 @@ export const config_soderholm: Config = {
       languages: [
         { code: "sv", label: "Svenska" }
       ],
+      defaultLanguage: "sv",
       enableLanguageChanges: false,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -996,6 +1000,7 @@ export const config_soderholm: Config = {
  */
 export const config_vonWright: Config = {
   app: {
+    siteURLOrigin: "https://vonwright.sls.fi",
     machineName: "vonwright",
     projectId: 6,
     apiEndpoint: "https://api.sls.fi/digitaledition",
@@ -1004,6 +1009,7 @@ export const config_vonWright: Config = {
       languages: [
         { code: "sv", label: "Svenska" }
       ],
+      defaultLanguage: "sv",
       enableLanguageChanges: false,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -1302,6 +1308,7 @@ export const config_vonWright: Config = {
  */
 export const config_granqvist: Config = {
   app: {
+    siteURLOrigin: "https://granqvist.sls.fi",
     machineName: "granqvist",
     projectId: 2,
     apiEndpoint: "https://api.sls.fi/digitaledition",
@@ -1312,6 +1319,7 @@ export const config_granqvist: Config = {
         { code: "en", label: "English" },
         { code: "ar", label: "Arabic" },
       ],
+      defaultLanguage: "sv",
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
@@ -1598,6 +1606,7 @@ export const config_granqvist: Config = {
  */
 export const config_mechelin: Config = {
   app: {
+    siteURLOrigin: "https://leomechelin.fi",
     machineName: "leomechelin",
     projectId: 1,
     apiEndpoint: "https://leomechelin.fi/api",
@@ -1608,6 +1617,7 @@ export const config_mechelin: Config = {
         { code: "sv", label: "Svenska" },
         { code: "fi", label: "Suomi" }
       ],
+      defaultLanguage: "sv",
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: true,
       multilingualReadingTextLanguages: ["sv", "fi"]
@@ -1827,7 +1837,7 @@ export const config_mechelin: Config = {
       ShowFilter: false,
       ShowPublishedStatus: 2
   },
-  ProjectStaticMarkdownCoversFolder: "",
+  ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
   SortCollectionsByRomanNumerals: false,
   OpenCollectionFromToc: true,
