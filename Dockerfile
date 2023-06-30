@@ -11,6 +11,8 @@ ADD . /digital_edition_web_ng
 
 RUN npm install -g @angular/cli@^15.2.2
 RUN npm install
+
+RUN npm run generate-sitemap
 RUN npm run build:ssr
 
 CMD ["npm","run","serve:ssr"]
