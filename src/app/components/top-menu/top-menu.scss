@@ -50,6 +50,10 @@ ul {
     button:hover {
       opacity: var(--opacity-hover);
     }
+
+    &.content-button.visuallyhidden {
+      display: none;
+    }
   
     > ul {
       position: absolute;

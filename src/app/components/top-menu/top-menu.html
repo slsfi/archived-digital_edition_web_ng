@@ -17,7 +17,7 @@
       <span class="side-title" i18n="@@TopMenu.Home">Hem</span>
     </a>
   </li>
-  <li *ngIf="showTopContentButton" class="content-button" role="menuitem">
+  <li [class.visuallyhidden]="!showTopContentButton" class="content-button" role="menuitem">
     <a [routerLink]="['/content']">
       <ion-icon name="library-sharp"></ion-icon>
       <span class="side-title" i18n="@@TopMenu.Content">Innehåll</span>
