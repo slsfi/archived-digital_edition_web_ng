@@ -329,7 +329,10 @@ export class CommonFunctionsService {
    */
   flattenObjectTree(data: any, branchingKey: string = 'children', requiredKey?: string) {
     const dataWithoutChildren = (({[branchingKey]: _, ...d}) => d)(data);
-    let list = [dataWithoutChildren];
+    let list: any[] = [];
+    if (!requiredKey || (requiredKey && data[requiredKey])) {
+        list = [dataWithoutChildren];
+    }
     if (!data[branchingKey] && (!requiredKey || (requiredKey && data[requiredKey]))) {
       return list;
     }
