@@ -10,18 +10,19 @@ import { config } from "src/assets/config/config";
 })
 export class TextService {
   appMachineName: string = '';
-  apiEndPoint: string = '';
+  apiEndpoint: string = '';
   simpleApi: string = '';
   readViewTextId: string;
   previousReadViewTextId: string;
   variationsOrder: number[] = [];
-  recentPageReadViews: Array<any> = [];
+  recentCollectionTextViews: Array<any> = [];
+  activeCollectionTextMobileModeView: string = '';
 
   constructor(
     private http: HttpClient
   ) {
     this.appMachineName = config.app?.machineName ?? '';
-    this.apiEndPoint = config.app?.apiEndpoint ?? '';
+    this.apiEndpoint = config.app?.apiEndpoint ?? '';
     this.simpleApi = config.app?.simpleApi ?? '';
 
     this.readViewTextId = '';
@@ -38,7 +39,7 @@ export class TextService {
       ch_id = idParts[2];
     }
 
-    let api = this.apiEndPoint;
+    let api = this.apiEndpoint;
     if (this.simpleApi) {
       api = this.simpleApi;
     }
@@ -50,14 +51,14 @@ export class TextService {
   }
 
   getIntroduction(id: string, lang: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${id}/1/inl/${lang}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${id}/1/inl/${lang}`;
     return this.http.get(url);
   }
 
   getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
     if (config.app?.enableCollectionLegacyIDs) {
       return this.http.get(
-        `${this.apiEndPoint}/${this.appMachineName}/legacy/${legacyId}`
+        `${this.apiEndpoint}/${this.appMachineName}/legacy/${legacyId}`
       );
     } else {
       return of([{coll_id: Number(legacyId.split('_')[0]), pub_id: Number(legacyId.split('_')[1])}]);
@@ -68,13 +69,13 @@ export class TextService {
     const idParts = id.split(';')[0].split('_');
     const coll_id = idParts[0];
     const pub_id = idParts.length > 1 ? idParts[1] : "1";
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/tit/${lang}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/tit/${lang}`;
     return this.http.get(url);
   }
 
   getForewordPage(id: string, lang: string): Observable<any> {
     const coll_id = id.split(';')[0].split('_')[0];
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/fore/${lang}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/fore/${lang}`;
     return this.http.get(url);
   }
 
@@ -85,7 +86,7 @@ export class TextService {
     const idParts = id.split(';')[0].split('_');
     const coll_id = idParts[0];
     const pub_id = idParts.length > 1 ? idParts[1] : "1";
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/cover/${lang}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/cover/${lang}`;
     return this.http.get(url);
   }
 
@@ -98,7 +99,7 @@ export class TextService {
       ch_id = idParts[2];
     }
 
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/var${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/var${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -113,7 +114,7 @@ export class TextService {
       ch_id = idParts[2];
     }
 
-    let api = this.apiEndPoint;
+    let api = this.apiEndpoint;
     if (this.simpleApi) {
       api = this.simpleApi;
     }
@@ -125,37 +126,37 @@ export class TextService {
   }
 
   getTextByType(type: string, id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/${type}/${id}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${type}/${id}`;
     return this.http.get(url);
   }
 
   getCollection(id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/collection/${id}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/collection/${id}`;
     return this.http.get(url);
   }
 
   getCollectionPublications(collection_id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/collection/${collection_id}/publications`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/collection/${collection_id}/publications`;
     return this.http.get(url);
   }
 
   getPublication(id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/publication/${id}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/publication/${id}`;
     return this.http.get(url);
   }
 
   getLegacyIdByPublicationId(id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/publication/${id}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/legacy/publication/${id}`;
     return this.http.get(url);
   }
 
   getLegacyIdByCollectionId(id: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/legacy/collection/${id}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/legacy/collection/${id}`;
     return this.http.get(url);
   }
 
   getDownloadableIntroduction(id: string, format: string, lang: string): Observable<any> {
-    const url = `${this.apiEndPoint}/${this.appMachineName}/text/downloadable/${format}/${id}/inl/${lang}`;
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/downloadable/${format}/${id}/inl/${lang}`;
     return this.http.get(url);
   }
 
@@ -168,7 +169,7 @@ export class TextService {
       ch_id = idParts[2];
     }
 
-    let api = this.apiEndPoint;
+    let api = this.apiEndpoint;
     if (this.simpleApi) {
       api = this.simpleApi;
     }
@@ -221,7 +222,7 @@ export class TextService {
         );
         text = text.replace(
           /assets\/images\/verk\//g,
-          `${this.apiEndPoint}/${this.appMachineName}/gallery/get/${galleryId}/`
+          `${this.apiEndpoint}/${this.appMachineName}/gallery/get/${galleryId}/`
         );
       }
     }

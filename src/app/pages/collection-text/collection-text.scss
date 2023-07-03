@@ -137,6 +137,7 @@ ion-segment {
   margin: 0 auto;
   max-width: 710px;
   width: calc(100% - 2px);
+  z-index: 100;
 }
 ion-segment-button {
   --border-radius: 0;
@@ -268,7 +269,6 @@ ion-fab {
   right: -10px !important;
   top: -15px;
 }
-*/
 
 .occurrenceButton {
   float: left;
@@ -278,7 +278,6 @@ ion-fab {
   right: auto !important;
 }
 
-/*
 .swapIcon {
   position: absolute;
   z-index: 999;
@@ -344,7 +343,8 @@ ion-fab {
 */
 
 /* Adjust padding and background color of text and facsimile columns in mobile mode. */
-div.mobile-mode-established {
+div.mobile-mode-established,
+div.mobile-mode-manuscripts {
   background-color: var(--page-text-columns-background-color);
   display: block;
   height: calc(100% - 32px); // full height minus ion-segment height

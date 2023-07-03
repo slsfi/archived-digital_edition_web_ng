@@ -683,7 +683,7 @@ ion-modal {
 // OTHER GLOBAL STYLES
 
 .visuallyhidden {
-  display: none;
+  display: none !important;
 }
 
 /* --- Style block: common styles for the main side menu and collection side menu. --- */

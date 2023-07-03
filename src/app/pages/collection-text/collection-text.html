@@ -164,7 +164,10 @@
                 <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
                   <ion-chip *ngFor="let lang of multilingualReadingTextLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()">
                     <ion-icon name="reader-outline"></ion-icon>
-                    <ion-label><ng-container i18n="@@Read.Established.AddButtonText">Lästext</ng-container> – {{lang}}</ion-label>
+                    <ng-container [ngSwitch]="lang">
+                      <ion-label *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ion-label>
+                      <ion-label *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ion-label>
+                    </ng-container>
                   </ion-chip>
                 </ng-container>
                 <ion-chip *ngIf="viewTypes['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()">
@@ -240,32 +243,53 @@
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
     </div>
-    <ion-segment [scrollable]="true" mode="ios" [(ngModel)]="activeMobileModeViewType">
-      <ion-segment-button value="established" *ngIf="viewTypes['established']">
+    <ion-segment mode="ios" [(ngModel)]="activeMobileModeViewType" (ionChange)="storeActiveMobileModeViewType()">
+      <ion-segment-button value="established" *ngIf="availableMobileModeViews.includes('established')">
         <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="facsimiles" *ngIf="viewTypes['facsimiles']">
+      <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
+        <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
+          <ion-segment-button [value]="'established_'+lang" *ngIf="availableMobileModeViews.includes('established_'+lang)">
+            <ng-container [ngSwitch]="lang">
+              <ion-label *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ion-label>
+              <ion-label *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ion-label>
+            </ng-container>
+          </ion-segment-button>
+        </ng-container>
+      </ng-container>
+      <ion-segment-button value="facsimiles" *ngIf="availableMobileModeViews.includes('facsimiles')">
         <ion-label i18n="@@Read.Facsimiles.Title">Faksimil</ion-label>
       </ion-segment-button>
       <!--
-      <ion-segment-button value="manuscripts" *ngIf="viewTypes['manuscripts']">
+      <ion-segment-button value="manuscripts" *ngIf="availableMobileModeViews.includes('manuscripts')">
         <ion-label i18n="@@Read.Manuscripts.Title">Manuskript</ion-label>
       </ion-segment-button>
       -->
     </ion-segment>
-    <ng-container [ngSwitch]="activeMobileModeViewType">
-      <div *ngSwitchCase="'established'" class="mobile-mode-established scroll-content-container">
-          <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
+    <div [class.visuallyhidden]="activeMobileModeViewType !== 'established'"
+          class="mobile-mode-established scroll-content-container"
+    >
+        <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
+    </div>
+    <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
+      <div [class.visuallyhidden]="activeMobileModeViewType !== 'established_'+lang"
+            class="mobile-mode-established scroll-content-container"
+      >
+        <read-text [textItemID]="textItemID + '_' + lang" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
       </div>
-      <div *ngSwitchCase="'facsimiles'" class="mobile-mode-facsimiles">
-        <facsimiles [textItemID]="textItemID"></facsimiles>
-      </div>
-      <!--
-      <div *ngSwitchCase="'manuscripts'" class="mobile-mode-manuscripts scroll-content-container">
-        <manuscripts [textItemID]="textItemID" [searchMatches]="searchMatches" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
-      </div>
-      -->
     </ng-container>
+    <div [class.visuallyhidden]="activeMobileModeViewType !== 'facsimiles'"
+          class="mobile-mode-facsimiles"
+    >
+      <facsimiles [textItemID]="textItemID"></facsimiles>
+    </div>
+    <!--
+    <div [class.visuallyhidden]="activeMobileModeViewType !== 'manuscripts'"
+          class="mobile-mode-manuscripts scroll-content-container"
+    >
+      <manuscripts [textItemID]="textItemID" [searchMatches]="searchMatches" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
+    </div>
+    -->
   </ion-content>
 </ng-container>
 

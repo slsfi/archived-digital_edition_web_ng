@@ -33,6 +33,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   activeMobileModeViewType: string = 'established';
   addViewPopoverisOpen: boolean = false;
+  availableMobileModeViews: string[] = [];
   collectionAndPublicationLegacyId: string = '';
   enabledViewTypes: string[] = [];
   illustrationsViewShown: boolean = false;
@@ -108,9 +109,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     };
 
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
-
     this.showURNButton = config.page?.read?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.read?.showViewOptionsButton ?? true;
+    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+    this.toolTipsSettings = config.settings?.toolTips ?? undefined;
 
     try {
       const textDownloadOptions = config.textDownloadOptions ?? undefined;
@@ -162,13 +164,32 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       }
     }
 
-    this.toolTipsSettings = config.settings?.toolTips ?? undefined;
+    // Set default mobile mode views
+    if (this.multilingualReadingTextLanguages.length > 1) {
+      for (const estLanguage of this.multilingualReadingTextLanguages) {
+        this.availableMobileModeViews.push('established_' + estLanguage);
+      }
+    } else {
+      this.availableMobileModeViews.push('established');
+    }
+    this.availableMobileModeViews.push('facsimiles');
+    // availableMobileModeViews.push('manuscripts');
     const defaultViews = config.defaults?.ReadModeView ?? ['established'];
-    const availableMobileModeViews = ['established', 'facsimiles'];
     this.activeMobileModeViewType = defaultViews.filter(
-      (value: string) => availableMobileModeViews.includes(value) && this.viewTypes[value]
+      (value: string) => this.availableMobileModeViews.includes(value) && this.enabledViewTypes.includes(value)
     )[0] || 'established';
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+    if (this.multilingualReadingTextLanguages.length > 1 && this.activeMobileModeViewType.includes('established_')) {
+      // Set the default selected mobile mode view to the active locale's read text if multilingual read texts
+      this.activeMobileModeViewType = 'established_' + this.activeLocale;
+    }
+    if (
+      this.textService.activeCollectionTextMobileModeView &&
+      this.availableMobileModeViews.includes(
+        this.textService.activeCollectionTextMobileModeView
+      )
+    ) {
+      this.activeMobileModeViewType = this.textService.activeCollectionTextMobileModeView;
+    }
   }
 
   ngOnInit() {
@@ -256,9 +277,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
           // Clear the array keeping track of recently open views in
           // text service and populate it with the current ones.
-          this.textService.recentPageReadViews = [];
+          this.textService.recentCollectionTextViews = [];
           parsedViews.forEach((viewObj: any) => {
-            this.textService.recentPageReadViews.push({ type: viewObj.type });
+            this.textService.recentCollectionTextViews.push({ type: viewObj.type });
           });
         } else {
           this.setDefaultViews();
@@ -331,9 +352,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   setDefaultViews() {
     // There are no views defined in the url params => show either recent or default views
-    if (this.textService.recentPageReadViews.length > 0) {
+    if (this.textService.recentCollectionTextViews.length > 0) {
       // show recent views
-      this.updateViewsInRouterQueryParams(this.textService.recentPageReadViews);
+      this.updateViewsInRouterQueryParams(this.textService.recentCollectionTextViews);
     } else {
       // show default views
       this.setDefaultViewsFromConfig();
@@ -341,15 +362,20 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   setDefaultViewsFromConfig() {
-    const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
     let newViews: Array<any> = [];
 
-    defaultReadModes.forEach((val: any) => {
-      if (this.enabledViewTypes.indexOf(val) !== -1) {
-        const view = { type: val } as any;
-        newViews.push(view);
-      }
-    });
+    if (this.userSettingsService.isMobile()) {
+      this.availableMobileModeViews.forEach((type: string) => {
+        newViews.push({ type });
+      });
+    } else {
+      const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
+      defaultReadModes.forEach((type: string) => {
+        if (this.enabledViewTypes.indexOf(type) !== -1) {
+          newViews.push({ type });
+        }
+      });
+    }
 
     this.updateViewsInRouterQueryParams(newViews);
   }
@@ -362,8 +388,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         this.viewTypeShouldBeShown(type) &&
         viewTypesShown.indexOf(type) === -1
       ) {
-        // TODO: this.activeMobileModeViewType sets the shown view in mobile mode, fix if changing to responsive design
-        this.activeMobileModeViewType = type;
         if (type.startsWith('established') && type.split('_')[1]) {
           this.addView('established', null, null, type.split('_')[1]);
         } else {
@@ -1772,6 +1796,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  storeActiveMobileModeViewType() {
+    this.textService.activeCollectionTextMobileModeView = this.activeMobileModeViewType;
   }
 
 }
