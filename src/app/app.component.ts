@@ -105,7 +105,7 @@ export class DigitalEditionsApp implements OnInit {
         this.headService.setTitle([$localize`:@@TopMenu.Search:Sök`]);
         return;
       default:
-        !routeBasePath && this.headService.setTitle([$localize`:@@TOC.Home:Hem`]);
+        !routeBasePath && this.headService.setTitle();
         return;
     }
   }
