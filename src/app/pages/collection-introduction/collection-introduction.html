@@ -49,8 +49,8 @@
       [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
     >
       <div class="infoOverlayHeader">
-        <h6 class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></h6>
-        <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()"></ion-icon>
+        <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
+        <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText"></div>
     </div>
