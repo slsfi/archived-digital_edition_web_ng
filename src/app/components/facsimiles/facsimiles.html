@@ -47,6 +47,7 @@
               "
         alt="Skannat faksimil"
         i18n-alt="@@Read.Facsimiles.AltText"
+        loading="lazy"
         [ngStyle]="{'transform':'scale('+zoom+') translate3d('+prevX+'px, '+prevY+'px, 0px) rotate('+angle+'deg)'}"
         (wheel)="zoomWithMouseWheel($event)"
         [draggableImage]="[prevX, prevY]"

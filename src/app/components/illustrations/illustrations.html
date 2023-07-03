@@ -5,7 +5,7 @@
     <ion-button *ngIf="!viewAll && imageCountTotal > 1" class="view-all-button" (click)="viewAllIllustrations()" i18n="@@Read.Illustrations.Showall">Visa alla</ion-button>
     <ng-container *ngIf="viewAll || showOne">
       <div class="illustration-image-wrapper" *ngFor="let image of images">
-        <img alt="illustration" src="{{ image.src }}" (click)="zoomImage(image.src)" alt="illustration" [ngClass]="image.class?image.class:''">
+        <img src="{{ image.src }}" (click)="zoomImage(image.src)" alt="illustration" loading="lazy" [ngClass]="image.class?image.class:''">
         <ion-button class="scroll-to-illustration-button" (click)="scrollToPositionInText(image)"><ion-icon slot="start" name="image"></ion-icon><ng-container i18n="@@Read.Illustrations.Goto">Gå till position i lästext</ng-container></ion-button>
       </div>
     </ng-container>

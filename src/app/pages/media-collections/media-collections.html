@@ -34,7 +34,7 @@
             <ion-col *ngFor="let gallery of galleries; index as i" (click)="openMediaCollection(gallery)" col-md-4 col-sm-12 col-lg-3>
                 <ion-card>
                     <div>
-                        <img alt="gallery image" id="{{gallery.id}}" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{gallery.id}}/gallery_thumb.jpg" />
+                        <img alt="gallery image" id="{{gallery.id}}" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{gallery.id}}/gallery_thumb.jpg" loading="lazy">
                     </div>
                     <ion-card-content>
                         <p>{{gallery.title}} – {{gallery.media_count}} <ng-container i18n="@@MediaCollections.photos">foton</ng-container></p>

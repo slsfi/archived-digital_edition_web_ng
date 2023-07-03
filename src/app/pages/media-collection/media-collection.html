@@ -46,7 +46,7 @@
       <ion-col *ngFor="let image of mediaCollection; index as i" col-md-4 col-sm-12 col-lg-3>
         <ion-card *ngIf="mediaCollectionId!=undefined" (click)="openImage(i, mediaCollectionId)">
           <div>
-            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy"/>
+            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy">
           </div>
           <ion-card-content>
             <div *ngIf="image.media_title_translation" class="img-desc title">
@@ -61,7 +61,7 @@
         </ion-card>
         <ion-card *ngIf="mediaCollectionId==undefined" (click)="openImage(i, image.mediaCollectionId)">
           <div>
-            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{image.mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy"/>
+            <img alt="Galleribild" i18n-alt="@@MediaCollections.altText" src="{{apiEndPoint}}/{{projectMachineName}}/gallery/get/{{image.mediaCollectionId}}/{{asThumb(image.front)}}" loading="lazy">
           </div>
           <ion-card-content>
             <div *ngIf="image.description" class="img-desc">

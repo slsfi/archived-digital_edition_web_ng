@@ -5,7 +5,7 @@
 
       <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="banner-subtitle" i18n="@@Site.Subtitle">Webbplatsens undertitel</p>
     </div>
-    <img *ngIf="imageOrientationPortrait" [src]="imageUrl" [alt]="portraitImageAltText">
+    <img *ngIf="imageOrientationPortrait" [src]="imageUrl" [alt]="portraitImageAltText" loading="lazy">
   </div>
 
   <div class="text-content">

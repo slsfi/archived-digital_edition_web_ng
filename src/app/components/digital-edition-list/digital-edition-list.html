@@ -6,7 +6,10 @@
           <ion-card-header class="digital-edition-list-card-header" [ngClass]="edition.isDownload ? 'download-only-edition' : ''">
             <a routerLink="{{'/' + edition.type | initialPathGenerator: edition.id}}" title="{{edition.title}}">
               <img [ngClass]="edition.isDownload ? 'download-only-edition' : ''"
-                    src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" alt="{{edition.title}}">
+                    src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}"
+                    alt="{{edition.title}}"
+                    loading="lazy"
+              >
             </a>
             <div class="corner-download-icon"><ion-icon *ngIf="edition.isDownload" name="download"></ion-icon></div>
           </ion-card-header>
@@ -31,7 +34,7 @@
           style="padding: 20px; position: relative; background-color: white;">
           <ion-card-header class="digital-edition-list-card-header">
             <img
-              src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+              src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
             <ion-icon class="download" *ngIf="edition.isDownload" name="download">
             </ion-icon>
           </ion-card-header>
@@ -55,7 +58,7 @@
           <ion-item *ngFor="let edition of digitalEditions" menuClose (click)="openCollection(edition, true)">
             <ion-thumbnail item-left>
               <img
-                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
               <ion-icon class="download" *ngIf="edition.isDownload"
                 name="download"></ion-icon>
             </ion-thumbnail>
@@ -80,7 +83,7 @@
         <ion-card class="digital-edition" style="padding: 20px; position: relative;">
           <ion-card-header class="digital-edition-list-card-header">
             <img
-              src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+              src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
             <ion-icon class="download" *ngIf="edition.isDownload" name="download">
             </ion-icon>
           </ion-card-header>
@@ -108,7 +111,7 @@
           <ion-item *ngFor="let edition of digitalEditionsFirstHalf" menuClose (click)="openCollection(edition, true)">
             <ion-thumbnail item-left>
               <img
-                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
               <ion-icon class="download" *ngIf="edition.isDownload"
                 name="download"></ion-icon>
             </ion-thumbnail>
@@ -125,7 +128,7 @@
           <ion-item *ngFor="let edition of digitalEditionsSecondHalf" menuClose (click)="openCollection(edition, true)">
             <ion-thumbnail item-left>
               <img
-                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
               <ion-icon class="download" *ngIf="edition.isDownload"
                 name="download"></ion-icon>
             </ion-thumbnail>
@@ -144,7 +147,7 @@
           <ion-item *ngFor="let edition of digitalEditions" menuClose (click)="openCollection(edition, true)">
             <ion-thumbnail item-left>
               <img
-                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}">
+                src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}" loading="lazy">
               <ion-icon class="download" *ngIf="edition.isDownload"
                 name="download"></ion-icon>
             </ion-thumbnail>

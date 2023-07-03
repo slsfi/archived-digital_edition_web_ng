@@ -20,7 +20,7 @@
 
 <ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="publication-ion-content" [ngClass]="printMainContentClasses()">
   <div class="cover-image-wrapper" [ngClass]="printMainContentClasses()">
-    <img class="cover-image" [src]="image_src" [alt]="image_alt">
+    <img class="cover-image" [src]="image_src" [alt]="image_alt" loading="lazy">
   </div>
 </ion-content>
 
