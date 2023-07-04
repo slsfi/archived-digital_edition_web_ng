@@ -5,7 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
-import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
@@ -415,8 +415,8 @@ export class MediaCollectionPage {
   async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
-      component: ReferenceDataModalPage,
-      componentProps: {id: document.URL, type: 'reference', origin: 'media-collection'}
+      component: ReferenceDataModal,
+      componentProps: { origin: 'media-collection' }
     });
     modal.present();
   }

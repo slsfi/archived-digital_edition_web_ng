@@ -6,7 +6,7 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { marked } from 'marked';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
-import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
@@ -48,12 +48,11 @@ export class CollectionTitlePage implements OnInit {
     public readPopoverService: ReadPopoverService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.titleSelected = true;
     this.hasMDTitle = config.ProjectStaticMarkdownTitleFolder ?? '';
-    this.showURNButton = config.showURNButton?.pageTitle ?? false;
+    this.showURNButton = config.page?.title?.showURNButton ?? false;
     this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
   }
 
@@ -148,8 +147,8 @@ export class CollectionTitlePage implements OnInit {
   public async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
-      component: ReferenceDataModalPage,
-      componentProps: {id: this.document.URL, type: 'reference', origin: 'page-title'}
+      component: ReferenceDataModal,
+      componentProps: { origin: 'page-title' }
     });
     modal.present();
   }

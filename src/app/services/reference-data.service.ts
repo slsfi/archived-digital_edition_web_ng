@@ -11,7 +11,6 @@ import { config } from "src/assets/config/config";
 export class ReferenceDataService {
   private referenceDataUrl = '/urn/';
   private urnResolverUrl: string;
-  textCache: any;
 
   constructor(
     private http: HttpClient
@@ -20,15 +19,10 @@ export class ReferenceDataService {
   }
 
   getReferenceData(id: string): Observable<any> {
+    // We need to double encode the URL for the API
     id = encodeURI(encodeURIComponent(id));
-    // We need to doulbe encode the URL for the API
     return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        this.referenceDataUrl +
-        id +
-        '/'
+      config.app.apiEndpoint + '/' + config.app.machineName + this.referenceDataUrl + id + '/'
     );
   }
 

@@ -5,7 +5,7 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { combineLatest, map, Observable, Subscription } from 'rxjs';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
-import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
@@ -801,8 +801,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalCtrl.create({
-      component: ReferenceDataModalPage,
-      componentProps: {id: document.URL, type: 'reference', origin: 'page-introduction'}
+      component: ReferenceDataModal,
+      componentProps: { origin: 'page-introduction' }
     });
     modal.present();
   }

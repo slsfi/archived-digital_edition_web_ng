@@ -6,7 +6,7 @@ import { Fontsize, ReadPopoverService } from 'src/app/services/read-popover.serv
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
@@ -750,8 +750,8 @@ export class EpubComponent {
   public async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
-      component: ReferenceDataModalPage,
-      componentProps: {id: document.URL, type: 'reference', origin: 'page-ebook'}
+      component: ReferenceDataModal,
+      componentProps: { origin: 'page-ebook' }
     });
     modal.present();
   }

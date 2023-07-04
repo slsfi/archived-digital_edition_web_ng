@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output } from '@angular/core';
 import { DOCUMENT } from "@angular/common";
 import { ModalController } from '@ionic/angular';
-import { ReferenceDataModalPage } from 'src/app/modals/reference-data-modal/reference-data-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -124,12 +124,8 @@ export class TopMenuComponent {
     event.preventDefault();
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
-      component: ReferenceDataModalPage,
-      id: this.document.URL,
-      componentProps: {
-        type: 'reference',
-        origin: 'top-menu',
-      }
+      component: ReferenceDataModal,
+      componentProps: { origin: 'top-menu' }
     });
     modal.present();
   }
