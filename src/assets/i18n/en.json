@@ -20,6 +20,11 @@
             "Options": "Options",
             "All": "Choose all",
             "Textsize": "Text size",
+            "TextsizeXSmall": "Text size: small",
+            "TextsizeSmall": "Text size: normal",
+            "TextsizeMedium": "Text size: large",
+            "TextsizeLarge": "Text size: extra large",
+            "TextsizeXLarge": "Text size: largest",
             "Show": "Options",
             "Comments": "Comments",
             "PersonInfo": "People",
@@ -30,7 +35,8 @@
             "Abbreviations": "Abbreviations",
             "ParagraphNumbering": "Paragraph/Stanza numbering",
             "PageBreakOriginal": "Original page breaks",
-            "PageBreakEdition": "Edition page breaks"
+            "PageBreakEdition": "Edition page breaks",
+            "CommentSymbol": "Red asterisk"
         },
         "ReadFromBeginning": "From the beginning",
         "Established": {

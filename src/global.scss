@@ -453,29 +453,9 @@ ion-toolbar.secondary {
 }
 
 // Ion-popover styles
-ion-popover ion-list-header {
-  --background: var(--ion-popover-list-header-background-color);
-  font-weight: bold;
-  font-size: 1em;
-  margin-bottom: 0;
-}
-ion-popover ion-list.list-md {
-  background: var(--ion-popover-content-background-color);
-  padding: 0;
-}
-ion-popover ion-list.list-md:last-child {
-  padding-bottom: 0.25em;
-}
-ion-popover ion-item.item {
-  --background: var(--ion-popover-content-background-color);
-  --background-hover: var(--ion-popover-content-background-color);
-  --border-color: var(--ion-popover-item-border-bottom-color);
-}
-ion-popover ion-item.item:last-child {
-  --border-width: 0;
-}
 ion-popover.read-popover {
   --min-width: 300px;
+  --max-width: 100%;
   --width: min-content;
   --offset-y: -30px;
 }

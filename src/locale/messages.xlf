@@ -1066,6 +1066,11 @@
         <source>Kommentarer</source>
       </segment>
     </unit>
+    <unit id="Read.Popover.CommentSymbol">
+      <segment>
+        <source>Röd asterisk</source>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Normalisations">
       <segment>
         <source>Normaliseringar</source>
@@ -1109,6 +1114,31 @@
     <unit id="Read.Popover.Textsize">
       <segment>
         <source>Textstorlek</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeLarge">
+      <segment>
+        <source>Textstorlek: mycket stor</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeMedium">
+      <segment>
+        <source>Textstorlek: stor</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeSmall">
+      <segment>
+        <source>Textstorlek: normal</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeXLarge">
+      <segment>
+        <source>Textstorlek: störst</source>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeXSmall">
+      <segment>
+        <source>Textstorlek: liten</source>
       </segment>
     </unit>
     <unit id="Read.Popover.WorkInfo">

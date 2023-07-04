@@ -20,6 +20,11 @@
             "Options": "Inställningar",
             "All": "Välj alla",
             "Textsize": "Textstorlek",
+            "TextsizeXSmall": "Textstorlek: liten",
+            "TextsizeSmall": "Textstorlek: normal",
+            "TextsizeMedium": "Textstorlek: stor",
+            "TextsizeLarge": "Textstorlek: mycket stor",
+            "TextsizeXLarge": "Textstorlek: störst",
             "Show": "Visningsalternativ",
             "Comments": "Kommentarer",
             "PersonInfo": "Personupplysningar",
@@ -29,8 +34,9 @@
             "Normalisations": "Normaliseringar",
             "Abbreviations": "Förkortningar",
             "ParagraphNumbering": "Stycke-/radnumrering",
-            "PageBreakOriginal": "Sidnummer/-brytning i originalet",
-            "PageBreakEdition": "Sidnummer i den tryckta utgåvan"
+            "PageBreakOriginal": "Sidnummer i originalet",
+            "PageBreakEdition": "Sidnummer i den tryckta utgåvan",
+            "CommentSymbol": "Röd asterisk"
         },
         "ReadFromBeginning": "Läs från början",
         "Established": {

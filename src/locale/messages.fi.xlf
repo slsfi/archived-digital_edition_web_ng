@@ -1278,6 +1278,12 @@
         <target>Kommentit</target>
       </segment>
     </unit>
+    <unit id="Read.Popover.CommentSymbol">
+      <segment state="initial">
+        <source>Röd asterisk</source>
+        <target>Punainen asteriski</target>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Normalisations">
       <segment state="initial">
         <source>Normaliseringar</source>
@@ -1299,7 +1305,7 @@
     <unit id="Read.Popover.PageBreakOriginal">
       <segment state="initial">
         <source>Sidnummer/-brytning i originalet</source>
-        <target>Alkuteoksen sivunumerot/sivunvaihdot</target>
+        <target>Alkuteoksen sivunumerot</target>
       </segment>
     </unit>
     <unit id="Read.Popover.ParagraphNumbering">
@@ -1330,6 +1336,36 @@
       <segment state="initial">
         <source>Textstorlek</source>
         <target>Tekstin koko</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeLarge">
+      <segment state="initial">
+        <source>Textstorlek: mycket stor</source>
+        <target>Tekstin koko: hyvin iso</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeMedium">
+      <segment state="initial">
+        <source>Textstorlek: stor</source>
+        <target>Tekstin koko: iso</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeSmall">
+      <segment state="initial">
+        <source>Textstorlek: normal</source>
+        <target>Tekstin koko: normaali</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeXLarge">
+      <segment state="initial">
+        <source>Textstorlek: störst</source>
+        <target>Tekstin koko: isoin</target>
+      </segment>
+    </unit>
+    <unit id="Read.Popover.TextsizeXSmall">
+      <segment state="initial">
+        <source>Textstorlek: liten</source>
+        <target>Tekstin koko: pieni</target>
       </segment>
     </unit>
     <unit id="Read.Popover.WorkInfo">

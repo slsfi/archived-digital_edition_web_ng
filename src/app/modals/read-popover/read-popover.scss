@@ -1,5 +1,33 @@
+ion-list-header {
+	--background: var(--ion-popover-list-header-background-color);
+	font-weight: bold;
+	font-size: 1em;
+	margin-bottom: 0;
+}
+ion-list.list-md {
+	background: var(--ion-popover-content-background-color);
+	padding: 0;
+}
+ion-list.list-md:last-child {
+	padding-bottom: 0.25em;
+}
+
+ion-item.item {
+	--background: var(--ion-popover-content-background-color);
+	--background-hover: var(--ion-popover-content-background-color);
+	--border-color: var(--ion-popover-item-border-bottom-color);
+}
+ion-item.item:last-child {
+	--border-width: 0;
+}
+
 ion-button.close {
-	--padding-end: 0.85em;
+	--padding-start: 0.65em;
+	--padding-end: 0.65em;
+	&.ion-focused {
+		outline: solid;
+		outline-offset: -4px;
+	}
 }
 
 .font-size-buttons-wrapper {
@@ -17,6 +45,10 @@ ion-button.text-button {
 	--color: #000;
 	--padding-start: 0;
 	--padding-end: 0;
+
+	&.ion-focused {
+		outline: solid;
+	}
 }
 ion-button.text-button::part(native) {
 	width: 3.25rem;
@@ -41,31 +73,25 @@ ion-button.text-xlarge {
 	font-size: 1.75rem !important;
 }
 
-.asterix {
-	height: 0.75rem;
+.asterisk {
+	height: 0.8125rem;
 	padding-right: 0.125rem;
 }
 .show_personInfo {
-	display: inline;
 	background-color: var(--persName-color);
 }
 .show_workInfo {
-	display: inline;
 	background-color: var(--workTitle-color);
 }
 .show_placeInfo {
-	display: inline;
 	background-color: var(--placeName-color);
 }
 .show_abbreviations {
-	display: inline;
 	background-color: var(--abbreviations-color);
 }
 .show_changesInfo {
-	display: inline;
 	background-color: var(--changes-color);
 }
 .show_normalisationsInfo {
-	display: inline;
 	background-color: var(--normalisations-color);
 }
