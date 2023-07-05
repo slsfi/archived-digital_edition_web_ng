@@ -7,7 +7,7 @@ import JsonURL from '@jsonurl/jsonurl';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
@@ -1430,8 +1430,8 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
   async showPopover(event: any) {
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
-      cssClass: 'read-popover',
+      component: ViewOptionsPopover,
+      cssClass: 'view-options-popover',
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'

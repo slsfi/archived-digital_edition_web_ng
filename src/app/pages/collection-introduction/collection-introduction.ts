@@ -8,7 +8,7 @@ import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/down
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { IllustrationPage } from 'src/app/modals/illustration/illustration';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { TextService } from 'src/app/services/text.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
@@ -788,9 +788,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   async showPopover(event: any) {
     const toggles = this.readPopoverTogglesIntro;
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
+      component: ViewOptionsPopover,
       componentProps: { toggles },
-      cssClass: 'read-popover',
+      cssClass: 'view-options-popover',
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'

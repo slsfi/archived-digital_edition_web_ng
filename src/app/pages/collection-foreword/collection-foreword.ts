@@ -2,7 +2,8 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
@@ -84,9 +85,9 @@ export class CollectionForewordPage implements OnInit {
       'pageBreakEdition': false
     };
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
+      component: ViewOptionsPopover,
       componentProps: { toggles },
-      cssClass: 'read-popover',
+      cssClass: 'view-options-popover',
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'

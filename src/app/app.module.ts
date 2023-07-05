@@ -15,8 +15,6 @@ import { FullscreenImageViewerModalModule } from './modals/fullscreen-image-view
 import { FullscreenImageViewerModal } from './modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { IllustrationPageModule } from './modals/illustration/illustration.module';
 import { IllustrationPage } from './modals/illustration/illustration';
-import { ReadPopoverPageModule } from './modals/read-popover/read-popover.module';
-import { ReadPopoverPage } from './modals/read-popover/read-popover';
 
 @NgModule({
   declarations: [
@@ -38,7 +36,6 @@ import { ReadPopoverPage } from './modals/read-popover/read-popover';
     PipesModule,
     DigitalEditionListModule,
     FullscreenImageViewerModalModule,
-    ReadPopoverPageModule,
     IllustrationPageModule
   ],
   providers: [
@@ -48,7 +45,6 @@ import { ReadPopoverPage } from './modals/read-popover/read-popover';
   bootstrap: [DigitalEditionsApp],
   entryComponents: [
     DigitalEditionsApp,
-    ReadPopoverPage,
     FullscreenImageViewerModal,
     DownloadTextsModalPage,
     IllustrationPage

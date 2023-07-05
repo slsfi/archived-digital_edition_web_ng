@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { marked } from 'marked';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
@@ -134,9 +134,9 @@ export class CollectionTitlePage implements OnInit {
       'pageBreakEdition': false
     };
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
+      component: ViewOptionsPopover,
       componentProps: { toggles },
-      cssClass: 'read-popover',
+      cssClass: 'view-options-popover',
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'

@@ -4,7 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { GeneralTocItem, TableOfContentsCategory } from 'src/app/models/table-of-contents.model';
 import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { TextService } from 'src/app/services/text.service';
@@ -237,7 +237,7 @@ export class SingleEditionPage {
 
   async showPopover(myEvent: any) {
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
+      component: ViewOptionsPopover,
     });
     popover.present(myEvent);
   }

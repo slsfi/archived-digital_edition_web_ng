@@ -7,7 +7,7 @@ import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { ReadPopoverPage } from 'src/app/modals/read-popover/read-popover';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -534,9 +534,9 @@ export class EpubComponent {
       'pageBreakEdition': false
     };
     const popover = await this.popoverCtrl.create({
-      component: ReadPopoverPage,
+      component: ViewOptionsPopover,
       componentProps: { toggles },
-      cssClass: 'read-popover',
+      cssClass: 'view-options-popover',
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'
