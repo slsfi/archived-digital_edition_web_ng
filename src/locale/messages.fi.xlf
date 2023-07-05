@@ -1050,6 +1050,12 @@
         <target>Sisältö</target>
       </segment>
     </unit>
+    <unit id="Read.Introduction.NoIntroduction">
+      <segment state="initial">
+        <source>Inledningen kunde inte laddas.</source>
+        <target>Johdannon lataus epäonnistui.</target>
+      </segment>
+    </unit>
     <unit id="Read.Introduction.Title">
       <segment state="initial">
         <source>Inledning</source>
@@ -1378,6 +1384,12 @@
       <segment state="initial">
         <source>Visa alla</source>
         <target>Näytä kaikki</target>
+      </segment>
+    </unit>
+    <unit id="Read.TitlePage.NoTitle">
+      <segment state="initial">
+        <source>Titelbladet kunde inte laddas.</source>
+        <target>Nimiölehden lataus epäonnistui.</target>
       </segment>
     </unit>
     <unit id="Read.TitlePage.Title">

@@ -14,8 +14,8 @@ import { TooltipService } from 'src/app/services/tooltip.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { config } from "src/assets/config/config";
-import { isBrowser } from "src/standalone/utility-functions";
+import { config } from 'src/assets/config/config';
+import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   infoOverlayTitle: string = '';
   intervalTimerId: ReturnType<typeof setInterval> | undefined;
   pos: string | null;
-  readPopoverTogglesIntro: any = {};
+  viewOptionsTogglesIntro: any = {};
   showTextDownloadButton: boolean = false;
   showURNButton: boolean;
   showViewOptionsButton: boolean = true;
@@ -97,14 +97,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     this.intervalTimerId = undefined;
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
-    this.readPopoverTogglesIntro = config.settings?.introToggles ?? undefined;
+    this.viewOptionsTogglesIntro = config.settings?.introToggles ?? undefined;
 
     if (
-      this.readPopoverTogglesIntro === undefined ||
-      this.readPopoverTogglesIntro === null ||
-      Object.keys(this.readPopoverTogglesIntro).length === 0
+      this.viewOptionsTogglesIntro === undefined ||
+      this.viewOptionsTogglesIntro === null ||
+      Object.keys(this.viewOptionsTogglesIntro).length === 0
     ) {
-      this.readPopoverTogglesIntro = {
+      this.viewOptionsTogglesIntro = {
         'comments': false,
         'personInfo': false,
         'placeInfo': false,
@@ -117,11 +117,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         'pageBreakEdition': false
       };
     } else {
-      this.readPopoverTogglesIntro.comments = false;
-      this.readPopoverTogglesIntro.changes = false;
-      this.readPopoverTogglesIntro.normalisations = false;
-      this.readPopoverTogglesIntro.abbreviations = false;
-      this.readPopoverTogglesIntro.pageBreakOriginal = false;
+      this.viewOptionsTogglesIntro.comments = false;
+      this.viewOptionsTogglesIntro.changes = false;
+      this.viewOptionsTogglesIntro.normalisations = false;
+      this.viewOptionsTogglesIntro.abbreviations = false;
+      this.viewOptionsTogglesIntro.pageBreakOriginal = false;
     }
 
     this.showURNButton = config.page?.introduction?.showURNButton ?? true;
@@ -184,7 +184,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           if (config.app?.enableCollectionLegacyIDs) {
             this.setCollectionLegacyId(this.id);
           }
-          this.loadIntroduction(this.activeLocale, this.id);
+          this.loadIntroduction(this.id, this.activeLocale);
         } else {
           // Try to scroll to a position in the text
           this.scrollToPos(100);
@@ -205,41 +205,46 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     this.unlistenFirstTouchStartEvent?.();
   }
 
-  private loadIntroduction(lang: string, id: string) {
+  private loadIntroduction(id: string, lang: string) {
     this.text = '';
     this.textLoading = true;
     this.textService.getIntroduction(id, lang).subscribe({
-      next: (res) => {
-        this.textLoading = false;
-        // Fix paths for images and file extensions for icons
-        let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+      next: (res: any) => {
+        if (res?.content) {
+          this.textLoading = false;
+          // Fix paths for images and file extensions for icons
+          let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
 
-        // Find the introduction's table of contents in the text
-        const pattern = /<div data-id="content">(.*?)<\/div>/;
-        const matches = textContent.match(pattern);
-        if ( matches && matches.length > 0 ) {
-          // The introduction's table of contents was found,
-          // copy it to this.textMenu and remove it from this.text
-          this.textMenu = this.sanitizer.bypassSecurityTrustHtml(matches[1]);
-          textContent = textContent.replace(pattern, '');
-          if (!this.userSettingsService.isMobile()) {
-            if (!this.tocMenuOpen) {
-              this.tocMenuOpen = true;
+          // Find the introduction's table of contents in the text
+          const pattern = /<div data-id="content">(.*?)<\/div>/;
+          const matches = textContent.match(pattern);
+          if ( matches && matches.length > 0 ) {
+            // The introduction's table of contents was found,
+            // copy it to this.textMenu and remove it from this.text
+            this.textMenu = this.sanitizer.bypassSecurityTrustHtml(matches[1]);
+            textContent = textContent.replace(pattern, '');
+            if (!this.userSettingsService.isMobile()) {
+              if (!this.tocMenuOpen) {
+                this.tocMenuOpen = true;
+              }
             }
+          } else {
+            this.hasSeparateIntroToc = false;
           }
+
+          this.text = this.sanitizer.bypassSecurityTrustHtml(textContent);
+          // Try to scroll to a position in the text
+          this.scrollToPos();
         } else {
+          this.textLoading = false;
+          this.text = $localize`:@@Read.Introduction.NoIntroduction:Inledningen kunde inte laddas.`;
           this.hasSeparateIntroToc = false;
         }
-
-        this.text = this.sanitizer.bypassSecurityTrustHtml(textContent);
-
-        // Try to scroll to a position in the text
-        this.scrollToPos();
       },
-      error: (e) =>  {
+      error: (e: any) =>  {
+        console.error(e);
         this.textLoading = false;
-        // TODO: Add translated error message.
-        this.text = 'Could not load introduction.';
+        this.text = $localize`:@@Read.Introduction.NoIntroduction:Inledningen kunde inte laddas.`;
         this.hasSeparateIntroToc = false;
       }
     });
@@ -264,20 +269,24 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             iterationsLeft -= 1;
             if (that.pos !== undefined && that.pos !== null) {
               // Look for position in name attributes
-              let posElem: HTMLElement | null = document.querySelector('page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]');
-              if (posElem !== null && posElem !== undefined) {
+              let posElem: HTMLElement | null = document.querySelector(
+                'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]'
+              );
+              if (posElem) {
                 const parentElem = posElem.parentElement;
                 if (parentElem) {
                   if (
-                    (parentElem !== null && parentElem.classList.contains('ttFixed')) ||
-                    (parentElem.parentElement !== null && parentElem.parentElement.classList.contains('ttFixed'))
+                    parentElem.classList.contains('ttFixed') ||
+                    parentElem.parentElement?.classList?.contains('ttFixed')
                   ) {
                     // Anchor is in footnote --> look for next occurence
                     // since the first footnote element is not displayed
                     // (footnote elements are copied to a list at the
                     // end of the introduction and that's the position
                     // we need to find).
-                    posElem = document.querySelectorAll('page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]')[1] as HTMLElement;
+                    posElem = document.querySelectorAll(
+                      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]'
+                    )[1] as HTMLElement;
                   }
                 }
                 if (posElem && !posElem.classList?.contains('anchor')) {
@@ -285,7 +294,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                 }
               } else {
                 // Look for position in data-id attributes
-                posElem = document.querySelector('page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [data-id="' + that.pos + '"]');
+                posElem = document.querySelector(
+                  'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [data-id="' + that.pos + '"]'
+                );
               }
               if (posElem) {
                 if (
@@ -309,13 +320,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   private setCollectionLegacyId(id: string) {
     this.textService.getLegacyIdByCollectionId(id).subscribe({
-      next: (collection) => {
+      next: (collection: any) => {
         this.collectionLegacyId = '';
         if (collection[0].legacy_id) {
           this.collectionLegacyId = collection[0].legacy_id;
         }
       },
-      error: (e) => {
+      error: (e: any) => {
         this.collectionLegacyId = '';
         console.log('could not get collection data trying to resolve collection legacy id');
       }
@@ -656,7 +667,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
     // Get page content element and adjust viewport height with horizontal scrollbar height if such is present
-    const contentElem = document.querySelector('page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content') as HTMLElement;
+    const contentElem = document.querySelector(
+      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content'
+    ) as HTMLElement;
     let horizontalScrollbarOffsetHeight = 0;
     if (contentElem.clientHeight < contentElem.offsetHeight) {
       horizontalScrollbarOffsetHeight = contentElem.offsetHeight - contentElem.clientHeight;
@@ -711,15 +724,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
         if (eventTarget.classList.contains('tooltiptrigger')) {
           return eventTarget;
-        } else if (eventTarget.parentElement !== undefined && eventTarget.parentElement !== null) {
+        } else if (eventTarget.parentElement) {
           if (eventTarget.parentElement.classList.contains('tooltiptrigger')) {
             return eventTarget.parentElement;
-          } else {
-            if (eventTarget.parentElement.parentElement !== undefined && eventTarget.parentElement.parentElement !== null) {
-              if (eventTarget.parentElement.parentElement.classList.contains('tooltiptrigger')) {
-                return eventTarget.parentElement.parentElement;
-              }
-            }
+          } else if (eventTarget.parentElement?.parentElement?.classList.contains('tooltiptrigger')) {
+            return eventTarget.parentElement.parentElement;
           }
         }
         if (eventTarget.classList.contains('anchor')) {
@@ -771,7 +780,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   async showSemanticDataObjectModal(id: string, type: string) {
     const modal = await this.modalCtrl.create({
       component: SemanticDataObjectModal,
-      componentProps: { id: id, type: type }
+      componentProps: { id, type }
     });
     modal.present();
   }
@@ -785,8 +794,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     modal.present();
   }
 
-  async showPopover(event: any) {
-    const toggles = this.readPopoverTogglesIntro;
+  async showViewOptionsPopover(event: any) {
+    const toggles = this.viewOptionsTogglesIntro;
     const popover = await this.popoverCtrl.create({
       component: ViewOptionsPopover,
       componentProps: { toggles },
@@ -799,7 +808,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   async showReference() {
-    // Get URL of Page and then the URI
     const modal = await this.modalCtrl.create({
       component: ReferenceDataModal,
       componentProps: { origin: 'page-introduction' }
@@ -810,17 +818,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   async showDownloadModal() {
     const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
-      componentProps: {textId: this.id, origin: 'page-introduction'}
+      componentProps: { textId: this.id, origin: 'page-introduction' }
     });
     modal.present();
   }
 
   toggleTocMenu() {
-    if ( this.tocMenuOpen ) {
-      this.tocMenuOpen = false;
-    } else {
-      this.tocMenuOpen = true;
-    }
+    this.tocMenuOpen = !this.tocMenuOpen;
   }
 
   printMainContentClasses() {
@@ -830,4 +834,5 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       return '';
     }
   }
+
 }

@@ -4,20 +4,21 @@
     <text-changer *ngIf="!userSettingsService.isMobile()" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
-      <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
+      <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
         <ion-icon slot="start" *ngIf="!usePrintNotDownloadIcon" class="download-icon" name="download"></ion-icon>
         <ion-icon slot="start" *ngIf="usePrintNotDownloadIcon" class="print-icon" name="print"></ion-icon>
         <span class="side-title" i18n="@@DownloadTexts.Download">Ladda ner</span>
       </ion-button>
-      <ion-button *ngIf="showURNButton" (click)="showReference()" class="sec-menu-button">
+      <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
         <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
-      <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showPopover($event)" class="sec-menu-button" id="settings-icon">
+      <ion-button *ngIf="showViewOptionsButton" (click)="showViewOptionsPopover($event)">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
         <span class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 

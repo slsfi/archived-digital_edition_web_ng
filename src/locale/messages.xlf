@@ -876,6 +876,11 @@
         <source>Innehåll</source>
       </segment>
     </unit>
+    <unit id="Read.Introduction.NoIntroduction">
+      <segment>
+        <source>Inledningen kunde inte laddas.</source>
+      </segment>
+    </unit>
     <unit id="Read.Introduction.Title">
       <segment>
         <source>Inledning</source>
@@ -1149,6 +1154,11 @@
     <unit id="Read.ShowAll">
       <segment>
         <source>Visa alla</source>
+      </segment>
+    </unit>
+    <unit id="Read.TitlePage.NoTitle">
+      <segment>
+        <source>Titelbladet kunde inte laddas.</source>
       </segment>
     </unit>
     <unit id="Read.TitlePage.Title">

@@ -11,13 +11,11 @@ import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.pop
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
@@ -79,18 +77,16 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     private renderer2: Renderer2,
     private ngZone: NgZone,
     private elementRef: ElementRef,
-    public popoverCtrl: PopoverController,
+    private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
-    public modalCtrl: ModalController,
+    private modalCtrl: ModalController,
     private sanitizer: DomSanitizer,
     private tooltipService: TooltipService,
-    public tocService: TableOfContentsService,
-    public semanticDataService: SemanticDataService,
     public userSettingsService: UserSettingsService,
     public commonFunctions: CommonFunctionsService,
     private route: ActivatedRoute,
     private router: Router,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.toolTipPosType = 'fixed';
     this.toolTipMaxWidth = null;
@@ -178,7 +174,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     this.activeMobileModeViewType = defaultViews.filter(
       (value: string) => this.availableMobileModeViews.includes(value) && this.enabledViewTypes.includes(value)
     )[0] || 'established';
-    if (this.multilingualReadingTextLanguages.length > 1 && this.activeMobileModeViewType.includes('established_')) {
+    if (
+      this.multilingualReadingTextLanguages.length > 1 &&
+      this.activeMobileModeViewType.includes('established_')
+    ) {
       // Set the default selected mobile mode view to the active locale's read text if multilingual read texts
       this.activeMobileModeViewType = 'established_' + this.activeLocale;
     }
@@ -1428,7 +1427,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     modal.present();
   }
 
-  async showPopover(event: any) {
+  async showViewOptionsPopover(event: any) {
     const popover = await this.popoverCtrl.create({
       component: ViewOptionsPopover,
       cssClass: 'view-options-popover',

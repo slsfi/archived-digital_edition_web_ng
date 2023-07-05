@@ -4,30 +4,30 @@
     <text-changer *ngIf="!userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-introduction'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
-      <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()" class="sec-menu-button">
+      <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
         <ion-icon slot="start" *ngIf="!usePrintNotDownloadIcon" class="download-icon" name="download"></ion-icon>
         <ion-icon slot="start" *ngIf="usePrintNotDownloadIcon" class="print-icon" name="print"></ion-icon>
         <span class="side-title" i18n="@@DownloadTexts.Download">Ladda ner</span>
       </ion-button>
-      <ion-button *ngIf="showURNButton" (click)="showReference()" class="sec-menu-button">
+      <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
         <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
-      <ion-button *ngIf="showViewOptionsButton" #settingsIconElement (click)="showPopover($event)" class="sec-menu-button" id="settings-icon">
+      <ion-button *ngIf="showViewOptionsButton" (click)="showViewOptionsPopover($event)">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
         <span class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
       </ion-button>
-      <ion-button *ngIf="hasSeparateIntroToc" class="sec-menu-button" [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'"  (click)="toggleTocMenu()">
+      <ion-button *ngIf="hasSeparateIntroToc" [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'" (click)="toggleTocMenu()">
         <ion-icon slot="start" name="list" *ngIf="!tocMenuOpen"></ion-icon>
         <ion-icon slot="start" name="close" *ngIf="tocMenuOpen"></ion-icon>
         <span class="side-title" i18n="@@Read.Introduction.Contents">Innehåll</span>
       </ion-button>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()">
-
   <div class="scroll-content-container">
 
     <!-- Tooltip wrapper -->
@@ -60,11 +60,11 @@
     
     <!-- Introduction text wrapper -->
     <div class="tei teiContainer"
-      [class.show_personInfo]="readPopoverService.show.personInfo && readPopoverTogglesIntro.personInfo"
-      [class.show_placeInfo]="readPopoverService.show.placeInfo && readPopoverTogglesIntro.placeInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo && readPopoverTogglesIntro.workInfo"
-      [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering && readPopoverTogglesIntro.paragraphNumbering"
-      [class.show_pageBreakEdition]="readPopoverService.show.pageBreakEdition && readPopoverTogglesIntro.pageBreakEdition"
+      [class.show_personInfo]="readPopoverService.show.personInfo && viewOptionsTogglesIntro.personInfo"
+      [class.show_placeInfo]="readPopoverService.show.placeInfo && viewOptionsTogglesIntro.placeInfo"
+      [class.show_workInfo]="readPopoverService.show.workInfo && viewOptionsTogglesIntro.workInfo"
+      [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering && viewOptionsTogglesIntro.paragraphNumbering"
+      [class.show_pageBreakEdition]="readPopoverService.show.pageBreakEdition && viewOptionsTogglesIntro.pageBreakEdition"
       [ngClass]="(hasSeparateIntroToc ? 'hideIntro' : '') + ' ' +
             ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
       [innerHTML]="text"

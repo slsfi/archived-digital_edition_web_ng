@@ -1,18 +1,17 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { DOCUMENT } from "@angular/common";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { marked } from 'marked';
+
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -22,35 +21,26 @@ import { config } from "src/assets/config/config";
 })
 
 export class CollectionTitlePage implements OnInit {
+  childrenPdfs: any[] = [];
+  hasDigitalEditionListChildren: boolean = false;
+  hasMDTitle: string = '';
+  id: string = '';
   mdContent$: Observable<SafeHtml>;
-  hasMDTitle = '';
-  hasDigitalEditionListChildren = false;
-  childrenPdfs = [];
-  protected id = '';
-
-  protected text: SafeHtml = this.sanitizer.bypassSecurityTrustHtml('<h1>Text from non-Observable</h1>')
-
-  public text$: Observable<SafeHtml>;
-
-  protected collection: any;
-  titleSelected: boolean;
-  showURNButton: boolean;
-  showViewOptionsButton: Boolean = true;
-  textLoading: Boolean = false;
+  showURNButton: boolean = false;
+  showViewOptionsButton: boolean = true;
+  text$: Observable<SafeHtml>;
 
   constructor(
     private textService: TextService,
-    protected sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService,
-    protected tableOfContentsService: TableOfContentsService,
-    public mdContentService: MdContentService,
-    protected popoverCtrl: PopoverController,
+    private mdContentService: MdContentService,
+    private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.titleSelected = true;
     this.hasMDTitle = config.ProjectStaticMarkdownTitleFolder ?? '';
     this.showURNButton = config.page?.title?.showURNButton ?? false;
     this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
@@ -58,58 +48,53 @@ export class CollectionTitlePage implements OnInit {
 
   ngOnInit() {
     this.text$ = this.route.params.pipe(
-
-      // TODO: Ideally we wouldn't have any side-effects
-      tap(({collectionID}) => {       // tap is analogous to "touch", do something, for side-effects
-        this.id = collectionID;       // NOTE: If there are no subscriptions then the code is not used
+      tap(({collectionID}) => {
+        this.id = collectionID;
         this.checkIfCollectionHasChildrenPdfs(collectionID);
       }),
-
-      // "Let's wait something else instead"
       switchMap(({collectionID}) => {
-          return this.getTitleContent(this.activeLocale, collectionID);
+        return this.loadTitle(collectionID, this.activeLocale);
       })
     );
   }
 
-  checkIfCollectionHasChildrenPdfs(collectionID: string) {
-    let configChildrenPdfs = config.collectionChildrenPdfs?.[collectionID] ?? [];
-
+  private checkIfCollectionHasChildrenPdfs(collectionID: string): void {
+    const configChildrenPdfs = config.collectionChildrenPdfs?.[collectionID] ?? [];
     if (configChildrenPdfs.length) {
       this.childrenPdfs = configChildrenPdfs;
       this.hasDigitalEditionListChildren = true;
     }
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
-      map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
-      }),
-      catchError((e) => {
-        return of('');
-      })
-    );
-  }
-
-  getTitleContent(lang: string, id: string): Observable<SafeHtml> {
+  private loadTitle(id: string, lang: string): Observable<SafeHtml> {
     const isIdText = isNaN(Number(id));
 
     if (this.hasMDTitle === '') {
       if (!isIdText) {
         return this.textService.getTitlePage(id, lang).pipe(
           map((res: any) => {
-            return this.sanitizer.bypassSecurityTrustHtml(
-              res.content.replace(/images\//g, 'assets/images/')
-                .replace(/\.png/g, '.svg')
-            );
+            if (res?.content) {
+              return this.sanitizer.bypassSecurityTrustHtml(
+                res.content.replace(/images\//g, 'assets/images/')
+                  .replace(/\.png/g, '.svg')
+              );
+            } else {
+              return of(this.sanitizer.bypassSecurityTrustHtml(
+                $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+              ));
+            }
           }),
-          catchError(e => {
-            return throwError(() => new Error(e));
+          catchError((e: any) => {
+            console.error(e);
+            return of(this.sanitizer.bypassSecurityTrustHtml(
+              $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+            ));
           })
         );
       } else {
-        return of(this.sanitizer.bypassSecurityTrustHtml(''));
+        return of(this.sanitizer.bypassSecurityTrustHtml(
+          $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+        ));
       }
     } else {
       if (!isIdText) {
@@ -120,7 +105,21 @@ export class CollectionTitlePage implements OnInit {
     }
   }
 
-  async showReadSettingsPopover(event: any) {
+  private getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e: any) => {
+        console.error(e);
+        return of(this.sanitizer.bypassSecurityTrustHtml(
+          $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+        ));
+      })
+    );
+  }
+
+  async showViewOptionsPopover(event: any) {
     const toggles = {
       'comments': false,
       'personInfo': false,
@@ -144,8 +143,7 @@ export class CollectionTitlePage implements OnInit {
     popover.present(event);
   }
 
-  public async showReference() {
-    // Get URL of Page and then the URI
+  async showReference() {
     const modal = await this.modalController.create({
       component: ReferenceDataModal,
       componentProps: { origin: 'page-title' }

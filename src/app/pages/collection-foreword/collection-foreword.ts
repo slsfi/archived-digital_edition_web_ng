@@ -1,15 +1,15 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -19,59 +19,60 @@ import { config } from "src/assets/config/config";
 })
 
 export class CollectionForewordPage implements OnInit {
-  protected id = '';
-  protected text: any;
-  protected collection: any;
-  forewordSelected?: boolean;
-  showURNButton: boolean;
-  showViewOptionsButton: Boolean = true;
-  textLoading: Boolean = true;
+  id: string = '';
+  showURNButton: boolean = false;
+  showViewOptionsButton: boolean = true;
+  text$: Observable<SafeHtml>;
 
   constructor(
-    public navCtrl: NavController,
     private textService: TextService,
-    protected sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService,
-    protected tableOfContentsService: TableOfContentsService,
-    protected popoverCtrl: PopoverController,
+    private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.showURNButton = config.page?.foreword?.showURNButton ?? false;
     this.showViewOptionsButton = config.page?.foreword?.showViewOptionsButton ?? true;
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.id = params['collectionID'];
-      this.loadForeword(this.activeLocale, this.id);
-    });
+    this.text$ = this.route.params.pipe(
+      tap(({collectionID}) => {
+        this.id = collectionID;
+      }),
+      switchMap(({collectionID}) => {
+        return this.loadForeword(collectionID, this.activeLocale);
+      })
+    );
   }
 
-  loadForeword(lang: string, id: string) {
-    this.textLoading = true;
-    this.textService.getForewordPage(id, lang).subscribe({
-      next: (res) => {
-        if (res.content && res.content !== 'File not found') {
-          this.text = this.sanitizer.bypassSecurityTrustHtml(
+  private loadForeword(id: string, lang: string): Observable<SafeHtml> {
+    return this.textService.getForewordPage(id, lang).pipe(
+      map((res: any) => {
+        if (res?.content && res?.content !== 'File not found') {
+          return this.sanitizer.bypassSecurityTrustHtml(
             res.content.replace(/images\//g, 'assets/images/')
               .replace(/\.png/g, '.svg')
           );
         } else {
-          this.text = $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`;
+          return of(this.sanitizer.bypassSecurityTrustHtml(
+            $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
+          ));
         }
-        this.textLoading = false;
-      },
-      error: (e) => {
-        this.textLoading = false;
-        this.text = $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`;
-      }
-    });
+      }),
+      catchError((e: any) => {
+        console.error(e);
+        return of(this.sanitizer.bypassSecurityTrustHtml(
+          $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
+        ));
+      })
+    );
   }
 
-  async showReadSettingsPopover(event: any) {
+  async showViewOptionsPopover(event: any) {
     const toggles = {
       'comments': false,
       'personInfo': false,
@@ -95,8 +96,7 @@ export class CollectionForewordPage implements OnInit {
     popover.present(event);
   }
 
-  public async showReference() {
-    // Get URL of Page and then the URI
+  async showReference() {
     const modal = await this.modalController.create({
       component: ReferenceDataModal,
       componentProps: { origin: 'page-foreword' },
@@ -111,4 +111,5 @@ export class CollectionForewordPage implements OnInit {
       return '';
     }
   }
+
 }

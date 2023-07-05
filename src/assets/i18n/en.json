@@ -113,7 +113,8 @@
             "ToggleDescription": "Show/hide description"
         },
         "TitlePage": {
-            "Title": "Title page"
+            "Title": "Title page",
+            "NoTitle": "The title page could not be loaded."
         },
         "ForewordPage": {
             "Title": "Foreword",
@@ -125,7 +126,8 @@
         "Introduction": {
             "Title": "Introduction",
             "AddButtonText": "Introduction",
-            "Contents": "Contents"
+            "Contents": "Contents",
+            "NoIntroduction": "The introduction could not be loaded."
         },
         "Illustrations": {
             "AddButtonText": "Illustrations",

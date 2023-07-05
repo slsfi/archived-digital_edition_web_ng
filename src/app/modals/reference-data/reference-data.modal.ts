@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from "@angular/router";
+import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { ReferenceDataService } from 'src/app/services/reference-data.service';

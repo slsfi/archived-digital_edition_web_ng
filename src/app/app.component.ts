@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from "@angular/router";
-import { filter } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 import { DocumentHeadService } from './services/document-head.service';
 import { UserSettingsService } from './services/user-settings.service';
@@ -13,7 +13,7 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class DigitalEditionsApp implements OnInit {
+export class DigitalEditionsApp implements OnInit, OnDestroy {
   appIsStarting: boolean = true;
   collectionID: string = '';
   collectionSideMenuInitialUrlSegments: UrlSegment[];
@@ -24,6 +24,7 @@ export class DigitalEditionsApp implements OnInit {
   loadingBarHidden: boolean = false;
   mountMainSideMenu: boolean = false;
   previousRouterUrl: string = '';
+  routerEventsSubscription: Subscription;
   showCollectionSideMenu: boolean = false;
   showSideNav: boolean = false;
 
@@ -38,8 +39,8 @@ export class DigitalEditionsApp implements OnInit {
     this.enableRouterLoadingBar = config.app?.enableRouterLoadingBar ?? false;
   }
 
-  ngOnInit() {
-    this.router.events.pipe(
+  ngOnInit(): void {
+    this.routerEventsSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.previousRouterUrl = this.currentRouterUrl;
@@ -90,6 +91,10 @@ export class DigitalEditionsApp implements OnInit {
 
       this.headService.setLinks(this.currentRouterUrl);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.routerEventsSubscription?.unsubscribe();
   }
 
   toggleSideNav() {

@@ -113,7 +113,8 @@
             "ToggleDescription": "Näytä/piilota kuvaus"
         },
         "TitlePage": {
-            "Title": "Nimiölehti"
+            "Title": "Nimiölehti",
+            "NoTitle": "Nimiölehden lataus epäonnistui."
         },
         "ForewordPage": {
             "Title": "Esipuhe",
@@ -125,7 +126,8 @@
         "Introduction": {
             "Title": "Johdanto",
             "AddButtonText": "Johdanto",
-            "Contents": "Sisältö"
+            "Contents": "Sisältö",
+            "NoIntroduction": "Johdannon lataus epäonnistui."
         },
         "Illustrations": {
             "AddButtonText": "Kuvat",

@@ -1050,6 +1050,12 @@
         <target>Contents</target>
       </segment>
     </unit>
+    <unit id="Read.Introduction.NoIntroduction">
+      <segment state="initial">
+        <source>Inledningen kunde inte laddas.</source>
+        <target>The introduction could not be loaded.</target>
+      </segment>
+    </unit>
     <unit id="Read.Introduction.Title">
       <segment state="initial">
         <source>Inledning</source>
@@ -1378,6 +1384,12 @@
       <segment state="initial">
         <source>Visa alla</source>
         <target>Show all</target>
+      </segment>
+    </unit>
+    <unit id="Read.TitlePage.NoTitle">
+      <segment state="initial">
+        <source>Titelbladet kunde inte laddas.</source>
+        <target>The title page could not be loaded.</target>
       </segment>
     </unit>
     <unit id="Read.TitlePage.Title">

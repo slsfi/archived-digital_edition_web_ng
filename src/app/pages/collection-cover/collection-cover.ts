@@ -1,10 +1,11 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
-import { config } from "src/assets/config/config";
+import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -14,25 +15,23 @@ import { config } from "src/assets/config/config";
 })
 
 export class CollectionCoverPage implements OnInit {
-  image_alt = '';
-  image_src = '';
-  hasMDCover = '';
-  hasDigitalEditionListChildren = false;
-  childrenPdfs = [];
-  id: string = '';
-  text: any;
+  childrenPdfs: any[] = [];
   collection: any;
-  coverSelected: boolean;
+  id: string = '';
+  image_alt: string = '';
+  image_src: string = '';
+  hasDigitalEditionListChildren: boolean = false;
+  hasMDCover: string = '';
+  text: any;
 
   constructor(
     private textService: TextService,
-    protected sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.coverSelected = true;
     this.hasMDCover = config.ProjectStaticMarkdownCoversFolder ?? '';
   }
 
@@ -40,20 +39,19 @@ export class CollectionCoverPage implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['collectionID'];
       this.checkIfCollectionHasChildrenPdfs();
-      this.loadCover(this.activeLocale, this.id);
+      this.loadCover(this.id, this.activeLocale);
     });
   }
 
   checkIfCollectionHasChildrenPdfs() {
     const configChildrenPdfs = config.collectionChildrenPdfs?.[this.id] ?? [];
-
     if (configChildrenPdfs.length) {
       this.childrenPdfs = configChildrenPdfs;
       this.hasDigitalEditionListChildren = true;
     }
   }
 
-  loadCover(lang: string, id: string) {
+  private loadCover(id: string, lang: string) {
     if (!isNaN(Number(id))) {
       if (!this.hasMDCover) {
         /**
@@ -61,35 +59,34 @@ export class CollectionCoverPage implements OnInit {
          * ! implemented, so getting the cover this way does not work. It has to be given in a
          * ! markdown file.
          */
-        this.textService.getCoverPage(id, lang).subscribe({
-          next: (res) => {
-            // in order to get id attributes for tooltips
+        this.textService.getCoverPage(id, lang).subscribe(
+          (res: any) => {
             this.text = this.sanitizer.bypassSecurityTrustHtml(
               res.content.replace(/images\//g, 'assets/images/')
                 .replace(/\.png/g, '.svg')
             );
           }
-        });
+        );
       } else {
         this.getCoverImageFromMdContent(`${lang}-${this.hasMDCover}-${id}`);
       }
     }
   }
 
-  getCoverImageFromMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe({
-      next: (text) => {
+  private getCoverImageFromMdContent(fileID: string) {
+    this.mdContentService.getMdContent(fileID).subscribe(
+      (res: any) => {
         // Extract image url and alt-text from markdown content.
-        this.image_alt = text.content.match(/!\[(.*?)\]\(.*?\)/)[1];
+        this.image_alt = res.content.match(/!\[(.*?)\]\(.*?\)/)[1];
         if (this.image_alt === null) {
           this.image_alt = 'Cover image';
         }
-        this.image_src = text.content.match(/!\[.*?\]\((.*?)\)/)[1];
+        this.image_src = res.content.match(/!\[.*?\]\((.*?)\)/)[1];
         if (this.image_src === null) {
           this.image_src = '';
         }
       }
-    });
+    );
   }
 
   printMainContentClasses() {

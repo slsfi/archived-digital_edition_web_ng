@@ -113,7 +113,8 @@
             "ToggleDescription": "Visa/dölj beskrivning"
         },
         "TitlePage": {
-            "Title": "Titelblad"
+            "Title": "Titelblad",
+            "NoTitle": "Titelbladet kunde inte laddas."
         },
         "ForewordPage": {
             "Title": "Förord",
@@ -125,7 +126,8 @@
         "Introduction": {
             "Title": "Inledning",
             "AddButtonText": "Inledning",
-            "Contents": "Innehåll"
+            "Contents": "Innehåll",
+            "NoIntroduction": "Inledningen kunde inte laddas."
         },
         "Illustrations": {
             "AddButtonText": "Illustrationer",
