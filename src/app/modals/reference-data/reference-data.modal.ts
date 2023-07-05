@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -16,16 +16,18 @@ import { ReferenceDataService } from 'src/app/services/reference-data.service';
 export class ReferenceDataModal implements OnInit {
   @Input() origin: string = '';
 
-  public permaLinkTranslation: boolean = false;
-  public referenceData: any = {};
-  public thisPageTranslation: boolean = false;
-  public urnResolverUrl: string = '';
+  currentUrl: string = '';
+  permaLinkTranslation: boolean = false;
+  referenceData: any = {};
+  thisPageTranslation: boolean = false;
+  urnResolverUrl: string = '';
 
   constructor(
     private modalCtrl: ModalController,
     private referenceDataService: ReferenceDataService,
     private router: Router,
-    @Inject(LOCALE_ID) private activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string,
+    @Inject(DOCUMENT) private document: Document
   ) {
     // Get URL to use for resolving URNs
     this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
@@ -38,6 +40,7 @@ export class ReferenceDataModal implements OnInit {
   ngOnInit() {
     const currentUrlTree: UrlTree = this.router.parseUrl(this.router.url);
     const currentUrlSegments: UrlSegment[] = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
+    this.currentUrl = this.document.defaultView?.location.href.split('?')[0] || '';
     this.getReferenceData(currentUrlSegments);
   }
 
@@ -70,6 +73,12 @@ export class ReferenceDataModal implements OnInit {
         }
 
         if (data) {
+          // Remove trailing comma from reference_text if present
+          if (data.reference_text?.slice(-2) === ', ') {
+            data.reference_text = data.reference_text.slice(0, -2);
+          } else if (data.reference_text?.slice(-1) === ',') {
+            data.reference_text = data.reference_text.slice(0, -1);
+          }
           this.referenceData = data;
         } else if (
           urlSegments?.[0]?.path === 'collection' &&

@@ -15,7 +15,7 @@
     <div class="rd-box">
       <h3 *ngIf="permaLinkTranslation && referenceData.urn"><ng-container i18n="@@Reference.permaLink">Beständig webbadress</ng-container>:</h3>
       <p class="urn" *ngIf="referenceData.urn"><a target="_blank" [href]="urnResolverUrl + referenceData.urn">{{urnResolverUrl + referenceData.urn}}</a></p>
-      <p *ngIf="!referenceData.urn" i18n="@@Reference.missing">Sidan saknar beständig webbadress</p>
+      <p class="urn" *ngIf="!referenceData.urn" i18n="@@Reference.missing">Sidan saknar beständig webbadress</p>
 
       <ng-container *ngIf="referenceData.reference_text">
         <h3 *ngIf="origin === 'page-title'"><ng-container i18n="@@Reference.pageTitle">Hänvisa till denna delutgåva</ng-container>:</h3>
@@ -25,7 +25,7 @@
         <h3 *ngIf="origin === 'page-ebook'"><ng-container i18n="@@Reference.pageEpub">Hänvisa till denna text</ng-container>:</h3>
         <h3 *ngIf="origin === 'media-collection'"><ng-container i18n="@@Reference.mediaCollection">Hänvisa till denna bildsamling</ng-container>:</h3>
         <h3 *ngIf="origin === 'top-menu'"><ng-container i18n="@@Reference.topMenu">Hänvisa till denna webbutgåva</ng-container>:</h3>
-        <p [innerHTML]="referenceData.reference_text + urnResolverUrl + referenceData.urn"></p>
+        <p [innerHTML]="referenceData.reference_text + (referenceData.urn ? ', ' + urnResolverUrl + referenceData.urn : currentUrl ? ', ' + currentUrl : '')"></p>
       </ng-container>
 
       <ng-container *ngIf="referenceData.intro_reference_text && origin !== 'page-introduction'">
