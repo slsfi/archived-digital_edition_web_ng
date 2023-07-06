@@ -668,7 +668,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
     // Get page content element and adjust viewport height with horizontal scrollbar height if such is present
     const contentElem = document.querySelector(
-      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.publication-ion-content'
+      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.collection-ion-content'
     ) as HTMLElement;
     let horizontalScrollbarOffsetHeight = 0;
     if (contentElem.clientHeight < contentElem.offsetHeight) {

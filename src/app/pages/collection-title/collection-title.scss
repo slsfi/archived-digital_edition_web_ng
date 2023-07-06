@@ -1,4 +1,13 @@
-/* Cover image on title page. */
+// Import general styles for the secondary toolbar
+@import "src/theme/common/secondary-toolbar.scss";
+
+// Import general styles for the collection-ion-content class
+@import "src/theme/common/collection-ion-content.scss";
+
+// Import general styles for the scroll-content-container class
+@import "src/theme/common/scroll-content-container.scss";
+
+// Styles for cover images on title page
 .tit_figure_graphic {
   max-width: 50%;
   display: block;
@@ -6,11 +15,11 @@
 }
 @media screen and (max-width: 600px) {
   .tit_figure_graphic {
-      max-width: 70%;
+    max-width: 70%;
   }
 }
 @media screen and (max-width: 450px) {
   .tit_figure_graphic {
-      max-width: 90%;
+    max-width: 90%;
   }
 }

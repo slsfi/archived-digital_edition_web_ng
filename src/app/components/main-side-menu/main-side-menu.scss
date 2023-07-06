@@ -1,1 +1,2 @@
-/* Styles for the side menu are defined in global.scss */
+// Import general styles for the side menu, these are common with the collection-side-menu
+@import "src/theme/common/side-menu.scss";

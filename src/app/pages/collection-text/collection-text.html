@@ -24,7 +24,7 @@
 
 <!-- Main content with scroll -->
 <ng-container *ngIf="!userSettingsService.isMobile()">
-  <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="true" [scrollY]="false">
+  <ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="true" [scrollY]="false">
     <div class="column-container">
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
@@ -153,7 +153,7 @@
           </ion-fab>
           <ion-popover #addViewPopover class="page-text-add-view-popover" reference="trigger" side="bottom" alignment="end" [isOpen]="addViewPopoverisOpen" (didDismiss)="addViewPopoverisOpen = false" [dismissOnSelect]="true">
             <ng-template>
-              <ion-content>
+              <ion-content class="no-padding">
                 <ion-chip *ngIf="viewTypes['showAll']" (click)="showAllViewTypes(); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="albums-outline"></ion-icon>
                   <ion-label i18n="@@Read.ShowAll">Visa alla</ion-label>
@@ -213,7 +213,7 @@
 
 <!-- Mobile Read -->
 <ng-container *ngIf="userSettingsService.isMobile()">
-  <ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+  <ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
     <div
       [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
       [class.show_comments]="readPopoverService.show.comments"

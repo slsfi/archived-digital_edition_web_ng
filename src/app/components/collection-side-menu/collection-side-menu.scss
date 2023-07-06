@@ -1,4 +1,5 @@
-/* General styles for the component are defined in global.scss since they are common with the main-side-menu component. */
+// Import general styles for the side menu, these are common with the main-side-menu
+@import "src/theme/common/side-menu.scss";
 
 .menu-header {
     display: flex;

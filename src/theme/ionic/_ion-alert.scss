@@ -1,0 +1,46 @@
+// Style for alert where a different variant, manuscript or facsimile text can be selected.
+ion-alert.custom-select-alert .alert-wrapper {
+    min-width: 250px;
+    max-width: 500px;
+    border-radius: var(--corner-border-radius);
+  
+    .alert-title {
+        font-size: 1.125rem;
+        font-weight: bold;
+    }
+  
+    .alert-radio-group {
+        max-height: 50vh;
+        padding: 1rem 0;
+    }
+  
+    button.alert-radio-button {
+        --color-checked: var(--button-background-color);
+        contain: content;
+        font-size: 1rem;
+        height: auto;
+  
+        .alert-radio-label {
+            line-height: 1.35;
+            padding-bottom: 0.5rem;
+            padding-top: 0.5rem;
+            white-space: normal;
+        }
+  
+        &[aria-checked="true"] {
+            .alert-radio-icon {
+                border-color: var(--button-background-color);
+            }
+            .alert-radio-inner {
+                background-color: var(--button-background-color);
+            }
+            .alert-radio-label {
+                color: var(--button-background-color);
+            }
+        }
+    }
+  
+    .alert-button-group button.alert-button {
+        color: var(--button-background-color);
+    }
+}

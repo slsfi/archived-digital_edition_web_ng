@@ -3,6 +3,9 @@
     height: 100%;
 }
 
+// Import styles for the text-select-wrapper class
+@import "src/theme/common/text-select-wrapper.scss";
+
 .external-urls-header {
     .flex-buttons {
         margin-bottom: 0.25rem;
@@ -18,15 +21,10 @@
     padding: 6px 16px 16px 16px;
     width: 100%;
 
-    div.tei {
-        font-family: var(--font-stack-app-base);
-        padding-bottom: 100px;
-    }
-
     ul {
         list-style-type: none;
         margin: 0;
-        padding: 0;
+        padding: 0 0 3rem 0;
         display: table;
     }
 
@@ -40,6 +38,14 @@
         padding-right: 0.5em;
         display: table-cell;
         text-align: right;
+    }
+
+    &.mobile-mode {
+        background-color: var(--page-text-columns-background-color);
+        height: calc(100% - 35px);
+        margin: 0 auto;
+        max-width: 710px;
+        padding: 0 10px 10px 10px;
     }
 }
 

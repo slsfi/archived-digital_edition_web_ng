@@ -1,0 +1,17 @@
+/* Styles for the scroll-content-container class, which is a div container that can scroll vertically in the collection pages */
+.scroll-content-container {
+    background-color: var(--page-text-columns-background-color);
+    height: 100%;
+    width: 100%;
+    max-width: 710px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 22px;
+    outline-offset: -0.125rem;
+}
+@media screen and (max-width: 820px) {
+    // Reduce padding om small screens
+    .scroll-content-container {
+        padding: 12px;
+    }
+}

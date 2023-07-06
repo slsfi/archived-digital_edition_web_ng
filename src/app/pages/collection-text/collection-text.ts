@@ -757,7 +757,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
                     anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')
                   ) {
                     containerElem = document.querySelector(
-                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content.mobile-mode-content .scroll-content-container'
+                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content.mobile-mode-content .scroll-content-container'
                     ) as HTMLElement;
                   }
                 }
@@ -1366,7 +1366,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     let scrollLeft = 0;
     let horizontalScrollbarOffsetHeight = 0;
     const contentElem = document.querySelector(
-      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content'
     )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (contentElem !== null) {
       scrollLeft = contentElem.scrollLeft;
@@ -1654,7 +1654,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       return;
     }
     const scrollingContainer = document.querySelector(
-      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content'
     )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (scrollingContainer !== null) {
       const x = columnElement.getBoundingClientRect().left + scrollingContainer.scrollLeft -

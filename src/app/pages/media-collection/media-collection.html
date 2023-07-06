@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar color="secondary" class="secondary">
+<ion-header class="ion-no-border">
+  <ion-toolbar class="secondary">
     <ion-title>{{mediaTitle}} – {{mediaCollection.length}} <ng-container i18n="@@MediaCollections.photos">foton</ng-container></ion-title>
     <ion-buttons end>
       <button *ngIf="showURNButton" ion-button fill="clear" (click)="showReference()" class="sec-menu-button">
@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <div class="info">
     <h1>{{mediaTitle}}</h1>
     <p>{{mediaDescription}}</p>

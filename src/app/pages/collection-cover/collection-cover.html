@@ -6,19 +6,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="hasDigitalEditionListChildren" class="ion-padding">
+<ion-content *ngIf="hasDigitalEditionListChildren">
   <div class="">
     <digital-edition-list-children [layoutType]="'auto'" [childrenPdfs]="childrenPdfs" [collectionID]="id"></digital-edition-list-children>
   </div>
 </ion-content>
 
-<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="publication-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()">
   <div class="scroll-content-container">
       <div class="tei teiContainer" [innerHTML]="text"></div>
   </div>
 </ion-content>
 
-<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="publication-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()">
   <div class="cover-image-wrapper" [ngClass]="printMainContentClasses()">
     <img class="cover-image" [src]="image_src" [alt]="image_alt" loading="lazy">
   </div>

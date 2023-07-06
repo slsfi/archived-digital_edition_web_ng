@@ -314,7 +314,7 @@ export class TooltipService {
     let sidePaneOffsetWidth = 0; // A default value, true value calculated with getBoundingClientRect() below
     let toolbarsHeight = 120; // A default value, true value calculated with getBoundingClientRect() below
     const contentElem = document.querySelector(
-      pageOrigin + ':not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.publication-ion-content'
+      pageOrigin + ':not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content'
     )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
     if (contentElem !== null) {
       scrollLeft = contentElem.scrollLeft;

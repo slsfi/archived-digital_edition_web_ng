@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="publication-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()">
   <div *ngIf="hasDigitalEditionListChildren">
     <digital-edition-list-children [layoutType]="'auto'" [childrenPdfs]="childrenPdfs" [collectionID]="id"></digital-edition-list-children>
   </div>

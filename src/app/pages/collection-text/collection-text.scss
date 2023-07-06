@@ -1,4 +1,24 @@
-/* Styles for the columns */
+// Import general styles for the secondary toolbar
+@import "src/theme/common/secondary-toolbar.scss";
+
+// Import general styles for the scroll-content-container class
+@import "src/theme/common/scroll-content-container.scss";
+
+// Import general styles for the collection-ion-content class
+@import "src/theme/common/collection-ion-content.scss";
+
+// Overrides to the general collection-ion-content class styles
+ion-content.collection-ion-content::part(scroll) {
+  padding: 26px 16px;
+}
+@media screen and (max-width: 820px) {
+  ion-content.collection-ion-content::part(scroll) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Styles for the columns
 .column-container {
   width: 100%;
 }
@@ -49,7 +69,7 @@
   }
 }
 
-/* Styles for the ion-fabs at the top of the columns */
+// Styles for the ion-fabs at the top of the columns
 ion-fab {
   ion-fab-button {
     --background: var(--fab-button-secondary-background-color);
@@ -69,7 +89,7 @@ ion-fab.column-options {
   right: -8px;
 }
 
-/* Styles for the narrow column where you can add new columns */
+// Styles for the narrow column where you can add new columns
 .add-view-column {
   position: relative;
   flex: 0 0 auto;
@@ -146,7 +166,7 @@ ion-segment-button:not(.segment-button-checked) {
   color: var(--button-text-color);
 }
 
-/* Adjust padding and background color of text and facsimile columns in mobile mode. */
+// Adjust padding and background color of text and facsimile columns in mobile mode
 div.mobile-mode-established,
 div.mobile-mode-manuscripts {
   background-color: var(--page-text-columns-background-color);

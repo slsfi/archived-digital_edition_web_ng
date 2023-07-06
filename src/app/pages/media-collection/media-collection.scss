@@ -1,3 +1,6 @@
+// Import general styles for the secondary toolbar
+@import "src/theme/common/secondary-toolbar.scss";
+
 ion-toolbar.secondary.toolbar button.back-button ion-icon.back-button-icon {
   font-size: 1.8rem;
 }
