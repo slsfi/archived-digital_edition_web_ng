@@ -11,8 +11,6 @@ import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
 import { DownloadTextsModalPage } from './modals/download-texts-modal/download-texts-modal';
-import { FullscreenImageViewerModalModule } from './modals/fullscreen-image-viewer/fullscreen-image-viewer.module';
-import { FullscreenImageViewerModal } from './modals/fullscreen-image-viewer/fullscreen-image-viewer';
 import { IllustrationPageModule } from './modals/illustration/illustration.module';
 import { IllustrationPage } from './modals/illustration/illustration';
 
@@ -35,7 +33,6 @@ import { IllustrationPage } from './modals/illustration/illustration';
     ComponentsModule,
     PipesModule,
     DigitalEditionListModule,
-    FullscreenImageViewerModalModule,
     IllustrationPageModule
   ],
   providers: [
@@ -45,7 +42,6 @@ import { IllustrationPage } from './modals/illustration/illustration';
   bootstrap: [DigitalEditionsApp],
   entryComponents: [
     DigitalEditionsApp,
-    FullscreenImageViewerModal,
     DownloadTextsModalPage,
     IllustrationPage
   ]

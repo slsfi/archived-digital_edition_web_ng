@@ -1,14 +1,20 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule, ModalController } from '@ionic/angular';
+
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { DraggableImageDirective } from 'src/directives/draggable-image.directive';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
+  standalone: true,
   selector: 'fullscreen-image-viewer',
   templateUrl: 'fullscreen-image-viewer.html',
-  styleUrls: ['fullscreen-image-viewer.scss']
+  styleUrls: ['fullscreen-image-viewer.scss'],
+  imports: [CommonModule, FormsModule, IonicModule, DraggableImageDirective]
 })
 export class FullscreenImageViewerModal implements OnInit {
   @Input() activeImageIndex: number = 0;
