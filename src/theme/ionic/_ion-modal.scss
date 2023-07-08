@@ -1,6 +1,6 @@
 ion-modal {
     &.fullscreen-image-viewer-modal {
-      --backdrop-opacity: 1;
+      --backdrop-opacity: 1 !important;
       --background: transparent;
       --height: 100%;
       --width: 100%;

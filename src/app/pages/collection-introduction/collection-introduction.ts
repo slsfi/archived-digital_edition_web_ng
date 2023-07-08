@@ -6,7 +6,7 @@ import { combineLatest, map, Observable, Subscription } from 'rxjs';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { IllustrationPage } from 'src/app/modals/illustration/illustration';
+import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { TextService } from 'src/app/services/text.service';
@@ -787,9 +787,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showIllustrationModal(imageNumber: string) {
     const modal = await this.modalCtrl.create({
-      component: IllustrationPage,
-      componentProps: { 'imageNumber': imageNumber },
-      cssClass: 'foo',
+      component: IllustrationModal,
+      componentProps: { 'imageNumber': imageNumber }
     });
     modal.present();
   }

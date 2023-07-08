@@ -431,11 +431,6 @@
         <source>Galleribild</source>
       </segment>
     </unit>
-    <unit id="MediaCollections.GotoMediaCollection">
-      <segment>
-        <source>Gå till bildbanken</source>
-      </segment>
-    </unit>
     <unit id="MediaCollections.locations">
       <segment>
         <source>Platser</source>
@@ -459,6 +454,16 @@
     <unit id="metadata">
       <segment>
         <source>Metadata</source>
+      </segment>
+    </unit>
+    <unit id="Modal.Illustration.OpenMediaCollection">
+      <segment>
+        <source>Öppna bildbanken</source>
+      </segment>
+    </unit>
+    <unit id="Modal.Illustration.Title">
+      <segment>
+        <source>Illustration</source>
       </segment>
     </unit>
     <unit id="ms">

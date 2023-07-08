@@ -5,7 +5,7 @@ import { CommonFunctionsService } from 'src/app/services/common-functions.servic
 import { TextService } from 'src/app/services/text.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { IllustrationPage } from 'src/app/modals/illustration/illustration';
+import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
@@ -190,9 +190,9 @@ export class CommentsComponent {
     });
   }
 
-  async openIllustration(imageNumber: any) {
+  async openIllustration(imageNumber: string) {
     const modal = await this.modalController.create({
-      component: IllustrationPage,
+      component: IllustrationModal,
       componentProps: { 'imageNumber': imageNumber }
     });
     modal.present();

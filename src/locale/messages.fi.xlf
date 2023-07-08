@@ -516,12 +516,6 @@
         <target>Galleriakuva</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.GotoMediaCollection">
-      <segment state="initial">
-        <source>Gå till bildbanken</source>
-        <target>Kuvapankkiin</target>
-      </segment>
-    </unit>
     <unit id="MediaCollections.locations">
       <segment state="initial">
         <source>Platser</source>
@@ -550,6 +544,18 @@
       <segment state="initial">
         <source>Metadata</source>
         <target>Metadata</target>
+      </segment>
+    </unit>
+    <unit id="Modal.Illustration.OpenMediaCollection">
+      <segment state="initial">
+        <source>Öppna bildbanken</source>
+        <target>Avaa kuvapankki</target>
+      </segment>
+    </unit>
+    <unit id="Modal.Illustration.Title">
+      <segment state="initial">
+        <source>Illustration</source>
+        <target>Kuva</target>
       </segment>
     </unit>
     <unit id="ms">

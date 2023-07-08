@@ -177,7 +177,6 @@
     },
     "MediaCollections": {
         "MediaCollections": "Faksimilsamlingar",
-        "GotoMediaCollection": "Gå till bildbanken",
         "locations": "Platser",
         "location": "Plats",
         "tags": "Ämnesord",
@@ -413,6 +412,12 @@
             "XML": "XML",
             "TXT": "TXT",
             "Print": "Utskrift"
+        }
+    },
+    "Modal": {
+        "Illustration": {
+            "Title": "Illustration",
+            "OpenMediaCollection": "Öppna bildbanken"
         }
     }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
-import { IllustrationPage } from 'src/app/modals/illustration/illustration';
+import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
@@ -214,9 +214,9 @@ export class ReadTextComponent {
     this.commonFunctions.scrollLastViewIntoView();
   }
 
-  async openIllustration(imageNumber: any) {
+  async openIllustration(imageNumber: string) {
     const modal = await this.modalController.create({
-      component: IllustrationPage,
+      component: IllustrationModal,
       componentProps: { 'imageNumber': imageNumber }
     });
     modal.present();

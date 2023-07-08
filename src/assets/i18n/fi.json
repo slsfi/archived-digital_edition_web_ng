@@ -177,7 +177,6 @@
     },
     "MediaCollections": {
         "MediaCollections": "Faksimilet",
-        "GotoMediaCollection": "Kuvapankkiin",
         "locations": "Paikat",
         "location": "Paikka",
         "tags": "Aihesanat",
@@ -413,6 +412,12 @@
             "XML": "XML",
             "TXT": "TXT",
             "Print": "Tulosta"
+        }
+    },
+    "Modal": {
+        "Illustration": {
+            "Title": "Kuva",
+            "OpenMediaCollection": "Avaa kuvapankki"
         }
     }
 }
