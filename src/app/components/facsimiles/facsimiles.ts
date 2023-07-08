@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from 'src/app/models/facsimile.model';
 import { FacsimileService } from 'src/app/services/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';

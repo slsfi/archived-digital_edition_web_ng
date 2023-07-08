@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';

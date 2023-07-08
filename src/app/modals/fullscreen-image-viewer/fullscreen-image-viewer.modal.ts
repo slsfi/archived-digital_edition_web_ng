@@ -11,9 +11,9 @@ import { isBrowser } from 'src/standalone/utility-functions';
 
 @Component({
   standalone: true,
-  selector: 'fullscreen-image-viewer',
-  templateUrl: 'fullscreen-image-viewer.html',
-  styleUrls: ['fullscreen-image-viewer.scss'],
+  selector: 'modal-fullscreen-image-viewer',
+  templateUrl: 'fullscreen-image-viewer.modal.html',
+  styleUrls: ['fullscreen-image-viewer.modal.scss'],
   imports: [CommonModule, FormsModule, IonicModule, DraggableImageDirective]
 })
 export class FullscreenImageViewerModal implements OnInit {
@@ -23,18 +23,18 @@ export class FullscreenImageViewerModal implements OnInit {
   @Input() imageTitles: string[] = [];
   @Input() imageURLs: string[] = [];
 
-  angle = 0;
-  inputImageNumber = 1;
-  prevX = 0;
-  prevY = 0;
-  showDescription = true;
-  showBackside = false;
-  toolbarHeight = 0;
-  zoom = 1.0;
+  angle: number = 0;
+  inputImageNumber: number = 1;
+  prevX: number = 0;
+  prevY: number = 0;
+  showDescription: boolean = true;
+  showBackside: boolean = false;
+  toolbarHeight: number = 0;
+  zoom: number = 1.0;
 
   constructor(
     private modalCtrl: ModalController,
-    public commonFunctions: CommonFunctionsService,
+    private commonFunctions: CommonFunctionsService,
     public userSettingsService: UserSettingsService
   ) {}
 

@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer';
+import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { MdContentService } from 'src/app/services/md-content.service';
