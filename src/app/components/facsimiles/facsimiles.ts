@@ -1,24 +1,30 @@
 import { Component, EventEmitter, Input, OnInit, Output, SecurityContext } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AlertButton, AlertController, AlertInput, ModalController } from '@ionic/angular';
+import { AlertButton, AlertController, AlertInput, IonicModule, ModalController } from '@ionic/angular';
+
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from 'src/app/models/facsimile.model';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { FacsimileService } from 'src/app/services/facsimile.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
+import { DraggableImageDirective } from 'src/directives/draggable-image.directive';
 
 
 @Component({
+  standalone: true,
   selector: 'facsimiles',
   templateUrl: 'facsimiles.html',
-  styleUrls: ['facsimiles.scss']
+  styleUrls: ['facsimiles.scss'],
+  imports: [CommonModule, DraggableImageDirective, FormsModule, IonicModule]
 })
 export class FacsimilesComponent implements OnInit {
-  @Input() textItemID: string = '';
   @Input() facsID: number | undefined = undefined;
   @Input() imageNr: number | undefined = undefined;
+  @Input() textItemID: string = '';
   @Output() selectedFacsID = new EventEmitter<number>();
   @Output() selectedImageNr = new EventEmitter<number | null>();
   
@@ -151,7 +157,7 @@ export class FacsimilesComponent implements OnInit {
     this.selectedFacsimile = facs;
     this.numberOfImages = facs.number_of_pages;
     this.facsURLDefault = config.app.apiEndpoint + '/' + config.app.machineName +
-    `/facsimiles/${facs.publication_facsimile_collection_id}/`;
+          `/facsimiles/${facs.publication_facsimile_collection_id}/`;
     this.text = this.sanitizer.bypassSecurityTrustHtml(
       facs.content?.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg')
     );
