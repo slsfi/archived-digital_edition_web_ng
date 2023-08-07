@@ -1,40 +1,42 @@
-import { Component, ElementRef, Input, NgZone, Renderer2 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ModalController } from '@ionic/angular';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { TextService } from 'src/app/services/text.service';
+import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicModule, ModalController } from '@ionic/angular';
+
 import { CommentService } from 'src/app/services/comment.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
+  standalone: true,
   selector: 'comments',
   templateUrl: 'comments.html',
-  styleUrls: ['comments.scss']
+  styleUrls: ['comments.scss'],
+  imports: [CommonModule, IonicModule]
 })
-export class CommentsComponent {
-  @Input() textItemID: string = '';
+export class CommentsComponent implements OnInit, OnDestroy {
   @Input() searchMatches: Array<string> = [];
+  @Input() textItemID: string = '';
 
-  text: any;
-  manuscript: any;
-  sender: any;
-  receiver: any;
-  letter: any;
+  letter: any = undefined;
+  manuscript: any = undefined;
+  receiver: string = '';
+  sender: string = '';
+  text: SafeHtml | string = '';
   private unlistenClickEvents?: () => void;
 
   constructor(
-    protected readPopoverService: ReadPopoverService,
-    protected commentService: CommentService,
-    protected textService: TextService,
-    protected sanitizer: DomSanitizer,
-    private renderer2: Renderer2,
-    private ngZone: NgZone,
+    private commentService: CommentService,
+    private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
-    protected modalController: ModalController,
-    public commonFunctions: CommonFunctionsService
+    private modalController: ModalController,
+    private ngZone: NgZone,
+    public readPopoverService: ReadPopoverService,
+    private renderer2: Renderer2,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -62,24 +64,24 @@ export class CommentsComponent {
         }
       },
       error: (e) =>  {
-        // TODO: Add translated error message.
-        this.text = 'Ett fel har uppstått. Kommentarer kunde inte hämtas.';
+        console.error(e);
+        this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
       }
     });
   }
 
   getCorrespondanceMetadata() {
-    this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).subscribe({
-      next: (text) => {
+    this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).subscribe(
+      (text: any) => {
         if (text['subjects'] !== undefined && text['subjects'] !== null) {
           if (text['subjects'].length > 0) {
             const senders = [] as any;
             const receivers = [] as any;
             text['subjects'].forEach((subject: any) => {
-              if ( subject['avs\u00e4ndare'] ) {
+              if (subject['avs\u00e4ndare']) {
                 senders.push(subject['avs\u00e4ndare']);
               }
-              if ( subject['mottagare'] ) {
+              if (subject['mottagare']) {
                 receivers.push(subject['mottagare']);
               }
             });
@@ -91,9 +93,8 @@ export class CommentsComponent {
         if (text['letter'] !== undefined && text['letter'] !== null) {
           this.letter = text['letter'];
         }
-      },
-      error: (e) => { }
-    });
+      }
+    );
   }
 
   private setUpTextListeners() {

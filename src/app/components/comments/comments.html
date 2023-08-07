@@ -1,11 +1,12 @@
 <ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
 <div class="tei teiContainer"
-  [class.show_comments]="readPopoverService.show.comments"
-  [class.show_personInfo]="readPopoverService.show.personInfo"
-  [class.show_workInfo]="readPopoverService.show.workInfo"
-  [class.show_abbreviations]="readPopoverService.show.abbreviations"
-  [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering"
-  [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'">
+      [class.show_comments]="readPopoverService.show.comments"
+      [class.show_personInfo]="readPopoverService.show.personInfo"
+      [class.show_workInfo]="readPopoverService.show.workInfo"
+      [class.show_abbreviations]="readPopoverService.show.abbreviations"
+      [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering"
+      [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+>
   <div [innerHTML]="text"></div>
   <div class="ms" *ngIf="letter">
     <h3 i18n="@@Read.Comments.Manuscript.Title">Manuskriptbeskrivning</h3>
