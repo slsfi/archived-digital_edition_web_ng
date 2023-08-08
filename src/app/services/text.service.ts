@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
+import { Parser } from 'htmlparser2';
 
 import { config } from "src/assets/config/config";
 
@@ -178,6 +179,52 @@ export class TextService {
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
+  }
+
+  getEstablishedTextIllustrations(id: string): Observable<any> {
+    return this.getEstablishedText(id).pipe(
+      map((res) => {
+        const images: any[] = [];
+        if (
+          res &&
+          res.content &&
+          res.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+        ) {
+          const collectionID = String(id).split('_')[0];
+          let text = res.content as string;
+          text = this.postprocessEstablishedText(text, collectionID);
+
+          // Parse the read text html to get all illustrations in it using htmlparser2
+          const parser = new Parser({
+            onopentag(name, attributes) {
+              if (name === 'img' && attributes.src) {
+                if (attributes.class?.includes('est_figure_graphic')) {
+                  let illustrationClass = 'illustration';
+                  if (!attributes.class?.includes('hide-illustration')) {
+                    illustrationClass = 'visible-illustration';
+                  }
+                  const image = { src: attributes.src, class: illustrationClass };
+                  images.push(image);
+                } else if (attributes.class?.includes('doodle') && attributes['data-id']) {
+                  const image = {
+                    src: '/assets/images/verk/' + attributes['data-id'].replace('tag_', '') + '.jpg',
+                    class: 'doodle'
+                  };
+                  images.push(image);
+                }
+              }
+            }
+          });
+          parser.write(text);
+          parser.end();
+        }
+        return images;
+      }),
+      catchError((e: any) => {
+        console.error('Error loading established text illustrations', e);
+        return of([]);
+      })
+    );
   }
 
   postprocessEstablishedText(text: string, collectionId: string) {

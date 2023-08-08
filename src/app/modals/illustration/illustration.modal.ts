@@ -1,4 +1,4 @@
-import { Component, Inject, Input, LOCALE_ID } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -15,7 +15,7 @@ import { config } from "src/assets/config/config";
   styleUrls: ['illustration.modal.scss'],
   imports: [CommonModule, RouterModule, IonicModule, FullscreenImageViewerModal]
 })
-export class IllustrationModal {
+export class IllustrationModal implements OnInit {
   @Input() imageNumber: string = '';
 
   imgPath: string = '';

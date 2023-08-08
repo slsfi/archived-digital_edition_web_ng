@@ -8,7 +8,6 @@ import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListChildrenComponent } from './digital-edition-list-children/digital-edition-list-children';
 import { DateHistogram } from './date-histogram/date-histogram';
 import { TextChangerComponent } from './text-changer/text-changer';
-import { IllustrationsComponent } from './illustrations/illustrations';
 import { TopMenuComponent } from "./top-menu/top-menu";
 import { MainSideMenu } from "./main-side-menu/main-side-menu";
 import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu";
@@ -18,7 +17,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 		TopMenuComponent,
 		TextChangerComponent,
 		DigitalEditionListChildrenComponent,
-		IllustrationsComponent,
 		DateHistogram,
 		MainSideMenu,
     	CollectionSideMenu
@@ -34,7 +32,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
     TopMenuComponent,
     TextChangerComponent,
     DigitalEditionListChildrenComponent,
-    IllustrationsComponent,
     DateHistogram,
     MainSideMenu,
     CollectionSideMenu

@@ -101,13 +101,25 @@
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
                 <ng-container *ngIf="view.type == 'established' && multilingualReadingTextLanguages.length < 2">
-                  <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
+                  <read-text
+                        [textItemID]="textItemID"
+                        [textPosition]="textPosition"
+                        [searchMatches]="searchMatches"
+                        (openNewIllustrView)="openNewView($event)"
+                        (selectedIllustration)="updateIllustrationViewImage($event)"
+                  ></read-text>
                 </ng-container>
 
                 <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
                   <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
                     <ng-container *ngIf="view.type == 'established_' + lang">
-                      <read-text [textItemID]="textItemID + '_' + lang" [textPosition]="textPosition" [searchMatches]="searchMatches" (openNewIllustrView)="openNewView($event)"></read-text>
+                      <read-text
+                            [textItemID]="textItemID + '_' + lang"
+                            [textPosition]="textPosition"
+                            [searchMatches]="searchMatches"
+                            (openNewIllustrView)="openNewView($event)"
+                            (selectedIllustration)="updateIllustrationViewImage($event)"
+                      ></read-text>
                     </ng-container>
                   </ng-container>
                 </ng-container>
@@ -128,7 +140,11 @@
                     (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variants>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'illustrations'">
-                  <illustrations [initialImage]="view.image" [itemId]="textItemID"></illustrations>
+                  <illustrations
+                        [singleImage]="view.image"
+                        [textItemID]="textItemID"
+                        (showAllImages)="updateIllustrationViewImage($event)"
+                  ></illustrations>
                 </ng-container>
                 <ng-container *ngIf="view.type == 'legend'">
                   <text-legend [itemId]="textItemID" [scrollToElementId]="view.id"></text-legend>

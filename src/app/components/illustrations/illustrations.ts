@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule, ModalController } from '@ionic/angular';
+
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
@@ -7,67 +9,84 @@ import { TextService } from 'src/app/services/text.service';
 
 
 @Component({
+  standalone: true,
   selector: 'illustrations',
   templateUrl: 'illustrations.html',
   styleUrls: ['illustrations.scss'],
+  imports: [CommonModule, IonicModule]
 })
-export class IllustrationsComponent {
-  @Input() itemId?: string;
-  @Input() initialImage: Record<string, any> = {};
-  illustrationsPath = 'assets/images/illustrations/2/';
-  imgPath: any;
+export class IllustrationsComponent implements OnChanges, OnInit {
+  @Input() singleImage: Record<string, any> | undefined = undefined;
+  @Input() textItemID: string = '';
+  @Output() showAllImages: EventEmitter<any> = new EventEmitter();
+  
+  imageCountTotal: number = 0;
   images: Array<any> = [];
-  imageCountTotal = 0;
-  imagesCache: Array<Object> = [];
+  imagesCache: Array<any> = [];
   selectedImage: Array<string> = [];
-  viewAll = true;
-  showOne = false;
-  textLoading: Boolean = true;
+  imgLoading: boolean = true;
+  viewAll: boolean = true;
 
   constructor(
-    protected readPopoverService: ReadPopoverService,
-    private textService: TextService,
+    private commonFunctions: CommonFunctionsService,
     private modalCtrl: ModalController,
-    public commonFunctions: CommonFunctionsService
-  ) {
-    this.registerEventListeners();
+    public readPopoverService: ReadPopoverService,
+    private textService: TextService
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        if (propName === 'singleImage') {
+          if (
+            !changes.singleImage.firstChange &&
+            typeof this.singleImage !== 'undefined' &&
+            this.singleImage
+          ) {
+            this.images = [];
+            this.images.push(this.singleImage);
+            this.viewAll = false;
+          }
+        }
+      }
+    }
   }
+
   ngOnInit() {
-    this.getIllustrationImages();
+    if (this.textItemID) {
+      this.getIllustrationImages();
+    }
   }
 
-  ngOnDestroy() {
-    this.deRegisterEventListeners();
-  }
-
-  registerEventListeners() {
-    // TODO: Fix without events service
-    /*
-    this.events.getGiveIllustration().subscribe((image: any) => {
-      this.showSingleImage(image);
-    });
-    */
-  }
-
-  deRegisterEventListeners() {
-    // TODO: Fix without events service
-    // this.events.getGiveIllustration().complete();
+  private getIllustrationImages() {
+    this.textService.getEstablishedTextIllustrations(this.textItemID).subscribe(
+      (images: any[]) => {
+        this.images = images;
+        this.imageCountTotal = this.images.length;
+        this.imagesCache = this.images;
+        if (typeof this.singleImage !== 'undefined' && this.singleImage) {
+          this.images = [];
+          this.images.push(this.singleImage);
+          this.viewAll = false;
+        }
+        this.imgLoading = false;
+      }
+    );
   }
 
   showSingleImage(image: any) {
     if (image) {
-      this.showOne = true;
       this.viewAll = false;
       this.images = [image];
     } else {
-      this.showOne = false;
+      this.viewAllIllustrations();
     }
   }
 
   viewAllIllustrations() {
     this.viewAll = true;
-    this.showOne = false;
     this.images = this.imagesCache;
+    this.showAllImages.emit(null);
   }
 
   async zoomImage(imageSrc: string) {
@@ -93,7 +112,9 @@ export class IllustrationsComponent {
     if (imageSrc) {
       imageFilename = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
       let target = null as HTMLElement | null;
-      const readtextElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text');
+      const readtextElem = document.querySelector(
+        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+      );
       try {
         if (image.class === 'doodle') {
           // Get the image filename without format and prepend tag_ to it
@@ -104,19 +125,15 @@ export class IllustrationsComponent {
             imageDataId = imageDataId.replace('tag_', '');
             target = readtextElem?.querySelector(`img.doodle[data-id="${imageDataId}"]`) as HTMLElement;
           }
-          if (target !== null) {
-            if (target.previousElementSibling !== null && target.previousElementSibling !== undefined) {
-              if (target.previousElementSibling.previousElementSibling !== null
-                && target.previousElementSibling.previousElementSibling !== undefined
-                && target.previousElementSibling.previousElementSibling.classList.contains('ttNormalisations')) {
-                // Change the scroll target from the doodle icon itself to the preceding word which the icon represents.
-                target = target.previousElementSibling.previousElementSibling as HTMLElement;
-              }
-            } else if (target.parentElement !== null && target.parentElement !== undefined) {
-              if (target.parentElement.classList.contains('ttNormalisations')) {
-                target = target.parentElement as HTMLElement;
-              }
+          if (
+            target?.previousElementSibling
+          ) {
+            if (target.previousElementSibling.previousElementSibling?.classList.contains('ttNormalisations')) {
+              // Change the scroll target from the doodle icon itself to the preceding word which the icon represents.
+              target = target.previousElementSibling.previousElementSibling as HTMLElement;
             }
+          } else if (target?.parentElement?.classList.contains('ttNormalisations')) {
+            target = target.parentElement as HTMLElement;
           }
         } else {
           // Get the image element with src-attribute value ending in image filename
@@ -124,7 +141,7 @@ export class IllustrationsComponent {
           target = readtextElem?.querySelector(`[src$="${imageSrcFilename}"]`) as HTMLElement;
         }
 
-        if (target !== null && target.parentElement !== null && target.parentElement !== undefined) {
+        if (target?.parentElement) {
           if (image.class !== 'visible-illustration') {
             // Prepend arrow to the image/icon in the reading text and scroll into view
             const tmpImage: HTMLImageElement = new Image();
@@ -148,49 +165,6 @@ export class IllustrationsComponent {
     } else {
       console.log('Empty src-attribute for image, unable to scroll to position in text.');
     }
-  }
-
-  private getIllustrationImages() {
-    this.images = [];
-    if (!this.itemId) {
-      return;
-    }
-    this.textService.getEstablishedText(this.itemId).subscribe({
-      next: (res) => {
-        let text = res as any;
-        text = text.content as string;
-
-        const c_id = String(this.itemId).split('_')[0];
-        text = this.textService.postprocessEstablishedText(text, c_id);
-
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, 'text/html');
-        const images: any = xmlDoc.querySelectorAll('img.est_figure_graphic');
-        const doodles: any = xmlDoc.querySelectorAll('img.doodle');
-        for (let i = 0; i < images.length ; i++) {
-          let illustrationClass = 'illustration';
-          if (!images[i].classList.contains('hide-illustration')) {
-            illustrationClass = 'visible-illustration';
-          }
-          const image = {src: images[i].src, class: illustrationClass};
-          this.images.push(image);
-        }
-        for (let i = 0; i < doodles.length ; i++) {
-          const image = {src: '/assets/images/verk/' + String(doodles[i].dataset.id).replace('tag_', '') + '.jpg', class: 'doodle'};
-          this.images.push(image);
-        }
-        this.imageCountTotal = this.images.length;
-        this.imagesCache = this.images;
-        if (typeof this.initialImage !== 'undefined' && this.initialImage) {
-          this.images = [];
-          this.images.push(this.initialImage);
-          this.viewAll = false;
-          this.showOne = true;
-        }
-        this.textLoading = false;
-      },
-      error: (e) => { this.textLoading = false; }
-    });
   }
 
 }

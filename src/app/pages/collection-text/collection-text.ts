@@ -272,6 +272,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
 
           if (this.views.length < 1 || viewsChanged) {
             this.views = parsedViews;
+            this.illustrationsViewShown = this.viewTypeIsShown('illustrations');
           }
 
           // Clear the array keeping track of recently open views in
@@ -396,15 +397,15 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     });
   }
 
-  getViewTypesShown() {
-    const viewTypes = [] as any;
+  getViewTypesShown(): string[] {
+    const viewTypes: string[] = [];
     this.views.forEach((view: any) => {
       viewTypes.push(view.type);
     });
     return viewTypes;
   }
 
-  viewTypeShouldBeShown(type: any) {
+  viewTypeShouldBeShown(type: string): boolean {
     if (type.startsWith('established') && !this.viewTypes['established']) {
       return false;
     } else if (type === 'comments' && !this.viewTypes['comments']) {
@@ -423,6 +424,16 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     return true;
   }
 
+  viewTypeIsShown(type: string, views?: any[]): boolean {
+    views = views ? views : this.views;
+    for (let i = 0; i < views.length; i++) {
+      if (views[i].type === type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private getEventTarget(event: any) {
     let eventTarget: HTMLElement = document.createElement('div');
 
@@ -430,41 +441,52 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       return event.target;
     }
     try {
-      if (event.target !== undefined && event.target !== null) {
-        if (event.target['classList'] !== undefined && event.target['classList'].contains('tooltiptrigger')) {
+      if (event.target) {
+        if (
+          event.target.classList?.contains('tooltiptrigger')
+        ) {
           eventTarget = event.target;
-        } else if (event['target']['parentNode'] !== undefined && event['target']['parentNode'] !== null
-        && event['target']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['classList'].contains('tooltiptrigger')) {
-          eventTarget = event['target']['parentNode'];
-        } else if (event['target']['parentNode']['parentNode'] !== undefined && event['target']['parentNode']['parentNode'] !== null
-        && event['target']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['parentNode']['classList'].contains('tooltiptrigger')) {
-          eventTarget = event['target']['parentNode']['parentNode'];
-        } else if (event['target']['classList'] !== undefined && event['target']['classList'].contains('anchor')) {
+        } else if (
+          event.target?.parentNode?.classList?.contains('tooltiptrigger')
+        ) {
+          eventTarget = event.target.parentNode;
+        } else if (
+          event.target.parentNode?.classList &&
+          event.target.parentNode?.parentNode?.classList?.contains('tooltiptrigger')
+        ) {
+          eventTarget = event.target.parentNode.parentNode;
+        } else if (
+          event.target.classList?.contains('anchor')
+        ) {
           eventTarget = event.target;
-        } else if (event['target']['classList'] !== undefined && event['target']['classList'].contains('variantScrollTarget')) {
+        } else if (
+          event.target.classList?.contains('variantScrollTarget')
+        ) {
           eventTarget = event.target;
-        } else if (event['target']['parentNode'] !== undefined && event['target']['parentNode'] !== null
-        && event['target']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['classList'].contains('variantScrollTarget')) {
-          eventTarget = event['target']['parentNode'];
-        } else if (event['target']['parentNode']['parentNode'] !== undefined && event['target']['parentNode']['parentNode'] !== null
-        && event['target']['parentNode']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['parentNode']['classList'].contains('variantScrollTarget')) {
-          eventTarget = event['target']['parentNode']['parentNode'];
-        } else if (event['target']['classList'] !== undefined && event['target']['classList'].contains('anchorScrollTarget')) {
+        } else if (
+          event.target.parentNode?.classList?.contains('variantScrollTarget')
+        ) {
+          eventTarget = event.target.parentNode;
+        } else if (
+          event.target.parentNode?.parentNode?.classList?.contains('variantScrollTarget')
+        ) {
+          eventTarget = event.target.parentNode.parentNode;
+        } else if (
+          event.target.classList?.contains('anchorScrollTarget')
+        ) {
           eventTarget = event.target;
-        } else if (event['target']['parentNode'] !== undefined && event['target']['parentNode'] !== null
-        && event['target']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['classList'].contains('anchorScrollTarget')) {
-          eventTarget = event['target']['parentNode'];
-        } else if (event['target']['classList'] !== undefined && event['target']['classList'].contains('extVariantsTrigger')) {
+        } else if (
+          event.target.parentNode?.classList?.contains('anchorScrollTarget')
+        ) {
+          eventTarget = event.target.parentNode;
+        } else if (
+          event.target.classList?.contains('extVariantsTrigger')
+        ) {
           eventTarget = event.target;
-        } else if (event['target']['parentNode'] !== undefined && event['target']['parentNode'] !== null
-        && event['target']['parentNode']['classList'] !== undefined
-        && event['target']['parentNode']['classList'].contains('extVariantsTrigger')) {
-          eventTarget = event['target']['parentNode'];
+        } else if (
+          event.target.parentNode?.classList?.contains('extVariantsTrigger')
+        ) {
+          eventTarget = event.target.parentNode;
         }
       }
     } catch (e) {
@@ -1564,6 +1586,15 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     return reorderedArray;
   }
 
+  updateIllustrationViewImage(image: any) {
+    for (let i = 0; i < this.views.length; i++) {
+      if (this.views[i].type === 'illustrations') {
+        this.updateViewProperty('image', image, i);
+        break;
+      }
+    }
+  }
+
   updateViewProperty(propertyName: string, value: any, viewIndex: number) {
     if (value !== null) {
       this.views[viewIndex][propertyName] = value;
@@ -1583,6 +1614,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         replaceUrl: true
       }
     );
+    this.illustrationsViewShown = this.viewTypeIsShown('illustrations', views);
   }
 
   private scrollToVariant(element: HTMLElement) {

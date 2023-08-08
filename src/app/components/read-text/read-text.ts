@@ -20,6 +20,7 @@ export class ReadTextComponent {
   @Input() textPosition: string = '';
   @Input() searchMatches: Array<string> = [];
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
+  @Output() selectedIllustration: EventEmitter<any> = new EventEmitter();
 
   text: any;
   textLanguage: string = '';
@@ -181,8 +182,7 @@ export class ReadTextComponent {
               } else {
                 // Display image in an illustrations-view which is already open
                 this.ngZone.run(() => {
-                  // TODO: Fix without events service
-                  // this.events.publishGiveIllustration(image);
+                  this.updateSelectedIllustrationImage(image);
                 });
               }
             }
@@ -209,9 +209,13 @@ export class ReadTextComponent {
    */
   openIllustrationInNewView(image: any) {
     image.viewType = 'illustrations';
-    image.id = null;
     this.openNewIllustrView.emit(image);
     this.commonFunctions.scrollLastViewIntoView();
+  }
+
+  updateSelectedIllustrationImage(image: any) {
+    image.viewType = 'illustrations';
+    this.selectedIllustration.emit(image);
   }
 
   async openIllustration(imageNumber: string) {

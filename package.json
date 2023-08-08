@@ -32,6 +32,7 @@
     "@nguniversal/express-engine": "^15.2.0",
     "@sentry/browser": "^7.29.0",
     "express": "^4.15.2",
+    "htmlparser2": "^9.0.0",
     "install": "^0.13.0",
     "ionicons": "^7.1.2",
     "marked": "^4.3.0",
