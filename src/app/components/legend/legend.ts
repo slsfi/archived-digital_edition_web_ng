@@ -1,7 +1,10 @@
 import { Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicModule } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
+
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
@@ -9,28 +12,31 @@ import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
+  standalone: true,
   selector: 'text-legend',
   templateUrl: 'legend.html',
-  styleUrls: ['legend.scss']
+  styleUrls: ['legend.scss'],
+  imports: [CommonModule, IonicModule]
 })
-export class LegendComponent implements OnInit, OnDestroy {
+export class LegendComponent implements OnDestroy, OnInit {
   @Input() itemId?: string;
   @Input() scrollToElementId?: string;
-  text$: Observable<SafeHtml>;
-  staticMdLegendFolderNumber = '13';
-  collectionId = '';
-  publicationId = '';
+
+  collectionId: string = '';
   intervalTimerId: number = 0;
+  publicationId: string = '';
+  staticMdLegendFolderNumber: string = '13';
+  text$: Observable<SafeHtml>;
   private unlistenClickEvents?: () => void;
 
   constructor(
+    private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
     private mdContentService: MdContentService,
     private ngZone: NgZone,
-    protected readPopoverService: ReadPopoverService,
+    public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    public commonFunctions: CommonFunctionsService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {}
 
@@ -76,9 +82,11 @@ export class LegendComponent implements OnInit, OnDestroy {
         try {
           const clickedElem = event.target as HTMLElement;
 
-          if (clickedElem.hasAttribute('href') === true
-          && clickedElem.getAttribute('href')?.startsWith('http') === false
-          && clickedElem.getAttribute('href')?.startsWith('/') === false) {
+          if (
+            clickedElem.hasAttribute('href') === true &&
+            clickedElem.getAttribute('href')?.startsWith('http') === false &&
+            clickedElem.getAttribute('href')?.startsWith('/') === false
+          ) {
             event.preventDefault();
             const targetHref = clickedElem.getAttribute('href');
 
@@ -89,7 +97,9 @@ export class LegendComponent implements OnInit, OnDestroy {
                 containerElem = containerElem.parentElement;
               }
               if (containerElem) {
-                const targetElem = containerElem.querySelector('[data-id="' + targetHref.slice(1) + '"]') as HTMLElement;
+                const targetElem = containerElem.querySelector(
+                  '[data-id="' + targetHref.slice(1) + '"]'
+                ) as HTMLElement;
                 this.commonFunctions.scrollElementIntoView(targetElem, 'top');
               }
             }
