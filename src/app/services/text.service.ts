@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Parser } from 'htmlparser2';
+import { DomHandler } from 'domhandler';
+import { findAll, getAttributeValue } from 'domutils';
+import { render } from 'dom-serializer';
 
 import { config } from "src/assets/config/config";
 
@@ -207,7 +210,7 @@ export class TextService {
                   images.push(image);
                 } else if (attributes.class?.includes('doodle') && attributes['data-id']) {
                   const image = {
-                    src: '/assets/images/verk/' + attributes['data-id'].replace('tag_', '') + '.jpg',
+                    src: 'assets/images/verk/' + attributes['data-id'].replace('tag_', '') + '.jpg',
                     class: 'doodle'
                   };
                   images.push(image);
@@ -253,24 +256,28 @@ export class TextService {
         galleryId = galleries[collectionId];
       }
 
-      const regexFigure = new RegExp(/est_figure_graphic/);
-      const regexAssets = new RegExp(/assets\/images\/verk\//);
-
       if (
         !showReadTextIllustrations.includes(collectionId) &&
-        (regexFigure.test(text) || regexAssets.test(text))
+        (text.includes('est_figure_graphic') || text.includes('assets/images/verk/'))
       ) {
-        // * The replace below should only replace in classLists, but adding a more specific 
-        // * regex causes a "too much recursion" error for long texts. There used to be a
-        // * DOMParser here.
-        text = text.replace(
-          /est_figure_graphic/g,
-          'est_figure_graphic hide-illustration'
-        );
-        text = text.replace(
-          /assets\/images\/verk\//g,
-          `${this.apiEndpoint}/${this.appMachineName}/gallery/get/${galleryId}/`
-        );
+        // Use SSR compatible htmlparser2 and related dom-handling modules to add
+        // class names to images and replace image file paths.
+        const handler = new DomHandler();
+        const parser = new Parser(handler);
+        parser.write(text);
+        parser.end();
+        const m = findAll(el => String(getAttributeValue(el, 'class')).includes('est_figure_graphic'), handler.dom);
+        m.forEach(element => {
+          element.attribs.class += ' hide-illustration';
+        });
+        const m2 = findAll(el => String(getAttributeValue(el, 'src')).includes('assets/images/verk/'), handler.dom);
+        m2.forEach(element => {
+          element.attribs.src = element.attribs.src.replace(
+                'assets/images/verk/',
+                `${this.apiEndpoint}/${this.appMachineName}/gallery/get/${galleryId}/`
+          );
+        });
+        text = render(handler.dom, { decodeEntities: false });
       }
     }
     return text;
