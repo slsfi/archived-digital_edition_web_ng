@@ -7,13 +7,11 @@ import { IonicModule } from '@ionic/angular';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListChildrenComponent } from './digital-edition-list-children/digital-edition-list-children';
 import { DateHistogram } from './date-histogram/date-histogram';
-import { TopMenuComponent } from "./top-menu/top-menu";
 import { MainSideMenu } from "./main-side-menu/main-side-menu";
 import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu";
 
 @NgModule({
 	declarations: [
-		TopMenuComponent,
 		DigitalEditionListChildrenComponent,
 		DateHistogram,
 		MainSideMenu,
@@ -27,7 +25,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 		RouterLink
 	],
   exports: [
-    TopMenuComponent,
     DigitalEditionListChildrenComponent,
     DateHistogram,
     MainSideMenu,

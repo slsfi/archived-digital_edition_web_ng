@@ -13,7 +13,7 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class DigitalEditionsApp implements OnInit, OnDestroy {
+export class DigitalEditionsApp implements OnDestroy, OnInit {
   appIsStarting: boolean = true;
   collectionID: string = '';
   collectionSideMenuInitialUrlSegments: UrlSegment[];

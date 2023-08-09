@@ -1,39 +1,43 @@
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output } from '@angular/core';
-import { DOCUMENT } from "@angular/common";
-import { ModalController } from '@ionic/angular';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnDestroy, OnInit, Output } from '@angular/core';
+import { CommonModule, DOCUMENT } from "@angular/common";
+import { RouterLink } from '@angular/router';
+import { IonicModule, ModalController } from '@ionic/angular';
+
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
+  standalone: true,
   selector: 'top-menu',
   templateUrl: 'top-menu.html',
-  styleUrls: ['top-menu.scss']
+  styleUrls: ['top-menu.scss'],
+  imports: [CommonModule, IonicModule, RouterLink]
 })
-export class TopMenuComponent {
-  @Input() showSideNav: boolean = false;
+export class TopMenuComponent implements OnDestroy, OnInit {
   @Input() currentRouterUrl: string = '';
+  @Input() showSideNav: boolean = false;
   @Output() sideNavClick = new EventEmitter();
 
-  public showLanguageButton: boolean;
-  public showTopURNButton: boolean;
-  public showTopSearchButton: boolean;
-  public showTopContentButton: boolean;
-  public showTopAboutButton: boolean;
-  public showSiteLogo: boolean;
-  public siteLogoLinkUrl: string;
-  public siteLogoDefaultImageUrl: string;
-  public siteLogoMobileImageUrl: string;
-  public currentLanguageLabel: string = '';
-  public languages: {
+  currentLanguageLabel: string = '';
+  firstAboutPageId: string = '';
+  handleLanguageMenuClosure: any = null;
+  languageMenuOpen: boolean = false;
+  languageMenuWidth: number | null;
+  languages: {
     code: string;
     label: string
-  }[]= [];
-  public languageMenuOpen: boolean = false;
-  languageMenuWidth: number | null;
-  firstAboutPageId = '';
-  handleLanguageMenuClosure: any = null;
+  }[] = [];
+  showLanguageButton: boolean = true;
+  showSiteLogo: boolean = false;
+  showTopAboutButton: boolean = true;
+  showTopContentButton: boolean = true;
+  showTopSearchButton: boolean = true;
+  showTopURNButton: boolean = true;
+  siteLogoDefaultImageUrl: string = 'assets/images/logo.svg';
+  siteLogoLinkUrl: string = 'https://www.sls.fi/';
+  siteLogoMobileImageUrl: string = 'assets/images/logo-mobile.svg';
   _window: Window;
 
   constructor(
