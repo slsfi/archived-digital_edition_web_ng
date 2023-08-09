@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { CollectionIntroductionPageRoutingModule } from './collection-introduction-routing.module';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+
 import { CollectionIntroductionPage } from './collection-introduction';
+import { CollectionIntroductionPageRoutingModule } from './collection-introduction-routing.module';
+import { TextChangerComponent } from 'src/app/components/text-changer/text-changer';
 
 @NgModule({
   declarations: [
@@ -13,8 +13,7 @@ import { CollectionIntroductionPage } from './collection-introduction';
   imports: [
     IonicModule,
     CommonModule,
-    FormsModule,
-    ComponentsModule,
+    TextChangerComponent,
     CollectionIntroductionPageRoutingModule
   ],
 })

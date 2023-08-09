@@ -1,43 +1,49 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
 
 @Component({
+  standalone: true,
   selector: 'text-changer',
   templateUrl: 'text-changer.html',
   styleUrls: ['text-changer.scss'],
+  imports: [CommonModule, IonicModule]
 })
-export class TextChangerComponent {
+export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
+  @Input() parentPageType: string = '';
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
-  @Input() parentPageType: string = '';
-  tocItemId: string = '';
-  prevItem: any;
-  nextItem: any;
-  prevItemTitle?: string;
-  nextItemTitle?: string;
-  firstItem?: boolean;
-  lastItem?: boolean;
-  currentItemTitle: string = '';
-  collectionId: string = '';
-  flattened: Array<any> = [];
+
+  activeTocOrder: string = '';
+  activeTocOrderSubscription: Subscription;
   collectionHasCover: boolean = false;
   collectionHasTitle: boolean = false;
   collectionHasForeword: boolean = false;
   collectionHasIntro: boolean = false;
-  activeTocOrder: string = '';
-  activeTocOrderSubscription: Subscription;
+  collectionId: string = '';
+  currentItemTitle: string = '';
+  firstItem?: boolean;
+  flattened: Array<any> = [];
+  lastItem?: boolean;
+  nextItem: any;
+  nextItemTitle?: string;
+  prevItem: any;
+  prevItemTitle?: string;
+  tocItemId: string = '';
 
   constructor(
-    public commonFunctions: CommonFunctionsService,
-    public tocService: TableOfContentsService,
-    public userSettingsService: UserSettingsService,
-    private router: Router
+    private commonFunctions: CommonFunctionsService,
+    private router: Router,
+    private tocService: TableOfContentsService,
+    public userSettingsService: UserSettingsService
   ) {
     this.collectionHasCover = config.HasCover ?? false;
     this.collectionHasTitle = config.HasTitle ?? false;
@@ -103,8 +109,8 @@ export class TextChangerComponent {
   }
 
   ngOnInit() {
-    this.activeTocOrderSubscription = this.tocService.getActiveTocOrder().subscribe({
-      next: (tocOrder) => {
+    this.activeTocOrderSubscription = this.tocService.getActiveTocOrder().subscribe(
+      (tocOrder: string) => {
         if (tocOrder !== this.activeTocOrder) {
           this.activeTocOrder = tocOrder;
           if (this.textItemID) {
@@ -112,13 +118,11 @@ export class TextChangerComponent {
           }
         }
       }
-    });
+    );
   }
 
   ngOnDestroy() {
-    if (this.activeTocOrderSubscription) {
-      this.activeTocOrderSubscription.unsubscribe();
-    }
+    this.activeTocOrderSubscription?.unsubscribe();
   }
 
   loadData() {
@@ -217,8 +221,8 @@ export class TextChangerComponent {
 
   setFirstTocItemAsNext(collectionId: string) {
     try {
-      this.tocService.getTableOfContents(collectionId).subscribe({
-        next: (toc: any) => {
+      this.tocService.getTableOfContents(collectionId).subscribe(
+        (toc: any) => {
           if (toc && toc.children && String(toc.collectionId) === collectionId) {
             this.flatten(toc);
             if (this.activeTocOrder === 'alphabetical') {
@@ -245,7 +249,7 @@ export class TextChangerComponent {
             this.lastItem = true;
           }
         }
-      });
+      );
     } catch (e) {
       console.log('Unable to get first toc item as next in text-changer');
       this.nextItemTitle = '';
