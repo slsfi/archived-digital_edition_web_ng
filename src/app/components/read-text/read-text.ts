@@ -1,44 +1,49 @@
-import { Component, Input, ElementRef, EventEmitter, Output, Renderer2, NgZone, SimpleChanges } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ModalController } from '@ionic/angular';
+import { Component, Input, ElementRef, EventEmitter, OnInit, Output, Renderer2, NgZone, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicModule, ModalController } from '@ionic/angular';
+
+import { MathJaxDirective } from 'src/directives/math-jax.directive';
 import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({
+  standalone: true,
   selector: 'read-text',
   templateUrl: 'read-text.html',
-  styleUrls: ['read-text.scss']
+  styleUrls: ['read-text.scss'],
+  imports: [CommonModule, IonicModule, MathJaxDirective]
 })
-export class ReadTextComponent {
+export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
+  @Input() searchMatches: Array<string> = [];
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
-  @Input() searchMatches: Array<string> = [];
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
   @Output() selectedIllustration: EventEmitter<any> = new EventEmitter();
 
-  text: any;
-  textLanguage: string = '';
-  illustrationsVisibleInReadtext: boolean = false;
   illustrationsViewAvailable: boolean = false;
+  illustrationsVisibleInReadtext: boolean = false;
   intervalTimerId: number;
+  text: SafeHtml = '';
+  textLanguage: string = '';
   private unlistenClickEvents?: () => void;
 
   constructor(
-    protected readPopoverService: ReadPopoverService,
-    protected textService: TextService,
-    protected sanitizer: DomSanitizer,
-    private renderer2: Renderer2,
-    private ngZone: NgZone,
+    private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
-    public userSettingsService: UserSettingsService,
-    protected modalController: ModalController,
-    public commonFunctions: CommonFunctionsService
+    private modalController: ModalController,
+    private ngZone: NgZone,
+    public readPopoverService: ReadPopoverService,
+    private renderer2: Renderer2,
+    private sanitizer: DomSanitizer,
+    private textService: TextService,
+    public userSettingsService: UserSettingsService
   ) {
     this.intervalTimerId = 0;
     this.illustrationsViewAvailable = config.page?.read?.viewTypeSettings?.illustrations ?? false;
@@ -153,12 +158,15 @@ export class ReadTextComponent {
             if (eventTarget.classList.contains('doodle') && eventTarget.hasAttribute('src')) {
               // Click on a pictogram ("doodle")
               image = {
-                src: '/assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
+                src: 'assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
                 class: 'doodle'
               };
             } else if (this.illustrationsVisibleInReadtext) {
               // There are possibly visible illustrations in the read text. Check if click on such an image.
-              if (eventTarget.classList.contains('est_figure_graphic') && eventTarget.hasAttribute('src')) {
+              if (
+                eventTarget.classList.contains('est_figure_graphic') &&
+                eventTarget.hasAttribute('src')
+              ) {
                 image = { src: event.target.src, class: 'visible-illustration' };
               }
             } else {
@@ -175,7 +183,11 @@ export class ReadTextComponent {
             // Check if we have an image to show in the illustrations-view
             if (image !== null) {
               // Check if we have an illustrations-view open, if not, open and display the clicked image there
-              if (document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations') === null) {
+              if (
+                document.querySelector(
+                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations'
+                ) === null
+              ) {
                 this.ngZone.run(() => {
                   this.openIllustrationInNewView(image);
                 });
@@ -240,26 +252,18 @@ export class ReadTextComponent {
             clearInterval(that.intervalTimerId);
           } else {
             iterationsLeft -= 1;
-            /*
-            let target = document.querySelector(
-              'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+            let target = nElement.querySelector(
+              '[name="' + that.textPosition + '"]'
             ) as HTMLAnchorElement;
-            */
-           // TODO: test this way of finding the target and use elsewhere as well, i.e. nElement. This way all read-text columns that are displayed will scroll to the new textPosition, not just the first one.
-            let target = nElement.querySelector('[name="' + that.textPosition + '"]') as HTMLAnchorElement;
             if (
               target && (
                 (target.parentElement && target.parentElement.classList.contains('ttFixed')) ||
                 (target.parentElement?.parentElement && target.parentElement?.parentElement.classList.contains('ttFixed'))
               )
             ) {
-              // Position in footnote --> look for second target
-              /*
-              target = document.querySelectorAll(
-                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.textPosition + '"]'
+              target = nElement.querySelectorAll(
+                '[name="' + that.textPosition + '"]'
               )[1] as HTMLAnchorElement;
-              */
-              target = nElement.querySelectorAll('[name="' + that.textPosition + '"]')[1] as HTMLAnchorElement;
             }
             if (target) {
               that.commonFunctions.scrollToHTMLElement(target);

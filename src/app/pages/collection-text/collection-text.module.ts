@@ -5,7 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { CollectionTextPage } from './collection-text';
 import { CollectionTextPageRoutingModule } from './collection-text-routing.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { ReadTextModule } from 'src/app/components/read-text/read-text.module';
 import { VariantsModule } from 'src/app/components/variants/variants.module';
 import { CommentsComponent } from 'src/app/components/comments/comments';
 import { FacsimilesComponent } from 'src/app/components/facsimiles/facsimiles';
@@ -13,6 +12,7 @@ import { IllustrationsComponent } from 'src/app/components/illustrations/illustr
 import { LegendComponent } from 'src/app/components/legend/legend';
 import { ManuscriptsComponent } from 'src/app/components/manuscripts/manuscripts';
 import { MetadataComponent } from 'src/app/components/metadata/metadata';
+import { ReadTextComponent } from 'src/app/components/read-text/read-text';
 import { MathJaxDirective } from 'src/directives/math-jax.directive';
 
 @NgModule({
@@ -24,7 +24,6 @@ import { MathJaxDirective } from 'src/directives/math-jax.directive';
       CommonModule,
       FormsModule,
       ComponentsModule,
-      ReadTextModule,
       VariantsModule,
       CommentsComponent,
       FacsimilesComponent,
@@ -32,6 +31,7 @@ import { MathJaxDirective } from 'src/directives/math-jax.directive';
       LegendComponent,
       ManuscriptsComponent,
       MetadataComponent,
+      ReadTextComponent,
       CollectionTextPageRoutingModule,
       MathJaxDirective
     ],
