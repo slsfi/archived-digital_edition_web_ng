@@ -1,38 +1,42 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
+
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { config } from "src/assets/config/config";
 
 
 @Component({
+  standalone: true,
   selector: 'manuscripts',
   templateUrl: 'manuscripts.html',
-  styleUrls: ['manuscripts.scss']
+  styleUrls: ['manuscripts.scss'],
+  imports: [CommonModule, IonicModule]
 })
 export class ManuscriptsComponent implements OnInit {
-  @Input() textItemID: string = '';
   @Input() msID: number | undefined = undefined;
   @Input() searchMatches: Array<string> = [];
-  @Output() openNewManView = new EventEmitter<any>();
+  @Input() textItemID: string = '';
   @Output() openNewLegendView = new EventEmitter<any>();
+  @Output() openNewManView = new EventEmitter<any>();
   @Output() selectedMsID = new EventEmitter<number>();
 
-  public text: any = '';
+  selectedManuscript: any = undefined;
+  showNormalizedMs: boolean = false;
+  showOpenLegendButton: boolean = false;
+  text: SafeHtml = '';
   textLanguage: string = '';
   manuscripts: any[] = [];
-  selectedManuscript: any = undefined;
-  showNormalizedMs = false;
-  showOpenLegendButton: boolean = false;
 
   constructor(
-    protected sanitizer: DomSanitizer,
-    protected readPopoverService: ReadPopoverService,
-    protected textService: TextService,
     private alertCtrl: AlertController,
-    public commonFunctions: CommonFunctionsService
+    private commonFunctions: CommonFunctionsService,
+    public readPopoverService: ReadPopoverService,
+    private sanitizer: DomSanitizer,
+    private textService: TextService
   ) {
     this.showOpenLegendButton = config.showOpenLegendButton?.manuscripts ?? false;
   }
