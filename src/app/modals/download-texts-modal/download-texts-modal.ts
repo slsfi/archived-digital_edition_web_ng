@@ -1,58 +1,61 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { NavController, ModalController, NavParams } from '@ionic/angular';
-import { TextService } from 'src/app/services/text.service';
+import { CommonModule } from '@angular/common';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+
 import { CommentService } from 'src/app/services/comment.service';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { TextService } from 'src/app/services/text.service';
 import { config } from "src/assets/config/config";
 
+
 @Component({
+  standalone: true,
   selector: 'page-download-texts-modal',
   templateUrl: 'download-texts-modal.html',
-  styleUrls: ['download-texts-modal.scss']
+  styleUrls: ['download-texts-modal.scss'],
+  imports: [CommonModule, IonicModule]
 })
 export class DownloadTextsModalPage {
-
   apiEndPoint: string;
   appMachineName: string;
-  siteUrl: string;
-  introductionMode: Boolean = false;
-  readTextsMode: Boolean = false;
-  textId: string;
-  collectionId?: string;
-  publicationId?: string;
   chapterId?: string;
-  positionId?: string;
+  collectionId?: string;
   collectionTitle?: string;
-  publicationTitle?: string;
-  introductionTitle?: string;
   commentTitle?: string;
-  downloadFormatsIntro?: Record<string, any> = {};
-  downloadFormatsEst?: Record<string, any> = {};
-  downloadFormatsCom?: Record<string, any> = {};
-  showInstructions: Boolean = false;
-  instructionsText?: string;
-  showCopyright: Boolean = false;
   copyrightText?: string;
-  printTranslation?: string;
-  textSizeTranslation?: string;
-  loadingIntro: Boolean = false;
-  loadingEst: Boolean = false;
-  loadingCom: Boolean = false;
-  showErrorMessage: Boolean = false;
+  downloadFormatsCom?: Record<string, any> = {};
+  downloadFormatsEst?: Record<string, any> = {};
+  downloadFormatsIntro?: Record<string, any> = {};
+  instructionsText?: string;
+  introductionMode: boolean = false;
+  introductionTitle?: string;
+  loadingCom: boolean = false;
+  loadingEst: boolean = false;
+  loadingIntro: boolean = false;
   objectURLs: any[] = [];
+  positionId?: string;
+  printTranslation?: string;
+  publicationId?: string;
+  publicationTitle?: string;
+  readTextsMode: boolean = false;
+  showCopyright: boolean = false;
+  showErrorMessage: boolean = false;
+  showInstructions: boolean = false;
+  siteUrl: string;
+  textId: string;
+  textSizeTranslation?: string;
 
   constructor(
-    public navCtrl: NavController,
-    public viewCtrl: ModalController,
-    params: NavParams,
-    private textService: TextService,
     private commentService: CommentService,
-    public readPopoverService: ReadPopoverService,
+    private commonFunctions: CommonFunctionsService,
+    private params: NavParams,
+    private readPopoverService: ReadPopoverService,
+    private textService: TextService,
     private tocService: TableOfContentsService,
-    public commonFunctions: CommonFunctionsService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private viewCtrl: ModalController,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     // Get configs
     this.appMachineName = config.app?.machineName ?? '';
@@ -92,7 +95,7 @@ export class DownloadTextsModalPage {
 
     // Get which page has initiated the download modal from nav params
     try {
-      const origin = String(params.get('origin'));
+      const origin = String(this.params.get('origin'));
       if (origin === 'page-text') {
         this.readTextsMode = true;
       } else if (origin === 'page-introduction') {
@@ -102,7 +105,7 @@ export class DownloadTextsModalPage {
 
     // Get text id from nav params
     try {
-      this.textId = String(params.get('textId'));
+      this.textId = String(this.params.get('textId'));
     } catch (e) {
       this.textId = '';
     }
