@@ -97,7 +97,7 @@ export class OccurrenceTextQueryParamGeneratorPipe implements PipeTransform {
       text_type = 'manuscripts';
       viewTypeID = textData.publication_manuscript_id;
     } else if (textData.textType === 'var') {
-      text_type = 'variations';
+      text_type = 'variants';
       viewTypeID = textData.publication_version_id;
     } else if (textData.textType === 'facs') {
       text_type = 'facsimiles'

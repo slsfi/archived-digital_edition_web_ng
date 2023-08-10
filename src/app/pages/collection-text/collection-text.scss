@@ -44,9 +44,21 @@ ion-content.collection-ion-content::part(scroll) {
 
       .column-card-title {
         background: var(--page-text-columns-header-background-color);
-        font-size: 0.75rem;
+        display: block;
+        font-size: 0.875rem;
         font-weight: bold;
-        padding: 16px 22px;
+        overflow: hidden;
+        padding: 16px 32px 16px 22px;
+        text-overflow: ellipsis;
+
+        span.column-text-title {
+          display: contents;
+          font-weight: normal;
+
+          &::before {
+            content: " – ";
+          }
+        }
       }
 
       .column-card-content {

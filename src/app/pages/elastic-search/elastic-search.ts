@@ -736,7 +736,7 @@ export class ElasticSearchPage {
     } else if (hit.source.text_type === 'ms') {
       path = path + 'manuscripts';
     } else if (hit.source.text_type === 'var') {
-      path = path + 'variations';
+      path = path + 'variants';
     }
 
     return path;

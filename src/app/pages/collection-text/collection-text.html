@@ -87,71 +87,100 @@
           <!-- Ion card for each column-->
           <ion-card>
             <ion-card-header class="column-card-title">
-              <ng-container *ngIf="view.type == 'established'" i18n="@@established">Lästext</ng-container>
-              <ng-container *ngIf="view.type == 'established_sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-              <ng-container *ngIf="view.type == 'established_fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
-              <ng-container *ngIf="view.type == 'comments'" i18n="@@comments">Kommentarer</ng-container>
-              <ng-container *ngIf="view.type == 'facsimiles'" i18n="@@facsimiles">Faksimil</ng-container>
-              <ng-container *ngIf="view.type == 'manuscripts'" i18n="@@manuscripts">Manuskript</ng-container>
-              <ng-container *ngIf="view.type == 'variations'" i18n="@@variations">Tryckta varianter</ng-container>
-              <ng-container *ngIf="view.type == 'illustrations'" i18n="@@illustrations">Illustrationer</ng-container>
-              <ng-container *ngIf="view.type == 'legend'" i18n="@@legend">Teckenförklaringar</ng-container>
-              <ng-container *ngIf="view.type == 'metadata'" i18n="@@metadata">Metadata</ng-container>
+              <ng-container *ngIf="view.type === 'established'" i18n="@@established">Lästext</ng-container>
+              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
+              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
+              <ng-container *ngIf="view.type === 'comments'" i18n="@@comments">Kommentarer</ng-container>
+              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@facsimiles">Faksimil</ng-container>
+              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@manuscripts">Manuskript</ng-container>
+              <ng-container *ngIf="view.type === 'variants'" i18n="@@Read.Variants.Title">Tryckt variant</ng-container>
+              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@illustrations">Illustrationer</ng-container>
+              <ng-container *ngIf="view.type === 'legend'" i18n="@@legend">Teckenförklaringar</ng-container>
+              <ng-container *ngIf="view.type === 'metadata'" i18n="@@metadata">Metadata</ng-container>
+
+              <span *ngIf="(
+                      view.type === 'variants' ||
+                      view.type === 'manuscripts' ||
+                      view.type === 'facsimiles'
+                    ) && view.title"
+                    class="column-text-title"
+                    [innerHTML]="view.title"
+              ></span>
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
-                <ng-container *ngIf="view.type == 'established' && multilingualReadingTextLanguages.length < 2">
-                  <read-text
-                        [textItemID]="textItemID"
-                        [textPosition]="textPosition"
-                        [searchMatches]="searchMatches"
-                        (openNewIllustrView)="openNewView($event)"
-                        (selectedIllustration)="updateIllustrationViewImage($event)"
-                  ></read-text>
-                </ng-container>
+
+                <read-text *ngIf="view.type === 'established' && multilingualReadingTextLanguages.length < 2"
+                      [textItemID]="textItemID"
+                      [textPosition]="textPosition"
+                      [searchMatches]="searchMatches"
+                      (openNewIllustrView)="openNewView($event)"
+                      (selectedIllustration)="updateIllustrationViewImage($event)"
+                ></read-text>
 
                 <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
                   <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
-                    <ng-container *ngIf="view.type == 'established_' + lang">
-                      <read-text
-                            [textItemID]="textItemID + '_' + lang"
-                            [textPosition]="textPosition"
-                            [searchMatches]="searchMatches"
-                            (openNewIllustrView)="openNewView($event)"
-                            (selectedIllustration)="updateIllustrationViewImage($event)"
-                      ></read-text>
-                    </ng-container>
+                    <read-text *ngIf="view.type === 'established_' + lang"
+                          [textItemID]="textItemID + '_' + lang"
+                          [textPosition]="textPosition"
+                          [searchMatches]="searchMatches"
+                          (openNewIllustrView)="openNewView($event)"
+                          (selectedIllustration)="updateIllustrationViewImage($event)"
+                    ></read-text>
                   </ng-container>
                 </ng-container>
 
-                <ng-container *ngIf="view.type == 'comments'">
-                  <comments [textItemID]="textItemID" [searchMatches]="searchMatches">
-                  </comments>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'facsimiles'">
-                  <facsimiles [textItemID]="textItemID" [facsID]="view.id" [imageNr]="view.nr" (selectedFacsID)="updateViewProperty('id', $event, i)" (selectedImageNr)="updateViewProperty('nr', $event, i)">
-                  </facsimiles>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'manuscripts'">
-                  <manuscripts [msID]="view.id" [textItemID]="textItemID" [searchMatches]="searchMatches" (selectedMsID)="updateViewProperty('id', $event, i)" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'variations'">
-                  <variants [linkID]="view.id" [itemId]="textItemID" [matches]="searchMatches" [sortOrder]="view.variationSortOrder"
-                    (openNewVarView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></variants>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'illustrations'">
-                  <illustrations
-                        [singleImage]="view.image"
-                        [textItemID]="textItemID"
-                        (showAllImages)="updateIllustrationViewImage($event)"
-                  ></illustrations>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'legend'">
-                  <text-legend [itemId]="textItemID" [scrollToElementId]="view.id"></text-legend>
-                </ng-container>
-                <ng-container *ngIf="view.type == 'metadata'">
-                  <text-metadata [textItemID]="textItemID"></text-metadata>
-                </ng-container>
+                <comments *ngIf="view.type === 'comments'"
+                      [textItemID]="textItemID"
+                      [searchMatches]="searchMatches"
+                ></comments>
+
+                <facsimiles *ngIf="view.type === 'facsimiles'"
+                      [textItemID]="textItemID"
+                      [facsID]="view.id"
+                      [imageNr]="view.nr"
+                      (selectedFacsID)="updateViewProperty('id', $event, i)"
+                      (selectedImageNr)="updateViewProperty('nr', $event, i)"
+                      (selectedFacsName)="updateViewProperty('title', $event, i, false)"
+                ></facsimiles>
+
+                <manuscripts *ngIf="view.type === 'manuscripts'"
+                      [textItemID]="textItemID"
+                      [msID]="view.id"
+                      [searchMatches]="searchMatches"
+                      (selectedMsID)="updateViewProperty('id', $event, i)"
+                      (selectedMsName)="updateViewProperty('title', $event, i, false)"
+                      (openNewManView)="openNewView($event)"
+                      (openNewLegendView)="openNewView($event)"
+                ></manuscripts>
+
+                <variants *ngIf="view.type === 'variants'"
+                      [textItemID]="textItemID"
+                      [varID]="view.id"
+                      [searchMatches]="searchMatches"
+                      [sortOrder]="view.sortOrder"
+                      (selectedVarID)="updateViewProperty('id', $event, i)"
+                      (selectedVarName)="updateViewProperty('title', $event, i, false)"
+                      (selectedVarSortOrder)="updateViewProperty('sortOrder', $event, i)"
+                      (openNewVarView)="openNewView($event)"
+                      (openNewLegendView)="openNewView($event)"
+                ></variants>
+                
+                <illustrations *ngIf="view.type === 'illustrations'"
+                      [singleImage]="view.image"
+                      [textItemID]="textItemID"
+                      (showAllImages)="updateIllustrationViewImage($event)"
+                ></illustrations>
+
+                <text-legend *ngIf="view.type === 'legend'"
+                      [itemId]="textItemID"
+                      [scrollToElementId]="view.id"
+                ></text-legend>
+
+                <text-metadata *ngIf="view.type === 'metadata'"
+                      [textItemID]="textItemID"
+                ></text-metadata>
+
               </div>
             </ion-card-content>
           </ion-card>
@@ -203,9 +232,9 @@
                   <ion-icon name="document-text-outline"></ion-icon>
                   <ion-label i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="viewTypes['variations']" (click)="addView('variations'); commonFunctions.scrollLastViewIntoView()">
+                <ion-chip *ngIf="viewTypes['variants']" (click)="addView('variants'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="documents-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Variations.AddButtonText">Tryckta varianter</ion-label>
+                  <ion-label i18n="@@Read.Variants.AddButtonText">Tryckt variant</ion-label>
                 </ion-chip>
                 <ion-chip *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()">
                   <ion-icon name="bulb-outline"></ion-icon>

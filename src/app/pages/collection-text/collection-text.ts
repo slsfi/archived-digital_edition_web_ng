@@ -6,15 +6,15 @@ import { Subscription } from 'rxjs';
 import JsonURL from '@jsonurl/jsonurl';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -24,7 +24,7 @@ import { isBrowser } from 'src/standalone/utility-functions';
   templateUrl: 'collection-text.html',
   styleUrls: ['collection-text.scss'],
 })
-export class CollectionTextPage implements OnInit, OnDestroy {
+export class CollectionTextPage implements OnDestroy, OnInit {
   @ViewChild('addViewPopover') addViewPopover: IonPopover;
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
@@ -72,20 +72,20 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   private unlistenMouseoutEvents?: () => void;
 
   constructor(
-    private textService: TextService,
     private commentService: CommentService,
-    private renderer2: Renderer2,
-    private ngZone: NgZone,
+    public commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
+    private modalCtrl: ModalController,
+    private ngZone: NgZone,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
-    private modalCtrl: ModalController,
-    private sanitizer: DomSanitizer,
-    private tooltipService: TooltipService,
-    public userSettingsService: UserSettingsService,
-    public commonFunctions: CommonFunctionsService,
+    private renderer2: Renderer2,
     private route: ActivatedRoute,
     private router: Router,
+    private sanitizer: DomSanitizer,
+    private textService: TextService,
+    private tooltipService: TooltipService,
+    public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.toolTipPosType = 'fixed';
@@ -146,7 +146,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       this.showTextDownloadButton = false;
     }
 
-    // Hide some or all of the view types that can be added (variations, facsimiles, established etc.)
+    // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
     this.viewTypes = config.page?.read?.viewTypeSettings ?? {};
     for (const type in this.viewTypes) {
       if (this.viewTypes.hasOwnProperty(type)) {
@@ -206,7 +206,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         if (this.textItemID !== textItemID) {
           this.textItemID = textItemID;
           // Save the id of the previous and current read view text in textService.
-          // TODO: This is maybe not needed any more:
           this.textService.previousReadViewTextId = this.textService.readViewTextId;
           this.textService.readViewTextId = this.textItemID;
         }
@@ -243,12 +242,10 @@ export class CollectionTextPage implements OnInit, OnDestroy {
         }
 
         if (queryParams['views']) {
-          // console.log('views in queryparams:', queryParams['views']);
           const parsedViews = JsonURL.parse(queryParams['views'], {
             AQF: true,
             impliedArray: []
           });
-          // console.log('parsed views: ', parsedViews);
 
           let viewsChanged = false;
           if (this.views.length !== parsedViews.length) {
@@ -257,12 +254,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
             for (let i = 0; i < this.views.length; i++) {
               // Comparison on the entire view objects doesn't work for texts that have
               // just positions that can change, hence checking only if types unequal
-              /*
-              if (JSON.stringify(this.views[i]) !== JSON.stringify(parsedViews[i])) {
-                viewsChanged = true;
-                break;
-              }
-              */
               if (this.views[i].type !== parsedViews[i].type) {
                 viewsChanged = true;
                 break;
@@ -279,14 +270,20 @@ export class CollectionTextPage implements OnInit, OnDestroy {
           // text service and populate it with the current ones.
           this.textService.recentCollectionTextViews = [];
           parsedViews.forEach((viewObj: any) => {
-            this.textService.recentCollectionTextViews.push({ type: viewObj.type });
+            const cachedViewObj: any = { type: viewObj.type };
+            if (
+              viewObj.type === 'variants' &&
+              viewObj.sortOrder
+            ) {
+              cachedViewObj.sortOrder = viewObj.sortOrder;
+            }
+            this.textService.recentCollectionTextViews.push(cachedViewObj);
           });
         } else {
-          this.setDefaultViews();
+          this.setViews();
         }
 
         if (queryParams['position'] || (this.textPosition && queryParams['position'] === undefined)) {
-          // console.log('position in queryparams:', queryParams['position']);
           this.textPosition = queryParams['position'];
         }
 
@@ -307,56 +304,21 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     this.unlistenFirstTouchStartEvent?.();
   }
 
-  /**
-   * TODO: This function is no longer used, it is here only for reference while refactoring the code.
-   */
-  setViews(viewmodes: any) {
-    let variationsViewOrderNumber = 0;
-    let sameCollection = false;
-    // Check if the same collection as the previous time page-text was loaded.
-    if (this.textService.readViewTextId.split('_')[0] === this.textService.previousReadViewTextId.split('_')[0]) {
-      sameCollection = true;
+  setViews() {
+    // There are no views defined in the url params =>
+    // show a) current views if defined,
+    //      b) recent view types if defined, or
+    //      c) default view types.
+    if (this.views.length > 0) {
+      // show current views
+      this.updateViewsInRouterQueryParams(this.views);
+    } else if (this.textService.recentCollectionTextViews.length > 0) {
+      // show recent view types
+      // if different collection than previously pass type of views only
+      let typesOnly = this.textItemID.split('_')[0] !== this.textService.previousReadViewTextId.split('_')[0] ? true : false;
+      this.updateViewsInRouterQueryParams(this.textService.recentCollectionTextViews, typesOnly);
     } else {
-      // A different collection than last time page-text was loaded --> clear variationsOrder array in textService.
-      this.textService.variationsOrder = [];
-    }
-
-    let defaultReadModeForMobileSelected = false;
-    viewmodes.forEach((viewmode: any) => {
-      if (!defaultReadModeForMobileSelected && this.viewTypes[viewmode]) {
-        /* Sets the default view on mobile to the first default read mode view which is available. */
-        this.activeMobileModeViewType = viewmode;
-        defaultReadModeForMobileSelected = true;
-      }
-
-      // check if view type it is similar to established_sv
-      const parts = viewmode.split('_');
-      if (parts.length > 1) {
-        this.addView(parts[0], null, null, null, parts[1]);
-      } else {
-        if (viewmode === 'variations') {
-          // this.addView(viewmode, null, null, null, null, null, variationsViewOrderNumber);
-          if (sameCollection && this.textService.variationsOrder.length > 0) {
-            this.addView(viewmode, null, null, null, this.textService.variationsOrder[variationsViewOrderNumber]);
-          } else {
-            this.addView(viewmode, null, null, null, variationsViewOrderNumber);
-            this.textService.variationsOrder.push(variationsViewOrderNumber);
-          }
-          variationsViewOrderNumber++;
-        } else {
-          this.addView(viewmode);
-        }
-      }
-    });
-  }
-
-  setDefaultViews() {
-    // There are no views defined in the url params => show either recent or default views
-    if (this.textService.recentCollectionTextViews.length > 0) {
-      // show recent views
-      this.updateViewsInRouterQueryParams(this.textService.recentCollectionTextViews);
-    } else {
-      // show default views
+      // show default view types
       this.setDefaultViewsFromConfig();
     }
   }
@@ -414,7 +376,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       return false;
     } else if (type === 'manuscripts' && !this.viewTypes['manuscripts']) {
       return false;
-    } else if (type === 'variations' && !this.viewTypes['variations']) {
+    } else if (type === 'variants' && !this.viewTypes['variants']) {
       return false;
     } else if (type === 'illustrations' && !this.viewTypes['illustrations']) {
       return false;
@@ -1491,17 +1453,7 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  addView(type: string, id?: number | null, image?: any | null, language?: string | null, variationSortOrder?: number) {
-
-    // TODO: Adding the correct unique variations still requires some work
-    if (type === 'variations' && variationSortOrder === undefined) {
-      let currentVariationsViews = 0;
-      this.views.forEach((viewObj: any) => {
-        if (viewObj.type === 'variations') { currentVariationsViews++; }
-      });
-      variationSortOrder = currentVariationsViews;
-    }
-
+  addView(type: string, id?: number | null, image?: any | null, language?: string | null) {
     if (type === 'established' && language && this.multilingualReadingTextLanguages.length > 1) {
       type = 'established_' + language;
     }
@@ -1515,9 +1467,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
       if (image != null) {
         newView['image'] = image;
       }
-      if (variationSortOrder != null) {
-        newView['variationSortOrder'] = variationSortOrder;
-      }
 
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
@@ -1526,7 +1475,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   }
 
   removeView(i: any) {
-    this.removeVariationSortOrderFromService(i);
     this.views.splice(i, 1);
     this.updateViewsInRouterQueryParams(this.views);
   }
@@ -1538,8 +1486,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   moveViewRight(id: number) {
     if (id > -1 && id < this.views.length - 1) {
       this.views = this.moveArrayItem(this.views, id, id + 1);
-      this.switchVariationSortOrdersInService(id, id + 1);
-
       this.fabColumnOptions.forEach(fabList => {
         fabList.activated = false;
       });
@@ -1559,8 +1505,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
   moveViewLeft(id: number) {
     if (id > 0 && id < this.views.length) {
       this.views = this.moveArrayItem(this.views, id, id - 1);
-      this.switchVariationSortOrdersInService(id, id - 1);
-
       this.fabColumnOptions.forEach(fabList => {
         fabList.activated = false;
       });
@@ -1595,26 +1539,39 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  updateViewProperty(propertyName: string, value: any, viewIndex: number) {
+  updateViewProperty(propertyName: string, value: any, viewIndex: number, updateQueryParams: boolean = true) {
     if (value !== null) {
       this.views[viewIndex][propertyName] = value;
     } else if (this.views[viewIndex].hasOwnProperty(propertyName)) {
       delete this.views[viewIndex][propertyName];
     }
-    this.updateViewsInRouterQueryParams(this.views);
+    updateQueryParams && this.updateViewsInRouterQueryParams(this.views);
   }
 
-  updateViewsInRouterQueryParams(views: Array<any>) {
+  updateViewsInRouterQueryParams(views: Array<any>, typesOnly: boolean = false) {
+    this.illustrationsViewShown = this.viewTypeIsShown('illustrations', views);
+
+    let trimmedViews: any[] = [];
+    if (typesOnly) {
+      views.forEach((viewObj: any) => {
+        if (viewObj.type) {
+          trimmedViews.push({ type: viewObj.type });
+        }
+      });
+    } else {
+      // Remove 'title' property from all view objects as it's not desired in the url
+      trimmedViews = views.map(({title, ...rest}) => rest);
+    }
+    
     this.router.navigate(
       [],
       {
         relativeTo: this.route,
-        queryParams: { views: JsonURL.stringify(views, { AQF: true, impliedArray: true }) },
+        queryParams: { views: JsonURL.stringify(trimmedViews, { AQF: true, impliedArray: true }) },
         queryParamsHandling: 'merge',
         replaceUrl: true
       }
     );
-    this.illustrationsViewShown = this.viewTypeIsShown('illustrations', views);
   }
 
   private scrollToVariant(element: HTMLElement) {
@@ -1680,21 +1637,6 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     }
   }
 
-  // TODO: currently not in use, should be used in read-text to scroll the column into view when changing textPosition
-  private scrollColumnIntoView(columnElement: HTMLElement, offset = 26) {
-    if (columnElement === undefined || columnElement === null) {
-      return;
-    }
-    const scrollingContainer = document.querySelector(
-      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content'
-    )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
-    if (scrollingContainer !== null) {
-      const x = columnElement.getBoundingClientRect().left + scrollingContainer.scrollLeft -
-      scrollingContainer.getBoundingClientRect().left - offset;
-      scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
-    }
-  }
-
   printMainContentClasses() {
     if (this.userSettingsService.isMobile()) {
       return 'mobile-mode-content';
@@ -1718,115 +1660,9 @@ export class CollectionTextPage implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Adds the sort order of a variation to the variationsOrder array in textService.
-   */
-  addVariationSortOrderToService(sortOrder: number) {
-    if (sortOrder !== null && sortOrder !== undefined) {
-      this.textService.variationsOrder.push(sortOrder);
-    }
-  }
-
-  /**
-   * Removes the sort order of the variations column with the given index from the variationsOrder
-   * array in textService.
-   */
-  removeVariationSortOrderFromService(columnIndex: number) {
-    const columnElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) div#read_div_' + columnIndex);
-    if (columnElem) {
-      const currentVarElem = columnElem.querySelector('variants');
-      if (currentVarElem) {
-        /* Find the index of the current variants column among just the variants columns */
-        const key = this.findVariationsColumnIndex(columnIndex);
-        /* Remove the sort order of the removed variants column from textService */
-        if (key !== undefined) {
-          if (this.textService.variationsOrder[key] !== undefined) {
-            this.textService.variationsOrder.splice(key, 1);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Switches the positions of two variants columns' sort orders in the variationsOrder array
-   * in textService.
-   */
-  switchVariationSortOrdersInService(currentColumnIndex: number, otherColumnIndex: number) {
-    /* Check if either the current column or the one it is changing places with is a variants column */
-    const currentColumnElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) div#read_div_' + currentColumnIndex);
-    const otherColumnElem = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) div#read_div_' + otherColumnIndex);
-    if (currentColumnElem && otherColumnElem) {
-      const currentVarElem = currentColumnElem.querySelector('variants');
-      const otherVarElem = otherColumnElem.querySelector('variants');
-      if (currentVarElem && otherVarElem) {
-        /* Find the indices of the two variants column among just the variants columns */
-        const currentVarIndex = this.findVariationsColumnIndex(currentColumnIndex);
-        let otherVarIndex = (currentVarIndex || 0) + 1;
-        if (otherColumnIndex < currentColumnIndex) {
-          otherVarIndex = (currentVarIndex || 0) - 1;
-        }
-        this.textService.variationsOrder = this.moveArrayItem(this.textService.variationsOrder, (currentVarIndex || 0), otherVarIndex);
-      }
-    }
-
-  }
-
-  /**
-   * Given the read column index of a variants column, this function returns the index of the
-   * column among just the variants columns in the read view. So, for instance, if there are
-   * 3 read columns in total, 2 of which are variants columns, this function can tell if the
-   * variants column with index columnIndex is the first or second variants column.
-   */
-  findVariationsColumnIndex(columnIndex: number) {
-    const columnElems = Array.from(document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) div.read-column'));
-    const varColIds = [] as any;
-    columnElems.forEach(function(column) {
-      const varElem = column.querySelector('variants');
-      if (varElem) {
-        varColIds.push(column.id);
-      }
-    });
-    let varIndex = undefined;
-    for (let i = 0; i < varColIds.length; i++) {
-      if (varColIds[i] === 'read_div_' + columnIndex) {
-        varIndex = i;
-        break;
-      }
-    }
-    return varIndex;
-  }
-
   showAddViewPopover(e: Event) {
     this.addViewPopover.event = e;
     this.addViewPopoverisOpen = true;
-  }
-
-  scrollReadTextToAnchorPosition(posId: string) {
-    const container = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text')[0];
-    if (container) {
-      const targets = container.querySelectorAll('a[name="' + posId + '"].anchor');
-      if (targets && targets.length > 0) {
-        let target = targets[0] as HTMLAnchorElement;
-        if ( target && ((target.parentElement && target.parentElement.classList.contains('ttFixed'))
-        || (target.parentElement?.parentElement && target.parentElement.parentElement.classList.contains('ttFixed'))) ) {
-          // Position in footnote --> look for second target
-          if (targets.length > 1) {
-            target = targets[1] as HTMLAnchorElement;
-          }
-        }
-        if (target) {
-          if (!this.userSettingsService.isMobile()) {
-            let columnElement = container as HTMLElement;
-            while (columnElement.parentElement !== null && !columnElement.parentElement.classList.contains('read-column')) {
-              columnElement = columnElement.parentElement;
-            }
-            this.scrollColumnIntoView(columnElement);
-          }
-          this.commonFunctions.scrollToHTMLElement(target);
-        }
-      }
-    }
   }
 
   storeActiveMobileModeViewType() {

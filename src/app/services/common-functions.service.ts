@@ -167,7 +167,33 @@ export class CommonFunctionsService {
 
 
   /**
-   * This function scrolls the read-view horisontally to the last (rightmost) read column.
+   * Helper function for scrolling the collection text page horizontally.
+   * @param columnElement which should be scrolled into view.
+   * @param offset horizontal adjustment to scroll position.
+   * @returns true on success, false on failure.
+   */
+  scrollCollectionTextColumnIntoView(columnElement: HTMLElement, offset: number = 26): boolean {
+    if (!columnElement) {
+      return false;
+    }
+    const scrollingContainer = document.querySelector(
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.collection-ion-content'
+    )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
+    if (scrollingContainer) {
+      const x = columnElement.getBoundingClientRect().left
+            + scrollingContainer.scrollLeft
+            - scrollingContainer.getBoundingClientRect().left
+            - offset;
+      scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  /**
+   * This function scrolls the collection text page horisontally to the last (rightmost) column.
    * It should be called after adding new views/columns.
    */
   scrollLastViewIntoView() {
@@ -184,19 +210,7 @@ export class CommonFunctionsService {
             const viewElements = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden)')?.getElementsByClassName('read-column');
             if (viewElements && viewElements[0] !== undefined) {
               const lastViewElement = viewElements[viewElements.length - 1] as HTMLElement;
-              let scrollingContainer = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.collection-ion-content');
-              if (scrollingContainer) {
-                const shadowContainer = scrollingContainer.shadowRoot;
-                if (shadowContainer) {
-                  scrollingContainer = shadowContainer.querySelector('[part="scroll"]');
-                  if (scrollingContainer) {
-                    const x = lastViewElement.getBoundingClientRect().right + scrollingContainer.scrollLeft -
-                    scrollingContainer.getBoundingClientRect().left;
-                    scrollingContainer.scrollTo({top: 0, left: x, behavior: 'smooth'});
-                    clearInterval(that.intervalTimerId);
-                  }
-                }
-              }
+              that.scrollCollectionTextColumnIntoView(lastViewElement, 0) && clearInterval(that.intervalTimerId);
             }
           }
         }.bind(this), 500);

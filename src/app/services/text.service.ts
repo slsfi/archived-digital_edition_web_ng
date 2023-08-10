@@ -16,9 +16,8 @@ export class TextService {
   appMachineName: string = '';
   apiEndpoint: string = '';
   simpleApi: string = '';
-  readViewTextId: string;
-  previousReadViewTextId: string;
-  variationsOrder: number[] = [];
+  readViewTextId: string = '';
+  previousReadViewTextId: string = '';
   recentCollectionTextViews: Array<any> = [];
   activeCollectionTextMobileModeView: string = '';
 
@@ -28,10 +27,6 @@ export class TextService {
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
     this.simpleApi = config.app?.simpleApi ?? '';
-
-    this.readViewTextId = '';
-    this.previousReadViewTextId = '';
-    this.variationsOrder = [];
   }
 
   getEstablishedText(id: string): Observable<any> {
@@ -94,7 +89,7 @@ export class TextService {
     return this.http.get(url);
   }
 
-  getVariations(id: string): Observable<any> {
+  getVariants(id: string): Observable<any> {
     const idParts = id.split(';')[0].split('_');
     const coll_id = idParts[0];
     const pub_id = idParts[1];

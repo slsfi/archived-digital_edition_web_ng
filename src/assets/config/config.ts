@@ -79,7 +79,7 @@ export const config: Config = {
         established: true,
         comments: true,
         manuscripts: true,
-        variations: true,
+        variants: true,
         facsimiles: true,
         illustrations: true,
         legend: true
@@ -128,7 +128,7 @@ export const config: Config = {
   useSimpleWorkMetadata: true,
   showOpenLegendButton: {
     manuscripts: true,
-    variations: true
+    variants: true
   },
   settings: {
     disableReadToggles: false,
@@ -157,7 +157,7 @@ export const config: Config = {
       placeInfo: true,
       changes: true,
       normalisations: true,
-      variations: true,
+      variants: true,
       abbreviations: true,
       workInfo: true,
       footNotes: true
@@ -540,7 +540,7 @@ export const config_soderholm: Config = {
         established: false,
         comments: false,
         manuscripts: true,
-        variations: false,
+        variants: false,
         facsimiles: true,
         illustrations: false,
         legend: false
@@ -589,7 +589,7 @@ export const config_soderholm: Config = {
   useSimpleWorkMetadata: false,
   showOpenLegendButton: {
     manuscripts: false,
-    variations: false
+    variants: false
   },
   settings: {
     disableReadToggles: false,
@@ -618,7 +618,7 @@ export const config_soderholm: Config = {
         placeInfo: false,
         changes: false,
         normalisations: false,
-        variations: false,
+        variants: false,
         abbreviations: false,
         workInfo: false,
         footNotes: false
@@ -1063,7 +1063,7 @@ export const config_vonWright: Config = {
         established: true,
         comments: true,
         manuscripts: false,
-        variations: false,
+        variants: false,
         facsimiles: true,
         illustrations: false,
         legend: false
@@ -1112,7 +1112,7 @@ export const config_vonWright: Config = {
   useSimpleWorkMetadata: false,
   showOpenLegendButton: {
     manuscripts: false,
-    variations: false
+    variants: false
   },
   settings: {
     disableReadToggles: false,
@@ -1141,7 +1141,7 @@ export const config_vonWright: Config = {
       placeInfo: true,
       changes: true,
       normalisations: true,
-      variations: false,
+      variants: false,
       abbreviations: false,
       workInfo: true,
       footNotes: true
@@ -1371,7 +1371,7 @@ export const config_granqvist: Config = {
         established: false,
         comments: false,
         manuscripts: false,
-        variations: false,
+        variants: false,
         facsimiles: true,
         illustrations: false,
         legend: false
@@ -1420,7 +1420,7 @@ export const config_granqvist: Config = {
   useSimpleWorkMetadata: false,
   showOpenLegendButton: {
     manuscripts: false,
-    variations: false
+    variants: false
   },
   settings: {
     disableReadToggles: false,
@@ -1449,7 +1449,7 @@ export const config_granqvist: Config = {
       placeInfo: true,
       changes: true,
       normalisations: true,
-      variations: false,
+      variants: false,
       abbreviations: false,
       workInfo: true,
       footNotes: true
@@ -1670,7 +1670,7 @@ export const config_mechelin: Config = {
         established: true,
         comments: false,
         manuscripts: true,
-        variations: false,
+        variants: false,
         facsimiles: true,
         illustrations: false,
         legend: false,
@@ -1723,7 +1723,7 @@ export const config_mechelin: Config = {
   useSimpleWorkMetadata: false,
   showOpenLegendButton: {
     manuscripts: true,
-    variations: true
+    variants: true
   },
   settings: {
     disableReadToggles: false,
@@ -1752,7 +1752,7 @@ export const config_mechelin: Config = {
       placeInfo: false,
       changes: true,
       normalisations: true,
-      variations: false,
+      variants: false,
       abbreviations: true,
       workInfo: false,
       footNotes: true

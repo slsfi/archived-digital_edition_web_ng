@@ -23,6 +23,7 @@ export class ManuscriptsComponent implements OnInit {
   @Output() openNewLegendView = new EventEmitter<any>();
   @Output() openNewManView = new EventEmitter<any>();
   @Output() selectedMsID = new EventEmitter<number>();
+  @Output() selectedMsName = new EventEmitter<string>();
 
   selectedManuscript: any = undefined;
   showNormalizedMs: boolean = false;
@@ -51,9 +52,8 @@ export class ManuscriptsComponent implements OnInit {
     this.textService.getManuscripts(this.textItemID).subscribe({
       next: (res) => {
         if (
-          res &&
-          res.manuscripts.length > 0 &&
-          res.manuscripts[0].manuscript_changes
+          res?.manuscripts?.length > 0 &&
+          res?.manuscripts[0]?.manuscript_changes
         ) {
           this.manuscripts = res.manuscripts;
           this.setManuscript();
@@ -62,8 +62,8 @@ export class ManuscriptsComponent implements OnInit {
         }
       },
       error: (e) => {
-        // TODO: Add translated error message.
-        this.text = 'Ett fel har uppstått. Transkriptioner kunde inte hämtas.';
+        console.error(e);
+        this.text = $localize`:@@Read.Manuscripts.Error:Ett fel har uppstått. Manuskript kunde inte hämtas.`;
       }
     });
   }
@@ -81,31 +81,33 @@ export class ManuscriptsComponent implements OnInit {
     }
     // Emit the ms id so the read page can update queryParams
     this.emitSelectedManuscriptId(this.selectedManuscript.id);
+    // Emit the ms name so the read page can display it in the column header
+    this.emitSelectedManuscriptName(this.selectedManuscript.name);
     this.changeManuscript();
   }
 
   changeManuscript(manuscript?: any) {
-    if (manuscript && this.selectedManuscript && this.selectedManuscript.id !== manuscript.id) {
+    if (
+      manuscript &&
+      this.selectedManuscript?.id !== manuscript.id
+    ) {
       this.selectedManuscript = manuscript;
       // Emit the ms id so the read page can update queryParams
       this.emitSelectedManuscriptId(manuscript.id);
+      // Emit the ms name so the read page can display it in the column header
+      this.emitSelectedManuscriptName(this.selectedManuscript.name);
     }
     if (this.selectedManuscript) {
-      let text = '';
-      if (this.showNormalizedMs) {
-        text = this.selectedManuscript.manuscript_normalized;
-      } else {
-        text = this.selectedManuscript.manuscript_changes;
-      }
+      let text = this.showNormalizedMs
+            ? this.selectedManuscript.manuscript_normalized
+            : this.selectedManuscript.manuscript_changes;
       text = this.postprocessManuscriptText(text);
       text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
 
-      if (this.selectedManuscript.language) {
-        this.textLanguage = this.selectedManuscript.language;
-      } else {
-        this.textLanguage = '';
-      }
+      this.textLanguage = this.selectedManuscript.language
+            ? this.selectedManuscript.language
+            : '';
     }
   }
 
@@ -170,6 +172,12 @@ export class ManuscriptsComponent implements OnInit {
     this.selectedMsID.emit(id);
   }
 
+  emitSelectedManuscriptName(name: string) {
+    if (this.manuscripts.length > 1) {
+      this.selectedMsName.emit(name);
+    }
+  }
+
   openNewMan(event: Event, id: any) {
     event.preventDefault();
     event.stopPropagation();
@@ -177,6 +185,7 @@ export class ManuscriptsComponent implements OnInit {
     this.openNewManView.emit(id);
   }
 
+  /*
   openFacsimileMan(event: Event, id: any) {
     event.preventDefault();
     event.stopPropagation();
@@ -184,6 +193,7 @@ export class ManuscriptsComponent implements OnInit {
     this.openNewManView.emit(id);
     this.commonFunctions.scrollLastViewIntoView();
   }
+  */
 
   openNewLegend(event: Event) {
     event.preventDefault();

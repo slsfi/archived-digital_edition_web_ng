@@ -1,140 +1,133 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AlertButton, AlertController, AlertInput } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
+
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
+  standalone: true,
   selector: 'variants',
   templateUrl: 'variants.html',
-  styleUrls: ['variants.scss']
+  styleUrls: ['variants.scss'],
+  imports: [CommonModule, IonicModule]
 })
-
 export class VariantsComponent implements OnInit {
-  @Input() itemId?: string;
-  @Input() linkID?: string;
-  @Input() matches?: Array<string>;
-  @Input() sortOrder?: number;
-  @Output() openNewVarView: EventEmitter<any> = new EventEmitter();
+  @Input() searchMatches: Array<string> = [];
+  @Input() sortOrder: number | undefined = undefined;
+  @Input() textItemID: string = '';
+  @Input() varID: number | undefined = undefined;
   @Output() openNewLegendView: EventEmitter<any> = new EventEmitter();
+  @Output() openNewVarView: EventEmitter<any> = new EventEmitter();
+  @Output() selectedVarID = new EventEmitter<number>();
+  @Output() selectedVarName = new EventEmitter<string>();
+  @Output() selectedVarSortOrder = new EventEmitter<number>();
 
-  text: any;
-  selection?: 0;
-  variations: any;
-  selectedVariation: any;
-  selectedVariationName: string;
-  errorMessage?: string;
-  normalized = true;
-  varID: string;
-  textLoading: Boolean = true;
-  showOpenLegendButton: Boolean = false;
+  selectedVariant: any = undefined;
+  showOpenLegendButton: boolean = false;
+  text: SafeHtml = '';
+  variants: any[] = [];
 
   constructor(
-    protected sanitizer: DomSanitizer,
-    protected readPopoverService: ReadPopoverService,
-    protected textService: TextService,
     private alertCtrl: AlertController,
-    public commonFunctions: CommonFunctionsService
+    private commonFunctions: CommonFunctionsService,
+    public readPopoverService: ReadPopoverService,
+    private sanitizer: DomSanitizer,
+    private textService: TextService
   ) {
-    this.text = '';
-    this.selectedVariationName = '';
-    this.variations = [];
-    this.varID = '';
-    this.showOpenLegendButton = config.showOpenLegendButton?.variations ?? false;
+    this.showOpenLegendButton = config.showOpenLegendButton?.variants ?? false;
   }
 
   ngOnInit() {
-    this.varID = this.itemId?.split(';')[0] + '_var';
-    this.setText();
-  }
-
-  openNewVar( event: Event, id: any ) {
-    event.preventDefault();
-    event.stopPropagation();
-    id.viewType = 'variations';
-    this.openNewVarView.emit(id);
-  }
-
-  setText() {
-    this.getVariation();
-  }
-
-  getVariation() {
-    if (!this.itemId) {
-      return;
+    if (this.textItemID) {
+      this.loadVariantTexts();
     }
-    this.textService.getVariations(this.itemId).subscribe({
+  }
+
+  loadVariantTexts() {
+    this.textService.getVariants(this.textItemID).subscribe({
       next: (res) => {
-        this.textLoading = false;
-        this.variations = res.variations;
-        if (this.variations.length > 0) {
-          this.setVariation();
+        if (res?.variations?.length > 0) {
+          this.variants = res.variations;
+          this.setVariant();
         } else {
-          this.text = $localize`:@@Read.Variations.NoVariations:Inga tryckta varianter tillgängliga.`;
+          this.text = $localize`:@@Read.Variants.NoVariations:Inga tryckta varianter tillgängliga.`;
         }
       },
-      error: (err) =>  {
-        console.error('Error loading variants', err);
-        // TODO: add translated error message
-        this.text = 'Varianter kunde inte laddas.'
-        this.textLoading = false;
+      error: (e) => {
+        console.error(e);
+        this.text = $localize`:@@Read.Variants.Error:Ett fel har uppstått. Varianter kunde inte laddas.`
       }
     });
   }
 
-  setVariation() {
-    const inputFilename = this.linkID + '.xml';
-
-    const that = this;
-    const inputVariation = this.variations.filter(function(item: any) {
-      return (item.id + '' === that.linkID + '' || item.legacy_id + '' === that.linkID + '');
-    }.bind(this))[0];
-
-    if (this.linkID && this.linkID !== undefined && inputVariation !== undefined ) {
-      this.selectedVariation = inputVariation;
-      this.sortOrder = inputVariation.sort_order - 1;
-    } else {
-      if (this.sortOrder && this.variations[this.sortOrder] !== undefined) {
-        this.selectedVariation = this.variations[this.sortOrder];
-      } else {
-        this.selectedVariation = this.variations[0];
-        this.sortOrder = 0;
+  setVariant() {
+    if (this.varID) {
+      const inputVariant = this.variants.filter((item: any) => {
+        return (item.id === this.varID);
+      })[0];
+      if (inputVariant) {
+        this.selectedVariant = inputVariant;
       }
+    } else if (this.sortOrder) {
+      const inputVariant = this.variants.filter((item: any) => {
+        return (item.sort_order === this.sortOrder);
+      })[0];
+      this.selectedVariant = inputVariant ? inputVariant : this.variants[0];
+    } else {
+      this.selectedVariant = this.variants[0];
     }
-    this.changeVariation();
+    this.emitOutputValues(this.selectedVariant);
+    this.changeVariant();
   }
 
-  changeVariation( variation?: any ) {
-    if (variation) {
-      this.selectedVariation = variation;
+  changeVariant(variant?: any) {
+    if (
+      variant &&
+      this.selectedVariant?.id !== variant.id
+    ) {
+      this.selectedVariant = variant;
+      this.emitOutputValues(this.selectedVariant);
     }
-    this.selectedVariationName = this.selectedVariation.name;
-    if (this.selectedVariation && this.selectedVariation.content !== undefined && this.matches) {
-      this.text = this.commonFunctions.insertSearchMatchTags(this.selectedVariation.content, this.matches);
-      this.text = this.sanitizer.bypassSecurityTrustHtml(
-          this.text.replace(/images\//g, 'assets/images/')
-            .replace(/\.png/g, '.svg').replace(/class=\"([a-z A-Z _ 0-9]{1,140})\"/g, 'class=\"teiVariant tei $1\"')
-      );
+    if (this.selectedVariant) {
+      let text = this.postprocessVariantText(this.selectedVariant.content);
+      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+      this.text = this.sanitizer.bypassSecurityTrustHtml(text);
     }
   }
 
-  async selectVariation(event: any) {
+  postprocessVariantText(text: string) {
+    text = text.trim();
+    // Replace png images with svg counterparts
+    text = text.replace(/\.png/g, '.svg');
+    // Fix image paths
+    text = text.replace(/images\//g, 'assets/images/');
+    // Add "tei" and "teiVariant" to all classlists
+    text = text.replace(
+      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
+      'class=\"teiVariant tei $1\"'
+    );
+    return text;
+  }
+
+  async selectVariant(event: any) {
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
 
-    this.variations.forEach((variation: any, index: any) => {
+    this.variants.forEach((variant: any, index: any) => {
       let checkedValue = false;
 
-      if (this.selectedVariation.id === variation.id) {
+      if (this.selectedVariant.id === variant.id) {
         checkedValue = true;
       }
 
       inputs.push({
         type: 'radio',
-        label: variation.name,
+        label: variant.name,
         value: index,
         checked: checkedValue
       });
@@ -144,15 +137,13 @@ export class VariantsComponent implements OnInit {
     buttons.push({
       text: $localize`:@@BasicActions.Ok:Ok`,
       handler: (index: any) => {
-        this.changeVariation(this.variations[parseInt(index)]);
-        this.sortOrder = parseInt(index);
-        this.updateVariationSortOrderInService(event);
+        this.changeVariant(this.variants[parseInt(index)]);
       }
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Variations.SelectVariationDialogTitle:Välj variant`,
-      subHeader:  $localize`:@@Read.Variations.SelectVariationDialogSubtitle:Varianten ersätter den variant som visas i kolumnen där du klickade.`,
+      header: $localize`:@@Read.Variants.SelectVariationDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variants.SelectVariationDialogSubtitle:Varianten ersätter den variant som visas i kolumnen där du klickade.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs
@@ -161,15 +152,15 @@ export class VariantsComponent implements OnInit {
     await alert.present();
   }
 
-  async selectVariationForNewView() {
+  async selectVariantForNewView() {
     const inputs = [] as AlertInput[];
     const buttons = [] as AlertButton[];
 
-    this.variations.forEach((variation: any, index: any) => {
+    this.variants.forEach((variant: any, index: any) => {
       inputs.push({
-          type: 'radio',
-          label: variation.name,
-          value: index
+        type: 'radio',
+        label: variant.name,
+        value: index
       });
     });
 
@@ -177,13 +168,13 @@ export class VariantsComponent implements OnInit {
     buttons.push({
       text: $localize`:@@BasicActions.Ok:Ok`,
       handler: (index: any) => {
-        this.openVariationInNewView(this.variations[parseInt(index)]);
+        this.openVariationInNewView(this.variants[parseInt(index)]);
       }
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Variations.OpenNewVariationDialogTitle:Välj variant`,
-      subHeader:  $localize`:@@Read.Variations.OpenNewVariationDialogSubtitle:Varianten öppnas i en ny kolumn.`,
+      header: $localize`:@@Read.Variants.OpenNewVariationDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variants.OpenNewVariationDialogSubtitle:Varianten öppnas i en ny kolumn.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs
@@ -192,21 +183,50 @@ export class VariantsComponent implements OnInit {
     await alert.present();
   }
 
-  openVariationInNewView(variation?: any) {
-    variation.viewType = 'variations';
-    this.textService.variationsOrder.push(variation.sort_order - 1);
-    this.openNewVarView.emit(variation);
+  emitOutputValues(variant: any) {
+    // Emit the var id so the read page can update queryParams
+    this.emitSelectedVariantId(variant.id);
+    // Emit the var sort_order so the read page can update queryParams
+    this.emitSelectedVariantSortOrder(variant.sort_order);
+    // Emit the var name so the read page can display it in the column header
+    this.emitSelectedVariantName(variant.name);
+  }
+
+  emitSelectedVariantId(id: number) {
+    this.selectedVarID.emit(id);
+  }
+
+  emitSelectedVariantName(name: string) {
+    this.selectedVarName.emit(name);
+  }
+
+  emitSelectedVariantSortOrder(order: number) {
+    this.selectedVarSortOrder.emit(order);
+  }
+
+  openNewVar(event: Event, id: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    id.viewType = 'variants';
+    this.openNewVarView.emit(id);
+  }
+
+  openVariationInNewView(variant?: any) {
+    variant.viewType = 'variants';
+    this.openNewVarView.emit(variant);
     this.commonFunctions.scrollLastViewIntoView();
   }
 
+  /*
   openAllVariations() {
-    this.variations.forEach((variation: any) => {
-      if (this.selectedVariation.id !== variation.id) {
-        variation.viewType = 'variations';
-        this.openNewVarView.emit(variation);
+    this.variants.forEach((variant: any) => {
+      if (this.selectedVariant.id !== variant.id) {
+        variant.viewType = 'variants';
+        this.openNewVarView.emit(variant);
       }
     });
   }
+  */
 
   openNewLegend(event: Event) {
     event.preventDefault();
@@ -217,43 +237,6 @@ export class VariantsComponent implements OnInit {
     }
     this.openNewLegendView.emit(id);
     this.commonFunctions.scrollLastViewIntoView();
-  }
-
-  /**
-   * Store the sort order of the selected variation in this variations column to textService.
-   * @param event Event triggered when pressing the change variation button in this variations column.
-   * */
-  updateVariationSortOrderInService(event: any) {
-    if (event.target) {
-      let currentVarElemContainer = event.target as HTMLElement;
-      while (currentVarElemContainer !== null
-        && !currentVarElemContainer.classList.contains('read-column')
-        && currentVarElemContainer.parentElement !== null) {
-          currentVarElemContainer = currentVarElemContainer.parentElement;
-      }
-      if (currentVarElemContainer !== null) {
-        const varElemColumnIds = [] as any;
-        const columnElems = Array.from(document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) div.read-column'));
-        if (columnElems) {
-          columnElems.forEach(function(columnElem) {
-            const varElem = columnElem.querySelector('variants');
-            if (varElem && columnElem.id) {
-              varElemColumnIds.push(columnElem.id);
-            }
-          });
-          let currentVarElemIndex = undefined;
-          for (let k = 0; k < varElemColumnIds.length; k++) {
-            if (varElemColumnIds[k] === currentVarElemContainer.id) {
-              currentVarElemIndex = k;
-              break;
-            }
-          }
-          if (currentVarElemIndex !== undefined && this.sortOrder) {
-            this.textService.variationsOrder[currentVarElemIndex] = this.sortOrder;
-          }
-        }
-      }
-    }
   }
 
 }

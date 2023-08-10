@@ -110,8 +110,8 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
         }
       },
       error: (e) => {
-        // TODO: Add translated error message.
-        this.text = 'Ett fel har uppstått. Lästexten kunde inte hämtas.';
+        console.error(e);
+        this.text = $localize`:@@Read.Established.Error:Ett fel har uppstått. Lästexten kunde inte hämtas.`;
       }
     });
   }

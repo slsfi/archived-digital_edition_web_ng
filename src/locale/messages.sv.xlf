@@ -756,6 +756,12 @@
         <target>Kommentarer</target>
       </segment>
     </unit>
+    <unit id="Read.Comments.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Kommentarer kunde inte hämtas.</source>
+        <target>Ett fel har uppstått. Kommentarer kunde inte hämtas.</target>
+      </segment>
+    </unit>
     <unit id="Read.Comments.Manuscript.Archive">
       <segment state="initial">
         <source>Arkiv</source>
@@ -886,6 +892,12 @@
       <segment state="initial">
         <source>Lästext</source>
         <target>Lästext</target>
+      </segment>
+    </unit>
+    <unit id="Read.Established.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Lästexten kunde inte hämtas.</source>
+        <target>Ett fel har uppstått. Lästexten kunde inte hämtas.</target>
       </segment>
     </unit>
     <unit id="Read.Established.NoEstablished">
@@ -1096,6 +1108,12 @@
       <segment state="initial">
         <source>Byt manuskript</source>
         <target>Byt manuskript</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Manuskript kunde inte hämtas.</source>
+        <target>Ett fel har uppstått. Manuskript kunde inte hämtas.</target>
       </segment>
     </unit>
     <unit id="Read.Manuscripts.NoManuscripts">
@@ -1404,52 +1422,64 @@
         <target>Titelblad</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.AddButtonText">
+    <unit id="Read.Variants.AddButtonText">
       <segment state="initial">
-        <source>Tryckta varianter</source>
-        <target>Tryckta varianter</target>
+        <source>Tryckt variant</source>
+        <target>Tryckt variant</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.ChangeVariation">
+    <unit id="Read.Variants.ChangeVariation">
       <segment state="initial">
         <source>Byt variant</source>
         <target>Byt variant</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.NoVariations">
+    <unit id="Read.Variants.Error">
+      <segment state="initial">
+        <source>Ett fel har uppstått. Varianter kunde inte laddas.</source>
+        <target>Ett fel har uppstått. Varianter kunde inte laddas.</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variants.NoVariations">
       <segment state="initial">
         <source>Inga tryckta varianter tillgängliga.</source>
         <target>Inga tryckta varianter tillgängliga.</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.OpenNewVariation">
+    <unit id="Read.Variants.OpenNewVariation">
       <segment state="initial">
         <source>Öppna ny variant</source>
         <target>Öppna ny variant</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.OpenNewVariationDialogSubtitle">
+    <unit id="Read.Variants.OpenNewVariationDialogSubtitle">
       <segment state="initial">
         <source>Varianten öppnas i en ny kolumn.</source>
         <target>Varianten öppnas i en ny kolumn.</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.OpenNewVariationDialogTitle">
+    <unit id="Read.Variants.OpenNewVariationDialogTitle">
       <segment state="initial">
         <source>Välj variant</source>
         <target>Välj variant</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.SelectVariationDialogSubtitle">
+    <unit id="Read.Variants.SelectVariationDialogSubtitle">
       <segment state="initial">
         <source>Varianten ersätter den variant som visas i kolumnen där du klickade.</source>
         <target>Varianten ersätter den variant som visas i kolumnen där du klickade.</target>
       </segment>
     </unit>
-    <unit id="Read.Variations.SelectVariationDialogTitle">
+    <unit id="Read.Variants.SelectVariationDialogTitle">
       <segment state="initial">
         <source>Välj variant</source>
         <target>Välj variant</target>
+      </segment>
+    </unit>
+    <unit id="Read.Variants.Title">
+      <segment state="initial">
+        <source>Tryckt variant</source>
+        <target>Tryckt variant</target>
       </segment>
     </unit>
     <unit id="Reference.established">
@@ -1726,12 +1756,6 @@
       <segment state="initial">
         <source>Tryckt variant</source>
         <target>Tryckt variant</target>
-      </segment>
-    </unit>
-    <unit id="variations">
-      <segment state="initial">
-        <source>Tryckta varianter</source>
-        <target>Tryckta varianter</target>
       </segment>
     </unit>
   </file>

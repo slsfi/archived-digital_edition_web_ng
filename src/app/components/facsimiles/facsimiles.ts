@@ -26,6 +26,7 @@ export class FacsimilesComponent implements OnInit {
   @Input() imageNr: number | undefined = undefined;
   @Input() textItemID: string = '';
   @Output() selectedFacsID = new EventEmitter<number>();
+  @Output() selectedFacsName = new EventEmitter<string>();
   @Output() selectedImageNr = new EventEmitter<number | null>();
   
   angle: number = 0;
@@ -103,7 +104,7 @@ export class FacsimilesComponent implements OnInit {
         }
       },
       error: (e) => {
-        console.log(e);
+        console.error(e);
         this.text = $localize`:@@Read.Facsimiles.Error:Ett fel har uppstått. Faksimil kunde inte hämtas.`;
       }
     });
@@ -129,6 +130,7 @@ export class FacsimilesComponent implements OnInit {
       ) {
         this.selectedFacsimileIsExternal = true;
         this.emitSelectedFacsimileId(0);
+        this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`);
       } else {
         this.selectedFacsimile = this.facsimiles[0];
       }
@@ -145,6 +147,7 @@ export class FacsimilesComponent implements OnInit {
     if (facs === 'external') {
       this.selectedFacsimileIsExternal = true;
       this.emitSelectedFacsimileId(0);
+      this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`);
       this.emitImageNumber(null);
     } else if (facs) {
       this.initializeDisplayedFacsimile(facs);
@@ -173,6 +176,7 @@ export class FacsimilesComponent implements OnInit {
 
     if (this.facsimiles.length > 1 || this.externalFacsimiles.length > 0) {
       this.emitSelectedFacsimileId(facs.facsimile_id);
+      this.emitSelectedFacsimileName(facs.title);
     }
 
     if (this.numberOfImages > 1) {
@@ -246,6 +250,14 @@ export class FacsimilesComponent implements OnInit {
 
   emitSelectedFacsimileId(id: number) {
     this.selectedFacsID.emit(id);
+  }
+
+  emitSelectedFacsimileName(name: string) {
+    if (
+      this.facsimiles.length > 1 ||
+      (this.facsimiles.length == 1 && this.externalFacsimiles.length > 0)) {
+      this.selectedFacsName.emit(name);
+    }
   }
 
   emitImageNumber(nr: number | null) {

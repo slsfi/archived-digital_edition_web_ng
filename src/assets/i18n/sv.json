@@ -42,12 +42,14 @@
         "Established": {
             "Title": "Lästext",
             "AddButtonText": "Lästext",
-            "NoEstablished": "Det finns ingen utskriven lästext, se faksimil."
+            "NoEstablished": "Det finns ingen utskriven lästext, se faksimil.",
+            "Error": "Ett fel har uppstått. Lästexten kunde inte hämtas."
         },
         "Comments": {
             "Title": "Kommentarer",
             "AddButtonText": "Kommentarer",
             "NoComments": "Inga kommentarer.",
+            "Error": "Ett fel har uppstått. Kommentarer kunde inte hämtas.",
             "Manuscript": {
                 "Title": "Manuskriptbeskrivning",
                 "LegacyId": "Brevsignum",
@@ -77,18 +79,20 @@
             "NoManuscripts": "Inga manuskriptutskrifter.",
             "ChangeManuscript": "Byt manuskript",
             "SelectMsDialogTitle": "Välj manuskript",
-            "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade."
+            "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.",
+            "Error": "Ett fel har uppstått. Manuskript kunde inte hämtas."
         },
-        "Variations": {
-            "Title": "Tryckta varianter",
-            "AddButtonText": "Tryckta varianter",
+        "Variants": {
+            "Title": "Tryckt variant",
+            "AddButtonText": "Tryckt variant",
             "NoVariations": "Inga tryckta varianter tillgängliga.",
             "ChangeVariation": "Byt variant",
             "OpenNewVariation": "Öppna ny variant",
             "SelectVariationDialogTitle": "Välj variant",
             "SelectVariationDialogSubtitle": "Varianten ersätter den variant som visas i kolumnen där du klickade.",
             "OpenNewVariationDialogTitle": "Välj variant",
-            "OpenNewVariationDialogSubtitle": "Varianten öppnas i en ny kolumn."
+            "OpenNewVariationDialogSubtitle": "Varianten öppnas i en ny kolumn.",
+            "Error": "Ett fel har uppstått. Varianter kunde inte laddas."
         },
         "Facsimiles": {
             "Title": "Faksimil",
@@ -371,7 +375,7 @@
     "comments": "Kommentarer",
     "facsimiles": "Faksimil",
     "manuscripts": "Manuskript",
-    "variations": "Tryckta varianter",
+    "variants": "Tryckta varianter",
     "introduction": "Inledning",
     "illustrations": "Illustrationer",
     "legend": "Teckenförklaringar",

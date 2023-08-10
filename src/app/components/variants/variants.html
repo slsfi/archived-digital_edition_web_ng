@@ -1,10 +1,10 @@
-<ion-spinner *ngIf="textLoading" class="loading" name="crescent"></ion-spinner>
+<ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
 
-<div *ngIf="!textLoading && variations.length>0" class="text-select-wrapper">
-  <h3 [innerHTML]="selectedVariationName"></h3>
+<div *ngIf="text && variants.length>0" class="text-select-wrapper">
+  <h3 [innerHTML]="selectedVariant.name"></h3>
   <div class="flex-buttons">
-    <ion-button class="custom-button" (click)="selectVariation($event)" i18n="@@Read.Variations.ChangeVariation">Byt variant</ion-button>
-    <ion-button class="custom-outline-button" fill="outline" (click)="selectVariationForNewView()" i18n="@@Read.Variations.OpenNewVariation">Öppna ny variant</ion-button>
+    <ion-button class="custom-button" (click)="selectVariant($event)" i18n="@@Read.Variants.ChangeVariation">Byt variant</ion-button>
+    <ion-button class="custom-outline-button" fill="outline" (click)="selectVariantForNewView()" i18n="@@Read.Variants.OpenNewVariation">Öppna ny variant</ion-button>
     <ion-button *ngIf="showOpenLegendButton" fill="outline" slot="icon-only" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="Teckenförklaringar" i18n-title="@@Read.Legend.Title">
       <ion-icon name="help-outline"></ion-icon>
     </ion-button>
@@ -12,7 +12,6 @@
 </div>
 
 <div class="tei teiContainer teiVariant" [innerHTML]="text"
-[class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering"
-[class.show_pageBreakOriginal]="readPopoverService.show.pageBreakOriginal"
-[ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+  [class.show_pageBreakOriginal]="readPopoverService.show.pageBreakOriginal"
+  [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
 ></div>

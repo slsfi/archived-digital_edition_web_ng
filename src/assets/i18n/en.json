@@ -42,12 +42,14 @@
         "Established": {
             "Title": "Established text",
             "AddButtonText": "Established text view",
-            "NoEstablished": "No established text, see facsimiles."
+            "NoEstablished": "No established text, see facsimiles.",
+            "Error": "An error occurred. The established text could not be loaded."
         },
         "Comments": {
             "Title": "Comments",
             "AddButtonText": "Comments view",
             "NoComments": "No comments.",
+            "Error": "An error occurred. Comments could not be loaded.",
 			"Manuscript": {
                 "Title": "Manuskriptbeskrivning",
                 "LegacyId": "Brevsignum",
@@ -77,18 +79,20 @@
             "NoManuscripts": "No transcribed manuscripts.",
             "ChangeManuscript": "Change manuscript",
             "SelectMsDialogTitle": "Select manuscript",
-            "SelectMsDialogSubtitle": "The manuscript will be shown in the column where you clicked."
+            "SelectMsDialogSubtitle": "The manuscript will be shown in the column where you clicked.",
+            "Error": "An error occurred. Manuscripts could not be loaded."
         },
-        "Variations": {
-            "Title": "Variants",
-            "AddButtonText": "Variant view",
+        "Variants": {
+            "Title": "Variant",
+            "AddButtonText": "Variant",
             "NoVariations": "No variants available.",
             "ChangeVariation": "Change variant",
             "OpenNewVariation": "Open new variant",
             "SelectVariationDialogTitle": "Select variant",
             "SelectVariationDialogSubtitle": "The variant will be shown in the column where you clicked.",
             "OpenNewVariationDialogTitle": "Select variant",
-            "OpenNewVariationDialogSubtitle": "The variant will open in a new column."
+            "OpenNewVariationDialogSubtitle": "The variant will open in a new column.",
+            "Error": "An error occurred. Variants could not be loaded."
         },
         "Facsimiles": {
             "Title": "Facsimiles",
@@ -371,7 +375,7 @@
     "comments": "Commentary",
     "facsimiles": "Fascimile",
     "manuscripts": "Manuscript",
-    "variations": "Variants",
+    "variants": "Variants",
     "introduction": "Introduction",
     "illustrations": "Illustrations",
     "legend": "Legend",

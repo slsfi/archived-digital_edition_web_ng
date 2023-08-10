@@ -42,12 +42,14 @@
         "Established": {
             "Title": "Lukuteksti",
             "AddButtonText": "Lukuteksti",
-            "NoEstablished": "Lukutekstiä ei ole, katso faksimile."
+            "NoEstablished": "Lukutekstiä ei ole, katso faksimile.",
+            "Error": "Lukutekstin lataus epäonnistui."
         },
         "Comments": {
             "Title": "Kommentaari",
             "AddButtonText": "Kommentaari",
             "NoComments": "Ei kommentteja.",
+            "Error": "Kommenttien lataus epäonnistui.",
             "Manuscript": {
                 "Title": "Manuskriptbeskrivning",
                 "LegacyId": "Brevsignum",
@@ -77,18 +79,20 @@
             "NoManuscripts": "Ei transkriboituja käsikirjoituksia.",
             "ChangeManuscript": "Vaihda käsikirjoitusta",
             "SelectMsDialogTitle": "Valitse käsikirjoitus",
-            "SelectMsDialogSubtitle": "Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen."
+            "SelectMsDialogSubtitle": "Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen.",
+            "Error": "Käsikirjoitusten lataus epäonnistui."
         },
-        "Variations": {
-            "Title": "Painetut variantit",
-            "AddButtonText": "Painetut variantit",
+        "Variants": {
+            "Title": "Painettu variantti",
+            "AddButtonText": "Painettu variantti",
             "NoVariations": "Painettuja variantteja ei ole saatavilla.",
             "ChangeVariation": "Vaihda varianttia",
             "OpenNewVariation": "Avaa uusi variantti",
             "SelectVariationDialogTitle": "Valitse variantti",
             "SelectVariationDialogSubtitle": "Valittu variantti korvaa sarakkeen variantin.",
             "OpenNewVariationDialogTitle": "Valitse variantti",
-            "OpenNewVariationDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen."
+            "OpenNewVariationDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen.",
+            "Error": "Varianttien lataus epäonnistui."
         },
         "Facsimiles": {
             "Title": "Faksimile",
@@ -371,7 +375,7 @@
     "comments": "Kommentaari",
     "facsimiles": "Faksimilet",
     "manuscripts": "Käsikirjoitukset",
-    "variations": "Painetut variantit",
+    "variants": "Painetut variantit",
     "introduction": "Johdanto",
     "illustrations": "Kuvat",
     "legend": "Lukuohje",
