@@ -1,5 +1,6 @@
-<ion-content class="card-background-page" [ngClass]="printContentClasses()">
-  <ng-container>
-    <epub *ngIf="epubFileName" [epubFileName]="epubFileName" id="epub-page-container"></epub>
-  </ng-container>
-</ion-content>
+<epub *ngIf="epubFileName"
+      id="epub-page-container"
+      class="ion-page"
+      [ngClass]="printContentClasses()"
+      [epubFileName]="epubFileName"
+></epub>

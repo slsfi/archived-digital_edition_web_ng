@@ -1,114 +1,153 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
-    <ion-buttons *ngIf="epubFileExists">
-        <ion-grid>
-            <ion-row class="secondary-toolbar-icons-wrapper">
-              <ion-col class="navigation-buttons-col" *ngIf="userSettingsService.isDesktop()">
-                <ion-button fill="clear" class="navigation-buttons" [ngClass]="atStart ? 'disabled-nav-button' : ''" id="epub-arrow-prev" (click)="prev()" *ngIf="!loading">
-                  <ion-icon name="arrow-back"></ion-icon>
-                </ion-button>
-              </ion-col>
-              <ion-col class="navigation-buttons-col current-section-label-col" *ngIf="userSettingsService.isDesktop()">
-                <div class="current-section-label" *ngIf="!loading">
-                  <span [innerHTML]="currentSectionLabel"></span>
-                </div>
-              </ion-col>
-              <ion-col class="navigation-buttons-col" *ngIf="userSettingsService.isDesktop()">
-                <ion-button fill="clear" class="navigation-buttons" [ngClass]="atEnd ? 'disabled-nav-button' : ''" id="epub-arrow-next" (click)="next()" *ngIf="!loading">
-                  <ion-icon name="arrow-forward"></ion-icon>
-                </ion-button>
-              </ion-col>
-              <ion-col class="navigation-buttons-toc">
-                <ion-button fill="clear" (click)="downloadEpub()">
-                  <ion-icon name="download" class="intro-dowload-button"></ion-icon>
-                  <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Epub.Download">Ladda ner</span>
-                </ion-button>
-                <ion-button *ngIf="showURNButton" fill="clear" (click)="showReference()">
-                  <ion-icon class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-                  <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Reference.refer">Hänvisa</span>
-                </ion-button>
-                <ion-button *ngIf="showViewOptionsButton" fill="clear" (click)="showReadSettingsPopover($event)">
-                  <ion-icon class="settings-icon" name="settings"></ion-icon>
-                  <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Epub.DisplayOptions">Textstorlek</span>
-                </ion-button>
-                <ion-button fill="clear" (click)="toggleSearchMenu()">
-                  <ion-icon name="search" class="intro-search-button" *ngIf="!searchMenuOpen"></ion-icon>
-                  <ion-icon name="close" class="intro-search-button" *ngIf="searchMenuOpen"></ion-icon>
-                  <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Epub.Search">Sök</span>
-                </ion-button>
-                <ion-button fill="clear" [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'" (click)="toggleTocMenu()">
-                  <ion-icon name="list" class="intro-toc-button" *ngIf="!tocMenuOpen"></ion-icon>
-                  <ion-icon name="close" class="intro-toc-button" *ngIf="tocMenuOpen"></ion-icon>
-                  <span *ngIf="!(userSettingsService.isMobile())" class="side-title" i18n="@@Epub.Contents">Innehåll</span>
-                </ion-button>
-              </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-buttons>
+
+    <ng-container *ngIf="epubFileExists">
+      <div *ngIf="userSettingsService.isDesktop() && !loading" class="epub-nav-buttons">
+        <ion-button id="epub-arrow-prev"
+              class="navigation-buttons"
+              [class.disabled-nav-button]="atStart"
+              [disabled]="atStart"
+              (click)="prev()"
+        >
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+        <p class="current-section-label" [innerHTML]="currentSectionLabel"></p>
+        <ion-button id="epub-arrow-next"
+              class="navigation-buttons"
+              [class.disabled-nav-button]="atEnd"
+              [disabled]="atEnd"
+              (click)="next()"
+        >
+          <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
+        </ion-button>
+      </div>
+
+      <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
+        <ion-button (click)="downloadEpub()">
+          <ion-icon slot="start" name="download"></ion-icon>
+          <span class="side-title" i18n="@@Epub.Download">Ladda ner</span>
+        </ion-button>
+        <ion-button *ngIf="showURNButton" (click)="showReference()">
+          <ion-icon slot="start" name="arrow-redo-sharp"></ion-icon>
+          <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+        </ion-button>
+        <ion-button *ngIf="showViewOptionsButton" (click)="showReadSettingsPopover($event)">
+          <ion-icon slot="start" name="settings"></ion-icon>
+          <span class="side-title" i18n="@@Epub.DisplayOptions">Textstorlek</span>
+        </ion-button>
+        <ion-button (click)="toggleSearchMenu()">
+          <ion-icon slot="start" name="search" [class.visuallyhidden]="searchMenuOpen"></ion-icon>
+          <ion-icon slot="start" name="close" [class.visuallyhidden]="!searchMenuOpen"></ion-icon>
+          <span class="side-title" i18n="@@Epub.Search">Sök</span>
+        </ion-button>
+        <ion-button [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'" (click)="toggleTocMenu()">
+          <ion-icon slot="start" name="list" [class.visuallyhidden]="tocMenuOpen"></ion-icon>
+          <ion-icon slot="start" name="close" [class.visuallyhidden]="!tocMenuOpen"></ion-icon>
+          <span class="side-title" i18n="@@Epub.Contents">Innehåll</span>
+        </ion-button>
+      </ion-buttons>
+    </ng-container>
+
   </ion-toolbar>
 </ion-header>
 
-<div id="search_menu" [ngClass]="searchMenuOpen ? 'searchOpen' : 'searchClosed'">
-  <ion-grid>
-    <ion-row class="search-bar">
-      <ion-col class="navigation-buttons-col">
-        <ion-searchbar class="epub-search-bar" (ionChange)=doSearch($event) (ionClear)="clearSearch()" *ngIf="!loading" [(ngModel)]="searchText" placeholder="Söktext" i18n-placeholder="@@Epub.SearchPhrase"></ion-searchbar>
-      </ion-col>
-    </ion-row>
-    <ion-row class="secondary-toolbar-icons-wrapper">
-      <ion-col class="navigation-buttons-col search-nav-button">
-        <ion-button *ngIf="!loading" fill="clear" class="navigation-buttons" (click)="prevSearch()">
-          <ion-icon name="arrow-back"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col class="navigation-buttons-col">
-          <div class="search-count" *ngIf="!loading">
-            <span *ngIf="searchResultIndex === 0 && searchResults.length>0">1 / {{searchResults.length}}</span>
-            <span *ngIf="searchResultIndex > 0">{{searchResultIndex + 1}} / {{searchResults.length}}</span>
-          </div>
-      </ion-col>
-      <ion-col class="navigation-buttons-col search-nav-button">
-        <ion-button *ngIf="!loading" fill="clear" class="navigation-buttons" (click)="nextSearch()">
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</div>
+<ion-content class="epub-ion-content">
+  <div class="epub-content-wrapper">
 
-<div id="toc-text" [ngClass]="tocMenuOpen ? 'menuOpen' : 'menuClosed'" (click)="toggleTocMenu()">
-</div>
+    <div *ngIf="!loading" id="epub-search-menu" [ngClass]="searchMenuOpen ? 'searchOpen' : 'searchClosed'">
+      <ion-searchbar class="epub-search-bar"
+            (ionInput)="doSearch($event)"
+            (ionClear)="clearSearch()"
+            [(ngModel)]="searchText"
+            placeholder="Söktext"
+            i18n-placeholder="@@Epub.SearchPhrase"
+            inputmode="text"
+            [debounce]="250"
+      ></ion-searchbar>
+      <ion-button fill="clear"
+            class="navigation-buttons"
+            (click)="prevSearch()"
+            [disabled]="searchResults.length < 1 || (searchResultIndex === 0 && searchResults.length > 0)"
+      >
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+      <div class="search-count">
+        <span *ngIf="searchResultIndex === 0 && searchResults.length>0">1 / {{searchResults.length}}</span>
+        <span *ngIf="searchResultIndex > 0">{{searchResultIndex + 1}} / {{searchResults.length}}</span>
+      </div>
+      <ion-button fill="clear"
+            class="navigation-buttons"
+            (click)="nextSearch()"
+            [disabled]="searchResults.length < 1 || searchResultIndex > searchResults.length-2"
+      >
+        <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
+      </ion-button>
+    </div>
 
-<div class="toc-epub-container">
-  <div *ngIf="loading" class="spinner-wrapper">
-    <ion-spinner class="loading" name="crescent"></ion-spinner>
+    <div id="epub-toc-menu"
+          [ngClass]="tocMenuOpen ? 'menuOpen' : 'menuClosed'"
+          [tabIndex]="tocMenuOpen ? '0' : '-1'"
+          (click)="toggleTocMenu()"
+    >
+      <img *ngIf="epubCoverImageSrc" class="epub-cover" alt="cover" [src]="epubCoverImageSrc">
+      <p *ngIf="epubWritersString" class="epub-creator">{{epubWritersString}}</p>
+      <p *ngIf="epubTitle" class="epub-title">{{epubTitle}}</p>
+      <hr *ngIf="epubWritersString || epubTitle">
+      <ol *ngIf="epubToc && epubToc.length > 0" role="menu">
+        <ng-container *ngTemplateOutlet="recursiveMenu; context: {$implicit: epubToc}"/>
+      </ol>
+    </div>
+
+    <div class="toc-epub-container">
+      <div *ngIf="loading" class="spinner-wrapper">
+        <ion-spinner class="loading" name="crescent"></ion-spinner>
+      </div>
+      <div *ngIf="epubFileExists" id="area"></div>
+      <p *ngIf="!epubFileExists" class="epub-error-message" i18n="@@Epub.FileNotFound">Texten kunde inte laddas. Epub-filen saknas.</p>
+    </div>
+
+    <!--
+    <div class="text-changer-mobile-mode" *ngIf="userSettingsService.isMobile() && epubFileExists">
+      <ion-grid class="text-changer-wrapper">
+          <ion-row class="secondary-toolbar-icons-wrapper">
+            <ion-col class="navigation-buttons-col">
+              <ion-button fill="clear" class="navigation-buttons" [ngClass]="atStart ? 'disabled-nav-button' : ''" id="epub-arrow-prev" (click)="prev()" *ngIf="!loading">
+                <ion-icon name="arrow-back"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col class="navigation-buttons-col text-changer-current-section-label-col">
+              <div class="current-section-label" *ngIf="!loading">
+                <span [innerHTML]="currentSectionLabel"></span>
+              </div>
+            </ion-col>
+            <ion-col class="navigation-buttons-col">
+              <ion-button fill="clear" class="navigation-buttons" [ngClass]="atEnd ? 'disabled-nav-button' : ''" id="epub-arrow-next" (click)="next()" *ngIf="!loading">
+                <ion-icon name="arrow-forward"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+    </div>
+    -->
+
+    <div class="current-position-container" *ngIf="!loading && epubFileExists">
+      <span [innerHTML]="currentPositionPercentage"></span>
+    </div>
   </div>
-  <div *ngIf="epubFileExists" id="area"></div>
-  <p class="epub-error-message" *ngIf="!epubFileExists" i18n="@@Epub.FileNotFound">Texten kunde inte laddas. Epub-filen saknas.</p>
-</div>
 
-<div class="text-changer-mobile-mode" *ngIf="userSettingsService.isMobile() && epubFileExists">
-  <ion-grid class="text-changer-wrapper">
-      <ion-row class="secondary-toolbar-icons-wrapper">
-        <ion-col class="navigation-buttons-col">
-          <ion-button fill="clear" class="navigation-buttons" [ngClass]="atStart ? 'disabled-nav-button' : ''" id="epub-arrow-prev" (click)="prev()" *ngIf="!loading">
-            <ion-icon name="arrow-back"></ion-icon>
-          </ion-button>
-        </ion-col>
-        <ion-col class="navigation-buttons-col text-changer-current-section-label-col">
-          <div class="current-section-label" *ngIf="!loading">
-            <span [innerHTML]="currentSectionLabel"></span>
-          </div>
-        </ion-col>
-        <ion-col class="navigation-buttons-col">
-          <ion-button fill="clear" class="navigation-buttons" [ngClass]="atEnd ? 'disabled-nav-button' : ''" id="epub-arrow-next" (click)="next()" *ngIf="!loading">
-            <ion-icon name="arrow-forward"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-  </ion-grid>
-</div>
+</ion-content>
 
-<div class="current-position-container" *ngIf="!loading && epubFileExists">
-  <span [innerHTML]="currentPositionPercentage"></span>
-</div>
+<ng-template #recursiveMenu let-list>
+  <ng-container *ngFor="let item of list">
+    <li role="menuitem">
+      <a *ngIf="item.href"
+            [href]="'ebook/' + epubFileName + '/' + item.href"
+            [tabIndex]="tocMenuOpen ? '' : '-1'"
+            (click)="openChapter($event, item.href)"
+      >{{item.label}}</a>
+      <ol *ngIf="item.subitems?.length > 0" role="menu">
+        <ng-container *ngTemplateOutlet="recursiveMenu; context: {$implicit: item.subitems}"/>
+      </ol>
+    </li>
+  </ng-container>
+</ng-template>
