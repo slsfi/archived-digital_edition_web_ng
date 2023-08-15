@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
   providedIn: 'root',
 })
 export class UserSettingsService {
-  private _mode: string = 'desktop'; // mode is either desktop or mobile
+  private mode: string = 'desktop'; // mode is either desktop or mobile
 
   constructor(
     private platform: Platform
@@ -16,22 +16,22 @@ export class UserSettingsService {
 
   detectPlatform() {
     try {
-      if (this.platform.is('mobile') || this.platform.is('tablet')) {
-        this._mode = 'mobile';
+      if (this.platform.is('desktop')) {
+        this.mode = 'desktop';
       } else {
-        this._mode = 'desktop';
+        this.mode = 'mobile';
       }
     } catch (e) {
-      this._mode = 'desktop';
+      this.mode = 'desktop';
     }
   }
 
   isMobile() {
-    return this._mode === 'mobile';
+    return this.mode === 'mobile';
   }
 
   isDesktop() {
-    return this._mode === 'desktop';
+    return this.mode === 'desktop';
   }
 
 }
