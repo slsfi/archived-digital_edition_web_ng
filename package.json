@@ -31,6 +31,7 @@
     "@jsonurl/jsonurl": "^1.1.7",
     "@nguniversal/express-engine": "^15.2.0",
     "@sentry/browser": "^7.29.0",
+    "epubjs": "~0.3.93",
     "express": "^4.15.2",
     "htmlparser2": "^9.0.0",
     "install": "^0.13.0",
