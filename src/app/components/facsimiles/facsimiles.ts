@@ -350,7 +350,7 @@ export class FacsimilesComponent implements OnInit {
 
   zoomWithMouseWheel(event: any) {
     if (event.target) {
-      if (event.deltaY > 0) {
+      if (event.deltaY < 0) {
         this.zoomIn();
       } else {
         this.zoomOut();
