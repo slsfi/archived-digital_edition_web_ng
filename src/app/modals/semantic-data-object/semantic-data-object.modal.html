@@ -20,7 +20,7 @@
   
         <div class="sd-header" *ngIf="data">
           <h2>
-            <span *ngIf="data?.details?.occupation && !hideTypeAndDescription" class="occupation">{{data.details.occupation}} – </span><span class="title" [innerHTML]="data?.details?.title"></span><span *ngIf="data?.details?.year_born_deceased" class="date"> {{data.details.year_born_deceased}}</span><span *ngIf="data?.details?.latitude && data?.details?.longitude" class="coordinates"> (<a [href]="'https://www.openstreetmap.org/?mlat=' + data.details.latitude + '&mlon=' + data.details.longitude" target="_blank"><ng-container i18n="@@Occurrences.latitude">lat.</ng-container> {{data.details.latitude}}, <ng-container i18n="@@Occurrences.longitude">long.</ng-container> {{data.details.longitude}}</a>)</span>
+            <span *ngIf="data?.details?.occupation && !hideTypeAndDescription" class="occupation">{{data.details.occupation}} – </span><span class="title" [innerHTML]="data?.details?.title"></span><span *ngIf="data?.details?.year_born_deceased" class="date" [innerHTML]="' ' + data.details.year_born_deceased"></span><span *ngIf="data?.details?.latitude && data?.details?.longitude" class="coordinates"> (<a [href]="'https://www.openstreetmap.org/?mlat=' + data.details.latitude + '&mlon=' + data.details.longitude" target="_blank"><ng-container i18n="@@Occurrences.latitude">lat.</ng-container> {{data.details.latitude}}, <ng-container i18n="@@Occurrences.longitude">long.</ng-container> {{data.details.longitude}}</a>)</span>
           </h2>
           <div class="media_image_wrapper" *ngIf="data?.media?.imageUrl">
             <img alt="occurrence image" [src]="data.media.imageUrl">
