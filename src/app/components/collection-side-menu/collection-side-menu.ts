@@ -165,7 +165,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   private recursiveFinding(array: any[], stringForComparison: string): any {
     return array.find(item => {
       if (item.itemId === stringForComparison) {
-        this.headService.setTitle([item.text, this.collectionTitle]);
+        this.headService.setTitle([String(item.text), this.collectionTitle]);
         return item;
       } else if (item.children) {
         const result = this.recursiveFinding(item.children, stringForComparison);

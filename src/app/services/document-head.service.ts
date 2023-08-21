@@ -27,7 +27,7 @@ export class DocumentHeadService {
     setTitle(pageTitleParts: string[] = []) {
         let pageTitle = '';
         for (let i = 0; i < pageTitleParts.length; i++) {
-            if (pageTitleParts[i]) {
+            if (pageTitleParts[i] && pageTitleParts[i].length) {
                 if (pageTitleParts[i].at(-1) === '.') {
                     pageTitleParts[i] = pageTitleParts[i].slice(0, -1);
                 }

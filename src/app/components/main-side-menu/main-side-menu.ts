@@ -313,11 +313,11 @@ export class MainSideMenu implements OnInit, OnChanges {
       if (itemPath === stringForComparison) {
         this.highlightedMenu = item.nodeId;
         if (item.parentPath === '/media-collections' || item.parentPath === '/media-collection') {
-          this.headService.setTitle([item.title, $localize`:@@TOC.MediaCollections:Bildbank`]);
+          this.headService.setTitle([String(item.title), $localize`:@@TOC.MediaCollections:Bildbank`]);
         } else if (!this.topMenuItems.includes(item.parentPath) && this.urlSegments[0]?.path !== 'collection') {
           // For top menu items the title is set by app.component, and
           // for collections the title is set by the collection side menu
-          this.headService.setTitle([item.title]);
+          this.headService.setTitle([String(item.title)]);
         }
         return item;
       } else if (item.children) {
