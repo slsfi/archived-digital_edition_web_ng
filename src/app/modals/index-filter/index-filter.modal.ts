@@ -1,86 +1,61 @@
-import { Component } from '@angular/core';
-import { ModalController, NavController, NavParams } from '@ionic/angular';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule, ModalController } from '@ionic/angular';
+
 import { SemanticDataService } from 'src/app/services/semantic-data.service';
 
-/**
- * This is a modal/page used to filter results.
- * Used by pages person-search, tag-search, place-search.
- */
 
 @Component({
-  selector: 'page-filter',
-  templateUrl: 'filter.html',
-  styleUrls: ['filter.scss']
+  standalone: true,
+  selector: 'modal-index-filter',
+  templateUrl: 'index-filter.modal.html',
+  styleUrls: ['index-filter.modal.scss'],
+  imports: [CommonModule, FormsModule, IonicModule]
 })
-export class FilterPage {
-  errorMessage?: string;
+export class IndexFilterModal implements OnInit {
+  @Input() activeFilters: any = undefined;
+  @Input() searchType: string = '';
+
+  filterCategoryTypes?: any[];
   filterCollections?: any[];
   filterPersonTypes?: any[];
-  filterYearMin?: number;
-  filterYearMax?: number;
-  filterCategoryTypes?: any[];
   filterPlaceCountries?: any[];
+  filterYearMax?: number;
+  filterYearMin?: number;
+  isEmpty: boolean = false;
   shouldFilterYear = false;
-  isEmpty = false;
-  activeFilters: any;
-  showLoading = false;
+  showLoading: boolean = false;
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public viewCtrl: ModalController,
-              public semanticDataService: SemanticDataService
-  ) {
+  constructor(
+    private semanticDataService: SemanticDataService,
+    private modalCtrl: ModalController
+  ) {}
 
-    if ( navParams.get('activeFilters') !== undefined ) {
-      this.activeFilters = navParams.get('activeFilters');
-      if (this.activeFilters['filterYearMin']) {
-        this.filterYearMin = Number(this.activeFilters['filterYearMin']);
-      }
-      if (this.activeFilters['filterYearMax']) {
-        this.filterYearMax = Number(this.activeFilters['filterYearMax']);
-      }
-    } else {
-      this.activeFilters = [];
+  ngOnInit() {
+    if (this.activeFilters?.filterYearMin) {
+      this.filterYearMin = Number(this.activeFilters.filterYearMin);
+    }
+    if (this.activeFilters?.filterYearMax) {
+      this.filterYearMax = Number(this.activeFilters.filterYearMax);
     }
 
-    if (navParams.get('searchType') === 'person-search') {
+    if (this.searchType === 'persons') {
       this.getFilterPersonTypes();
       this.shouldFilterYear = true;
-    }
-    if (navParams.get('searchType') === 'place-search') {
+    } else if (this.searchType === 'places') {
       this.getFilterPlaceCountries();
-    }
-    if (navParams.get('searchType') === 'tag-search') {
+    } else if (this.searchType === 'keywords') {
       this.getFilterCategoryTypes();
     }
   }
 
-  /*
-  getFilterCollections() {
-    this.semanticDataService.getFilterCollections().subscribe(
-      filterCollections => {
-        this.filterCollections = filterCollections;
-      },
-      error =>  {this.errorMessage = <any>error},
-      () => {
-        this.storage.get('filterCollections').then((filterCollections) => {
-          if (filterCollections) {
-            this.filterCollections = filterCollections;
-          } else {
-            console.log('filter collections in cache empty');
-          }
-        });
-      }
-    );
-  }
-  */
-
   getFilterPersonTypes() {
     this.showLoading = true;
-    this.semanticDataService.getFilterPersonTypes().subscribe({
-      next: filterPersonTypes => {
+    this.semanticDataService.getFilterPersonTypes().subscribe(
+      (filterPersonTypes) => {
         this.filterPersonTypes = filterPersonTypes['aggregations']['types']['buckets'];
-        this.filterPersonTypes?.forEach( cat => {
+        this.filterPersonTypes?.forEach(cat => {
           cat.name = cat.key;
           if (this.activeFilters['filterPersonTypes'] && this.activeFilters['filterPersonTypes'].length > 0) {
             for (let i = 0; i < this.activeFilters['filterPersonTypes'].length; i++) {
@@ -96,17 +71,16 @@ export class FilterPage {
           }
         });
         this.showLoading = false;
-      },
-      error: e =>  { this.errorMessage = <any>e; }
-    });
+      }
+    );
   }
 
   getFilterCategoryTypes() {
     this.showLoading = true;
-    this.semanticDataService.getFilterCategoryTypes().subscribe({
-      next: filterCategoryTypes => {
+    this.semanticDataService.getFilterCategoryTypes().subscribe(
+      (filterCategoryTypes) => {
         this.filterCategoryTypes = filterCategoryTypes['aggregations']['types']['buckets'];
-        this.filterCategoryTypes?.forEach( cat => {
+        this.filterCategoryTypes?.forEach(cat => {
           cat.name = cat.key;
           if (this.activeFilters['filterCategoryTypes'] && this.activeFilters['filterCategoryTypes'].length > 0) {
             for (let i = 0; i < this.activeFilters['filterCategoryTypes'].length; i++) {
@@ -122,17 +96,16 @@ export class FilterPage {
           }
         });
         this.showLoading = false;
-      },
-      error: e => { this.errorMessage = <any>e; }
-    });
+      }
+    );
   }
 
   getFilterPlaceCountries() {
     this.showLoading = true;
-    this.semanticDataService.getFilterPlaceCountries().subscribe({
-      next: filterPlaceCountries => {
+    this.semanticDataService.getFilterPlaceCountries().subscribe(
+      (filterPlaceCountries) => {
         this.filterPlaceCountries = filterPlaceCountries['aggregations']['countries']['buckets'];
-        this.filterPlaceCountries?.forEach( cat => {
+        this.filterPlaceCountries?.forEach(cat => {
           cat.name = cat.key;
           if (this.activeFilters['filterPlaceCountries'] && this.activeFilters['filterPlaceCountries'].length > 0) {
             for (let i = 0; i < this.activeFilters['filterPlaceCountries'].length; i++) {
@@ -148,13 +121,12 @@ export class FilterPage {
           }
         });
         this.showLoading = false;
-      },
-      error: e => { this.errorMessage = <any>e; }
-    });
+      }
+    );
   }
 
   apply() {
-    const filters = [] as any;
+    const filters: any = {};
     const filterCollections = [];
     const filterPersonTypes = [];
     const filterCategoryTypes = [];
@@ -206,38 +178,41 @@ export class FilterPage {
     this.checkIfFiltersEmpty(filters);
     filters['isEmpty'] = this.isEmpty;
 
-    this.viewCtrl.dismiss(filters);
+    return this.modalCtrl.dismiss(filters, 'apply');
   }
 
   checkIfFiltersEmpty(filters: any) {
-    if (this.navParams.get('searchType') === 'person-search') {
+    if (this.searchType === 'persons') {
       const d = new Date();
       if (!filters['filterYearMin'] && filters['filterYearMax']) {
         filters['filterYearMin'] = 1;
       }
-      if ((filters['filterYearMin'] && !filters['filterYearMax']) || (Number(filters['filterYearMax']) > d.getFullYear())) {
+      if (
+        (filters['filterYearMin'] && !filters['filterYearMax']) ||
+        (Number(filters['filterYearMax']) > d.getFullYear())
+      ) {
         filters['filterYearMax'] = d.getFullYear();
       }
-      if (!filters['filterYearMin'] && !filters['filterYearMax'] && filters['filterPersonTypes'].length < 1) {
+      if (
+        !filters['filterYearMin'] &&
+        !filters['filterYearMax'] &&
+        filters['filterPersonTypes'].length < 1
+      ) {
         this.isEmpty = true;
       }
     }
 
-    if (this.navParams.get('searchType') === 'place-search') {
-      if (filters['filterPlaceCountries'].length < 1) {
-        this.isEmpty = true;
-      }
+    if (this.searchType === 'places' && filters['filterPlaceCountries'].length < 1) {
+      this.isEmpty = true;
     }
 
-    if (this.navParams.get('searchType') === 'tag-search') {
-      if (filters['filterCategoryTypes'].length < 1) {
-        this.isEmpty = true;
-      }
+    if (this.searchType === 'keywords' && filters['filterCategoryTypes'].length < 1) {
+      this.isEmpty = true;
     }
   }
 
   cancel() {
-    this.viewCtrl.dismiss();
+    return this.modalCtrl.dismiss(null, 'close');
   }
 
 }

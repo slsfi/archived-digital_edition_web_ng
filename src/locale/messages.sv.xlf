@@ -372,54 +372,6 @@
         <target>historisk förebild</target>
       </segment>
     </unit>
-    <unit id="Filter.activeFilters">
-      <segment state="initial">
-        <source>Aktiva avgränsningar</source>
-        <target>Aktiva avgränsningar</target>
-      </segment>
-    </unit>
-    <unit id="Filter.apply">
-      <segment state="initial">
-        <source>Verkställ</source>
-        <target>Verkställ</target>
-      </segment>
-    </unit>
-    <unit id="Filter.bornBetween">
-      <segment state="initial">
-        <source>Född mellan</source>
-        <target>Född mellan</target>
-      </segment>
-    </unit>
-    <unit id="Filter.countries">
-      <segment state="initial">
-        <source>Land</source>
-        <target>Land</target>
-      </segment>
-    </unit>
-    <unit id="Filter.personTypes">
-      <segment state="initial">
-        <source>Personkategori</source>
-        <target>Personkategori</target>
-      </segment>
-    </unit>
-    <unit id="Filter.tagTypes">
-      <segment state="initial">
-        <source>Ämneskategori</source>
-        <target>Ämneskategori</target>
-      </segment>
-    </unit>
-    <unit id="Filter.title">
-      <segment state="initial">
-        <source>Avgränsningar</source>
-        <target>Avgränsningar</target>
-      </segment>
-    </unit>
-    <unit id="Filter.year">
-      <segment state="initial">
-        <source>Född</source>
-        <target>Född</target>
-      </segment>
-    </unit>
     <unit id="fore">
       <segment state="initial">
         <source>Förord</source>
@@ -438,28 +390,94 @@
         <target>Illustrationer</target>
       </segment>
     </unit>
-    <unit id="IndexOfPersons.searchPlaceholder">
+    <unit id="Index.ActiveFilters">
+      <segment state="initial">
+        <source>Aktiva avgränsningar</source>
+        <target>Aktiva avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="Index.Born">
+      <segment state="initial">
+        <source>Födda</source>
+        <target>Födda</target>
+      </segment>
+    </unit>
+    <unit id="Index.ClearFilters">
+      <segment state="initial">
+        <source>Ta bort aktiva avgränsningar</source>
+        <target>Ta bort aktiva avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="Index.Filter">
+      <segment state="initial">
+        <source>Avgränsa</source>
+        <target>Avgränsa</target>
+      </segment>
+    </unit>
+    <unit id="Index.Reset">
+      <segment state="initial">
+        <source>Ta bort sökord och aktiva avgränsningar</source>
+        <target>Ta bort sökord och aktiva avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="Index.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
         <target>Sök ...</target>
       </segment>
     </unit>
-    <unit id="IndexOfPlaces.searchPlaceholder">
+    <unit id="Index.ShownRecords">
       <segment state="initial">
-        <source>Sök ...</source>
-        <target>Sök ...</target>
+        <source>Visade poster</source>
+        <target>Visade poster</target>
       </segment>
     </unit>
-    <unit id="IndexOfTags.searchPlaceholder">
+    <unit id="IndexFilter.Apply">
       <segment state="initial">
-        <source>Sök ...</source>
-        <target>Sök ...</target>
+        <source>Verkställ</source>
+        <target>Verkställ</target>
       </segment>
     </unit>
-    <unit id="IndexOfWorks.searchPlaceholder">
+    <unit id="IndexFilter.Born">
       <segment state="initial">
-        <source>Sök ...</source>
-        <target>Sök ...</target>
+        <source>Födda</source>
+        <target>Födda</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.Countries">
+      <segment state="initial">
+        <source>Länder</source>
+        <target>Länder</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.EarliestYear">
+      <segment state="initial">
+        <source>Tidigast år</source>
+        <target>Tidigast år</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.Filters">
+      <segment state="initial">
+        <source>Avgränsningar</source>
+        <target>Avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.KeywordTypes">
+      <segment state="initial">
+        <source>Ämneskategorier</source>
+        <target>Ämneskategorier</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.LatestYear">
+      <segment state="initial">
+        <source>Senast år</source>
+        <target>Senast år</target>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.PersonTypes">
+      <segment state="initial">
+        <source>Personkategorier</source>
+        <target>Personkategorier</target>
       </segment>
     </unit>
     <unit id="inl">

@@ -1,0 +1,16 @@
+ion-searchbar.custom-searchbar {
+    --border-radius: 3px;
+    --box-shadow: none;
+    --color: #000;
+
+    input.searchbar-input {
+        border: 1px solid #b5b5b5;
+        font-size: 1.125rem;
+        transition: all 0.4s;
+
+        &:hover,
+        &:focus {
+            border-color: var(--button-background-color);
+        }
+    }
+}

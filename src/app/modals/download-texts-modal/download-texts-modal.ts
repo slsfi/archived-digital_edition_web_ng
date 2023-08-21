@@ -60,7 +60,7 @@ export class DownloadTextsModalPage {
     // Get configs
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.siteUrl = config.siteMetaData?.website?.url ?? '';
+    this.siteUrl = config.app?.siteURLOrigin ?? '';
     this.downloadFormatsIntro = config.textDownloadOptions?.enabledIntroductionFormats ?? undefined;
     this.downloadFormatsEst = config.textDownloadOptions?.enabledEstablishedFormats ?? undefined;
     this.downloadFormatsCom = config.textDownloadOptions?.enabledCommentsFormats ?? undefined;

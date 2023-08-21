@@ -115,9 +115,12 @@
   --media-collection-card-content-border-top-color:     var(--primary-color);
   --media-collection-filter-select-background-color:  #dad6cd;
 
-  // Indices, i.e. person-search, place-search, tag-search and work-search
-  --index-list-item-background-color:             var(--main-background-color);
-  --index-list-divider-background-color:          var(--secondary-color);
+  // Indices of persons, places, keywords and works
+  --index-list-item-background-color:             transparent;
+  --index-list-item-hover-background-color:     #f5f5f5;
+  --index-list-item-border-color:               #ccc;
+  --index-list-heading-background-color:        #e0e0e0;
+  --index-list-heading-border-color:            #979797;
 
   // Tutorial
   --tutorial-tooltip-background-color:          #4F7B8C;

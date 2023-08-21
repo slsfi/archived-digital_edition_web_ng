@@ -47,6 +47,11 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   ngOnInit() {
+    this.type === 'person' ? this.type = 'subject'
+      : this.type === 'place' ? this.type = 'location'
+      : this.type === 'keyword' ? this.type = 'tag'
+      : this.type;
+
     this.objectData$ = this.getSemanticDataObjectData(this.type, this.id);
 
     // Close the modal on route change
@@ -208,7 +213,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   cancel() {
-    this.modalCtrl.dismiss();
+    return this.modalCtrl.dismiss(null, 'close');
   }
 
 }

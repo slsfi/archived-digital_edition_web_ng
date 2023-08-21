@@ -45,6 +45,14 @@ export const config: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     home: {
       imageOrientationIsPortrait: true,
       imageOnRightIfPortrait: false,
@@ -55,13 +63,23 @@ export const config: Config = {
       showEditionList: false,
       showFooter: true
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
-    foreword: {
-      showURNButton: true,
-      showViewOptionsButton: true
+    index: {
+      keywords: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      },
+      persons: {
+        database: "elastic",
+        maxFetchSize: 500,
+        showPublishedStatus: 2,
+        showFilter: true
+      },
+      places: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      }
     },
     introduction: {
       hasSeparateTOC: true,
@@ -239,35 +257,8 @@ export const config: Config = {
     ReadModeView: ["established", "comments", "facsimiles"]
   },
   defaultSelectedItem: "cover",
-  cache: {
-    viewmodes: {
-      daysUntilExpires: 1
-    }
-  },
-  PersonSearchTypes: [{
-    object_type: "subject",
-    object_subtype: "",
-    translation: "TOC.PersonSearch"
-  }],
-  PersonSearch: {
-    ShowFilter: true,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  LocationSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  TagSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
-  SortCollectionsByRomanNumerals: false,
-  OpenCollectionFromToc: true,
-  SearchTocItemInAccordionByTitle: false,
   HasCover: true,
   HasTitle: true,
   HasForeword: true,
@@ -352,24 +343,6 @@ export const config: Config = {
       }
     },
     suggestions: {}
-  },
-  siteMetaData: {
-    keywords: "Zacharias Topelius Skrifter, digital edition, digital utgåva",
-    description: "En textkritisk, kommenterad utgåva av Zacharias Topelius (1818–1898) författarskap",
-    website: {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "topelius.sls.fi",
-      alternateName: "Zacharias Topelius Skrifter",
-      url: "https://topelius.sls.fi",
-      sameAs: ["http://www.topelius.fi", "http://topelius.sls.fi"]
-    },
-    organization: {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      url: "https://topelius.sls.fi",
-      logo: "https://topelius.sls.fi/assets/images/logo.svg"
-    }
   },
   AvailableEpubs: [
     {
@@ -506,6 +479,14 @@ export const config_soderholm: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01"
     },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     home: {
       imageOrientationIsPortrait: false,
       imageOnRightIfPortrait: false,
@@ -516,13 +497,23 @@ export const config_soderholm: Config = {
       showEditionList: false,
       showFooter: false
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
-    foreword: {
-      showURNButton: true,
-      showViewOptionsButton: true
+    index: {
+      keywords: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      },
+      persons: {
+        database: "elastic",
+        maxFetchSize: 500,
+        showPublishedStatus: 2,
+        showFilter: true
+      },
+      places: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      }
     },
     introduction: {
       hasSeparateTOC: true,
@@ -890,35 +881,8 @@ export const config_soderholm: Config = {
     ReadModeView: ["facsimiles", "manuscripts"]
   },
   defaultSelectedItem: "cover",
-  cache: {
-    viewmodes: {
-      daysUntilExpires: 1
-    }
-  },
-  PersonSearchTypes: [{
-    object_type: "subject",
-    object_subtype: "",
-    translation: "TOC.PersonSearch"
-  }],
-  PersonSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  LocationSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  TagSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "05",
-  SortCollectionsByRomanNumerals: false,
-  OpenCollectionFromToc: true,
-  SearchTocItemInAccordionByTitle: false,
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
@@ -975,24 +939,6 @@ export const config_soderholm: Config = {
       cover: "/assets/images/parmbilder/Kerstin-Soderholms-dagbocker-cover-web.jpg"
     }
   ],
-  siteMetaData: {
-    keywords: "Kerstin Söderholm, Digital Edition",
-    description: "Kerstin Söderholms dagböcker och arkiv",
-    website: {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "soderholm.sls.fi",
-      alternateName: "Kerstin Söderholm",
-      url: "https://soderholm.sls.fi",
-      sameAs: ["http://soderholm.sls.fi", ""]
-    },
-    organization: {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      url:"https://soderholm.sls.fi",
-      logo:"https://soderholm.sls.fi/assets/images/logo.svg"
-    }
-  }
 }
 
 /**
@@ -1029,6 +975,14 @@ export const config_vonWright: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     home: {
       imageOrientationIsPortrait: false,
       imageOnRightIfPortrait: false,
@@ -1039,13 +993,23 @@ export const config_vonWright: Config = {
       showEditionList: false,
       showFooter: false
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
-    foreword: {
-      showURNButton: true,
-      showViewOptionsButton: true
+    index: {
+      keywords: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      },
+      persons: {
+        database: "elastic",
+        maxFetchSize: 500,
+        showPublishedStatus: 2,
+        showFilter: true
+      },
+      places: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      }
     },
     introduction: {
       hasSeparateTOC: true,
@@ -1202,35 +1166,8 @@ export const config_vonWright: Config = {
     ReadModeView: ["established", "comments"]
   },
   defaultSelectedItem: "cover",
-  cache: {
-    viewmodes: {
-      daysUntilExpires: 1
-    }
-  },
-  PersonSearchTypes: [{
-    object_type: "subject",
-    object_subtype: "",
-    translation: "TOC.PersonSearch"
-  }],
-  PersonSearch: {
-    ShowFilter: true,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  LocationSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  TagSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
-  SortCollectionsByRomanNumerals: false,
-  OpenCollectionFromToc: true,
-  SearchTocItemInAccordionByTitle: false,
   HasCover: true,
   HasTitle: true,
   HasForeword: false,
@@ -1282,24 +1219,6 @@ export const config_vonWright: Config = {
       }
     },
     suggestions: {}
-  },
-  siteMetaData: {
-    keywords: "Den okände von Wright, Digital Edition, digital utgåva",
-    description: "Brevväxlingen med Eino Kaila 1937–1958 och skrifter om Wittgenstein 1936–2001",
-    website: {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "vonwright.sls.fi",
-      alternateName: "Den okände von Wright",
-      url: "https://vonwright.sls.fi",
-      sameAs: ["vonwright.sls.fi", ""]
-    },
-    organization: {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      url:"https://vonwright.sls.fi",
-      logo:"https://vonwright.sls.fi/assets/images/logo.svg"
-    }
   }
 }
 
@@ -1337,6 +1256,14 @@ export const config_granqvist: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     home: {
       imageOrientationIsPortrait: false,
       imageOnRightIfPortrait: false,
@@ -1347,13 +1274,23 @@ export const config_granqvist: Config = {
       showEditionList: true,
       showFooter: true
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
-    foreword: {
-      showURNButton: true,
-      showViewOptionsButton: true
+    index: {
+      keywords: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      },
+      persons: {
+        database: "elastic",
+        maxFetchSize: 500,
+        showPublishedStatus: 2,
+        showFilter: true
+      },
+      places: {
+        maxFetchSize: 500,
+        showFilter: true,
+        showPublishedStatus: 2
+      }
     },
     introduction: {
       hasSeparateTOC: true,
@@ -1518,35 +1455,8 @@ export const config_granqvist: Config = {
     ReadModeView: ["facsimiles"]
   },
   defaultSelectedItem: "title",
-  cache: {
-    viewmodes: {
-      daysUntilExpires: 1
-    }
-  },
-  PersonSearchTypes: [{
-    object_type: "subject",
-    object_subtype: "",
-    translation: "TOC.PersonSearch"
-  }],
-  PersonSearch: {
-    ShowFilter: true,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  LocationSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2,
-    InitialLoadNumber: 500
-  },
-  TagSearch: {
-    ShowFilter: false,
-    ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "",
   ProjectStaticMarkdownTitleFolder: "09",
-  SortCollectionsByRomanNumerals: false,
-  OpenCollectionFromToc: true,
-  SearchTocItemInAccordionByTitle: false,
   HasCover: false,
   HasTitle: true,
   HasForeword: false,
@@ -1636,6 +1546,14 @@ export const config_mechelin: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
+    epub: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
+    foreword: {
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     home: {
       imageOrientationIsPortrait: false,
       imageOnRightIfPortrait: false,
@@ -1646,13 +1564,11 @@ export const config_mechelin: Config = {
       showEditionList: false,
       showFooter: false
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
-    foreword: {
-      showURNButton: true,
-      showViewOptionsButton: true
+    index: {
+      persons: {
+        database: "default",
+        showFilter: false
+      }
     },
     introduction: {
       hasSeparateTOC: true,
@@ -1798,7 +1714,7 @@ export const config_mechelin: Config = {
       Read: true,
       Facsimiles: false,
       ImageGallery: false,
-      PersonSearch: false,
+      PersonSearch: true,
       PlaceSearch: false,
       MediaCollections: false,
       TagSearch: false,
@@ -1811,126 +1727,10 @@ export const config_mechelin: Config = {
   defaults: {
       ReadModeView: ["established_sv", "established_fi", "manuscripts", "facsimiles"]
   },
-  cache: {
-      viewmodes: {
-          daysUntilExpires: 2
-      }
-  },
-  PersonSearchTypes: [
-    {
-        object_type: "subject",
-        object_subtype: "",
-        translation: "TOC.PersonSearch"
-    }
-  ],
-  PersonSearch: {
-      ShowFilter: false,
-      ShowPublishedStatus: 2,
-      InitialLoadNumber: 500
-  },
-  LocationSearch: {
-      ShowFilter: false,
-      ShowPublishedStatus: 2,
-      InitialLoadNumber: 500
-  },
-  TagSearch: {
-      ShowFilter: false,
-      ShowPublishedStatus: 2
-  },
   ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
-  SortCollectionsByRomanNumerals: false,
-  OpenCollectionFromToc: true,
-  SearchTocItemInAccordionByTitle: false,
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
-  HasIntro: true,
-  ElasticSearch: {
-    groupOpenByDefault: {
-        type: true,
-        genre: true,
-        collection: true
-    },
-    indices: ["leomechelin"],
-    fixedFilters: [
-      {
-        terms: {
-          deleted: ["0"]
-        }
-      },
-      {
-        terms: {
-          published: ["2"]
-        }
-      }
-    ],
-    types: ["est","inl","ms"],
-    hitsPerPage: 20,
-    source: [],
-    aggregations: {
-      Years: {
-        date_histogram: {
-          field: "orig_date_sort",
-          calendar_interval: "year",
-          format: "yyyy"
-        }
-      },
-      Type: {
-        terms: {
-          field: "xml_type.keyword",
-          size: 40
-        }
-      },
-      Genre: {
-        terms: {
-          field: "publication_data.genre.keyword",
-          size: 40
-        }
-      },
-      Collection: {
-        terms: {
-          field: "publication_data.colname.keyword",
-          size: 40
-        }
-      },
-      Subjects: {
-        terms: {
-          field: "publication_subjects.full_name.keyword",
-          size: 40
-        }
-      },
-      Person: {
-        terms: {
-          field: "publication_subjects.full_name.keyword",
-          size: 40
-        }
-      },
-      LetterSenderName: {
-        terms: {
-          field: "sender_subject_name.keyword",
-          size: 40
-        }
-      },
-      LetterReceiverName: {
-        terms: {
-          field: "receiver_subject_name.keyword",
-          size: 40
-        }
-      },
-      LetterSenderLocation: {
-        terms: {
-          field: "sender_location_name.keyword",
-          size: 40
-        }
-      },
-      LetterReceiverLocation: {
-        terms: {
-          field: "receiver_location_name.keyword",
-          size: 40
-        }
-      }
-    },
-    suggestions: {}
-  }
+  HasIntro: true
 }

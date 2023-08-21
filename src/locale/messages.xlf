@@ -311,46 +311,6 @@
         <source>historisk förebild</source>
       </segment>
     </unit>
-    <unit id="Filter.activeFilters">
-      <segment>
-        <source>Aktiva avgränsningar</source>
-      </segment>
-    </unit>
-    <unit id="Filter.apply">
-      <segment>
-        <source>Verkställ</source>
-      </segment>
-    </unit>
-    <unit id="Filter.bornBetween">
-      <segment>
-        <source>Född mellan</source>
-      </segment>
-    </unit>
-    <unit id="Filter.countries">
-      <segment>
-        <source>Land</source>
-      </segment>
-    </unit>
-    <unit id="Filter.personTypes">
-      <segment>
-        <source>Personkategori</source>
-      </segment>
-    </unit>
-    <unit id="Filter.tagTypes">
-      <segment>
-        <source>Ämneskategori</source>
-      </segment>
-    </unit>
-    <unit id="Filter.title">
-      <segment>
-        <source>Avgränsningar</source>
-      </segment>
-    </unit>
-    <unit id="Filter.year">
-      <segment>
-        <source>Född</source>
-      </segment>
-    </unit>
     <unit id="fore">
       <segment>
         <source>Förord</source>
@@ -366,24 +326,79 @@
         <source>Illustrationer</source>
       </segment>
     </unit>
-    <unit id="IndexOfPersons.searchPlaceholder">
+    <unit id="Index.ActiveFilters">
+      <segment>
+        <source>Aktiva avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="Index.Born">
+      <segment>
+        <source>Födda</source>
+      </segment>
+    </unit>
+    <unit id="Index.ClearFilters">
+      <segment>
+        <source>Ta bort aktiva avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="Index.Filter">
+      <segment>
+        <source>Avgränsa</source>
+      </segment>
+    </unit>
+    <unit id="Index.Reset">
+      <segment>
+        <source>Ta bort sökord och aktiva avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="Index.SearchPlaceholder">
       <segment>
         <source>Sök ...</source>
       </segment>
     </unit>
-    <unit id="IndexOfPlaces.searchPlaceholder">
+    <unit id="Index.ShownRecords">
       <segment>
-        <source>Sök ...</source>
+        <source>Visade poster</source>
       </segment>
     </unit>
-    <unit id="IndexOfTags.searchPlaceholder">
+    <unit id="IndexFilter.Apply">
       <segment>
-        <source>Sök ...</source>
+        <source>Verkställ</source>
       </segment>
     </unit>
-    <unit id="IndexOfWorks.searchPlaceholder">
+    <unit id="IndexFilter.Born">
       <segment>
-        <source>Sök ...</source>
+        <source>Födda</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.Countries">
+      <segment>
+        <source>Länder</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.EarliestYear">
+      <segment>
+        <source>Tidigast år</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.Filters">
+      <segment>
+        <source>Avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.KeywordTypes">
+      <segment>
+        <source>Ämneskategorier</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.LatestYear">
+      <segment>
+        <source>Senast år</source>
+      </segment>
+    </unit>
+    <unit id="IndexFilter.PersonTypes">
+      <segment>
+        <source>Personkategorier</source>
       </segment>
     </unit>
     <unit id="inl">

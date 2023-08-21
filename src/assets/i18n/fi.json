@@ -224,17 +224,24 @@
         "Ebooks": "Sähkökirjat"
     },
     "BackButton": "Takaisin",
-    "IndexOfPersons": {
-        "searchPlaceholder": "Hae ..."
+    "Index": {
+        "ActiveFilters": "Aktiiviset rajaukset",
+        "Born": "Syntyneet",
+        "ClearFilters": "Poista aktiiviset rajaukset",
+        "Filter": "Rajaa",
+        "Reset": "Poista hakusanat ja aktiiviset rajaukset",
+        "SearchPlaceholder": "Hae ...",
+        "ShownRecords": "Näytettyjä tietueita"
     },
-    "IndexOfPlaces": {
-        "searchPlaceholder": "Hae ..."
-    },
-    "IndexOfTags": {
-        "searchPlaceholder": "Hae ..."
-    },
-    "IndexOfWorks": {
-        "searchPlaceholder": "Hae ..."
+    "IndexFilter": {
+        "Apply": "Aseta",
+        "Born": "Syntyneet",
+        "Countries": "Maat",
+        "EarliestYear": "Viimeistään vuonna",
+        "Filters": "Rajaukset",
+        "KeywordTypes": "Aihekategoriat",
+        "LatestYear": "Aikaisintaan vuonna",
+        "PersonTypes": "Henkilökategoriat"
     },
     "Occurrences": {
         "Title": "Esiintymät",
@@ -301,16 +308,6 @@
         "HideFacets": "Piilota rajaukset",
         "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan.",
         "ScrollToTop": "Palaa alkuun"
-    },
-    "Filter": {
-        "title": "Rajaukset",
-        "personTypes": "Henkilökategoria",
-        "tagTypes": "Aihekategoria",
-        "countries": "Maa",
-        "year": "Syntynyt",
-        "bornBetween": "Syntynyt vuosina",
-        "apply": "Aseta",
-        "activeFilters": "Aktiiviset rajaukset"
     },
     "Type": "Tekstityyppi",
     "Genre": "Tekstilaji",

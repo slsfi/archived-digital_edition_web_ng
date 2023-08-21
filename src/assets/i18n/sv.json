@@ -224,17 +224,24 @@
         "Ebooks": "E-böcker"
     },
     "BackButton": "Tillbaka",
-    "IndexOfPersons": {
-        "searchPlaceholder": "Sök ..."
+    "Index": {
+        "ActiveFilters": "Aktiva avgränsningar",
+        "Born": "Födda",
+        "ClearFilters": "Ta bort aktiva avgränsningar",
+        "Filter": "Avgränsa",
+        "Reset": "Ta bort sökord och aktiva avgränsningar",
+        "SearchPlaceholder": "Sök ...",
+        "ShownRecords": "Visade poster"
     },
-    "IndexOfPlaces": {
-        "searchPlaceholder": "Sök ..."
-    },
-    "IndexOfTags": {
-        "searchPlaceholder": "Sök ..."
-    },
-    "IndexOfWorks": {
-        "searchPlaceholder": "Sök ..."
+    "IndexFilter": {
+        "Apply": "Verkställ",
+        "Born": "Födda",
+        "Countries": "Länder",
+        "EarliestYear": "Tidigast år",
+        "Filters": "Avgränsningar",
+        "KeywordTypes": "Ämneskategorier",
+        "LatestYear": "Senast år",
+        "PersonTypes": "Personkategorier"
     },
     "Occurrences": {
         "Title": "Förekomster",
@@ -301,16 +308,6 @@
         "HideFacets": "Dölj avgränsningar",
         "OpenInNewWindow": "Länken öppnas i ett nytt fönster.",
         "ScrollToTop": "Till början"
-    },
-    "Filter": {
-        "title": "Avgränsningar",
-        "personTypes": "Personkategori",
-        "tagTypes": "Ämneskategori",
-        "countries": "Land",
-        "year": "Född",
-        "bornBetween": "Född mellan",
-        "apply": "Verkställ",
-        "activeFilters": "Aktiva avgränsningar"
     },
     "Type": "Texttyp",
     "Genre": "Genre",

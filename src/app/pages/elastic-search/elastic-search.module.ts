@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElasticSearchPageRoutingModule } from './elastic-search-routing.module';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
-import { FilterPageModule } from 'src/app/modals/filter/filter.module';
 import { ElasticSearchPage } from './elastic-search';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { ElasticSearchPage } from './elastic-search';
     FormsModule,
     PipesModule,
     ComponentsModule,
-    FilterPageModule,
     SemanticDataObjectModal,
     ElasticSearchPageRoutingModule
   ],

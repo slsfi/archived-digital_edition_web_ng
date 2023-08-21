@@ -171,16 +171,7 @@ export class SemanticDataService {
     );
   }
 
-  getAllPerson(): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint + '/subjects'
-    );
-  }
-
-  getOccurrencesByType(
-    object_type: string,
-    object_subtype?: string
-  ): Observable<any> {
+  getOccurrencesByType(object_type: string, object_subtype?: string): Observable<any> {
     let occurrenceURL = `/occurrences/${object_type}`;
 
     if (object_subtype) {
@@ -192,6 +183,12 @@ export class SemanticDataService {
         '/' +
         config.app.machineName +
         occurrenceURL
+    );
+  }
+
+  getPersons(language: string): Observable<any> {
+    return this.http.get(
+      `${config.app.apiEndpoint}/${config.app.machineName}/persons/${language}`
     );
   }
 
@@ -214,13 +211,60 @@ export class SemanticDataService {
     );
   }
 
-  getSubjectsElastic(
-    after_key?: any,
-    searchText?: any,
-    filters?: any,
-    max?: any
-  ) {
-    const showPublishedStatus = config.PersonSearch?.ShowPublishedStatus ?? 2;
+  getSingleObjectElastic(type: any, id: any) {
+    const payload: any = {
+      from: 0,
+      size: 200,
+      query: {
+        bool: {
+          should: [
+            {
+              bool: {
+                must: [
+                  {
+                    term: {
+                      project_id: config.app.projectId,
+                    },
+                  },
+                  {
+                    term: { id: id },
+                  },
+                ],
+              },
+            },
+            {
+              bool: {
+                must: [
+                  {
+                    term: {
+                      project_id: config.app.projectId,
+                    },
+                  },
+                  {
+                    term: { legacy_id: id },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    if (type === 'work') {
+      payload.query.bool.should[0].bool.must[1]['term'] = { man_id: id };
+    }
+
+    // remove if the ID is not strictly numerical
+    if (/^\d+$/.test(id) === false) {
+      delete payload.query.bool.should[0];
+    }
+
+    return this.http.post<any>(this.getSearchUrl(type), payload);
+  }
+
+  getSubjectsElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
+    const showPublishedStatus = config.page?.index?.persons?.showPublishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -349,65 +393,8 @@ export class SemanticDataService {
     return this.http.post<any>(this.getSearchUrl(this.elasticSubjectIndex), payload);
   }
 
-  getSingleObjectElastic(type: any, id: any) {
-    const payload: any = {
-      from: 0,
-      size: 200,
-      query: {
-        bool: {
-          should: [
-            {
-              bool: {
-                must: [
-                  {
-                    term: {
-                      project_id: config.app.projectId,
-                    },
-                  },
-                  {
-                    term: { id: id },
-                  },
-                ],
-              },
-            },
-            {
-              bool: {
-                must: [
-                  {
-                    term: {
-                      project_id: config.app.projectId,
-                    },
-                  },
-                  {
-                    term: { legacy_id: id },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      },
-    };
-
-    if (type === 'work') {
-      payload.query.bool.should[0].bool.must[1]['term'] = { man_id: id };
-    }
-
-    // remove if the ID is not strictly numerical
-    if (/^\d+$/.test(id) === false) {
-      delete payload.query.bool.should[0];
-    }
-
-    return this.http.post<any>(this.getSearchUrl(type), payload);
-  }
-
-  getLocationElastic(
-    after_key?: any,
-    searchText?: any,
-    filters?: any,
-    max?: any
-  ) {
-    const showPublishedStatus = config.LocationSearch?.ShowPublishedStatus ?? 2;
+  getLocationElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
+    const showPublishedStatus = config.page?.index?.places?.showPublishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -510,10 +497,10 @@ export class SemanticDataService {
     return this.http.post<any>(this.getSearchUrl(this.elasticLocationIndex), payload);
   }
 
-  getWorksElastic(from: any, searchText?: any) {
+  getWorksElastic(from: any, searchText?: any, size: number = 500) {
     const payload: any = {
       from: from,
-      size: 200,
+      size: size,
       sort: [{ 'author_data.last_name.keyword': 'asc' }],
       query: {
         bool: {
@@ -550,33 +537,7 @@ export class SemanticDataService {
         },
       },
     };
-    // Search for first character of name
-    if (
-      searchText !== undefined &&
-      searchText !== '' &&
-      String(searchText).length === 1
-    ) {
-      payload.from = 0;
-      payload.size = 5000;
-      payload.query.bool.should[0].bool.must.push({
-        regexp: {
-          'title.keyword': {
-            value: `${String(searchText)}.*|${String(
-              searchText
-            ).toLowerCase()}.*`,
-          },
-        },
-      });
-      payload.query.bool.should[1].bool.must.push({
-        regexp: {
-          'title.keyword': {
-            value: `${String(searchText)}.*|${String(
-              searchText
-            ).toLowerCase()}.*`,
-          },
-        },
-      });
-    } else if (searchText !== undefined && searchText !== '') {
+    if (searchText !== undefined && searchText !== '') {
       payload.from = 0;
       payload.size = 5000;
       payload.query.bool.should[0].bool.must.push({
@@ -600,7 +561,7 @@ export class SemanticDataService {
   }
 
   getTagElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
-    const showPublishedStatus = config.TagSearch?.ShowPublishedStatus ?? 2;
+    const showPublishedStatus = config.page?.index?.keywords?.showPublishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -766,7 +727,7 @@ export class SemanticDataService {
     );
   }
 
-  getWorkOccurrences(): Observable<any> {
+  getAllWorks(): Observable<any> {
     return this.http.get(
       config.app.apiEndpoint +
         '/' +
@@ -829,4 +790,5 @@ export class SemanticDataService {
       index
     );
   }
+
 }

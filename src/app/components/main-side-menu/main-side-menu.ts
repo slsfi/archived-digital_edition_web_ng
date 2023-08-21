@@ -73,10 +73,10 @@ export class MainSideMenu implements OnInit, OnChanges {
         this.getEbookPagesMenu(),
         this.getCollectionPagesMenu(),
         this.getMediaCollectionPagesMenu(),
-        this.getPersonsPageMenuItem(),
-        this.getPlacesPageMenuItem(),
-        this.getKeywordsPageMenuItem(),
-        this.getWorksPageMenuItem()
+        this.getIndexPageMenuItem('persons'),
+        this.getIndexPageMenuItem('places'),
+        this.getIndexPageMenuItem('keywords'),
+        this.getIndexPageMenuItem('works')
       ]
     ).pipe(
       map((res: any[]) => {
@@ -201,36 +201,18 @@ export class MainSideMenu implements OnInit, OnChanges {
     }
   }
 
-  private getPersonsPageMenuItem(): Observable<any> {
+  private getIndexPageMenuItem(indexType: string): Observable<any> {
     let menuData: any[] = [];
-    if (this._config.show?.TOC?.PersonSearch) {
-      menuData = [{ id: '', title: $localize`:@@TOC.PersonSearch:Personregister`, parentPath: '/persons' }];
+    if (indexType === 'persons' && this._config.show?.TOC?.PersonSearch) {
+      menuData = [{ id: '', title: $localize`:@@TOC.PersonSearch:Personregister`, parentPath: '/index/persons' }];
+    } else if (indexType === 'places' && this._config.show?.TOC?.PlaceSearch) {
+      menuData = [{ id: '', title: $localize`:@@TOC.PlaceSearch:Ortregister`, parentPath: '/index/places' }];
+    } else if (indexType === 'keywords' && this._config.show?.TOC?.TagSearch) {
+      menuData = [{ id: '', title: $localize`:@@TOC.TagSearch:Ämnesord`, parentPath: '/index/keywords' }];
+    } else if (indexType === 'works' && this._config.show?.TOC?.WorkSearch) {
+      menuData = [{ id: '', title: $localize`:@@TOC.WorkSearch:Verkregister`, parentPath: '/index/works' }];
     }
-    return of({ menuType: 'persons', menuData });
-  }
-
-  private getPlacesPageMenuItem(): Observable<any> {
-    let menuData: any[] = [];
-    if (this._config.show?.TOC?.PlaceSearch) {
-      menuData = [{ id: '', title: $localize`:@@TOC.PlaceSearch:Ortregister`, parentPath: '/places' }];
-    }
-    return of({ menuType: 'places', menuData });
-  }
-
-  private getKeywordsPageMenuItem(): Observable<any> {
-    let menuData: any[] = [];
-    if (this._config.show?.TOC?.TagSearch) {
-      menuData = [{ id: '', title: $localize`:@@TOC.TagSearch:Ämnesord`, parentPath: '/keywords' }];
-    }
-    return of({ menuType: 'keywords', menuData });
-  }
-
-  private getWorksPageMenuItem(): Observable<any> {
-    let menuData: any[] = [];
-    if (this._config.show?.TOC?.WorkSearch) {
-      menuData = [{ id: '', title: $localize`:@@TOC.WorkSearch:Verkregister`, parentPath: '/works' }];
-    }
-    return of({ menuType: 'works', menuData });
+    return of({ menuType: indexType, menuData });
   }
 
   private categorizeCollections(collections: any) {

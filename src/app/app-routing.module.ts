@@ -44,8 +44,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'keywords',
-    loadChildren: () => import('./pages/index-of-keywords/index-of-keywords.module').then( m => m.IndexOfKeywordsPageModule)
+    path: 'index/:type',
+    loadChildren: () => import('./pages/index/index-page.module').then( m => m.IndexPageModule)
   },
   {
     path: 'media-collection',
@@ -56,24 +56,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/media-collections/media-collections.module').then( m => m.MediaCollectionsPageModule)
   },
   {
-    path: 'persons',
-    loadChildren: () => import('./pages/index-of-persons/index-of-persons.module').then( m => m.IndexOfPersonsPageModule)
-  },
-  {
-    path: 'places',
-    loadChildren: () => import('./pages/index-of-places/index-of-places.module').then( m => m.IndexOfPlacesPageModule)
-  },
-  {
     path: 'publication-toc',
     loadChildren: () => import('./pages/single-edition/single-edition.module').then( m => m.SingleEditionPageModule)
   },
   {
     path: 'search',
     loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
-  },
-  {
-    path: 'works',
-    loadChildren: () => import('./pages/index-of-works/index-of-works.module').then( m => m.IndexOfWorksPageModule)
   }
 ];
 

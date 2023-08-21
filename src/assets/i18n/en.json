@@ -224,17 +224,24 @@
         "Ebooks": "E-books"
     },
     "BackButton": "Go back",
-    "IndexOfPersons": {
-        "searchPlaceholder": "Search ..."
+    "Index": {
+        "ActiveFilters": "Active filters",
+        "Born": "Born",
+        "ClearFilters": "Clear active filters",
+        "Filter": "Filter",
+        "Reset": "Clear search and active filters",
+        "SearchPlaceholder": "Search ...",
+        "ShownRecords": "Shown records"
     },
-    "IndexOfPlaces": {
-        "searchPlaceholder": "Search ..."
-    },
-    "IndexOfTags": {
-        "searchPlaceholder": "Search ..."
-    },
-    "IndexOfWorks": {
-        "searchPlaceholder": "Search ..."
+    "IndexFilter": {
+        "Apply": "Apply",
+        "Born": "Born",
+        "Countries": "Countries",
+        "EarliestYear": "Earliest year",
+        "Filters": "Filters",
+        "KeywordTypes": "Keyword categories",
+        "LatestYear": "Latest year",
+        "PersonTypes": "Person categories"
     },
     "Occurrences": {
         "Title": "Occurrences",
@@ -301,16 +308,6 @@
         "HideFacets": "Hide filters",
         "OpenInNewWindow": "Opens in a new window.",
         "ScrollToTop": "Scroll to top"
-    },
-    "Filter": {
-        "title": "Filter",
-        "personTypes": "Person category",
-        "tagTypes": "Tag category",
-        "countries": "Country",
-        "year": "Born",
-        "bornBetween": "Born between",
-        "apply": "Apply",
-        "activeFilters": "Active filters"
     },
     "Type": "Type",
     "Genre": "Genre",
