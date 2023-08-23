@@ -5,7 +5,11 @@ import { EbookPage } from './ebook';
 
 const routes: Routes = [
   {
-    path: ':epubFileName',
+    path: '',
+    component: EbookPage,
+  },
+  {
+    path: ':filename',
     component: EbookPage,
   }
 ];

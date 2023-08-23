@@ -40,14 +40,40 @@ export const config: Config = {
       212: "212_20323", 209: "209_20479"
     }
   },
+  ebooks: [
+    {
+      title: "Bröd och bot",
+      filename: "norrback-brod-och-bot.epub",
+      externalFileURL: "",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://www.sls.fi/sv/utgivning/historiska-recept",
+          label: ""
+        }
+      ]
+    },
+    {
+      title: "Marriage Conditions in a Palestinian Village I",
+      filename: "marriage-conditions-1.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "/assets/ebooks/30_11672_Marriage_Conditions_1.epub",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/pdf/30_11672_Marriage_Conditions_1.pdf/",
+          label: "PDF"
+        }
+      ]
+    }
+  ],
   page: {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
-    },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
     },
     foreword: {
       showURNButton: true,
@@ -109,6 +135,11 @@ export const config: Config = {
     }
   },
   component: {
+    epub: {
+      showTOCButton: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -205,10 +236,6 @@ export const config: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  simpleSearch: {
-    showPageNumbers: false,
-    user_defined_search_fields: ["textData"]
   },
   editionImages: {
     default: "assets/images/edition-default-cover.jpg",
@@ -343,21 +370,7 @@ export const config: Config = {
       }
     },
     suggestions: {}
-  },
-  AvailableEpubs: [
-    {
-      title: "Dummy epub",
-      filename: "norrback-brod-och-bot.epub",
-      download: "https://www.sls.fi/",
-      cover: ""
-    },
-    {
-      title: "Another dummy epub",
-      filename: "285.epub",
-      download: "https://www.sls.fi/",
-      cover: ""
-    }
-  ]
+  }
 }
 
 /**
@@ -474,14 +487,24 @@ export const config_soderholm: Config = {
       535: "535_27366", 536: "536_27368", 540: "540_37812"
     }
   },
+  ebooks: [
+    {
+      title: "Dagböcker",
+      filename: "soderholm_dagbocker.epub",
+      externalFileURL: "",
+      coverURL: "/assets/images/parmbilder/Kerstin-Soderholms-dagbocker-cover-web.jpg",
+      downloadOptions: [
+        {
+          url: "https://www.sls.fi/sv/utgivning/kerstin-soderholms-dagbocker",
+          label: ""
+        }
+      ]
+    }
+  ],
   page: {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01"
-    },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
     },
     foreword: {
       showURNButton: true,
@@ -543,6 +566,11 @@ export const config_soderholm: Config = {
     }
   },
   component: {
+    epub: {
+      showTOCButton: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -639,10 +667,6 @@ export const config_soderholm: Config = {
         print: false
     },
     usePrintNotDownloadIcon: false
-  },
-  simpleSearch: {
-    showPageNumbers: false,
-    user_defined_search_fields: ["textData"]
   },
   editionImages: {
     default: "assets/images/parmbilder/white.jpg",
@@ -930,15 +954,7 @@ export const config_soderholm: Config = {
       }
     },
     suggestions: {}
-  },
-  AvailableEpubs: [
-    {
-      title: "Dagböcker",
-      filename: "soderholm_dagbocker.epub",
-      download: "https://www.sls.fi/sv/utgivning/kerstin-soderholms-dagbocker",
-      cover: "/assets/images/parmbilder/Kerstin-Soderholms-dagbocker-cover-web.jpg"
-    }
-  ],
+  }
 }
 
 /**
@@ -974,10 +990,6 @@ export const config_vonWright: Config = {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
-    },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
     },
     foreword: {
       showURNButton: true,
@@ -1039,6 +1051,11 @@ export const config_vonWright: Config = {
     }
   },
   component: {
+    epub: {
+      showTOCButton: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -1135,10 +1152,6 @@ export const config_vonWright: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  simpleSearch: {
-    showPageNumbers: false,
-    user_defined_search_fields: ["textData"]
   },
   editionImages: {
     default: "assets/images/edition-default-cover.jpg",
@@ -1251,14 +1264,92 @@ export const config_granqvist: Config = {
     firstReadItem: {
     }
   },
+  ebooks: [
+    {
+      title: "Birth and Childhood Among the Arabs",
+      filename: "147_11675_Birth_and_Childhood.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/147/epub/147_11675_Birth_and_Childhood.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/147/epub/147_11675_Birth_and_Childhood.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/147/pdf/147_11675_Birth_and_Childhood.pdf/",
+          label: "PDF"
+        }
+      ]
+    },
+    {
+      title: "Child Problems Among the Arabs",
+      filename: "148_11676_Child_Problems.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/148/epub/148_11676_Child_Problems.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/148/epub/148_11676_Child_Problems.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/148/pdf/148_11676_Child_Problems.pdf/",
+          label: "PDF"
+        }
+      ]
+    },
+    {
+      title: "Marriage Conditions in a Palestinian Village I",
+      filename: "30_11672_Marriage_Conditions_1.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/pdf/30_11672_Marriage_Conditions_1.pdf/",
+          label: "PDF"
+        }
+      ]
+    },
+    {
+      title: "Marriage Conditions in a Palestinian Village II",
+      filename: "31_11673_Marriage_Conditions_2.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/31/epub/31_11673_Marriage_Conditions_2.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/31/epub/31_11673_Marriage_Conditions_2.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/31/pdf/31_11673_Marriage_Conditions_2.pdf/",
+          label: "PDF"
+        }
+      ]
+    },
+    {
+      title: "Muslim Death and Burial",
+      filename: "149_11677_Death_Burial.epub",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/149/epub/149_11677_Death_Burial.epub/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/149/epub/149_11677_Death_Burial.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/149/pdf/149_11677_Death_Burial.pdf/",
+          label: "PDF"
+        }
+      ]
+    }
+  ],
   page: {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
-    },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
     },
     foreword: {
       showURNButton: true,
@@ -1320,6 +1411,11 @@ export const config_granqvist: Config = {
     }
   },
   component: {
+    epub: {
+      showTOCButton: false,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -1416,10 +1512,6 @@ export const config_granqvist: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  simpleSearch: {
-    showPageNumbers: false,
-    user_defined_search_fields: ["textData"]
   },
   editionImages: {
     default: "assets/images/edition-default-cover.jpg",
@@ -1546,10 +1638,6 @@ export const config_mechelin: Config = {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
-    epub: {
-      showURNButton: true,
-      showViewOptionsButton: true
-    },
     foreword: {
       showURNButton: true,
       showViewOptionsButton: true
@@ -1599,6 +1687,11 @@ export const config_mechelin: Config = {
     }
   },
   component: {
+    epub: {
+      showTOCButton: true,
+      showURNButton: true,
+      showViewOptionsButton: true
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -1698,10 +1791,6 @@ export const config_mechelin: Config = {
         print: false
     },
     usePrintNotDownloadIcon: false
-  },
-  simpleSearch: {
-    showPageNumbers: false,
-    user_defined_search_fields: []
   },
   editionImages: {
     1: "https://leomechelin.fi/assets/images/løvenskiold_cover.jpg",

@@ -56,10 +56,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/media-collections/media-collections.module').then( m => m.MediaCollectionsPageModule)
   },
   {
-    path: 'publication-toc',
-    loadChildren: () => import('./pages/single-edition/single-edition.module').then( m => m.SingleEditionPageModule)
-  },
-  {
     path: 'search',
     loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
   }

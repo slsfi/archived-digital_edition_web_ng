@@ -32,7 +32,7 @@ export class DigitalEditionList implements OnInit {
   galleryInReadMenu = false;
   collectionSortOrder: any;
   showEpubsInList = false;
-  availableEpubs = [];
+  availableEbooks: any[] = [];
 
   @Input() layoutType?: string;
   @Input() collectionsToShow?: Array<any>;
@@ -54,7 +54,7 @@ export class DigitalEditionList implements OnInit {
     this.hasMediaCollections = config.show?.TOC?.MediaCollections ?? false;
     this.galleryInReadMenu = config.ImageGallery?.ShowInReadMenu ?? false;
     this.showEpubsInList = config.show?.epubsInDigitalEditionList ?? true;
-    this.availableEpubs = config.AvailableEpubs ?? [];
+    this.availableEbooks = config.ebooks ?? [];
     this.pdfsAreDownloadOnly = config.collectionDownloads?.isDownloadOnly ?? false;
     this.hideBooks = config.show?.TOC?.Books ?? false;
   }
@@ -96,7 +96,7 @@ export class DigitalEditionList implements OnInit {
         if (this.collectionsToShow !== undefined && this.collectionsToShow.length > 0) {
           this.filterCollectionsToShow(de);
         }
-        if (this.showEpubsInList && Object.keys(this.availableEpubs).length > 0) {
+        if (this.showEpubsInList && Object.keys(this.availableEbooks).length > 0) {
           this.prependEpubsToDigitalEditions();
         }
       },
@@ -269,11 +269,11 @@ export class DigitalEditionList implements OnInit {
 
   prependEpubsToDigitalEditions() {
     const epubCollections: any[] = [];
-    this.availableEpubs.forEach((epub: any) => {
+    this.availableEbooks.forEach((epub: any) => {
       const epubColl = new DigitalEdition({id: epub.filename, title: epub.title, type: 'ebook'});
       epubCollections.push(epubColl);
-      if (epub.cover) {
-        this.editionImages[epub.filename] = epub.cover;
+      if (epub.coverURL) {
+        this.editionImages[epub.filename] = epub.coverURL;
       }
     });
     this.digitalEditions = epubCollections.concat(this.digitalEditions);

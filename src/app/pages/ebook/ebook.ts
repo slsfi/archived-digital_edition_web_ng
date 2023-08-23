@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { config } from "src/assets/config/config";
+
 
 @Component({
   selector: 'page-ebook',
@@ -9,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class EbookPage implements OnInit {
-  epubFileName: string = '';
+  ebookType: string = '';
+  filename: string = '';
 
   constructor(
     private route: ActivatedRoute
@@ -17,7 +20,18 @@ export class EbookPage implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.epubFileName = params['epubFileName'];
+      this.filename = '';
+      this.ebookType = '';
+      const availableEbooks: any[] = config.ebooks ?? [];
+      for (const ebook of availableEbooks) {
+        if (ebook.filename === params['filename']) {
+          this.filename = params['filename'];
+          this.ebookType = this.filename.substring(
+            this.filename.lastIndexOf('.') + 1, this.filename.length
+          ) || '';
+          break;
+        }
+      }
     });
   }
 

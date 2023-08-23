@@ -20,7 +20,7 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   _config = config;
   aboutPagesRootNodeID: string = '';
-  epubsList: any[] = [];
+  ebooksList: any[] = [];
   highlightedMenu: string = '';
   mainMenu: any[] = [];
   selectedMenu: string[] = [];
@@ -39,10 +39,10 @@ export class MainSideMenu implements OnInit, OnChanges {
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.aboutPagesRootNodeID = this._config.page?.about?.markdownFolderNumber ?? '03';
-    this.epubsList = this._config.AvailableEpubs ?? [];
+    this.ebooksList = this._config.ebooks ?? [];
 
-    if (this.epubsList) {
-      this.epubsList.forEach((epub: any) => {
+    if (this.ebooksList) {
+      this.ebooksList.forEach((epub: any) => {
         epub.id = epub.filename;
       });
     }
@@ -129,15 +129,15 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   private getEbookPagesMenu(): Observable<any> {
     let menuData: any[] = [];
-    if (this._config.show?.TOC?.EPUB && this.epubsList?.length) {
-      this.epubsList.forEach(epub => {
+    if (this._config.show?.TOC?.EPUB && this.ebooksList?.length) {
+      this.ebooksList.forEach(epub => {
         menuData.push({
           id: epub.id,
           title: epub.title,
           parentPath: '/ebook'
         });
       });
-      if (this.epubsList.length > 1) {
+      if (this.ebooksList.length > 1) {
         menuData = [{
           title: $localize`:@@TOC.Ebooks:E-böcker`,
           children: menuData

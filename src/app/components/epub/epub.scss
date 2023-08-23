@@ -37,6 +37,10 @@ ion-content.epub-ion-content::part(scroll) {
     padding: 40px 8px 25px 8px;
   }
 
+  @media screen and (max-width: 600px) {
+    padding: 40px 0 25px 0;
+  }
+
   > .spinner-wrapper {
     background-color: rgba(255, 255, 255, 0.5);
     height: 100%;
@@ -69,6 +73,10 @@ ion-content.epub-ion-content::part(scroll) {
 
   .toc-epub-container {
     padding: 40px 8px 25px 8px;
+
+    @media screen and (max-width: 600px) {
+      padding: 40px 0 25px 0;
+    }
   }
 }
 
@@ -117,6 +125,10 @@ ion-content.epub-ion-content::part(scroll) {
     margin-inline-end: 1px;
     margin-inline-start: 1px;
 
+    @media screen and (max-width: 430px) {
+      width: 46px;
+    }
+
     &.disabled-nav-button {
       opacity: 0.25;
     }
@@ -148,10 +160,6 @@ ion-content.epub-ion-content::part(scroll) {
 
     .current-section-label {
       display: block;
-
-      @media screen and (max-width: 450px) {
-        display: none;
-      }
     }
   }
 }

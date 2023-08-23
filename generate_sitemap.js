@@ -47,8 +47,8 @@ async function generateSitemap() {
     }
 
     // Get ebook-pages URLs
-    if (config.show?.TOC?.EPUB && config.AvailableEpubs?.length) {
-        urlCounter += generateEbookURLs(config.AvailableEpubs, urlOrigin, locale);
+    if (config.show?.TOC?.EPUB && config.ebooks?.length) {
+        urlCounter += generateEbookURLs(config.ebooks, urlOrigin, locale);
     }
 
     // Get collections URLs
@@ -127,54 +127,6 @@ async function fetchFromAPI(endpoint) {
         return null;
     }
 }
-
-/*
-function getValueFromConfig(config, key, type, parentKey = undefined) {
-    let initPos = config.indexOf('config:');
-    if (initPos < 0) {
-        return '';
-    }
-
-    if (parentKey) {
-        initPos = config.indexOf(parentKey + ':', initPos);
-        if (initPos < 0) {
-            return '';
-        }
-    }
-
-    let startPos = config.indexOf(key + ':', initPos);
-    if (startPos < 0) {
-        return '';
-    }
-
-    let endPos = -1;
-    if (type === 'boolean' || type === 'number' ) {
-        startPos = config.indexOf(' ', startPos) + 1;
-        endPos = config.indexOf(',', startPos);
-        if (endPos < 0) {
-            return false;
-        }
-        const value = config.slice(startPos, endPos);
-        if (type === 'boolean') {
-            if (value === 'true') {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return Number(config.slice(startPos, endPos));
-        }
-    } else {
-        // assume type is string
-        startPos = config.indexOf('"', startPos) + 1;
-        endPos = config.indexOf('"', startPos);
-        if (endPos < 0) {
-            return '';
-        }
-        return config.slice(startPos, endPos);
-    }
-}
-*/
 
 function flattenObjectTree(data, branchingKey = 'children', requiredKey = undefined) {
     const dataWithoutChildren = (({[branchingKey]: _, ...d}) => d)(data);

@@ -391,6 +391,9 @@
         "ScrollToTop": "Scroll to top",
         "Close": "Close"
     },
+    "Ebook": {
+        "InvalidFilename": "Invalid filename. The ebook could not be found."
+    },
     "Epub": {
         "DisplayOptions": "Text size",
         "Download": "Download",

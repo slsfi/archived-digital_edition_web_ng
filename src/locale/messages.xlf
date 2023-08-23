@@ -26,6 +26,11 @@
         <source>Ok</source>
       </segment>
     </unit>
+    <unit id="BasicActions.OpenInNewWindow">
+      <segment>
+        <source>Länken öppnas i ett nytt fönster</source>
+      </segment>
+    </unit>
     <unit id="BasicActions.ScrollToTop">
       <segment>
         <source>Till början</source>
@@ -119,6 +124,11 @@
     <unit id="DownloadTexts.Title">
       <segment>
         <source>Ladda ner och skriv ut</source>
+      </segment>
+    </unit>
+    <unit id="Ebook.InvalidFilename">
+      <segment>
+        <source>Ogiltigt filnamn. E-boken kunde inte hittas.</source>
       </segment>
     </unit>
     <unit id="editorialChange">

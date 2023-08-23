@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule, DOCUMENT } from "@angular/common";
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -6,6 +6,7 @@ import { IonicModule, ModalController, PopoverController } from '@ionic/angular'
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
+import { IsExternalURLPipe } from 'src/pipes/is-external-url.pipe';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
@@ -20,22 +21,23 @@ import { isBrowser } from 'src/standalone/utility-functions';
   selector: 'epub',
   templateUrl: 'epub.html',
   styleUrls: ['epub.scss'],
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, IonicModule, IsExternalURLPipe],
   host: {ngSkipHydration: 'true'}
 })
 export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
   @Input() epubFileName: string = '';
+  @ViewChild('downloadOptionsPopover') downloadOptionsPopover: any;
   
   atEnd: boolean = false;
   atStart: boolean = true;
-  availableEpubs: any = [];
   book: any = null;
   currentHighlight: any = undefined;
   currentLocationCfi: any = '';
   currentPositionPercentage: string = '0 %';
   currentSectionLabel: string = '';
   displayed: any = null;
-  downloadURL: string = '';
+  downloadPopoverIsOpen: boolean = false;
+  epubData: Record<string, any> = {};
   epubContributors: string[] = [];
   epubCoverImageSrc: SafeUrl | undefined | null = '';
   epubCreators: string[] = [];
@@ -54,6 +56,7 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
   searchResultIndex: number = 0;
   searchResults: any[] = [];
   searchText: string = '';
+  showTOCButton: boolean = true;
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
   tocMenuOpen: boolean = false;
@@ -75,25 +78,37 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
     @Inject(LOCALE_ID) private activeLocale: string,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.availableEpubs = config.AvailableEpubs ?? [];
     this.fontsize = this.readPopoverService.fontsize;
-    this.showURNButton = config.page?.epub?.showURNButton ?? false;
-    this.showViewOptionsButton = config.page?.epub?.showViewOptionsButton ?? true;
+    this.showTOCButton = config.component?.epub?.showTOCButton ?? true;
+    this.showURNButton = config.component?.epub?.showURNButton ?? false;
+    this.showViewOptionsButton = config.component?.epub?.showViewOptionsButton ?? true;
     this._window = <any>this.document.defaultView;
   }
 
   ngOnInit() {
     this.subscribeToReadPopoverFontsizeChanges();
+
+    const availableEbooks: any[] = config.ebooks ?? [];
+    for (const ebook of availableEbooks) {
+      if (ebook.filename === this.epubFileName) {
+        this.epubData = ebook;
+        break;
+      }
+    }
   }
 
   ngAfterViewInit() {
     // TODO: After upgrade to Angular 16.2+ test changing this to the AfterRender lifecycle hook. The DOM needs to be ready before the epub is loaded.
     // Loading the epub works only in the browser
     if (isBrowser()) {
-      const epubFilePath = (this._window?.location.origin ?? '')
+      let epubFilePath = (this._window?.location.origin ?? '')
             + (this._window?.location.pathname.split('/')[1] === this.activeLocale ? '/' + this.activeLocale : '')
-            + '/assets/books/'
+            + '/assets/ebooks/'
             + this.epubFileName;
+
+      if (this.epubData.externalFileURL) {
+        epubFilePath = this.epubData.externalFileURL;
+      }
     
       let iterationsLeft = 10;
       if (this.intervalTimerId !== undefined) {
@@ -137,74 +152,76 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
           });
         }, 500);
 
-        // Get epub title, creator(s), contributor(s) and cover image
-        // (as a blob) from the epub. Since the metadata object provided
-        // by the epub.js library doesn't support multiple creators or
-        // contributors we have to get those directly from the epub
-        // package document.
-        this.epubTitle = this.book.package.metadata.title;
+        if (this.showTOCButton) {
+          // Get epub title, creator(s), contributor(s) and cover image
+          // (as a blob) from the epub. Since the metadata object provided
+          // by the epub.js library doesn't support multiple creators or
+          // contributors we have to get those directly from the epub
+          // package document.
+          this.epubTitle = this.book.package.metadata.title;
 
-        let opfFilePath = String(this.book.container.packagePath);
-        if (!opfFilePath.startsWith('/')) {
-          opfFilePath = '/' + opfFilePath;
-        }
+          let opfFilePath = String(this.book.container.packagePath);
+          if (!opfFilePath.startsWith('/')) {
+            opfFilePath = '/' + opfFilePath;
+          }
 
-        this.book.archive.getText(opfFilePath).then((res: any) => {
-          try {
-            if (res) {
-              const parser = new DOMParser();
-              const opf = parser.parseFromString(res, 'text/xml');
-              const creatorElements = opf.getElementsByTagName('dc:creator');
-              for (let i = 0; i < creatorElements.length; i++) {
-                if (creatorElements && creatorElements.item(i)?.textContent) {
-                  const text = creatorElements.item(i)?.textContent;
-                  if (text) {
-                    this.epubCreators.push(text);
-                  }
-                }
-              }
-              const contributorElements = opf.getElementsByTagName('dc:contributor');
-              for (let i = 0; i < contributorElements.length; i++) {
-                if (creatorElements && contributorElements.item(i)?.textContent) {
-                  const text = contributorElements.item(i)?.textContent;
-                  if (text) {
-                    this.epubContributors.push(text);
-                  }
-                }
-              }
-              // Form concatenated string with epub writer names
-              if (this.epubCreators.length > 0) {
-                this.epubWritersString = this.commonFunctions.concatenateNames(this.epubCreators, ',');
-              } else if (this.epubContributors.length > 0) {
-                this.epubWritersString = this.commonFunctions.concatenateNames(this.epubContributors, ',');
-              }
-            }
-          } catch {}
-        });
-
-        // Get epub cover image
-        this.book.archive.getBlob(this.book.cover).then((res: any) => {
-          this.ngZone.run(() => {
+          this.book.archive.getText(opfFilePath).then((res: any) => {
             try {
               if (res) {
-                this.epubCoverImageSrc = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-              } else {
+                const parser = new DOMParser();
+                const opf = parser.parseFromString(res, 'text/xml');
+                const creatorElements = opf.getElementsByTagName('dc:creator');
+                for (let i = 0; i < creatorElements.length; i++) {
+                  if (creatorElements && creatorElements.item(i)?.textContent) {
+                    const text = creatorElements.item(i)?.textContent;
+                    if (text) {
+                      this.epubCreators.push(text);
+                    }
+                  }
+                }
+                const contributorElements = opf.getElementsByTagName('dc:contributor');
+                for (let i = 0; i < contributorElements.length; i++) {
+                  if (creatorElements && contributorElements.item(i)?.textContent) {
+                    const text = contributorElements.item(i)?.textContent;
+                    if (text) {
+                      this.epubContributors.push(text);
+                    }
+                  }
+                }
+                // Form concatenated string with epub writer names
+                if (this.epubCreators.length > 0) {
+                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubCreators, ',');
+                } else if (this.epubContributors.length > 0) {
+                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubContributors, ',');
+                }
+              }
+            } catch {}
+          });
+
+          // Get epub cover image
+          this.book.archive.getBlob(this.book.cover).then((res: any) => {
+            this.ngZone.run(() => {
+              try {
+                if (res) {
+                  this.epubCoverImageSrc = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+                } else {
+                  this.epubCoverImageSrc = '';
+                }
+              } catch (e) {
                 this.epubCoverImageSrc = '';
               }
-            } catch (e) {
-              this.epubCoverImageSrc = '';
-            }
+            });
           });
-        });
 
-        // Get epub table of contents
-        this.book.loaded.navigation.then((toc: any) => {
-          this.ngZone.run(() => {
-            if (toc?.length) {
-              this.epubToc = toc.toc;
-            }
+          // Get epub table of contents
+          this.book.loaded.navigation.then((toc: any) => {
+            this.ngZone.run(() => {
+              if (toc?.length) {
+                this.epubToc = toc.toc;
+              }
+            });
           });
-        });
+        }
 
         // Generate locations for calculating percentage positions throughout the book
         this.book.locations.generate();
@@ -271,13 +288,6 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
       }); // End of this.book.ready
 
     }); // End of runOutsideAngular
-
-    for (const epub in this.availableEpubs) {
-      if (this.availableEpubs[epub]['filename'] === this.epubFileName) {
-        this.downloadURL = this.availableEpubs[epub]['download'];
-        break;
-      }
-    }
   }
 
   private renderEpub() {
@@ -509,8 +519,13 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
     this.rendition.prev();
   }
 
-  openDownloadURL() {
-    const ref = window.open(this.downloadURL, '_blank');
+  openDownloadPopover(event: any) {
+    this.downloadOptionsPopover.event = event;
+    this.downloadPopoverIsOpen = true;
+  }
+
+  closeDownloadPopover() {
+    this.downloadPopoverIsOpen = false;
   }
 
   async showReadSettingsPopover(event: any) {
@@ -604,13 +619,18 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // 3. We also need to listen on the whole document for next/prev in epub
     // to work when the user has clicked somewhere outside the epub iframe.
+    // However, arrow left/right clicks inside the searchbar should be ignored.
     this.unlistenKeyDownEvents = this.renderer2.listen('document', 'keydown', (event) => {
       switch (event.key) {
         case 'ArrowLeft':
-          this.prev();
+          if (!event.target.className.includes('searchbar-input')) {
+            this.prev();
+          }
           break;
         case 'ArrowRight':
-          this.next();
+          if (!event.target.className.includes('searchbar-input')) {
+            this.next();
+          }
           break;
         case 'Enter':
           // Move to next search match if 'enter' key pressed in epub
@@ -620,7 +640,7 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
           if (event.target.className.includes('searchbar-input')) {
             if (event.target.parentElement !== null) {
               if (event.target.parentElement.parentElement !== null) {
-                if (event.target.parentElement.parentElement.className.includes('epub-search-bar')) {
+                if (event.target.parentElement.parentElement.className.includes('epub-searchbar')) {
                   this.nextSearch();
                   break;
                 }

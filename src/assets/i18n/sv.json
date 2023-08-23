@@ -389,7 +389,11 @@
         "Cancel": "Avbryt",
         "ShowMore": "Visa fler",
         "ScrollToTop": "Till början",
-        "Close": "Stäng"
+        "Close": "Stäng",
+        "OpenInNewWindow": "Länken öppnas i ett nytt fönster"
+    },
+    "Ebook": {
+        "InvalidFilename": "Ogiltigt filnamn. E-boken kunde inte hittas."
     },
     "Epub": {
         "DisplayOptions": "Textstorlek",

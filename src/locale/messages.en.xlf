@@ -30,6 +30,12 @@
         <target>Ok</target>
       </segment>
     </unit>
+    <unit id="BasicActions.OpenInNewWindow">
+      <segment state="initial">
+        <source>Länken öppnas i ett nytt fönster</source>
+        <target>Länken öppnas i ett nytt fönster</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.ScrollToTop">
       <segment state="initial">
         <source>Till början</source>
@@ -142,6 +148,12 @@
       <segment state="initial">
         <source>Ladda ner och skriv ut</source>
         <target>Download and print</target>
+      </segment>
+    </unit>
+    <unit id="Ebook.InvalidFilename">
+      <segment state="initial">
+        <source>Ogiltigt filnamn. E-boken kunde inte hittas.</source>
+        <target>Invalid filename. The ebook could not be found.</target>
       </segment>
     </unit>
     <unit id="editorialChange">

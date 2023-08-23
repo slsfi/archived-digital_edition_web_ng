@@ -391,6 +391,9 @@
         "ScrollToTop": "Palaa alkuun",
         "Close": "Sulje"
     },
+    "Ebook": {
+        "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."
+    },
     "Epub": {
         "DisplayOptions": "Tekstikoko",
         "Download": "Lataa",

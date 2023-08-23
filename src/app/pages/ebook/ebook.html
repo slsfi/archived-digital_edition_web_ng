@@ -1,5 +1,11 @@
-<epub *ngIf="epubFileName"
+<epub *ngIf="(filename && ebookType === 'epub'); else invalidFilename"
       id="epub-page-container"
       class="ion-page"
-      [epubFileName]="epubFileName"
+      [epubFileName]="filename"
 ></epub>
+
+<ng-template #invalidFilename>
+      <ion-content class="ebook-ion-content">
+            <p class="ebook-error-message" i18n="@@Ebook.InvalidFilename">Ogiltigt filnamn. E-boken kunde inte hittas.</p>
+      </ion-content>
+</ng-template>
