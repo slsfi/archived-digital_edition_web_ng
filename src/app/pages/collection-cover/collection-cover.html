@@ -12,13 +12,13 @@
   </div>
 </ion-content>
 
-<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
       <div class="tei teiContainer" [innerHTML]="text"></div>
   </div>
 </ion-content>
 
-<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
   <div class="cover-image-wrapper" [ngClass]="printMainContentClasses()">
     <img class="cover-image" [src]="image_src" [alt]="image_alt" loading="lazy">
   </div>
