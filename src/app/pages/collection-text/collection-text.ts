@@ -3,7 +3,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import JsonURL from '@jsonurl/jsonurl';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
@@ -11,6 +10,7 @@ import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/sem
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { UrlService } from 'src/app/services/url.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
@@ -75,6 +75,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private commentService: CommentService,
     public commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
+    private urlService: UrlService,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private popoverCtrl: PopoverController,
@@ -242,10 +243,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         }
 
         if (queryParams['views']) {
-          const parsedViews = JsonURL.parse(queryParams['views'], {
-            AQF: true,
-            impliedArray: []
-          });
+          const parsedViews = this.urlService.parse(queryParams['views'], true);
 
           let viewsChanged = false;
           if (this.views.length !== parsedViews.length) {
@@ -1567,7 +1565,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       [],
       {
         relativeTo: this.route,
-        queryParams: { views: JsonURL.stringify(trimmedViews, { AQF: true, impliedArray: true }) },
+        queryParams: { views: this.urlService.stringify(trimmedViews, true) },
         queryParamsHandling: 'merge',
         replaceUrl: true
       }
