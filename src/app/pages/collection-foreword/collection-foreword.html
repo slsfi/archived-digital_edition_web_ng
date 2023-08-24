@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()">
+<ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
     <ng-container *ngIf="(text$ | async) as text; else loading">
       <div class="tei teiContainer"
