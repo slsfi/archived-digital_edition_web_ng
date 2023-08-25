@@ -343,7 +343,7 @@ export class IndexPage implements OnInit {
     sortByName = sortByName.replace('ʽ', '').trim();
     if (indexType === 'persons') {
       sortByName = sortByName.replace(
-        /^(?:de la |de |von |van |af |d’ |d’|di |du |des |zu |auf |del |do |dos |da |das |e )/, ''
+        /^(?:de la |de |von der |van der |von |van |der |af |d’ |d’|di |du |des |zu |auf |del |do |dos |da |das |e )/, ''
       );
     }
     sortByName = sortByName.toLowerCase();
@@ -388,7 +388,10 @@ export class IndexPage implements OnInit {
             );
           } else {
             this.data = this.cachedData.filter(
-              item => item.name_for_list && (item.name_for_list as string).toLowerCase().includes(this.searchText.toLowerCase())
+              item => (
+                (item.name_for_list && (item.name_for_list as string).toLowerCase().includes(this.searchText.toLowerCase())) ||
+                (item.full_name && (item.full_name as string).toLowerCase().includes(this.searchText.toLowerCase()))
+              )
             );
           }
         }

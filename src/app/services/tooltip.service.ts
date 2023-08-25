@@ -1,5 +1,4 @@
 import { Injectable, SecurityContext } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 
@@ -13,7 +12,6 @@ import { config } from "src/assets/config/config";
   providedIn: 'root',
 })
 export class TooltipService {
-  private API: string = '';
   private cachedTooltips: Record<string, any> = {
     'comments': new Map(),
     'footnotes': new Map(),
@@ -21,30 +19,16 @@ export class TooltipService {
     'places': new Map(),
     'works': new Map()
   };
-  private project: string = '';
   private maxTooltipCacheSize: number = 50;
   private simpleWorkMetadata: boolean = false;
 
   constructor(
-    private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private commentService: CommentService,
+    private sanitizer: DomSanitizer,
     private semanticDataService: SemanticDataService,
     private userSettingsService: UserSettingsService
   ) {
-    this.API = config.app?.apiEndpoint ?? '';
-    this.project = config.app?.machineName ?? '';
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
-  }
-
-  getSingleSemanticObject(id: string, type: string): Observable<any> {
-    type = type === 'person' ? 'subject'
-      : type === 'place' ? 'location'
-      : type === 'keyword' ? 'tag'
-      : type;
-    return this.http.get(
-      `${this.API}/${this.project}/${type}/${id}`
-    );
   }
 
   getSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement): Observable<string> {
@@ -77,7 +61,7 @@ export class TooltipService {
         })
       );
     } else {
-      return this.getSingleSemanticObject(id, type).pipe(
+      return this.semanticDataService.getSingleSemanticDataObject(type, id).pipe(
         map((tooltip) => {
           let text = '';
           if (type === 'person') {
@@ -257,14 +241,7 @@ export class TooltipService {
       yearBorn !== 'null' &&
       yearDeceased !== 'null'
     ) {
-      yearBornDeceased =
-        '(' +
-        yearBorn +
-        bcIndicatorBorn +
-        '–' +
-        yearDeceased +
-        bcIndicatorDeceased +
-        ')';
+      yearBornDeceased = '(' + yearBorn + bcIndicatorBorn + '–' + yearDeceased + bcIndicatorDeceased + ')';
     } else if (yearBorn !== null && yearBorn !== 'null') {
       yearBornDeceased = '(* ' + yearBorn + bcIndicatorBorn + ')';
     } else if (yearDeceased !== null && yearDeceased !== 'null') {
@@ -330,8 +307,8 @@ export class TooltipService {
 
     // Set variable for determining if the tooltip should be placed above or below the trigger
     // rather than beside it.
-    let positionAboveOrBelowTrigger: Boolean = false;
-    let positionAbove: Boolean = false;
+    let positionAboveOrBelowTrigger: boolean = false;
+    let positionAbove: boolean = false;
 
     // Get rectangle which contains tooltiptrigger element. For trigger elements
     // spanning multiple lines tooltips are always placed above or below the trigger.
@@ -612,7 +589,7 @@ export class TooltipService {
     toolTipElem: HTMLElement,
     toolTipText: string,
     maxWidth = 0,
-    returnCompMaxWidth: Boolean = false
+    returnCompMaxWidth: boolean = false
   ) {
     // Create hidden div and make it into a copy of the tooltip div. Calculations are done on the hidden div.
     const hiddenDiv: HTMLElement = document.createElement('div');

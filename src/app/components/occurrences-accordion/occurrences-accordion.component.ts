@@ -25,18 +25,27 @@ export class OccurrencesAccordionComponent implements OnInit {
   groupedTexts: any[] = [];
   isLoading: boolean = true;
   occurrenceData: any[] = [];
-  showPublishedStatus: Number = 2;
+  showPublishedStatus: number = 2;
   simpleWorkMetadata: boolean = false;
 
   constructor(
     private commonFunctions: CommonFunctionsService,
     private semanticDataService: SemanticDataService
   ) {
-    this.showPublishedStatus = config.component?.occurrencesAccordion?.publishedStatus ?? 2;
     this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {
+    if (this.type === 'tag') {
+      this.showPublishedStatus = config.page?.index?.keywords?.publishedStatus ?? 2;
+    } else if (this.type === 'subject') {
+      this.showPublishedStatus = config.page?.index?.persons?.publishedStatus ?? 2;
+    } else if (this.type === 'location') {
+      this.showPublishedStatus = config.page?.index?.places?.publishedStatus ?? 2;
+    } else if (this.type === 'work') {
+      this.showPublishedStatus = config.page?.index?.works?.publishedStatus ?? 2;
+    }
+
     if (this.type === 'work' && this.simpleWorkMetadata) {
       this.isLoading = false;
     } else if (this.id && this.type) {

@@ -9,7 +9,8 @@ export const config: Config = {
     machineName: "topelius",
     projectId: 10,
     apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
-    simpleApi: '',
+    simpleApi: "",
+    facsimileBase: "",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" },
@@ -18,7 +19,8 @@ export const config: Config = {
       defaultLanguage: "sv",
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
-      multilingualReadingTextLanguages: []
+      multilingualReadingTextLanguages: [],
+      multilingualSemanticData: false
     },
     enableCollectionLegacyIDs: true,
     enableRouterLoadingBar: true
@@ -93,18 +95,21 @@ export const config: Config = {
       keywords: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       },
       persons: {
         database: "elastic",
         maxFetchSize: 500,
-        showPublishedStatus: 2,
-        showFilter: true
+        showFilter: true,
+        publishedStatus: 2
       },
       places: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
+      },
+      works: {
+        publishedStatus: 2
       }
     },
     introduction: {
@@ -161,16 +166,22 @@ export const config: Config = {
     facsimileColumn: {
       imageQuality: 4,
       showFacsimileTitle: true
-    },
-    occurrencesAccordion: {
-      hideCityRegionCountry: true,
-      hideTypeAndDescription: true,
-      publishedStatus: 2
     }
   },
   modal: {
     fullscreenImageViewer: {
       imageQuality: 4
+    },
+    semanticDataObject: {
+      showAliasAndPrevLastName: false,
+      showArticleData: false,
+      showCityRegionCountry: false,
+      showDescriptionLabel: false,
+      showGalleryOccurrences: false,
+      showMediaData: false,
+      showOccupation: false,
+      showOccurrences: true,
+      showType: false
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -524,18 +535,18 @@ export const config_soderholm: Config = {
       keywords: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       },
       persons: {
         database: "elastic",
         maxFetchSize: 500,
-        showPublishedStatus: 2,
-        showFilter: true
+        showFilter: true,
+        publishedStatus: 2
       },
       places: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       }
     },
     introduction: {
@@ -592,16 +603,14 @@ export const config_soderholm: Config = {
     facsimileColumn: {
       imageQuality: 2,
       showFacsimileTitle: false
-    },
-    occurrencesAccordion: {
-      hideCityRegionCountry: true,
-      hideTypeAndDescription: true,
-      publishedStatus: 2
     }
   },
   modal: {
     fullscreenImageViewer: {
       imageQuality: 2
+    },
+    semanticDataObject: {
+      showAliasAndPrevLastName: false
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1009,18 +1018,18 @@ export const config_vonWright: Config = {
       keywords: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       },
       persons: {
         database: "elastic",
         maxFetchSize: 500,
-        showPublishedStatus: 2,
-        showFilter: true
+        showFilter: true,
+        publishedStatus: 2
       },
       places: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       }
     },
     introduction: {
@@ -1077,16 +1086,14 @@ export const config_vonWright: Config = {
     facsimileColumn: {
       imageQuality: 4,
       showFacsimileTitle: false
-    },
-    occurrencesAccordion: {
-      hideCityRegionCountry: true,
-      hideTypeAndDescription: true,
-      publishedStatus: 2
     }
   },
   modal: {
     fullscreenImageViewer: {
       imageQuality: 4
+    },
+    semanticDataObject: {
+      showAliasAndPrevLastName: false
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1369,18 +1376,18 @@ export const config_granqvist: Config = {
       keywords: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       },
       persons: {
         database: "elastic",
         maxFetchSize: 500,
-        showPublishedStatus: 2,
-        showFilter: true
+        showFilter: true,
+        publishedStatus: 2
       },
       places: {
         maxFetchSize: 500,
         showFilter: true,
-        showPublishedStatus: 2
+        publishedStatus: 2
       }
     },
     introduction: {
@@ -1437,16 +1444,18 @@ export const config_granqvist: Config = {
     facsimileColumn: {
       imageQuality: 1,
       showFacsimileTitle: false
-    },
-    occurrencesAccordion: {
-      hideCityRegionCountry: true,
-      hideTypeAndDescription: true,
-      publishedStatus: 2
     }
   },
   modal: {
     fullscreenImageViewer: {
       imageQuality: 1
+    },
+    semanticDataObject: {
+      showAliasAndPrevLastName: false,
+      showArticleData: true,
+      showCityRegionCountry: true,
+      showGalleryOccurrences: true,
+      showMediaData: true
     }
   },
   urnResolverUrl: "https://urn.fi/",
@@ -1622,7 +1631,8 @@ export const config_mechelin: Config = {
       defaultLanguage: "sv",
       enableLanguageChanges: true,
       multilingualCollectionTableOfContents: true,
-      multilingualReadingTextLanguages: ["sv", "fi"]
+      multilingualReadingTextLanguages: ["sv", "fi"],
+      multilingualSemanticData: true
     }
   },
   collections: {
@@ -1713,11 +1723,6 @@ export const config_mechelin: Config = {
     facsimileColumn: {
       imageQuality: 1,
       showFacsimileTitle: false
-    },
-    occurrencesAccordion: {
-      hideCityRegionCountry: true,
-      hideTypeAndDescription: true,
-      publishedStatus: 2
     }
   },
   modal: {
