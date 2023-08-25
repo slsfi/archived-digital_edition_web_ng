@@ -284,6 +284,15 @@ ion-content.epub-ion-content::part(scroll) {
     padding-inline-end: 0;
   }
 
+  ion-button {
+    --background-hover: transparent;
+    --ripple-color: transparent;
+
+    &:hover {
+      opacity: var(--opacity-hover);
+    }
+  }
+
   ion-icon {
     color: #000;
     font-size: 1.75rem !important;
