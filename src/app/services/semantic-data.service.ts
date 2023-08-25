@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -18,8 +18,9 @@ export class SemanticDataService {
   flattened: any;
 
   constructor(
-    public commonFunctions: CommonFunctionsService,
-    private http: HttpClient
+    private commonFunctions: CommonFunctionsService,
+    private http: HttpClient,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.elasticSubjectIndex = 'subject';
     this.elasticLocationIndex = 'location';
@@ -34,13 +35,16 @@ export class SemanticDataService {
    * place/location, work.
    */
   getSingleSemanticDataObject(type: string, id: string): Observable<any> {
-    type === 'person' ? type = 'subject'
-      : type === 'place' ? type = 'location'
-      : type === 'keyword' ? type = 'tag'
+    type = (type === 'person') ? 'subject'
+      : (type === 'place') ? 'location'
+      : (type === 'keyword') ? 'tag'
       : type;
-    return this.http.get(
-      `${config.app.apiEndpoint}/${config.app.machineName}/${type}/${id}`
-    );
+    
+    let url = `${config.app.apiEndpoint}/${config.app.machineName}/${type}/${id}`;
+    if (config.app?.i18n?.multilingualSemanticData) {
+      url = url + '/' + this.activeLocale;
+    }
+    return this.http.get(url);
   }
 
   getFilterCollections(): Observable<any> {
@@ -192,7 +196,7 @@ export class SemanticDataService {
     );
   }
 
-  getSubjectOccurrences(subject_id?: Number): Observable<any> {
+  getSubjectOccurrences(subject_id?: number): Observable<any> {
     return this.http.get(
       config.app.apiEndpoint +
         '/' +
@@ -264,7 +268,7 @@ export class SemanticDataService {
   }
 
   getSubjectsElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
-    const showPublishedStatus = config.page?.index?.persons?.showPublishedStatus ?? 2;
+    const showPublishedStatus = config.page?.index?.persons?.publishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -394,7 +398,7 @@ export class SemanticDataService {
   }
 
   getLocationElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
-    const showPublishedStatus = config.page?.index?.places?.showPublishedStatus ?? 2;
+    const showPublishedStatus = config.page?.index?.places?.publishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -561,7 +565,7 @@ export class SemanticDataService {
   }
 
   getTagElastic(after_key?: any, searchText?: any, filters?: any, max?: any) {
-    const showPublishedStatus = config.page?.index?.keywords?.showPublishedStatus ?? 2;
+    const showPublishedStatus = config.page?.index?.keywords?.publishedStatus ?? 2;
 
     if (filters === null || filters === undefined) {
       filters = {};
@@ -765,20 +769,6 @@ export class SemanticDataService {
         '/toc/' +
         collection_id
     );
-  }
-
-  private flatten(toc: any) {
-    if (toc.children) {
-      for (let i = 0, count = toc.children.length; i < count; i++) {
-        if (
-          toc.children[i].itemId !== undefined &&
-          toc.children[i].itemId !== ''
-        ) {
-          this.flattened.push(toc.children[i]);
-        }
-        this.flatten(toc.children[i]);
-      }
-    }
   }
 
   private getSearchUrl(index: any): string {

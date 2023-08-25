@@ -44,6 +44,10 @@
 
         p {
             margin: 0;
+
+            + p {
+                margin-top: 0.25em;
+            }
         }
 
         dl {

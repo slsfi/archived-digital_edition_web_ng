@@ -20,7 +20,7 @@
   
         <div class="sd-header" *ngIf="data">
           <h2>
-            <span *ngIf="data?.details?.occupation && !hideTypeAndDescription" class="occupation">{{data.details.occupation}} – </span><span class="title" [innerHTML]="data?.details?.title"></span><span *ngIf="data?.details?.year_born_deceased" class="date" [innerHTML]="' ' + data.details.year_born_deceased"></span><span *ngIf="data?.details?.latitude && data?.details?.longitude" class="coordinates"> (<a [href]="'https://www.openstreetmap.org/?mlat=' + data.details.latitude + '&mlon=' + data.details.longitude" target="_blank"><ng-container i18n="@@Occurrences.latitude">lat.</ng-container> {{data.details.latitude}}, <ng-container i18n="@@Occurrences.longitude">long.</ng-container> {{data.details.longitude}}</a>)</span>
+            <span *ngIf="data?.details?.occupation && showOccupation" class="occupation">{{data.details.occupation}} – </span><span class="title" [innerHTML]="data?.details?.title"></span><span *ngIf="data?.details?.year_born_deceased || data?.details?.lived_between" class="date" [innerHTML]="data?.details?.lived_between ? ' (' + data.details.lived_between + ')' : ' ' + data.details.year_born_deceased"></span><span *ngIf="data?.details?.latitude && data?.details?.longitude" class="coordinates"> (<a [href]="'https://www.openstreetmap.org/?mlat=' + data.details.latitude + '&mlon=' + data.details.longitude" target="_blank"><ng-container i18n="@@Occurrences.latitude">lat.</ng-container> {{data.details.latitude}}, <ng-container i18n="@@Occurrences.longitude">long.</ng-container> {{data.details.longitude}}</a>)</span>
           </h2>
           <div class="media_image_wrapper" *ngIf="data?.media?.imageUrl">
             <img alt="occurrence image" [src]="data.media.imageUrl">
@@ -31,20 +31,20 @@
         </div>
   
         <div class="sd-box"
-            *ngIf="(data?.details?.city && !hideCityRegionCountry) || (data?.details?.region && !hideCityRegionCountry) || (data?.details?.country && !hideCityRegionCountry) || data?.details?.place_of_birth || (data?.details?.type && !hideTypeAndDescription) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || data?.details?.description || data?.articles?.length || data?.galleryOccurrences?.length"
+            *ngIf="(showCityRegionCountry && (data?.details?.city || data?.details?.region || data?.details?.country)) || data?.details?.place_of_birth || (data?.details?.type && showType) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || data?.details?.description || data?.articles?.length || data?.galleryOccurrences?.length || data?.details?.alias || data?.details?.previous_last_name"
         >
           <dl
-                *ngIf="(data?.details?.city && !hideCityRegionCountry) || (data?.details?.region && !hideCityRegionCountry) || (data?.details?.country && !hideCityRegionCountry) || data?.details?.place_of_birth || (data?.details?.type && !hideTypeAndDescription) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || (data?.details?.description && !hideTypeAndDescription) || data?.articles?.length"
+                *ngIf="(showCityRegionCountry && (data?.details?.city || data?.details?.region || data?.details?.country)) || data?.details?.place_of_birth || (data?.details?.type && showType) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || (data?.details?.description && showDescriptionLabel) || data?.articles?.length"
           >
-            <div *ngIf="data?.details?.city && !hideCityRegionCountry" class="city">
+            <div *ngIf="data?.details?.city && showCityRegionCountry" class="city">
               <dt i18n="@@Occurrences.city">Stad</dt>
               <dd>{{data.details.city}}</dd>
             </div>
-            <div *ngIf="data?.details?.region && !hideCityRegionCountry" class="region">
+            <div *ngIf="data?.details?.region && showCityRegionCountry" class="region">
               <dt i18n="@@Occurrences.region">Region</dt>
               <dd>{{data.details.region}}</dd>
             </div>
-            <div *ngIf="data?.details?.country && !hideCityRegionCountry" class="country">
+            <div *ngIf="data?.details?.country && showCityRegionCountry" class="country">
               <dt i18n="@@Occurrences.country">Land</dt>
               <dd>{{data.details.country}}</dd>
             </div>
@@ -52,7 +52,7 @@
               <dt i18n="@@Occurrences.place_of_birth">Ort</dt>
               <dd>{{data.details.place_of_birth}}</dd>
             </div>
-            <div *ngIf="data?.details?.type && !hideTypeAndDescription" class="type">
+            <div *ngIf="data?.details?.type && showType" class="type">
               <dt i18n="@@Occurrences.type">Typ</dt>
               <dd>{{data.details.type}}</dd>
             </div>
@@ -92,12 +92,13 @@
                 </ng-container>
             </dd>
             </div>
-            <div *ngIf="data?.details?.description && !hideTypeAndDescription" class="description">
+            <div *ngIf="data?.details?.description && showDescriptionLabel" class="description">
               <dt i18n="@@Occurrences.description">Beskrivning</dt>
               <dd>{{data.details.description}}</dd>
             </div>
           </dl>
-          <p *ngIf="data?.details?.description && hideTypeAndDescription" class="description">{{data.details.description}}</p>
+          <p *ngIf="showAliasAndPrevLastName && (data?.details?.alias || data?.details?.previous_last_name)" class="alias" [innerHTML]="data?.details?.alias ? (data?.details?.previous_last_name ? data?.details?.alias + ', ' + data?.details?.previous_last_name : data?.details?.alias) : data?.details?.previous_last_name"></p>
+          <p *ngIf="data?.details?.description && !showDescriptionLabel" class="description">{{data.details.description}}</p>
           <ion-button *ngIf="data?.galleryOccurrences?.length" class="custom-outline-button" fill="outline" i18n="@@TOC.MediaCollections" (click)="openGallery(data.galleryOccurrences[0])">Bildbank</ion-button>
         </div>
   

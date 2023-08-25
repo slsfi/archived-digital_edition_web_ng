@@ -4,13 +4,12 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subject, Subscription, timeout } from 'rxjs';
 
-import { ComponentsModule } from 'src/app/components/components.module';
 import { OccurrencesAccordionComponent } from 'src/app/components/occurrences-accordion/occurrences-accordion.component';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { OccurrenceService } from 'src/app/services/occurence.service';
 import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -18,32 +17,44 @@ import { config } from "src/assets/config/config";
   selector: 'modal-semantic-data-object',
   templateUrl: 'semantic-data-object.modal.html',
   styleUrls: ['semantic-data-object.modal.scss'],
-  imports: [CommonModule, ComponentsModule, IonicModule, OccurrencesAccordionComponent, RouterModule]
+  imports: [CommonModule, IonicModule, OccurrencesAccordionComponent, RouterModule]
 })
 export class SemanticDataObjectModal implements OnInit {
   @Input() id: string = '';
   @Input() type: string = '';
 
-  hideTypeAndDescription = false;
-  hideCityRegionCountry = false;
   loadingErrorData$: Subject<boolean> = new Subject<boolean>();
   objectData$: Observable<any>;
   routerEventsSubscription: Subscription;
+  showAliasAndPrevLastName: boolean = true;
+  showArticleData: boolean = false;
+  showCityRegionCountry: boolean = false;
+  showDescriptionLabel: boolean = false;
+  showGalleryOccurrences: boolean = false;
+  showMediaData: boolean = false;
+  showOccupation: boolean = false;
   showOccurrences: boolean = true;
+  showType: boolean = false;
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private semanticDataService: SemanticDataService,
-    private modalCtrl: ModalController,
-    private tooltipService: TooltipService,
-    private occurrenceService: OccurrenceService,
     private commonFunctions: CommonFunctionsService,
-    public router: Router
+    private occurrenceService: OccurrenceService,
+    private modalCtrl: ModalController,
+    private router: Router,
+    private semanticDataService: SemanticDataService,
+    private tooltipService: TooltipService
   ) {
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
-    this.hideTypeAndDescription = config.component?.occurrencesAccordion?.hideTypeAndDescription ?? false;
-    this.hideCityRegionCountry = config.component?.occurrencesAccordion?.hideCityRegionCountry ?? false;
+    this.showAliasAndPrevLastName = config.modal?.semanticDataObject?.showAliasAndPrevLastName ?? true;
+    this.showArticleData = config.modal?.semanticDataObject?.showArticleData ?? false;
+    this.showCityRegionCountry = config.modal?.semanticDataObject?.showCityRegionCountry ?? false;
+    this.showDescriptionLabel = config.modal?.semanticDataObject?.showDescriptionLabel ?? false;
+    this.showGalleryOccurrences = config.modal?.semanticDataObject?.showGalleryOccurrences ?? false;
+    this.showMediaData = config.modal?.semanticDataObject?.showMediaData ?? false;
+    this.showOccupation = config.modal?.semanticDataObject?.showOccupation ?? false;
     this.showOccurrences = config.modal?.semanticDataObject?.showOccurrences ?? true;
+    this.showType = config.modal?.semanticDataObject?.showType ?? false;
+    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {
@@ -169,7 +180,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectMediaData(type: string, id: string): Observable<any> {
-    return this.occurrenceService.getMediaData(type, id).pipe(
+    return (!this.showMediaData && of({})) || this.occurrenceService.getMediaData(type, id).pipe(
       timeout(20000),
       map((data: any) => {
         data.imageUrl = data.image_path;
@@ -182,7 +193,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectArticleData(type: string, id: string): Observable<any> {
-    return this.occurrenceService.getArticleData(type, id).pipe(
+    return (!this.showArticleData && of({})) || this.occurrenceService.getArticleData(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
         return of({});
@@ -191,7 +202,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectGalleryOccurrences(type: string, id: string): Observable<any> {
-    return this.occurrenceService.getGalleryOccurrences(type, id).pipe(
+    return (!this.showGalleryOccurrences && of({})) || this.occurrenceService.getGalleryOccurrences(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
         return of({});
