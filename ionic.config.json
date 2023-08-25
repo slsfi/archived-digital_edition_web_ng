@@ -1,7 +1,4 @@
 {
   "name": "digitalEditions",
-  "integrations": {
-    "capacitor": {}
-  },
   "type": "angular"
 }
