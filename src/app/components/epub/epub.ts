@@ -95,6 +95,12 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
         break;
       }
     }
+
+    // Set up resizing of the epub when the container dimensions change
+    this.resizeObserver = new ResizeObserver(entries => {
+      this.throttledEpubResize();
+    });
+    this.resizeObserver.observe(this.elementRef.nativeElement);
   }
 
   ngAfterViewInit() {
@@ -141,10 +147,9 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
     // console.log('Loading epub from ', epubFilePath);
     this.ngZone.runOutsideAngular(() => {
       this.book = new Book(epubFilePath);
+      this.renderEpub();
 
       this.book.ready.then((res: any) => {
-        this.renderEpub();
-
         // Remove loading spinner with a delay
         setTimeout(() => {
           this.ngZone.run(() => {
@@ -226,66 +231,60 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
         // Generate locations for calculating percentage positions throughout the book
         this.book.locations.generate();
 
-        // Set up resizing of the epub when the container dimensions change
-        this.resizeObserver = new ResizeObserver(entries => {
-          this.throttledEpubResize();
-        });
-        this.resizeObserver.observe(this.elementRef.nativeElement);
-
-        // Event fired when current location (i.e. page or spread) in book changes
-        this.rendition.on('relocated', (location: any) => {
-          this.ngZone.run(() => {
-
-            // Store current cfi location in book and check if at start or end of book
-            this.previousLocationCfi = this.currentLocationCfi;
-            this.currentLocationCfi = location.start.cfi;
-            if (location.atStart) {
-              this.atStart = true;
-            } else {
-              this.atStart = false;
-            }
-            if (location.atEnd) {
-              this.atEnd = true;
-            } else {
-              this.atEnd = false;
-            }
-
-            // Get the current position in the book as a percentage with one decimal
-            if (this.atStart) {
-              this.currentPositionPercentage = '0.0 %';
-            } else if (this.atEnd) {
-              this.currentPositionPercentage = '100.0 %';
-            } else {
-              this.currentPositionPercentage = (parseFloat(this.book.locations.percentageFromCfi(this.currentLocationCfi)) * 100).toFixed(1)
-              + ' %';
-            }
-          });
-
-          // Get the label of the current section from the epub
-          const getNavItemByHref = (href: any) => (function flatten(arr) {
-            return [].concat(...arr.map((v: any) => [v, ...flatten(v.subitems)]));
-          })(this.book.navigation.toc).filter(
-              (item: any) => this.book.canonical(item.href.split('#')[0]) === this.book.canonical(href)
-          )[0] || null;
-
-          const navItemHref = getNavItemByHref(this.rendition.currentLocation().start.href) as any;
-
-          this.ngZone.run(() => {
-            if (navItemHref !== null && navItemHref !== undefined) {
-              this.currentSectionLabel = navItemHref.label;
-            } else {
-              this.currentSectionLabel = '';
-            }
-            if (this.currentSectionLabel === null || this.currentSectionLabel === undefined) {
-              this.currentSectionLabel = '';
-            }
-          });
-        });
-
-        // Set up event listeners (keyboard)
-        this.setUpInputListeners();
-
       }); // End of this.book.ready
+
+      // Event fired when current location (i.e. page or spread) in book changes
+      this.rendition.on('relocated', (location: any) => {
+        this.ngZone.run(() => {
+
+          // Store current cfi location in book and check if at start or end of book
+          this.previousLocationCfi = this.currentLocationCfi;
+          this.currentLocationCfi = location.start.cfi;
+          if (location.atStart) {
+            this.atStart = true;
+          } else {
+            this.atStart = false;
+          }
+          if (location.atEnd) {
+            this.atEnd = true;
+          } else {
+            this.atEnd = false;
+          }
+
+          // Get the current position in the book as a percentage with one decimal
+          if (this.atStart) {
+            this.currentPositionPercentage = '0.0 %';
+          } else if (this.atEnd) {
+            this.currentPositionPercentage = '100.0 %';
+          } else {
+            this.currentPositionPercentage = (parseFloat(this.book.locations.percentageFromCfi(this.currentLocationCfi)) * 100).toFixed(1)
+            + ' %';
+          }
+        });
+
+        // Get the label of the current section from the epub
+        const getNavItemByHref = (href: any) => (function flatten(arr) {
+          return [].concat(...arr.map((v: any) => [v, ...flatten(v.subitems)]));
+        })(this.book.navigation.toc).filter(
+            (item: any) => this.book.canonical(item.href.split('#')[0]) === this.book.canonical(href)
+        )[0] || null;
+
+        const navItemHref = getNavItemByHref(this.rendition.currentLocation().start.href) as any;
+
+        this.ngZone.run(() => {
+          if (navItemHref !== null && navItemHref !== undefined) {
+            this.currentSectionLabel = navItemHref.label;
+          } else {
+            this.currentSectionLabel = '';
+          }
+          if (this.currentSectionLabel === null || this.currentSectionLabel === undefined) {
+            this.currentSectionLabel = '';
+          }
+        });
+      });
+
+      // Set up event listeners (keyboard)
+      this.setUpInputListeners();
 
     }); // End of runOutsideAngular
   }
@@ -308,7 +307,7 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     // Render the epub in the specified HTML element with rendering options
-    this.rendition = this.book.renderTo(area, { method: 'continuous', width: areaWidth, height: areaHeight, spread: 'auto' });
+    this.rendition = this.book.renderTo(area, { method: 'continuous', width: areaWidth, height: areaHeight, spread: 'auto', allowPopups: true });
 
     // Register epub themes for switching font size and setting font family to
     // browser default serif for the search to highlight matches correctly.
@@ -393,7 +392,7 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
       if (areaWidth > 0 && areaHeight > 0) {
         // Resize the epub rendition with the area's dimensions
         try {
-          this.rendition.resize(areaWidth, areaHeight);
+          this.rendition?.resize(areaWidth, areaHeight);
         } catch {
           console.log('epub.js threw an error resizing the rendering area');
         }
