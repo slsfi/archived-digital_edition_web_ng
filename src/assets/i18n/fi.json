@@ -387,9 +387,11 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Peruuta",
+        "Download": "Lataa",
         "ShowMore": "Näytä lisää",
         "ScrollToTop": "Palaa alkuun",
-        "Close": "Sulje"
+        "Close": "Sulje",
+        "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan"
     },
     "Ebook": {
         "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."

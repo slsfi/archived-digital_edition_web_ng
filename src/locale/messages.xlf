@@ -21,6 +21,11 @@
         <source>Stäng</source>
       </segment>
     </unit>
+    <unit id="BasicActions.Download">
+      <segment>
+        <source>Ladda ner</source>
+      </segment>
+    </unit>
     <unit id="BasicActions.Ok">
       <segment>
         <source>Ok</source>
