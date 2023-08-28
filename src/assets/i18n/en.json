@@ -387,9 +387,11 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Cancel",
+        "Download": "Download",
         "ShowMore": "Show more",
         "ScrollToTop": "Scroll to top",
-        "Close": "Close"
+        "Close": "Close",
+        "OpenInNewWindow": "Opens in a new window"
     },
     "Ebook": {
         "InvalidFilename": "Invalid filename. The ebook could not be found."

@@ -24,6 +24,12 @@
         <target>Stäng</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Ladda ner</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Ok">
       <segment state="initial">
         <source>Ok</source>

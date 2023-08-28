@@ -24,6 +24,12 @@
         <target>Close</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Download">
+      <segment state="initial">
+        <source>Ladda ner</source>
+        <target>Download</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.Ok">
       <segment state="initial">
         <source>Ok</source>
@@ -33,7 +39,7 @@
     <unit id="BasicActions.OpenInNewWindow">
       <segment state="initial">
         <source>Länken öppnas i ett nytt fönster</source>
-        <target>Länken öppnas i ett nytt fönster</target>
+        <target>Opens in a new window</target>
       </segment>
     </unit>
     <unit id="BasicActions.ScrollToTop">

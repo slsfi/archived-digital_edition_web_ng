@@ -46,7 +46,7 @@ export const config: Config = {
     {
       title: "Bröd och bot",
       filename: "norrback-brod-och-bot.epub",
-      externalFileURL: "",
+      externalFileURL: "https://www.sls.fi/sites/default/files/publications/epub/2695.epub",
       coverURL: "",
       downloadOptions: [
         {
@@ -56,13 +56,29 @@ export const config: Config = {
       ]
     },
     {
-      title: "Marriage Conditions in a Palestinian Village I",
+      title: "Marriage Conditions in a Palestinian Village I (epub)",
       filename: "marriage-conditions-1.epub",
       externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
       coverURL: "",
       downloadOptions: [
         {
-          url: "/assets/ebooks/30_11672_Marriage_Conditions_1.epub",
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
+          label: "EPUB"
+        },
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/pdf/30_11672_Marriage_Conditions_1.pdf/",
+          label: "PDF"
+        }
+      ]
+    },
+    {
+      title: "Marriage Conditions in a Palestinian Village I (pdf)",
+      filename: "marriage-conditions-1.pdf",
+      externalFileURL: "https://api.sls.fi/digitaledition/granqvist/files/30/pdf/30_11672_Marriage_Conditions_1.pdf/",
+      coverURL: "",
+      downloadOptions: [
+        {
+          url: "https://api.sls.fi/digitaledition/granqvist/files/30/epub/30_11672_Marriage_Conditions_1.epub/",
           label: "EPUB"
         },
         {

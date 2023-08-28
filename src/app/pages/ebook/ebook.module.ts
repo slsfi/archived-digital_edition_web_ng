@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { EbookPageRoutingModule } from './ebook-routing.module';
 import { EbookPage } from './ebook';
 import { EpubComponent } from 'src/app/components/epub/epub';
+import { PdfViewerComponent } from 'src/app/components/pdf-viewer/pdf-viewer';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { EpubComponent } from 'src/app/components/epub/epub';
       CommonModule,
       FormsModule,
       EbookPageRoutingModule,
-      EpubComponent
+      EpubComponent,
+      PdfViewerComponent
     ],
     providers: [],
     entryComponents: [

@@ -1,8 +1,16 @@
-<epub *ngIf="(filename && ebookType === 'epub'); else invalidFilename"
+<epub *ngIf="(filename && ebookType === 'epub'); else pdf"
       id="epub-page-container"
       class="ion-page"
       [epubFileName]="filename"
 ></epub>
+
+<ng-template #pdf>
+      <pdf-viewer *ngIf="(filename && ebookType === 'pdf'); else invalidFilename"
+            id="pdf-page-container"
+            class="ion-page"
+            [pdfFileName]="filename"
+      ></pdf-viewer>
+</ng-template>
 
 <ng-template #invalidFilename>
       <ion-content class="ebook-ion-content">

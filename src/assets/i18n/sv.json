@@ -387,6 +387,7 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Avbryt",
+        "Download": "Ladda ner",
         "ShowMore": "Visa fler",
         "ScrollToTop": "Till början",
         "Close": "Stäng",
