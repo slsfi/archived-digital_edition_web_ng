@@ -387,6 +387,7 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Cancel",
+        "DontShowAgain": "Don’t show again",
         "Download": "Download",
         "ShowMore": "Show more",
         "ScrollToTop": "Scroll to top",
@@ -402,7 +403,9 @@
         "Search": "Search",
         "SearchPhrase": "Search phrase",
         "Contents": "Contents",
-        "FileNotFound": "Unable to load the text. The epub-file cannot be found."
+        "FileNotFound": "Unable to load the text. The epub-file cannot be found.",
+        "NoticeHeader": "Notice",
+        "NoticeMessage": "This is an ebook in epub format. It’s displayed on the website using an integrated reading app. The reading app works best in Firefox. In Chrome, Edge and Safari the links in ebooks don’t work in the reading app. Hence we recommend you use Firefox, or download the ebook and read it on your device with a reading app of your choice."
     },
     "DownloadTexts": {
         "Download": "Download",

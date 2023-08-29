@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
   providedIn: 'root',
 })
 export class UserSettingsService {
+  private epubAlertDismissed: boolean = false;
   private mode: string = 'desktop'; // mode is either desktop or mobile
 
   constructor(
@@ -32,6 +33,14 @@ export class UserSettingsService {
 
   isDesktop() {
     return this.mode === 'desktop';
+  }
+
+  epubAlertIsDismissed() {
+    return this.epubAlertDismissed;
+  }
+
+  markEpubAlertAsDismissed() {
+    this.epubAlertDismissed = true;
   }
 
 }

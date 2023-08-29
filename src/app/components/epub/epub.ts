@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, Input, LOCALE_ID, NgZone,
 import { CommonModule, DOCUMENT } from "@angular/common";
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { IonicModule, ModalController, PopoverController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
@@ -66,6 +66,7 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
   private unlistenKeyDownEvents?: () => void;
 
   constructor(
+    private alertController: AlertController,
     private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
     private modalController: ModalController,
@@ -97,10 +98,12 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     // Set up resizing of the epub when the container dimensions change
-    this.resizeObserver = new ResizeObserver(entries => {
-      this.throttledEpubResize();
-    });
-    this.resizeObserver.observe(this.elementRef.nativeElement);
+    if (isBrowser()) {
+      this.resizeObserver = new ResizeObserver(entries => {
+        this.throttledEpubResize();
+      });
+      this.resizeObserver.observe(this.elementRef.nativeElement);
+    }
   }
 
   ngAfterViewInit() {
@@ -150,6 +153,10 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
       this.renderEpub();
 
       this.book.ready.then((res: any) => {
+        if (!this.userSettingsService.epubAlertIsDismissed() && $localize`:@@Epub.NoticeHeader:Anmärkning`) {
+          this.showNotice();
+        }
+
         // Remove loading spinner with a delay
         setTimeout(() => {
           this.ngZone.run(() => {
@@ -648,6 +655,32 @@ export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
           }
       }
     });
+  }
+
+  private async showNotice() {
+    const alert = await this.alertController.create({
+      header: $localize`:@@Epub.NoticeHeader:Anmärkning`,
+      message: $localize`:@@Epub.NoticeMessage:Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat.`,
+      cssClass: 'custom-select-alert',
+      buttons: [
+        {
+          text: $localize`:@@BasicActions.Ok:Ok`,
+          role: 'ok'
+        },
+        {
+          text: $localize`:@@BasicActions.DontShowAgain:Visa inte igen`,
+          role: 'dismiss',
+          cssClass: 'alert-button-highlighted'
+        }
+      ]
+    });
+
+    alert.present();
+    const { data, role } = await alert.onWillDismiss();
+
+    if (role === 'dismiss') {
+      this.userSettingsService.markEpubAlertAsDismissed();
+    }
   }
 
 }
