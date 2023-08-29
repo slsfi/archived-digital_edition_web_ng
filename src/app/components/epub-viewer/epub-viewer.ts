@@ -18,13 +18,13 @@ import { isBrowser } from 'src/standalone/utility-functions';
 
 @Component({
   standalone: true,
-  selector: 'epub',
-  templateUrl: 'epub.html',
-  styleUrls: ['epub.scss'],
+  selector: 'epub-viewer',
+  templateUrl: 'epub-viewer.html',
+  styleUrls: ['epub-viewer.scss'],
   imports: [CommonModule, FormsModule, IonicModule, IsExternalURLPipe],
   host: {ngSkipHydration: 'true'}
 })
-export class EpubComponent implements AfterViewInit, OnDestroy, OnInit {
+export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   @Input() epubFileName: string = '';
   @ViewChild('downloadOptionsPopover') downloadOptionsPopover: any;
   
