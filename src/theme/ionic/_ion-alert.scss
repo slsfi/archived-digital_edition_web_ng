@@ -8,6 +8,10 @@ ion-alert.custom-select-alert .alert-wrapper {
         font-size: 1.125rem;
         font-weight: bold;
     }
+
+    .alert-message {
+        color: #262626;
+    }
   
     .alert-radio-group {
         max-height: 50vh;
@@ -40,7 +44,17 @@ ion-alert.custom-select-alert .alert-wrapper {
         }
     }
   
-    .alert-button-group button.alert-button {
-        color: var(--button-background-color);
+    .alert-button-group {
+        align-items: center;
+
+        .alert-button {
+            color: var(--button-background-color);
+        }
+
+        .alert-button-highlighted {
+            color: var(--button-text-color);
+            background-color: var(--button-background-color);
+            height: 1.875rem;
+        }
     }
 }

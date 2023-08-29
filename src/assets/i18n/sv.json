@@ -387,6 +387,7 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Avbryt",
+        "DontShowAgain": "Visa inte igen",
         "Download": "Ladda ner",
         "ShowMore": "Visa fler",
         "ScrollToTop": "Till början",
@@ -402,7 +403,9 @@
         "Search": "Sök",
         "SearchPhrase": "Söktext",
         "Contents": "Innehåll",
-        "FileNotFound": "Texten kunde inte laddas. Epub-filen saknas."
+        "FileNotFound": "Texten kunde inte laddas. Epub-filen saknas.",
+        "NoticeHeader": "Anmärkning",
+        "NoticeMessage": "Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat."
     },
     "DownloadTexts": {
         "Download": "Ladda ner",

@@ -387,6 +387,7 @@
     "BasicActions": {
         "Ok": "Ok",
         "Cancel": "Peruuta",
+        "DontShowAgain": "Visa inte igen",
         "Download": "Lataa",
         "ShowMore": "Näytä lisää",
         "ScrollToTop": "Palaa alkuun",
@@ -402,7 +403,9 @@
         "Search": "Haku",
         "SearchPhrase": "Hakulause",
         "Contents": "Sisältö",
-        "FileNotFound": "Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole."
+        "FileNotFound": "Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole.",
+        "NoticeHeader": "Huomautus",
+        "NoticeMessage": "Tämä on epub-muodossa oleva sähkökirja, jota näytetään verkkosivustolla sisäänrakennetun lukuohjelman avulla. Lukuohjelma toimii parhaiten Firefox-selaimessa. Chrome, Edge ja Safari-selaimissa sähkökirjojen linkit eivät toimi lukuohjelmassa. Suosittelemme siksi, että käytät Firefoxia, tai lataat sähkökirjan ja luet sitä omalla laitteellasi, valitsemallasi lukuohjelmalla."
     },
     "DownloadTexts": {
         "Download": "Lataa",

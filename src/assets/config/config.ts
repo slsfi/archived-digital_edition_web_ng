@@ -46,7 +46,7 @@ export const config: Config = {
     {
       title: "Bröd och bot",
       filename: "norrback-brod-och-bot.epub",
-      externalFileURL: "https://www.sls.fi/sites/default/files/publications/epub/2695.epub",
+      externalFileURL: "",
       coverURL: "",
       downloadOptions: [
         {
