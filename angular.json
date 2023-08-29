@@ -55,9 +55,7 @@
               "src/global.scss",
               "src/assets/custom_css/custom.scss"
             ],
-            "scripts": [
-              "node_modules/marked/marked.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
