@@ -4,24 +4,22 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TextService } from 'src/app/services/text.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
+
+import { AggregationData, AggregationsData, Facet, Facets, FacetGroups, TimeRange } from 'src/app/models/elastic-search.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { TextService } from 'src/app/services/text.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
+
 
 interface SearchOptions {
   done?: Function;
   initialSearch?: boolean;
 }
 
-// @IonicPage({
-//   name: 'elastic-search',
-//   segment: 'elastic-search/:query',
-//   defaultHistory: ['HomePage']
-// })
 @Component({
   selector: 'page-elastic-search',
   templateUrl: 'elastic-search.html',
@@ -29,8 +27,7 @@ interface SearchOptions {
 })
 export class ElasticSearchPage {
   @ViewChild(IonContent) content?: IonContent;
-  @ViewChild('myInput') myInput?: any;
-
+  
   // Helper to loop objects
   objectKeys = Object.keys;
   objectValues = Object.values;
@@ -38,14 +35,14 @@ export class ElasticSearchPage {
   loading = false;
   infiniteLoading = false;
   elasticError = false;
-  queries: string[] = [''];
   cleanQueries: string[] = [''];
-  currentQuery = '';
+  currentQuery: string = '';
   hits: any = [];
   termData: object[] = [];
   hitsPerPage = 10;
   aggregations: object = {};
   facetGroups: any = {};
+  dateHistogramData: any = undefined;
   selectedFacetGroups: FacetGroups = {};
   suggestedFacetGroups: FacetGroups = {};
 
@@ -104,33 +101,10 @@ export class ElasticSearchPage {
     }
   }
 
-  private getParamsData(query: string) {
-    try {
-      if (query !== ':query') {
-        // Remove line break characters
-        query = query.replace(/\n/gm, '');
-        // Remove any script tags
-        query = query.replace(/<script.+?<\/script>/gi, '');
-        this.queries[0] = query;
-      }
-      this.paramsLoaded();
-    } catch (e) {
-      console.log('Problems parsing query parameters...');
-    }
-  }
+  ngOnInit() {
+    this.search({initialSearch: true});
 
-  ionViewDidLoad() {
-    this.route.params.subscribe(params => {
-      this.getParamsData(params['query'] || ':query')
-    });
-  }
-
-  paramsLoaded() {
-    if (this.queries[0]) {
-      this.initSearch();
-    } else {
-      this.search({initialSearch: true});
-    }
+    /*
     // Open type by default
     setTimeout(() => {
       const facetGroups = Object.keys(this.facetGroups);
@@ -185,96 +159,13 @@ export class ElasticSearchPage {
         }
       })
     }, 300);
+    */
 
     this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
     this.sortSelectOptions = {
       title: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
       cssClass: 'custom-select-alert'
     };
-  }
-
-  /*
-  open(hit) {
-    this.events.publish('searchHitOpened', hit);
-    const params = { tocItem: null, fetch: true, collection: { title: hit.source.doc_title } };
-    const path = hit.source.path;
-    const filename = path.split('/').pop();
-
-    // 199_18434_var_6251.xml This should preferrably be implemented via elastic data instead of path
-    const collection_id = filename.split('_').shift(); // 199
-    const var_ms_id = filename.replace('.xml', '').split('_').pop(); // 6251
-
-    params['tocLinkId'] = collection_id + '_' + hit.source.publication_id;
-    params['collectionID'] = collection_id;
-    params['publicationID'] = hit.source.publication_id;
-    params['chapterID'] = 'nochapter';
-
-    params['facs_id'] = 'not';
-    params['facs_nr'] = 'infinite';
-    params['song_id'] = 'nosong';
-    params['search_title'] = this.queries[0];
-    params['matches'] = this.queries;
-    params['views'] = [];
-    // : facs_id / : facs_nr / : song_id / : search_title / : urlviews
-    // not / infinite / nosong / searchtitle / established & variations & facsimiles
-
-
-    switch (hit.source.text_type) {
-      case 'est': {
-        params['urlviews'] = 'established';
-        params['views'].push({type: 'established'});
-        break;
-      }
-      case 'ms': {
-        params['urlviews'] = 'manuscripts';
-        params['views'].push({type: 'manuscripts', id: var_ms_id});
-        break;
-      }
-      case 'com': {
-        params['urlviews'] = 'comments';
-        params['views'].push({type: 'comments'});
-        break;
-      }
-      case 'var': {
-        params['urlviews'] = 'variations';
-        params['views'].push({type: 'variations', id: var_ms_id});
-        break;
-      }
-      case 'inl': {
-        params['urlviews'] = 'introduction';
-        params['views'].push({type: 'introduction', id: var_ms_id});
-        break;
-      }
-      case 'tit': {
-        params['urlviews'] = 'title';
-        params['views'].push({type: 'title', id: var_ms_id});
-        break;
-      }
-      default: {
-        params['urlviews'] = 'established';
-        params['views'].push({type: 'established'});
-         // statements;
-        break;
-      }
-    }
-    if (hit.source.text_type === 'tit') {
-      this.app.getRootNav().push('title-page', params);
-    } else if (hit.source.text_type === 'fore') {
-      this.app.getRootNav().push('foreword-page', params);
-    } else if (hit.source.text_type === 'inl') {
-      this.app.getRootNav().push('introduction', params);
-    } else {
-      params['selectedItemInAccordion'] = false;
-      this.app.getRootNav().push('read', params);
-    }
-  }
-  */
-
-  /**
-   * https://stackoverflow.com/questions/46991497/how-properly-bind-an-array-with-ngmodel-in-angular-4
-   */
-  trackByIdx(index: number): number {
-    return index;
   }
 
   /**
@@ -289,25 +180,10 @@ export class ElasticSearchPage {
   }
 
   clearSearch() {
-    for (let i = 0; i < this.queries.length; i++) {
-      this.queries[i] = '';
-    }
+    this.currentQuery = '';
     this.cf.detectChanges();
     this.initSearch();
   }
-
-  /**
-   * Triggers a new search and clears suggested facets. DEPRECATED
-   */
-  /*
-  onQueryChange() {
-    // this.autoExpandSearchfields();
-    this.reset();
-    this.loading = true;
-    this.debouncedSearch();
-    this.cf.detectChanges();
-  }
-  */
 
   /**
    * Triggers a new search with selected facets.
@@ -372,13 +248,12 @@ export class ElasticSearchPage {
   private search({ done, initialSearch }: SearchOptions = {}) {
     // console.log(`search from ${this.from} to ${this.from + this.hitsPerPage}`);
 
-    this.currentQuery = this.queries[0];
     this.elasticError = false;
     this.loading = true;
 
     // Fetch hits
     this.elastic.executeSearchQuery({
-      queries: this.queries,
+      queries: [this.currentQuery],
       highlight: {
         fields: {
           'text_data': { number_of_fragments: 1000, fragment_size: this.textHighlightFragmentSize, type: this.textHighlightType },
@@ -435,13 +310,13 @@ export class ElasticSearchPage {
 
     // Fetch aggregation data for facets.
     this.elastic.executeAggregationQuery({
-      queries: this.queries,
+      queries: [this.currentQuery],
       facetGroups: this.facetGroups,
       range: this.range,
     }).subscribe({
       next: data => {
         // console.log('aggregation data', data);
-        this.populateFacets(data.aggregations);
+        this.populateFacets(data.aggregations, initialSearch ? true : false);
       },
       error: e => { console.error('Error fetching aggregations', e); }
     });
@@ -551,21 +426,13 @@ export class ElasticSearchPage {
    * so it should not be modified here.
    */
   updateFacet(facetGroupKey: string, facet: Facet) {
-    const facets = this.facetGroups[facetGroupKey] || {};
+    const facets = this.facetGroups[facetGroupKey] || {};
     facets[facet.key] = facet;
     this.facetGroups[facetGroupKey] = facets;
 
     this.updateSelectedFacets(facetGroupKey, facet);
 
     this.onFacetsChanged();
-  }
-
-  selectSuggestedFacet(facetGroupKey: string, facet: Facet) {
-    this.suggestedFacetGroups = {};
-    this.queries = [''];
-
-    facet.selected = true;
-    this.updateFacet(facetGroupKey, facet);
   }
 
   unselectFacet(facetGroupKey: string, facet: Facet) {
@@ -594,7 +461,7 @@ export class ElasticSearchPage {
   /**
    * Populate facets data using the search results aggregation data.
    */
-  private populateFacets(aggregations: AggregationsData) {
+  private populateFacets(aggregations: AggregationsData, initialSearch?: boolean) {
     // Get aggregation keys that are ordered in config.json.
     this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
       const newFacets = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
@@ -621,6 +488,9 @@ export class ElasticSearchPage {
         this.facetGroups[facetGroupKey] = newFacets;
       }
     });
+    if (initialSearch && this.facetGroups['Years']) {
+      this.dateHistogramData = Object.values(this.facetGroups['Years']);
+    }
   }
 
   /**
@@ -812,26 +682,18 @@ export class ElasticSearchPage {
 
     if (arrow?.classList.contains('open')) {
       if (facet) {
-        facet.style.height = '0';
+        facet.style.display = 'none';
       }
       arrow.classList.add('closed');
       arrow.classList.remove('open');
     } else if (arrow) {
       if (facet) {
-        facet.style.height = '100%';
+        facet.style.display = 'block';
       }
       arrow.classList.add('open');
       arrow.classList.remove('closed');
     }
     this.cf.detectChanges();
-  }
-
-  addSearchField() {
-    this.queries.push('');
-  }
-
-  removeSearchField(i: any) {
-    this.queries.splice(i, 1);
   }
 
   autoExpandSearchfields() {

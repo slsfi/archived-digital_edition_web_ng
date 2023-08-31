@@ -1,5 +1,17 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
+    <unit id="4349973071892705650">
+      <segment state="initial">
+        <source>Till år</source>
+        <target>Till år</target>
+      </segment>
+    </unit>
+    <unit id="6286776428245261861">
+      <segment state="initial">
+        <source>Från år</source>
+        <target>Från år</target>
+      </segment>
+    </unit>
     <unit id="abbreviation">
       <segment state="initial">
         <source>Förkortning</source>
@@ -88,6 +100,18 @@
       <segment state="initial">
         <source>Utgivarens anmärkning</source>
         <target>Toimittajan huomautus</target>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Clear">
+      <segment state="initial">
+        <source>Nollställ</source>
+        <target>Nollställ</target>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Refresh">
+      <segment state="initial">
+        <source>Uppdatera</source>
+        <target>Uppdatera</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
@@ -180,12 +204,6 @@
         <target>Normalisointi</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
-      <segment state="initial">
-        <source>och</source>
-        <target>ja</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment state="initial">
         <source>Kommentar till</source>
@@ -204,12 +222,6 @@
         <target>Tekstejä, joissa hakutuloksia:</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment state="initial">
-        <source>Från</source>
-        <target>Vuodesta</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
@@ -220,12 +232,6 @@
       <segment state="initial">
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
         <target>Tapahtui virhe ladatessa hakutuloksia.</target>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.NewestFirst">
-      <segment state="initial">
-        <source>Nyast först</source>
-        <target>Uusimmat ensin</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.NoFacetOptions">
@@ -240,12 +246,6 @@
         <target>Haulla ei löytynyt yhtään tulosta.</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OldestFirst">
-      <segment state="initial">
-        <source>Äldst först</source>
-        <target>Vanhimmat ensin</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.OpenInNewWindow">
       <segment state="initial">
         <source>Länken öppnas i ett nytt fönster.</source>
@@ -258,22 +258,22 @@
         <target>Hae editiosta</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Relevance">
-      <segment state="initial">
-        <source>Relevans</source>
-        <target>Relevanssi</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.ScrollToTop">
       <segment state="initial">
         <source>Till början</source>
         <target>Palaa alkuun</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Aihesana</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
-        <target>Hae ...</target>
+        <target>Sök ...</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowAllHitHighlights">
@@ -290,13 +290,13 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment state="initial">
-        <source>Visa mindre</source>
+        <source>Visa färre</source>
         <target>Näytä vähemmän</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment state="initial">
-        <source>Visa mera</source>
+        <source>Visa fler</source>
         <target>Näytä enemmän</target>
       </segment>
     </unit>
@@ -312,16 +312,10 @@
         <target>Lajittele</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.TimeRange">
       <segment state="initial">
-        <source>Till</source>
-        <target>Vuoteen</target>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.Years">
-      <segment state="initial">
-        <source>År</source>
-        <target>Vuodet</target>
+        <source>Tidsperiod</source>
+        <target>Tidsperiod</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">

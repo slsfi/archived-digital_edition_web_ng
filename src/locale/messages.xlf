@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="aa">
   <file id="ngi18n" original="ng.template">
+    <unit id="4349973071892705650">
+      <segment>
+        <source>Till år</source>
+      </segment>
+    </unit>
+    <unit id="6286776428245261861">
+      <segment>
+        <source>Från år</source>
+      </segment>
+    </unit>
     <unit id="abbreviation">
       <segment>
         <source>Förkortning</source>
@@ -74,6 +84,16 @@
     <unit id="criticalNote">
       <segment>
         <source>Utgivarens anmärkning</source>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Clear">
+      <segment>
+        <source>Nollställ</source>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Refresh">
+      <segment>
+        <source>Uppdatera</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
@@ -151,11 +171,6 @@
         <source>Normalisering</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
-      <segment>
-        <source>och</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment>
         <source>Kommentar till</source>
@@ -171,11 +186,6 @@
         <source>Texter med sökträffar:</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment>
-        <source>Från</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment>
         <source>Dölj avgränsningar</source>
@@ -184,11 +194,6 @@
     <unit id="ElasticSearch.LoadingError">
       <segment>
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.NewestFirst">
-      <segment>
-        <source>Nyast först</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.NoFacetOptions">
@@ -201,11 +206,6 @@
         <source>Sökningen gav inga svar.</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OldestFirst">
-      <segment>
-        <source>Äldst först</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.OpenInNewWindow">
       <segment>
         <source>Länken öppnas i ett nytt fönster.</source>
@@ -216,17 +216,17 @@
         <source>Sök i utgåvan</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Relevance">
-      <segment>
-        <source>Relevans</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.ScrollToTop">
       <segment>
         <source>Till början</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
+      <segment>
+        <source>Sök</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment>
         <source>Sök ...</source>
       </segment>
@@ -243,12 +243,12 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment>
-        <source>Visa mindre</source>
+        <source>Visa färre</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment>
-        <source>Visa mera</source>
+        <source>Visa fler</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMoreHits">
@@ -261,14 +261,9 @@
         <source>Sortera enligt</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.TimeRange">
       <segment>
-        <source>Till</source>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.Years">
-      <segment>
-        <source>År</source>
+        <source>Tidsperiod</source>
       </segment>
     </unit>
     <unit id="Epub.Contents">

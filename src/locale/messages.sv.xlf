@@ -1,5 +1,17 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
+    <unit id="4349973071892705650">
+      <segment state="initial">
+        <source>Till år</source>
+        <target>Till år</target>
+      </segment>
+    </unit>
+    <unit id="6286776428245261861">
+      <segment state="initial">
+        <source>Från år</source>
+        <target>Från år</target>
+      </segment>
+    </unit>
     <unit id="abbreviation">
       <segment state="initial">
         <source>Förkortning</source>
@@ -88,6 +100,18 @@
       <segment state="initial">
         <source>Utgivarens anmärkning</source>
         <target>Utgivarens anmärkning</target>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Clear">
+      <segment state="initial">
+        <source>Nollställ</source>
+        <target>Nollställ</target>
+      </segment>
+    </unit>
+    <unit id="DateHistogram.Refresh">
+      <segment state="initial">
+        <source>Uppdatera</source>
+        <target>Uppdatera</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
@@ -180,12 +204,6 @@
         <target>Normalisering</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
-      <segment state="initial">
-        <source>och</source>
-        <target>och</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment state="initial">
         <source>Kommentar till</source>
@@ -204,12 +222,6 @@
         <target>Texter med sökträffar:</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment state="initial">
-        <source>Från</source>
-        <target>Från</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
@@ -220,12 +232,6 @@
       <segment state="initial">
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
         <target>Ett fel har uppstått när sökträffarna skulle laddas.</target>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.NewestFirst">
-      <segment state="initial">
-        <source>Nyast först</source>
-        <target>Nyast först</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.NoFacetOptions">
@@ -240,12 +246,6 @@
         <target>Sökningen gav inga svar.</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OldestFirst">
-      <segment state="initial">
-        <source>Äldst först</source>
-        <target>Äldst först</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.OpenInNewWindow">
       <segment state="initial">
         <source>Länken öppnas i ett nytt fönster.</source>
@@ -258,19 +258,19 @@
         <target>Sök i utgåvan</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Relevance">
-      <segment state="initial">
-        <source>Relevans</source>
-        <target>Relevans</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.ScrollToTop">
       <segment state="initial">
         <source>Till början</source>
         <target>Till början</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Sök</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
         <target>Sök ...</target>
@@ -290,14 +290,14 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment state="initial">
-        <source>Visa mindre</source>
-        <target>Visa mindre</target>
+        <source>Visa färre</source>
+        <target>Visa färre</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment state="initial">
-        <source>Visa mera</source>
-        <target>Visa mera</target>
+        <source>Visa fler</source>
+        <target>Visa fler</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMoreHits">
@@ -312,16 +312,10 @@
         <target>Sortera enligt</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.TimeRange">
       <segment state="initial">
-        <source>Till</source>
-        <target>Till</target>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.Years">
-      <segment state="initial">
-        <source>År</source>
-        <target>År</target>
+        <source>Tidsperiod</source>
+        <target>Tidsperiod</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">
