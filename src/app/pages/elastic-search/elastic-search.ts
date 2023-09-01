@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
@@ -9,8 +8,6 @@ import { AggregationData, AggregationsData, Facet, Facets, FacetGroups, TimeRang
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search.service';
 import { MdContentService } from 'src/app/services/md-content.service';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TextService } from 'src/app/services/text.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
@@ -25,147 +22,84 @@ interface SearchOptions {
   templateUrl: 'elastic-search.html',
   styleUrls: ['elastic-search.scss']
 })
-export class ElasticSearchPage {
+export class ElasticSearchPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
   
-  // Helper to loop objects
+  // Helpers to loop objects
   objectKeys = Object.keys;
   objectValues = Object.values;
 
-  loading = false;
-  infiniteLoading = false;
-  elasticError = false;
+  aggregations: object = {};
   cleanQueries: string[] = [''];
   currentQuery: string = '';
-  hits: any = [];
-  termData: object[] = [];
-  hitsPerPage = 10;
-  aggregations: object = {};
-  facetGroups: any = {};
   dateHistogramData: any = undefined;
-  selectedFacetGroups: FacetGroups = {};
-  suggestedFacetGroups: FacetGroups = {};
-
-  showAllFor = {} as any;
-  showSortOptions = true;
-  showFacets = true;
-  textTitleHighlightType = 'unified';
-  textHighlightType = 'unified';
-  textHighlightFragmentSize = 150;
-
   disableFacetCheckboxes = false;
-  highlightSearchMatches = true;
-
-  facetsToggledInMobileMode = false;
-
-  // -1 when there a search hasn't returned anything yet.
-  total = -1;
-  from = 0;
-  sort = '';
-
-  range?: TimeRange | null;
+  elasticError: boolean = false;
+  facetGroups: any = {};
+  facetsToggledInMobileMode: boolean = false;
+  from: number = 0;
   groupsOpenByDefault: any;
-  // debouncedSearch = debounce(this.search, 1500); // lodash/debounce has been removed from dependencies
-  sortSelectOptions: Record<string, any> = {};
+  highlightSearchMatches: boolean = true;
+  hits: any = [];
+  hitsPerPage: number = 10;
+  infiniteLoading: boolean = false;
+  loading: boolean = false;
   mdContent$: Observable<SafeHtml>;
+  range?: TimeRange | null;
+  selectedFacetGroups: FacetGroups = {};
+  showAllFor: any = {};
+  showFacets: boolean = true;
+  showSortOptions: boolean = true;
+  sort: string = '';
+  sortSelectOptions: Record<string, any> = {};
+  termData: object[] = [];
+  textHighlightFragmentSize: number = 150;
+  textHighlightType: string = 'unified';
+  textTitleHighlightType: string = 'unified';
+  total: number = -1;
 
   constructor(
-    private sanitizer: DomSanitizer,
-    public navCtrl: NavController,
-    public semanticDataService: SemanticDataService,
-    public modalCtrl: ModalController,
-    protected textService: TextService,
-    private mdContentService: MdContentService,
-    public loadingCtrl: LoadingController,
-    public elastic: ElasticSearchService,
-    public userSettingsService: UserSettingsService,
     private cf: ChangeDetectorRef,
-    public commonFunctions: CommonFunctionsService,
-    private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private commonFunctions: CommonFunctionsService,
+    public elastic: ElasticSearchService,
+    private mdContentService: MdContentService,
+    private sanitizer: DomSanitizer,
+    public userSettingsService: UserSettingsService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
     this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
-    this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
-    this.showFacets = config.ElasticSearch?.show?.facets ?? true;
     this.highlightSearchMatches = config.show?.highlightedSearchMatches ?? true;
-    this.textTitleHighlightType = config.ElasticSearch?.textTitleHighlightType ?? 'unified';
-    this.textHighlightType = config.ElasticSearch?.textHighlightType ?? 'unified';
+    this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
+    this.showFacets = config.ElasticSearch?.show?.facets ?? true;
+    this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
     this.textHighlightFragmentSize = config.ElasticSearch?.textHighlightFragmentSize ?? 150;
+    this.textHighlightType = config.ElasticSearch?.textHighlightType ?? 'unified';
+    this.textTitleHighlightType = config.ElasticSearch?.textTitleHighlightType ?? 'unified';
     
-    if (this.textTitleHighlightType !== 'fvh' && this.textTitleHighlightType !== 'unified' && this.textTitleHighlightType !== 'plain') {
+    if (
+      this.textTitleHighlightType !== 'fvh' &&
+      this.textTitleHighlightType !== 'unified' &&
+      this.textTitleHighlightType !== 'plain'
+    ) {
       this.textTitleHighlightType = 'unified';
     }
-    if (this.textHighlightType !== 'fvh' && this.textHighlightType !== 'unified' && this.textHighlightType !== 'plain') {
+    if (
+      this.textHighlightType !== 'fvh' &&
+      this.textHighlightType !== 'unified' &&
+      this.textHighlightType !== 'plain'
+    ) {
       this.textHighlightType = 'unified';
     }
-  }
 
-  ngOnInit() {
-    this.search({initialSearch: true});
-
-    /*
-    // Open type by default
-    setTimeout(() => {
-      const facetGroups = Object.keys(this.facetGroups);
-      facetGroups.forEach(facetGroup => {
-        const openGroup = facetGroup.toLowerCase();
-        switch (openGroup) {
-          case 'type':
-            if (this.groupsOpenByDefault.type) {
-              const facetListType = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListType.style.height = '100%';
-                const facetArrowType = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowType.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          case 'genre':
-            if (this.groupsOpenByDefault.genre) {
-              const facetListGenre = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListGenre.style.height = '100%';
-                const facetArrowGenre = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowGenre.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          case 'collection':
-            if (this.groupsOpenByDefault.collection) {
-              const facetListCollection = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListCollection.style.height = '100%';
-                const facetArrowCollection = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowCollection.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          default:
-            const facetListRest = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-            try {
-              facetListRest.style.setProperty('height', '0px');
-              const facetArrowRest = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-              facetArrowRest.classList.add('closed');
-            } catch (e) {
-            }
-            break;
-        }
-      })
-    }, 300);
-    */
-
-    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
     this.sortSelectOptions = {
       header: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
       cssClass: 'custom-select-alert'
     };
+  }
+
+  ngOnInit() {
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
+    this.search({initialSearch: true});
   }
 
   /**
@@ -218,7 +152,7 @@ export class ElasticSearchPage {
       this.search();
     } else {
       // Only one year selected, so do nothing
-      this.range = null
+      this.range = null;
     }
   }
 
@@ -238,15 +172,12 @@ export class ElasticSearchPage {
     this.hits = [];
     this.from = 0;
     this.total = -1;
-    this.suggestedFacetGroups = {};
   }
 
   /**
    * Immediately execute a search.
    */
   private search({ done, initialSearch }: SearchOptions = {}) {
-    // console.log(`search from ${this.from} to ${this.from + this.hitsPerPage}`);
-
     this.elasticError = false;
     this.loading = true;
 
@@ -319,20 +250,6 @@ export class ElasticSearchPage {
       },
       error: e => { console.error('Error fetching aggregations', e); }
     });
-
-    // Fetch suggestions
-    /*
-    // TODO: Currently only works with the first search field.
-    if (this.queries[0] && this.queries[0].length > 3) {
-      this.elastic.executeSuggestionsQuery({
-        query: this.queries[0],
-      })
-      .subscribe((data: any) => {
-        console.log('suggestions data', data);
-        this.populateSuggestions(data.aggregations);
-      });
-    }
-    */
   }
 
   private parseSortForQuery() {
@@ -379,16 +296,6 @@ export class ElasticSearchPage {
 
   hasFacets(facetGroupKey: string) {
     return (this.facetGroups[facetGroupKey] ? Object.keys(this.facetGroups[facetGroupKey]).length : 0) > 0;
-  }
-
-  hasSuggestedFacetsByGroup(groupKey: string) {
-    return (this.suggestedFacetGroups[groupKey] ? Object.keys(this.suggestedFacetGroups[groupKey]).length : 0) > 0;
-  }
-
-  hasSuggestedFacets() {
-    return Object.values(this.suggestedFacetGroups).some(
-      (facets: Facets) => (facets ? Object.keys(facets).length : 0) > 0
-    );
   }
 
   getFacets(facetGroupKey: string): any {
@@ -485,15 +392,6 @@ export class ElasticSearchPage {
     if (initialSearch && this.facetGroups['Years']) {
       this.dateHistogramData = Object.values(this.facetGroups['Years']);
     }
-  }
-
-  /**
-   * Populate suggestions data using the search results aggregation data.
-   */
-  private populateSuggestions(aggregations: AggregationsData) {
-    Object.entries(aggregations).forEach(([aggregationKey, value]: [string, any]) => {
-      this.suggestedFacetGroups[aggregationKey] = this.convertAggregationsToFacets(value);
-    });
   }
 
   /**
