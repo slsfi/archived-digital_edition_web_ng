@@ -105,7 +105,6 @@ export class DateHistogram implements OnChanges {
   selectYear(selected: any) {
     if (!this.from) {
       this.from = selected.key_as_string;
-      console.log(this.firstYear);
     } else if (!this.to && parseInt(selected.key_as_string || '') >= parseInt(this.from)) {
       this.to = selected.key_as_string;
     } else {

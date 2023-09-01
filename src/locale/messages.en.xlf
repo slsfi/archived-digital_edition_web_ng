@@ -105,13 +105,13 @@
     <unit id="DateHistogram.Clear">
       <segment state="initial">
         <source>Nollställ</source>
-        <target>Nollställ</target>
+        <target>Clear</target>
       </segment>
     </unit>
     <unit id="DateHistogram.Refresh">
       <segment state="initial">
         <source>Uppdatera</source>
-        <target>Uppdatera</target>
+        <target>Refresh</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
@@ -234,6 +234,12 @@
         <target>An error occurred while loading search matches.</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.NewestFirst">
+      <segment state="initial">
+        <source>Nyast först</source>
+        <target>Newest first</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.NoFacetOptions">
       <segment state="initial">
         <source>Inga sökord</source>
@@ -246,10 +252,10 @@
         <target>No search matches.</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OpenInNewWindow">
+    <unit id="ElasticSearch.OldestFirst">
       <segment state="initial">
-        <source>Länken öppnas i ett nytt fönster.</source>
-        <target>Opens in a new window.</target>
+        <source>Äldst först</source>
+        <target>Oldest first</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.PageTitle">
@@ -258,22 +264,22 @@
         <target>Search the edition</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.ScrollToTop">
+    <unit id="ElasticSearch.Relevance">
       <segment state="initial">
-        <source>Till början</source>
-        <target>Scroll to top</target>
+        <source>Relevans</source>
+        <target>Relevance</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.SearchButtonAriaLabel">
       <segment state="initial">
         <source>Sök</source>
-        <target>Tags</target>
+        <target>Search</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
-        <target>Sök ...</target>
+        <target>Search ...</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowAllHitHighlights">
@@ -315,7 +321,7 @@
     <unit id="ElasticSearch.TimeRange">
       <segment state="initial">
         <source>Tidsperiod</source>
-        <target>Tidsperiod</target>
+        <target>Period</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">

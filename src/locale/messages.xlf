@@ -196,6 +196,11 @@
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
       </segment>
     </unit>
+    <unit id="ElasticSearch.NewestFirst">
+      <segment>
+        <source>Nyast först</source>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.NoFacetOptions">
       <segment>
         <source>Inga sökord</source>
@@ -206,9 +211,9 @@
         <source>Sökningen gav inga svar.</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OpenInNewWindow">
+    <unit id="ElasticSearch.OldestFirst">
       <segment>
-        <source>Länken öppnas i ett nytt fönster.</source>
+        <source>Äldst först</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.PageTitle">
@@ -216,9 +221,9 @@
         <source>Sök i utgåvan</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.ScrollToTop">
+    <unit id="ElasticSearch.Relevance">
       <segment>
-        <source>Till början</source>
+        <source>Relevans</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.SearchButtonAriaLabel">

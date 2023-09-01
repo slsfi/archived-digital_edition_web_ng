@@ -26,7 +26,7 @@ interface SearchOptions {
   styleUrls: ['elastic-search.scss']
 })
 export class ElasticSearchPage {
-  @ViewChild(IonContent) content?: IonContent;
+  @ViewChild(IonContent) content: IonContent;
   
   // Helper to loop objects
   objectKeys = Object.keys;
@@ -163,7 +163,7 @@ export class ElasticSearchPage {
 
     this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
     this.sortSelectOptions = {
-      title: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
+      header: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
       cssClass: 'custom-select-alert'
     };
   }
@@ -243,7 +243,6 @@ export class ElasticSearchPage {
 
   /**
    * Immediately execute a search.
-   * Use debouncedSearch to wait for additional key presses when use types.
    */
   private search({ done, initialSearch }: SearchOptions = {}) {
     // console.log(`search from ${this.from} to ${this.from + this.hitsPerPage}`);
@@ -349,18 +348,13 @@ export class ElasticSearchPage {
     return this.total > this.from + this.hitsPerPage;
   }
 
-  /**
-   * ! Infinite-scroll commented out, using button for loading more matches for now.
-   */
   loadMore(e: any) {
     this.infiniteLoading = true;
     this.from += this.hitsPerPage;
 
-    // Search and let ion-infinite-scroll know that it can re-enable itself.
     this.search({
       done: () => {
         this.infiniteLoading = false;
-        // e.complete() // uncomment this line if using infine-scroll to load more search matches
       },
     });
   }
@@ -729,25 +723,20 @@ export class ElasticSearchPage {
   showAllHitHighlights(event: any) {
     // Find and show all hidden highlights
     let parentElem = event.target.parentElement as any;
-    while (parentElem !== null && !parentElem.classList.contains('matchHighlights')) {
+    while (parentElem !== null && !parentElem.classList.contains('match-highlights')) {
       parentElem = parentElem.parentElement;
     }
 
     if (parentElem !== null) {
-      const highlightElems = parentElem.querySelectorAll('.hiddenHighlight');
+      const highlightElems = parentElem.querySelectorAll('.hidden-highlight');
       for (let i = 0; i < highlightElems.length; i++) {
-        highlightElems[i].classList.remove('hiddenHighlight');
+        highlightElems[i].classList.remove('hidden-highlight');
       }
     }
 
-    // Find and hide the button that triggered the event
-    parentElem = event.target.parentElement as any;
-    while (parentElem !== null && !parentElem.classList.contains('showAllHitHighlights')) {
-      parentElem = parentElem.parentElement;
-    }
-
-    if (parentElem !== null) {
-      parentElem.classList.add('hiddenButton');
+    // Hide the button that triggered the event
+    if (event.target?.classList.contains('show-all-highlights')) {
+      event.target.classList.add('hidden-highlight-button');
     }
   }
 
@@ -756,9 +745,12 @@ export class ElasticSearchPage {
   }
 
   scrollToTop() {
-    const searchBarElem = document.querySelector('.searchbar-wrapper') as HTMLElement;
+    const searchBarElem = document.querySelector('.search-container') as HTMLElement;
     if (searchBarElem) {
-      this.commonFunctions.scrollElementIntoView(searchBarElem, 'top', 16);
+      const topMenuElem = document.querySelector('top-menu') as HTMLElement;
+      if (topMenuElem) {
+        this.content.scrollByPoint(0, searchBarElem.getBoundingClientRect().top - topMenuElem.offsetHeight, 500);
+      }
     }
   }
 }
