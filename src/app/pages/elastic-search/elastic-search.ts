@@ -30,13 +30,12 @@ export class ElasticSearchPage implements OnInit {
   objectValues = Object.values;
 
   aggregations: object = {};
-  cleanQueries: string[] = [''];
-  currentQuery: string = '';
   dateHistogramData: any = undefined;
   disableFacetCheckboxes = false;
   elasticError: boolean = false;
+  enableFilters: boolean = true;
+  filtersVisible: boolean = true;
   facetGroups: any = {};
-  facetsToggledInMobileMode: boolean = false;
   from: number = 0;
   groupsOpenByDefault: any;
   highlightSearchMatches: boolean = true;
@@ -45,14 +44,14 @@ export class ElasticSearchPage implements OnInit {
   infiniteLoading: boolean = false;
   loading: boolean = false;
   mdContent$: Observable<SafeHtml>;
+  query: string = ''; // variable bound to the input search field with ngModel
   range?: TimeRange | null;
   selectedFacetGroups: FacetGroups = {};
   showAllFor: any = {};
-  showFacets: boolean = true;
   showSortOptions: boolean = true;
   sort: string = '';
   sortSelectOptions: Record<string, any> = {};
-  termData: object[] = [];
+  submittedQuery: string = '';
   textHighlightFragmentSize: number = 150;
   textHighlightType: string = 'unified';
   textTitleHighlightType: string = 'unified';
@@ -67,14 +66,16 @@ export class ElasticSearchPage implements OnInit {
     public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
+    this.enableFilters = config.ElasticSearch?.show?.facets ?? true;
     this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
     this.highlightSearchMatches = config.show?.highlightedSearchMatches ?? true;
     this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
-    this.showFacets = config.ElasticSearch?.show?.facets ?? true;
     this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
     this.textHighlightFragmentSize = config.ElasticSearch?.textHighlightFragmentSize ?? 150;
     this.textHighlightType = config.ElasticSearch?.textHighlightType ?? 'unified';
     this.textTitleHighlightType = config.ElasticSearch?.textTitleHighlightType ?? 'unified';
+
+    this.filtersVisible = this.userSettingsService.isMobile() ? false : true;
     
     if (
       this.textTitleHighlightType !== 'fvh' &&
@@ -99,7 +100,7 @@ export class ElasticSearchPage implements OnInit {
 
   ngOnInit() {
     this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
-    this.search({initialSearch: true});
+    this.getAggregations(true);
   }
 
   /**
@@ -114,7 +115,7 @@ export class ElasticSearchPage implements OnInit {
   }
 
   clearSearch() {
-    this.currentQuery = '';
+    this.query = '';
     this.cf.detectChanges();
     this.initSearch();
   }
@@ -180,75 +181,80 @@ export class ElasticSearchPage implements OnInit {
   private search({ done, initialSearch }: SearchOptions = {}) {
     this.elasticError = false;
     this.loading = true;
+    this.submittedQuery = this.query;
 
     // Fetch hits
-    this.elastic.executeSearchQuery({
-      queries: [this.currentQuery],
-      highlight: {
-        fields: {
-          'text_data': { number_of_fragments: 1000, fragment_size: this.textHighlightFragmentSize, type: this.textHighlightType },
-          'text_title': { number_of_fragments: 0, type: this.textTitleHighlightType },
+    if (!initialSearch) {
+      this.elastic.executeSearchQuery({
+        queries: [this.query],
+        highlight: {
+          fields: {
+            'text_data': {
+              number_of_fragments: 1000,
+              fragment_size: this.textHighlightFragmentSize,
+              type: this.textHighlightType
+            },
+            'text_title': {
+              number_of_fragments: 0,
+              type: this.textTitleHighlightType
+            },
+          },
         },
-      },
-      from: this.from,
-      size: initialSearch ? 0 : this.hitsPerPage,
-      facetGroups: this.facetGroups,
-      range: this.range,
-      sort: this.parseSortForQuery(),
-    })
-    .subscribe((data: any) => {
-      if (data.hits === undefined) {
-        console.error('Elastic search error, no hits: ', data);
-        this.total = 0;
-        this.elasticError = true;
-      } else {
-        this.total = data.hits.total.value;
-        // console.log('hits: ', data.hits);
-
-        // Append new hits to this.hits array.
-        Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
-          type: hit._source.text_type,
-          source: hit._source,
-          highlight: hit.highlight,
-          id: hit._id
-        })));
-
-        /*
-        this.cleanQueries = [];
-        if (this.queries.length > 0 && this.queries[0] !== undefined && this.queries[0].length > 0 ) {
-          this.queries.forEach(term => {
-            this.cleanQueries.push(term.toLowerCase().replace(/[^a-zA-ZåäöÅÄÖ[0-9]+/g, ''));
-          });
-          for (const item in data.hits.hits) {
-            this.elastic.executeTermQuery(this.cleanQueries, [data.hits.hits[item]['_id']])
-            .subscribe((termData: any) => {
-              this.termData = termData;
-              const elementsIndex = this.hits.findIndex(element => element['id'] === data.hits.hits[item]['_id'] );
-              this.hits[elementsIndex] = {...this.hits[elementsIndex], count: termData};
-            })
-          }
+        from: this.from,
+        size: this.hitsPerPage,
+        facetGroups: this.facetGroups,
+        range: this.range,
+        sort: this.parseSortForQuery(),
+      }).subscribe((data: any) => {
+        if (data.hits === undefined) {
+          console.error('Elastic search error, no hits: ', data);
+          this.total = 0;
+          this.elasticError = true;
+        } else {
+          this.total = data.hits.total.value;
+          // console.log('hits: ', data.hits);
+  
+          // Append new hits to this.hits array.
+          Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
+            type: hit._source.text_type,
+            source: hit._source,
+            highlight: hit.highlight,
+            id: hit._id
+          })));
         }
-        */
-      }
-      this.loading = false;
-      this.disableFacetCheckboxes = false;
+        this.loading = false;
+  
+        if (done) {
+          done();
+        }
+      });
+    }
+    
+    this.getAggregations();
+  }
 
-      if (done) {
-        done();
-      }
-    });
+  private getAggregations(initialAggregations: boolean = false) {
+    if (initialAggregations) {
+      this.loading = true;
+    }
 
-    // Fetch aggregation data for facets.
     this.elastic.executeAggregationQuery({
-      queries: [this.currentQuery],
+      queries: initialAggregations ? [] : [this.query],
       facetGroups: this.facetGroups,
       range: this.range,
     }).subscribe({
       next: data => {
-        // console.log('aggregation data', data);
-        this.populateFacets(data.aggregations, initialSearch ? true : false);
+        console.log('aggregation data', data);
+        this.populateFacets(data.aggregations, initialAggregations ? true : false);
+        this.disableFacetCheckboxes = false;
+        if (initialAggregations) {
+          this.loading = false;
+        }
       },
-      error: e => { console.error('Error fetching aggregations', e); }
+      error: e => {
+        console.error('Error fetching aggregations', e);
+        this.loading = false;
+      }
     });
   }
 
@@ -277,7 +283,7 @@ export class ElasticSearchPage implements OnInit {
   }
 
   canShowHits() {
-    return (!this.loading || this.infiniteLoading) && (this.currentQuery || this.range || this.hasSelectedFacets());
+    return (!this.loading || this.infiniteLoading) && (this.submittedQuery || this.range || this.hasSelectedFacets());
   }
 
   hasSelectedFacets() {
@@ -312,7 +318,9 @@ export class ElasticSearchPage implements OnInit {
         for (let i = 0; i < keys.length; i++) {
           facetsAsArray.push(facets[keys[i]]);
         }
-        this.commonFunctions.sortArrayOfObjectsNumerically(facetsAsArray, 'doc_count');
+        if (!config.ElasticSearch?.aggregations?.[facetGroupKey]?.terms?.order?._key) {
+          this.commonFunctions.sortArrayOfObjectsNumerically(facetsAsArray, 'doc_count');
+        }
         return facetsAsArray;
       } else {
         return Object.values(facets);
@@ -376,12 +384,12 @@ export class ElasticSearchPage implements OnInit {
             // prevents unselected aggregations from appearing in the results.
             // TODO: Fix this by separating search and aggregation query.
           } else {
-            delete this.facetGroups[facetGroupKey][facetKey];
-           // existingFacet.doc_count = 0;
+            // delete this.facetGroups[facetGroupKey][facetKey];
+            existingFacet.doc_count = 0;
           }
         })
         Object.entries(newFacets).forEach(([facetKey, existingFacet]: [string, any]) => {
-          if ( this.facetGroups[facetGroupKey][facetKey] === undefined ) {
+          if (this.facetGroups[facetGroupKey][facetKey] === undefined) {
             this.facetGroups[facetGroupKey][facetKey] = existingFacet;
           }
         });
@@ -638,8 +646,8 @@ export class ElasticSearchPage implements OnInit {
     }
   }
 
-  toggleFacetsColumn() {
-    this.facetsToggledInMobileMode = !this.facetsToggledInMobileMode;
+  toggleFiltersColumn() {
+    this.filtersVisible = !this.filtersVisible;
   }
 
   scrollToTop() {

@@ -362,13 +362,15 @@ export const config: Config = {
       Genre: {
         terms: {
           field: "publication_data.genre.keyword",
-          size: 40
+          size: 40,
+          order: {_key: "asc"}
         }
       },
       Collection: {
         terms: {
           field: "publication_data.collection_name.keyword",
-          size: 40
+          size: 40,
+          order: {_key: "asc"}
         }
       },
       LetterSenderName: {
@@ -395,8 +397,7 @@ export const config: Config = {
           size: 50
         }
       }
-    },
-    suggestions: {}
+    }
   }
 }
 

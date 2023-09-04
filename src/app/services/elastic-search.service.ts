@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, SuggestionsQuery, TimeRange } from 'src/app/models/elastic-search.model';
+import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, TimeRange } from 'src/app/models/elastic-search.model';
 import { config } from "src/assets/config/config";
 
 
@@ -17,7 +17,6 @@ export class ElasticSearchService {
   private machineName: string;
   private source = [] as any;
   private aggregations: any = {};
-  private suggestions: SuggestionsConfig = {};
   private fixedFilters?: object[];
   private textTypes = [];
 
@@ -68,7 +67,6 @@ export class ElasticSearchService {
     try {
       this.fixedFilters = config.ElasticSearch?.fixedFilters ?? undefined;
       this.textTypes = config.ElasticSearch?.types ?? undefined;
-      this.suggestions = config.ElasticSearch?.suggestions ?? undefined;
     } catch (e: any) {
       console.error(
         'Failed to load Elastic Search Service. Configuration error.',
@@ -110,11 +108,13 @@ export class ElasticSearchService {
   /**
    * Returns facet suggestions.
    */
+  /*
   executeSuggestionsQuery(options: SuggestionsQuery): Observable<any> {
     const payload = this.generateSuggestionsQueryPayload(options);
 
     return this.http.post(this.getSearchUrl(), payload);
   }
+  */
 
   private generateSearchQueryPayload({
     queries,
@@ -296,6 +296,7 @@ export class ElasticSearchService {
     return payload;
   }
 
+  /*
   private generateSuggestionsQueryPayload({ query }: SuggestionsQuery): object {
     const payload: any = {
       from: 0,
@@ -346,6 +347,7 @@ export class ElasticSearchService {
 
     return payload;
   }
+  */
 
   private injectFacetsToPayload(payload: any, facetGroups: FacetGroups) {
     Object.entries(facetGroups).forEach(

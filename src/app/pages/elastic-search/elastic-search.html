@@ -17,7 +17,7 @@
             enterkeyhint="search"
             inputmode="search"
             [searchIcon]="undefined"
-            [(ngModel)]="currentQuery"
+            [(ngModel)]="query"
             (ionClear)="clearSearch()"
             (keyup.enter)="initSearch()"
       ></ion-searchbar>
@@ -26,67 +26,19 @@
       </ion-button>
     </div>
 
-    <div class="selected-facets-row" *ngIf="hasSelectedFacets()">
-      <ng-container *ngFor="let groupKey of objectKeys(selectedFacetGroups)">
-        <div class="sfg" *ngIf="hasSelectedFacetsByGroup(groupKey)">
-          <p class="sfg-title">
-            <ng-container *ngIf="groupKey === 'Years'">
-              <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'Type'">
-              <ng-container i18n="@@Type">Texttyp</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'Genre'">
-              <ng-container i18n="@@Genre">Genre</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'Collection'">
-              <ng-container i18n="@@Collection">Delutgåva</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'LetterSenderName'">
-              <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'LetterReceiverName'">
-              <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'LetterSenderLocation'">
-              <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
-            </ng-container>
-            <ng-container *ngIf="groupKey === 'LetterReceiverLocation'">
-              <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
-            </ng-container>
-          </p>
-          <ul>
-            <li *ngFor="let facet of objectValues(selectedFacetGroups[groupKey])">
-              <ion-button (click)="unselectFacet(groupKey, facet)" class="custom-button">
-                <ng-container [ngSwitch]="facet.key.toString()">
-                  <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                  <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                  <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                  <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                  <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                  <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                  <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                  <ng-container *ngSwitchDefault>{{getEllipsisString(facet.key.toString())}}</ng-container>
-                </ng-container>
-                <ion-icon name="close" slot="end"></ion-icon>
-              </ion-button>
-            </li>
-          </ul>
-        </div>
-      </ng-container>
-    </div>
-
-    <ion-button *ngIf="userSettingsService.isMobile()"
-          class="custom-button show-facets-button"
-          (click)="toggleFacetsColumn()"
+    <ion-button *ngIf="enableFilters"
+          fill="outline"
+          class="custom-outline-button show-facets-button"
+          (click)="toggleFiltersColumn()"
     >
-      <ng-container *ngIf="!facetsToggledInMobileMode" i18n="@@ElasticSearch.ShowFacets">Visa avgränsningar</ng-container>
-      <ng-container *ngIf="facetsToggledInMobileMode" i18n="@@ElasticSearch.HideFacets">Dölj avgränsningar</ng-container>
+      <ion-icon name="filter-outline" slot="start"></ion-icon>
+      <ng-container *ngIf="!filtersVisible" i18n="@@ElasticSearch.ShowFacets">Visa avgränsningar</ng-container>
+      <ng-container *ngIf="filtersVisible" i18n="@@ElasticSearch.HideFacets">Dölj avgränsningar</ng-container>
     </ion-button>
 
     <div class="facet-and-hits-area-row">
       <!--  Search fields -->
-      <div *ngIf="showFacets" class="facet-column" [class.hide-facet-column]="userSettingsService.isMobile() && !facetsToggledInMobileMode">
+      <div *ngIf="enableFilters" class="facet-column" [class.hide-facet-column]="!filtersVisible">
         <!-- List of facet groups -->
         <h2 i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
@@ -134,7 +86,13 @@
               <ng-template #facets>
                 <ng-container *ngFor="let facet of getFacets(facetGroupKey); let j = index">
                   <li *ngIf="showAllFor[facetGroupKey] || j < 10">
-                    <ion-checkbox justify="start" labelPlacement="end" [(ngModel)]="facet.selected" (ionChange)="updateFacet(facetGroupKey, facet)" [disabled]="(facet.doc_count === 0 && facetGroupKey !== 'Type') || disableFacetCheckboxes">
+                    <ion-checkbox
+                          justify="start"
+                          labelPlacement="end"
+                          [(ngModel)]="facet.selected"
+                          (ionChange)="updateFacet(facetGroupKey, facet)"
+                          [disabled]="(facet.doc_count < 1) || disableFacetCheckboxes"
+                    >
                       <span [ngStyle]="{'white-space': 'normal'}">
                         <span>
                           <ng-container *ngIf="facetGroupKey === 'Type'">
@@ -159,7 +117,10 @@
                 </ng-container>
 
                 <li>
-                  <ion-button *ngIf="getFacets(facetGroupKey).length > 10" class="custom-button more-facets" (click)="showAllFor[facetGroupKey] = !showAllFor[facetGroupKey]">
+                  <ion-button *ngIf="getFacets(facetGroupKey).length > 10"
+                        class="custom-button more-facets"
+                        (click)="showAllFor[facetGroupKey] = !showAllFor[facetGroupKey]"
+                  >
                     <ng-container *ngIf="!showAllFor[facetGroupKey]" i18n="@@ElasticSearch.ShowMore">Visa fler</ng-container>
                     <ng-container *ngIf="showAllFor[facetGroupKey]" i18n="@@ElasticSearch.ShowLess">Visa färre</ng-container>
                   </ion-button>
@@ -177,6 +138,56 @@
       </div>
 
       <div class="search-result-column">
+        <div class="selected-facets-row" *ngIf="hasSelectedFacets()">
+          <ng-container *ngFor="let groupKey of objectKeys(selectedFacetGroups)">
+            <div class="sfg" *ngIf="hasSelectedFacetsByGroup(groupKey)">
+              <p class="sfg-title">
+                <ng-container *ngIf="groupKey === 'Years'">
+                  <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'Type'">
+                  <ng-container i18n="@@Type">Texttyp</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'Genre'">
+                  <ng-container i18n="@@Genre">Genre</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'Collection'">
+                  <ng-container i18n="@@Collection">Delutgåva</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'LetterSenderName'">
+                  <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'LetterReceiverName'">
+                  <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'LetterSenderLocation'">
+                  <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="groupKey === 'LetterReceiverLocation'">
+                  <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
+                </ng-container>
+              </p>
+              <ul>
+                <li *ngFor="let facet of objectValues(selectedFacetGroups[groupKey])">
+                  <ion-button (click)="unselectFacet(groupKey, facet)" class="custom-button">
+                    <ng-container [ngSwitch]="facet.key.toString()">
+                      <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
+                      <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
+                      <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
+                      <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
+                      <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
+                      <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
+                      <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                      <ng-container *ngSwitchDefault>{{getEllipsisString(facet.key.toString())}}</ng-container>
+                    </ng-container>
+                    <ion-icon name="close" slot="end"></ion-icon>
+                  </ion-button>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+        </div>
+
         <div class="info-toolbar">
           <!-- Show search hit count -->
           <h2 *ngIf="canShowHits() && total > 0" class="hits-heading"><ng-container i18n="@@ElasticSearch.Found">Texter med sökträffar:</ng-container> {{total}}</h2>
@@ -184,7 +195,7 @@
           <h2 *ngIf="elasticError && total === 0" class="hits-heading" i18n="@@ElasticSearch.LoadingError">Ett fel har uppstått när sökträffarna skulle laddas.</h2>
           
           <!-- Sort by -->
-          <ion-select *ngIf="showSortOptions && canShowHits() && total > 0"
+          <ion-select [class.show-sort-options]="showSortOptions && canShowHits() && total > 0"
                 class="sort-select"
                 label="Sortera enligt"
                 i18n-label="@@ElasticSearch.SortBy"
@@ -217,7 +228,7 @@
         <div class="hits-column">
           <!-- Search status row -->
           <div class="search-status">
-            <ion-spinner *ngIf="loading && 1 > total" class="loading" name="crescent"></ion-spinner>
+            <ion-spinner *ngIf="loading && total < 1" class="loading" name="crescent"></ion-spinner>
           </div>
 
           <!-- Hits row -->
