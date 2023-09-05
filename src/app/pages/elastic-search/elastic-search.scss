@@ -97,6 +97,10 @@ h1.page-title {
       font-weight: bold;
       margin: 0 0 0.5em 0;
       padding: 0.8125rem 1rem;
+
+      &.greyed-out {
+        color: #ccc;
+      }
     }
 
     .fg-wrapper {
@@ -126,7 +130,7 @@ h1.page-title {
 
         ion-icon {
           font-size: 1.5em;
-          margin: 0.8125rem 1rem;
+          margin: 0.8125rem 0.625rem 0.8125rem 1rem;
 
           &.rotate.open {
             transform: rotate(90deg);
@@ -241,7 +245,16 @@ h1.page-title {
 
 .search-status {
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
+
+  p {
+    text-align: center;
+  }
+
+  ion-spinner {
+    display: block;
+  }
 }
 
 ol.search-hits {

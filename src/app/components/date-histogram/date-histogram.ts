@@ -21,6 +21,7 @@ export class DateHistogram implements OnChanges {
   @Input() years?: [any] = undefined;
   @Input() yearsAll?: [any] = undefined;
   @Input() change?: Function = undefined;
+  @Input() selectedRange?: any = undefined;
 
   from?: string = undefined;
   to?: string = undefined;
@@ -63,6 +64,11 @@ export class DateHistogram implements OnChanges {
             this.yearsAll.push({ key_as_string: String(last), doc_count: 0 });
           }
         }
+      } else if (this.selectedRange?.from && this.selectedRange?.to) {
+        // console.log(this.years);
+        // console.log(this.selectedRange);
+        this.from = this.selectedRange?.from;
+        this.to = this.selectedRange?.to;
       }
 
       for (let a = 0; a < this.yearsAll.length; a++) {
@@ -90,7 +96,7 @@ export class DateHistogram implements OnChanges {
     const toTime = new Date(`${parseInt(this.to || '') + 1}`).getTime();
 
     if (fromTime <= toTime) {
-      this.change?.(fromTime, toTime);
+      this.change?.(this.from, this.to);
     }
   }
 
@@ -103,6 +109,7 @@ export class DateHistogram implements OnChanges {
   }
 
   selectYear(selected: any) {
+    this.selectedRange = undefined;
     if (!this.from) {
       this.from = selected.key_as_string;
     } else if (!this.to && parseInt(selected.key_as_string || '') >= parseInt(this.from)) {
@@ -111,7 +118,10 @@ export class DateHistogram implements OnChanges {
       this.from = selected.key_as_string;
       this.to = undefined;
     }
-    this.onChange();
+
+    if (this.from && this.to) {
+      this.onChange();
+    }
   }
 
   isYearInRange(year: any) {
@@ -127,15 +137,27 @@ export class DateHistogram implements OnChanges {
 
   updateYearFrom(event: any) {
     if (event?.detail?.value) {
-      this.from = event?.detail?.value;
-      this.onChange();
+      this.selectedRange = undefined;
+      if (!this.to || this.to && parseInt(event?.detail?.value) > parseInt(this.to || '')) {
+        this.from = event?.detail?.value;
+        this.to = undefined;
+      } else {
+        this.from = event?.detail?.value;
+        this.onChange();
+      }
     }
   }
 
   updateYearTo(event: any) {
     if (event?.detail?.value) {
-      this.to = event?.detail?.value;
-      this.onChange();
+      this.selectedRange = undefined;
+      if (!this.from || this.from && parseInt(event?.detail?.value) < parseInt(this.from || '')) {
+        this.to = event?.detail?.value;
+        this.from = undefined;
+      } else {
+        this.to = event?.detail?.value;
+        this.onChange();
+      }
     }
   }
 

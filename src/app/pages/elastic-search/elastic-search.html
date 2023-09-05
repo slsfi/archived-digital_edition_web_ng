@@ -17,11 +17,12 @@
             enterkeyhint="search"
             inputmode="search"
             [searchIcon]="undefined"
+            [disabled]="initializing"
             [(ngModel)]="query"
-            (ionClear)="clearSearch()"
-            (keyup.enter)="initSearch()"
+            (ionClear)="clearSearchQuery()"
+            (keyup.enter)="submitSearchQuery()"
       ></ion-searchbar>
-      <ion-button (click)="initSearch()">
+      <ion-button (click)="submitSearchQuery()" [disabled]="initializing">
         <ion-icon slot="icon-only" name="search" aria-label="Sök" i18n-aria-label="@@ElasticSearch.SearchButtonAriaLabel"></ion-icon>
       </ion-button>
     </div>
@@ -30,6 +31,7 @@
           fill="outline"
           class="custom-outline-button show-facets-button"
           (click)="toggleFiltersColumn()"
+          [disabled]="initializing"
     >
       <ion-icon name="filter-outline" slot="start"></ion-icon>
       <ng-container *ngIf="!filtersVisible" i18n="@@ElasticSearch.ShowFacets">Visa avgränsningar</ng-container>
@@ -40,15 +42,15 @@
       <!--  Search fields -->
       <div *ngIf="enableFilters" class="facet-column" [class.hide-facet-column]="!filtersVisible">
         <!-- List of facet groups -->
-        <h2 i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
+        <h2 [class.greyed-out]="initializing" i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
-        <div *ngIf="elastic.isDateHistogramAggregation('Years')" class="fg-wrapper">
+        <div *ngIf="elastic.isDateHistogramAggregation('Years') && !initializing" class="fg-wrapper">
           <button (click)="openAccordion($event, 'Years')">
             <h3 i18n="@@ElasticSearch.TimeRange">Tidsperiod</h3>
             <ion-icon id="arrow-Years" name="chevron-forward"></ion-icon>
           </button>
           <div id="facetList-Years" class="facetList-Years facetlist">
-            <date-histogram [years]="getFacets('Years')" [yearsAll]="dateHistogramData" [change]="onRangeChange.bind(this)"></date-histogram>
+            <date-histogram [years]="getFacets('Years')" [yearsAll]="dateHistogramData" [change]="onRangeChange.bind(this)" [selectedRange]="rangeYears"></date-histogram>
           </div>
         </div>
 
@@ -228,6 +230,7 @@
         <div class="hits-column">
           <!-- Search status row -->
           <div class="search-status">
+            <p *ngIf="initializing">Ett ögonblick, laddar sökavgränsningar ...</p>
             <ion-spinner *ngIf="loading && total < 1" class="loading" name="crescent"></ion-spinner>
           </div>
 
@@ -282,14 +285,14 @@
             </li>
           </ol>
 
-          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && hasMore() && total > 0">
+          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && (hasMore() || loadingMoreHits)">
             <div class="loading-spinner-wrapper">
-              <ion-spinner *ngIf="infiniteLoading" class="loading" name="crescent"></ion-spinner>
+              <ion-spinner *ngIf="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
             </div>
             <ion-button
                   class="custom-button"
                   (click)="loadMore($event)"
-                  [disabled]="infiniteLoading"
+                  [disabled]="loadingMoreHits"
                   i18n="@@ElasticSearch.ShowMoreHits"
             >Visa fler sökträffar</ion-button>
           </div>

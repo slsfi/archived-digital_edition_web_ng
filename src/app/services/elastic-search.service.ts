@@ -23,19 +23,13 @@ export class ElasticSearchService {
   constructor(
     private http: HttpClient
   ) {
-    // Should fail if config is missing.
-    try {
-      this.apiEndpoint = config.app?.apiEndpoint ?? '';
-      this.machineName = config.app?.machineName ?? '';
-      this.indices = config.ElasticSearch?.indices ?? undefined;
-      this.aggregations = config.ElasticSearch?.aggregations ?? undefined;
-    } catch (e: any) {
-      console.error(
-        'Failed to load Elastic Search Service. Configuration error.',
-        e.message
-      );
-      throw e;
-    }
+    this.apiEndpoint = config.app?.apiEndpoint ?? '';
+    this.machineName = config.app?.machineName ?? '';
+    this.indices = config.ElasticSearch?.indices ?? undefined;
+    this.aggregations = config.ElasticSearch?.aggregations ?? undefined;
+    this.fixedFilters = config.ElasticSearch?.fixedFilters ?? [];
+    this.textTypes = config.ElasticSearch?.types ?? [];
+
     // Add fields that should always be returned in hits
     this.source = [
       'text_type',
@@ -51,27 +45,14 @@ export class ElasticSearchService {
     ];
 
     // Add additional fields that should be returned in hits from config file
-    try {
-      const configSourceFields = config.ElasticSearch?.source ?? undefined;
-      if (configSourceFields !== undefined && configSourceFields.length > 0) {
-        // Append additional fields to this.source if not already present
-        for (let i = 0; i < configSourceFields.length; i++) {
-          if (!this.source.includes(configSourceFields[i])) {
-            this.source.push(configSourceFields[i]);
-          }
+    const configSourceFields = config.ElasticSearch?.source ?? undefined;
+    if (configSourceFields?.length > 0) {
+      // Append additional fields to this.source if not already present
+      for (let i = 0; i < configSourceFields.length; i++) {
+        if (!this.source.includes(configSourceFields[i])) {
+          this.source.push(configSourceFields[i]);
         }
       }
-    } catch (e) {}
-
-    // Should not fail if config is missing.
-    try {
-      this.fixedFilters = config.ElasticSearch?.fixedFilters ?? undefined;
-      this.textTypes = config.ElasticSearch?.types ?? undefined;
-    } catch (e: any) {
-      console.error(
-        'Failed to load Elastic Search Service. Configuration error.',
-        e.message
-      );
     }
   }
 

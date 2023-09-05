@@ -1,21 +1,18 @@
 import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
 import { AggregationData, AggregationsData, Facet, Facets, FacetGroups, TimeRange } from 'src/app/models/elastic-search.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search.service';
 import { MdContentService } from 'src/app/services/md-content.service';
+import { UrlService } from 'src/app/services/url.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
 
-
-interface SearchOptions {
-  done?: Function;
-  initialSearch?: boolean;
-}
 
 @Component({
   selector: 'page-elastic-search',
@@ -31,21 +28,25 @@ export class ElasticSearchPage implements OnInit {
 
   aggregations: object = {};
   dateHistogramData: any = undefined;
-  disableFacetCheckboxes = false;
+  disableFacetCheckboxes = true;
   elasticError: boolean = false;
   enableFilters: boolean = true;
-  filtersVisible: boolean = true;
   facetGroups: any = {};
+  filtersVisible: boolean = true;
   from: number = 0;
   groupsOpenByDefault: any;
   highlightSearchMatches: boolean = true;
   hits: any = [];
   hitsPerPage: number = 10;
-  infiniteLoading: boolean = false;
-  loading: boolean = false;
+  initializing: boolean = true;
+  loading: boolean = true;
+  loadingMoreHits: boolean = false;
   mdContent$: Observable<SafeHtml>;
+  pages: number = 1;
   query: string = ''; // variable bound to the input search field with ngModel
-  range?: TimeRange | null;
+  range?: TimeRange | null = undefined;
+  rangeYears?: Record<string, any> = undefined;
+  routeQueryParamsSubscription: Subscription | null = null;
   selectedFacetGroups: FacetGroups = {};
   showAllFor: any = {};
   showSortOptions: boolean = true;
@@ -62,7 +63,10 @@ export class ElasticSearchPage implements OnInit {
     private commonFunctions: CommonFunctionsService,
     public elastic: ElasticSearchService,
     private mdContentService: MdContentService,
+    private route: ActivatedRoute,
+    private router: Router,
     private sanitizer: DomSanitizer,
+    private urlService: UrlService,
     public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -100,7 +104,96 @@ export class ElasticSearchPage implements OnInit {
 
   ngOnInit() {
     this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
-    this.getAggregations(true);
+
+    // Get initial aggregations
+    this.getInitialAggregations().subscribe(
+      (filters: any) => {
+        this.facetGroups = filters;
+        if (this.facetGroups['Years']) {
+          this.dateHistogramData = Object.values(this.facetGroups['Years']);
+        }
+        this.disableFacetCheckboxes = false;
+        this.loading = false;
+
+        console.log('initial facetGroups: ', this.facetGroups);
+
+        // Subscribe to queryParams, all searches are triggered through them
+        this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
+          (queryParams: any) => {
+            let triggerSearch = false;
+            let directSearch = false;
+
+            if (queryParams['query']) {
+              if (queryParams['query'] !== this.query) {
+                this.query = queryParams['query'];
+              }
+              triggerSearch = true;
+            }
+
+            if (queryParams['filters']) {
+              // TODO
+              triggerSearch = true;
+            }
+
+            if (queryParams['from'] && queryParams['to']) {
+              let range = { from: queryParams['from'], to: queryParams['to'] };
+              if (range.from !== this.rangeYears?.from && range.to !== this.rangeYears?.to) {
+                this.rangeYears = range;
+                this.range = {
+                  from: new Date(range.from || '').getTime(),
+                  to: new Date(`${parseInt(range.to || '') + 1}`).getTime()
+                }
+                triggerSearch = true;
+              }
+            } else if (this.range?.from && this.range?.to) {
+              this.range = null;
+              this.rangeYears = undefined;
+              triggerSearch = true;
+            }
+
+            if (queryParams['order']) {
+              if (queryParams['order'] === 'relevance') {
+                this.sort = '';
+              } else {
+                this.sort = queryParams['order'];
+              }
+              triggerSearch = true;
+            }
+
+            if (queryParams['pages']) {
+              if (this.from < 1) {
+                this.hits = [];
+                this.from = 0;
+                this.total = -1;
+                this.pages = Number(queryParams['pages']) || 1;
+              } else {
+                this.loadingMoreHits = true;
+              }
+              directSearch = true;
+              triggerSearch = true;
+            }
+
+            if (!triggerSearch && !queryParams['query'] && !this.initializing) {
+              triggerSearch = true;
+            }
+
+            this.initializing = false;
+
+            if (triggerSearch) {
+              if (directSearch) {
+                this.search();
+              } else {
+                this.initSearch();
+              }
+            }
+          }
+        );
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.routeQueryParamsSubscription?.unsubscribe();
   }
 
   /**
@@ -114,10 +207,29 @@ export class ElasticSearchPage implements OnInit {
     this.cf.detectChanges();
   }
 
-  clearSearch() {
+  clearSearchQuery() {
     this.query = '';
-    this.cf.detectChanges();
-    this.initSearch();
+    this.updateURLQueryParameters({ query: null });
+  }
+
+  updateURLQueryParameters(params: any) {
+    if (!params.pages) {
+      params.pages = null;
+    }
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: params,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      }
+    );
+  }
+
+  submitSearchQuery() {
+    this.updateURLQueryParameters({ query: this.query || null });
   }
 
   /**
@@ -134,26 +246,27 @@ export class ElasticSearchPage implements OnInit {
   /**
    * Triggers a new search with selected years.
    */
-  onRangeChange(from: number, to: number) {
+  onRangeChange(from: string, to: string) {
+    let triggerSearch = false;
+    let range = null;
     if (from && to) {
       // Certain date range
-      this.range = {from, to};
-      // console.log('year range: ', this.range);
-
-      this.disableFacetCheckboxes = true;
-      this.cf.detectChanges();
-      this.reset();
-      this.search();
+      range = {from, to};
+      triggerSearch = true;  
     } else if (!from && !to) {
       // All time
       this.range = null;
-      this.disableFacetCheckboxes = true;
-      this.cf.detectChanges();
-      this.reset();
-      this.search();
-    } else {
-      // Only one year selected, so do nothing
-      this.range = null;
+      this.rangeYears = undefined;
+      triggerSearch = true;
+    }
+
+    if (triggerSearch) {
+      this.updateURLQueryParameters(
+        {
+          from: range && range.from ? range.from : null,
+          to: range && range.to ? range.to : null
+        }
+      );
     }
   }
 
@@ -161,9 +274,7 @@ export class ElasticSearchPage implements OnInit {
    * Sorting changed so trigger new query.
    */
   onSortByChanged() {
-    this.disableFacetCheckboxes = true;
-    this.reset();
-    this.search();
+    this.updateURLQueryParameters({ order: this.sort || 'relevance' });
   }
 
   /**
@@ -173,89 +284,98 @@ export class ElasticSearchPage implements OnInit {
     this.hits = [];
     this.from = 0;
     this.total = -1;
+    this.pages = 1;
   }
 
   /**
    * Immediately execute a search.
    */
-  private search({ done, initialSearch }: SearchOptions = {}) {
+  private search() {
     this.elasticError = false;
     this.loading = true;
     this.submittedQuery = this.query;
 
     // Fetch hits
-    if (!initialSearch) {
-      this.elastic.executeSearchQuery({
-        queries: [this.query],
-        highlight: {
-          fields: {
-            'text_data': {
-              number_of_fragments: 1000,
-              fragment_size: this.textHighlightFragmentSize,
-              type: this.textHighlightType
-            },
-            'text_title': {
-              number_of_fragments: 0,
-              type: this.textTitleHighlightType
-            },
+    this.elastic.executeSearchQuery({
+      queries: [this.query],
+      highlight: {
+        fields: {
+          'text_data': {
+            number_of_fragments: 1000,
+            fragment_size: this.textHighlightFragmentSize,
+            type: this.textHighlightType
+          },
+          'text_title': {
+            number_of_fragments: 0,
+            type: this.textTitleHighlightType
           },
         },
-        from: this.from,
-        size: this.hitsPerPage,
-        facetGroups: this.facetGroups,
-        range: this.range,
-        sort: this.parseSortForQuery(),
-      }).subscribe((data: any) => {
-        if (data.hits === undefined) {
-          console.error('Elastic search error, no hits: ', data);
-          this.total = 0;
-          this.elasticError = true;
-        } else {
-          this.total = data.hits.total.value;
-          // console.log('hits: ', data.hits);
-  
-          // Append new hits to this.hits array.
-          Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
-            type: hit._source.text_type,
-            source: hit._source,
-            highlight: hit.highlight,
-            id: hit._id
-          })));
+      },
+      from: this.from,
+      size: (this.from < 1 && this.pages > 1) ? this.pages * this.hitsPerPage : this.hitsPerPage,
+      facetGroups: this.facetGroups,
+      range: this.range,
+      sort: this.parseSortForQuery(),
+    }).subscribe((data: any) => {
+      if (data.hits === undefined) {
+        console.error('Elastic search error, no hits: ', data);
+        this.from = 0;
+        this.pages = 1;
+        this.total = 0;
+        this.elasticError = true;
+      } else {
+        this.total = data.hits.total.value;
+        // console.log('hits: ', data.hits);
+
+        // Append new hits to this.hits array.
+        Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
+          type: hit._source.text_type,
+          source: hit._source,
+          highlight: hit.highlight,
+          id: hit._id
+        })));
+
+        if (this.from < 1 && this.pages > 1) {
+          this.from = (this.pages - 1) * this.hitsPerPage;
         }
-        this.loading = false;
-  
-        if (done) {
-          done();
-        }
-      });
-    }
+      }
+      this.loading = false;
+      this.loadingMoreHits = false;
+    });
     
-    this.getAggregations();
+    // Get aggregations only if NOT loading more hits
+    if (this.from < 1) {
+      this.getAggregations();
+    }
   }
 
-  private getAggregations(initialAggregations: boolean = false) {
-    if (initialAggregations) {
-      this.loading = true;
-    }
-
+  private getAggregations() {
     this.elastic.executeAggregationQuery({
-      queries: initialAggregations ? [] : [this.query],
+      queries: [this.query],
       facetGroups: this.facetGroups,
       range: this.range,
     }).subscribe({
       next: data => {
-        console.log('aggregation data', data);
-        this.populateFacets(data.aggregations, initialAggregations ? true : false);
+        this.populateFacets(data.aggregations);
         this.disableFacetCheckboxes = false;
-        if (initialAggregations) {
-          this.loading = false;
-        }
       },
       error: e => {
         console.error('Error fetching aggregations', e);
         this.loading = false;
       }
     });
+  }
+
+  private getInitialAggregations(): Observable<any> {
+    return this.elastic.executeAggregationQuery({
+      queries: [],
+      facetGroups: {},
+      range: undefined,
+    }).pipe(
+      map((data: any) => {
+        return this.getInitialFilters(data.aggregations);
+      })
+    );
   }
 
   private parseSortForQuery() {
@@ -272,18 +392,15 @@ export class ElasticSearchPage implements OnInit {
   }
 
   loadMore(e: any) {
-    this.infiniteLoading = true;
+    this.loadingMoreHits = true;
     this.from += this.hitsPerPage;
+    this.pages += 1;
 
-    this.search({
-      done: () => {
-        this.infiniteLoading = false;
-      },
-    });
+    this.updateURLQueryParameters({ pages: this.pages });
   }
 
   canShowHits() {
-    return (!this.loading || this.infiniteLoading) && (this.submittedQuery || this.range || this.hasSelectedFacets());
+    return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.hasSelectedFacets());
   }
 
   hasSelectedFacets() {
@@ -370,7 +487,7 @@ export class ElasticSearchPage implements OnInit {
   /**
    * Populate facets data using the search results aggregation data.
    */
-  private populateFacets(aggregations: AggregationsData, initialSearch?: boolean) {
+  private populateFacets(aggregations: AggregationsData) {
     // Get aggregation keys that are ordered in config.json.
     this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
       const newFacets = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
@@ -382,7 +499,7 @@ export class ElasticSearchPage implements OnInit {
           } else if (this.hasSelectedFacetsByGroup(facetGroupKey)) {
             // Unselected facets aren't updating because the terms bool.filter in the query
             // prevents unselected aggregations from appearing in the results.
-            // TODO: Fix this by separating search and aggregation query.
+            // TODO: Fix this by separating search and aggregation query. // SK: not sure this is an issua any more
           } else {
             // delete this.facetGroups[facetGroupKey][facetKey];
             existingFacet.doc_count = 0;
@@ -397,9 +514,15 @@ export class ElasticSearchPage implements OnInit {
         this.facetGroups[facetGroupKey] = newFacets;
       }
     });
-    if (initialSearch && this.facetGroups['Years']) {
-      this.dateHistogramData = Object.values(this.facetGroups['Years']);
-    }
+  }
+
+  private getInitialFilters(aggregations: AggregationsData) {
+    // Get aggregation keys that are ordered in config.json.
+    const filterGroups: any = {};
+    this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
+      filterGroups[facetGroupKey] = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
+    });
+    return filterGroups;
   }
 
   /**
