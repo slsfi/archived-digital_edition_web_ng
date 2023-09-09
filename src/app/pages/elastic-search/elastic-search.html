@@ -44,60 +44,66 @@
         <!-- List of facet groups -->
         <h2 [class.greyed-out]="initializing" i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
-        <div *ngIf="elastic.isDateHistogramAggregation('Years') && !initializing" class="fg-wrapper">
-          <button (click)="openAccordion($event, 'Years')">
-            <h3 i18n="@@ElasticSearch.TimeRange">Tidsperiod</h3>
-            <ion-icon id="arrow-Years" name="chevron-forward"></ion-icon>
-          </button>
-          <div id="facetList-Years" class="facetList-Years facetlist">
-            <date-histogram [years]="getFacets('Years')" [yearsAll]="dateHistogramData" [change]="onRangeChange.bind(this)" [selectedRange]="rangeYears"></date-histogram>
-          </div>
-        </div>
-
-        <ng-container *ngFor="let facetGroupKey of objectKeys(facetGroups)">
-          <div *ngIf="elastic.isTermsAggregation(facetGroupKey)" class="fg-wrapper">
-            <button (click)="openAccordion($event, facetGroupKey)">
+        <ng-container *ngFor="let filterGroup of filterGroups">
+          <div class="fg-wrapper">
+            <button (click)="toggleFilterGroupOpenState(filterGroup)">
               <h3>
-                <ng-container *ngIf="facetGroupKey === 'Type'">
+                <ng-container *ngIf="filterGroup.name === 'Years'">
+                  <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
+                </ng-container>
+                <ng-container *ngIf="filterGroup.name === 'Type'">
                   <ng-container i18n="@@Type">Texttyp</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'Genre'">
+                <ng-container *ngIf="filterGroup.name === 'Genre'">
                   <ng-container i18n="@@Genre">Genre</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'Collection'">
+                <ng-container *ngIf="filterGroup.name === 'Collection'">
                   <ng-container i18n="@@Collection">Delutgåva</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'LetterSenderName'">
+                <ng-container *ngIf="filterGroup.name === 'LetterSenderName'">
                   <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'LetterReceiverName'">
+                <ng-container *ngIf="filterGroup.name === 'LetterReceiverName'">
                   <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'LetterSenderLocation'">
+                <ng-container *ngIf="filterGroup.name === 'LetterSenderLocation'">
                   <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="facetGroupKey === 'LetterReceiverLocation'">
+                <ng-container *ngIf="filterGroup.name === 'LetterReceiverLocation'">
                   <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
                 </ng-container>
               </h3>
-              <ion-icon id="arrow-{{facetGroupKey}}" name="chevron-forward"></ion-icon>
+              <ion-icon id="arrow-{{filterGroup.name}}" name="chevron-forward" [class.open]="filterGroup.open"></ion-icon>
             </button>
-            <ol id="facetList-{{facetGroupKey}}" class="facetList-{{facetGroupKey}} facetlist">
-              <ng-container *ngIf="hasFacets(facetGroupKey); then facets else nofacet"></ng-container>
+
+            <div *ngIf="filterGroup.type === 'date_histogram'"
+                  id="facetList-{{filterGroup.name}}"
+                  class="facetList-{{filterGroup.name}} facetlist"
+                  [class.open]="filterGroup.open"
+            >
+              <date-histogram [years]="filterGroup.filters" [yearsAll]="dateHistogramData" [change]="onRangeChange.bind(this)" [selectedRange]="rangeYears"></date-histogram>
+            </div>
+
+            <ol *ngIf="filterGroup.type === 'terms'"
+                  id="facetList-{{filterGroup.name}}"
+                  class="facetList-{{filterGroup.name}} facetlist"
+                  [class.open]="filterGroup.open"
+            >
+              <ng-container *ngIf="filterGroup.filters.length; then facets else nofacet"></ng-container>
 
               <ng-template #facets>
-                <ng-container *ngFor="let facet of getFacets(facetGroupKey); let j = index">
-                  <li *ngIf="showAllFor[facetGroupKey] || j < 10">
+                <ng-container *ngFor="let facet of filterGroup.filters; let j = index">
+                  <li *ngIf="showAllFor[filterGroup.name] || j < 10">
                     <ion-checkbox
                           justify="start"
                           labelPlacement="end"
                           [(ngModel)]="facet.selected"
-                          (ionChange)="updateFacet(facetGroupKey, facet)"
+                          (ionChange)="updateFilter(filterGroup.name, facet)"
                           [disabled]="(facet.doc_count < 1) || disableFacetCheckboxes"
                     >
                       <span [ngStyle]="{'white-space': 'normal'}">
                         <span>
-                          <ng-container *ngIf="facetGroupKey === 'Type'">
+                          <ng-container *ngIf="filterGroup.name === 'Type'">
                             <ng-container [ngSwitch]="facet.key.toString()">
                               <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
                               <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
@@ -109,7 +115,7 @@
                               <ng-container *ngSwitchDefault>{{facet.key.toString()}}</ng-container>
                             </ng-container>
                           </ng-container>
-                          <ng-container *ngIf="facetGroupKey !== 'Type'">
+                          <ng-container *ngIf="filterGroup.name !== 'Type'">
                             {{facet.key_as_string || facet.key}}
                           </ng-container>
                         </span><span [ngStyle]="{'font-size': '0.875em', 'color': '#686868'}" [innerHTML]="' (' + facet.doc_count + ')'"></span>
@@ -119,12 +125,12 @@
                 </ng-container>
 
                 <li>
-                  <ion-button *ngIf="getFacets(facetGroupKey).length > 10"
+                  <ion-button *ngIf="filterGroup.filters.length > 10"
                         class="custom-button more-facets"
-                        (click)="showAllFor[facetGroupKey] = !showAllFor[facetGroupKey]"
+                        (click)="showAllFor[filterGroup.name] = !showAllFor[filterGroup.name]"
                   >
-                    <ng-container *ngIf="!showAllFor[facetGroupKey]" i18n="@@ElasticSearch.ShowMore">Visa fler</ng-container>
-                    <ng-container *ngIf="showAllFor[facetGroupKey]" i18n="@@ElasticSearch.ShowLess">Visa färre</ng-container>
+                    <ng-container *ngIf="!showAllFor[filterGroup.name]" i18n="@@ElasticSearch.ShowMore">Visa fler</ng-container>
+                    <ng-container *ngIf="showAllFor[filterGroup.name]" i18n="@@ElasticSearch.ShowLess">Visa färre</ng-container>
                   </ion-button>
                 </li>
               </ng-template>
@@ -140,39 +146,41 @@
       </div>
 
       <div class="search-result-column">
-        <div class="selected-facets-row" *ngIf="hasSelectedFacets()">
-          <ng-container *ngFor="let groupKey of objectKeys(selectedFacetGroups)">
-            <div class="sfg" *ngIf="hasSelectedFacetsByGroup(groupKey)">
+
+        <!-- Active filters -->
+        <div class="selected-facets-row" *ngIf="this.activeFilters.length">
+          <ng-container *ngFor="let activeFilterGroup of activeFilters">
+            <div class="sfg" *ngIf="activeFilterGroup.filters.length">
               <p class="sfg-title">
-                <ng-container *ngIf="groupKey === 'Years'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'Years'">
                   <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'Type'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'Type'">
                   <ng-container i18n="@@Type">Texttyp</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'Genre'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'Genre'">
                   <ng-container i18n="@@Genre">Genre</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'Collection'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'Collection'">
                   <ng-container i18n="@@Collection">Delutgåva</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'LetterSenderName'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterSenderName'">
                   <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'LetterReceiverName'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterReceiverName'">
                   <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'LetterSenderLocation'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterSenderLocation'">
                   <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="groupKey === 'LetterReceiverLocation'">
+                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterReceiverLocation'">
                   <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
                 </ng-container>
               </p>
               <ul>
-                <li *ngFor="let facet of objectValues(selectedFacetGroups[groupKey])">
-                  <ion-button (click)="unselectFacet(groupKey, facet)" class="custom-button">
-                    <ng-container [ngSwitch]="facet.key.toString()">
+                <li *ngFor="let filter of activeFilterGroup.filters">
+                  <ion-button (click)="unselectFilter(activeFilterGroup.groupKey, filter)" class="custom-button">
+                    <ng-container [ngSwitch]="filter.key.toString()">
                       <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
                       <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
                       <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
@@ -180,7 +188,7 @@
                       <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
                       <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
                       <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                      <ng-container *ngSwitchDefault>{{getEllipsisString(facet.key.toString())}}</ng-container>
+                      <ng-container *ngSwitchDefault>{{getEllipsisString(filter.key.toString())}}</ng-container>
                     </ng-container>
                     <ion-icon name="close" slot="end"></ion-icon>
                   </ion-button>
@@ -305,6 +313,7 @@
             >Till början</ion-button>
           </div>
         </div>
+
       </div>
     </div>
 

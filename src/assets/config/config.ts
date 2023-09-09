@@ -324,11 +324,7 @@ export const config: Config = {
     },
     textTitleHighlightType: "fvh",
     textHighlightType: "fvh",
-    groupOpenByDefault: {
-      type: true,
-      genre: true,
-      collection: true
-    },
+    filterGroupsOpenByDefault: ["Years", "Type", "Genre", "Collection"],
     indices: ["topelius"],
     fixedFilters: [
       {
@@ -356,7 +352,8 @@ export const config: Config = {
       Type: {
         terms: {
           field: "text_type",
-          size: 40
+          size: 40,
+          order: {_key: "asc"}
         }
       },
       Genre: {

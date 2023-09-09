@@ -55,21 +55,35 @@ export class DateHistogram implements OnChanges {
           let first = Number(this.yearsAll[0]['key_as_string']);
           while (first % 10 !== 0) {
             first = first - 1;
-            this.yearsAll.unshift({ key_as_string: String(first), doc_count: 0 });
+            this.yearsAll.unshift(
+              {
+                key: new Date(String(first)).getTime(),
+                key_as_string: String(first),
+                doc_count: 0
+              }
+            );
           }
 
           let last = Number(this.yearsAll[this.yearsAll.length - 1]['key_as_string']);
           while (last % 10 !== 0) {
             last = last + 1;
-            this.yearsAll.push({ key_as_string: String(last), doc_count: 0 });
+            this.yearsAll.push(
+              {
+                key: new Date(String(last)).getTime(),
+                key_as_string: String(last),
+                doc_count: 0
+              }
+            );
           }
         }
+        // console.log('yearsAll', this.yearsAll);
       } else if (this.selectedRange?.from && this.selectedRange?.to) {
-        // console.log(this.years);
         // console.log(this.selectedRange);
         this.from = this.selectedRange?.from;
         this.to = this.selectedRange?.to;
       }
+
+      // console.log('years', this.years);
 
       for (let a = 0; a < this.yearsAll.length; a++) {
         this.yearsAll[a]['doc_count_current'] = 0;

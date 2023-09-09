@@ -26,12 +26,14 @@ export class ElasticSearchPage implements OnInit {
   objectKeys = Object.keys;
   objectValues = Object.values;
 
+  activeFilters: any[] = [];
   aggregations: object = {};
   dateHistogramData: any = undefined;
   disableFacetCheckboxes = true;
   elasticError: boolean = false;
   enableFilters: boolean = true;
   facetGroups: any = {};
+  filterGroups: any[] = [];
   filtersVisible: boolean = true;
   from: number = 0;
   groupsOpenByDefault: any;
@@ -47,7 +49,6 @@ export class ElasticSearchPage implements OnInit {
   range?: TimeRange | null = undefined;
   rangeYears?: Record<string, any> = undefined;
   routeQueryParamsSubscription: Subscription | null = null;
-  selectedFacetGroups: FacetGroups = {};
   showAllFor: any = {};
   showSortOptions: boolean = true;
   sort: string = '';
@@ -108,14 +109,17 @@ export class ElasticSearchPage implements OnInit {
     // Get initial aggregations
     this.getInitialAggregations().subscribe(
       (filters: any) => {
-        this.facetGroups = filters;
-        if (this.facetGroups['Years']) {
-          this.dateHistogramData = Object.values(this.facetGroups['Years']);
+        this.filterGroups = filters;
+
+        for (let g = 0; g < this.filterGroups.length; g++) {
+          if (this.filterGroups[g].name === 'Years') {
+            this.dateHistogramData = this.filterGroups[g].filters;
+            break;
+          }
         }
+
         this.disableFacetCheckboxes = false;
         this.loading = false;
-
-        console.log('initial facetGroups: ', this.facetGroups);
 
         // Subscribe to queryParams, all searches are triggered through them
         this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
@@ -235,7 +239,7 @@ export class ElasticSearchPage implements OnInit {
   /**
    * Triggers a new search with selected facets.
    */
-  onFacetsChanged() {
+  onFiltersChanged() {
     this.disableFacetCheckboxes = true;
     this.cf.detectChanges();
     this.reset();
@@ -313,7 +317,7 @@ export class ElasticSearchPage implements OnInit {
       },
       from: this.from,
       size: (this.from < 1 && this.pages > 1) ? this.pages * this.hitsPerPage : this.hitsPerPage,
-      facetGroups: this.facetGroups,
+      facetGroups: this.filterGroups,
       range: this.range,
       sort: this.parseSortForQuery(),
     }).subscribe((data: any) => {
@@ -352,11 +356,11 @@ export class ElasticSearchPage implements OnInit {
   private getAggregations() {
     this.elastic.executeAggregationQuery({
       queries: [this.query],
-      facetGroups: this.facetGroups,
+      facetGroups: this.filterGroups,
       range: this.range,
     }).subscribe({
       next: data => {
-        this.populateFacets(data.aggregations);
+        this.updateFilters(data.aggregations);
         this.disableFacetCheckboxes = false;
       },
       error: e => {
@@ -400,27 +404,36 @@ export class ElasticSearchPage implements OnInit {
   }
 
   canShowHits() {
-    return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.hasSelectedFacets());
+    return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.activeFilters.length);
   }
 
-  hasSelectedFacets() {
-    return Object.values(this.facetGroups).some((facets: any) => Object.values(facets).some((facet: any) => facet.selected));
+  hasActiveFacetsByGroup(groupKey: string) {
+    for (let a = 0; a < this.activeFilters.length; a++) {
+      if (
+        this.activeFilters[a].groupKey === groupKey &&
+        this.activeFilters[a].filters.length
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  hasSelectedFacetsByGroup(groupKey: string) {
-    return (this.selectedFacetGroups[groupKey] ? Object.keys(this.selectedFacetGroups[groupKey]).length : 0) > 0;
-  }
-
+  /* DEPRECATED
   hasSelectedNormalFacets() {
     return Object.keys(this.facetGroups).some(facetGroupKey =>
       facetGroupKey !== 'Type' && facetGroupKey !== 'Years' && Object.values(this.facetGroups[facetGroupKey]).some((facet: any) => facet.selected)
     );
   }
+  */
 
+  /* DEPRECATED
   hasFacets(facetGroupKey: string) {
     return (this.facetGroups[facetGroupKey] ? Object.keys(this.facetGroups[facetGroupKey]).length : 0) > 0;
   }
+  */
 
+  /* DEPRECATED
   getFacets(facetGroupKey: string): any {
     const facets = this.facetGroups[facetGroupKey];
     if (facets) {
@@ -446,89 +459,187 @@ export class ElasticSearchPage implements OnInit {
       return [];
     }
   }
+  */
 
   /**
-   * Toggles facet on/off. Note that the selected state is controlled by the ion-checkbox
-   * so it should not be modified here.
+   * Toggles filter on/off. Note that the selected state is controlled
+   * by the ion-checkbox so it should not be modified here.
    */
-  updateFacet(facetGroupKey: string, facet: Facet) {
-    const facets = this.facetGroups[facetGroupKey] || {};
-    facets[facet.key] = facet;
-    this.facetGroups[facetGroupKey] = facets;
-
-    this.updateSelectedFacets(facetGroupKey, facet);
-
-    this.onFacetsChanged();
-  }
-
-  unselectFacet(facetGroupKey: string, facet: Facet) {
-    facet.selected = false;
-    this.updateFacet(facetGroupKey, facet);
-  }
-
-  private updateSelectedFacets(facetGroupKey: string, facet: Facet) {
-    const facetGroup = this.selectedFacetGroups[facetGroupKey] || {};
-
-    // Set or delete facet from selected facets
-    if (facet.selected) {
-      facetGroup[facet.key] = facet;
-    } else {
-      delete facetGroup[facet.key];
+  updateFilter(filterGroupKey: string, filter: Facet) {
+    for (let g = 0; g < this.filterGroups.length; g++) {
+      if (this.filterGroups[g].name === filterGroupKey) {
+        for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+          if (this.filterGroups[g].filters[f].key === filter.key) {
+            this.filterGroups[g].filters[f] = filter;
+            break;
+          }
+        }
+        break;
+      }
     }
 
-    // Set or delete facet group from selected facet groups
-    if ((facetGroup ? Object.keys(facetGroup).length : 0) === 0) {
-      delete this.selectedFacetGroups[facetGroupKey];
-    } else {
-      this.selectedFacetGroups[facetGroupKey] = facetGroup;
+    this.updateActiveFilters(filterGroupKey, filter);
+    this.onFiltersChanged();
+  }
+
+  unselectFilter(filterGroupKey: string, filter: Facet) {
+    filter.selected = false;
+    this.updateFilter(filterGroupKey, filter);
+  }
+
+  private updateActiveFilters(filterGroupKey: string, filter: Facet) {
+    let filterGroupActive = false;
+    for (let a = 0; a < this.activeFilters.length; a++) {
+      if (this.activeFilters[a].groupKey === filterGroupKey) {
+        filterGroupActive = true;
+        if (filter.selected) {
+          // Add filter to already active filter group
+          this.activeFilters[a].filters.push(filter);
+        } else {
+          // Remove filter from already active filter group
+          for (let f = 0; f < this.activeFilters[a].filters.length; f++) {
+            if (this.activeFilters[a].filters[f].key === filter.key) {
+              this.activeFilters[a].filters.splice(f, 1);
+              break;
+            }
+          }
+          if (this.activeFilters[a].filters.length < 1) {
+            // Remove filter group from active filters
+            // since there are no active filters from the group
+            this.activeFilters.splice(a, 1);
+          }
+        }
+        break;
+      }
+    }
+
+    if (!filterGroupActive && filter.selected) {
+      // Add filter group and filter to active filters
+      this.activeFilters.push(
+        {
+          groupKey: filterGroupKey,
+          filters: [filter]
+        }
+      );
     }
   }
 
   /**
-   * Populate facets data using the search results aggregation data.
+   * Updates filter data using the search result's aggregation data.
    */
-  private populateFacets(aggregations: AggregationsData) {
+  private updateFilters(aggregations: AggregationsData) {
     // Get aggregation keys that are ordered in config.json.
-    this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
-      const newFacets = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
-      if (this.facetGroups[facetGroupKey]) {
-        Object.entries(this.facetGroups[facetGroupKey]).forEach(([facetKey, existingFacet]: [string, any]) => {
-          const newFacet = newFacets[facetKey];
-          if (newFacet) {
-            existingFacet.doc_count = newFacet.doc_count;
-          } else if (this.hasSelectedFacetsByGroup(facetGroupKey)) {
-            // Unselected facets aren't updating because the terms bool.filter in the query
-            // prevents unselected aggregations from appearing in the results.
-            // TODO: Fix this by separating search and aggregation query. // SK: not sure this is an issua any more
-          } else {
-            // delete this.facetGroups[facetGroupKey][facetKey];
-            existingFacet.doc_count = 0;
+    this.elastic.getAggregationKeys().forEach((filterGroupKey: any) => {
+      const newFilterGroup = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
+      let filterGroupExists = false;
+      for (let g = 0; g < this.filterGroups.length; g++) {
+        if (this.filterGroups[g].name === filterGroupKey) {
+          filterGroupExists = true;
+
+          const deleteFilterIndices = [];
+
+          for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+            const newFilter = newFilterGroup[this.filterGroups[g].filters[f].key];
+            if (newFilter) {
+              this.filterGroups[g].filters[f].doc_count = newFilter.doc_count;
+            } else if (this.hasActiveFacetsByGroup(filterGroupKey)) {
+              // Unselected facets aren't updating because the terms bool.filter in the query
+              // prevents unselected aggregations from appearing in the results.
+              // TODO: Fix this by separating search and aggregation query. // SK: not sure this is an issue any more
+            } else {
+              if (
+                config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms &&
+                !config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
+              ) {
+                // Aggregations are ordered desc according to doc_count -->
+                // Empty filters should be removed
+                deleteFilterIndices.push(f);
+              } else {
+                // Aggregations are ordered according to key name -->
+                // Empty filters should be retained with zero count
+                this.filterGroups[g].filters[f].doc_count = 0;
+              }
+            }
           }
-        })
-        Object.entries(newFacets).forEach(([facetKey, existingFacet]: [string, any]) => {
-          if (this.facetGroups[facetGroupKey][facetKey] === undefined) {
-            this.facetGroups[facetGroupKey][facetKey] = existingFacet;
+
+          // Remove filter objects that should be deleted from filters array
+          deleteFilterIndices.forEach((index: number) => {
+            this.filterGroups[g].filters.splice(index, 1);
+          });
+
+          // This forEach-loop just double checks that all filters we have
+          // received from Elastic exist in the component. Missing filters
+          // are added, but that should never happen if the filters have
+          // been properly initialized.
+          Object.entries(newFilterGroup).forEach(
+            ([filterKey, filterObj]: [string, any]) => {
+              let filterFound = false;
+              for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+                if (String(this.filterGroups[g].filters[f].key) === filterKey) {
+                  filterFound = true;
+                  break;
+                }
+              }
+
+              if (!filterFound) {
+                this.filterGroups[g].filters.push(filterObj);
+                if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order) {
+                  this.commonFunctions.sortArrayOfObjectsAlphabetically(
+                    this.filterGroups[g].filters, 'key'
+                  );
+                } else if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms) {
+                  this.commonFunctions.sortArrayOfObjectsNumerically(
+                    this.filterGroups[g].filters, 'doc_count', 'desc'
+                  );
+                } else if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.date_histogram) {
+                  this.commonFunctions.sortArrayOfObjectsNumerically(
+                    this.filterGroups[g].filters, 'key', 'asc'
+                  );
+                }
+              }
+            }
+          );
+
+          break;
+        }
+      }
+
+      if (!filterGroupExists) {
+        this.filterGroups.push(
+          {
+            name: filterGroupKey,
+            filters: this.convertFilterGroupToArray(filterGroupKey, newFilterGroup),
+            open: config.ElasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+            type: this.elastic.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
           }
-        });
-      } else {
-        this.facetGroups[facetGroupKey] = newFacets;
+        );
       }
     });
   }
 
   private getInitialFilters(aggregations: AggregationsData) {
     // Get aggregation keys that are ordered in config.json.
-    const filterGroups: any = {};
-    this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
-      filterGroups[facetGroupKey] = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
+    const filterGroups: any[] = [];
+    this.elastic.getAggregationKeys().forEach((filterGroupKey: any) => {
+      const facetGroupObj = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
+
+      filterGroups.push(
+        {
+          name: filterGroupKey,
+          filters: this.convertFilterGroupToArray(filterGroupKey, facetGroupObj),
+          open: config.ElasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+          type: this.elastic.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
+        }
+      );
     });
+
     return filterGroups;
   }
 
   /**
    * Convert aggregation data to facets data.
    */
-  private convertAggregationsToFacets(aggregation: AggregationData): Facets {
+  private convertAggregationsToFilters(aggregation: AggregationData): Facets {
     const facets = {} as any;
     // Get buckets from either unfiltered or filtered aggregation.
     const buckets = aggregation.buckets || aggregation?.filtered?.buckets;
@@ -537,6 +648,31 @@ export class ElasticSearchPage implements OnInit {
       facets[facet.key] = facet;
     });
     return facets;
+  }
+
+  private convertFilterGroupToArray(facetGroupKey: string, facetGroupObj: Facets) {
+    if (facetGroupObj) {
+      if (facetGroupKey !== 'Years') {
+        const keys = [];
+        const facetsAsArray = [];
+        for (const key in facetGroupObj) {
+          if (facetGroupObj.hasOwnProperty(key)) {
+            keys.push(key);
+          }
+        }
+        for (let i = 0; i < keys.length; i++) {
+          facetsAsArray.push(facetGroupObj[keys[i]]);
+        }
+        if (!config.ElasticSearch?.aggregations?.[facetGroupKey]?.terms?.order?._key) {
+          this.commonFunctions.sortArrayOfObjectsNumerically(facetsAsArray, 'doc_count');
+        }
+        return facetsAsArray;
+      } else {
+        return Object.values(facetGroupObj);
+      }
+    } else {
+      return [];
+    }
   }
 
   getTextName(source: any) {
@@ -697,26 +833,8 @@ export class ElasticSearchPage implements OnInit {
     }
   }
 
-  openAccordion(e: any, group: any) {
-    const facet = document.getElementById('facetList-' + group);
-    const arrow = document.getElementById('arrow-' + group);
-
-    arrow?.classList.toggle('rotate');
-
-    if (arrow?.classList.contains('open')) {
-      if (facet) {
-        facet.style.display = 'none';
-      }
-      arrow.classList.add('closed');
-      arrow.classList.remove('open');
-    } else if (arrow) {
-      if (facet) {
-        facet.style.display = 'block';
-      }
-      arrow.classList.add('open');
-      arrow.classList.remove('closed');
-    }
-    this.cf.detectChanges();
+  toggleFilterGroupOpenState(filterGroup: any) {
+    filterGroup.open = !filterGroup.open;
   }
 
   autoExpandSearchfields() {

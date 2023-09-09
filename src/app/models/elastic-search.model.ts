@@ -12,7 +12,7 @@ export interface AggregationData {
 
 export interface AggregationQuery {
     queries: string[]
-    facetGroups?: FacetGroups
+    facetGroups?: any
     range?: TimeRange
 }
 
@@ -50,7 +50,7 @@ export interface SearchQuery {
     highlight: object
     from: number
     size: number
-    facetGroups?: FacetGroups
+    facetGroups?: any
     range?: TimeRange
     sort?: object[]
 }

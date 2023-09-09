@@ -131,13 +131,10 @@ h1.page-title {
         ion-icon {
           font-size: 1.5em;
           margin: 0.8125rem 0.625rem 0.8125rem 1rem;
+          transition: transform ease-in-out .15s;
 
-          &.rotate.open {
+          &.open {
             transform: rotate(90deg);
-            transition: transform ease-in-out .15s;
-          }
-
-          &.closed {
             transition: transform ease-in-out .15s;
           }
         }
@@ -150,6 +147,10 @@ h1.page-title {
       .facetlist {
         display: none;
         padding: 0;
+
+        &.open {
+          display: block;
+        }
       }
 
       ol.facetlist {

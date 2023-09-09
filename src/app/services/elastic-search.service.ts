@@ -188,7 +188,7 @@ export class ElasticSearchService {
       });
     }
 
-    if (facetGroups) {
+    if (facetGroups.length) {
       this.injectFacetsToPayload(payload, facetGroups);
     }
 
@@ -330,23 +330,21 @@ export class ElasticSearchService {
   }
   */
 
-  private injectFacetsToPayload(payload: any, facetGroups: FacetGroups) {
-    Object.entries(facetGroups).forEach(
-      ([facetGroupKey, facets]: [string, Facets]) => {
-        const terms = this.filterSelectedFacetKeys(facets);
-        if (terms.length > 0) {
-          payload.query.function_score.query.bool.filter =
-            payload.query.function_score.query.bool.filter || [];
-          if (this.aggregations && facetGroupKey) {
-            payload.query.function_score.query.bool.filter.push({
-              terms: {
-                [this.aggregations[facetGroupKey].terms.field]: terms,
-              },
-            });
-          }
+  private injectFacetsToPayload(payload: any, facetGroups: any[]) {
+    facetGroups.forEach(facetGroup => {
+      const terms = this.filterSelectedFacetKeys(facetGroup.filters);
+      if (terms.length > 0) {
+        payload.query.function_score.query.bool.filter =
+          payload.query.function_score.query.bool.filter || [];
+        if (this.aggregations && facetGroup.name) {
+          payload.query.function_score.query.bool.filter.push({
+            terms: {
+              [this.aggregations[facetGroup.name].terms.field]: terms,
+            },
+          });
         }
       }
-    );
+    });
   }
 
   private filterSelectedFacetKeys(facets: Facets): string[] {
@@ -372,7 +370,7 @@ export class ElasticSearchService {
    */
   private injectFilteredAggregationsToPayload(
     payload: any,
-    facetGroups?: FacetGroups,
+    facetGroups?: any,
     range?: TimeRange
   ) {
     payload.aggs = {};
@@ -393,7 +391,7 @@ export class ElasticSearchService {
   private generateFilteredAggregation(
     aggregationKey: string,
     aggregation: any,
-    facetGroups?: FacetGroups,
+    facetGroups?: any,
     range?: TimeRange
   ) {
     const filtered = {
@@ -410,22 +408,20 @@ export class ElasticSearchService {
     };
 
     // Add term filters.
-    if (facetGroups) {
-      Object.entries(facetGroups).forEach(
-        ([groupKey, facets]: [string, Facets]) => {
-          // Don't filter itself.
-          if (aggregationKey !== groupKey) {
-            const selectedFacetKeys = this.filterSelectedFacetKeys(facets);
-            if (selectedFacetKeys.length > 0) {
-              filtered.filter.bool.filter.push({
-                terms: {
-                  [this.getAggregationField(groupKey)]: selectedFacetKeys,
-                },
-              });
-            }
+    if (facetGroups.length) {
+      facetGroups.forEach((facetGroup: any) => {
+        // Don't filter itself.
+        if (aggregationKey !== facetGroup.name) {
+          const selectedFacetKeys = this.filterSelectedFacetKeys(facetGroup.filters);
+          if (selectedFacetKeys.length > 0) {
+            filtered.filter.bool.filter.push({
+              terms: {
+                [this.getAggregationField(facetGroup.name)]: selectedFacetKeys,
+              },
+            });
           }
         }
-      );
+      });
     }
 
     // Add date range filter.
