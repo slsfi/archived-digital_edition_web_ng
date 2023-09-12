@@ -1,15 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 
-/**
- * Visualize and select time ranges using elastic search date histogram data.
- *
- * TODO: Add drag to select range.
- * TODO: Add more granular months selection.
- */
 @Component({
   standalone: true,
   selector: 'date-histogram',
@@ -18,17 +12,17 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, FormsModule, IonicModule]
 })
 export class DateHistogram implements OnChanges {
+  @Input() selectedRange?: any = undefined;
   @Input() years?: [any] = undefined;
   @Input() yearsAll?: [any] = undefined;
-  @Input() change?: Function = undefined;
-  @Input() selectedRange?: any = undefined;
+  @Output() rangeChange = new EventEmitter<any>();
 
-  from?: string = undefined;
-  to?: string = undefined;
-  max: number = 0;
-  firstYear?: string = undefined;
-  lastYear?: string = undefined;
   firstUpdate: boolean = true;
+  firstYear?: string = undefined;
+  from?: string = undefined;
+  lastYear?: string = undefined;
+  max: number = 0;
+  to?: string = undefined;
 
   constructor() {}
 
@@ -81,6 +75,9 @@ export class DateHistogram implements OnChanges {
         // console.log(this.selectedRange);
         this.from = this.selectedRange?.from;
         this.to = this.selectedRange?.to;
+      } else if (!this.selectedRange) {
+        this.from = undefined;
+        this.to = undefined;
       }
 
       // console.log('years', this.years);
@@ -100,7 +97,7 @@ export class DateHistogram implements OnChanges {
   reset() {
     this.from = undefined;
     this.to = undefined;
-    this.change?.(null, null);
+    this.rangeChange.emit(null);
   }
 
   // Send the change event to the parent component
@@ -110,7 +107,7 @@ export class DateHistogram implements OnChanges {
     const toTime = new Date(`${parseInt(this.to || '') + 1}`).getTime();
 
     if (fromTime <= toTime) {
-      this.change?.(this.from, this.to);
+      this.rangeChange.emit({ from: this.from, to: this.to });
     }
   }
 

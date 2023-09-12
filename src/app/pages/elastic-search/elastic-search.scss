@@ -36,7 +36,7 @@ h1.page-title {
   }
 }
 
-.selected-facets-row {
+.active-filters-row {
   column-gap: 0.75em;
   display: flex;
   flex-flow: row wrap;
@@ -44,13 +44,13 @@ h1.page-title {
   margin: 0.375rem 0 1.5rem 0;
   row-gap: 0.25em;
 
-  .sfg {
+  .active-filter-group {
     align-items: flex-start;
     display: inline-flex;
     gap: 0.5em;
     justify-content: flex-start;
 
-    .sfg-title {
+    .afg-title {
       margin: 0.625em 0 0 0;
     }
 
@@ -197,7 +197,7 @@ h1.page-title {
   }
 }
 
-.selected-facets-row + .show-facets-button {
+.active-filters-row + .show-facets-button {
   margin-top: 1rem;
 }
 

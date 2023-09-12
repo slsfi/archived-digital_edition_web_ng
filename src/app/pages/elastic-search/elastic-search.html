@@ -81,7 +81,12 @@
                   class="facetList-{{filterGroup.name}} facetlist"
                   [class.open]="filterGroup.open"
             >
-              <date-histogram [years]="filterGroup.filters" [yearsAll]="dateHistogramData" [change]="onRangeChange.bind(this)" [selectedRange]="rangeYears"></date-histogram>
+              <date-histogram
+                    [years]="filterGroup.filters"
+                    [yearsAll]="dateHistogramData"
+                    [selectedRange]="rangeYears"
+                    (rangeChange)="onTimeRangeChange($event)"
+              ></date-histogram>
             </div>
 
             <ol *ngIf="filterGroup.type === 'terms'"
@@ -98,7 +103,7 @@
                           justify="start"
                           labelPlacement="end"
                           [(ngModel)]="facet.selected"
-                          (ionChange)="updateFilter(filterGroup.name, facet)"
+                          (ionChange)="toggleFilter(filterGroup.name, facet)"
                           [disabled]="(facet.doc_count < 1) || disableFacetCheckboxes"
                     >
                       <span [ngStyle]="{'white-space': 'normal'}">
@@ -148,39 +153,36 @@
       <div class="search-result-column">
 
         <!-- Active filters -->
-        <div class="selected-facets-row" *ngIf="this.activeFilters.length">
+        <div class="active-filters-row" *ngIf="this.activeFilters.length || rangeYears">
           <ng-container *ngFor="let activeFilterGroup of activeFilters">
-            <div class="sfg" *ngIf="activeFilterGroup.filters.length">
-              <p class="sfg-title">
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'Years'">
-                  <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'Type'">
+            <div class="active-filter-group" *ngIf="activeFilterGroup.keys.length">
+              <p class="afg-title">
+                <ng-container *ngIf="activeFilterGroup.name === 'Type'">
                   <ng-container i18n="@@Type">Texttyp</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'Genre'">
+                <ng-container *ngIf="activeFilterGroup.name === 'Genre'">
                   <ng-container i18n="@@Genre">Genre</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'Collection'">
+                <ng-container *ngIf="activeFilterGroup.name === 'Collection'">
                   <ng-container i18n="@@Collection">Delutgåva</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterSenderName'">
+                <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderName'">
                   <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterReceiverName'">
+                <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverName'">
                   <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterSenderLocation'">
+                <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderLocation'">
                   <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
                 </ng-container>
-                <ng-container *ngIf="activeFilterGroup.groupKey === 'LetterReceiverLocation'">
+                <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverLocation'">
                   <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
                 </ng-container>
               </p>
               <ul>
-                <li *ngFor="let filter of activeFilterGroup.filters">
-                  <ion-button (click)="unselectFilter(activeFilterGroup.groupKey, filter)" class="custom-button">
-                    <ng-container [ngSwitch]="filter.key.toString()">
+                <li *ngFor="let filterKey of activeFilterGroup.keys">
+                  <ion-button (click)="unselectFilter(activeFilterGroup.name, filterKey)" class="custom-button">
+                    <ng-container [ngSwitch]="filterKey.toString()">
                       <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
                       <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
                       <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
@@ -188,7 +190,7 @@
                       <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
                       <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
                       <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                      <ng-container *ngSwitchDefault>{{getEllipsisString(filter.key.toString())}}</ng-container>
+                      <ng-container *ngSwitchDefault>{{getEllipsisString(filterKey.toString())}}</ng-container>
                     </ng-container>
                     <ion-icon name="close" slot="end"></ion-icon>
                   </ion-button>
@@ -196,6 +198,19 @@
               </ul>
             </div>
           </ng-container>
+          <div class="active-filter-group" *ngIf="rangeYears">
+            <p class="afg-title">
+              <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
+            </p>
+            <ul>
+              <li>
+                <ion-button (click)="onTimeRangeChange({from: null, to: null})" class="custom-button">
+                  {{rangeYears.from}}–{{rangeYears.to}}
+                  <ion-icon name="close" slot="end"></ion-icon>
+                </ion-button>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="info-toolbar">
