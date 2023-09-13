@@ -5,7 +5,7 @@ import { IonContent } from '@ionic/angular';
 import { catchError, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
-import { AggregationData, AggregationsData, Facet, Facets, FacetGroups, TimeRange } from 'src/app/models/elastic-search.model';
+import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from 'src/app/models/elastic-search.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search.service';
 import { MdContentService } from 'src/app/services/md-content.service';
@@ -23,17 +23,12 @@ import { config } from "src/assets/config/config";
 export class ElasticSearchPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
   
-  // Helpers to loop objects
-  objectKeys = Object.keys;
-  objectValues = Object.values;
-
   activeFilters: any[] = [];
   aggregations: object = {};
   dateHistogramData: any = undefined;
   disableFacetCheckboxes = true;
   elasticError: boolean = false;
   enableFilters: boolean = true;
-  facetGroups: any = {};
   filterGroups: any[] = [];
   filtersVisible: boolean = true;
   from: number = 0;
@@ -126,20 +121,27 @@ export class ElasticSearchPage implements OnInit {
         // Subscribe to queryParams, all searches are triggered through them
         this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
           (queryParams: any) => {
+            console.log('queryParams changed');
             let triggerSearch = false;
             let directSearch = false;
 
             if (queryParams['query']) {
-              if (queryParams['query'] !== this.query) {
+              if (queryParams['query'] !== this.submittedQuery) {
                 this.query = queryParams['query'];
+                triggerSearch = true;
               }
-              triggerSearch = true;
             }
 
             if (queryParams['filters']) {
               const parsedActiveFilters = this.urlService.parse(queryParams['filters'], true);
-              this.selectFiltersFromActiveFilters(parsedActiveFilters);
-              this.activeFilters = parsedActiveFilters;
+              if (this.activeFiltersChanged(parsedActiveFilters)) {
+                this.selectFiltersFromActiveFilters(parsedActiveFilters);
+                this.activeFilters = parsedActiveFilters;
+                triggerSearch = true;
+              }
+            } else if (this.activeFilters.length) {
+              // Active filters should be cleared
+              this.clearAllActiveFilters();
               triggerSearch = true;
             }
 
@@ -148,8 +150,9 @@ export class ElasticSearchPage implements OnInit {
                 from: queryParams['from'],
                 to: queryParams['to']
               };
+              console.log(range);
               if (
-                range.from !== this.rangeYears?.from &&
+                range.from !== this.rangeYears?.from ||
                 range.to !== this.rangeYears?.to
               ) {
                 this.rangeYears = range;
@@ -166,34 +169,48 @@ export class ElasticSearchPage implements OnInit {
             }
 
             if (queryParams['order']) {
+              let compareOrder = queryParams['order'];
               if (queryParams['order'] === 'relevance') {
-                this.sort = '';
-              } else {
-                this.sort = queryParams['order'];
+                compareOrder = '';
               }
-              triggerSearch = true;
+              if (compareOrder !== this.sort) {
+                this.sort = compareOrder;
+                triggerSearch = true;
+              }
             }
 
             if (queryParams['pages']) {
-              if (this.from < 1) {
-                this.hits = [];
-                this.from = 0;
-                this.total = -1;
+              console.log('pages queryparams', queryParams['pages']);
+              console.log('this.from', this.from);
+              if (Number(queryParams['pages']) !== this.pages) {
+                if (this.from < 1) {
+                  this.hits = [];
+                  this.from = 0;
+                  this.total = -1;
+                } else {
+                  this.loadingMoreHits = true;
+                }
                 this.pages = Number(queryParams['pages']) || 1;
-              } else {
-                this.loadingMoreHits = true;
+                directSearch = true;
+                triggerSearch = true;
               }
-              directSearch = true;
-              triggerSearch = true;
             }
 
-            if (!triggerSearch && !queryParams['query'] && !this.initializing) {
+            // Trigger new search if the search input field has
+            // been cleared, i.e. no "query" parameter
+            if (
+              !triggerSearch &&
+              !queryParams['query'] &&
+              this.submittedQuery &&
+              !this.initializing
+            ) {
               triggerSearch = true;
             }
 
             this.initializing = false;
 
             if (triggerSearch) {
+              console.log('search triggered based on query params');
               if (directSearch) {
                 this.search();
               } else {
@@ -258,8 +275,6 @@ export class ElasticSearchPage implements OnInit {
       triggerSearch = true;  
     } else if (!newRange?.from && !newRange?.to) {
       // All time
-      this.range = null;
-      this.rangeYears = undefined;
       triggerSearch = true;
     }
 
@@ -276,8 +291,8 @@ export class ElasticSearchPage implements OnInit {
   /**
    * Sorting changed so trigger new query.
    */
-  onSortByChanged() {
-    this.updateURLQueryParameters({ order: this.sort || 'relevance' });
+  onSortByChanged(event: any) {
+    this.updateURLQueryParameters({ order: event?.detail?.value || 'relevance' });
   }
 
   /**
@@ -400,16 +415,15 @@ export class ElasticSearchPage implements OnInit {
   loadMore(e: any) {
     this.loadingMoreHits = true;
     this.from += this.hitsPerPage;
-    this.pages += 1;
 
-    this.updateURLQueryParameters({ pages: this.pages });
+    this.updateURLQueryParameters({ pages: this.pages + 1 });
   }
 
   canShowHits() {
     return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.activeFilters.length);
   }
 
-  hasActiveFacetsByGroup(groupKey: string) {
+  private hasActiveFacetsByGroup(groupKey: string) {
     for (let a = 0; a < this.activeFilters.length; a++) {
       if (
         this.activeFilters[a].name === groupKey &&
@@ -422,13 +436,13 @@ export class ElasticSearchPage implements OnInit {
   }
 
   toggleFilter(filterGroupKey: string, filter: Facet) {
-    // Update list of active filters
-    this.updateActiveFilters(filterGroupKey, filter);
+    // Get updated list of active filters
+    const newActiveFilters = this.getNewActiveFilters(filterGroupKey, filter);
 
     // Update URL query params so a new search is triggered
     this.updateURLQueryParameters(
       {
-        filters: this.activeFilters.length ? this.urlService.stringify(this.activeFilters, true) : null
+        filters: newActiveFilters.length ? this.urlService.stringify(newActiveFilters, true) : null
       }
     );
   }
@@ -450,6 +464,7 @@ export class ElasticSearchPage implements OnInit {
     this.toggleFilter(filterGroupKey, { key: filterKey, selected: false, doc_count: 0 });
   }
 
+  /*
   private updateActiveFilters(filterGroupKey: string, filter: Facet) {
     let filterGroupActive = false;
     for (let a = 0; a < this.activeFilters.length; a++) {
@@ -486,7 +501,65 @@ export class ElasticSearchPage implements OnInit {
       );
     }
   }
+  */
 
+  private getNewActiveFilters(filterGroupKey: string, updatedFilter: Facet) {
+    const newActiveFilters: any[] = [];
+    let filterGroupActive: boolean = false;
+
+    for (let a = 0; a < this.activeFilters.length; a++) {
+      if (this.activeFilters[a].name === filterGroupKey) {
+        filterGroupActive = true;
+
+        newActiveFilters.push(
+          {
+            name: this.activeFilters[a].name,
+            keys: [...this.activeFilters[a].keys]
+          }
+        );
+
+        if (updatedFilter.selected) {
+          // Add filter to already active filter group
+          newActiveFilters[newActiveFilters.length - 1].keys.push(updatedFilter.key);
+        } else {
+          // Remove filter from already active filter group
+          for (let f = 0; f < newActiveFilters[newActiveFilters.length - 1].keys.length; f++) {
+            if (newActiveFilters[newActiveFilters.length - 1].keys[f] === updatedFilter.key) {
+              newActiveFilters[newActiveFilters.length - 1].keys.splice(f, 1);
+              break;
+            }
+          }
+          if (newActiveFilters[newActiveFilters.length - 1].keys.length < 1) {
+            // Remove filter group from active filters
+            // since there are no active filters from the group
+            newActiveFilters.splice(-1, 1);
+          }
+        }
+        break;
+      } else {
+        newActiveFilters.push(this.activeFilters[a]);
+      }
+    }
+
+    if (!filterGroupActive && updatedFilter.selected) {
+      // Add filter group and filter to active filters
+      newActiveFilters.push(
+        {
+          name: filterGroupKey,
+          keys: [updatedFilter.key]
+        }
+      );
+    }
+
+    return newActiveFilters;
+  }
+
+  /**
+   * Loops through the array with all filter groups and marks the filters
+   * in activeFilters as selected.
+   * @param activeFilters Array of active filter objects which should be
+   * applied to all filters.
+   */
   selectFiltersFromActiveFilters(activeFilters: any[]) {
     for (let a = 0; a < activeFilters.length; a++) {
       for (let g = 0; g < this.filterGroups.length; g++) {
@@ -501,6 +574,52 @@ export class ElasticSearchPage implements OnInit {
           }
           break;
         }
+      }
+    }
+  }
+
+  /**
+   * Checks if the given array of active filter objects is non-identical to this.activeFilters.
+   * @param compareActiveFilters Array of active filter objects to compare upon.
+   * @returns True if the given filters array differs from this.activeFilters
+   */
+  private activeFiltersChanged(compareActiveFilters: any[]): boolean {
+    if (compareActiveFilters.length !== this.activeFilters.length) {
+      return true;
+    } else {
+      for (let a = 0; a < this.activeFilters.length; a++) {
+        let groupFound = false;
+        for (let c = 0; c < compareActiveFilters.length; c++) {
+          if (this.activeFilters[a].name === compareActiveFilters[c].name) {
+            groupFound = true;
+
+            if (this.activeFilters[a].keys.length !== compareActiveFilters[c].keys.length) {
+              return true;
+            }
+
+            for (let k = 0; k < this.activeFilters[a].keys.length; k++) {
+              if (!compareActiveFilters[c].keys.includes(this.activeFilters[a].keys[k])) {
+                return true;
+              }
+            }
+            break;
+          }
+        }
+
+        if (!groupFound) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private clearAllActiveFilters() {
+    this.activeFilters = [];
+    for (let g = 0; g < this.filterGroups.length; g++) {
+      for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+        this.filterGroups[g].filters[f].selected = false;
       }
     }
   }
@@ -718,7 +837,7 @@ export class ElasticSearchPage implements OnInit {
     }
   }
 
-  public getDate(source: any) {
+  getDate(source: any) {
     let date = source?.publication_data?.[0]?.original_publication_date ?? this.formatISO8601DateToLocale(source?.orig_date_certain);
     if ((date === undefined || date === '' || date === null)
     && source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
@@ -824,25 +943,6 @@ export class ElasticSearchPage implements OnInit {
 
   toggleFilterGroupOpenState(filterGroup: any) {
     filterGroup.open = !filterGroup.open;
-  }
-
-  autoExpandSearchfields() {
-    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll('.searchInput');
-
-    for (let i = 0; i < inputs.length; i++) {
-      const borderTop = measure(inputs[i], 'border-top-width');
-      const borderBottom = measure(inputs[i], 'border-bottom-width');
-
-      inputs[i].style.height = '';
-      inputs[i].style.height = borderTop + inputs[i].scrollHeight + borderBottom + 'px';
-    }
-
-    function measure(elem: Element, property: any) {
-      return parseInt(
-        window.getComputedStyle(elem, null)
-          .getPropertyValue(property)
-          .replace(/px$/, ''));
-    }
   }
 
   getMdContent(fileID: string): Observable<SafeHtml> {

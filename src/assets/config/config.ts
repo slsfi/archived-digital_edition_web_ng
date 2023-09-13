@@ -339,6 +339,7 @@ export const config: Config = {
       }
     ],
     types: ["est", "com", "var", "inl", "tit", "fore"],
+    openEstWithComTypeHit: false,
     hitsPerPage: 15,
     source: [],
     aggregations: {

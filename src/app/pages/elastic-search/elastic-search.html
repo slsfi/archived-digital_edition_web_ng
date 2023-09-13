@@ -231,8 +231,8 @@
                 cancelText="Avbryt"
                 i18n-cancelText="@@BasicActions.Cancel"
                 [interfaceOptions]="sortSelectOptions"
-                (ionChange)="onSortByChanged()"
-                [(ngModel)]="sort"
+                (ionChange)="onSortByChanged($event)"
+                [value]="sort"
           >
             <ion-select-option
                   value=""
@@ -263,10 +263,10 @@
 
               <p>#{{n+1}}</p>
               <div>
-                <a [href]="getHitHref(hit)" target="_blank">
+                <a [routerLink]="hit | elasticHitPathGenerator" [queryParams]="hit | elasticHitQueryParamsGenerator">
                   <div>
                     <h3>
-                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>&nbsp;<ion-icon class="open-icon" name="open-outline" aria-description="Länken öppnas i ett nytt fönster" i18n-aria-description="@@BasicActions.OpenInNewWindow" title="Länken öppnas i ett nytt fönster" i18n-title="@@BasicActions.OpenInNewWindow"></ion-icon>
+                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span><!--&nbsp;<ion-icon class="open-icon" name="open-outline" aria-description="Länken öppnas i ett nytt fönster" i18n-aria-description="@@BasicActions.OpenInNewWindow" title="Länken öppnas i ett nytt fönster" i18n-title="@@BasicActions.OpenInNewWindow"></ion-icon>-->
                     </h3>
                     <p>{{getPublicationCollectionName(hit.source)}}</p>
                   </div>
@@ -310,7 +310,7 @@
 
           <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && (hasMore() || loadingMoreHits)">
             <div class="loading-spinner-wrapper">
-              <ion-spinner *ngIf="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
+              <ion-spinner [class.visible]="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
             </div>
             <ion-button
                   class="custom-button"

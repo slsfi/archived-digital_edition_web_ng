@@ -423,8 +423,12 @@ li.hit-item {
     min-height: 4rem;
   }
 
-  ion-spinner.loading {
-    padding: 1rem 0;
+  ion-spinner {
+    visibility: hidden;
+  }
+
+  ion-spinner.visible {
+    visibility: visible;
   }
 }
 

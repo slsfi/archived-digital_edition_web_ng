@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { DateHistogram } from 'src/app/components/date-histogram/date-histogram';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
+import { ElasticHitPathGeneratorPipe } from 'src/pipes/elastic-hit-path-generator';
+import { ElasticHitQueryParamsGeneratorPipe } from 'src/pipes/elastic-hit-queryparams-generator';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { OccurrenceService } from 'src/app/services/occurence.service';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -23,6 +25,8 @@ import { ElasticSearchPage } from './elastic-search';
     PipesModule,
     ComponentsModule,
     SemanticDataObjectModal,
+    ElasticHitPathGeneratorPipe,
+    ElasticHitQueryParamsGeneratorPipe,
     ElasticSearchPageRoutingModule,
     DateHistogram
   ],

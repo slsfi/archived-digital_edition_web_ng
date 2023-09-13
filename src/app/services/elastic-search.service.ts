@@ -35,6 +35,7 @@ export class ElasticSearchService {
       'text_type',
       'text_title',
       'text_data',
+      'type_id',
       'doc_title',
       'collection_id',
       'publication_id',
