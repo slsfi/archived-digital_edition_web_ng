@@ -1,4 +1,5 @@
 <div class="year-input-row">
+  <!--
   <ion-datetime-button datetime="yearFrom" [class.blank]="!from"></ion-datetime-button>
   <ion-modal [keepContentsMounted]="true">
     <ng-template>
@@ -51,6 +52,17 @@
   >
     <ion-icon slot="icon-only" name="refresh" aria-label="Uppdatera" i18n-aria-label="@@DateHistogram.Refresh"></ion-icon>
   </ion-button>
+  <ion-button
+        fill="clear"
+        size="small"
+        (click)="reset()"
+        title="Nollställ"
+        i18n-title="@@DateHistogram.Clear"
+  >
+    <ion-icon slot="icon-only" name="close" aria-label="Nollställ" i18n-aria-label="@@DateHistogram.Clear"></ion-icon>
+  </ion-button>
+  -->
+  <span class="current-year-range"><span *ngIf="from">{{from}}</span></span><span class="dash">–</span><span class="current-year-range"><span *ngIf="to">{{to}}</span></span>
   <ion-button
         fill="clear"
         size="small"

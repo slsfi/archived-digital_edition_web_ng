@@ -240,7 +240,7 @@
         <target>Newest first</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.NoFacetOptions">
+    <unit id="ElasticSearch.NoFilterOptions">
       <segment state="initial">
         <source>Inga sökord</source>
         <target>No options</target>

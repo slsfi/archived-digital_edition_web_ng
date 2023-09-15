@@ -13,8 +13,8 @@ export class ElasticHitQueryParamsGeneratorPipe implements PipeTransform {
   openEstWithComTypeHit: boolean = false;
 
   constructor(private urlService: UrlService) {
-    this.highlightSearchMatches = config.show?.highlightedSearchMatches ?? true;
-    this.openEstWithComTypeHit = config.ElasticSearch?.openEstWithComTypeHit ?? false;
+    this.highlightSearchMatches = config.collections?.highlightSearchMatches ?? true;
+    this.openEstWithComTypeHit = config.page?.elasticSearch?.openEstWithComTypeHit ?? false;
   }
 
   transform(elasticHit: any): any {

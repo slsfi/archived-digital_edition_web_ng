@@ -26,13 +26,13 @@ export class ElasticSearchPage implements OnInit {
   activeFilters: any[] = [];
   aggregations: object = {};
   dateHistogramData: any = undefined;
-  disableFacetCheckboxes = true;
+  disableFacetCheckboxes: boolean = true;
   elasticError: boolean = false;
   enableFilters: boolean = true;
+  enableSortOptions: boolean = true;
   filterGroups: any[] = [];
   filtersVisible: boolean = true;
   from: number = 0;
-  groupsOpenByDefault: any;
   hits: any = [];
   hitsPerPage: number = 10;
   initializing: boolean = true;
@@ -45,13 +45,12 @@ export class ElasticSearchPage implements OnInit {
   rangeYears?: Record<string, any> = undefined;
   routeQueryParamsSubscription: Subscription | null = null;
   showAllFor: any = {};
-  showSortOptions: boolean = true;
   sort: string = '';
   sortSelectOptions: Record<string, any> = {};
   submittedQuery: string = '';
   textHighlightFragmentSize: number = 150;
-  textHighlightType: string = 'unified';
-  textTitleHighlightType: string = 'unified';
+  textHighlightType: string = 'fvh';
+  textTitleHighlightType: string = 'fvh';
   total: number = -1;
 
   constructor(
@@ -66,13 +65,12 @@ export class ElasticSearchPage implements OnInit {
     public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.enableFilters = config.ElasticSearch?.show?.facets ?? true;
-    this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
-    this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
-    this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
-    this.textHighlightFragmentSize = config.ElasticSearch?.textHighlightFragmentSize ?? 150;
-    this.textHighlightType = config.ElasticSearch?.textHighlightType ?? 'unified';
-    this.textTitleHighlightType = config.ElasticSearch?.textTitleHighlightType ?? 'unified';
+    this.enableFilters = config.page?.elasticSearch?.enableFilters ?? true;
+    this.enableSortOptions = config.page?.elasticSearch?.enableSortOptions ?? true;
+    this.hitsPerPage = config.page?.elasticSearch?.hitsPerPage ?? 20;
+    this.textHighlightFragmentSize = config.page?.elasticSearch?.textHighlightFragmentSize ?? 150;
+    this.textHighlightType = config.page?.elasticSearch?.textHighlightType ?? 'fvh';
+    this.textTitleHighlightType = config.page?.elasticSearch?.textTitleHighlightType ?? 'fvh';
 
     this.filtersVisible = this.userSettingsService.isMobile() ? false : true;
     
@@ -116,102 +114,7 @@ export class ElasticSearchPage implements OnInit {
         this.loading = false;
         this.cf.detectChanges();
 
-        // Subscribe to queryParams, all searches are triggered through them
-        this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
-          (queryParams: any) => {
-            let triggerSearch = false;
-            let directSearch = false;
-
-            if (queryParams['query']) {
-              if (queryParams['query'] !== this.submittedQuery) {
-                this.query = queryParams['query'];
-                triggerSearch = true;
-              }
-            }
-
-            if (queryParams['filters']) {
-              const parsedActiveFilters = this.urlService.parse(queryParams['filters'], true);
-              if (this.activeFiltersChanged(parsedActiveFilters)) {
-                this.selectFiltersFromActiveFilters(parsedActiveFilters);
-                this.activeFilters = parsedActiveFilters;
-                triggerSearch = true;
-              }
-            } else if (this.activeFilters.length) {
-              // Active filters should be cleared
-              this.clearAllActiveFilters();
-              triggerSearch = true;
-            }
-
-            if (queryParams['from'] && queryParams['to']) {
-              let range = {
-                from: queryParams['from'],
-                to: queryParams['to']
-              };
-              if (
-                range.from !== this.rangeYears?.from ||
-                range.to !== this.rangeYears?.to
-              ) {
-                this.rangeYears = range;
-                this.range = {
-                  from: new Date(range.from || '').getTime(),
-                  to: new Date(`${parseInt(range.to || '') + 1}`).getTime()
-                }
-                triggerSearch = true;
-              }
-            } else if (this.range?.from && this.range?.to) {
-              this.range = null;
-              this.rangeYears = undefined;
-              triggerSearch = true;
-            }
-
-            if (queryParams['order']) {
-              let compareOrder = queryParams['order'];
-              if (queryParams['order'] === 'relevance') {
-                compareOrder = '';
-              }
-              if (compareOrder !== this.sort) {
-                this.sort = compareOrder;
-                triggerSearch = true;
-              }
-            }
-
-            if (queryParams['pages']) {
-              if (Number(queryParams['pages']) !== this.pages) {
-                if (this.from < 1) {
-                  this.hits = [];
-                  this.from = 0;
-                  this.total = -1;
-                } else {
-                  this.loadingMoreHits = true;
-                }
-                this.pages = Number(queryParams['pages']) || 1;
-                directSearch = true;
-                triggerSearch = true;
-              }
-            }
-
-            // Trigger new search if the search input field has
-            // been cleared, i.e. no "query" parameter
-            if (
-              !triggerSearch &&
-              !queryParams['query'] &&
-              this.submittedQuery &&
-              !this.initializing
-            ) {
-              triggerSearch = true;
-            }
-
-            this.initializing = false;
-
-            if (triggerSearch) {
-              if (directSearch) {
-                this.search();
-              } else {
-                this.initSearch();
-              }
-            }
-          }
-        );
+        this.subscribeToQueryParams();
       }
     );
   }
@@ -221,9 +124,115 @@ export class ElasticSearchPage implements OnInit {
   }
 
   /**
+   * Subscribe to queryParams, all searches are triggered through them.
+   */
+  private subscribeToQueryParams() {
+    this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
+      (queryParams: any) => {
+        let triggerSearch = false;
+        let directSearch = false;
+
+        // Text query
+        if (queryParams['query']) {
+          if (queryParams['query'] !== this.submittedQuery) {
+            this.query = queryParams['query'];
+            triggerSearch = true;
+          }
+        }
+
+        // Filters
+        if (queryParams['filters']) {
+          const parsedActiveFilters = this.urlService.parse(queryParams['filters'], true);
+          if (this.activeFiltersChanged(parsedActiveFilters)) {
+            this.selectFiltersFromActiveFilters(parsedActiveFilters);
+            this.activeFilters = parsedActiveFilters;
+            triggerSearch = true;
+          }
+        } else if (this.activeFilters.length) {
+          // Active filters should be cleared
+          this.clearAllActiveFilters();
+          triggerSearch = true;
+        }
+
+        // Time range
+        if (queryParams['from'] && queryParams['to']) {
+          let range = {
+            from: queryParams['from'],
+            to: queryParams['to']
+          };
+          if (
+            range.from !== this.rangeYears?.from ||
+            range.to !== this.rangeYears?.to
+          ) {
+            this.rangeYears = range;
+            this.range = {
+              from: new Date(range.from || '').getTime(),
+              to: new Date(`${parseInt(range.to || '') + 1}`).getTime()
+            }
+            triggerSearch = true;
+          }
+        } else if (this.range?.from && this.range?.to) {
+          this.range = null;
+          this.rangeYears = undefined;
+          triggerSearch = true;
+        }
+
+        // Sort order
+        if (queryParams['sort']) {
+          let compareOrder = queryParams['sort'];
+          if (queryParams['sort'] === 'relevance') {
+            compareOrder = '';
+          }
+          if (compareOrder !== this.sort) {
+            this.sort = compareOrder;
+            triggerSearch = true;
+          }
+        }
+
+        // Number of pages with hits
+        if (queryParams['pages']) {
+          if (Number(queryParams['pages']) !== this.pages) {
+            if (this.from < 1) {
+              this.hits = [];
+              this.from = 0;
+              this.total = -1;
+            } else {
+              this.loadingMoreHits = true;
+            }
+            this.pages = Number(queryParams['pages']) || 1;
+            directSearch = true;
+            triggerSearch = true;
+          }
+        }
+
+        // Trigger new search if the search input field has been cleared, i.e. no "query" parameter
+        if (
+          !triggerSearch &&
+          !queryParams['query'] &&
+          this.submittedQuery &&
+          !this.initializing
+        ) {
+          triggerSearch = true;
+        }
+
+        this.initializing = false;
+
+        // Determine if a new search should be initialized
+        if (triggerSearch) {
+          if (directSearch) {
+            this.search();
+          } else {
+            this.initSearch();
+          }
+        }
+      }
+    );
+  }
+
+  /**
    * Triggers a new search.
    */
-  initSearch() {
+  private initSearch() {
     this.disableFacetCheckboxes = true;
     this.reset();
     this.loading = true;
@@ -236,7 +245,7 @@ export class ElasticSearchPage implements OnInit {
     this.updateURLQueryParameters({ query: null });
   }
 
-  updateURLQueryParameters(params: any) {
+  private updateURLQueryParameters(params: any) {
     if (!params.pages) {
       params.pages = null;
     }
@@ -285,7 +294,7 @@ export class ElasticSearchPage implements OnInit {
    * Sorting changed so trigger new query.
    */
   onSortByChanged(event: any) {
-    this.updateURLQueryParameters({ order: event?.detail?.value || 'relevance' });
+    this.updateURLQueryParameters({ sort: event?.detail?.value || 'relevance' });
   }
 
   /**
@@ -401,11 +410,7 @@ export class ElasticSearchPage implements OnInit {
     return [{ [key]: direction }];
   }
 
-  hasMore() {
-    return this.total > this.from + this.hitsPerPage;
-  }
-
-  loadMore(e: any) {
+  loadMore() {
     this.loadingMoreHits = true;
     this.from += this.hitsPerPage;
 
@@ -577,8 +582,8 @@ export class ElasticSearchPage implements OnInit {
           filterGroupExists = true;
 
           if (
-            config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms &&
-            !config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
+            config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms &&
+            !config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
           ) {
             // Aggregations are ordered desc according to doc_count -->
             // Empty filters should be removed, so replace filters in the group
@@ -615,7 +620,7 @@ export class ElasticSearchPage implements OnInit {
           // for change detection to be triggered in the <date-histogram> component
           // when the input changes. This shallow copy action using the spread operator
           // accomplishes this.
-          if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.date_histogram) {
+          if (config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.date_histogram) {
             this.filterGroups[g].filters = [...this.filterGroups[g].filters];
           }
 
@@ -628,7 +633,7 @@ export class ElasticSearchPage implements OnInit {
           {
             name: filterGroupKey,
             filters: this.convertFilterGroupToArray(filterGroupKey, newFilterGroup),
-            open: config.ElasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+            open: config.page?.elasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
             type: this.elastic.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
           }
         );
@@ -640,13 +645,13 @@ export class ElasticSearchPage implements OnInit {
     // Get aggregation keys that are ordered in config.json.
     const filterGroups: any[] = [];
     this.elastic.getAggregationKeys().forEach((filterGroupKey: any) => {
-      const facetGroupObj = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
+      const filterGroupObj = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
 
       filterGroups.push(
         {
           name: filterGroupKey,
-          filters: this.convertFilterGroupToArray(filterGroupKey, facetGroupObj),
-          open: config.ElasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+          filters: this.convertFilterGroupToArray(filterGroupKey, filterGroupObj),
+          open: config.page?.elasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
           type: this.elastic.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
         }
       );
@@ -656,63 +661,51 @@ export class ElasticSearchPage implements OnInit {
   }
 
   /**
-   * Convert aggregation data to facets data.
+   * Convert aggregation data to filters data.
    */
   private convertAggregationsToFilters(aggregation: AggregationData): Facets {
-    const facets = {} as any;
+    const filters = {} as any;
     // Get buckets from either unfiltered or filtered aggregation.
     const buckets = aggregation.buckets || aggregation?.filtered?.buckets;
 
-    buckets?.forEach((facet: Facet) => {
-      facets[facet.key] = facet;
+    buckets?.forEach((filter: Facet) => {
+      filters[filter.key] = filter;
     });
-    return facets;
+    return filters;
   }
 
-  private convertFilterGroupToArray(facetGroupKey: string, facetGroupObj: Facets) {
-    if (facetGroupObj) {
-      if (facetGroupKey !== 'Years') {
+  private convertFilterGroupToArray(filterGroupKey: string, filterGroupObj: Facets) {
+    if (filterGroupObj) {
+      if (filterGroupKey !== 'Years') {
         const keys = [];
-        const facetsAsArray = [];
-        for (const key in facetGroupObj) {
-          if (facetGroupObj.hasOwnProperty(key)) {
+        const filtersAsArray = [];
+        for (const key in filterGroupObj) {
+          if (filterGroupObj.hasOwnProperty(key)) {
             keys.push(key);
           }
         }
         for (let i = 0; i < keys.length; i++) {
-          facetsAsArray.push(facetGroupObj[keys[i]]);
+          filtersAsArray.push(filterGroupObj[keys[i]]);
         }
-        if (!config.ElasticSearch?.aggregations?.[facetGroupKey]?.terms?.order?._key) {
-          this.commonFunctions.sortArrayOfObjectsNumerically(facetsAsArray, 'doc_count');
+        if (!config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order?._key) {
+          this.commonFunctions.sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
         }
-        return facetsAsArray;
+        return filtersAsArray;
       } else {
-        return Object.values(facetGroupObj);
+        return Object.values(filterGroupObj);
       }
     } else {
       return [];
     }
   }
 
-  getTextName(source: any) {
+  private getTextName(source: any) {
     return source?.text_title;
   }
 
-  getPublicationName(source: any) {
-    return source?.publication_data?.[0]?.publication_name;
-  }
-
-  getHiglightedTextName(highlight: any) {
+  private getHiglightedTextName(highlight: any) {
     if (highlight['text_title']) {
       return highlight['text_title'][0];
-    } else {
-      return '';
-    }
-  }
-
-  getHiglightedPublicationName(highlight: any) {
-    if (highlight['publication_data.publication_name']) {
-      return highlight['publication_data.publication_name'][0];
     } else {
       return '';
     }
@@ -723,12 +716,8 @@ export class ElasticSearchPage implements OnInit {
   }
 
   // Returns the title from the xml title element in the teiHeader
-  getTitle(source: any) {
+  private getTitle(source: any) {
     return (source.doc_title || source.name || '').trim();
-  }
-
-  getGenre(source: any) {
-    return source?.publication_data?.[0]?.genre;
   }
 
   private formatISO8601DateToLocale(date: string) {
@@ -737,8 +726,8 @@ export class ElasticSearchPage implements OnInit {
 
   hasDate(source: any) {
     const dateData = source?.publication_data?.[0]?.original_publication_date ?? source?.orig_date_certain;
-    if (dateData === undefined || dateData === null || dateData === '') {
-      if (source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
+    if (!dateData) {
+      if (source?.orig_date_year) {
         return true;
       } else {
         return false;
@@ -750,15 +739,10 @@ export class ElasticSearchPage implements OnInit {
 
   getDate(source: any) {
     let date = source?.publication_data?.[0]?.original_publication_date ?? this.formatISO8601DateToLocale(source?.orig_date_certain);
-    if ((date === undefined || date === '' || date === null)
-    && source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
+    if (!date && source?.orig_date_year) {
       date = source.orig_date_year;
     }
     return date;
-  }
-
-  private filterEmpty(array: any[]) {
-    return array.filter(str => str).join(', ');
   }
 
   getHeading(hit: any) {
@@ -774,13 +758,6 @@ export class ElasticSearchPage implements OnInit {
       }
     }
     return text_name;
-  }
-
-  getSubHeading(source: any) {
-    return this.filterEmpty([
-      this.getGenre(source),
-      source.type !== 'brev' && this.getDate(source)
-    ]);
   }
 
   getEllipsisString(str: any, max = 50) {

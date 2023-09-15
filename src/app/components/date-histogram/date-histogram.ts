@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-
+/**
+ * ! The ion-datetime-buttons have been commented out in the template 
+ * ! because the component is not compatible with Angular SSR - it
+ * ! throws a runtime error on the server side.
+ */
 @Component({
   standalone: true,
   selector: 'date-histogram',

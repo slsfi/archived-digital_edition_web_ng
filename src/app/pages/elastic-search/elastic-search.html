@@ -8,6 +8,7 @@
 
   <div class="search-container">
 
+    <!-- Search bar -->
     <div class="search-row">
       <ion-searchbar
             class="custom-searchbar manual-exec"
@@ -27,9 +28,10 @@
       </ion-button>
     </div>
 
+    <!-- Toggle filters visibility button -->
     <ion-button *ngIf="enableFilters"
           fill="outline"
-          class="custom-outline-button show-facets-button"
+          class="custom-outline-button show-filters-button"
           (click)="toggleFiltersColumn()"
           [disabled]="initializing"
     >
@@ -38,10 +40,9 @@
       <ng-container *ngIf="filtersVisible" i18n="@@ElasticSearch.HideFacets">Dölj avgränsningar</ng-container>
     </ion-button>
 
-    <div class="facet-and-hits-area-row">
-      <!--  Search fields -->
-      <div *ngIf="enableFilters" class="facet-column" [class.hide-facet-column]="!filtersVisible">
-        <!-- List of facet groups -->
+    <div class="filter-and-hits-area-row">
+      <!--  Filters -->
+      <div *ngIf="enableFilters" class="filter-column" [class.hide-filter-column]="!filtersVisible">
         <h2 [class.greyed-out]="initializing" i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
         <ng-container *ngFor="let filterGroup of filterGroups; trackBy: trackByName">
@@ -77,8 +78,7 @@
             </button>
 
             <div *ngIf="filterGroup.type === 'date_histogram'"
-                  id="facetList-{{filterGroup.name}}"
-                  class="facetList-{{filterGroup.name}} facetlist"
+                  class="filterlist"
                   [class.open]="filterGroup.open"
             >
               <date-histogram
@@ -90,8 +90,7 @@
             </div>
 
             <ol *ngIf="filterGroup.type === 'terms'"
-                  id="facetList-{{filterGroup.name}}"
-                  class="facetList-{{filterGroup.name}} facetlist"
+                  class="filterlist"
                   [class.open]="filterGroup.open"
             >
               <ng-container *ngIf="filterGroup.filters.length; then filters else nofilters"></ng-container>
@@ -131,7 +130,7 @@
 
                 <li>
                   <ion-button *ngIf="filterGroup.filters.length > 10"
-                        class="custom-button more-facets"
+                        class="custom-button more-filters"
                         (click)="showAllFor[filterGroup.name] = !showAllFor[filterGroup.name]"
                   >
                     <ng-container *ngIf="!showAllFor[filterGroup.name]" i18n="@@ElasticSearch.ShowMore">Visa fler</ng-container>
@@ -141,7 +140,7 @@
               </ng-template>
 
               <ng-template #nofilters>
-                <li i18n="@@ElasticSearch.NoFacetOptions">Inga sökord</li>
+                <li i18n="@@ElasticSearch.NoFilterOptions">Inga sökord</li>
               </ng-template>
 
             </ol>
@@ -220,7 +219,7 @@
           <h2 *ngIf="elasticError && total === 0" class="hits-heading" i18n="@@ElasticSearch.LoadingError">Ett fel har uppstått när sökträffarna skulle laddas.</h2>
           
           <!-- Sort by -->
-          <ion-select [class.show-sort-options]="showSortOptions && canShowHits() && total > 0"
+          <ion-select [class.show-sort-options]="enableSortOptions && canShowHits() && total > 0"
                 class="sort-select"
                 label="Sortera enligt"
                 i18n-label="@@ElasticSearch.SortBy"
@@ -257,7 +256,7 @@
             <ion-spinner *ngIf="loading && total < 1" class="loading" name="crescent"></ion-spinner>
           </div>
 
-          <!-- Hits row -->
+          <!-- Hits -->
           <ol *ngIf="canShowHits() && total > 0" class="search-hits">
             <li *ngFor="let hit of hits; let n = index; trackBy: trackById" class="hit-item">
 
@@ -266,7 +265,7 @@
                 <a [routerLink]="hit | elasticHitPathGenerator" [queryParams]="hit | elasticHitQueryParamsGenerator">
                   <div>
                     <h3>
-                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span><!--&nbsp;<ion-icon class="open-icon" name="open-outline" aria-description="Länken öppnas i ett nytt fönster" i18n-aria-description="@@BasicActions.OpenInNewWindow" title="Länken öppnas i ett nytt fönster" i18n-title="@@BasicActions.OpenInNewWindow"></ion-icon>-->
+                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>
                     </h3>
                     <p>{{getPublicationCollectionName(hit.source)}}</p>
                   </div>
@@ -308,13 +307,13 @@
             </li>
           </ol>
 
-          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && (hasMore() || loadingMoreHits)">
+          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && ((this.total > this.from + this.hitsPerPage) || loadingMoreHits)">
             <div class="loading-spinner-wrapper">
               <ion-spinner [class.visible]="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
             </div>
             <ion-button
                   class="custom-button"
-                  (click)="loadMore($event)"
+                  (click)="loadMore()"
                   [disabled]="loadingMoreHits"
                   i18n="@@ElasticSearch.ShowMoreHits"
             >Visa fler sökträffar</ion-button>

@@ -240,7 +240,7 @@
         <target>Nyast först</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.NoFacetOptions">
+    <unit id="ElasticSearch.NoFilterOptions">
       <segment state="initial">
         <source>Inga sökord</source>
         <target>Inga sökord</target>

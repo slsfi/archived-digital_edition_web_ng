@@ -25,10 +25,10 @@ export class ElasticSearchService {
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
     this.machineName = config.app?.machineName ?? '';
-    this.indices = config.ElasticSearch?.indices ?? undefined;
-    this.aggregations = config.ElasticSearch?.aggregations ?? undefined;
-    this.fixedFilters = config.ElasticSearch?.fixedFilters ?? [];
-    this.textTypes = config.ElasticSearch?.types ?? [];
+    this.indices = config.page?.elasticSearch?.indices ?? undefined;
+    this.aggregations = config.page?.elasticSearch?.aggregations ?? undefined;
+    this.fixedFilters = config.page?.elasticSearch?.fixedFilters ?? [];
+    this.textTypes = config.page?.elasticSearch?.typeFilterGroupOptions ?? [];
 
     // Add fields that should always be returned in hits
     this.source = [
@@ -46,7 +46,7 @@ export class ElasticSearchService {
     ];
 
     // Add additional fields that should be returned in hits from config file
-    const configSourceFields = config.ElasticSearch?.source ?? undefined;
+    const configSourceFields = config.page?.elasticSearch?.additionalSourceFields ?? undefined;
     if (configSourceFields?.length > 0) {
       // Append additional fields to this.source if not already present
       for (let i = 0; i < configSourceFields.length; i++) {
