@@ -44,7 +44,7 @@
         <!-- List of facet groups -->
         <h2 [class.greyed-out]="initializing" i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
-        <ng-container *ngFor="let filterGroup of filterGroups">
+        <ng-container *ngFor="let filterGroup of filterGroups; trackBy: trackByName">
           <div class="fg-wrapper">
             <button (click)="toggleFilterGroupOpenState(filterGroup)">
               <h3>
@@ -94,22 +94,22 @@
                   class="facetList-{{filterGroup.name}} facetlist"
                   [class.open]="filterGroup.open"
             >
-              <ng-container *ngIf="filterGroup.filters.length; then facets else nofacet"></ng-container>
+              <ng-container *ngIf="filterGroup.filters.length; then filters else nofilters"></ng-container>
 
-              <ng-template #facets>
-                <ng-container *ngFor="let facet of filterGroup.filters; let j = index">
+              <ng-template #filters>
+                <ng-container *ngFor="let filter of filterGroup.filters; let j = index; trackBy: trackByKey">
                   <li *ngIf="showAllFor[filterGroup.name] || j < 10">
                     <ion-checkbox
                           justify="start"
                           labelPlacement="end"
-                          [(ngModel)]="facet.selected"
-                          (ionChange)="toggleFilter(filterGroup.name, facet)"
-                          [disabled]="(facet.doc_count < 1) || disableFacetCheckboxes"
+                          [(ngModel)]="filter.selected"
+                          (ionChange)="toggleFilter(filterGroup.name, filter)"
+                          [disabled]="(filter.doc_count < 1) || disableFacetCheckboxes"
                     >
                       <span [ngStyle]="{'white-space': 'normal'}">
                         <span>
                           <ng-container *ngIf="filterGroup.name === 'Type'">
-                            <ng-container [ngSwitch]="facet.key.toString()">
+                            <ng-container [ngSwitch]="filter.key.toString()">
                               <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
                               <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
                               <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
@@ -117,13 +117,13 @@
                               <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
                               <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
                               <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                              <ng-container *ngSwitchDefault>{{facet.key.toString()}}</ng-container>
+                              <ng-container *ngSwitchDefault>{{filter.key.toString()}}</ng-container>
                             </ng-container>
                           </ng-container>
                           <ng-container *ngIf="filterGroup.name !== 'Type'">
-                            {{facet.key_as_string || facet.key}}
+                            {{filter.key_as_string || filter.key}}
                           </ng-container>
-                        </span><span [ngStyle]="{'font-size': '0.875em', 'color': '#686868'}" [innerHTML]="' (' + facet.doc_count + ')'"></span>
+                        </span><span [ngStyle]="{'font-size': '0.875em', 'color': '#686868'}" [innerHTML]="' (' + filter.doc_count + ')'"></span>
                       </span>
                     </ion-checkbox>
                   </li>
@@ -140,7 +140,7 @@
                 </li>
               </ng-template>
 
-              <ng-template #nofacet>
+              <ng-template #nofilters>
                 <li i18n="@@ElasticSearch.NoFacetOptions">Inga sökord</li>
               </ng-template>
 
@@ -259,7 +259,7 @@
 
           <!-- Hits row -->
           <ol *ngIf="canShowHits() && total > 0" class="search-hits">
-            <li *ngFor="let hit of hits; let n = index" class="hit-item">
+            <li *ngFor="let hit of hits; let n = index; trackBy: trackById" class="hit-item">
 
               <p>#{{n+1}}</p>
               <div>

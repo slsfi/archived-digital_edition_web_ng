@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
@@ -18,23 +18,25 @@ import { config } from "src/assets/config/config";
 })
 export class ManuscriptsComponent implements OnInit {
   @Input() msID: number | undefined = undefined;
-  @Input() searchMatches: Array<string> = [];
+  @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
   @Output() openNewLegendView = new EventEmitter<any>();
   @Output() openNewManView = new EventEmitter<any>();
   @Output() selectedMsID = new EventEmitter<number>();
   @Output() selectedMsName = new EventEmitter<string>();
 
+  intervalTimerId: number = 0;
+  manuscripts: any[] = [];
   selectedManuscript: any = undefined;
   showNormalizedMs: boolean = false;
   showOpenLegendButton: boolean = false;
   text: SafeHtml = '';
   textLanguage: string = '';
-  manuscripts: any[] = [];
 
   constructor(
     private alertCtrl: AlertController,
     private commonFunctions: CommonFunctionsService,
+    private elementRef: ElementRef,
     public readPopoverService: ReadPopoverService,
     private sanitizer: DomSanitizer,
     private textService: TextService
@@ -57,6 +59,9 @@ export class ManuscriptsComponent implements OnInit {
         ) {
           this.manuscripts = res.manuscripts;
           this.setManuscript();
+          if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+          }
         } else {
           this.text = $localize`:@@Read.Manuscripts.NoManuscripts:Inga manuskript.`;
         }

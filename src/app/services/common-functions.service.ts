@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { Parser } from 'htmlparser2';
 
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -218,6 +219,55 @@ export class CommonFunctionsService {
 
 
   /**
+   * Searches for the first <mark> element that isn't in a footnote tooltip within
+   * the given containerElement and scrolls it into view.
+   * @param containerElement the context element to look for <mark> within
+   * @param intervalTimerId reference to a variable where the return value of
+   * window.setInterval can be stored
+   */
+  scrollToFirstSearchMatch(containerElement: HTMLElement, intervalTimerId: number) {
+    if (isBrowser()) {
+      this.ngZone.runOutsideAngular(() => {
+        let iterationsLeft = 10;
+        clearInterval(intervalTimerId);
+        const that = this;
+
+        intervalTimerId = window.setInterval(function() {
+          if (iterationsLeft < 1) {
+            clearInterval(intervalTimerId);
+          } else {
+            iterationsLeft -= 1;
+            let target: HTMLElement | null | undefined = containerElement.querySelector('mark');
+
+            if (
+              target?.parentElement?.classList.contains('ttFixed') ||
+              target?.parentElement?.parentElement?.classList.contains('ttFixed')
+            ) {
+              // The search match is in a footnote tooltip, look for next which isn't
+              const targets: NodeListOf<HTMLElement> = containerElement.querySelectorAll('mark');
+              let i = 0;
+
+              while (
+                target?.parentElement?.classList.contains('ttFixed') ||
+                target?.parentElement?.parentElement?.classList.contains('ttFixed')
+              ) {
+                i++;
+                target = targets[i];
+              }
+            }
+
+            if (target) {
+              that.scrollToHTMLElement(target);
+              clearInterval(intervalTimerId);
+            }
+          }
+        }.bind(this), 1000);
+      });
+    }
+  }
+
+
+  /**
    * Given an array with names of people, this function return a string where the names
    * have been concatenated. The string given in 'separator' is used as a separator between
    * all of the names except between the second to last and last, which are separated by an
@@ -247,7 +297,7 @@ export class CommonFunctionsService {
    * TODO: The regex doesn't work if the match string in the text is interspersed with opening and closing tags.
    * For instance, in the text the match could have a span indicating page break:
    * Tavast<span class="tei pb_zts">|87|</span>länningar. This occurrence will not be marked
-   * with <match> tags in a search for "Tavastlänningar". However, these kind of matches are
+   * with <mark> tags in a search for "Tavastlänningar". However, these kind of matches are
    * found on the elastic-search page.
    * However, the regex does take care of self-closing tags in the match string, for instance <img/>.
    */
@@ -270,7 +320,7 @@ export class CommonFunctionsService {
             }
           }
           const re = new RegExp('(?<=^|\\P{L})(' + c_val + ')(?=\\P{L}|$)', 'gumi');
-          text = text.replace(re, '<match>$1</match>');
+          text = text.replace(re, '<mark>$1</mark>');
         }
       });
     }
@@ -278,35 +328,75 @@ export class CommonFunctionsService {
   }
 
 
-  /**
-   * Returns the text with all occurrences of the specified characters replaced with their
-   * corresponding character entity references.
-   */
-  encodeCharEntities(text: string) {
-    if (isBrowser()) {
-      const entities = {
-        '&' : '&amp;',
-        '<' : '&lt;',
-        '>' : '&gt;',
-        '"' : '&quot;',
-        '\'' : '&apos;',
-        '℔' : '&#x2114;',
-        'ʄ' : '&#x284;'
-      };
+  getSearchMatchesFromQueryParams(terms: string | string[]): string[] {
+    const queryMatches: string[] = Array.isArray(terms)
+          ? terms : [terms];
+    let matches: string[] = [];
 
-      // First parse the text as html which will decode all entity references,
-      // otherwise & in existing entity references will be replaced.
-      const parser = new DOMParser;
-      const dom = parser.parseFromString('<!DOCTYPE html><html><body>' + text + '</body></html>', 'text/html');
-      text = dom.body.textContent || '';
-
-      // Then encode the selected characters
-      Object.entries(entities).forEach(([code, entity]) => {
-        const re = new RegExp('[' + code + ']', 'gi');
-        text = text.replace(re, entity);
+    if (queryMatches.length && queryMatches[0]) {
+      queryMatches.forEach((term: any) => {
+        // Remove line break characters
+        let decoded_match = term.replace(/\n/gm, '');
+        // Remove any script tags
+        decoded_match = decoded_match.replace(/<script.+?<\/script>/gi, '');
+        decoded_match = this.encodeSelectedCharEntities(decoded_match);
+        matches.push(decoded_match);
       });
     }
-    return text;
+    return matches;
+  }
+
+
+  /**
+   * Returns the text with all occurrences of a selected set of characters
+   * replaced with their corresponding character entity references.
+   * The replaced characters are: & < > " ' ℔ ʄ
+   * @param text string or html fragment as string to be encoded
+   * @returns encoded text 
+   */
+  encodeSelectedCharEntities(text: string): string {
+    const entities = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      '\'': '&apos;',
+      '℔': '&#x2114;',
+      'ʄ': '&#x284;'
+    };
+
+    // First parse the text using SSR compatible htmlparser2 as html,
+    // which will decode all entity references, otherwise & in
+    // existing entity references will be replaced.
+    let parsed_text = '';
+    let isBody = false;
+    const parser2 = new Parser({
+      onopentagname(tag) {
+        if (tag === 'body') {
+          isBody = true;
+        }
+      },
+      ontext(textContent) {
+        if (isBody) {
+          parsed_text += textContent;
+        }
+      },
+      onclosetag(tag) {
+        if (tag === 'body') {
+          isBody = false;
+        }
+      }
+    });
+    parser2.write('<!DOCTYPE html><html><body>' + text + '</body></html>');
+    parser2.end();
+
+    // Then encode the selected characters
+    Object.entries(entities).forEach(([code, entity]) => {
+      const re = new RegExp('[' + code + ']', 'gi');
+      parsed_text = parsed_text.replace(re, entity);
+    });
+
+    return parsed_text;
   }
 
 

@@ -21,7 +21,7 @@ import { isBrowser } from 'src/standalone/utility-functions';
   imports: [CommonModule, IonicModule, MathJaxDirective]
 })
 export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
-  @Input() searchMatches: Array<string> = [];
+  @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
   @Output() openNewIllustrView: EventEmitter<any> = new EventEmitter();
@@ -29,7 +29,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
 
   illustrationsViewAvailable: boolean = false;
   illustrationsVisibleInReadtext: boolean = false;
-  intervalTimerId: number;
+  intervalTimerId: number = 0;
   text: SafeHtml = '';
   textLanguage: string = '';
   private unlistenClickEvents?: () => void;
@@ -45,7 +45,6 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     private textService: TextService,
     public userSettingsService: UserSettingsService
   ) {
-    this.intervalTimerId = 0;
     this.illustrationsViewAvailable = config.page?.read?.viewTypeSettings?.illustrations ?? false;
   }
 
@@ -99,6 +98,8 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           if (this.textPosition) {
             this.scrollToTextPosition();
+          } else if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;

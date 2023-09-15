@@ -33,7 +33,6 @@ export class ElasticSearchPage implements OnInit {
   filtersVisible: boolean = true;
   from: number = 0;
   groupsOpenByDefault: any;
-  highlightSearchMatches: boolean = true;
   hits: any = [];
   hitsPerPage: number = 10;
   initializing: boolean = true;
@@ -69,7 +68,6 @@ export class ElasticSearchPage implements OnInit {
   ) {
     this.enableFilters = config.ElasticSearch?.show?.facets ?? true;
     this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
-    this.highlightSearchMatches = config.show?.highlightedSearchMatches ?? true;
     this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
     this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
     this.textHighlightFragmentSize = config.ElasticSearch?.textHighlightFragmentSize ?? 150;
@@ -121,7 +119,6 @@ export class ElasticSearchPage implements OnInit {
         // Subscribe to queryParams, all searches are triggered through them
         this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
           (queryParams: any) => {
-            console.log('queryParams changed');
             let triggerSearch = false;
             let directSearch = false;
 
@@ -150,7 +147,6 @@ export class ElasticSearchPage implements OnInit {
                 from: queryParams['from'],
                 to: queryParams['to']
               };
-              console.log(range);
               if (
                 range.from !== this.rangeYears?.from ||
                 range.to !== this.rangeYears?.to
@@ -180,8 +176,6 @@ export class ElasticSearchPage implements OnInit {
             }
 
             if (queryParams['pages']) {
-              console.log('pages queryparams', queryParams['pages']);
-              console.log('this.from', this.from);
               if (Number(queryParams['pages']) !== this.pages) {
                 if (this.from < 1) {
                   this.hits = [];
@@ -210,7 +204,6 @@ export class ElasticSearchPage implements OnInit {
             this.initializing = false;
 
             if (triggerSearch) {
-              console.log('search triggered based on query params');
               if (directSearch) {
                 this.search();
               } else {
@@ -298,7 +291,7 @@ export class ElasticSearchPage implements OnInit {
   /**
    * Resets search results.
    */
-  reset() {
+  private reset() {
     this.hits = [];
     this.from = 0;
     this.total = -1;
@@ -423,18 +416,6 @@ export class ElasticSearchPage implements OnInit {
     return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.activeFilters.length);
   }
 
-  private hasActiveFacetsByGroup(groupKey: string) {
-    for (let a = 0; a < this.activeFilters.length; a++) {
-      if (
-        this.activeFilters[a].name === groupKey &&
-        this.activeFilters[a].keys.length
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   toggleFilter(filterGroupKey: string, filter: Facet) {
     // Get updated list of active filters
     const newActiveFilters = this.getNewActiveFilters(filterGroupKey, filter);
@@ -452,7 +433,7 @@ export class ElasticSearchPage implements OnInit {
     for (let g = 0; g < this.filterGroups.length; g++) {
       if (this.filterGroups[g].name === filterGroupKey) {
         for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
-          if (this.filterGroups[g].filters[f].key === filterKey) {
+          if (String(this.filterGroups[g].filters[f].key) === filterKey) {
             this.filterGroups[g].filters[f].selected = false;
             break;
           }
@@ -464,59 +445,21 @@ export class ElasticSearchPage implements OnInit {
     this.toggleFilter(filterGroupKey, { key: filterKey, selected: false, doc_count: 0 });
   }
 
-  /*
-  private updateActiveFilters(filterGroupKey: string, filter: Facet) {
-    let filterGroupActive = false;
-    for (let a = 0; a < this.activeFilters.length; a++) {
-      if (this.activeFilters[a].name === filterGroupKey) {
-        filterGroupActive = true;
-        if (filter.selected) {
-          // Add filter to already active filter group
-          this.activeFilters[a].keys.push(filter.key);
-        } else {
-          // Remove filter from already active filter group
-          for (let f = 0; f < this.activeFilters[a].keys.length; f++) {
-            if (this.activeFilters[a].keys[f] === filter.key) {
-              this.activeFilters[a].keys.splice(f, 1);
-              break;
-            }
-          }
-          if (this.activeFilters[a].keys.length < 1) {
-            // Remove filter group from active filters
-            // since there are no active filters from the group
-            this.activeFilters.splice(a, 1);
-          }
-        }
-        break;
-      }
-    }
-
-    if (!filterGroupActive && filter.selected) {
-      // Add filter group and filter to active filters
-      this.activeFilters.push(
-        {
-          name: filterGroupKey,
-          keys: [filter.key]
-        }
-      );
-    }
-  }
-  */
-
   private getNewActiveFilters(filterGroupKey: string, updatedFilter: Facet) {
     const newActiveFilters: any[] = [];
     let filterGroupActive: boolean = false;
 
     for (let a = 0; a < this.activeFilters.length; a++) {
+      // Copy current active filters to new array
+      newActiveFilters.push(
+        {
+          name: this.activeFilters[a].name,
+          keys: [...this.activeFilters[a].keys]
+        }
+      );
+
       if (this.activeFilters[a].name === filterGroupKey) {
         filterGroupActive = true;
-
-        newActiveFilters.push(
-          {
-            name: this.activeFilters[a].name,
-            keys: [...this.activeFilters[a].keys]
-          }
-        );
 
         if (updatedFilter.selected) {
           // Add filter to already active filter group
@@ -535,9 +478,6 @@ export class ElasticSearchPage implements OnInit {
             newActiveFilters.splice(-1, 1);
           }
         }
-        break;
-      } else {
-        newActiveFilters.push(this.activeFilters[a]);
       }
     }
 
@@ -560,7 +500,7 @@ export class ElasticSearchPage implements OnInit {
    * @param activeFilters Array of active filter objects which should be
    * applied to all filters.
    */
-  selectFiltersFromActiveFilters(activeFilters: any[]) {
+  private selectFiltersFromActiveFilters(activeFilters: any[]) {
     for (let a = 0; a < activeFilters.length; a++) {
       for (let g = 0; g < this.filterGroups.length; g++) {
         if (activeFilters[a].name === this.filterGroups[g].name) {
@@ -636,69 +576,40 @@ export class ElasticSearchPage implements OnInit {
         if (this.filterGroups[g].name === filterGroupKey) {
           filterGroupExists = true;
 
-          const deleteFilterIndices = [];
+          if (
+            config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms &&
+            !config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
+          ) {
+            // Aggregations are ordered desc according to doc_count -->
+            // Empty filters should be removed, so replace filters in the group
+            const filtersArray = this.convertFilterGroupToArray(filterGroupKey, newFilterGroup);
 
-          for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
-            const newFilter = newFilterGroup[this.filterGroups[g].filters[f].key];
-            if (newFilter) {
-              this.filterGroups[g].filters[f].doc_count = newFilter.doc_count;
-            } else if (this.hasActiveFacetsByGroup(filterGroupKey)) {
-              // Unselected facets aren't updating because the terms bool.filter in the query
-              // prevents unselected aggregations from appearing in the results.
-              // TODO: Fix this by separating search and aggregation query. // SK: not sure this is an issue any more
-            } else {
-              if (
-                config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms &&
-                !config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
-              ) {
-                // Aggregations are ordered desc according to doc_count -->
-                // Empty filters should be removed
-                deleteFilterIndices.push(f);
+            // Retain selected status of filters, i.e. search for all selected filters
+            // in the matching filterGroup and apply selected to the new filters
+            for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+              if (this.filterGroups[g].filters[f].selected) {
+                for (let w = 0; w < filtersArray.length; w++) {
+                  if (this.filterGroups[g].filters[f].key === filtersArray[w].key) {
+                    filtersArray[w].selected = true;
+                    break;
+                  }
+                }
+              }
+            }
+
+            this.filterGroups[g].filters = filtersArray;
+          } else {
+            // Aggregations are ordered according to key name -->
+            // Empty filters should be retained with zero count
+            for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+              const updatedFilter = newFilterGroup[this.filterGroups[g].filters[f].key];
+              if (updatedFilter) {
+                this.filterGroups[g].filters[f].doc_count = updatedFilter.doc_count;
               } else {
-                // Aggregations are ordered according to key name -->
-                // Empty filters should be retained with zero count
                 this.filterGroups[g].filters[f].doc_count = 0;
               }
             }
           }
-
-          // Remove filter objects that should be deleted from filters array
-          deleteFilterIndices.forEach((index: number) => {
-            this.filterGroups[g].filters.splice(index, 1);
-          });
-
-          // This forEach-loop just double checks that all filters we have
-          // received from Elastic exist in the component. Missing filters
-          // are added, but that should never happen if the filters have
-          // been properly initialized.
-          Object.entries(newFilterGroup).forEach(
-            ([filterKey, filterObj]: [string, any]) => {
-              let filterFound = false;
-              for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
-                if (String(this.filterGroups[g].filters[f].key) === filterKey) {
-                  filterFound = true;
-                  break;
-                }
-              }
-
-              if (!filterFound) {
-                this.filterGroups[g].filters.push(filterObj);
-                if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms?.order) {
-                  this.commonFunctions.sortArrayOfObjectsAlphabetically(
-                    this.filterGroups[g].filters, 'key'
-                  );
-                } else if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.terms) {
-                  this.commonFunctions.sortArrayOfObjectsNumerically(
-                    this.filterGroups[g].filters, 'doc_count', 'desc'
-                  );
-                } else if (config.ElasticSearch?.aggregations?.[filterGroupKey]?.date_histogram) {
-                  this.commonFunctions.sortArrayOfObjectsNumerically(
-                    this.filterGroups[g].filters, 'key', 'asc'
-                  );
-                }
-              }
-            }
-          );
 
           // The reference of date histogram filter arrays needs to be changed in order
           // for change detection to be triggered in the <date-histogram> component
@@ -850,35 +761,6 @@ export class ElasticSearchPage implements OnInit {
     return array.filter(str => str).join(', ');
   }
 
-  getHitHref(hit: any) {
-    let path = '/';
-
-    if (hit.source.text_type === 'tit') {
-      path = path + 'publication-title/' + hit.source.collection_id;
-    } else if (hit.source.text_type === 'fore') {
-      path = path + 'publication-foreword/' + hit.source.collection_id;
-    } else if (hit.source.text_type === 'inl') {
-      path = path + 'publication-introduction/' + hit.source.collection_id;
-    } else {
-      path = path + 'publication/' + hit.source.collection_id;
-      path = path + '/text/' + hit.source.publication_id;
-      path = path + '/nochapter/not/infinite/nosong/';
-      path = path + this.getMatchesForUrl(hit) + '/';
-    }
-
-    if (hit.source.text_type === 'est') {
-      path = path + 'established';
-    } else if (hit.source.text_type === 'com') {
-      path = path + 'comments';
-    } else if (hit.source.text_type === 'ms') {
-      path = path + 'manuscripts';
-    } else if (hit.source.text_type === 'var') {
-      path = path + 'variants';
-    }
-
-    return path;
-  }
-
   getHeading(hit: any) {
     /* If a match is found in the publication name, return it from the highlights. Otherwise from the data. */
     let text_name = '';
@@ -909,43 +791,11 @@ export class ElasticSearchPage implements OnInit {
     }
   }
 
-  getMatchesForUrl(hit: any) {
-    if (hit && hit.highlight && hit.highlight.text_data && this.highlightSearchMatches) {
-      let encoded_matches = '';
-      const unique_matches = [] as any;
-      const regexp = /<em>.+?<\/em>/g;
-
-      hit.highlight.text_data.forEach((highlight: any) => {
-        const matches = highlight.match(regexp);
-        matches.forEach((match: any) => {
-          const clean_match = match.replace('<em>', '').replace('</em>', '').toLowerCase();
-          if (!unique_matches.includes(clean_match)) {
-            unique_matches.push(clean_match);
-          }
-        });
-      });
-
-      if (unique_matches.length > 0) {
-        for (let i = 0; i < unique_matches.length; i++) {
-          encoded_matches = encoded_matches + encodeURIComponent(unique_matches[i]);
-          if (i < unique_matches.length - 1) {
-            encoded_matches = encoded_matches + '_';
-          }
-        }
-        return encoded_matches;
-      } else {
-        return 'searchtitle';
-      }
-    } else {
-      return 'searchtitle';
-    }
-  }
-
   toggleFilterGroupOpenState(filterGroup: any) {
     filterGroup.open = !filterGroup.open;
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
+  private getMdContent(fileID: string): Observable<SafeHtml> {
     return this.mdContentService.getMdContent(fileID).pipe(
       map((res: any) => {
         return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
@@ -989,4 +839,17 @@ export class ElasticSearchPage implements OnInit {
       }
     }
   }
+
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+
+  trackByKey(index: number, item: any) {
+    return item.key;
+  }
+
+  trackByName(index: number, item: any) {
+    return item.name;
+  }
+
 }

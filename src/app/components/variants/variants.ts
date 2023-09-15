@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
@@ -27,6 +27,7 @@ export class VariantsComponent implements OnInit {
   @Output() selectedVarName = new EventEmitter<string>();
   @Output() selectedVarSortOrder = new EventEmitter<number>();
 
+  intervalTimerId: number = 0;
   selectedVariant: any = undefined;
   showOpenLegendButton: boolean = false;
   text: SafeHtml = '';
@@ -35,6 +36,7 @@ export class VariantsComponent implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private commonFunctions: CommonFunctionsService,
+    private elementRef: ElementRef,
     public readPopoverService: ReadPopoverService,
     private sanitizer: DomSanitizer,
     private textService: TextService
@@ -54,6 +56,9 @@ export class VariantsComponent implements OnInit {
         if (res?.variations?.length > 0) {
           this.variants = res.variations;
           this.setVariant();
+          if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+          }
         } else {
           this.text = $localize`:@@Read.Variants.NoVariations:Inga tryckta varianter tillgängliga.`;
         }
