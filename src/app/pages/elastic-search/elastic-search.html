@@ -103,7 +103,7 @@
                           labelPlacement="end"
                           [(ngModel)]="filter.selected"
                           (ionChange)="toggleFilter(filterGroup.name, filter)"
-                          [disabled]="(filter.doc_count < 1) || disableFacetCheckboxes"
+                          [disabled]="(filter.doc_count < 1) || disableFilterCheckboxes"
                     >
                       <span [ngStyle]="{'white-space': 'normal'}">
                         <span>

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
-import { catchError, map, Observable, of, Subscription } from 'rxjs';
+import { catchError, map, merge, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
 import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from 'src/app/models/elastic-search.model';
@@ -20,13 +20,13 @@ import { config } from "src/assets/config/config";
   styleUrls: ['elastic-search.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ElasticSearchPage implements OnInit {
+export class ElasticSearchPage implements OnDestroy, OnInit {
   @ViewChild(IonContent) content: IonContent;
   
   activeFilters: any[] = [];
   aggregations: object = {};
   dateHistogramData: any = undefined;
-  disableFacetCheckboxes: boolean = true;
+  disableFilterCheckboxes: boolean = true;
   elasticError: boolean = false;
   enableFilters: boolean = true;
   enableSortOptions: boolean = true;
@@ -44,6 +44,8 @@ export class ElasticSearchPage implements OnInit {
   range?: TimeRange | null = undefined;
   rangeYears?: Record<string, any> = undefined;
   routeQueryParamsSubscription: Subscription | null = null;
+  searchDataSubscription: Subscription | null = null;
+  searchTrigger$ = new Subject<boolean>();
   showAllFor: any = {};
   sort: string = '';
   sortSelectOptions: Record<string, any> = {};
@@ -98,9 +100,13 @@ export class ElasticSearchPage implements OnInit {
   ngOnInit() {
     this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
 
+    // Set up search data stream subscriptions
+    this.subscribeToSearchDataStreams();
+
     // Get initial aggregations
     this.getInitialAggregations().subscribe(
       (filters: any) => {
+        // Populate initial filters with initial aggregations data
         this.filterGroups = filters;
 
         for (let g = 0; g < this.filterGroups.length; g++) {
@@ -110,10 +116,11 @@ export class ElasticSearchPage implements OnInit {
           }
         }
 
-        this.disableFacetCheckboxes = false;
+        this.disableFilterCheckboxes = false;
         this.loading = false;
         this.cf.detectChanges();
 
+        // Set up URL query params subscriptions in order to trigger new searches
         this.subscribeToQueryParams();
       }
     );
@@ -121,6 +128,109 @@ export class ElasticSearchPage implements OnInit {
 
   ngOnDestroy() {
     this.routeQueryParamsSubscription?.unsubscribe();
+    this.searchDataSubscription?.unsubscribe();
+    this.searchTrigger$?.unsubscribe();
+  }
+
+  /**
+   * Subscribe to search data streams from Elasticsearch:
+   * 1. search hits
+   * 2. aggregations data
+   * Aggregations data is not fetched when we are only loading
+   * more search hits using the same search parameters. Otherwise
+   * search hits and aggregations are fetched in parallell.
+   * The switchMap on searchTrigger$ takes care that when a new
+   * search is initiated while the previous search is still
+   * processing, the previous search gets cancelled.
+   */
+  private subscribeToSearchDataStreams() {
+    this.searchDataSubscription = this.searchTrigger$.pipe(
+      switchMap(() => {
+        const searchQuery$: Observable<any> = 
+              !(this.submittedQuery || this.range || this.activeFilters.length)
+              ? of({ hits: { hits: [] } })
+              : this.elastic.executeSearchQuery({
+                  queries: [this.query],
+                  highlight: {
+                    fields: {
+                      'text_data': {
+                        number_of_fragments: 1000,
+                        fragment_size: this.textHighlightFragmentSize,
+                        type: this.textHighlightType
+                      },
+                      'text_title': {
+                        number_of_fragments: 0,
+                        type: this.textTitleHighlightType
+                      },
+                    },
+                  },
+                  from: this.from,
+                  size: (this.from < 1 && this.pages > 1) ? this.pages * this.hitsPerPage : this.hitsPerPage,
+                  facetGroups: this.filterGroups,
+                  range: this.range,
+                  sort: this.parseSortForQuery(),
+                });
+
+        if (this.from < 1) {
+          // Get aggregations only if NOT loading more hits
+          const aggregationsQuery$: Observable<any> = this.elastic.executeAggregationQuery({
+            queries: [this.query],
+            facetGroups: this.filterGroups,
+            range: this.range,
+          });
+
+          return merge(searchQuery$, aggregationsQuery$);
+        } else {
+          return searchQuery$;
+        }
+      })
+    ).subscribe({
+      next: (data: any) => {
+        // console.log('data:', data);
+        if (data?.aggregations) {
+          this.updateFilters(data.aggregations);
+          this.disableFilterCheckboxes = false;
+          this.cf.detectChanges();
+        } else {
+          if (data?.hits === undefined) {
+            console.error('Elastic search error, no hits: ', data);
+            this.from = 0;
+            this.pages = 1;
+            this.total = 0;
+            this.elasticError = true;
+          } else if (data.hits.hits.length > 0) {
+            this.total = data.hits.total.value;
+    
+            // Append new hits to this.hits array.
+            Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
+              type: hit._source.text_type,
+              source: hit._source,
+              highlight: hit.highlight,
+              id: hit._id
+            })));
+    
+            if (this.from < 1 && this.pages > 1) {
+              this.from = (this.pages - 1) * this.hitsPerPage;
+            }
+          }
+    
+          this.loading = false;
+          this.loadingMoreHits = false;
+          this.cf.detectChanges();
+        }
+      },
+      error: (e: any) => {
+        console.error('Elastic search error: ', e);
+        this.from = 0;
+        this.pages = 1;
+        this.total = 0;
+        this.elasticError = true;
+        this.loading = false;
+        this.loadingMoreHits = false;
+        this.disableFilterCheckboxes = false;
+        this.cf.detectChanges();
+      }
+    });
   }
 
   /**
@@ -222,7 +332,7 @@ export class ElasticSearchPage implements OnInit {
           if (directSearch) {
             this.search();
           } else {
-            this.initSearch();
+            this.resetAndSearch();
           }
         }
       }
@@ -230,19 +340,34 @@ export class ElasticSearchPage implements OnInit {
   }
 
   /**
-   * Triggers a new search.
+   * Trigger a new, clean search.
    */
-  private initSearch() {
-    this.disableFacetCheckboxes = true;
+  private resetAndSearch() {
+    this.disableFilterCheckboxes = true;
     this.reset();
-    this.loading = true;
-    this.cf.detectChanges();
     this.search();
   }
 
-  clearSearchQuery() {
-    this.query = '';
-    this.updateURLQueryParameters({ query: null });
+  /**
+   * Trigger an immediate search with current parameters. Called directly only
+   * to load more search results.
+   */
+  private search() {
+    this.elasticError = false;
+    this.loading = true;
+    this.cf.detectChanges();
+    this.submittedQuery = this.query;
+    this.searchTrigger$.next(true);
+  };
+
+  /**
+   * Reset search results.
+   */
+  private reset() {
+    this.hits = [];
+    this.from = 0;
+    this.total = -1;
+    this.pages = 1;
   }
 
   private updateURLQueryParameters(params: any) {
@@ -265,8 +390,13 @@ export class ElasticSearchPage implements OnInit {
     this.updateURLQueryParameters({ query: this.query || null });
   }
 
+  clearSearchQuery() {
+    this.query = '';
+    this.updateURLQueryParameters({ query: null });
+  }
+
   /**
-   * Triggers a new search with selected years.
+   * Trigger a new search with selected years.
    */
   onTimeRangeChange(newRange: { from: string | null, to: string | null } | null) {
     let triggerSearch = false;
@@ -291,102 +421,31 @@ export class ElasticSearchPage implements OnInit {
   }
 
   /**
-   * Sorting changed so trigger new query.
+   * Trigger new search with changed sorting.
    */
   onSortByChanged(event: any) {
     this.updateURLQueryParameters({ sort: event?.detail?.value || 'relevance' });
   }
 
   /**
-   * Resets search results.
+   * Loads more results with current search parameters.
    */
-  private reset() {
-    this.hits = [];
-    this.from = 0;
-    this.total = -1;
-    this.pages = 1;
+  loadMore() {
+    this.loadingMoreHits = true;
+    this.from += this.hitsPerPage;
+
+    this.updateURLQueryParameters({ pages: this.pages + 1 });
   }
 
-  /**
-   * Immediately execute a search.
-   */
-  private search() {
-    this.elasticError = false;
-    this.loading = true;
-    this.submittedQuery = this.query;
-
-    // Fetch hits
-    this.elastic.executeSearchQuery({
-      queries: [this.query],
-      highlight: {
-        fields: {
-          'text_data': {
-            number_of_fragments: 1000,
-            fragment_size: this.textHighlightFragmentSize,
-            type: this.textHighlightType
-          },
-          'text_title': {
-            number_of_fragments: 0,
-            type: this.textTitleHighlightType
-          },
-        },
-      },
-      from: this.from,
-      size: (this.from < 1 && this.pages > 1) ? this.pages * this.hitsPerPage : this.hitsPerPage,
-      facetGroups: this.filterGroups,
-      range: this.range,
-      sort: this.parseSortForQuery(),
-    }).subscribe((data: any) => {
-      if (data.hits === undefined) {
-        console.error('Elastic search error, no hits: ', data);
-        this.from = 0;
-        this.pages = 1;
-        this.total = 0;
-        this.elasticError = true;
-      } else {
-        this.total = data.hits.total.value;
-        // console.log('hits: ', data.hits);
-
-        // Append new hits to this.hits array.
-        Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
-          type: hit._source.text_type,
-          source: hit._source,
-          highlight: hit.highlight,
-          id: hit._id
-        })));
-
-        if (this.from < 1 && this.pages > 1) {
-          this.from = (this.pages - 1) * this.hitsPerPage;
-        }
-      }
-      this.loading = false;
-      this.loadingMoreHits = false;
-      this.cf.detectChanges();
-    });
-    
-    // Get aggregations only if NOT loading more hits
-    if (this.from < 1) {
-      this.getAggregations();
-    }
-  }
-
-  private getAggregations() {
-    this.elastic.executeAggregationQuery({
-      queries: [this.query],
-      facetGroups: this.filterGroups,
-      range: this.range,
-    }).subscribe({
-      next: data => {
-        this.updateFilters(data.aggregations);
-        this.disableFacetCheckboxes = false;
-        this.cf.detectChanges();
-      },
-      error: e => {
-        console.error('Error fetching aggregations', e);
-        this.loading = false;
-        this.cf.detectChanges();
-      }
-    });
+  private getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
   }
 
   private getInitialAggregations(): Observable<any> {
@@ -408,13 +467,6 @@ export class ElasticSearchPage implements OnInit {
 
     const [key, direction] = this.sort.split('.');
     return [{ [key]: direction }];
-  }
-
-  loadMore() {
-    this.loadingMoreHits = true;
-    this.from += this.hitsPerPage;
-
-    this.updateURLQueryParameters({ pages: this.pages + 1 });
   }
 
   canShowHits() {
@@ -770,17 +822,6 @@ export class ElasticSearchPage implements OnInit {
 
   toggleFilterGroupOpenState(filterGroup: any) {
     filterGroup.open = !filterGroup.open;
-  }
-
-  private getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
-      map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
-      }),
-      catchError((e) => {
-        return of('');
-      })
-    );
   }
 
   showAllHitHighlights(event: any) {
