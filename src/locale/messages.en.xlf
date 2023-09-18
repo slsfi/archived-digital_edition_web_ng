@@ -1,17 +1,5 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0">
   <file id="namespace1">
-    <unit id="4349973071892705650">
-      <segment state="initial">
-        <source>Till år</source>
-        <target>Till år</target>
-      </segment>
-    </unit>
-    <unit id="6286776428245261861">
-      <segment state="initial">
-        <source>Från år</source>
-        <target>Från år</target>
-      </segment>
-    </unit>
     <unit id="abbreviation">
       <segment state="initial">
         <source>Förkortning</source>
@@ -108,12 +96,6 @@
         <target>Clear</target>
       </segment>
     </unit>
-    <unit id="DateHistogram.Refresh">
-      <segment state="initial">
-        <source>Uppdatera</source>
-        <target>Refresh</target>
-      </segment>
-    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -204,6 +186,12 @@
         <target>Normalization</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.ClearAllActiveFilters">
+      <segment state="initial">
+        <source>Ta bort alla aktiva avgränsningar</source>
+        <target>Clear all active filters</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment state="initial">
         <source>Kommentar till</source>
@@ -232,6 +220,12 @@
       <segment state="initial">
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
         <target>An error occurred while loading search matches.</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LoadingFilters">
+      <segment state="initial">
+        <source>Ett ögonblick, laddar sökavgränsningar ...</source>
+        <target>Just a moment, loading filters ...</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.NewestFirst">
@@ -316,6 +310,12 @@
       <segment state="initial">
         <source>Sortera enligt</source>
         <target>Sort by</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.StartSearchInstruction">
+      <segment state="initial">
+        <source>Börja söka genom att skriva in sökord eller välja avgränsningar.</source>
+        <target>Start by entering search terms or applying filters.</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.TimeRange">

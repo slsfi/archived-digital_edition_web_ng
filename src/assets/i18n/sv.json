@@ -295,10 +295,13 @@
         "ShowMoreHits": "Visa fler sökträffar",
         "ShowAllHitHighlights": "Visa alla träffar i texten",
         "LoadingError": "Ett fel har uppstått när sökträffarna skulle laddas.",
+        "LoadingFilters": "Ett ögonblick, laddar sökavgränsningar ...",
         "CommentsHitHeadingPrepend": "Kommentar till",
         "FilterResults": "Avgränsa sökningen",
         "ShowFacets": "Visa avgränsningar",
-        "HideFacets": "Dölj avgränsningar"
+        "HideFacets": "Dölj avgränsningar",
+        "StartSearchInstruction": "Börja söka genom att skriva in sökord eller välja avgränsningar.",
+        "ClearAllActiveFilters": "Ta bort alla aktiva avgränsningar"
     },
     "DateHistogram": {
         "Clear": "Nollställ",

@@ -295,10 +295,13 @@
         "ShowMoreHits": "Show more search matches",
         "ShowAllHitHighlights": "Show all matches in the text",
         "LoadingError": "An error occurred while loading search matches.",
+        "LoadingFilters": "Just a moment, loading filters ...",
         "CommentsHitHeadingPrepend": "Commentary to",
         "FilterResults": "Filters",
         "ShowFacets": "Show filters",
-        "HideFacets": "Hide filters"
+        "HideFacets": "Hide filters",
+        "StartSearchInstruction": "Start by entering search terms or applying filters.",
+        "ClearAllActiveFilters": "Clear all active filters"
     },
     "DateHistogram": {
         "Clear": "Clear",

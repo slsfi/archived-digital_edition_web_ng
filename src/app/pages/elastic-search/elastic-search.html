@@ -9,9 +9,10 @@
   <div class="search-container">
 
     <!-- Search bar -->
-    <div class="search-row">
+    <div class="search-row" [class.filters-hidden]="!filtersVisible">
       <ion-searchbar
             class="custom-searchbar manual-exec"
+            [class.highlight]="query"
             placeholder="Sök ..."
             i18n-placeholder="@@ElasticSearch.SearchPlaceholder"
             show-clear-button="always"
@@ -26,22 +27,217 @@
       <ion-button (click)="submitSearchQuery()" [disabled]="initializing">
         <ion-icon slot="icon-only" name="search" aria-label="Sök" i18n-aria-label="@@ElasticSearch.SearchButtonAriaLabel"></ion-icon>
       </ion-button>
+
+      <!-- Toggle filters visibility button -->
+      <ion-button *ngIf="enableFilters"
+            fill="outline"
+            class="custom-outline-button show-filters-button"
+            (click)="toggleFiltersColumn()"
+            [disabled]="initializing"
+      >
+        <ion-icon name="filter-outline" slot="start"></ion-icon>
+        <ng-container *ngIf="!filtersVisible" i18n="@@ElasticSearch.ShowFacets">Visa avgränsningar</ng-container>
+        <ng-container *ngIf="filtersVisible" i18n="@@ElasticSearch.HideFacets">Dölj avgränsningar</ng-container>
+      </ion-button>
     </div>
 
-    <!-- Toggle filters visibility button -->
-    <ion-button *ngIf="enableFilters"
-          fill="outline"
-          class="custom-outline-button show-filters-button"
-          (click)="toggleFiltersColumn()"
-          [disabled]="initializing"
-    >
-      <ion-icon name="filter-outline" slot="start"></ion-icon>
-      <ng-container *ngIf="!filtersVisible" i18n="@@ElasticSearch.ShowFacets">Visa avgränsningar</ng-container>
-      <ng-container *ngIf="filtersVisible" i18n="@@ElasticSearch.HideFacets">Dölj avgränsningar</ng-container>
-    </ion-button>
-
     <div class="filter-and-hits-area-row">
-      <!--  Filters -->
+      <!-- Active filters and search results column -->
+      <div class="search-result-column" [style.min-height]="loading && !loadingMoreHits ? searchResultsColumnHeight : null">
+
+        <!-- Active filters -->
+        <div class="active-filters-row" *ngIf="this.activeFilters.length || rangeYears">
+          <div class="active-filters-wrapper">
+            <ng-container *ngFor="let activeFilterGroup of activeFilters; trackBy: trackByName">
+              <div class="active-filter-group" *ngIf="activeFilterGroup.keys.length">
+                <p class="afg-title">
+                  <ng-container *ngIf="activeFilterGroup.name === 'Type'">
+                    <ng-container i18n="@@Type">Texttyp</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'Genre'">
+                    <ng-container i18n="@@Genre">Genre</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'Collection'">
+                    <ng-container i18n="@@Collection">Delutgåva</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderName'">
+                    <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverName'">
+                    <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderLocation'">
+                    <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
+                  </ng-container>
+                  <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverLocation'">
+                    <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
+                  </ng-container>
+                </p>
+                <ul>
+                  <li *ngFor="let filterKey of activeFilterGroup.keys">
+                    <ion-button fill="outline"
+                          (click)="unselectFilter(activeFilterGroup.name, filterKey)"
+                          class="custom-outline-button"
+                    >
+                      <ng-container [ngSwitch]="filterKey.toString()">
+                        <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
+                        <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
+                        <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
+                        <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
+                        <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
+                        <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
+                        <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                        <ng-container *ngSwitchDefault>{{getEllipsisString(filterKey.toString())}}</ng-container>
+                      </ng-container>
+                      <ion-icon name="close" slot="end"></ion-icon>
+                    </ion-button>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+            <div class="active-filter-group" *ngIf="rangeYears">
+              <p class="afg-title">
+                <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
+              </p>
+              <ul>
+                <li>
+                  <ion-button fill="outline"
+                        (click)="onTimeRangeChange({from: null, to: null})"
+                        class="custom-outline-button"
+                  >
+                    {{rangeYears.from}}–{{rangeYears.to}}
+                    <ion-icon name="close" slot="end"></ion-icon>
+                  </ion-button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <ion-button class="close" fill="clear" (click)="clearAllActiveFiltersAndTimeRange()" title="Ta bort alla aktiva avgränsningar" i18n-title="@@ElasticSearch.ClearAllActiveFilters">
+            <ion-icon name="close" slot="icon-only" aria-label="Ta bort alla aktiva avgränsningar" i18n-aria-label="@@ElasticSearch.ClearAllActiveFilters"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="info-toolbar">
+          <!-- Show search hit count -->
+          <h2 *ngIf="canShowHits() && total > 0" class="hits-heading"><ng-container i18n="@@ElasticSearch.Found">Texter med sökträffar:</ng-container> {{total}}</h2>
+          <h2 *ngIf="canShowHits() && total === 0 && !elasticError" class="hits-heading" i18n="@@ElasticSearch.NoHits">Sökningen gav inga svar.</h2>
+          <h2 *ngIf="elasticError && total === 0" class="hits-heading" i18n="@@ElasticSearch.LoadingError">Ett fel har uppstått när sökträffarna skulle laddas.</h2>
+          
+          <!-- Sort by -->
+          <ion-select [class.show-sort-options]="enableSortOptions && canShowHits() && total > 0"
+                class="sort-select"
+                label="Sortera enligt"
+                i18n-label="@@ElasticSearch.SortBy"
+                label-placement="floating"
+                fill="outline"
+                okText="Ok"
+                i18n-okText="@@BasicActions.Ok"
+                cancelText="Avbryt"
+                i18n-cancelText="@@BasicActions.Cancel"
+                [interfaceOptions]="sortSelectOptions"
+                (ionChange)="onSortByChanged($event)"
+                [value]="sort"
+          >
+            <ion-select-option
+                  value=""
+                  i18n="@@ElasticSearch.Relevance"
+            >Relevans</ion-select-option>
+            <ion-select-option
+                  value="orig_date_sort.asc"
+                  i18n="@@ElasticSearch.OldestFirst"
+            >Äldst först</ion-select-option>
+            <ion-select-option
+                  value="orig_date_sort.desc"
+                  i18n="@@ElasticSearch.NewestFirst"
+            >Nyast först</ion-select-option>
+          </ion-select>
+        </div>
+
+        <!-- Hits column -->
+        <div class="hits-column">
+          <!-- Search status row -->
+          <div class="search-status">
+            <p *ngIf="initializing" i18n="@@ElasticSearch.LoadingFilters">Ett ögonblick, laddar sökavgränsningar ...</p>
+            <p *ngIf="total < 0 && !initializing && !loading" i18n="@@ElasticSearch.StartSearchInstruction">Börja söka genom att skriva in sökord eller välja avgränsningar.</p>
+            <ion-spinner *ngIf="loading && total < 1" class="loading" name="crescent"></ion-spinner>
+          </div>
+
+          <!-- Hits -->
+          <ol *ngIf="canShowHits() && total > 0" class="search-hits">
+            <li *ngFor="let hit of hits; let n = index; trackBy: trackById" class="hit-item">
+
+              <p>#{{n+1}}</p>
+              <div>
+                <a [routerLink]="hit | elasticHitPathGenerator" [queryParams]="hit | elasticHitQueryParamsGenerator">
+                  <div>
+                    <h3>
+                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>
+                    </h3>
+                    <p>{{getPublicationCollectionName(hit.source)}}</p>
+                  </div>
+                  <div>
+                    <div class="hit-text-type {{ hit.source.text_type }}">
+                      <span>
+                        <ng-container [ngSwitch]="hit.source.text_type">
+                          <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
+                          <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
+                          <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
+                          <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
+                          <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
+                          <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
+                          <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                          <ng-container *ngSwitchDefault>{{hit.source.text_type}}</ng-container>
+                        </ng-container>
+                      </span>
+                    </div>
+                    <div *ngIf="hasDate(hit.source)" class="hit-text-date">
+                      <span>{{getDate(hit.source)}}</span>
+                    </div>
+                  </div>
+                </a>
+                <div *ngIf="hit?.highlight?.text_data" class="match-highlights">
+                  <p *ngFor="let highlight of hit.highlight?.text_data; let h = index"
+                        [innerHTML]="'&#8230; ' + highlight + ' &#8230;'"
+                        [class.hidden-highlight]="h > 2"
+                  ></p>
+                  <ion-button *ngIf="hit.highlight.text_data.length > 3"
+                        fill="outline"
+                        class="custom-outline-button show-all-highlights"
+                        (click)="showAllHitHighlights($event)"
+                  >
+                    <ng-container i18n="@@ElasticSearch.ShowAllHitHighlights">Visa alla träffar i texten</ng-container> (+{{hit.highlight.text_data.length-3}})
+                  </ion-button>
+                </div>
+              </div>
+
+            </li>
+          </ol>
+
+          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && ((this.total > this.from + this.hitsPerPage) || loadingMoreHits)">
+            <div class="loading-spinner-wrapper">
+              <ion-spinner [class.visible]="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
+            </div>
+            <ion-button
+                  class="custom-button"
+                  (click)="loadMore()"
+                  [disabled]="loadingMoreHits"
+                  i18n="@@ElasticSearch.ShowMoreHits"
+            >Visa fler sökträffar</ion-button>
+          </div>
+          <div class="hits-footer" *ngIf="canShowHits() && total > 5">
+            <ion-button
+                  class="custom-outline-button"
+                  fill="outline"
+                  (click)="scrollToTop()"
+                  i18n="@@BasicActions.ScrollToTop"
+            >Till början</ion-button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Filters column -->
       <div *ngIf="enableFilters" class="filter-column" [class.hide-filter-column]="!filtersVisible">
         <h2 [class.greyed-out]="initializing" i18n="@@ElasticSearch.FilterResults">Avgränsa sökningen</h2>
 
@@ -147,187 +343,6 @@
           </div>
         </ng-container>
         
-      </div>
-
-      <div class="search-result-column">
-
-        <!-- Active filters -->
-        <div class="active-filters-row" *ngIf="this.activeFilters.length || rangeYears">
-          <ng-container *ngFor="let activeFilterGroup of activeFilters">
-            <div class="active-filter-group" *ngIf="activeFilterGroup.keys.length">
-              <p class="afg-title">
-                <ng-container *ngIf="activeFilterGroup.name === 'Type'">
-                  <ng-container i18n="@@Type">Texttyp</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'Genre'">
-                  <ng-container i18n="@@Genre">Genre</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'Collection'">
-                  <ng-container i18n="@@Collection">Delutgåva</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderName'">
-                  <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverName'">
-                  <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderLocation'">
-                  <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
-                </ng-container>
-                <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverLocation'">
-                  <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
-                </ng-container>
-              </p>
-              <ul>
-                <li *ngFor="let filterKey of activeFilterGroup.keys">
-                  <ion-button (click)="unselectFilter(activeFilterGroup.name, filterKey)" class="custom-button">
-                    <ng-container [ngSwitch]="filterKey.toString()">
-                      <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                      <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                      <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                      <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                      <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                      <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                      <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                      <ng-container *ngSwitchDefault>{{getEllipsisString(filterKey.toString())}}</ng-container>
-                    </ng-container>
-                    <ion-icon name="close" slot="end"></ion-icon>
-                  </ion-button>
-                </li>
-              </ul>
-            </div>
-          </ng-container>
-          <div class="active-filter-group" *ngIf="rangeYears">
-            <p class="afg-title">
-              <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
-            </p>
-            <ul>
-              <li>
-                <ion-button (click)="onTimeRangeChange({from: null, to: null})" class="custom-button">
-                  {{rangeYears.from}}–{{rangeYears.to}}
-                  <ion-icon name="close" slot="end"></ion-icon>
-                </ion-button>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="info-toolbar">
-          <!-- Show search hit count -->
-          <h2 *ngIf="canShowHits() && total > 0" class="hits-heading"><ng-container i18n="@@ElasticSearch.Found">Texter med sökträffar:</ng-container> {{total}}</h2>
-          <h2 *ngIf="canShowHits() && total === 0 && !elasticError" class="hits-heading" i18n="@@ElasticSearch.NoHits">Sökningen gav inga svar.</h2>
-          <h2 *ngIf="elasticError && total === 0" class="hits-heading" i18n="@@ElasticSearch.LoadingError">Ett fel har uppstått när sökträffarna skulle laddas.</h2>
-          
-          <!-- Sort by -->
-          <ion-select [class.show-sort-options]="enableSortOptions && canShowHits() && total > 0"
-                class="sort-select"
-                label="Sortera enligt"
-                i18n-label="@@ElasticSearch.SortBy"
-                label-placement="floating"
-                fill="outline"
-                okText="Ok"
-                i18n-okText="@@BasicActions.Ok"
-                cancelText="Avbryt"
-                i18n-cancelText="@@BasicActions.Cancel"
-                [interfaceOptions]="sortSelectOptions"
-                (ionChange)="onSortByChanged($event)"
-                [value]="sort"
-          >
-            <ion-select-option
-                  value=""
-                  i18n="@@ElasticSearch.Relevance"
-            >Relevans</ion-select-option>
-            <ion-select-option
-                  value="orig_date_sort.asc"
-                  i18n="@@ElasticSearch.OldestFirst"
-            >Äldst först</ion-select-option>
-            <ion-select-option
-                  value="orig_date_sort.desc"
-                  i18n="@@ElasticSearch.NewestFirst"
-            >Nyast först</ion-select-option>
-          </ion-select>
-        </div>
-
-        <!-- Hits column -->
-        <div class="hits-column">
-          <!-- Search status row -->
-          <div class="search-status">
-            <p *ngIf="initializing">Ett ögonblick, laddar sökavgränsningar ...</p>
-            <ion-spinner *ngIf="loading && total < 1" class="loading" name="crescent"></ion-spinner>
-          </div>
-
-          <!-- Hits -->
-          <ol *ngIf="canShowHits() && total > 0" class="search-hits">
-            <li *ngFor="let hit of hits; let n = index; trackBy: trackById" class="hit-item">
-
-              <p>#{{n+1}}</p>
-              <div>
-                <a [routerLink]="hit | elasticHitPathGenerator" [queryParams]="hit | elasticHitQueryParamsGenerator">
-                  <div>
-                    <h3>
-                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>
-                    </h3>
-                    <p>{{getPublicationCollectionName(hit.source)}}</p>
-                  </div>
-                  <div>
-                    <div class="hit-text-type {{ hit.source.text_type }}">
-                      <span>
-                        <ng-container [ngSwitch]="hit.source.text_type">
-                          <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                          <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                          <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                          <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                          <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                          <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                          <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
-                          <ng-container *ngSwitchDefault>{{hit.source.text_type}}</ng-container>
-                        </ng-container>
-                      </span>
-                    </div>
-                    <div *ngIf="hasDate(hit.source)" class="hit-text-date">
-                      <span>{{getDate(hit.source)}}</span>
-                    </div>
-                  </div>
-                </a>
-                <div *ngIf="hit?.highlight?.text_data" class="match-highlights">
-                  <p *ngFor="let highlight of hit.highlight?.text_data; let h = index"
-                        [innerHTML]="'&#8230; ' + highlight + ' &#8230;'"
-                        [class.hidden-highlight]="h > 2"
-                  ></p>
-                  <ion-button *ngIf="hit.highlight.text_data.length > 3"
-                        fill="outline"
-                        class="custom-outline-button show-all-highlights"
-                        (click)="showAllHitHighlights($event)"
-                  >
-                    <ng-container i18n="@@ElasticSearch.ShowAllHitHighlights">Visa alla träffar i texten</ng-container> (+{{hit.highlight.text_data.length-3}})
-                  </ion-button>
-                </div>
-              </div>
-
-            </li>
-          </ol>
-
-          <div class="load-more-hits-wrapper" *ngIf="canShowHits() && total > 0 && ((this.total > this.from + this.hitsPerPage) || loadingMoreHits)">
-            <div class="loading-spinner-wrapper">
-              <ion-spinner [class.visible]="loadingMoreHits" class="loading" name="crescent"></ion-spinner>
-            </div>
-            <ion-button
-                  class="custom-button"
-                  (click)="loadMore()"
-                  [disabled]="loadingMoreHits"
-                  i18n="@@ElasticSearch.ShowMoreHits"
-            >Visa fler sökträffar</ion-button>
-          </div>
-          <div class="hits-footer" *ngIf="canShowHits() && total > 5">
-            <ion-button
-                  class="custom-outline-button"
-                  fill="outline"
-                  (click)="scrollToTop()"
-                  i18n="@@BasicActions.ScrollToTop"
-            >Till början</ion-button>
-          </div>
-        </div>
-
       </div>
     </div>
 

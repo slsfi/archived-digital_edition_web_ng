@@ -295,10 +295,13 @@
         "ShowMoreHits": "Näytä lisää hakutuloksia",
         "ShowAllHitHighlights": "Näytä tekstin kaikki hakutulokset",
         "LoadingError": "Tapahtui virhe ladatessa hakutuloksia.",
+        "LoadingFilters": "Pieni hetki, ladataan rajauksia ...",
         "CommentsHitHeadingPrepend": "Kommentti tekstiin",
         "FilterResults": "Rajaa hakua",
         "ShowFacets": "Näytä rajaukset",
-        "HideFacets": "Piilota rajaukset"
+        "HideFacets": "Piilota rajaukset",
+        "StartSearchInstruction": "Aloita haku kirjoittamalla hakusana tai valitsemalla rajauksia.",
+        "ClearAllActiveFilters": "Poista kaikki aktiiviset rajaukset"
     },
     "DateHistogram": {
         "Clear": "Nollaa",

@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="aa">
   <file id="ngi18n" original="ng.template">
-    <unit id="4349973071892705650">
-      <segment>
-        <source>Till år</source>
-      </segment>
-    </unit>
-    <unit id="6286776428245261861">
-      <segment>
-        <source>Från år</source>
-      </segment>
-    </unit>
     <unit id="abbreviation">
       <segment>
         <source>Förkortning</source>
@@ -91,11 +81,6 @@
         <source>Nollställ</source>
       </segment>
     </unit>
-    <unit id="DateHistogram.Refresh">
-      <segment>
-        <source>Uppdatera</source>
-      </segment>
-    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment>
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -171,6 +156,11 @@
         <source>Normalisering</source>
       </segment>
     </unit>
+    <unit id="ElasticSearch.ClearAllActiveFilters">
+      <segment>
+        <source>Ta bort alla aktiva avgränsningar</source>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment>
         <source>Kommentar till</source>
@@ -194,6 +184,11 @@
     <unit id="ElasticSearch.LoadingError">
       <segment>
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LoadingFilters">
+      <segment>
+        <source>Ett ögonblick, laddar sökavgränsningar ...</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.NewestFirst">
@@ -264,6 +259,11 @@
     <unit id="ElasticSearch.SortBy">
       <segment>
         <source>Sortera enligt</source>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.StartSearchInstruction">
+      <segment>
+        <source>Börja söka genom att skriva in sökord eller välja avgränsningar.</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.TimeRange">
