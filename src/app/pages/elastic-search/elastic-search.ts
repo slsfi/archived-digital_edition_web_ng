@@ -46,7 +46,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
   rangeYears?: Record<string, any> = undefined;
   routeQueryParamsSubscription: Subscription | null = null;
   searchDataSubscription: Subscription | null = null;
-  searchResultsColumnHeight: string | null = null;
+  searchResultsColumnMinHeight: string | null = null;
   searchTrigger$ = new Subject<boolean>();
   showAllFor: any = {};
   sort: string = '';
@@ -203,7 +203,6 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
             this.elasticError = true;
           } else if (data.hits?.total?.value > -1) {
             this.total = data.hits.total.value;
-            console.log('has hits');
     
             // Append new hits to this.hits array.
             Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
@@ -647,18 +646,29 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
             !config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
           ) {
             // Aggregations are ordered desc according to doc_count -->
-            // Empty filters should be removed, so replace filters in the group
+            // Empty filters should be removed if not selected, so replace filters in the group
             const filtersArray = this.convertFilterGroupToArray(filterGroupKey, newFilterGroup);
 
             // Retain selected status of filters, i.e. search for all selected filters
-            // in the matching filterGroup and apply selected to the new filters
+            // in the matching filterGroup and apply selected to the new filters.
+            // If a selected filter is missing from the new filters, add it to them with
+            // a zero doc_count
             for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
               if (this.filterGroups[g].filters[f].selected) {
+                let found = false;
                 for (let w = 0; w < filtersArray.length; w++) {
                   if (this.filterGroups[g].filters[f].key === filtersArray[w].key) {
                     filtersArray[w].selected = true;
+                    found = true;
                     break;
                   }
+                }
+                if (!found) {
+                  filtersArray.push({
+                    key: this.filterGroups[g].filters[f].key,
+                    doc_count: 0,
+                    selected: true
+                  });
                 }
               }
             }
@@ -676,6 +686,9 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
               }
             }
           }
+
+          // Ensure that all active filters are still selected
+          this.selectFiltersFromActiveFilters(this.activeFilters);
 
           // The reference of date histogram filter arrays needs to be changed in order
           // for change detection to be triggered in the <date-histogram> component
@@ -858,11 +871,13 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
   }
 
   scrollToTop() {
-    const searchBarElem = this.elementRef.nativeElement.querySelector('.search-container') as HTMLElement;
-    if (searchBarElem) {
-      const topMenuElem = this.elementRef.nativeElement.querySelector('top-menu') as HTMLElement;
-      if (topMenuElem) {
-        this.content.scrollByPoint(0, searchBarElem.getBoundingClientRect().top - topMenuElem.offsetHeight, 500);
+    if (isBrowser()) {
+      const searchBarElem: HTMLElement | null = this.elementRef.nativeElement.querySelector('.search-container');
+      if (searchBarElem) {
+        const topMenuElem: HTMLElement | null = document.querySelector('top-menu');
+        if (topMenuElem) {
+          this.content.scrollByPoint(0, searchBarElem.getBoundingClientRect().top - topMenuElem.offsetHeight, 500);
+        }
       }
     }
   }
@@ -871,9 +886,9 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
     if (isBrowser()) {
       const elem: HTMLElement | null = this.elementRef.nativeElement.querySelector('.search-result-column');
       const elemRect = elem?.getBoundingClientRect();
-      this.searchResultsColumnHeight = elemRect ? elemRect.bottom - elemRect.top + 'px' : null;
+      this.searchResultsColumnMinHeight = elemRect ? elemRect.bottom - elemRect.top + 'px' : null;
     } else {
-      this.searchResultsColumnHeight = null;
+      this.searchResultsColumnMinHeight = null;
     }
   }
 

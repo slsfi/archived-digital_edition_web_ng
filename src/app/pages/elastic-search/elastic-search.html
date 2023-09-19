@@ -43,7 +43,7 @@
 
     <div class="filter-and-hits-area-row">
       <!-- Active filters and search results column -->
-      <div class="search-result-column" [style.min-height]="loading && !loadingMoreHits ? searchResultsColumnHeight : null">
+      <div class="search-result-column" [style.min-height]="loading && !loadingMoreHits ? searchResultsColumnMinHeight : null">
 
         <!-- Active filters -->
         <div class="active-filters-row" *ngIf="this.activeFilters.length || rangeYears">
@@ -299,7 +299,7 @@
                           labelPlacement="end"
                           [(ngModel)]="filter.selected"
                           (ionChange)="toggleFilter(filterGroup.name, filter)"
-                          [disabled]="(filter.doc_count < 1) || disableFilterCheckboxes"
+                          [disabled]="disableFilterCheckboxes || (filter.doc_count < 1 && !filter.selected)"
                     >
                       <span [ngStyle]="{'white-space': 'normal'}">
                         <span>
