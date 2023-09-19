@@ -26,11 +26,7 @@ export const config: Config = {
     enableRouterLoadingBar: true
   },
   collections: {
-    order: [
-      [216, 219, 220, 218, 210, 208, 207, 214, 203, 213,
-        202, 199, 221, 206, 201, 211, 200, 205, 215, 217,
-        204, 212, 209]
-    ],
+    enableMathJax: false,
     firstReadItem: {
       216: "216_20280", 219: "219_19443", 220: "220_20122",
       218: "218_20230_ch2", 210: "210_20548_ch1", 208: "208_18466_ch4",
@@ -40,7 +36,13 @@ export const config: Config = {
       211: "211_20128", 200: "200_19870", 205: "205_20227_ch1",
       215: "215_20568", 217: "217_20559_ch1", 204: "204_20322",
       212: "212_20323", 209: "209_20479"
-    }
+    },
+    highlightSearchMatches: true,
+    order: [
+      [216, 219, 220, 218, 210, 208, 207, 214, 203, 213,
+        202, 199, 221, 206, 201, 211, 200, 205, 215, 217,
+        204, 212, 209]
+    ]
   },
   ebooks: [
     {
@@ -92,6 +94,85 @@ export const config: Config = {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
+    },
+    elasticSearch: {
+      enableFilters: true,
+      enableSortOptions: true,
+      filterGroupsOpenByDefault: ["Years", "Type", "Genre", "Collection"],
+      hitsPerPage: 15,
+      indices: ["topelius"],
+      openEstWithComTypeHit: false,
+      textHighlightFragmentSize: 150,
+      textHighlightType: "fvh",
+      textTitleHighlightType: "fvh",
+      typeFilterGroupOptions: ["est", "com", "var", "inl", "tit", "fore"],
+      fixedFilters: [
+        {
+          terms: {
+            deleted: ["0"]
+          }
+        },
+        {
+          terms: {
+            published: ["2"]
+          }
+        }
+      ],
+      additionalSourceFields: [],
+      aggregations: {
+        Years: {
+          date_histogram: {
+            field: "orig_date_sort",
+            calendar_interval: "year",
+            format: "yyyy"
+          }
+        },
+        Type: {
+          terms: {
+            field: "text_type",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        Genre: {
+          terms: {
+            field: "publication_data.genre.keyword",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        Collection: {
+          terms: {
+            field: "publication_data.collection_name.keyword",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        LetterSenderName: {
+          terms: {
+            field: "sender_subject_name.keyword",
+            size: 100
+          }
+        },
+        LetterReceiverName: {
+          terms: {
+            field: "receiver_subject_name.keyword",
+            size: 100
+          }
+        },
+        LetterSenderLocation: {
+          terms: {
+            field: "sender_location_name.keyword",
+            size: 50
+          }
+        },
+        LetterReceiverLocation: {
+          terms: {
+            field: "receiver_location_name.keyword",
+            size: 50
+          }
+        }
+      }
     },
     foreword: {
       showURNButton: true,
@@ -304,8 +385,7 @@ export const config: Config = {
       WorkSearch: false,
       Books: false,
       EPUB: true
-    },
-    highlightedSearchMatches: true
+    }
   },
   defaults: {
     ReadModeView: ["established", "comments", "facsimiles"]
@@ -316,88 +396,7 @@ export const config: Config = {
   HasCover: true,
   HasTitle: true,
   HasForeword: true,
-  HasIntro: true,
-  ElasticSearch: {
-    show: {
-      sortOptions: true,
-      facets: true
-    },
-    textTitleHighlightType: "fvh",
-    textHighlightType: "fvh",
-    groupOpenByDefault: {
-      type: true,
-      genre: true,
-      collection: true
-    },
-    indices: ["topelius"],
-    fixedFilters: [
-      {
-        terms: {
-          deleted: ["0"]
-        }
-      },
-      {
-        terms: {
-          published: ["2"]
-        }
-      }
-    ],
-    types: ["est", "com", "var", "inl", "tit", "fore"],
-    hitsPerPage: 15,
-    source: [],
-    aggregations: {
-      Years: {
-        date_histogram: {
-          field: "orig_date_sort",
-          calendar_interval: "year",
-          format: "yyyy"
-        }
-      },
-      Type: {
-        terms: {
-          field: "text_type",
-          size: 40
-        }
-      },
-      Genre: {
-        terms: {
-          field: "publication_data.genre.keyword",
-          size: 40
-        }
-      },
-      Collection: {
-        terms: {
-          field: "publication_data.collection_name.keyword",
-          size: 40
-        }
-      },
-      LetterSenderName: {
-        terms: {
-          field: "sender_subject_name.keyword",
-          size: 100
-        }
-      },
-      LetterReceiverName: {
-        terms: {
-          field: "receiver_subject_name.keyword",
-          size: 100
-        }
-      },
-      LetterSenderLocation: {
-        terms: {
-          field: "sender_location_name.keyword",
-          size: 50
-        }
-      },
-      LetterReceiverLocation: {
-        terms: {
-          field: "receiver_location_name.keyword",
-          size: 50
-        }
-      }
-    },
-    suggestions: {}
-  }
+  HasIntro: true
 }
 
 /**
@@ -421,25 +420,6 @@ export const config_soderholm: Config = {
     },
   },
   collections: {
-    order: [
-      [378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 
-        393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 
-        408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 
-        423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 
-        438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 
-        453, 454, 455, 456, 540, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466,
-        467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 1084, 480,
-        481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495,
-        496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 511,
-        512, 510, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525,
-        526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536],  
-      [2559], 
-      [1646, 1699, 1701, 1747, 1702, 1703, 1704, 1726, 1705, 1714, 1706, 1707,
-        1715, 1721, 1716, 1717, 1718, 1708, 1722, 1749, 1742, 1719, 1748, 1731,
-        1746, 1745, 1720, 1743, 1752, 1711, 1710, 1712, 1727, 1713, 1709, 1700,
-        1751, 1739, 1738, 1741, 1723, 1724, 1725, 1737, 1740, 1750, 1729, 1732,
-        1733, 1734, 1735, 1736]
-    ],
     firstReadItem: {
       1084: "1084_77105", 1699: "1699_77946", 1700: "1700_78162",
       1701: "1701_78326", 1702: "1702_78404", 1703: "1703_78486",
@@ -512,7 +492,27 @@ export const config_soderholm: Config = {
       529: "529_27350", 530: "530_27354", 531: "531_27356",
       532: "532_27358", 533: "533_26046", 534: "534_26048",
       535: "535_27366", 536: "536_27368", 540: "540_37812"
-    }
+    },
+    highlightSearchMatches: true,
+    order: [
+      [378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 
+        393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 
+        408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 
+        423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 
+        438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 
+        453, 454, 455, 456, 540, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466,
+        467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 1084, 480,
+        481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495,
+        496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 511,
+        512, 510, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525,
+        526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536],  
+      [2559], 
+      [1646, 1699, 1701, 1747, 1702, 1703, 1704, 1726, 1705, 1714, 1706, 1707,
+        1715, 1721, 1716, 1717, 1718, 1708, 1722, 1749, 1742, 1719, 1748, 1731,
+        1746, 1745, 1720, 1743, 1752, 1711, 1710, 1712, 1727, 1713, 1709, 1700,
+        1751, 1739, 1738, 1741, 1723, 1724, 1725, 1737, 1740, 1750, 1729, 1732,
+        1733, 1734, 1735, 1736]
+    ]
   },
   ebooks: [
     {
@@ -532,6 +532,45 @@ export const config_soderholm: Config = {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01"
+    },
+    elasticSearch: {
+      enableFilters: true,
+      enableSortOptions: false,
+      filterGroupsOpenByDefault: ["Type", "Collection"],
+      hitsPerPage: 15,
+      indices: ["soderholm"],
+      openEstWithComTypeHit: false,
+      textHighlightType: "fvh",
+      textTitleHighlightType: "fvh",
+      typeFilterGroupOptions: ["ms"],
+      fixedFilters: [
+        {
+          terms: {
+            deleted: ["0"]
+          }
+        },
+        {
+          terms: {
+            published: ["2"]
+          }
+        }
+      ],
+      additionalSourceFields: [],
+      aggregations: {
+        Type: {
+          terms: {
+            field: "text_type",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        Collection: {
+          terms: {
+            field: "publication_data.collection_name.keyword",
+            size: 40
+          }
+        }
+      }
     },
     foreword: {
       showURNButton: true,
@@ -923,8 +962,7 @@ export const config_soderholm: Config = {
       WorkSearch: false,
       Books: false,
       EPUB: true
-    },
-    highlightedSearchMatches: true
+    }
   },
   defaults: {
     ReadModeView: ["facsimiles", "manuscripts"]
@@ -935,51 +973,7 @@ export const config_soderholm: Config = {
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
-  HasIntro: false,
-  ElasticSearch: {
-    show: {
-      sortOptions: false,
-      facets: true
-    },
-    textTitleHighlightType: "fvh",
-    textHighlightType: "fvh",
-    groupOpenByDefault: {
-      type: true,
-      genre: false,
-      collection: true
-    },
-    indices: ["soderholm"],
-    fixedFilters: [
-      {
-        terms: {
-          deleted: ["0"]
-        }
-      },
-      {
-        terms: {
-          published: ["2"]
-        }
-      }
-    ],
-    types: ["ms"],
-    hitsPerPage: 15,
-    source: [],
-    aggregations: {
-      Type: {
-        terms: {
-          field: "text_type",
-          size: 40
-        }
-      },
-      Collection: {
-        terms: {
-          field: "publication_data.collection_name.keyword",
-          size: 40
-        }
-      }
-    },
-    suggestions: {}
-  }
+  HasIntro: false
 }
 
 /**
@@ -1003,18 +997,59 @@ export const config_vonWright: Config = {
     },
   },
   collections: {
-    order: [
-      [146, 225]
-    ],
+    enableMathJax: true,
     firstReadItem: {
       146: "", 225: ""
     },
-    enableMathJax: true
+    highlightSearchMatches: true,
+    order: [
+      [146, 225]
+    ]
   },
   page: {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
+    },
+    elasticSearch: {
+      enableFilters: true,
+      enableSortOptions: false,
+      filterGroupsOpenByDefault: ["Type", "Collection"],
+      hitsPerPage: 15,
+      indices: ["vonwright"],
+      openEstWithComTypeHit: false,
+      textHighlightType: "fvh",
+      textTitleHighlightType: "fvh",
+      typeFilterGroupOptions: ["est", "com", "inl", "tit"],
+      fixedFilters: [
+        {
+          terms: {
+            deleted: ["0"]
+          }
+        },
+        {
+          terms: {
+            published: ["2"]
+          }
+        }
+      ],
+      additionalSourceFields: [],
+      aggregations: {
+        Type: {
+          terms: {
+            field: "text_type",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        Collection: {
+          terms: {
+            field: "publication_data.collection_name.keyword",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        }
+      }
     },
     foreword: {
       showURNButton: true,
@@ -1195,8 +1230,7 @@ export const config_vonWright: Config = {
       WorkSearch: true,
       Books: false,
       EPUB: false
-    },
-    highlightedSearchMatches: true
+    }
   },
   defaults: {
     ReadModeView: ["established", "comments"]
@@ -1207,55 +1241,7 @@ export const config_vonWright: Config = {
   HasCover: true,
   HasTitle: true,
   HasForeword: false,
-  HasIntro: true,
-  ElasticSearch: {
-    show: {
-      sortOptions: false,
-      facets: true
-    },
-    textTitleHighlightType: "fvh",
-    textHighlightType: "fvh",
-    groupOpenByDefault: {
-      type: true,
-      collection: true
-    },
-    indices: [
-      "vonwright"
-    ],
-    fixedFilters: [
-      {
-        terms: {
-          deleted: [
-            "0"
-          ]
-        }
-      },
-      {
-        terms: {
-          published: [
-            "2"
-          ]
-        }
-      }
-    ],
-    hitsPerPage: 15,
-    source: [],
-    aggregations: {
-      Type: {
-        terms: {
-          field: "text_type",
-          size: 40
-        }
-      },
-      Collection: {
-        terms: {
-          field: "publication_data.collection_name.keyword",
-          size: 40
-        }
-      }
-    },
-    suggestions: {}
-  }
+  HasIntro: true
 }
 
 /**
@@ -1281,11 +1267,12 @@ export const config_granqvist: Config = {
     },
   },
   collections: {
+    firstReadItem: {
+    },
+    highlightSearchMatches: true,
     order: [
       [537, 538, 539, 29, 147, 148, 149, 30, 31]
     ],
-    firstReadItem: {
-    }
   },
   ebooks: [
     {
@@ -1373,6 +1360,46 @@ export const config_granqvist: Config = {
     about: {
       markdownFolderNumber: "03",
       initialPageNode: "01-01"
+    },
+    elasticSearch: {
+      enableFilters: true,
+      enableSortOptions: false,
+      filterGroupsOpenByDefault: ["Type", "Collection"],
+      hitsPerPage: 15,
+      indices: ["granqvist"],
+      openEstWithComTypeHit: false,
+      textHighlightType: "fvh",
+      textTitleHighlightType: "fvh",
+      typeFilterGroupOptions: ["tit"],
+      fixedFilters: [
+        {
+          terms: {
+            deleted: ["0"]
+          }
+        },
+        {
+          terms: {
+            published: ["2"]
+          }
+        }
+      ],
+      additionalSourceFields: [],
+      aggregations: {
+        Type: {
+          terms: {
+            field: "text_type",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        },
+        Collection: {
+          terms: {
+            field: "publication_data.collection_name.keyword",
+            size: 40,
+            order: {_key: "asc"}
+          }
+        }
+      }
     },
     foreword: {
       showURNButton: true,
@@ -1565,8 +1592,7 @@ export const config_granqvist: Config = {
       WorkSearch: false,
       Books: true,
       EPUB: false
-    },
-    highlightedSearchMatches: true
+    }
   },
   defaults: {
     ReadModeView: ["facsimiles"]
@@ -1577,55 +1603,7 @@ export const config_granqvist: Config = {
   HasCover: false,
   HasTitle: true,
   HasForeword: false,
-  HasIntro: false,
-  ElasticSearch: {
-    show: {
-      sortOptions: false,
-      facets: true
-    },
-    textTitleHighlightType: "fvh",
-    textHighlightType: "fvh",
-    groupOpenByDefault: {
-      type: true,
-      collection: true
-    },
-    indices: [
-      "granqvist"
-    ],
-    fixedFilters: [
-      {
-        terms: {
-          deleted: [
-            "0"
-          ]
-        }
-      },
-      {
-        terms: {
-          published: [
-            "2"
-          ]
-        }
-      }
-    ],
-    hitsPerPage: 15,
-    source: [],
-    aggregations: {
-      Type: {
-        terms: {
-          field: "text_type",
-          size: 40
-        }
-      },
-      Collection: {
-        terms: {
-          field: "publication_data.collection_name.keyword",
-          size: 40
-        }
-      }
-    },
-    suggestions: {}
-  }
+  HasIntro: false
 }
 
 /**
@@ -1652,12 +1630,12 @@ export const config_mechelin: Config = {
     }
   },
   collections: {
-    order: [
-      [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    ],
     firstReadItem: {
       1: "1_1199"
-    }
+    },
+    order: [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    ]
   },
   page: {
     about: {

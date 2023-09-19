@@ -33,9 +33,10 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   infoOverlayWidth: string | null;
   infoOverlayText: SafeHtml = '';
   infoOverlayTitle: string = '';
-  intervalTimerId: ReturnType<typeof setInterval> | undefined;
+  intervalTimerId: number = 0;
   pos: string | null;
   viewOptionsTogglesIntro: any = {};
+  searchMatches: string[] = [];
   showTextDownloadButton: boolean = false;
   showURNButton: boolean;
   showViewOptionsButton: boolean = true;
@@ -94,7 +95,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       bottom: 0 + 'px',
       left: -1500 + 'px'
     };
-    this.intervalTimerId = undefined;
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.viewOptionsTogglesIntro = config.settings?.introToggles ?? undefined;
@@ -174,6 +174,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         this.pos = null;
       }
 
+
+      if (routeParams['q'] !== undefined) {
+        this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(routeParams['q']);
+      }
+
       // If there is a collection id in the route params and it's
       // not the same as already stored in the component, load
       // content. If it's the same collection id, try to scroll
@@ -215,10 +220,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           // Fix paths for images and file extensions for icons
           let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
 
+          // TODO: this manipulation of the introductions TOC should be made using htmlparser2
           // Find the introduction's table of contents in the text
           const pattern = /<div data-id="content">(.*?)<\/div>/;
           const matches = textContent.match(pattern);
-          if ( matches && matches.length > 0 ) {
+          if (matches && matches.length > 0) {
             // The introduction's table of contents was found,
             // copy it to this.textMenu and remove it from this.text
             this.textMenu = this.sanitizer.bypassSecurityTrustHtml(matches[1]);
@@ -232,9 +238,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             this.hasSeparateIntroToc = false;
           }
 
+          textContent = this.commonFunctions.insertSearchMatchTags(textContent, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(textContent);
-          // Try to scroll to a position in the text
-          this.scrollToPos();
+          // Try to scroll to a position in the text or first search match
+          if (this.pos) {
+            this.scrollToPos();
+          } else if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+          }
         } else {
           this.textLoading = false;
           this.text = $localize`:@@Read.Introduction.NoIntroduction:Inledningen kunde inte laddas.`;
@@ -259,10 +270,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       const that = this;
       this.ngZone.runOutsideAngular(() => {
         let iterationsLeft = 10;
-        if (this.intervalTimerId !== undefined) {
-          clearInterval(this.intervalTimerId);
-        }
-        this.intervalTimerId = setInterval(function() {
+        clearInterval(this.intervalTimerId);
+        this.intervalTimerId = window.setInterval(function() {
           if (iterationsLeft < 1) {
             clearInterval(that.intervalTimerId);
           } else {

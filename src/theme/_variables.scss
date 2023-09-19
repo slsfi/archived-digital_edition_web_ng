@@ -65,11 +65,11 @@
   // Home-page
   --page-home-portrait-mode-background-color-below-image:   transparent;
 
-  // Introduction-page
+  // Collection introduction page
   --page-introduction-separate-toc-background-color:        var(--secondary-color);
   --page-introduction-separate-toc-text-color:              var(--dark-color);
 
-  // Read-page
+  // Collection text page
   --page-text-columns-header-background-color:              var(--secondary-color);
   --page-text-columns-background-color:                   #fafafa;
   --page-text-add-column-text-color:                        var(--dark-color);
@@ -91,8 +91,7 @@
   --facsimile-column-highlight-color:                       var(--fab-button-primary-background-color);
 
   // Elastic search
-  --elastic-search-facet-background-color:                    transparent;
-  --elastic-search-facet-border-color:                      #ccc;
+  --elastic-search-filter-border-color:                     #ccc;
   --elastic-search-hititem-border-color:                    #ccc;
   --elastic-search-hititem-hover-background-color:          #fff;
   --elastic-search-hititem-hover-border-color:                var(--primary-color);
@@ -101,14 +100,6 @@
   --elastic-search-date-histogram-year-bar-color:             var(--primary-color);
   --elastic-search-date-histogram-year-hover-color:           var(--secondary-color);
   --elastic-search-date-histogram-year-in-range-color:      #751e22;
-
-  // Simple search
-  --simple-search-search-match-highlight-background-color:      var(--primary-color);
-  --simple-search-search-match-highlight-text-color:            var(--text-color-on-primary-color-background);
-  --simple-search-hititem-hover-background-color-rgb:           var(--primary-color-rgb);
-  --simple-search-hititem-hover-background-color-alpha:         0.2;
-  --simple-search-hititem-background-color:                     var(--main-background-color);
-  --simple-search-selected-search-suggestion-background-color:  var(--secondary-color);
 
   // Media-collections
   --media-collection-card-content-background-color:     var(--secondary-color);
@@ -121,11 +112,6 @@
   --index-list-item-border-color:               #ccc;
   --index-list-heading-background-color:        #e0e0e0;
   --index-list-heading-border-color:            #979797;
-
-  // Tutorial
-  --tutorial-tooltip-background-color:          #4F7B8C;
-  --tutorial-tooltip-text-color:                #fff;
-  --tutorial-tooltip-font-size:                   1.0625rem;
 
   // Info overlay
 	--infoOverlay-background-color:               #333;

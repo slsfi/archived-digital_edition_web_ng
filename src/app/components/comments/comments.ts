@@ -18,9 +18,10 @@ import { isBrowser } from 'src/standalone/utility-functions';
   imports: [CommonModule, IonicModule]
 })
 export class CommentsComponent implements OnInit, OnDestroy {
-  @Input() searchMatches: Array<string> = [];
+  @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
 
+  intervalTimerId: number = 0;
   letter: any = undefined;
   manuscript: any = undefined;
   receiver: string = '';
@@ -59,6 +60,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
         if (text) {
           text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+          if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+          }
         } else {
           this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
         }

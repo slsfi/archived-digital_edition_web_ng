@@ -129,6 +129,9 @@ export class CommentService {
    * @returns String.
    */
   private extractSingleComment(elementID: string, comments: string): string {
+    // TODO: document.createRange() is safe here because this function is only
+    // called in the browser, however, this could be refactored to use the
+    // SSR compatible htmlparser2 instead.
     const selector = '.' + elementID;
     const range = document.createRange();
     const docFrags = range.createContextualFragment(comments);

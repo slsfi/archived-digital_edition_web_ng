@@ -6,14 +6,12 @@ import { IonicModule } from '@ionic/angular';
 
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListChildrenComponent } from './digital-edition-list-children/digital-edition-list-children';
-import { DateHistogram } from './date-histogram/date-histogram';
 import { MainSideMenu } from "./main-side-menu/main-side-menu";
 import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu";
 
 @NgModule({
 	declarations: [
 		DigitalEditionListChildrenComponent,
-		DateHistogram,
 		MainSideMenu,
     	CollectionSideMenu
 	],
@@ -26,7 +24,6 @@ import { CollectionSideMenu } from "./collection-side-menu/collection-side-menu"
 	],
   exports: [
     DigitalEditionListChildrenComponent,
-    DateHistogram,
     MainSideMenu,
     CollectionSideMenu
   ]

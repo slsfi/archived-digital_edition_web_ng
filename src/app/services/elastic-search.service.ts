@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, TimeRange } from 'src/app/models/elastic-search.model';
 import { config } from "src/assets/config/config";
 
 
@@ -16,31 +17,25 @@ export class ElasticSearchService {
   private machineName: string;
   private source = [] as any;
   private aggregations: any = {};
-  private suggestions: SuggestionsConfig = {};
   private fixedFilters?: object[];
   private textTypes = [];
 
   constructor(
     private http: HttpClient
   ) {
-    // Should fail if config is missing.
-    try {
-      this.apiEndpoint = config.app?.apiEndpoint ?? '';
-      this.machineName = config.app?.machineName ?? '';
-      this.indices = config.ElasticSearch?.indices ?? undefined;
-      this.aggregations = config.ElasticSearch?.aggregations ?? undefined;
-    } catch (e: any) {
-      console.error(
-        'Failed to load Elastic Search Service. Configuration error.',
-        e.message
-      );
-      throw e;
-    }
+    this.apiEndpoint = config.app?.apiEndpoint ?? '';
+    this.machineName = config.app?.machineName ?? '';
+    this.indices = config.page?.elasticSearch?.indices ?? undefined;
+    this.aggregations = config.page?.elasticSearch?.aggregations ?? undefined;
+    this.fixedFilters = config.page?.elasticSearch?.fixedFilters ?? [];
+    this.textTypes = config.page?.elasticSearch?.typeFilterGroupOptions ?? [];
+
     // Add fields that should always be returned in hits
     this.source = [
       'text_type',
       'text_title',
       'text_data',
+      'type_id',
       'doc_title',
       'collection_id',
       'publication_id',
@@ -51,28 +46,14 @@ export class ElasticSearchService {
     ];
 
     // Add additional fields that should be returned in hits from config file
-    try {
-      const configSourceFields = config.ElasticSearch?.source ?? undefined;
-      if (configSourceFields !== undefined && configSourceFields.length > 0) {
-        // Append additional fields to this.source if not already present
-        for (let i = 0; i < configSourceFields.length; i++) {
-          if (!this.source.includes(configSourceFields[i])) {
-            this.source.push(configSourceFields[i]);
-          }
+    const configSourceFields = config.page?.elasticSearch?.additionalSourceFields ?? undefined;
+    if (configSourceFields?.length > 0) {
+      // Append additional fields to this.source if not already present
+      for (let i = 0; i < configSourceFields.length; i++) {
+        if (!this.source.includes(configSourceFields[i])) {
+          this.source.push(configSourceFields[i]);
         }
       }
-    } catch (e) {}
-
-    // Should not fail if config is missing.
-    try {
-      this.fixedFilters = config.ElasticSearch?.fixedFilters ?? undefined;
-      this.textTypes = config.ElasticSearch?.types ?? undefined;
-      this.suggestions = config.ElasticSearch?.suggestions ?? undefined;
-    } catch (e: any) {
-      console.error(
-        'Failed to load Elastic Search Service. Configuration error.',
-        e.message
-      );
     }
   }
 
@@ -109,11 +90,13 @@ export class ElasticSearchService {
   /**
    * Returns facet suggestions.
    */
+  /*
   executeSuggestionsQuery(options: SuggestionsQuery): Observable<any> {
     const payload = this.generateSuggestionsQueryPayload(options);
 
     return this.http.post(this.getSearchUrl(), payload);
   }
+  */
 
   private generateSearchQueryPayload({
     queries,
@@ -206,7 +189,7 @@ export class ElasticSearchService {
       });
     }
 
-    if (facetGroups) {
+    if (facetGroups.length) {
       this.injectFacetsToPayload(payload, facetGroups);
     }
 
@@ -295,6 +278,7 @@ export class ElasticSearchService {
     return payload;
   }
 
+  /*
   private generateSuggestionsQueryPayload({ query }: SuggestionsQuery): object {
     const payload: any = {
       from: 0,
@@ -345,24 +329,23 @@ export class ElasticSearchService {
 
     return payload;
   }
+  */
 
-  private injectFacetsToPayload(payload: any, facetGroups: FacetGroups) {
-    Object.entries(facetGroups).forEach(
-      ([facetGroupKey, facets]: [string, Facets]) => {
-        const terms = this.filterSelectedFacetKeys(facets);
-        if (terms.length > 0) {
-          payload.query.function_score.query.bool.filter =
-            payload.query.function_score.query.bool.filter || [];
-          if (this.aggregations && facetGroupKey) {
-            payload.query.function_score.query.bool.filter.push({
-              terms: {
-                [this.aggregations[facetGroupKey].terms.field]: terms,
-              },
-            });
-          }
+  private injectFacetsToPayload(payload: any, facetGroups: any[]) {
+    facetGroups.forEach(facetGroup => {
+      const terms = this.filterSelectedFacetKeys(facetGroup.filters);
+      if (terms.length > 0) {
+        payload.query.function_score.query.bool.filter =
+          payload.query.function_score.query.bool.filter || [];
+        if (this.aggregations && facetGroup.name) {
+          payload.query.function_score.query.bool.filter.push({
+            terms: {
+              [this.aggregations[facetGroup.name].terms.field]: terms,
+            },
+          });
         }
       }
-    );
+    });
   }
 
   private filterSelectedFacetKeys(facets: Facets): string[] {
@@ -388,7 +371,7 @@ export class ElasticSearchService {
    */
   private injectFilteredAggregationsToPayload(
     payload: any,
-    facetGroups?: FacetGroups,
+    facetGroups?: any,
     range?: TimeRange
   ) {
     payload.aggs = {};
@@ -409,7 +392,7 @@ export class ElasticSearchService {
   private generateFilteredAggregation(
     aggregationKey: string,
     aggregation: any,
-    facetGroups?: FacetGroups,
+    facetGroups?: any,
     range?: TimeRange
   ) {
     const filtered = {
@@ -426,22 +409,20 @@ export class ElasticSearchService {
     };
 
     // Add term filters.
-    if (facetGroups) {
-      Object.entries(facetGroups).forEach(
-        ([groupKey, facets]: [string, Facets]) => {
-          // Don't filter itself.
-          if (aggregationKey !== groupKey) {
-            const selectedFacetKeys = this.filterSelectedFacetKeys(facets);
-            if (selectedFacetKeys.length > 0) {
-              filtered.filter.bool.filter.push({
-                terms: {
-                  [this.getAggregationField(groupKey)]: selectedFacetKeys,
-                },
-              });
-            }
+    if (facetGroups.length) {
+      facetGroups.forEach((facetGroup: any) => {
+        // Don't filter itself.
+        if (aggregationKey !== facetGroup.name) {
+          const selectedFacetKeys = this.filterSelectedFacetKeys(facetGroup.filters);
+          if (selectedFacetKeys.length > 0) {
+            filtered.filter.bool.filter.push({
+              terms: {
+                [this.getAggregationField(facetGroup.name)]: selectedFacetKeys,
+              },
+            });
           }
         }
-      );
+      });
     }
 
     // Add date range filter.

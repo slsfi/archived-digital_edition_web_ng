@@ -192,7 +192,8 @@ export class TextService {
           let text = res.content as string;
           text = this.postprocessEstablishedText(text, collectionID);
 
-          // Parse the read text html to get all illustrations in it using htmlparser2
+          // Parse the read text html to get all illustrations in it using
+          // SSR compatible htmlparser2
           const parser = new Parser({
             onopentag(name, attributes) {
               if (name === 'img' && attributes.src) {
@@ -255,8 +256,10 @@ export class TextService {
         !showReadTextIllustrations.includes(collectionId) &&
         (text.includes('est_figure_graphic') || text.includes('assets/images/verk/'))
       ) {
-        // Use SSR compatible htmlparser2 and related dom-handling modules to add
-        // class names to images and replace image file paths.
+        // Use SSR compatible htmlparser2 and related DOM-handling modules
+        // (domhandler: https://domhandler.js.org/, domutils: https://domutils.js.org/,
+        // dom-serializer: https://github.com/cheeriojs/dom-serializer)
+        // to add class names to images and replace image file paths.
         const handler = new DomHandler();
         const parser = new Parser(handler);
         parser.write(text);

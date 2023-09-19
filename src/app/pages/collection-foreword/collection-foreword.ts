@@ -1,11 +1,12 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
@@ -20,18 +21,22 @@ import { config } from 'src/assets/config/config';
 
 export class CollectionForewordPage implements OnInit {
   id: string = '';
+  intervalTimerId: number = 0;
+  searchMatches: string[] = [];
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
   text$: Observable<SafeHtml>;
 
   constructor(
-    private textService: TextService,
-    private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService,
+    private commonFunctions: CommonFunctionsService,
+    private elementRef: ElementRef,
+    private modalController: ModalController,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
-    private modalController: ModalController,
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private textService: TextService,
+    public userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.showURNButton = config.page?.foreword?.showURNButton ?? false;
@@ -39,9 +44,18 @@ export class CollectionForewordPage implements OnInit {
   }
 
   ngOnInit() {
-    this.text$ = this.route.params.pipe(
-      tap(({collectionID}) => {
+    this.text$ = combineLatest(
+      [this.route.params, this.route.queryParams]
+    ).pipe(
+      map(([params, queryParams]) => ({...params, ...queryParams})),
+      tap(({collectionID, q}) => {
         this.id = collectionID;
+        if (q) {
+          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
+          if (this.searchMatches.length) {
+            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+          }
+        }
       }),
       switchMap(({collectionID}) => {
         return this.loadForeword(collectionID, this.activeLocale);
@@ -53,10 +67,9 @@ export class CollectionForewordPage implements OnInit {
     return this.textService.getForewordPage(id, lang).pipe(
       map((res: any) => {
         if (res?.content && res?.content !== 'File not found') {
-          return this.sanitizer.bypassSecurityTrustHtml(
-            res.content.replace(/images\//g, 'assets/images/')
-              .replace(/\.png/g, '.svg')
-          );
+          let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          return this.sanitizer.bypassSecurityTrustHtml(text);
         } else {
           return of(this.sanitizer.bypassSecurityTrustHtml(
             $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`

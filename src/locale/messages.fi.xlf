@@ -90,6 +90,12 @@
         <target>Toimittajan huomautus</target>
       </segment>
     </unit>
+    <unit id="DateHistogram.Clear">
+      <segment state="initial">
+        <source>Nollställ</source>
+        <target>Nollaa</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -180,10 +186,10 @@
         <target>Normalisointi</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
+    <unit id="ElasticSearch.ClearAllActiveFilters">
       <segment state="initial">
-        <source>och</source>
-        <target>ja</target>
+        <source>Ta bort alla aktiva avgränsningar</source>
+        <target>Poista kaikki aktiiviset rajaukset</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
@@ -204,12 +210,6 @@
         <target>Tekstejä, joissa hakutuloksia:</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment state="initial">
-        <source>Från</source>
-        <target>Vuodesta</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
@@ -222,13 +222,19 @@
         <target>Tapahtui virhe ladatessa hakutuloksia.</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.LoadingFilters">
+      <segment state="initial">
+        <source>Ett ögonblick, laddar sökavgränsningar ...</source>
+        <target>Pieni hetki, ladataan rajauksia ...</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.NewestFirst">
       <segment state="initial">
         <source>Nyast först</source>
         <target>Uusimmat ensin</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.NoFacetOptions">
+    <unit id="ElasticSearch.NoFilterOptions">
       <segment state="initial">
         <source>Inga sökord</source>
         <target>Ei hakusanoja</target>
@@ -246,12 +252,6 @@
         <target>Vanhimmat ensin</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OpenInNewWindow">
-      <segment state="initial">
-        <source>Länken öppnas i ett nytt fönster.</source>
-        <target>Linkki avautuu uuteen ikkunaan.</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.PageTitle">
       <segment state="initial">
         <source>Sök i utgåvan</source>
@@ -264,13 +264,13 @@
         <target>Relevanssi</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.ScrollToTop">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
       <segment state="initial">
-        <source>Till början</source>
-        <target>Palaa alkuun</target>
+        <source>Sök</source>
+        <target>Hae</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
         <target>Hae ...</target>
@@ -290,13 +290,13 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment state="initial">
-        <source>Visa mindre</source>
+        <source>Visa färre</source>
         <target>Näytä vähemmän</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment state="initial">
-        <source>Visa mera</source>
+        <source>Visa fler</source>
         <target>Näytä enemmän</target>
       </segment>
     </unit>
@@ -309,19 +309,19 @@
     <unit id="ElasticSearch.SortBy">
       <segment state="initial">
         <source>Sortera enligt</source>
-        <target>Lajittele</target>
+        <target>Lajitteluperuste</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.StartSearchInstruction">
       <segment state="initial">
-        <source>Till</source>
-        <target>Vuoteen</target>
+        <source>Börja söka genom att skriva in sökord eller välja avgränsningar.</source>
+        <target>Aloita haku kirjoittamalla hakusana tai valitsemalla rajauksia.</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Years">
+    <unit id="ElasticSearch.TimeRange">
       <segment state="initial">
-        <source>År</source>
-        <target>Vuodet</target>
+        <source>Tidsperiod</source>
+        <target>Ajanjakso</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">

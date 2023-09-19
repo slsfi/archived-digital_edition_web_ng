@@ -76,6 +76,11 @@
         <source>Utgivarens anmärkning</source>
       </segment>
     </unit>
+    <unit id="DateHistogram.Clear">
+      <segment>
+        <source>Nollställ</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment>
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -151,9 +156,9 @@
         <source>Normalisering</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
+    <unit id="ElasticSearch.ClearAllActiveFilters">
       <segment>
-        <source>och</source>
+        <source>Ta bort alla aktiva avgränsningar</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
@@ -171,11 +176,6 @@
         <source>Texter med sökträffar:</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment>
-        <source>Från</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment>
         <source>Dölj avgränsningar</source>
@@ -186,12 +186,17 @@
         <source>Ett fel har uppstått när sökträffarna skulle laddas.</source>
       </segment>
     </unit>
+    <unit id="ElasticSearch.LoadingFilters">
+      <segment>
+        <source>Ett ögonblick, laddar sökavgränsningar ...</source>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.NewestFirst">
       <segment>
         <source>Nyast först</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.NoFacetOptions">
+    <unit id="ElasticSearch.NoFilterOptions">
       <segment>
         <source>Inga sökord</source>
       </segment>
@@ -206,11 +211,6 @@
         <source>Äldst först</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OpenInNewWindow">
-      <segment>
-        <source>Länken öppnas i ett nytt fönster.</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.PageTitle">
       <segment>
         <source>Sök i utgåvan</source>
@@ -221,12 +221,12 @@
         <source>Relevans</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.ScrollToTop">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
       <segment>
-        <source>Till början</source>
+        <source>Sök</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment>
         <source>Sök ...</source>
       </segment>
@@ -243,12 +243,12 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment>
-        <source>Visa mindre</source>
+        <source>Visa färre</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment>
-        <source>Visa mera</source>
+        <source>Visa fler</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMoreHits">
@@ -261,14 +261,14 @@
         <source>Sortera enligt</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.StartSearchInstruction">
       <segment>
-        <source>Till</source>
+        <source>Börja söka genom att skriva in sökord eller välja avgränsningar.</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Years">
+    <unit id="ElasticSearch.TimeRange">
       <segment>
-        <source>År</source>
+        <source>Tidsperiod</source>
       </segment>
     </unit>
     <unit id="Epub.Contents">

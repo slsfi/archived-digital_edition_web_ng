@@ -223,23 +223,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
       (queryParams: any) => {
 
-        if (queryParams['search']) {
-          // console.log('search in queryparams:', queryParams['search']);
-          let searchMatches: Array<string> = [];
-          const parsedSearchMatches = JSON.parse(queryParams['search']);
-          if (parsedSearchMatches.length > 0) {
-            parsedSearchMatches.forEach((search_match: any) => {
-              // Remove line break characters
-              let decoded_match = search_match.replace(/\n/gm, '');
-              // Remove any script tags
-              decoded_match = decoded_match.replace(/<script.+?<\/script>/gi, '');
-              decoded_match = this.commonFunctions.encodeCharEntities(decoded_match);
-              searchMatches.push(decoded_match);
-            });
-            this.searchMatches = searchMatches;
-          } else {
-            this.searchMatches = [];
-          }
+        if (queryParams['q']) {
+          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(queryParams['q']);
         }
 
         if (queryParams['views']) {

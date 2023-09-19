@@ -1,464 +1,471 @@
-import { ChangeDetectorRef, Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IonContent, LoadingController, ModalController, NavController } from '@ionic/angular';
-import { catchError, map, Observable, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IonContent } from '@ionic/angular';
+import { catchError, map, merge, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
 import { marked } from 'marked';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TextService } from 'src/app/services/text.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
+
+import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from 'src/app/models/elastic-search.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ElasticSearchService } from 'src/app/services/elastic-search.service';
+import { MdContentService } from 'src/app/services/md-content.service';
+import { UrlService } from 'src/app/services/url.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from "src/assets/config/config";
+import { isBrowser } from 'src/standalone/utility-functions';
 
-interface SearchOptions {
-  done?: Function;
-  initialSearch?: boolean;
-}
 
-// @IonicPage({
-//   name: 'elastic-search',
-//   segment: 'elastic-search/:query',
-//   defaultHistory: ['HomePage']
-// })
 @Component({
   selector: 'page-elastic-search',
   templateUrl: 'elastic-search.html',
-  styleUrls: ['elastic-search.scss']
+  styleUrls: ['elastic-search.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ElasticSearchPage {
-  @ViewChild(IonContent) content?: IonContent;
-  @ViewChild('myInput') myInput?: any;
-
-  // Helper to loop objects
-  objectKeys = Object.keys;
-  objectValues = Object.values;
-
-  loading = false;
-  infiniteLoading = false;
-  elasticError = false;
-  queries: string[] = [''];
-  cleanQueries: string[] = [''];
-  currentQuery = '';
-  hits: any = [];
-  termData: object[] = [];
-  hitsPerPage = 10;
+export class ElasticSearchPage implements OnDestroy, OnInit {
+  @ViewChild(IonContent) content: IonContent;
+  
+  activeFilters: any[] = [];
   aggregations: object = {};
-  facetGroups: any = {};
-  selectedFacetGroups: FacetGroups = {};
-  suggestedFacetGroups: FacetGroups = {};
-
-  showAllFor = {} as any;
-  showSortOptions = true;
-  showFacets = true;
-  textTitleHighlightType = 'unified';
-  textHighlightType = 'unified';
-  textHighlightFragmentSize = 150;
-
-  disableFacetCheckboxes = false;
-  highlightSearchMatches = true;
-
-  facetsToggledInMobileMode = false;
-
-  // -1 when there a search hasn't returned anything yet.
-  total = -1;
-  from = 0;
-  sort = '';
-
-  range?: TimeRange | null;
-  groupsOpenByDefault: any;
-  // debouncedSearch = debounce(this.search, 1500); // lodash/debounce has been removed from dependencies
-  sortSelectOptions: Record<string, any> = {};
+  dateHistogramData: any = undefined;
+  disableFilterCheckboxes: boolean = true;
+  elasticError: boolean = false;
+  enableFilters: boolean = true;
+  enableSortOptions: boolean = true;
+  filterGroups: any[] = [];
+  filtersVisible: boolean = true;
+  from: number = 0;
+  hits: any = [];
+  hitsPerPage: number = 10;
+  initializing: boolean = true;
+  loading: boolean = true;
+  loadingMoreHits: boolean = false;
   mdContent$: Observable<SafeHtml>;
+  pages: number = 1;
+  query: string = ''; // variable bound to the input search field with ngModel
+  range?: TimeRange | null = undefined;
+  rangeYears?: Record<string, any> = undefined;
+  routeQueryParamsSubscription: Subscription | null = null;
+  searchDataSubscription: Subscription | null = null;
+  searchResultsColumnMinHeight: string | null = null;
+  searchTrigger$ = new Subject<boolean>();
+  showAllFor: any = {};
+  sort: string = '';
+  sortSelectOptions: Record<string, any> = {};
+  submittedQuery: string = '';
+  textHighlightFragmentSize: number = 150;
+  textHighlightType: string = 'fvh';
+  textTitleHighlightType: string = 'fvh';
+  total: number = -1;
 
   constructor(
-    private sanitizer: DomSanitizer,
-    public navCtrl: NavController,
-    public semanticDataService: SemanticDataService,
-    public modalCtrl: ModalController,
-    protected textService: TextService,
-    private mdContentService: MdContentService,
-    public loadingCtrl: LoadingController,
-    public elastic: ElasticSearchService,
-    public userSettingsService: UserSettingsService,
     private cf: ChangeDetectorRef,
-    public commonFunctions: CommonFunctionsService,
+    private commonFunctions: CommonFunctionsService,
+    private elasticService: ElasticSearchService,
+    private elementRef: ElementRef,
+    private mdContentService: MdContentService,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private router: Router,
+    private sanitizer: DomSanitizer,
+    private urlService: UrlService,
+    private userSettingsService: UserSettingsService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.hitsPerPage = config.ElasticSearch?.hitsPerPage ?? 20;
-    this.groupsOpenByDefault = config.ElasticSearch?.groupOpenByDefault ?? undefined;
-    this.showSortOptions = config.ElasticSearch?.show?.sortOptions ?? true;
-    this.showFacets = config.ElasticSearch?.show?.facets ?? true;
-    this.highlightSearchMatches = config.show?.highlightedSearchMatches ?? true;
-    this.textTitleHighlightType = config.ElasticSearch?.textTitleHighlightType ?? 'unified';
-    this.textHighlightType = config.ElasticSearch?.textHighlightType ?? 'unified';
-    this.textHighlightFragmentSize = config.ElasticSearch?.textHighlightFragmentSize ?? 150;
+    this.enableFilters = config.page?.elasticSearch?.enableFilters ?? true;
+    this.enableSortOptions = config.page?.elasticSearch?.enableSortOptions ?? true;
+    this.hitsPerPage = config.page?.elasticSearch?.hitsPerPage ?? 20;
+    this.textHighlightFragmentSize = config.page?.elasticSearch?.textHighlightFragmentSize ?? 150;
+    this.textHighlightType = config.page?.elasticSearch?.textHighlightType ?? 'fvh';
+    this.textTitleHighlightType = config.page?.elasticSearch?.textTitleHighlightType ?? 'fvh';
+
+    this.filtersVisible = this.userSettingsService.isMobile() ? false : true;
     
-    if (this.textTitleHighlightType !== 'fvh' && this.textTitleHighlightType !== 'unified' && this.textTitleHighlightType !== 'plain') {
+    if (
+      this.textTitleHighlightType !== 'fvh' &&
+      this.textTitleHighlightType !== 'unified' &&
+      this.textTitleHighlightType !== 'plain'
+    ) {
       this.textTitleHighlightType = 'unified';
     }
-    if (this.textHighlightType !== 'fvh' && this.textHighlightType !== 'unified' && this.textHighlightType !== 'plain') {
+    if (
+      this.textHighlightType !== 'fvh' &&
+      this.textHighlightType !== 'unified' &&
+      this.textHighlightType !== 'plain'
+    ) {
       this.textHighlightType = 'unified';
     }
-  }
 
-  private getParamsData(query: string) {
-    try {
-      if (query !== ':query') {
-        // Remove line break characters
-        query = query.replace(/\n/gm, '');
-        // Remove any script tags
-        query = query.replace(/<script.+?<\/script>/gi, '');
-        this.queries[0] = query;
-      }
-      this.paramsLoaded();
-    } catch (e) {
-      console.log('Problems parsing query parameters...');
-    }
-  }
-
-  ionViewDidLoad() {
-    this.route.params.subscribe(params => {
-      this.getParamsData(params['query'] || ':query')
-    });
-  }
-
-  paramsLoaded() {
-    if (this.queries[0]) {
-      this.initSearch();
-    } else {
-      this.search({initialSearch: true});
-    }
-    // Open type by default
-    setTimeout(() => {
-      const facetGroups = Object.keys(this.facetGroups);
-      facetGroups.forEach(facetGroup => {
-        const openGroup = facetGroup.toLowerCase();
-        switch (openGroup) {
-          case 'type':
-            if (this.groupsOpenByDefault.type) {
-              const facetListType = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListType.style.height = '100%';
-                const facetArrowType = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowType.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          case 'genre':
-            if (this.groupsOpenByDefault.genre) {
-              const facetListGenre = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListGenre.style.height = '100%';
-                const facetArrowGenre = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowGenre.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          case 'collection':
-            if (this.groupsOpenByDefault.collection) {
-              const facetListCollection = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-              try {
-                facetListCollection.style.height = '100%';
-                const facetArrowCollection = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-                facetArrowCollection.classList.add('open', 'rotate');
-              } catch ( e ) {
-
-              }
-            }
-            break;
-          default:
-            const facetListRest = <HTMLElement>document.querySelector('.facetList-' + facetGroup);
-            try {
-              facetListRest.style.setProperty('height', '0px');
-              const facetArrowRest = <HTMLElement>document.querySelector('#arrow-' + facetGroup);
-              facetArrowRest.classList.add('closed');
-            } catch (e) {
-            }
-            break;
-        }
-      })
-    }, 300);
-
-    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
     this.sortSelectOptions = {
-      title: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
+      header: $localize`:@@ElasticSearch.SortBy:Sortera enligt`,
       cssClass: 'custom-select-alert'
     };
   }
 
-  /*
-  open(hit) {
-    this.events.publish('searchHitOpened', hit);
-    const params = { tocItem: null, fetch: true, collection: { title: hit.source.doc_title } };
-    const path = hit.source.path;
-    const filename = path.split('/').pop();
+  ngOnInit() {
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-12-01');
 
-    // 199_18434_var_6251.xml This should preferrably be implemented via elastic data instead of path
-    const collection_id = filename.split('_').shift(); // 199
-    const var_ms_id = filename.replace('.xml', '').split('_').pop(); // 6251
+    // Set up search data stream subscriptions
+    this.subscribeToSearchDataStreams();
 
-    params['tocLinkId'] = collection_id + '_' + hit.source.publication_id;
-    params['collectionID'] = collection_id;
-    params['publicationID'] = hit.source.publication_id;
-    params['chapterID'] = 'nochapter';
+    // Get initial aggregations
+    this.getInitialAggregations().subscribe(
+      (filters: any) => {
+        // Populate initial filters with initial aggregations data
+        this.filterGroups = filters;
 
-    params['facs_id'] = 'not';
-    params['facs_nr'] = 'infinite';
-    params['song_id'] = 'nosong';
-    params['search_title'] = this.queries[0];
-    params['matches'] = this.queries;
-    params['views'] = [];
-    // : facs_id / : facs_nr / : song_id / : search_title / : urlviews
-    // not / infinite / nosong / searchtitle / established & variations & facsimiles
+        for (let g = 0; g < this.filterGroups.length; g++) {
+          if (this.filterGroups[g].name === 'Years') {
+            this.dateHistogramData = this.filterGroups[g].filters;
+            break;
+          }
+        }
 
+        this.disableFilterCheckboxes = false;
+        this.loading = false;
+        this.cf.detectChanges();
 
-    switch (hit.source.text_type) {
-      case 'est': {
-        params['urlviews'] = 'established';
-        params['views'].push({type: 'established'});
-        break;
+        // Set up URL query params subscriptions in order to trigger new searches
+        this.subscribeToQueryParams();
       }
-      case 'ms': {
-        params['urlviews'] = 'manuscripts';
-        params['views'].push({type: 'manuscripts', id: var_ms_id});
-        break;
-      }
-      case 'com': {
-        params['urlviews'] = 'comments';
-        params['views'].push({type: 'comments'});
-        break;
-      }
-      case 'var': {
-        params['urlviews'] = 'variations';
-        params['views'].push({type: 'variations', id: var_ms_id});
-        break;
-      }
-      case 'inl': {
-        params['urlviews'] = 'introduction';
-        params['views'].push({type: 'introduction', id: var_ms_id});
-        break;
-      }
-      case 'tit': {
-        params['urlviews'] = 'title';
-        params['views'].push({type: 'title', id: var_ms_id});
-        break;
-      }
-      default: {
-        params['urlviews'] = 'established';
-        params['views'].push({type: 'established'});
-         // statements;
-        break;
-      }
-    }
-    if (hit.source.text_type === 'tit') {
-      this.app.getRootNav().push('title-page', params);
-    } else if (hit.source.text_type === 'fore') {
-      this.app.getRootNav().push('foreword-page', params);
-    } else if (hit.source.text_type === 'inl') {
-      this.app.getRootNav().push('introduction', params);
-    } else {
-      params['selectedItemInAccordion'] = false;
-      this.app.getRootNav().push('read', params);
-    }
+    );
   }
-  */
 
-  /**
-   * https://stackoverflow.com/questions/46991497/how-properly-bind-an-array-with-ngmodel-in-angular-4
-   */
-  trackByIdx(index: number): number {
-    return index;
+  ngOnDestroy() {
+    this.routeQueryParamsSubscription?.unsubscribe();
+    this.searchDataSubscription?.unsubscribe();
+    this.searchTrigger$?.unsubscribe();
   }
 
   /**
-   * Triggers a new search.
+   * Subscribe to search data streams from Elasticsearch:
+   * 1. search hits
+   * 2. aggregations data
+   * Aggregations data is not fetched when we are only loading
+   * more search hits using the same search parameters. Otherwise
+   * search hits and aggregations are fetched in parallell.
+   * The switchMap on searchTrigger$ takes care that when a new
+   * search is initiated while the previous search is still
+   * processing, the previous search gets cancelled.
    */
-  initSearch() {
-    this.disableFacetCheckboxes = true;
+  private subscribeToSearchDataStreams() {
+    this.searchDataSubscription = this.searchTrigger$.pipe(
+      switchMap(() => {
+        const searchQuery$: Observable<any> = 
+              !(this.submittedQuery || this.range || this.activeFilters.length)
+              ? of({ hits: { total: { value: -1 } } })
+              : this.elasticService.executeSearchQuery({
+                  queries: [this.query],
+                  highlight: {
+                    fields: {
+                      'text_data': {
+                        number_of_fragments: 1000,
+                        fragment_size: this.textHighlightFragmentSize,
+                        type: this.textHighlightType
+                      },
+                      'text_title': {
+                        number_of_fragments: 0,
+                        type: this.textTitleHighlightType
+                      },
+                    },
+                  },
+                  from: this.from,
+                  size: (this.from < 1 && this.pages > 1) ? this.pages * this.hitsPerPage : this.hitsPerPage,
+                  facetGroups: this.filterGroups,
+                  range: this.range,
+                  sort: this.parseSortForQuery(),
+                });
+
+        if (this.from < 1) {
+          // Get aggregations only if NOT loading more hits
+          const aggregationsQuery$: Observable<any> = this.elasticService.executeAggregationQuery({
+            queries: [this.query],
+            facetGroups: this.filterGroups,
+            range: this.range,
+          });
+
+          return merge(searchQuery$, aggregationsQuery$);
+        } else {
+          return searchQuery$;
+        }
+      })
+    ).subscribe({
+      next: (data: any) => {
+        // console.log('data:', data);
+        if (data?.aggregations) {
+          this.updateFilters(data.aggregations);
+          this.disableFilterCheckboxes = false;
+          this.cf.detectChanges();
+        } else {
+          if (data?.hits === undefined) {
+            console.error('Elastic search error, no hits: ', data);
+            this.from = 0;
+            this.pages = 1;
+            this.total = 0;
+            this.elasticError = true;
+          } else if (data.hits?.total?.value > -1) {
+            this.total = data.hits.total.value;
+    
+            // Append new hits to this.hits array.
+            Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
+              type: hit._source.text_type,
+              source: hit._source,
+              highlight: hit.highlight,
+              id: hit._id
+            })));
+    
+            if (this.from < 1 && this.pages > 1) {
+              this.from = (this.pages - 1) * this.hitsPerPage;
+            }
+          }
+    
+          this.loading = false;
+          this.loadingMoreHits = false;
+          this.cf.detectChanges();
+        }
+      },
+      error: (e: any) => {
+        console.error('Elastic search error: ', e);
+        this.from = 0;
+        this.pages = 1;
+        this.total = 0;
+        this.elasticError = true;
+        this.loading = false;
+        this.loadingMoreHits = false;
+        this.disableFilterCheckboxes = false;
+        this.cf.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Subscribe to queryParams, all searches are triggered through them.
+   */
+  private subscribeToQueryParams() {
+    this.routeQueryParamsSubscription = this.route.queryParams.subscribe(
+      (queryParams: any) => {
+        let triggerSearch = false;
+        let directSearch = false;
+
+        // Text query
+        if (queryParams['query']) {
+          if (queryParams['query'] !== this.submittedQuery) {
+            this.query = queryParams['query'];
+            triggerSearch = true;
+          }
+        }
+
+        // Filters
+        if (queryParams['filters']) {
+          const parsedActiveFilters = this.urlService.parse(queryParams['filters'], true);
+          if (this.activeFiltersChanged(parsedActiveFilters)) {
+            this.selectFiltersFromActiveFilters(parsedActiveFilters);
+            this.activeFilters = parsedActiveFilters;
+            triggerSearch = true;
+          }
+        } else if (this.activeFilters.length) {
+          // Active filters should be cleared
+          this.clearAllActiveFilters();
+          triggerSearch = true;
+        }
+
+        // Time range
+        if (queryParams['from'] && queryParams['to']) {
+          let range = {
+            from: queryParams['from'],
+            to: queryParams['to']
+          };
+          if (
+            range.from !== this.rangeYears?.from ||
+            range.to !== this.rangeYears?.to
+          ) {
+            this.rangeYears = range;
+            this.range = {
+              from: new Date(range.from || '').getTime(),
+              to: new Date(`${parseInt(range.to || '') + 1}`).getTime()
+            }
+            triggerSearch = true;
+          }
+        } else if (this.range?.from && this.range?.to) {
+          this.range = null;
+          this.rangeYears = undefined;
+          triggerSearch = true;
+        }
+
+        // Sort order
+        if (queryParams['sort']) {
+          let compareOrder = queryParams['sort'];
+          if (queryParams['sort'] === 'relevance') {
+            compareOrder = '';
+          }
+          if (compareOrder !== this.sort) {
+            this.sort = compareOrder;
+            triggerSearch = true;
+          }
+        }
+
+        // Number of pages with hits
+        if (queryParams['pages']) {
+          if (Number(queryParams['pages']) !== this.pages) {
+            if (this.from < 1) {
+              this.hits = [];
+              this.from = 0;
+              this.total = -1;
+            } else {
+              this.loadingMoreHits = true;
+            }
+            this.pages = Number(queryParams['pages']) || 1;
+            directSearch = true;
+            triggerSearch = true;
+          }
+        }
+
+        // Trigger new search if the search input field has been cleared, i.e. no "query" parameter
+        if (
+          !triggerSearch &&
+          !queryParams['query'] &&
+          this.submittedQuery &&
+          !this.initializing
+        ) {
+          triggerSearch = true;
+        }
+
+        this.initializing = false;
+
+        // Determine if a new search should be initialized
+        if (triggerSearch) {
+          if (directSearch) {
+            this.search();
+          } else {
+            this.resetAndSearch();
+          }
+        }
+      }
+    );
+  }
+
+  /**
+   * Trigger a new, clean search.
+   */
+  private resetAndSearch() {
+    this.disableFilterCheckboxes = true;
     this.reset();
-    this.loading = true;
     this.search();
-    this.cf.detectChanges();
-  }
-
-  clearSearch() {
-    for (let i = 0; i < this.queries.length; i++) {
-      this.queries[i] = '';
-    }
-    this.cf.detectChanges();
-    this.initSearch();
   }
 
   /**
-   * Triggers a new search and clears suggested facets. DEPRECATED
+   * Trigger an immediate search with current parameters. Called directly only
+   * to load more search results.
    */
-  /*
-  onQueryChange() {
-    // this.autoExpandSearchfields();
-    this.reset();
+  private search() {
+    this.setSearchColumnMinHeight();
+    this.elasticError = false;
     this.loading = true;
-    this.debouncedSearch();
     this.cf.detectChanges();
-  }
-  */
+    this.submittedQuery = this.query;
+    this.searchTrigger$.next(true);
+  };
 
   /**
-   * Triggers a new search with selected facets.
+   * Reset search results.
    */
-  onFacetsChanged() {
-    this.disableFacetCheckboxes = true;
-    this.cf.detectChanges();
-    this.reset();
-    this.loading = true;
-    this.search();
-  }
-
-  /**
-   * Triggers a new search with selected years.
-   */
-  onRangeChange(from: number, to: number) {
-    if (from && to) {
-      // Certain date range
-      this.range = {from, to};
-      // console.log('year range: ', this.range);
-
-      this.disableFacetCheckboxes = true;
-      this.cf.detectChanges();
-      this.reset();
-      this.search();
-    } else if (!from && !to) {
-      // All time
-      this.range = null;
-      this.disableFacetCheckboxes = true;
-      this.cf.detectChanges();
-      this.reset();
-      this.search();
-    } else {
-      // Only one year selected, so do nothing
-      this.range = null
-    }
-  }
-
-  /**
-   * Sorting changed so trigger new query.
-   */
-  onSortByChanged() {
-    this.disableFacetCheckboxes = true;
-    this.reset();
-    this.search();
-  }
-
-  /**
-   * Resets search results.
-   */
-  reset() {
+  private reset() {
     this.hits = [];
     this.from = 0;
     this.total = -1;
-    this.suggestedFacetGroups = {};
+    this.pages = 1;
+  }
+
+  private updateURLQueryParameters(params: any) {
+    if (!params.pages) {
+      params.pages = null;
+    }
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: params,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      }
+    );
+  }
+
+  submitSearchQuery() {
+    this.updateURLQueryParameters({ query: this.query || null });
+  }
+
+  clearSearchQuery() {
+    this.query = '';
+    this.updateURLQueryParameters({ query: null });
+  }
+
+  clearAllActiveFiltersAndTimeRange() {
+    this.updateURLQueryParameters({ filters: null, from: null, to: null });
   }
 
   /**
-   * Immediately execute a search.
-   * Use debouncedSearch to wait for additional key presses when use types.
+   * Trigger a new search with selected years.
    */
-  private search({ done, initialSearch }: SearchOptions = {}) {
-    // console.log(`search from ${this.from} to ${this.from + this.hitsPerPage}`);
-
-    this.currentQuery = this.queries[0];
-    this.elasticError = false;
-    this.loading = true;
-
-    // Fetch hits
-    this.elastic.executeSearchQuery({
-      queries: this.queries,
-      highlight: {
-        fields: {
-          'text_data': { number_of_fragments: 1000, fragment_size: this.textHighlightFragmentSize, type: this.textHighlightType },
-          'text_title': { number_of_fragments: 0, type: this.textTitleHighlightType },
-        },
-      },
-      from: this.from,
-      size: initialSearch ? 0 : this.hitsPerPage,
-      facetGroups: this.facetGroups,
-      range: this.range,
-      sort: this.parseSortForQuery(),
-    })
-    .subscribe((data: any) => {
-      if (data.hits === undefined) {
-        console.error('Elastic search error, no hits: ', data);
-        this.total = 0;
-        this.elasticError = true;
-      } else {
-        this.total = data.hits.total.value;
-        // console.log('hits: ', data.hits);
-
-        // Append new hits to this.hits array.
-        Array.prototype.push.apply(this.hits, data.hits.hits.map((hit: any) => ({
-          type: hit._source.text_type,
-          source: hit._source,
-          highlight: hit.highlight,
-          id: hit._id
-        })));
-
-        /*
-        this.cleanQueries = [];
-        if (this.queries.length > 0 && this.queries[0] !== undefined && this.queries[0].length > 0 ) {
-          this.queries.forEach(term => {
-            this.cleanQueries.push(term.toLowerCase().replace(/[^a-zA-ZåäöÅÄÖ[0-9]+/g, ''));
-          });
-          for (const item in data.hits.hits) {
-            this.elastic.executeTermQuery(this.cleanQueries, [data.hits.hits[item]['_id']])
-            .subscribe((termData: any) => {
-              this.termData = termData;
-              const elementsIndex = this.hits.findIndex(element => element['id'] === data.hits.hits[item]['_id'] );
-              this.hits[elementsIndex] = {...this.hits[elementsIndex], count: termData};
-            })
-          }
-        }
-        */
-      }
-      this.loading = false;
-      this.disableFacetCheckboxes = false;
-
-      if (done) {
-        done();
-      }
-    });
-
-    // Fetch aggregation data for facets.
-    this.elastic.executeAggregationQuery({
-      queries: this.queries,
-      facetGroups: this.facetGroups,
-      range: this.range,
-    }).subscribe({
-      next: data => {
-        // console.log('aggregation data', data);
-        this.populateFacets(data.aggregations);
-      },
-      error: e => { console.error('Error fetching aggregations', e); }
-    });
-
-    // Fetch suggestions
-    /*
-    // TODO: Currently only works with the first search field.
-    if (this.queries[0] && this.queries[0].length > 3) {
-      this.elastic.executeSuggestionsQuery({
-        query: this.queries[0],
-      })
-      .subscribe((data: any) => {
-        console.log('suggestions data', data);
-        this.populateSuggestions(data.aggregations);
-      });
+  onTimeRangeChange(newRange: { from: string | null, to: string | null } | null) {
+    let triggerSearch = false;
+    let range = null;
+    if (newRange?.from && newRange?.to) {
+      // Certain date range
+      range = newRange;
+      triggerSearch = true;  
+    } else if (!newRange?.from && !newRange?.to) {
+      // All time
+      triggerSearch = true;
     }
-    */
+
+    if (triggerSearch) {
+      this.updateURLQueryParameters(
+        {
+          from: range?.from ? range.from : null,
+          to: range?.to ? range.to : null
+        }
+      );
+    }
+  }
+
+  /**
+   * Trigger new search with changed sorting.
+   */
+  onSortByChanged(event: any) {
+    this.updateURLQueryParameters({ sort: event?.detail?.value || 'relevance' });
+  }
+
+  /**
+   * Loads more results with current search parameters.
+   */
+  loadMore() {
+    this.loadingMoreHits = true;
+    this.from += this.hitsPerPage;
+
+    this.updateURLQueryParameters({ pages: this.pages + 1 });
+  }
+
+  private getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
+  }
+
+  private getInitialAggregations(): Observable<any> {
+    return this.elasticService.executeAggregationQuery({
+      queries: [],
+      facetGroups: {},
+      range: undefined,
+    }).pipe(
+      map((data: any) => {
+        return this.getInitialFilters(data.aggregations);
+      })
+    );
   }
 
   private parseSortForQuery() {
@@ -470,201 +477,309 @@ export class ElasticSearchPage {
     return [{ [key]: direction }];
   }
 
-  hasMore() {
-    return this.total > this.from + this.hitsPerPage;
+  canShowHits() {
+    return (!this.loading || this.loadingMoreHits) && (this.submittedQuery || this.range || this.activeFilters.length);
+  }
+
+  toggleFilter(filterGroupKey: string, filter: Facet) {
+    // Get updated list of active filters
+    const newActiveFilters = this.getNewActiveFilters(filterGroupKey, filter);
+
+    // Update URL query params so a new search is triggered
+    this.updateURLQueryParameters(
+      {
+        filters: newActiveFilters.length ? this.urlService.stringify(newActiveFilters, true) : null
+      }
+    );
+  }
+
+  unselectFilter(filterGroupKey: string, filterKey: string) {
+    // Mark the filter as unselected
+    for (let g = 0; g < this.filterGroups.length; g++) {
+      if (this.filterGroups[g].name === filterGroupKey) {
+        for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+          if (String(this.filterGroups[g].filters[f].key) === filterKey) {
+            this.filterGroups[g].filters[f].selected = false;
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    this.toggleFilter(filterGroupKey, { key: filterKey, selected: false, doc_count: 0 });
+  }
+
+  private getNewActiveFilters(filterGroupKey: string, updatedFilter: Facet) {
+    const newActiveFilters: any[] = [];
+    let filterGroupActive: boolean = false;
+
+    for (let a = 0; a < this.activeFilters.length; a++) {
+      // Copy current active filters to new array
+      newActiveFilters.push(
+        {
+          name: this.activeFilters[a].name,
+          keys: [...this.activeFilters[a].keys]
+        }
+      );
+
+      if (this.activeFilters[a].name === filterGroupKey) {
+        filterGroupActive = true;
+
+        if (updatedFilter.selected) {
+          // Add filter to already active filter group
+          newActiveFilters[newActiveFilters.length - 1].keys.push(updatedFilter.key);
+        } else {
+          // Remove filter from already active filter group
+          for (let f = 0; f < newActiveFilters[newActiveFilters.length - 1].keys.length; f++) {
+            if (newActiveFilters[newActiveFilters.length - 1].keys[f] === updatedFilter.key) {
+              newActiveFilters[newActiveFilters.length - 1].keys.splice(f, 1);
+              break;
+            }
+          }
+          if (newActiveFilters[newActiveFilters.length - 1].keys.length < 1) {
+            // Remove filter group from active filters
+            // since there are no active filters from the group
+            newActiveFilters.splice(-1, 1);
+          }
+        }
+      }
+    }
+
+    if (!filterGroupActive && updatedFilter.selected) {
+      // Add filter group and filter to active filters
+      newActiveFilters.push(
+        {
+          name: filterGroupKey,
+          keys: [updatedFilter.key]
+        }
+      );
+    }
+
+    return newActiveFilters;
   }
 
   /**
-   * ! Infinite-scroll commented out, using button for loading more matches for now.
+   * Loops through the array with all filter groups and marks the filters
+   * in activeFilters as selected.
+   * @param activeFilters Array of active filter objects which should be
+   * applied to all filters.
    */
-  loadMore(e: any) {
-    this.infiniteLoading = true;
-    this.from += this.hitsPerPage;
+  private selectFiltersFromActiveFilters(activeFilters: any[]) {
+    for (let a = 0; a < activeFilters.length; a++) {
+      for (let g = 0; g < this.filterGroups.length; g++) {
+        if (activeFilters[a].name === this.filterGroups[g].name) {
+          for (let i = 0; i < activeFilters[a].keys.length; i++) {
+            for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+              if (this.filterGroups[g].filters[f].key === activeFilters[a].keys[i]) {
+                this.filterGroups[g].filters[f].selected = true;
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
 
-    // Search and let ion-infinite-scroll know that it can re-enable itself.
-    this.search({
-      done: () => {
-        this.infiniteLoading = false;
-        // e.complete() // uncomment this line if using infine-scroll to load more search matches
-      },
+  /**
+   * Checks if the given array of active filter objects is non-identical to this.activeFilters.
+   * @param compareActiveFilters Array of active filter objects to compare upon.
+   * @returns True if the given filters array differs from this.activeFilters
+   */
+  private activeFiltersChanged(compareActiveFilters: any[]): boolean {
+    if (compareActiveFilters.length !== this.activeFilters.length) {
+      return true;
+    } else {
+      for (let a = 0; a < this.activeFilters.length; a++) {
+        let groupFound = false;
+        for (let c = 0; c < compareActiveFilters.length; c++) {
+          if (this.activeFilters[a].name === compareActiveFilters[c].name) {
+            groupFound = true;
+
+            if (this.activeFilters[a].keys.length !== compareActiveFilters[c].keys.length) {
+              return true;
+            }
+
+            for (let k = 0; k < this.activeFilters[a].keys.length; k++) {
+              if (!compareActiveFilters[c].keys.includes(this.activeFilters[a].keys[k])) {
+                return true;
+              }
+            }
+            break;
+          }
+        }
+
+        if (!groupFound) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private clearAllActiveFilters() {
+    this.activeFilters = [];
+    for (let g = 0; g < this.filterGroups.length; g++) {
+      for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+        this.filterGroups[g].filters[f].selected = false;
+      }
+    }
+  }
+
+  /**
+   * Updates filter data using the search result's aggregation data.
+   */
+  private updateFilters(aggregations: AggregationsData) {
+    // Get aggregation keys that are ordered in config.json.
+    this.elasticService.getAggregationKeys().forEach((filterGroupKey: any) => {
+      const newFilterGroup = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
+      let filterGroupExists = false;
+      for (let g = 0; g < this.filterGroups.length; g++) {
+        if (this.filterGroups[g].name === filterGroupKey) {
+          filterGroupExists = true;
+
+          if (
+            config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms &&
+            !config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order
+          ) {
+            // Aggregations are ordered desc according to doc_count -->
+            // Empty filters should be removed if not selected, so replace filters in the group
+            const filtersArray = this.convertFilterGroupToArray(filterGroupKey, newFilterGroup);
+
+            // Retain selected status of filters, i.e. search for all selected filters
+            // in the matching filterGroup and apply selected to the new filters.
+            // If a selected filter is missing from the new filters, add it to them with
+            // a zero doc_count
+            for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+              if (this.filterGroups[g].filters[f].selected) {
+                let found = false;
+                for (let w = 0; w < filtersArray.length; w++) {
+                  if (this.filterGroups[g].filters[f].key === filtersArray[w].key) {
+                    filtersArray[w].selected = true;
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  filtersArray.push({
+                    key: this.filterGroups[g].filters[f].key,
+                    doc_count: 0,
+                    selected: true
+                  });
+                }
+              }
+            }
+
+            this.filterGroups[g].filters = filtersArray;
+          } else {
+            // Aggregations are ordered according to key name -->
+            // Empty filters should be retained with zero count
+            for (let f = 0; f < this.filterGroups[g].filters.length; f++) {
+              const updatedFilter = newFilterGroup[this.filterGroups[g].filters[f].key];
+              if (updatedFilter) {
+                this.filterGroups[g].filters[f].doc_count = updatedFilter.doc_count;
+              } else {
+                this.filterGroups[g].filters[f].doc_count = 0;
+              }
+            }
+          }
+
+          // Ensure that all active filters are still selected
+          this.selectFiltersFromActiveFilters(this.activeFilters);
+
+          // The reference of date histogram filter arrays needs to be changed in order
+          // for change detection to be triggered in the <date-histogram> component
+          // when the input changes. This shallow copy action using the spread operator
+          // accomplishes this.
+          if (config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.date_histogram) {
+            this.filterGroups[g].filters = [...this.filterGroups[g].filters];
+          }
+
+          break;
+        }
+      }
+
+      if (!filterGroupExists) {
+        this.filterGroups.push(
+          {
+            name: filterGroupKey,
+            filters: this.convertFilterGroupToArray(filterGroupKey, newFilterGroup),
+            open: config.page?.elasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+            type: this.elasticService.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
+          }
+        );
+      }
     });
   }
 
-  canShowHits() {
-    return (!this.loading || this.infiniteLoading) && (this.currentQuery || this.range || this.hasSelectedFacets());
+  private getInitialFilters(aggregations: AggregationsData) {
+    // Get aggregation keys that are ordered in config.json.
+    const filterGroups: any[] = [];
+    this.elasticService.getAggregationKeys().forEach((filterGroupKey: any) => {
+      const filterGroupObj = this.convertAggregationsToFilters(aggregations[filterGroupKey]);
+
+      filterGroups.push(
+        {
+          name: filterGroupKey,
+          filters: this.convertFilterGroupToArray(filterGroupKey, filterGroupObj),
+          open: config.page?.elasticSearch?.filterGroupsOpenByDefault?.includes(filterGroupKey) ? true : false,
+          type: this.elasticService.isDateHistogramAggregation(filterGroupKey) ? 'date_histogram' : 'terms'
+        }
+      );
+    });
+
+    return filterGroups;
   }
 
-  hasSelectedFacets() {
-    return Object.values(this.facetGroups).some((facets: any) => Object.values(facets).some((facet: any) => facet.selected));
+  /**
+   * Convert aggregation data to filters data.
+   */
+  private convertAggregationsToFilters(aggregation: AggregationData): Facets {
+    const filters = {} as any;
+    // Get buckets from either unfiltered or filtered aggregation.
+    const buckets = aggregation.buckets || aggregation?.filtered?.buckets;
+
+    buckets?.forEach((filter: Facet) => {
+      filters[filter.key] = filter;
+    });
+    return filters;
   }
 
-  hasSelectedFacetsByGroup(groupKey: string) {
-    return (this.selectedFacetGroups[groupKey] ? Object.keys(this.selectedFacetGroups[groupKey]).length : 0) > 0;
-  }
-
-  hasSelectedNormalFacets() {
-    return Object.keys(this.facetGroups).some(facetGroupKey =>
-      facetGroupKey !== 'Type' && facetGroupKey !== 'Years' && Object.values(this.facetGroups[facetGroupKey]).some((facet: any) => facet.selected)
-    );
-  }
-
-  hasFacets(facetGroupKey: string) {
-    return (this.facetGroups[facetGroupKey] ? Object.keys(this.facetGroups[facetGroupKey]).length : 0) > 0;
-  }
-
-  hasSuggestedFacetsByGroup(groupKey: string) {
-    return (this.suggestedFacetGroups[groupKey] ? Object.keys(this.suggestedFacetGroups[groupKey]).length : 0) > 0;
-  }
-
-  hasSuggestedFacets() {
-    return Object.values(this.suggestedFacetGroups).some(
-      (facets: Facets) => (facets ? Object.keys(facets).length : 0) > 0
-    );
-  }
-
-  getFacets(facetGroupKey: string): any {
-    const facets = this.facetGroups[facetGroupKey];
-    if (facets) {
-      if (facetGroupKey !== 'Years') {
+  private convertFilterGroupToArray(filterGroupKey: string, filterGroupObj: Facets) {
+    if (filterGroupObj) {
+      if (filterGroupKey !== 'Years') {
         const keys = [];
-        const facetsAsArray = [];
-        for (const key in facets) {
-          if (facets.hasOwnProperty(key)) {
+        const filtersAsArray = [];
+        for (const key in filterGroupObj) {
+          if (filterGroupObj.hasOwnProperty(key)) {
             keys.push(key);
           }
         }
         for (let i = 0; i < keys.length; i++) {
-          facetsAsArray.push(facets[keys[i]]);
+          filtersAsArray.push(filterGroupObj[keys[i]]);
         }
-        this.commonFunctions.sortArrayOfObjectsNumerically(facetsAsArray, 'doc_count');
-        return facetsAsArray;
+        if (!config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order?._key) {
+          this.commonFunctions.sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
+        }
+        return filtersAsArray;
       } else {
-        return Object.values(facets);
+        return Object.values(filterGroupObj);
       }
     } else {
       return [];
     }
   }
 
-  /**
-   * Toggles facet on/off. Note that the selected state is controlled by the ion-checkbox
-   * so it should not be modified here.
-   */
-  updateFacet(facetGroupKey: string, facet: Facet) {
-    const facets = this.facetGroups[facetGroupKey] || {};
-    facets[facet.key] = facet;
-    this.facetGroups[facetGroupKey] = facets;
-
-    this.updateSelectedFacets(facetGroupKey, facet);
-
-    this.onFacetsChanged();
-  }
-
-  selectSuggestedFacet(facetGroupKey: string, facet: Facet) {
-    this.suggestedFacetGroups = {};
-    this.queries = [''];
-
-    facet.selected = true;
-    this.updateFacet(facetGroupKey, facet);
-  }
-
-  unselectFacet(facetGroupKey: string, facet: Facet) {
-    facet.selected = false;
-    this.updateFacet(facetGroupKey, facet);
-  }
-
-  private updateSelectedFacets(facetGroupKey: string, facet: Facet) {
-    const facetGroup = this.selectedFacetGroups[facetGroupKey] || {};
-
-    // Set or delete facet from selected facets
-    if (facet.selected) {
-      facetGroup[facet.key] = facet;
-    } else {
-      delete facetGroup[facet.key];
-    }
-
-    // Set or delete facet group from selected facet groups
-    if ((facetGroup ? Object.keys(facetGroup).length : 0) === 0) {
-      delete this.selectedFacetGroups[facetGroupKey];
-    } else {
-      this.selectedFacetGroups[facetGroupKey] = facetGroup;
-    }
-  }
-
-  /**
-   * Populate facets data using the search results aggregation data.
-   */
-  private populateFacets(aggregations: AggregationsData) {
-    // Get aggregation keys that are ordered in config.json.
-    this.elastic.getAggregationKeys().forEach((facetGroupKey: any) => {
-      const newFacets = this.convertAggregationsToFacets(aggregations[facetGroupKey]);
-      if (this.facetGroups[facetGroupKey]) {
-        Object.entries(this.facetGroups[facetGroupKey]).forEach(([facetKey, existingFacet]: [string, any]) => {
-          const newFacet = newFacets[facetKey];
-          if (newFacet) {
-            existingFacet.doc_count = newFacet.doc_count;
-          } else if (this.hasSelectedFacetsByGroup(facetGroupKey)) {
-            // Unselected facets aren't updating because the terms bool.filter in the query
-            // prevents unselected aggregations from appearing in the results.
-            // TODO: Fix this by separating search and aggregation query.
-          } else {
-            delete this.facetGroups[facetGroupKey][facetKey];
-           // existingFacet.doc_count = 0;
-          }
-        })
-        Object.entries(newFacets).forEach(([facetKey, existingFacet]: [string, any]) => {
-          if ( this.facetGroups[facetGroupKey][facetKey] === undefined ) {
-            this.facetGroups[facetGroupKey][facetKey] = existingFacet;
-          }
-        });
-      } else {
-        this.facetGroups[facetGroupKey] = newFacets;
-      }
-    });
-  }
-
-  /**
-   * Populate suggestions data using the search results aggregation data.
-   */
-  private populateSuggestions(aggregations: AggregationsData) {
-    Object.entries(aggregations).forEach(([aggregationKey, value]: [string, any]) => {
-      this.suggestedFacetGroups[aggregationKey] = this.convertAggregationsToFacets(value);
-    });
-  }
-
-  /**
-   * Convert aggregation data to facets data.
-   */
-  private convertAggregationsToFacets(aggregation: AggregationData): Facets {
-    const facets = {} as any;
-    // Get buckets from either unfiltered or filtered aggregation.
-    const buckets = aggregation.buckets || aggregation?.filtered?.buckets;
-
-    buckets?.forEach((facet: Facet) => {
-      facets[facet.key] = facet;
-    });
-    return facets;
-  }
-
-  getTextName(source: any) {
+  private getTextName(source: any) {
     return source?.text_title;
   }
 
-  getPublicationName(source: any) {
-    return source?.publication_data?.[0]?.publication_name;
-  }
-
-  getHiglightedTextName(highlight: any) {
+  private getHiglightedTextName(highlight: any) {
     if (highlight['text_title']) {
       return highlight['text_title'][0];
-    } else {
-      return '';
-    }
-  }
-
-  getHiglightedPublicationName(highlight: any) {
-    if (highlight['publication_data.publication_name']) {
-      return highlight['publication_data.publication_name'][0];
     } else {
       return '';
     }
@@ -675,12 +790,8 @@ export class ElasticSearchPage {
   }
 
   // Returns the title from the xml title element in the teiHeader
-  getTitle(source: any) {
+  private getTitle(source: any) {
     return (source.doc_title || source.name || '').trim();
-  }
-
-  getGenre(source: any) {
-    return source?.publication_data?.[0]?.genre;
   }
 
   private formatISO8601DateToLocale(date: string) {
@@ -689,8 +800,8 @@ export class ElasticSearchPage {
 
   hasDate(source: any) {
     const dateData = source?.publication_data?.[0]?.original_publication_date ?? source?.orig_date_certain;
-    if (dateData === undefined || dateData === null || dateData === '') {
-      if (source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
+    if (!dateData) {
+      if (source?.orig_date_year) {
         return true;
       } else {
         return false;
@@ -700,46 +811,12 @@ export class ElasticSearchPage {
     }
   }
 
-  public getDate(source: any) {
+  getDate(source: any) {
     let date = source?.publication_data?.[0]?.original_publication_date ?? this.formatISO8601DateToLocale(source?.orig_date_certain);
-    if ((date === undefined || date === '' || date === null)
-    && source.orig_date_year !== undefined && source.orig_date_year !== null && source.orig_date_year !== '') {
+    if (!date && source?.orig_date_year) {
       date = source.orig_date_year;
     }
     return date;
-  }
-
-  private filterEmpty(array: any[]) {
-    return array.filter(str => str).join(', ');
-  }
-
-  getHitHref(hit: any) {
-    let path = '/';
-
-    if (hit.source.text_type === 'tit') {
-      path = path + 'publication-title/' + hit.source.collection_id;
-    } else if (hit.source.text_type === 'fore') {
-      path = path + 'publication-foreword/' + hit.source.collection_id;
-    } else if (hit.source.text_type === 'inl') {
-      path = path + 'publication-introduction/' + hit.source.collection_id;
-    } else {
-      path = path + 'publication/' + hit.source.collection_id;
-      path = path + '/text/' + hit.source.publication_id;
-      path = path + '/nochapter/not/infinite/nosong/';
-      path = path + this.getMatchesForUrl(hit) + '/';
-    }
-
-    if (hit.source.text_type === 'est') {
-      path = path + 'established';
-    } else if (hit.source.text_type === 'com') {
-      path = path + 'comments';
-    } else if (hit.source.text_type === 'ms') {
-      path = path + 'manuscripts';
-    } else if (hit.source.text_type === 'var') {
-      path = path + 'variants';
-    }
-
-    return path;
   }
 
   getHeading(hit: any) {
@@ -757,13 +834,6 @@ export class ElasticSearchPage {
     return text_name;
   }
 
-  getSubHeading(source: any) {
-    return this.filterEmpty([
-      this.getGenre(source),
-      source.type !== 'brev' && this.getDate(source)
-    ]);
-  }
-
   getEllipsisString(str: any, max = 50) {
     if (!str || str.length <= max) {
       return str;
@@ -772,131 +842,66 @@ export class ElasticSearchPage {
     }
   }
 
-  getMatchesForUrl(hit: any) {
-    if (hit && hit.highlight && hit.highlight.text_data && this.highlightSearchMatches) {
-      let encoded_matches = '';
-      const unique_matches = [] as any;
-      const regexp = /<em>.+?<\/em>/g;
-
-      hit.highlight.text_data.forEach((highlight: any) => {
-        const matches = highlight.match(regexp);
-        matches.forEach((match: any) => {
-          const clean_match = match.replace('<em>', '').replace('</em>', '').toLowerCase();
-          if (!unique_matches.includes(clean_match)) {
-            unique_matches.push(clean_match);
-          }
-        });
-      });
-
-      if (unique_matches.length > 0) {
-        for (let i = 0; i < unique_matches.length; i++) {
-          encoded_matches = encoded_matches + encodeURIComponent(unique_matches[i]);
-          if (i < unique_matches.length - 1) {
-            encoded_matches = encoded_matches + '_';
-          }
-        }
-        return encoded_matches;
-      } else {
-        return 'searchtitle';
-      }
-    } else {
-      return 'searchtitle';
-    }
-  }
-
-  openAccordion(e: any, group: any) {
-    const facet = document.getElementById('facetList-' + group);
-    const arrow = document.getElementById('arrow-' + group);
-
-    arrow?.classList.toggle('rotate');
-
-    if (arrow?.classList.contains('open')) {
-      if (facet) {
-        facet.style.height = '0';
-      }
-      arrow.classList.add('closed');
-      arrow.classList.remove('open');
-    } else if (arrow) {
-      if (facet) {
-        facet.style.height = '100%';
-      }
-      arrow.classList.add('open');
-      arrow.classList.remove('closed');
-    }
-    this.cf.detectChanges();
-  }
-
-  addSearchField() {
-    this.queries.push('');
-  }
-
-  removeSearchField(i: any) {
-    this.queries.splice(i, 1);
-  }
-
-  autoExpandSearchfields() {
-    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll('.searchInput');
-
-    for (let i = 0; i < inputs.length; i++) {
-      const borderTop = measure(inputs[i], 'border-top-width');
-      const borderBottom = measure(inputs[i], 'border-bottom-width');
-
-      inputs[i].style.height = '';
-      inputs[i].style.height = borderTop + inputs[i].scrollHeight + borderBottom + 'px';
-    }
-
-    function measure(elem: Element, property: any) {
-      return parseInt(
-        window.getComputedStyle(elem, null)
-          .getPropertyValue(property)
-          .replace(/px$/, ''));
-    }
-  }
-
-  getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
-      map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
-      }),
-      catchError((e) => {
-        return of('');
-      })
-    );
+  toggleFilterGroupOpenState(filterGroup: any) {
+    filterGroup.open = !filterGroup.open;
   }
 
   showAllHitHighlights(event: any) {
     // Find and show all hidden highlights
     let parentElem = event.target.parentElement as any;
-    while (parentElem !== null && !parentElem.classList.contains('matchHighlights')) {
+    while (parentElem !== null && !parentElem.classList.contains('match-highlights')) {
       parentElem = parentElem.parentElement;
     }
 
     if (parentElem !== null) {
-      const highlightElems = parentElem.querySelectorAll('.hiddenHighlight');
+      const highlightElems = parentElem.querySelectorAll('.hidden-highlight');
       for (let i = 0; i < highlightElems.length; i++) {
-        highlightElems[i].classList.remove('hiddenHighlight');
+        highlightElems[i].classList.remove('hidden-highlight');
       }
     }
 
-    // Find and hide the button that triggered the event
-    parentElem = event.target.parentElement as any;
-    while (parentElem !== null && !parentElem.classList.contains('showAllHitHighlights')) {
-      parentElem = parentElem.parentElement;
-    }
-
-    if (parentElem !== null) {
-      parentElem.classList.add('hiddenButton');
+    // Hide the button that triggered the event
+    if (event.target?.classList.contains('show-all-highlights')) {
+      event.target.classList.add('hidden-highlight-button');
     }
   }
 
-  toggleFacetsColumn() {
-    this.facetsToggledInMobileMode = !this.facetsToggledInMobileMode;
+  toggleFiltersColumn() {
+    this.filtersVisible = !this.filtersVisible;
   }
 
   scrollToTop() {
-    const searchBarElem = document.querySelector('.searchbar-wrapper') as HTMLElement;
-    if (searchBarElem) {
-      this.commonFunctions.scrollElementIntoView(searchBarElem, 'top', 16);
+    if (isBrowser()) {
+      const searchBarElem: HTMLElement | null = this.elementRef.nativeElement.querySelector('.search-container');
+      if (searchBarElem) {
+        const topMenuElem: HTMLElement | null = document.querySelector('top-menu');
+        if (topMenuElem) {
+          this.content.scrollByPoint(0, searchBarElem.getBoundingClientRect().top - topMenuElem.offsetHeight, 500);
+        }
+      }
     }
   }
+
+  private setSearchColumnMinHeight() {
+    if (isBrowser()) {
+      const elem: HTMLElement | null = this.elementRef.nativeElement.querySelector('.search-result-column');
+      const elemRect = elem?.getBoundingClientRect();
+      this.searchResultsColumnMinHeight = elemRect ? elemRect.bottom - elemRect.top + 'px' : null;
+    } else {
+      this.searchResultsColumnMinHeight = null;
+    }
+  }
+
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+
+  trackByKey(index: number, item: any) {
+    return item.key;
+  }
+
+  trackByName(index: number, item: any) {
+    return item.name;
+  }
+
 }

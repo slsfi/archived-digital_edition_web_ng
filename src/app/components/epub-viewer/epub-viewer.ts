@@ -180,6 +180,8 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
           this.book.archive.getText(opfFilePath).then((res: any) => {
             try {
               if (res) {
+                // TODO: DOMParser is safe here because this code is only run in the browser,
+                // however, this could be refactored to use the SSR compatible htmlparser2 instead.
                 const parser = new DOMParser();
                 const opf = parser.parseFromString(res, 'text/xml');
                 const creatorElements = opf.getElementsByTagName('dc:creator');

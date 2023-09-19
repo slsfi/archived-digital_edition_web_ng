@@ -90,6 +90,12 @@
         <target>Utgivarens anmärkning</target>
       </segment>
     </unit>
+    <unit id="DateHistogram.Clear">
+      <segment state="initial">
+        <source>Nollställ</source>
+        <target>Nollställ</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -180,10 +186,10 @@
         <target>Normalisering</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.AND">
+    <unit id="ElasticSearch.ClearAllActiveFilters">
       <segment state="initial">
-        <source>och</source>
-        <target>och</target>
+        <source>Ta bort alla aktiva avgränsningar</source>
+        <target>Ta bort alla aktiva avgränsningar</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
@@ -204,12 +210,6 @@
         <target>Texter med sökträffar:</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.From">
-      <segment state="initial">
-        <source>Från</source>
-        <target>Från</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
@@ -222,13 +222,19 @@
         <target>Ett fel har uppstått när sökträffarna skulle laddas.</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.LoadingFilters">
+      <segment state="initial">
+        <source>Ett ögonblick, laddar sökavgränsningar ...</source>
+        <target>Ett ögonblick, laddar sökavgränsningar ...</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.NewestFirst">
       <segment state="initial">
         <source>Nyast först</source>
         <target>Nyast först</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.NoFacetOptions">
+    <unit id="ElasticSearch.NoFilterOptions">
       <segment state="initial">
         <source>Inga sökord</source>
         <target>Inga sökord</target>
@@ -246,12 +252,6 @@
         <target>Äldst först</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.OpenInNewWindow">
-      <segment state="initial">
-        <source>Länken öppnas i ett nytt fönster.</source>
-        <target>Länken öppnas i ett nytt fönster.</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.PageTitle">
       <segment state="initial">
         <source>Sök i utgåvan</source>
@@ -264,13 +264,13 @@
         <target>Relevans</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.ScrollToTop">
+    <unit id="ElasticSearch.SearchButtonAriaLabel">
       <segment state="initial">
-        <source>Till början</source>
-        <target>Till början</target>
+        <source>Sök</source>
+        <target>Sök</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Search">
+    <unit id="ElasticSearch.SearchPlaceholder">
       <segment state="initial">
         <source>Sök ...</source>
         <target>Sök ...</target>
@@ -290,14 +290,14 @@
     </unit>
     <unit id="ElasticSearch.ShowLess">
       <segment state="initial">
-        <source>Visa mindre</source>
-        <target>Visa mindre</target>
+        <source>Visa färre</source>
+        <target>Visa färre</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMore">
       <segment state="initial">
-        <source>Visa mera</source>
-        <target>Visa mera</target>
+        <source>Visa fler</source>
+        <target>Visa fler</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowMoreHits">
@@ -312,16 +312,16 @@
         <target>Sortera enligt</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.To">
+    <unit id="ElasticSearch.StartSearchInstruction">
       <segment state="initial">
-        <source>Till</source>
-        <target>Till</target>
+        <source>Börja söka genom att skriva in sökord eller välja avgränsningar.</source>
+        <target>Börja söka genom att skriva in sökord eller välja avgränsningar.</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.Years">
+    <unit id="ElasticSearch.TimeRange">
       <segment state="initial">
-        <source>År</source>
-        <target>År</target>
+        <source>Tidsperiod</source>
+        <target>Tidsperiod</target>
       </segment>
     </unit>
     <unit id="Epub.Contents">
