@@ -1,7 +1,10 @@
 import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit } from '@angular/core';
-import { UrlSegment } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { RouterLink, UrlSegment } from "@angular/router";
+import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
+import { PipesModule } from 'src/pipes/pipes.module';
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { DigitalEditionListService } from "src/app/services/digital-edition-list.service";
@@ -11,9 +14,11 @@ import { config } from "src/assets/config/config";
 
 
 @Component({
+  standalone: true,
   selector: 'main-side-menu',
   templateUrl: './main-side-menu.html',
   styleUrls: ['./main-side-menu.scss'],
+  imports: [CommonModule, IonicModule, PipesModule, RouterLink]
 })
 export class MainSideMenu implements OnInit, OnChanges {
   @Input() urlSegments: UrlSegment[] = [];

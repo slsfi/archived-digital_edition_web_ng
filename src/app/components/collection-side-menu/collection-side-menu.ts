@@ -1,6 +1,9 @@
 import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from "@angular/core";
-import { Params, UrlSegment } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { Params, RouterLink, UrlSegment } from "@angular/router";
+import { IonicModule } from '@ionic/angular';
 
+import { PipesModule } from 'src/pipes/pipes.module';
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { TableOfContentsService } from "src/app/services/table-of-contents.service";
@@ -9,9 +12,11 @@ import { isBrowser } from "src/standalone/utility-functions";
 
 
 @Component({
+  standalone: true,
   selector: 'collection-side-menu',
   templateUrl: 'collection-side-menu.html',
-  styleUrls: ['collection-side-menu.scss']
+  styleUrls: ['collection-side-menu.scss'],
+  imports: [CommonModule, IonicModule, PipesModule, RouterLink]
 })
 export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;
