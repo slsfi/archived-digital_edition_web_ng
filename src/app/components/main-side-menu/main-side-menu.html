@@ -13,7 +13,7 @@
           role="menuitem"
     >
       <a *ngIf="!item.children"
-            [routerLink]="item.parentPath | initialPathGenerator: item.id"
+            [routerLink]="item.parentPath | parentChildPagePath: item.id"
             [class.menu-highlight]="highlightedMenu === item.nodeId"
             [class.submenu-label]="item.children"
       >

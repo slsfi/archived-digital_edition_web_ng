@@ -4,7 +4,7 @@ import { RouterLink, UrlSegment } from "@angular/router";
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-import { PipesModule } from 'src/pipes/pipes.module';
+import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { DigitalEditionListService } from "src/app/services/digital-edition-list.service";
@@ -18,7 +18,7 @@ import { config } from "src/assets/config/config";
   selector: 'main-side-menu',
   templateUrl: './main-side-menu.html',
   styleUrls: ['./main-side-menu.scss'],
-  imports: [CommonModule, IonicModule, PipesModule, RouterLink]
+  imports: [CommonModule, IonicModule, RouterLink, ParentChildPagePathPipe]
 })
 export class MainSideMenu implements OnInit, OnChanges {
   @Input() urlSegments: UrlSegment[] = [];

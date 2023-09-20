@@ -4,7 +4,7 @@
       <ion-col size="12" size-sm="6" size-md="4" size-xl="3" *ngFor="let edition of digitalEditions">
         <ion-card class="digital-edition">
           <ion-card-header class="digital-edition-list-card-header" [ngClass]="edition.isDownload ? 'download-only-edition' : ''">
-            <a routerLink="{{'/' + edition.type | initialPathGenerator: edition.id}}" title="{{edition.title}}">
+            <a routerLink="{{'/' + edition.type | parentChildPagePath: edition.id}}" title="{{edition.title}}">
               <img [ngClass]="edition.isDownload ? 'download-only-edition' : ''"
                     src="{{editionImages[edition.id] ? (editionImages[edition.id]).replace('.','_thumb.') : (editionImages.default).replace('.','_thumb.')}}"
                     alt="{{edition.title}}"

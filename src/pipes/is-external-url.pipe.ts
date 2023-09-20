@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 
+/**
+ * Returns true if the URL is external, i.e. includes site origin.
+ */
 @Pipe({
   name: 'isExternalURL',
   standalone: true

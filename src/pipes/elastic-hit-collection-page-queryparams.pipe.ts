@@ -4,11 +4,15 @@ import { UrlService } from 'src/app/services/url.service';
 import { config } from 'src/assets/config/config';
 
 
+/**
+ * Generates queryParams for a collection page from an
+ * ElasticSearch hit item.
+ */
 @Pipe({
-  name: 'elasticHitQueryParamsGenerator',
+  name: 'elasticHitCollectionPageQueryparams',
   standalone: true
 })
-export class ElasticHitQueryParamsGeneratorPipe implements PipeTransform {
+export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
   highlightSearchMatches: boolean = true;
   openEstWithComTypeHit: boolean = false;
 

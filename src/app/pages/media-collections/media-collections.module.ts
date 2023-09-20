@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { PipesModule } from 'src/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MediaCollectionsRoutingModule } from './media-collections-routing.module';
 import { CommonModule } from '@angular/common';
@@ -16,7 +15,6 @@ import { MediaCollectionsPage } from './media-collections';
     IonicModule,
     CommonModule,
     FormsModule,
-    PipesModule,
     ComponentsModule,
     MediaCollectionsRoutingModule
   ],
