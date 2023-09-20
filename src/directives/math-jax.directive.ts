@@ -1,6 +1,8 @@
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+
 import { config } from 'src/assets/config/config';
+
 
 declare var MathJax: {
   Hub: {
@@ -14,11 +16,10 @@ declare var MathJax: {
 })
 export class MathJaxDirective implements OnChanges {
   @Input('MathJax') mathJaxInput: string | SafeHtml | null = null;
+
   private mathJaxEnabled: boolean = false;
 
-  constructor(
-    private elRef: ElementRef
-  ) {
+  constructor(private elRef: ElementRef) {
     this.mathJaxEnabled = config.collections?.enableMathJax ?? false;
   }
 
@@ -28,6 +29,7 @@ export class MathJaxDirective implements OnChanges {
         // Tell the MathJax-processor to convert any TeX notated math in this.elRef.nativeElement
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, this.elRef.nativeElement]);
       } catch (e) {
+        console.error('MathJax error', e);
       }
     }
   }

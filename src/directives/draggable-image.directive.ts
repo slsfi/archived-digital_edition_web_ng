@@ -1,5 +1,6 @@
 import { Directive, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 
+
 @Directive({
     standalone: true,
     selector: '[draggableImage]'
@@ -12,9 +13,9 @@ export class DraggableImageDirective implements OnInit, OnDestroy {
     @Output() finalCoordinates = new EventEmitter<number[]>();
 
     private activeDrag: boolean = false;
+    private currentCoordinates: number[] = [0, 0];
     private offsetX: number = 0;
     private offsetY: number = 0;
-    private currentCoordinates: number[] = [0, 0];
 
     private unlistenMouseDownEvents: () => void;
     private unlistenMouseMoveEvents: () => void;
