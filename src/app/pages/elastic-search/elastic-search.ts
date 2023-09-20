@@ -328,9 +328,23 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
           triggerSearch = true;
         }
 
+        // Clear all search parameters and trigger new search if no
+        // query params and not initializing page
+        if (
+          this.commonFunctions.isEmptyObject(queryParams) &&
+          !this.initializing
+        ) {
+          this.query = '';
+          this.activeFilters = [];
+          this.range = null;
+          this.rangeYears = undefined;
+          this.sort = '';
+          triggerSearch = true;
+        }
+
         this.initializing = false;
 
-        // Determine if a new search should be initialized
+        // Execute new search if trigger criteria have been met
         if (triggerSearch) {
           if (directSearch) {
             this.search();
