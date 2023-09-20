@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { PipesModule } from 'src/pipes/pipes.module';
+import { CollectionPagePathPipe } from 'src/pipes/collection-page-path.pipe';
+import { OccurrenceCollectionTextPageQueryparamsPipe } from 'src/pipes/occurrence-collection-text-page-queryparams.pipe';
 import { Occurrence } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
@@ -16,7 +17,13 @@ import { config } from "src/assets/config/config";
   selector: 'occurrences-accordion',
   templateUrl: 'occurrences-accordion.component.html',
   styleUrls: ['occurrences-accordion.component.scss'],
-  imports: [CommonModule, IonicModule, PipesModule, RouterModule]
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterModule,
+    CollectionPagePathPipe,
+    OccurrenceCollectionTextPageQueryparamsPipe
+  ]
 })
 export class OccurrencesAccordionComponent implements OnInit {
   @Input() id: number | undefined = undefined;

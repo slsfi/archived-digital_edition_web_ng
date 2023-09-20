@@ -14,8 +14,8 @@
                     <ng-container *ngFor="let occ of publication.occurrences; index as i">
                         <a *ngIf="i < 1 || (i > 0 && (publication.occurrences[i].textType === 'facs' || publication.occurrences[i].textType !== publication.occurrences[i-1].textType))"
                                     class="button-link"
-                                    [routerLink]="occ.linkID | pagePathGenerator"
-                                    [queryParams]="occ | occurrenceTextQueryParamGenerator"
+                                    [routerLink]="occ.linkID | collectionPagePath"
+                                    [queryParams]="occ | occurrenceCollectionTextPageQueryparams"
                         >
                             <ng-container *ngIf="occ.textType == 'ms'" i18n="@@Occurrences.Manuscript">Manuskript</ng-container>
         

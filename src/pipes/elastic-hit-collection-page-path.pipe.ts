@@ -2,10 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 
 @Pipe({
-  name: 'elasticHitPathGenerator',
+  name: 'elasticHitCollectionPagePath',
   standalone: true
 })
-export class ElasticHitPathGeneratorPipe implements PipeTransform {
+export class ElasticHitCollectionPagePathPipe implements PipeTransform {
   transform(elasticHit: any): string {
     let path = '/';
 

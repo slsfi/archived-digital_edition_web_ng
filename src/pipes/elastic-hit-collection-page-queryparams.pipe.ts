@@ -5,10 +5,10 @@ import { config } from 'src/assets/config/config';
 
 
 @Pipe({
-  name: 'elasticHitQueryParamsGenerator',
+  name: 'elasticHitCollectionPageQueryparams',
   standalone: true
 })
-export class ElasticHitQueryParamsGeneratorPipe implements PipeTransform {
+export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
   highlightSearchMatches: boolean = true;
   openEstWithComTypeHit: boolean = false;
 

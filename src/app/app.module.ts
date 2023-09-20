@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { DigitalEditionsApp } from './app.component';
-import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
 import { CollectionSideMenu } from './components/collection-side-menu/collection-side-menu';
@@ -30,7 +29,6 @@ import { TopMenuComponent } from './components/top-menu/top-menu';
     HttpClientModule,
     CommonModule,
     ComponentsModule,
-    PipesModule,
     DigitalEditionListModule,
     CollectionSideMenu,
     MainSideMenu,

@@ -169,7 +169,7 @@
 
               <p>#{{n+1}}</p>
               <div>
-                <a [routerLink]="hit | elasticHitPathGenerator" [queryParams]="hit | elasticHitQueryParamsGenerator">
+                <a [routerLink]="hit | elasticHitCollectionPagePath" [queryParams]="hit | elasticHitCollectionPageQueryparams">
                   <div>
                     <h3>
                       <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>

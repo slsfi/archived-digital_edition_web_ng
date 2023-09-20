@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from "@angular/router";
 import { IonicModule } from '@ionic/angular';
 
-import { PipesModule } from 'src/pipes/pipes.module';
+import { CollectionPagePathPipe } from "src/pipes/collection-page-path.pipe";
+import { CollectionPagePositionQueryparamPipe } from "src/pipes/collection-page-position-queryparam.pipe";
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { TableOfContentsService } from "src/app/services/table-of-contents.service";
@@ -16,7 +17,13 @@ import { isBrowser } from "src/standalone/utility-functions";
   selector: 'collection-side-menu',
   templateUrl: 'collection-side-menu.html',
   styleUrls: ['collection-side-menu.scss'],
-  imports: [CommonModule, IonicModule, PipesModule, RouterLink]
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterLink,
+    CollectionPagePathPipe,
+    CollectionPagePositionQueryparamPipe
+  ]
 })
 export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;
