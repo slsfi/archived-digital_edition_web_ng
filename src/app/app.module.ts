@@ -10,6 +10,8 @@ import { DigitalEditionsApp } from './app.component';
 import { PipesModule } from 'src/pipes/pipes.module';
 import { DigitalEditionListModule } from './components/digital-edition-list/digital-edition-list.module';
 import { ComponentsModule } from './components/components.module';
+import { CollectionSideMenu } from './components/collection-side-menu/collection-side-menu';
+import { MainSideMenu } from './components/main-side-menu/main-side-menu';
 import { TopMenuComponent } from './components/top-menu/top-menu';
 
 @NgModule({
@@ -30,6 +32,8 @@ import { TopMenuComponent } from './components/top-menu/top-menu';
     ComponentsModule,
     PipesModule,
     DigitalEditionListModule,
+    CollectionSideMenu,
+    MainSideMenu,
     TopMenuComponent
   ],
   providers: [
