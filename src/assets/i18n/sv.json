@@ -175,9 +175,7 @@
         "AddColumn": "Ny kolumn"
     },
     "About": {
-        "Title": "Om",
-        "UI": "Användargränssnitt",
-        "Information": "Information"
+        "LoadingError": "Sidans innehåll kunde inte laddas."
     },
     "MediaCollections": {
         "MediaCollections": "Faksimilsamlingar",

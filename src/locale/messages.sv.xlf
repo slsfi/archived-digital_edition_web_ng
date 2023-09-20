@@ -6,6 +6,12 @@
         <target>Förkortning</target>
       </segment>
     </unit>
+    <unit id="About.LoadingError">
+      <segment state="initial">
+        <source>Sidans innehåll kunde inte laddas.</source>
+        <target>Sidans innehåll kunde inte laddas.</target>
+      </segment>
+    </unit>
     <unit id="BackButton">
       <segment state="initial">
         <source>Tillbaka</source>

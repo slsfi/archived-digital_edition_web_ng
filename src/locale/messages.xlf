@@ -6,6 +6,11 @@
         <source>Förkortning</source>
       </segment>
     </unit>
+    <unit id="About.LoadingError">
+      <segment>
+        <source>Sidans innehåll kunde inte laddas.</source>
+      </segment>
+    </unit>
     <unit id="BackButton">
       <segment>
         <source>Tillbaka</source>
