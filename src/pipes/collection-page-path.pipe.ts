@@ -1,6 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 
+/**
+ * Generates a routerLink path for a collection page from a
+ * collection text item id. If typeOfPage argument is not
+ * undefined, itemId argument must be a collection id.
+ */
 @Pipe({
     name: 'collectionPagePath',
     standalone: true

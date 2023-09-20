@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 
+/**
+ * Generates a routerLink path for a collection page from an
+ * ElasticSearch hit item.
+ */
 @Pipe({
   name: 'elasticHitCollectionPagePath',
   standalone: true

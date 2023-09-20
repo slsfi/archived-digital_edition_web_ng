@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 
+/**
+ * Generates queryParams for a collection text page from an
+ * occurrence text data object.
+ */
 @Pipe({
     name: 'occurrenceCollectionTextPageQueryparams',
     standalone: true

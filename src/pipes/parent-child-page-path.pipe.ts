@@ -3,6 +3,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { config } from 'src/assets/config/config';
 
 
+/**
+ * Generates a routerLink path to a page based on parent path
+ * and child id.
+ */
 @Pipe({
     name: 'parentChildPagePath',
     standalone: true
