@@ -175,9 +175,7 @@
         "AddColumn": "Lisää sarake"
     },
     "About": {
-        "Title": "Tietoja",
-        "UI": "Käyttöliittymä",
-        "Information": "Tietoa"
+        "LoadingError": "Sivun sisällön lataus epäonnistui."
     },
     "MediaCollections": {
         "MediaCollections": "Faksimilet",

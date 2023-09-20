@@ -6,6 +6,12 @@
         <target>Abbreviation</target>
       </segment>
     </unit>
+    <unit id="About.LoadingError">
+      <segment state="initial">
+        <source>Sidans innehåll kunde inte laddas.</source>
+        <target>Failed to load page content.</target>
+      </segment>
+    </unit>
     <unit id="BackButton">
       <segment state="initial">
         <source>Tillbaka</source>

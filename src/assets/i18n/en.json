@@ -175,10 +175,8 @@
         "AddColumn": "Add column"
     },
     "About": {
-        "Title": "About the Edition",
-        "UI": "User Interface",
-        "Information": "Information"
-	},
+        "LoadingError": "Failed to load page content."
+    },
     "MediaCollections": {
         "MediaCollections": "Faksimilsamlingar",
         "locations": "Platser",
