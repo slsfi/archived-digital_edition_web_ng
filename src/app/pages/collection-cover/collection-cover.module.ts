@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
-import { ComponentsModule } from 'src/app/components/components.module';
 import { TextChangerComponent } from 'src/app/components/text-changer/text-changer';
 import { CollectionCoverPageRoutingModule } from './collection-cover-routing.module';
 import { CollectionCoverPage } from './collection-cover';
@@ -14,7 +13,6 @@ import { CollectionCoverPage } from './collection-cover';
   imports: [
     CommonModule,
     IonicModule,
-    ComponentsModule,
     TextChangerComponent,
     CollectionCoverPageRoutingModule
   ],

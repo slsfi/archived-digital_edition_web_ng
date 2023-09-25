@@ -1,0 +1,72 @@
+ion-grid {
+  --ion-grid-padding: 0;
+  margin: -0.75rem -0.75rem 0 -0.75rem;
+}
+
+ion-col {
+  --ion-grid-column-padding: 0.75rem;
+}
+
+.item-wrapper {
+  background-color: #fff;
+  height: 100%;
+  padding: 0.5rem;
+  transition: box-shadow 0.15s ease-in-out;
+  width: 100%;
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  a {
+    color: #000;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    justify-content: space-between;
+    text-decoration: none;
+  }
+}
+
+ion-spinner {
+  padding-top: 2rem;
+}
+
+@media only screen and (max-width: 575px) {
+  ion-grid {
+    margin: -0.25rem -0.25rem 0 -0.25rem;
+  }
+
+  ion-col {
+    --ion-grid-column-padding: 0.25rem;
+  }
+
+  .item-wrapper {
+    img {
+      margin: 0 1rem 0 0;
+      max-width: 25%;
+    }
+
+    h2 {
+      text-align: start;
+    }
+
+    a {
+      align-content: center;
+      align-items: center;
+      flex-flow: row nowrap;
+      justify-content: flex-start;
+    }
+  }
+}

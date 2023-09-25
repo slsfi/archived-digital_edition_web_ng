@@ -18,11 +18,7 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
-  <div *ngIf="hasDigitalEditionListChildren">
-    <digital-edition-list-children [layoutType]="'auto'" [childrenPdfs]="childrenPdfs" [collectionID]="id"></digital-edition-list-children>
-  </div>
-
-  <div class="scroll-content-container" *ngIf="!hasDigitalEditionListChildren">
+  <div class="scroll-content-container">
     <ng-container *ngIf="(text$ | async) as text; else loading">
       <div class="tei teiContainer"
             [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"

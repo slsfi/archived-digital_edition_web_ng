@@ -1,6 +1,11 @@
 <ion-content>
-  <div *ngIf="(text$ | async) as text" [ngClass]="userSettingsService.isMobile()?'markdown-container-mobile':'markdown-container'">
-    <div class="markdown" [innerHTML]="text"></div>
-  </div>
-  <digital-editions-list [layoutType]="'auto'"></digital-editions-list>
+
+  <h1 class="page-title" i18n="@@TopMenu.Content">Innehåll</h1>
+
+  <ng-container *ngIf="(mdContent$ | async) as mdContent">
+    <div class="info markdown" [innerHTML]="mdContent"></div>
+  </ng-container>
+
+  <content-grid></content-grid>
+
 </ion-content>
