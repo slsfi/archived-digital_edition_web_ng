@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { CollectionForewordPage } from './collection-foreword';
+
 
 const routes: Routes = [
   {

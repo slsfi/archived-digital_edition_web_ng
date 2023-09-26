@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer slot="start" *ngIf="!userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-desktop-mode"></text-changer>
+    <text-changer slot="start" *ngIf="!mobileMode" [textItemID]="collectionID" [parentPageType]="'page-foreword'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton" (click)="showReference()">
@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+<ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
     <ng-container *ngIf="(text$ | async) as text; else loading">
       <div class="tei teiContainer"
@@ -31,4 +31,4 @@
   </div>
 </ion-content>
 
-<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-foreword'" class="text-changer-mobile-mode"></text-changer>
+<text-changer *ngIf="mobileMode" [textItemID]="collectionID" [parentPageType]="'page-foreword'" class="text-changer-mobile-mode"></text-changer>

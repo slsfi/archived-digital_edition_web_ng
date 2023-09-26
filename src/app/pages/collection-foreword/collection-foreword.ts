@@ -4,12 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
+import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { TextService } from 'src/app/services/text.service';
+import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from 'src/assets/config/config';
 
 
@@ -18,10 +18,10 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'collection-foreword.html',
   styleUrls: ['collection-foreword.scss']
 })
-
 export class CollectionForewordPage implements OnInit {
-  id: string = '';
+  collectionID: string = '';
   intervalTimerId: number = 0;
+  mobileMode: boolean = false;
   searchMatches: string[] = [];
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
@@ -36,7 +36,7 @@ export class CollectionForewordPage implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private textService: TextService,
-    public userSettingsService: UserSettingsService,
+    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.showURNButton = config.page?.foreword?.showURNButton ?? false;
@@ -44,12 +44,14 @@ export class CollectionForewordPage implements OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.userSettingsService.isMobile();
+
     this.text$ = combineLatest(
       [this.route.params, this.route.queryParams]
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams})),
       tap(({collectionID, q}) => {
-        this.id = collectionID;
+        this.collectionID = collectionID;
         if (q) {
           this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
@@ -98,6 +100,7 @@ export class CollectionForewordPage implements OnInit {
       'pageBreakOriginal': false,
       'pageBreakEdition': false
     };
+
     const popover = await this.popoverCtrl.create({
       component: ViewOptionsPopover,
       componentProps: { toggles },
@@ -106,23 +109,17 @@ export class CollectionForewordPage implements OnInit {
       side: 'bottom',
       alignment: 'end'
     });
+
     popover.present(event);
   }
 
   async showReference() {
     const modal = await this.modalController.create({
       component: ReferenceDataModal,
-      componentProps: { origin: 'page-foreword' },
+      componentProps: { origin: 'page-foreword' }
     });
-    modal.present();
-  }
 
-  printMainContentClasses() {
-    if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-content';
-    } else {
-      return '';
-    }
+    modal.present();
   }
 
 }
