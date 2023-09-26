@@ -29,7 +29,7 @@ export class CollectionCoverPage implements OnInit {
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.hasMDCover = config.ProjectStaticMarkdownCoversFolder ?? '';
+    this.hasMDCover = config.collections?.coversMarkdownFolderNumber ?? ''; // should default to '08'
   }
 
   ngOnInit() {

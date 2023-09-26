@@ -26,6 +26,7 @@ export const config: Config = {
     enableRouterLoadingBar: true
   },
   collections: {
+    coversMarkdownFolderNumber: "08",
     enableMathJax: false,
     firstReadItem: {
       216: "216_20280", 219: "219_19443", 220: "220_20122",
@@ -238,8 +239,14 @@ export const config: Config = {
   },
   component: {
     contentGrid: {
-      showEbooks: true,
-      showMediaCollections: false
+      includeEbooks: false,
+      includeMediaCollection: false,
+      mediaCollectionCoverURL: "",
+      mediaCollectionCoverAltTexts: {
+        sv: "Alt-text",
+        fi: "Alt-teksti"
+      },
+      showTitles: false
     },
     epub: {
       showTOCButton: true,
@@ -369,7 +376,6 @@ export const config: Config = {
     ReadModeView: ["established", "comments", "facsimiles"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
   HasCover: true,
   HasTitle: true,
@@ -398,6 +404,7 @@ export const config_soderholm: Config = {
     },
   },
   collections: {
+    coversMarkdownFolderNumber: "08",
     firstReadItem: {
       1084: "1084_77105", 1699: "1699_77946", 1700: "1700_78162",
       1701: "1701_78326", 1702: "1702_78404", 1703: "1703_78486",
@@ -611,8 +618,9 @@ export const config_soderholm: Config = {
   },
   component: {
     contentGrid: {
-      showEbooks: true,
-      showMediaCollections: false
+      includeEbooks: true,
+      includeMediaCollection: false,
+      showTitles: true
     },
     epub: {
       showTOCButton: true,
@@ -734,7 +742,6 @@ export const config_soderholm: Config = {
     ReadModeView: ["facsimiles", "manuscripts"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "05",
   HasCover: false,
   HasTitle: false,
@@ -763,6 +770,7 @@ export const config_vonWright: Config = {
     },
   },
   collections: {
+    coversMarkdownFolderNumber: "08",
     enableMathJax: true,
     firstReadItem: {
       146: "", 225: ""
@@ -878,8 +886,9 @@ export const config_vonWright: Config = {
   },
   component: {
     contentGrid: {
-      showEbooks: false,
-      showMediaCollections: false
+      includeEbooks: false,
+      includeMediaCollection: false,
+      showTitles: true
     },
     epub: {
       showTOCButton: true,
@@ -1001,7 +1010,6 @@ export const config_vonWright: Config = {
     ReadModeView: ["established", "comments"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
   HasCover: true,
   HasTitle: true,
@@ -1032,6 +1040,7 @@ export const config_granqvist: Config = {
     },
   },
   collections: {
+    coversMarkdownFolderNumber: "08",
     firstReadItem: {
     },
     highlightSearchMatches: true,
@@ -1227,8 +1236,14 @@ export const config_granqvist: Config = {
   },
   component: {
     contentGrid: {
-      showEbooks: true,
-      showMediaCollections: true
+      includeEbooks: true,
+      includeMediaCollection: true,
+      mediaCollectionCoverURL: "",
+      mediaCollectionCoverAltTexts: {
+        sv: "Alt-text",
+        fi: "Alt-teksti"
+      },
+      showTitles: true
     },
     epub: {
       showTOCButton: false,
@@ -1354,7 +1369,6 @@ export const config_granqvist: Config = {
     ReadModeView: ["facsimiles"]
   },
   defaultSelectedItem: "title",
-  ProjectStaticMarkdownCoversFolder: "",
   ProjectStaticMarkdownTitleFolder: "09",
   HasCover: false,
   HasTitle: true,
@@ -1386,6 +1400,7 @@ export const config_mechelin: Config = {
     }
   },
   collections: {
+    coversMarkdownFolderNumber: "08",
     firstReadItem: {
       1: "1_1199"
     },
@@ -1448,8 +1463,9 @@ export const config_mechelin: Config = {
   },
   component: {
     contentGrid: {
-      showEbooks: false,
-      showMediaCollections: false
+      includeEbooks: false,
+      includeMediaCollection: false,
+      showTitles: true
     },
     epub: {
       showTOCButton: true,
@@ -1571,7 +1587,6 @@ export const config_mechelin: Config = {
   defaults: {
       ReadModeView: ["established_sv", "established_fi", "manuscripts", "facsimiles"]
   },
-  ProjectStaticMarkdownCoversFolder: "08",
   ProjectStaticMarkdownTitleFolder: "",
   HasCover: false,
   HasTitle: false,

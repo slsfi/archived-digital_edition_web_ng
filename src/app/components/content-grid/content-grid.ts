@@ -2,13 +2,13 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { IonicModule } from '@ionic/angular';
-import { catchError, concatMap, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
+import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 
-import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
 import { ContentItem } from 'src/app/models/content-item.model';
+import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
 import { CollectionsService } from 'src/app/services/collections.service';
 import { MdContentService } from 'src/app/services/md-content.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -23,8 +23,9 @@ export class ContentGridComponent implements OnInit {
   collectionCoversFolderId: string = '';
   collectionSortOrder: any[] = [];
   contentItems$: Observable<ContentItem[]>;
-  showEbooksInList: boolean = false;
-  showMediaCollectionsInList: boolean = false;
+  includeEbooks: boolean = false;
+  includeMediaCollection: boolean = false;
+  showTitles: boolean = true;
 
   constructor(
     private collectionsService: CollectionsService,
@@ -32,18 +33,19 @@ export class ContentGridComponent implements OnInit {
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.availableEbooks = config.ebooks ?? [];
-    this.collectionCoversFolderId = config.ProjectStaticMarkdownCoversFolder ?? '';
+    this.collectionCoversFolderId = config.collections?.coversMarkdownFolderNumber ?? '08';
     this.collectionSortOrder = config.collections?.order ?? [];
-    this.showEbooksInList = config.component?.contentGrid?.showEbooks ?? false;
-    this.showMediaCollectionsInList = config.component?.contentGrid?.showMediaCollections ?? false;
+    this.includeEbooks = config.component?.contentGrid?.includeEbooks ?? false;
+    this.includeMediaCollection = config.component?.contentGrid?.includeMediaCollection ?? false;
+    this.showTitles = config.component?.contentGrid?.showTitles ?? true;
   }
 
   ngOnInit() {
-    // TODO: Add support for listing media collections in grid
     this.contentItems$ = forkJoin(
       [
         this.getEbooks(),
-        this.getCollections()
+        this.getCollections(),
+        this.getMediaCollection()
       ]
     ).pipe(
       map((res: any[]) => {
@@ -62,7 +64,7 @@ export class ContentGridComponent implements OnInit {
 
   private getEbooks(): Observable<ContentItem[]> {
     let itemsList: ContentItem[] = [];
-    if (this.showEbooksInList && this.availableEbooks.length) {
+    if (this.includeEbooks && this.availableEbooks.length) {
       this.availableEbooks.forEach((ebook: any) => {
         const ebookItem = new ContentItem(ebook);
         itemsList.push(ebookItem);
@@ -80,8 +82,9 @@ export class ContentGridComponent implements OnInit {
       mergeMap((collectionsList: any[]) =>
         // 'from' emits each collection separately
         from(collectionsList).pipe(
-          // load cover info for each collection
-          concatMap(
+          // load cover info for each collection (mergeMap fetches in
+          // parallell, to fetch sequentially you'd use concatMap)
+          mergeMap(
             (collection: any) => 
               this.mdContentService.getMdContent(`${this.activeLocale}-${this.collectionCoversFolderId}-${collection.id}`).pipe(
                 // add image alt-text and cover URL from response to collection data
@@ -115,6 +118,23 @@ export class ContentGridComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  private getMediaCollection(): Observable<ContentItem[]> {
+    let itemsList: ContentItem[] = [];
+    if (this.includeMediaCollection) {
+      const ebookItem = new ContentItem(
+        {
+          id: 'media-collection',
+          imageAltText: config.component?.contentGrid?.mediaCollectionCoverAltTexts?.[this.activeLocale] ?? $localize`:@@TOC.MediaCollections:Bildbank`,
+          imageURL: config.component?.contentGrid?.mediaCollectionCoverURL ?? '',
+          title: $localize`:@@TOC.MediaCollections:Bildbank`,
+          type: 'media-collections'
+        }
+      );
+      itemsList.push(ebookItem);
+    }
+    return of(itemsList);
   }
 
   private sortCollectionsList(collectionsList: ContentItem[], sortList: any[]): ContentItem[] {
