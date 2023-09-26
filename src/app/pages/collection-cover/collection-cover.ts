@@ -1,9 +1,8 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { MdContentService } from 'src/app/services/md-content.service';
-import { TextService } from 'src/app/services/text.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from 'src/assets/config/config';
 
@@ -14,75 +13,54 @@ import { config } from 'src/assets/config/config';
   styleUrls: ['collection-cover.scss']
 })
 export class CollectionCoverPage implements OnInit {
-  collection: any;
-  id: string = '';
-  image_alt: string = '';
-  image_src: string = '';
-  hasMDCover: string = '';
-  text: any;
+  collectionID: string = '';
+  coverMdFolderId: string = '08';
+  coverData$: Observable<any>;
+  mobileMode: boolean = false;
 
   constructor(
-    private textService: TextService,
-    private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService,
+    private userSettingsService: UserSettingsService,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.hasMDCover = config.collections?.coversMarkdownFolderNumber ?? ''; // should default to '08'
+    this.coverMdFolderId = config.collections?.coversMarkdownFolderNumber ?? '08';
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.id = params['collectionID'];
-      this.loadCover(this.id, this.activeLocale);
-    });
-  }
+    this.mobileMode = this.userSettingsService.isMobile();
 
-  private loadCover(id: string, lang: string) {
-    if (!isNaN(Number(id))) {
-      if (!this.hasMDCover) {
-        /**
-         * ! The necessary API endpoint for getting the cover page via textService has not been
-         * ! implemented, so getting the cover this way does not work. It has to be given in a
-         * ! markdown file.
-         */
-        this.textService.getCoverPage(id, lang).subscribe(
-          (res: any) => {
-            this.text = this.sanitizer.bypassSecurityTrustHtml(
-              res.content.replace(/images\//g, 'assets/images/')
-                .replace(/\.png/g, '.svg')
-            );
-          }
+    this.coverData$ = this.route.params.pipe(
+      tap(({collectionID}) => {
+        this.collectionID = collectionID;
+      }),
+      switchMap(({collectionID}) => {
+        return this.getCoverDataFromMdContent(
+          `${this.activeLocale}-${this.coverMdFolderId}-${collectionID}`
         );
-      } else {
-        this.getCoverImageFromMdContent(`${lang}-${this.hasMDCover}-${id}`);
-      }
-    }
-  }
-
-  private getCoverImageFromMdContent(fileID: string) {
-    this.mdContentService.getMdContent(fileID).subscribe(
-      (res: any) => {
-        // Extract image url and alt-text from markdown content.
-        this.image_alt = res.content.match(/!\[(.*?)\]\(.*?\)/)[1];
-        if (this.image_alt === null) {
-          this.image_alt = 'Cover image';
-        }
-        this.image_src = res.content.match(/!\[.*?\]\((.*?)\)/)[1];
-        if (this.image_src === null) {
-          this.image_src = '';
-        }
-      }
+      })
     );
   }
 
-  printMainContentClasses() {
-    if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-content';
-    } else {
-      return '';
-    }
+  private getCoverDataFromMdContent(fileID: string): Observable<any> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        // Extract image url and alt-text from markdown content.
+        let image_alt = res.content.match(/!\[(.*?)\]\(.*?\)/)[1];
+        if (!image_alt) {
+          image_alt = 'Cover image';
+        }
+        let image_src = res.content.match(/!\[.*?\]\((.*?)\)/)[1];
+        if (!image_src) {
+          image_src = '';
+        }
+        return { image_alt, image_src };
+      }),
+      catchError((e: any) => {
+        console.error('Error loading markdown content for cover image', e);
+        return of({ image_alt: 'Cover image', image_src: '' });
+      })
+    );
   }
 
 }
