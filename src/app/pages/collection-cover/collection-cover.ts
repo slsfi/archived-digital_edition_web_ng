@@ -13,14 +13,11 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'collection-cover.html',
   styleUrls: ['collection-cover.scss']
 })
-
 export class CollectionCoverPage implements OnInit {
-  childrenPdfs: any[] = [];
   collection: any;
   id: string = '';
   image_alt: string = '';
   image_src: string = '';
-  hasDigitalEditionListChildren: boolean = false;
   hasMDCover: string = '';
   text: any;
 
@@ -32,23 +29,14 @@ export class CollectionCoverPage implements OnInit {
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
-    this.hasMDCover = config.ProjectStaticMarkdownCoversFolder ?? '';
+    this.hasMDCover = config.collections?.coversMarkdownFolderNumber ?? ''; // should default to '08'
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params['collectionID'];
-      this.checkIfCollectionHasChildrenPdfs();
       this.loadCover(this.id, this.activeLocale);
     });
-  }
-
-  checkIfCollectionHasChildrenPdfs() {
-    const configChildrenPdfs = config.collectionChildrenPdfs?.[this.id] ?? [];
-    if (configChildrenPdfs.length) {
-      this.childrenPdfs = configChildrenPdfs;
-      this.hasDigitalEditionListChildren = true;
-    }
   }
 
   private loadCover(id: string, lang: string) {

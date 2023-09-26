@@ -20,10 +20,7 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'collection-title.html',
   styleUrls: ['collection-title.scss'],
 })
-
 export class CollectionTitlePage implements OnInit {
-  childrenPdfs: any[] = [];
-  hasDigitalEditionListChildren: boolean = false;
   hasMDTitle: string = '';
   id: string = '';
   intervalTimerId: number = 0;
@@ -57,7 +54,6 @@ export class CollectionTitlePage implements OnInit {
       map(([params, queryParams]) => ({...params, ...queryParams})),
       tap(({collectionID, q}) => {
         this.id = collectionID;
-        this.checkIfCollectionHasChildrenPdfs(collectionID);
         if (q) {
           this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
@@ -69,14 +65,6 @@ export class CollectionTitlePage implements OnInit {
         return this.loadTitle(collectionID, this.activeLocale);
       })
     );
-  }
-
-  private checkIfCollectionHasChildrenPdfs(collectionID: string): void {
-    const configChildrenPdfs = config.collectionChildrenPdfs?.[collectionID] ?? [];
-    if (configChildrenPdfs.length) {
-      this.childrenPdfs = configChildrenPdfs;
-      this.hasDigitalEditionListChildren = true;
-    }
   }
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {

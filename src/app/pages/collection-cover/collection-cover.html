@@ -1,27 +1,21 @@
-<ion-header class="ion-no-border" *ngIf="!(userSettingsService.isMobile()) && !hasDigitalEditionListChildren">
+<ion-header class="ion-no-border" *ngIf="!userSettingsService.isMobile()">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!(userSettingsService.isMobile())" [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-desktop-mode"></text-changer>
+    <text-changer [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-desktop-mode"></text-changer>
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="hasDigitalEditionListChildren">
-  <div class="">
-    <digital-edition-list-children [layoutType]="'auto'" [childrenPdfs]="childrenPdfs" [collectionID]="id"></digital-edition-list-children>
-  </div>
-</ion-content>
-
-<ion-content *ngIf="!hasDigitalEditionListChildren && !hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+<ion-content *ngIf="!hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
       <div class="tei teiContainer" [innerHTML]="text"></div>
   </div>
 </ion-content>
 
-<ion-content *ngIf="!hasDigitalEditionListChildren && hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+<ion-content *ngIf="hasMDCover" class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
   <div class="cover-image-wrapper" [ngClass]="printMainContentClasses()">
     <img class="cover-image" [src]="image_src" [alt]="image_alt" loading="lazy">
   </div>
 </ion-content>
 
-<text-changer *ngIf="(userSettingsService.isMobile()) && !hasDigitalEditionListChildren" [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-mobile-mode"></text-changer>
+<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-cover'" class="text-changer-mobile-mode"></text-changer>

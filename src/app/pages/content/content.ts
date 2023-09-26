@@ -1,9 +1,9 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
+
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 
 
 @Component({
@@ -11,25 +11,29 @@ import { UserSettingsService } from 'src/app/services/user-settings.service';
   templateUrl: 'content.html',
   styleUrls: ['content.scss']
 })
-
 export class ContentPage implements OnInit {
-  text$: Observable<SafeHtml>;
+  mdContent$: Observable<SafeHtml | null>;
 
   constructor(
     private sanitizer: DomSanitizer,
     private mdContentService: MdContentService,
-    public userSettingsService: UserSettingsService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
   ngOnInit() {
-    this.text$ = this.getMdContent(this.activeLocale + '-02');
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-02').pipe(
+      map((res: string) => {
+        return this.sanitizer.sanitize(
+          SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(res)
+        );
+      })
+    );
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
+  getMdContent(fileID: string): Observable<string> {
     return this.mdContentService.getMdContent(fileID).pipe(
       map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+        return marked(res.content);
       }),
       catchError(e => {
         return of('');

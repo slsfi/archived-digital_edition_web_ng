@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ComponentsModule } from 'src/app/components/components.module';
+import { IonicModule } from '@ionic/angular';
+
 import { MediaCollectionRoutingModule } from './media-collection-routing.module';
 import { MediaCollectionPage } from './media-collection';
 
@@ -11,11 +11,10 @@ import { MediaCollectionPage } from './media-collection';
   declarations: [
     MediaCollectionPage,
   ],
- imports: [
+  imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    ComponentsModule,
     MediaCollectionRoutingModule
   ],
 })

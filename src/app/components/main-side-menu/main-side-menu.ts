@@ -7,7 +7,7 @@ import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
-import { DigitalEditionListService } from "src/app/services/digital-edition-list.service";
+import { CollectionsService } from "src/app/services/collections.service";
 import { GalleryService } from "src/app/services/gallery.service";
 import { MdContentService } from "src/app/services/md-content.service";
 import { config } from "src/assets/config/config";
@@ -39,7 +39,7 @@ export class MainSideMenu implements OnInit, OnChanges {
     private commonFunctions: CommonFunctionsService,
     private headService: DocumentHeadService,
     private mdcontentService: MdContentService,
-    private digitalEditionListService: DigitalEditionListService,
+    private collectionsService: CollectionsService,
     private galleryService: GalleryService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
@@ -54,12 +54,12 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.getMenuData().subscribe({
-      next: (menu: any[]) => {
+    this.getMenuData().subscribe(
+      (menu: any[]) => {
         this.mainMenu = menu;
         this.updateHighlightedMenuItem();
       }
-    });
+    );
   }
 
   ngOnChanges() {
@@ -154,7 +154,7 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   private getCollectionPagesMenu(): Observable<any> {
     if (this._config.collections?.order?.length) {
-      return this.digitalEditionListService.getDigitalEditions().pipe(
+      return this.collectionsService.getCollections().pipe(
         map((res: any) => {
           this.recursivelyAddParentPagePath(res, '/collection');
           res = this.categorizeCollections(res);
