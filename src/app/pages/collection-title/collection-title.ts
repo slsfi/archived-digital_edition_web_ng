@@ -21,12 +21,13 @@ import { config } from 'src/assets/config/config';
   styleUrls: ['collection-title.scss'],
 })
 export class CollectionTitlePage implements OnInit {
-  hasMDTitle: string = '';
-  id: string = '';
+  collectionID: string = '';
   intervalTimerId: number = 0;
+  mobileMode: boolean = false;
   searchMatches: string[] = [];
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
+  titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
 
   constructor(
@@ -39,21 +40,23 @@ export class CollectionTitlePage implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private textService: TextService,
-    public userSettingsService: UserSettingsService,
+    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.hasMDTitle = config.ProjectStaticMarkdownTitleFolder ?? '';
+    this.titleFromMarkdownFolderId = config.collections?.titlesMarkdownFolderNumber ?? '';
     this.showURNButton = config.page?.title?.showURNButton ?? false;
     this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
   }
 
   ngOnInit() {
+    this.mobileMode = this.userSettingsService.isMobile();
+
     this.text$ = combineLatest(
       [this.route.params, this.route.queryParams]
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams})),
       tap(({collectionID, q}) => {
-        this.id = collectionID;
+        this.collectionID = collectionID;
         if (q) {
           this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
@@ -68,40 +71,28 @@ export class CollectionTitlePage implements OnInit {
   }
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {
-    const isIdText = isNaN(Number(id));
-
-    if (this.hasMDTitle === '') {
-      if (!isIdText) {
-        return this.textService.getTitlePage(id, lang).pipe(
-          map((res: any) => {
-            if (res?.content) {
-              let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-              text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
-              return this.sanitizer.bypassSecurityTrustHtml(text);
-            } else {
-              return of(this.sanitizer.bypassSecurityTrustHtml(
-                $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
-              ));
-            }
-          }),
-          catchError((e: any) => {
-            console.error(e);
+    if (!this.titleFromMarkdownFolderId) {
+      return this.textService.getTitlePage(id, lang).pipe(
+        map((res: any) => {
+          if (res?.content) {
+            let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+            text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+            return this.sanitizer.bypassSecurityTrustHtml(text);
+          } else {
             return of(this.sanitizer.bypassSecurityTrustHtml(
               $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
             ));
-          })
-        );
-      } else {
-        return of(this.sanitizer.bypassSecurityTrustHtml(
-          $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
-        ));
-      }
+          }
+        }),
+        catchError((e: any) => {
+          console.error(e);
+          return of(this.sanitizer.bypassSecurityTrustHtml(
+            $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+          ));
+        })
+      );
     } else {
-      if (!isIdText) {
-        return this.getMdContent(`${lang}-${this.hasMDTitle}-${id}`);
-      } else {
-        return this.getMdContent(`${lang}-gallery-intro`);
-      }
+      return this.getMdContent(`${lang}-${this.titleFromMarkdownFolderId}-${id}`);
     }
   }
 
@@ -132,6 +123,7 @@ export class CollectionTitlePage implements OnInit {
       'pageBreakOriginal': false,
       'pageBreakEdition': false
     };
+
     const popover = await this.popoverCtrl.create({
       component: ViewOptionsPopover,
       componentProps: { toggles },
@@ -139,7 +131,8 @@ export class CollectionTitlePage implements OnInit {
       reference: 'trigger',
       side: 'bottom',
       alignment: 'end'
-    })
+    });
+
     popover.present(event);
   }
 
@@ -148,15 +141,8 @@ export class CollectionTitlePage implements OnInit {
       component: ReferenceDataModal,
       componentProps: { origin: 'page-title' }
     });
-    modal.present();
-  }
 
-  printMainContentClasses() {
-    if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-content';
-    } else {
-      return '';
-    }
+    modal.present();
   }
 
 }
