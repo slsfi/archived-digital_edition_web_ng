@@ -27,6 +27,7 @@ export const config: Config = {
   },
   collections: {
     coversMarkdownFolderNumber: "08",
+    titlesMarkdownFolderNumber: "",
     enableMathJax: false,
     firstReadItem: {
       216: "216_20280", 219: "219_19443", 220: "220_20122",
@@ -376,7 +377,6 @@ export const config: Config = {
     ReadModeView: ["established", "comments", "facsimiles"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownTitleFolder: "",
   HasCover: true,
   HasTitle: true,
   HasForeword: true,
@@ -405,6 +405,7 @@ export const config_soderholm: Config = {
   },
   collections: {
     coversMarkdownFolderNumber: "08",
+    titlesMarkdownFolderNumber: "",
     firstReadItem: {
       1084: "1084_77105", 1699: "1699_77946", 1700: "1700_78162",
       1701: "1701_78326", 1702: "1702_78404", 1703: "1703_78486",
@@ -742,7 +743,6 @@ export const config_soderholm: Config = {
     ReadModeView: ["facsimiles", "manuscripts"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownTitleFolder: "05",
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
@@ -771,6 +771,7 @@ export const config_vonWright: Config = {
   },
   collections: {
     coversMarkdownFolderNumber: "08",
+    titlesMarkdownFolderNumber: "",
     enableMathJax: true,
     firstReadItem: {
       146: "", 225: ""
@@ -1010,7 +1011,6 @@ export const config_vonWright: Config = {
     ReadModeView: ["established", "comments"]
   },
   defaultSelectedItem: "cover",
-  ProjectStaticMarkdownTitleFolder: "",
   HasCover: true,
   HasTitle: true,
   HasForeword: false,
@@ -1041,6 +1041,7 @@ export const config_granqvist: Config = {
   },
   collections: {
     coversMarkdownFolderNumber: "08",
+    titlesMarkdownFolderNumber: "09",
     firstReadItem: {
     },
     highlightSearchMatches: true,
@@ -1231,7 +1232,7 @@ export const config_granqvist: Config = {
     },
     title: {
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: false
     }
   },
   component: {
@@ -1361,15 +1362,14 @@ export const config_granqvist: Config = {
       MediaCollections: true,
       TagSearch: true,
       WorkSearch: false,
-      Books: true,
-      EPUB: false
+      Books: false,
+      EPUB: true
     }
   },
   defaults: {
     ReadModeView: ["facsimiles"]
   },
   defaultSelectedItem: "title",
-  ProjectStaticMarkdownTitleFolder: "09",
   HasCover: false,
   HasTitle: true,
   HasForeword: false,
@@ -1401,6 +1401,7 @@ export const config_mechelin: Config = {
   },
   collections: {
     coversMarkdownFolderNumber: "08",
+    titlesMarkdownFolderNumber: "",
     firstReadItem: {
       1: "1_1199"
     },
@@ -1587,7 +1588,6 @@ export const config_mechelin: Config = {
   defaults: {
       ReadModeView: ["established_sv", "established_fi", "manuscripts", "facsimiles"]
   },
-  ProjectStaticMarkdownTitleFolder: "",
   HasCover: false,
   HasTitle: false,
   HasForeword: false,
