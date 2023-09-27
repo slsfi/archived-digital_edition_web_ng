@@ -85,8 +85,8 @@ ion-content.collection-ion-content::part(scroll) {
 ion-fab {
   ion-fab-button {
     --background: var(--fab-button-secondary-background-color);
-    --color: var(--fab-button-secondary-icon-color);
     --box-shadow: none;
+    --color: var(--fab-button-secondary-icon-color);
   }
   ion-fab-button.toggle-fab-list-button {
     --background: var(--fab-button-primary-background-color);
@@ -97,8 +97,8 @@ ion-fab {
   }
 }
 ion-fab.column-options {
-  top: -18px;
   right: -8px;
+  top: -18px;
 }
 
 // Styles for the narrow column where you can add new columns
@@ -139,24 +139,8 @@ ion-fab.column-options {
       --ionicon-stroke-width: 48px;
     }
   }
-
-  /* Old backdrop for ion-fab-list for adding columns
-  .fab-backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.65);
-    z-index: 999;
-
-    &.show-fab-backdrop {
-      display: block;
-    }
-  }
-  */
 }
+
 .read-column + .add-view-column {
   visibility: visible;
 }

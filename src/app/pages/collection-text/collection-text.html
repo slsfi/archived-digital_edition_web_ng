@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!userSettingsService.isMobile()" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-mode"></text-changer>
+    <text-changer *ngIf="!mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
@@ -22,39 +22,46 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Main content with scroll -->
-<ng-container *ngIf="!userSettingsService.isMobile()">
-  <ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="true" [scrollY]="false">
+<!-- Main content with horizontal scroll in desktop mode -->
+<ng-container *ngIf="!mobileMode">
+  <ion-content class="collection-ion-content"
+        [class.mobile-mode-content]="mobileMode"
+        [scrollX]="true"
+        [scrollY]="false"
+  >
     <div class="column-container">
       <!-- Wrapper for all columns -->
-      <div class="read-columns-wrapper" [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'" [class.illustrations-view-shown]="illustrationsViewShown">
+      <div class="read-columns-wrapper"
+            [class.illustrations-view-shown]="illustrationsViewShown"
+            [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
+      >
 
         <!-- Tooltip wrapper -->
         <div
-          [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-          [class.show_comments]="readPopoverService.show.comments"
-          [class.show_personInfo]="readPopoverService.show.personInfo"
-          [class.show_placeInfo]="readPopoverService.show.placeInfo"
-          [class.show_workInfo]="readPopoverService.show.workInfo"
-          [class.show_normalisations]="readPopoverService.show.normalisations"
-          [class.show_changes]="readPopoverService.show.changes"
-          [class.show_abbreviations]="readPopoverService.show.abbreviations"
-          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-          [innerHTML]="toolTipText"
-          [MathJax]="toolTipText"
+              [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+              [class.show_comments]="readPopoverService.show.comments"
+              [class.show_personInfo]="readPopoverService.show.personInfo"
+              [class.show_placeInfo]="readPopoverService.show.placeInfo"
+              [class.show_workInfo]="readPopoverService.show.workInfo"
+              [class.show_normalisations]="readPopoverService.show.normalisations"
+              [class.show_changes]="readPopoverService.show.changes"
+              [class.show_abbreviations]="readPopoverService.show.abbreviations"
+              [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+              [innerHTML]="toolTipText"
+              [MathJax]="toolTipText"
         ></div>
 
         <!-- Info overlay wrapper -->
         <div
-          [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-          [class.show_comments]="readPopoverService.show.comments"
-          [class.show_personInfo]="readPopoverService.show.personInfo"
-          [class.show_placeInfo]="readPopoverService.show.placeInfo"
-          [class.show_workInfo]="readPopoverService.show.workInfo"
-          [class.show_normalisations]="readPopoverService.show.normalisations"
-          [class.show_changes]="readPopoverService.show.changes"
-          [class.show_abbreviations]="readPopoverService.show.abbreviations"
-          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+              [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+              [class.show_comments]="readPopoverService.show.comments"
+              [class.show_personInfo]="readPopoverService.show.personInfo"
+              [class.show_placeInfo]="readPopoverService.show.placeInfo"
+              [class.show_workInfo]="readPopoverService.show.workInfo"
+              [class.show_normalisations]="readPopoverService.show.normalisations"
+              [class.show_changes]="readPopoverService.show.changes"
+              [class.show_abbreviations]="readPopoverService.show.abbreviations"
+              [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
         >
           <div class="infoOverlayHeader">
             <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
@@ -64,22 +71,26 @@
         </div>
         
         <!-- Wrapper for each column -->
-        <div *ngFor="let view of views; let i = index;" id="read_div_{{i}}" class="column_type_{{view.type}}" [ngClass]="views.length > 1 ? 'read-column multiple-columns' : 'read-column single-column'">
+        <div *ngFor="let view of views; let i = index"
+              id="read_div_{{i}}"
+              class="read-column column_type_{{view.type}}"
+              [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
+        >
 
           <!-- Ion fab column options -->
           <ion-fab *ngIf="views.length>1" class="column-options">
-            <ion-fab-button class="toggle-fab-list-button" size="small" #fabColumnOptionsButton>
-              <ion-icon name="ellipsis-vertical"></ion-icon>
+            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@Read.ToggleColumnOptionsMenu" #fabColumnOptionsButton>
+              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@Read.ToggleColumnOptionsMenu"></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)">
-                <ion-icon name="trash-bin-sharp"></ion-icon>
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@Read.RemoveColumn">
+                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@Read.RemoveColumn"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)">
-                <ion-icon name="return-down-forward-sharp"></ion-icon>
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@Read.MoveColumnRight">
+                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@Read.MoveColumnRight"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)">
-                <ion-icon name="return-down-back-sharp"></ion-icon>
+              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@Read.MoveColumnLeft">
+                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@Read.MoveColumnLeft"></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
@@ -188,62 +199,67 @@
 
         <!-- Add view -->
         <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
-          <!--
-          <div class="fab-backdrop" [ngClass]="showAddViewsFabBackdrop ? 'show-fab-backdrop' : ''" [ngStyle]="{'width':backdropWidth+'px'}" (click)="toggleFabBackdrop(); fabmenuadd.close()"></div>
-          -->
           <ion-fab id="add-view-fab" #fabmenuadd>
             <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" (click)="showAddViewPopover($event)">
               <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
             </ion-fab-button>
           </ion-fab>
-          <ion-popover #addViewPopover class="page-text-add-view-popover" reference="trigger" side="bottom" alignment="end" [isOpen]="addViewPopoverisOpen" (didDismiss)="addViewPopoverisOpen = false" [dismissOnSelect]="true">
+          <ion-popover #addViewPopover
+                class="page-text-add-view-popover"
+                reference="trigger"
+                side="bottom"
+                alignment="end"
+                [isOpen]="addViewPopoverisOpen"
+                (didDismiss)="addViewPopoverisOpen = false"
+                [dismissOnSelect]="true"
+          >
             <ng-template>
               <ion-content class="no-padding">
-                <ion-chip *ngIf="viewTypes['showAll']" (click)="showAllViewTypes(); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="albums-outline"></ion-icon>
-                  <ion-label i18n="@@Read.ShowAll">Visa alla</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="multilingualReadingTextLanguages.length < 2 && viewTypes['established']" (click)="addView('established'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="reader-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Established.AddButtonText">Lästext</ion-label>
-                </ion-chip>
+                <ion-button *ngIf="viewTypes['showAll']" (click)="showAllViewTypes(); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="albums-outline"></ion-icon>
+                  <ng-container i18n="@@Read.ShowAll">Visa alla</ng-container>
+                </ion-button>
+                <ion-button *ngIf="multilingualReadingTextLanguages.length < 2 && viewTypes['established']" (click)="addView('established'); commonFunctions.scrollLastViewIntoView()"class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="reader-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Established.AddButtonText">Lästext</ng-container>
+                </ion-button>
                 <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
-                  <ion-chip *ngFor="let lang of multilingualReadingTextLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()">
-                    <ion-icon name="reader-outline"></ion-icon>
+                  <ion-button *ngFor="let lang of multilingualReadingTextLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                    <ion-icon slot="start" name="reader-outline"></ion-icon>
                     <ng-container [ngSwitch]="lang">
-                      <ion-label *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ion-label>
-                      <ion-label *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ion-label>
+                      <ng-container *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
+                      <ng-container *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
                     </ng-container>
-                  </ion-chip>
+                  </ion-button>
                 </ng-container>
-                <ion-chip *ngIf="viewTypes['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Comments.AddButtonText">Kommentarer</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['facsimiles']" (click)="addView('facsimiles'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="image-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Facsimiles.AddButtonText">Faksimil</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['illustrations']" (click)="addView('illustrations'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="images-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Illustrations.AddButtonText">Illustrationer</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['manuscripts']" (click)="addView('manuscripts'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="document-text-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['variants']" (click)="addView('variants'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="documents-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Variants.AddButtonText">Tryckt variant</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="bulb-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ion-label>
-                </ion-chip>
-                <ion-chip *ngIf="viewTypes['metadata']" (click)="addView('metadata'); commonFunctions.scrollLastViewIntoView()">
-                  <ion-icon name="server-outline"></ion-icon>
-                  <ion-label i18n="@@Read.Metadata.AddButtonText">Metadata</ion-label>
-                </ion-chip>
+                <ion-button *ngIf="viewTypes['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Comments.AddButtonText">Kommentarer</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['facsimiles']" (click)="addView('facsimiles'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="image-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Facsimiles.AddButtonText">Faksimil</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['illustrations']" (click)="addView('illustrations'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="images-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Illustrations.AddButtonText">Illustrationer</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['manuscripts']" (click)="addView('manuscripts'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['variants']" (click)="addView('variants'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="documents-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Variants.AddButtonText">Tryckt variant</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="bulb-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ng-container>
+                </ion-button>
+                <ion-button *ngIf="viewTypes['metadata']" (click)="addView('metadata'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+                  <ion-icon slot="start" name="server-outline"></ion-icon>
+                  <ng-container i18n="@@Read.Metadata.AddButtonText">Metadata</ng-container>
+                </ion-button>
               </ion-content>
             </ng-template>
           </ion-popover>
@@ -256,32 +272,38 @@
   </ion-content>
 </ng-container>
 
-<!-- Mobile Read -->
-<ng-container *ngIf="userSettingsService.isMobile()">
-  <ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+<!-- Main content in mobile mode -->
+<ng-container *ngIf="mobileMode">
+  <ion-content class="collection-ion-content mobile-mode-content"
+        [scrollX]="false"
+        [scrollY]="false"
+  >
+    <!-- Tooltip wrapper in mobile mode -->
     <div
-      [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-      [class.show_comments]="readPopoverService.show.comments"
-      [class.show_personInfo]="readPopoverService.show.personInfo"
-      [class.show_placeInfo]="readPopoverService.show.placeInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo"
-      [class.show_normalisations]="readPopoverService.show.normalisations"
-      [class.show_changes]="readPopoverService.show.changes"
-      [class.show_abbreviations]="readPopoverService.show.abbreviations"
-      [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-      [innerHTML]="toolTipText"
-      [MathJax]="toolTipText"
+          [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+          [class.show_comments]="readPopoverService.show.comments"
+          [class.show_personInfo]="readPopoverService.show.personInfo"
+          [class.show_placeInfo]="readPopoverService.show.placeInfo"
+          [class.show_workInfo]="readPopoverService.show.workInfo"
+          [class.show_normalisations]="readPopoverService.show.normalisations"
+          [class.show_changes]="readPopoverService.show.changes"
+          [class.show_abbreviations]="readPopoverService.show.abbreviations"
+          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+          [innerHTML]="toolTipText"
+          [MathJax]="toolTipText"
     ></div>
+
+    <!-- Info overlay wrapper in mobile mode -->
     <div
-      [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-      [class.show_comments]="readPopoverService.show.comments"
-      [class.show_personInfo]="readPopoverService.show.personInfo"
-      [class.show_placeInfo]="readPopoverService.show.placeInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo"
-      [class.show_normalisations]="readPopoverService.show.normalisations"
-      [class.show_changes]="readPopoverService.show.changes"
-      [class.show_abbreviations]="readPopoverService.show.abbreviations"
-      [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+          [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+          [class.show_comments]="readPopoverService.show.comments"
+          [class.show_personInfo]="readPopoverService.show.personInfo"
+          [class.show_placeInfo]="readPopoverService.show.placeInfo"
+          [class.show_workInfo]="readPopoverService.show.workInfo"
+          [class.show_normalisations]="readPopoverService.show.normalisations"
+          [class.show_changes]="readPopoverService.show.changes"
+          [class.show_abbreviations]="readPopoverService.show.abbreviations"
+          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
     >
       <div class="infoOverlayHeader">
         <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
@@ -289,6 +311,8 @@
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
     </div>
+
+    <!-- Ion segment for choosing displayed column type -->
     <ion-segment mode="ios" [(ngModel)]="activeMobileModeViewType" (ionChange)="storeActiveMobileModeViewType()">
       <ion-segment-button value="established" *ngIf="availableMobileModeViews.includes('established')">
         <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
@@ -312,6 +336,8 @@
       </ion-segment-button>
       -->
     </ion-segment>
+
+    <!-- Columns in mobile mode -->
     <div [class.visuallyhidden]="activeMobileModeViewType !== 'established'"
           class="mobile-mode-established scroll-content-container"
     >
@@ -339,4 +365,4 @@
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-mode"></text-changer>
+<text-changer *ngIf="mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-mode"></text-changer>

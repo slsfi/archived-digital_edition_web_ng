@@ -172,7 +172,11 @@
         },
         "ShowAll": "Visa alla",
         "ShowSearchResults": "Förekomster",
-        "AddColumn": "Ny kolumn"
+        "AddColumn": "Ny kolumn",
+        "ToggleColumnOptionsMenu": "Öppna/stäng alternativ för kolumnen",
+        "RemoveColumn": "Ta bort kolumnen",
+        "MoveColumnRight": "Byt plats med kolumnen till höger",
+        "MoveColumnLeft": "Byt plats med kolumnen till vänster"
     },
     "About": {
         "LoadingError": "Sidans innehåll kunde inte laddas."

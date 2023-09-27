@@ -10,10 +10,10 @@ import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/sem
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { UrlService } from 'src/app/services/url.service';
 import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { UrlService } from 'src/app/services/url.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
@@ -35,12 +35,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   collectionAndPublicationLegacyId: string = '';
   enabledViewTypes: string[] = [];
   illustrationsViewShown: boolean = false;
-  infoOverlayPosType: string;
-  infoOverlayPosition: any;
-  infoOverlayWidth: string | null;
+  infoOverlayPosition: any = {
+    bottom: 0 + 'px',
+    left: -1500 + 'px'
+  };
+  infoOverlayPosType: string = 'fixed';
   infoOverlayText: SafeHtml = '';
   infoOverlayTitle: string = '';
+  infoOverlayWidth: string | null = null;
   legacyId: string = '';
+  mobileMode: boolean = false;
   multilingualReadingTextLanguages: any[] = [];
   paramChapterID: any;
   paramCollectionID: any;
@@ -48,17 +52,19 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   routeParamsSubscription: Subscription | null = null;
   routeQueryParamsSubscription: Subscription | null = null;
   searchMatches: string[] = [];
-  simpleWorkMetadata: boolean = false;
   showTextDownloadButton: boolean = false;
   showURNButton: boolean;
   showViewOptionsButton: boolean = true;
   textItemID: string = '';
   textPosition: string = '';
-  toolTipsSettings?: Record<string, any> = {};
-  toolTipPosType: string;
-  toolTipPosition: any;
-  toolTipMaxWidth: string | null;
-  toolTipScaleValue: number | null;
+  toolTipMaxWidth: string | null = null;
+  toolTipPosType: string = 'fixed';
+  toolTipPosition: any = {
+    top: 0 + 'px',
+    left: -1500 + 'px'
+  };
+  toolTipScaleValue: number | null = null;
+  toolTipsSettings: any = {};
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
   usePrintNotDownloadIcon: boolean = false;
@@ -75,7 +81,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private commentService: CommentService,
     public commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
-    private urlService: UrlService,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private popoverCtrl: PopoverController,
@@ -86,29 +91,13 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private sanitizer: DomSanitizer,
     private textService: TextService,
     private tooltipService: TooltipService,
-    public userSettingsService: UserSettingsService,
+    private urlService: UrlService,
+    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.toolTipPosType = 'fixed';
-    this.toolTipMaxWidth = null;
-    this.toolTipScaleValue = null;
-    this.toolTipPosition = {
-      top: 0 + 'px',
-      left: -1500 + 'px'
-    };
-    this.infoOverlayText = '';
-    this.infoOverlayTitle = '';
-    this.infoOverlayWidth = null;
-    this.infoOverlayPosType = 'fixed';
-    this.infoOverlayPosition = {
-      bottom: 0 + 'px',
-      left: -1500 + 'px'
-    };
-
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
     this.showURNButton = config.page?.read?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.read?.showViewOptionsButton ?? true;
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
 
     try {
@@ -193,6 +182,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.userSettingsService.isMobile();
+
     this.routeParamsSubscription = this.route.params.subscribe(
       (params: any) => {
         let textItemID;
@@ -287,7 +278,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.unlistenFirstTouchStartEvent?.();
   }
 
-  setViews() {
+  private setViews() {
     // There are no views defined in the url params =>
     // show a) current views if defined,
     //      b) recent view types if defined, or
@@ -306,7 +297,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  setDefaultViewsFromConfig() {
+  private setDefaultViewsFromConfig() {
     let newViews: Array<any> = [];
 
     if (this.userSettingsService.isMobile()) {
@@ -342,7 +333,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     });
   }
 
-  getViewTypesShown(): string[] {
+  private getViewTypesShown(): string[] {
     const viewTypes: string[] = [];
     this.views.forEach((view: any) => {
       viewTypes.push(view.type);
@@ -350,7 +341,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     return viewTypes;
   }
 
-  viewTypeShouldBeShown(type: string): boolean {
+  private viewTypeShouldBeShown(type: string): boolean {
     if (type.startsWith('established') && !this.viewTypes['established']) {
       return false;
     } else if (type === 'comments' && !this.viewTypes['comments']) {
@@ -369,7 +360,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     return true;
   }
 
-  viewTypeIsShown(type: string, views?: any[]): boolean {
+  private viewTypeIsShown(type: string, views?: any[]): boolean {
     views = views ? views : this.views;
     for (let i = 0; i < views.length; i++) {
       if (views[i].type === type) {
@@ -435,8 +426,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         }
       }
     } catch (e) {
-      console.log('Error resolving event target in getEventTarget() in read.ts');
-      console.error(e);
+      console.error('Error resolving event target in getEventTarget() in read.ts', e);
     }
     return eventTarget;
   }
@@ -642,10 +632,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           }.bind(null, eventTarget), 5000);
         } else if (eventTarget['classList'].contains('extVariantsTrigger')) {
           // Click on trigger for showing links to external variants
-          if (
-            eventTarget.nextElementSibling !== null &&
-            eventTarget.nextElementSibling !== undefined
-          ) {
+          if (eventTarget.nextElementSibling) {
             if (
               eventTarget.nextElementSibling.classList.contains('extVariants') &&
               !eventTarget.nextElementSibling.classList.contains('show-extVariants')
@@ -662,16 +649,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
         // Possibly click on link.
         eventTarget = event.target as HTMLElement;
-        if (eventTarget !== null && !eventTarget.classList.contains('xreference')) {
+        if (!eventTarget?.classList.contains('xreference')) {
           eventTarget = eventTarget.parentElement;
-          if (eventTarget !== null) {
+          if (eventTarget) {
             if (!eventTarget.classList.contains('xreference')) {
               eventTarget = eventTarget.parentElement;
             }
           }
         }
 
-        if (eventTarget !== null && eventTarget.classList.contains('xreference')) {
+        if (eventTarget?.classList.contains('xreference')) {
           event.preventDefault();
           const anchorElem: HTMLAnchorElement = eventTarget as HTMLAnchorElement;
 
@@ -680,10 +667,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             let targetId = '';
             if (anchorElem.hasAttribute('href')) {
               targetId = anchorElem.getAttribute('href') || '';
-            } else if (
-              anchorElem.parentElement &&
-              anchorElem.parentElement.hasAttribute('href')
-            ) {
+            } else if (anchorElem.parentElement?.hasAttribute('href')) {
               targetId = anchorElem.parentElement.getAttribute('href') || '';
             }
 
@@ -700,44 +684,41 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               // Find the containing scrollable element.
               let containerElem = null;
               if (targetColumnId) {
-                containerElem = document.querySelector(
-                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) #' + targetColumnId
+                containerElem = nElement.querySelector(
+                  '#' + targetColumnId
                 );
               } else {
                 containerElem = anchorElem.parentElement;
                 while (
-                  containerElem !== null &&
-                  containerElem.parentElement !== null &&
+                  containerElem?.parentElement &&
                   !containerElem.classList.contains('scroll-content-container')
                 ) {
                   containerElem = containerElem.parentElement;
                 }
-                if (containerElem?.parentElement === null) {
+                if (!containerElem?.parentElement) {
                   containerElem = null;
                 }
-                if (containerElem === null) {
+                if (!containerElem) {
                   // Check if a footnotereference link in infoOverlay. This method is used to find the container element if in mobile mode.
                   if (
-                    anchorElem.parentElement !== null &&
-                    anchorElem.parentElement.parentElement !== null &&
-                    anchorElem.parentElement.parentElement.hasAttribute('class') &&
-                    anchorElem.parentElement.parentElement.classList.contains('infoOverlayContent')
+                    anchorElem.parentElement?.parentElement?.hasAttribute('class') &&
+                    anchorElem.parentElement?.parentElement?.classList.contains('infoOverlayContent')
                   ) {
-                    containerElem = document.querySelector(
-                      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content.mobile-mode-content .scroll-content-container'
+                    containerElem = nElement.querySelector(
+                      'ion-content.collection-ion-content.mobile-mode-content .scroll-content-container'
                     ) as HTMLElement;
                   }
                 }
               }
 
-              if (containerElem !== null) {
+              if (containerElem) {
                 let dataIdSelector = '[data-id="' + String(targetId).replace('#', '') + '"]';
                 if (anchorElem.classList.contains('teiVariant')) {
                   // Link to (foot)note reference in variant, uses id-attribute instead of data-id.
                   dataIdSelector = '[id="' + String(targetId).replace('#', '') + '"]';
                 }
                 const target = containerElem.querySelector(dataIdSelector) as HTMLElement;
-                if (target !== null) {
+                if (target) {
                   this.commonFunctions.scrollToHTMLElement(target, 'top');
                 }
               }
@@ -756,30 +737,23 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
               varTargets.forEach((varTarget: any) => {
                 this.commonFunctions.scrollElementIntoView(varTarget);
-                if (varTarget.firstElementChild !== null
-                  && varTarget.firstElementChild !== undefined) {
-                  if (varTarget.firstElementChild.classList.contains('var_margin')) {
-                    const marginElem = varTarget.firstElementChild;
+                if (varTarget.firstElementChild?.classList.contains('var_margin')) {
+                  const marginElem = varTarget.firstElementChild;
 
-                    // Highlight all children of the margin element that have the ref_variant class
-                    const refVariants = Array.from(marginElem.querySelectorAll('.ref_variant'));
-                    refVariants.forEach((refVariant: any) => {
-                      refVariant.classList.add('highlight');
-                      window.setTimeout(function(elem: any) {
-                        elem.classList.remove('highlight');
-                      }.bind(null, refVariant), 5000);
-                    });
+                  // Highlight all children of the margin element that have the ref_variant class
+                  const refVariants = Array.from(marginElem.querySelectorAll('.ref_variant'));
+                  refVariants.forEach((refVariant: any) => {
+                    refVariant.classList.add('highlight');
+                    window.setTimeout(function(elem: any) {
+                      elem.classList.remove('highlight');
+                    }.bind(null, refVariant), 5000);
+                  });
 
-                    if (
-                      marginElem.firstElementChild !== null &&
-                      marginElem.firstElementChild !== undefined &&
-                      marginElem.firstElementChild.classList.contains('extVariantsTrigger')
-                    ) {
-                      marginElem.firstElementChild.classList.add('highlight');
-                      window.setTimeout(function(elem: any) {
-                        elem.classList.remove('highlight');
-                      }.bind(null, marginElem.firstElementChild), 5000);
-                    }
+                  if (marginElem.firstElementChild?.classList.contains('extVariantsTrigger')) {
+                    marginElem.firstElementChild.classList.add('highlight');
+                    window.setTimeout(function(elem: any) {
+                      elem.classList.remove('highlight');
+                    }.bind(null, marginElem.firstElementChild), 5000);
                   }
                 }
               });
@@ -842,8 +816,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('#', '');
 
                 // Find the element in the correct column (read-text or comments) based on ref type.
-                const matchingElements = document.querySelectorAll(
-                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + positionId + '"]'
+                const matchingElements = nElement.querySelectorAll(
+                  '[name="' + positionId + '"]'
                 );
                 let targetElement = null;
                 let refType = 'READ-TEXT';
@@ -852,10 +826,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 }
                 for (let i = 0; i < matchingElements.length; i++) {
                   let parentElem = matchingElements[i].parentElement;
-                  while (parentElem !== null && parentElem.tagName !== refType) {
-                    parentElem = parentElem.parentElement;
+                  while (parentElem?.tagName !== refType) {
+                    parentElem = parentElem?.parentElement ?? null;
                   }
-                  if (parentElem !== null && parentElem.tagName === refType) {
+                  if (parentElem?.tagName === refType) {
                     targetElement = matchingElements[i] as HTMLElement;
                     if (
                       targetElement.parentElement?.classList.contains('ttFixed') ||
@@ -869,7 +843,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                     }
                   }
                 }
-                if (targetElement !== null && targetElement.classList.contains('anchor')) {
+                if (targetElement?.classList.contains('anchor')) {
                   this.commonFunctions.scrollToHTMLElement(targetElement);
                 }
               } else {
@@ -880,8 +854,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
                 this.textService.getCollectionAndPublicationByLegacyId(
                   publicationId + '_' + textId
-                ).subscribe({
-                  next: (data: any) => {
+                ).subscribe(
+                  (data: any) => {
                     if (data?.length && data[0]['coll_id'] && data[0]['pub_id']) {
                       publicationId = data[0]['coll_id'];
                       textId = data[0]['pub_id'];
@@ -902,7 +876,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                       newWindowRef.location.href = '/' + this.activeLocale + hrefString;
                     }
                   }
-                });
+                );
               }
 
             } else if (anchorElem.classList.contains('ref_introduction')) {
@@ -913,8 +887,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
               this.textService.getCollectionAndPublicationByLegacyId(
                 publicationId
-              ).subscribe({
-                next: (data: any) => {
+              ).subscribe(
+                (data: any) => {
                   if (data?.length && data[0]['coll_id']) {
                     publicationId = data[0]['coll_id'];
                   }
@@ -928,7 +902,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                     newWindowRef.location.href = '/' + this.activeLocale + hrefString;
                   }
                 }
-              });
+              );
             }
           }
         }
@@ -1097,7 +1071,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     });
   }
 
-  showSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement) {
+  private showSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement) {
     this.tooltipService.getSemanticDataObjectTooltip(id, type, targetElem).subscribe(
       (text: string) => {
         this.setToolTipPosition(targetElem, text);
@@ -1106,7 +1080,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     );
   }
 
-  showFootnoteTooltip(id: string, textType: string, targetElem: HTMLElement) {
+  private showFootnoteTooltip(id: string, textType: string, targetElem: HTMLElement) {
     this.tooltipService.getFootnoteTooltip(id, textType, targetElem).subscribe(
       (footnoteHTML: string) => {
         if (footnoteHTML) {
@@ -1117,15 +1091,18 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     );
   }
 
-  /* This method is used for showing tooltips for changes, normalisations, abbreviations and explanations in manuscripts. */
-  showTooltipFromInlineHtml(targetElem: HTMLElement) {
+  /**
+   * This function is used for showing tooltips for changes,
+   * normalisations, abbreviations and explanations in manuscripts.
+   */
+  private showTooltipFromInlineHtml(targetElem: HTMLElement) {
     if (targetElem.nextElementSibling?.classList.contains('tooltip')) {
       this.setToolTipPosition(targetElem, targetElem.nextElementSibling.innerHTML);
       this.setToolTipText(targetElem.nextElementSibling.innerHTML);
     }
   }
 
-  showCommentTooltip(id: string, targetElem: HTMLElement) {
+  private showCommentTooltip(id: string, targetElem: HTMLElement) {
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
         this.setToolTipPosition(targetElem, tooltip.description);
@@ -1139,7 +1116,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     });
   }
 
-  showVariantTooltip(targetElem: HTMLElement) {
+  private showVariantTooltip(targetElem: HTMLElement) {
     if (
       targetElem.nextElementSibling?.classList.contains('tooltip') &&
       targetElem.nextElementSibling?.textContent
@@ -1149,7 +1126,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  showFootnoteInfoOverlay(id: string, textType: string, targetElem: HTMLElement) {
+  private showFootnoteInfoOverlay(id: string, textType: string, targetElem: HTMLElement) {
     this.tooltipService.getFootnoteTooltip(id, textType, targetElem).subscribe(
       (footnoteHTML: string) => {
         if (footnoteHTML) {
@@ -1161,7 +1138,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     );
   }
 
-  showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
+  private showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
         this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
@@ -1176,9 +1153,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     });
   }
 
-  /* This method is used for showing infoOverlays for changes, normalisations and abbreviations, and
-     also comments if they are present inline in the text. */
-  showInfoOverlayFromInlineHtml(targetElem: HTMLElement) {
+  /**
+   * This function is used for showing infoOverlays for changes,
+   * normalisations and abbreviations, and also comments if they
+   * are present inline in the text.
+   */
+  private showInfoOverlayFromInlineHtml(targetElem: HTMLElement) {
     if (targetElem.nextElementSibling?.classList.contains('tooltip')) {
       let text = '';
       let lemma = '';
@@ -1265,19 +1245,19 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  setToolTipText(text: string) {
+  private setToolTipText(text: string) {
     this.toolTipText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
-  setInfoOverlayText(text: string) {
+  private setInfoOverlayText(text: string) {
     this.infoOverlayText = this.sanitizer.bypassSecurityTrustHtml(text);
   }
 
-  setInfoOverlayTitle(title: string) {
+  private setInfoOverlayTitle(title: string) {
     this.infoOverlayTitle = String(title);
   }
 
-  hideToolTip() {
+  private hideToolTip() {
     this.setToolTipText('');
     this.toolTipPosType = 'fixed'; // Position needs to be fixed so we can safely hide it outside viewport
     this.toolTipPosition = {
@@ -1297,7 +1277,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     };
   }
 
-  setToolTipPosition(targetElem: HTMLElement, ttText: string) {
+  private setToolTipPosition(targetElem: HTMLElement, ttText: string) {
     const ttProperties = this.tooltipService.getTooltipProperties(targetElem, ttText, 'page-text');
 
     if (ttProperties !== undefined && ttProperties !== null) {
@@ -1309,7 +1289,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         left: ttProperties.left
       };
       this.toolTipPosType = 'absolute';
-      if (!this.userSettingsService.isDesktop()) {
+      if (this.mobileMode) {
         this.toolTipPosType = 'fixed';
       }
       this.tooltipVisible = true;
@@ -1332,10 +1312,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     // scrolled horizontally to the left.
     let scrollLeft = 0;
     let horizontalScrollbarOffsetHeight = 0;
-    const contentElem = document.querySelector(
-      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) > ion-content.collection-ion-content'
+    const contentElem = this.elementRef.nativeElement.querySelector(
+      'ion-content.collection-ion-content'
     )?.shadowRoot?.querySelector('[part="scroll"]') as HTMLElement;
-    if (contentElem !== null) {
+    if (contentElem) {
       scrollLeft = contentElem.scrollLeft;
       if (contentElem.clientHeight < contentElem.offsetHeight) {
         horizontalScrollbarOffsetHeight = contentElem.offsetHeight - contentElem.clientHeight;
@@ -1346,18 +1326,17 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     // container for the column that the trigger element resides in.
     let containerElem = triggerElement.parentElement;
     while (
-      containerElem !== null &&
-      containerElem.parentElement !== null &&
+      containerElem?.parentElement &&
       !containerElem.classList.contains('scroll-content-container')
     ) {
       containerElem = containerElem.parentElement;
     }
 
-    if (containerElem !== null && containerElem.parentElement !== null) {
+    if (containerElem?.parentElement) {
       const containerElemRect = containerElem.getBoundingClientRect();
       let calcWidth = containerElem.clientWidth; // Width without scrollbar
 
-      if (this.userSettingsService.isMobile() && vw > 800) {
+      if (this.mobileMode && vw > 800) {
         // Adjust width in mobile view when viewport size over 800 px
         // since padding changes through CSS then.
         margins = margins + 16;
@@ -1375,10 +1354,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         bottom: (vh - horizontalScrollbarOffsetHeight - containerElemRect.bottom) + 'px',
         left: (containerElemRect.left + scrollLeft + margins - contentElem.getBoundingClientRect().left) + 'px'
       };
-      if (this.userSettingsService.isDesktop()) {
-        this.infoOverlayPosType = 'absolute';
-      } else {
+      if (this.mobileMode) {
         this.infoOverlayPosType = 'fixed';
+      } else {
+        this.infoOverlayPosType = 'absolute';
       }
 
       // Set info overlay width
@@ -1386,11 +1365,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  async showSemanticDataObjectModal(id: string, type: string) {
+  private async showSemanticDataObjectModal(id: string, type: string) {
     const modal = await this.modalCtrl.create({
       component: SemanticDataObjectModal,
       componentProps: { id: id, type: type }
     });
+
     modal.present();
   }
 
@@ -1402,6 +1382,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       side: 'bottom',
       alignment: 'end'
     });
+
     popover.present(event);
   }
 
@@ -1410,7 +1391,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     const modal = await this.modalCtrl.create({
       component: ReferenceDataModal,
       componentProps: { origin: 'page-text' }
-    })
+    });
+
     modal.present();
   }
 
@@ -1418,7 +1400,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
       componentProps: { textId: this.textItemID, origin: 'page-text' }
-    })
+    });
+
     modal.present();
   }
 
@@ -1436,8 +1419,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  addView(type: string, id?: number | null, image?: any | null, language?: string | null) {
-    if (type === 'established' && language && this.multilingualReadingTextLanguages.length > 1) {
+  addView(type: string, id?: number | null, image?: any, language?: string | null) {
+    if (
+      type === 'established' &&
+      language &&
+      this.multilingualReadingTextLanguages.length > 1
+    ) {
       type = 'established_' + language;
     }
 
@@ -1504,10 +1491,15 @@ export class CollectionTextPage implements OnDestroy, OnInit {
    * Reorders the given array by moving the item at position 'fromIndex'
    * to the position 'toIndex'. Returns the reordered array.
    */
-  moveArrayItem(array: any[], fromIndex: number, toIndex: number) {
+  private moveArrayItem(array: any[], fromIndex: number, toIndex: number) {
     const reorderedArray = array;
-    if (fromIndex > -1 && toIndex > -1 && fromIndex < array.length
-      && toIndex < array.length && fromIndex !== toIndex) {
+    if (
+      fromIndex > -1 &&
+      toIndex > -1 &&
+      fromIndex < array.length &&
+      toIndex < array.length &&
+      fromIndex !== toIndex
+    ) {
       reorderedArray.splice(toIndex, 0, reorderedArray.splice(fromIndex, 1)[0]);
     }
     return reorderedArray;
@@ -1531,7 +1523,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     updateQueryParams && this.updateViewsInRouterQueryParams(this.views);
   }
 
-  updateViewsInRouterQueryParams(views: Array<any>, typesOnly: boolean = false) {
+  private updateViewsInRouterQueryParams(views: Array<any>, typesOnly: boolean = false) {
     this.illustrationsViewShown = this.viewTypeIsShown('illustrations', views);
 
     let trimmedViews: any[] = [];
@@ -1561,9 +1553,13 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.hideToolTip();
     try {
       if (element['classList'].contains('variantScrollTarget')) {
-        const variantContElems: NodeListOf<HTMLElement> = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) variants');
+        const variantContElems: NodeListOf<HTMLElement> = this.elementRef.nativeElement.querySelectorAll(
+          'variants'
+        );
         for (let v = 0; v < variantContElems.length; v++) {
-          const elems: NodeListOf<HTMLElement> = variantContElems[v].querySelectorAll('.teiVariant');
+          const elems: NodeListOf<HTMLElement> = variantContElems[v].querySelectorAll(
+            '.teiVariant'
+          );
           let variantNotScrolled = true;
           for (let i = 0; i < elems.length; i++) {
             if (elems[i].id === element.id) {
@@ -1575,15 +1571,15 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 this.commonFunctions.scrollElementIntoView(elems[i]);
               }
               setTimeout(function () {
-                if (elems[i] !== undefined) {
-                  elems[i].classList.remove('highlight');
-                }
+                elems[i]?.classList.remove('highlight');
               }, 5000);
             }
           }
         }
       } else if (element['classList'].contains('anchorScrollTarget')) {
-        const elems: NodeListOf<HTMLElement> = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) .teiVariant.anchorScrollTarget');
+        const elems: NodeListOf<HTMLElement> = this.elementRef.nativeElement.querySelectorAll(
+          '.teiVariant.anchorScrollTarget'
+        );
         const elementClassList = element.className.split(' ');
         let targetClassName = '';
         let targetCompClassName = '';
@@ -1605,9 +1601,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             if (iClassList[y] === targetClassName || iClassList[y] === targetCompClassName) {
               elems[i].classList.add('highlight');
               setTimeout(function () {
-                if (elems[i] !== undefined) {
-                  elems[i].classList.remove('highlight');
-                }
+                elems[i]?.classList.remove('highlight');
               }, 5000);
               if (iClassList[y] === targetClassName) {
                 this.commonFunctions.scrollElementIntoView(elems[i]);
@@ -1620,15 +1614,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  printMainContentClasses() {
-    if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-content';
-    } else {
-      return '';
-    }
-  }
-
-  setCollectionAndPublicationLegacyId(publicationID: string) {
+  private setCollectionAndPublicationLegacyId(publicationID: string) {
     this.textService.getLegacyIdByPublicationId(publicationID).subscribe({
       next: (publication) => {
         this.collectionAndPublicationLegacyId = '';
@@ -1638,7 +1624,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       },
       error: (e) => {
         this.collectionAndPublicationLegacyId = '';
-        console.log('could not get publication data trying to resolve collection and publication legacy id');
+        console.error('Error: could not get publication data trying to resolve collection and publication legacy id', e);
       }
     });
   }
