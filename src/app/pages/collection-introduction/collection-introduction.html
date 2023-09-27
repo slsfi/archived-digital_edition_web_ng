@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-introduction'" class="text-changer-desktop-mode"></text-changer>
+    <text-changer *ngIf="!mobileMode" [textItemID]="collectionID" [parentPageType]="'page-introduction'" class="text-changer-desktop-mode"></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
@@ -27,7 +27,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="collection-ion-content" [ngClass]="printMainContentClasses()" [scrollX]="false" [scrollY]="false">
+<ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
 
     <!-- Tooltip wrapper -->
@@ -73,9 +73,9 @@
 
   <!-- Introduction table of contents -->
   <nav id="TOC" *ngIf="hasSeparateIntroToc && tocMenuOpen">
-    <div *ngIf="!userSettingsService.isMobile()" id="toc-close-button" (click)="toggleTocMenu()">
+    <div *ngIf="!mobileMode" id="toc-close-button" (click)="toggleTocMenu()">
       <ion-button class="close" fill="clear">
-        <ion-icon slot="icon-only" name="close" class="intro-toc-button"></ion-icon>
+        <ion-icon slot="icon-only" name="close" class="intro-toc-button" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
       </ion-button>
     </div>
     <div id="toc-text" [innerHTML]="textMenu"></div>
@@ -83,4 +83,4 @@
 
 </ion-content>
 
-<text-changer *ngIf="userSettingsService.isMobile()" [textItemID]="id" [parentPageType]="'page-introduction'" class="text-changer-mobile-mode"></text-changer>
+<text-changer *ngIf="mobileMode" [textItemID]="collectionID" [parentPageType]="'page-introduction'" class="text-changer-mobile-mode"></text-changer>

@@ -5,15 +5,15 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { combineLatest, map, Observable, Subscription } from 'rxjs';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';
+import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
 import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { ReadPopoverService } from 'src/app/services/read-popover.service';
 import { TextService } from 'src/app/services/text.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 
@@ -24,38 +24,42 @@ import { isBrowser } from 'src/standalone/utility-functions';
   styleUrls: ['collection-introduction.scss']
 })
 export class CollectionIntroductionPage implements OnInit, OnDestroy {
+  collectionID: string = '';
   collectionLegacyId: string = '';
   hasSeparateIntroToc: boolean = false;
-  hasTOCLabelTranslation: boolean = false;
-  id = '';
-  infoOverlayPosType: string;
-  infoOverlayPosition: any;
-  infoOverlayWidth: string | null;
+  infoOverlayPosition: any = {
+    bottom: 0 + 'px',
+    left: -1500 + 'px'
+  };
+  infoOverlayPosType: string = 'fixed';
   infoOverlayText: SafeHtml = '';
   infoOverlayTitle: string = '';
+  infoOverlayWidth: string | null = null;
   intervalTimerId: number = 0;
-  pos: string | null;
-  viewOptionsTogglesIntro: any = {};
+  mobileMode: boolean = false;
+  pos: string | null = null;
   searchMatches: string[] = [];
   showTextDownloadButton: boolean = false;
-  showURNButton: boolean;
+  showURNButton: boolean = true;
   showViewOptionsButton: boolean = true;
-  simpleWorkMetadata?: boolean;
   text: SafeHtml;
   textLoading: boolean = true;
   textMenu: SafeHtml;
-  tocMenuOpen: boolean;
+  tocMenuOpen: boolean = false;
+  toolTipMaxWidth: string | null = null;
+  toolTipPosition: any = {
+    top: 0 + 'px',
+    left: -1500 + 'px'
+  };
+  toolTipPosType: string = 'fixed';
+  toolTipScaleValue: number | null = null;
   toolTipsSettings: any = {};
-  toolTipPosType: string;
-  toolTipPosition: any;
-  toolTipMaxWidth: string | null;
-  toolTipScaleValue: number | null;
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
-  urlParameters$: Observable<any>;
   urlParametersSubscription: Subscription | null = null;
   usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
+  viewOptionsTogglesIntro: any = {};
 
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
@@ -63,39 +67,24 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   private unlistenFirstTouchStartEvent?: () => void;
 
   constructor(
-    private sanitizer: DomSanitizer,
-    private renderer2: Renderer2,
-    private ngZone: NgZone,
-    private tooltipService: TooltipService,
-    private elementRef: ElementRef,
-    private popoverCtrl: PopoverController,
-    public userSettingsService: UserSettingsService,
-    public readPopoverService: ReadPopoverService,
-    private textService: TextService,
     private commonFunctions: CommonFunctionsService,
+    private elementRef: ElementRef,
     private modalCtrl: ModalController,
+    private ngZone: NgZone,
+    private popoverCtrl: PopoverController,
+    public readPopoverService: ReadPopoverService,
+    private renderer2: Renderer2,
+    private sanitizer: DomSanitizer,
+    private textService: TextService,
+    private tooltipService: TooltipService,
     private route: ActivatedRoute,
     private router: Router,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private userSettingsService: UserSettingsService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.pos = null;
-    this.tocMenuOpen = false;
-    this.toolTipPosType = 'fixed';
-    this.toolTipMaxWidth = null;
-    this.toolTipScaleValue = null;
-    this.toolTipPosition = {
-      top: 0 + 'px',
-      left: -1500 + 'px'
-    };
-    this.infoOverlayText = '';
-    this.infoOverlayTitle = '';
-    this.infoOverlayWidth = null;
-    this.infoOverlayPosType = 'fixed';
-    this.infoOverlayPosition = {
-      bottom: 0 + 'px',
-      left: -1500 + 'px'
-    };
-
+    this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
+    this.showURNButton = config.page?.introduction?.showURNButton ?? true;
+    this.showViewOptionsButton = config.page?.introduction?.showViewOptionsButton ?? true;
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.viewOptionsTogglesIntro = config.settings?.introToggles ?? undefined;
 
@@ -124,16 +113,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       this.viewOptionsTogglesIntro.pageBreakOriginal = false;
     }
 
-    this.showURNButton = config.page?.introduction?.showURNButton ?? true;
-    this.showViewOptionsButton = config.page?.introduction?.showViewOptionsButton ?? true;
-    this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
-
-    if ($localize`:@@Read.Introduction.Contents:Innehåll`) {
-      this.hasTOCLabelTranslation = true;
-    } else {
-      this.hasTOCLabelTranslation = false;
-    }
-
     try {
       const textDownloadOptions = config.textDownloadOptions ?? undefined;
       if (
@@ -158,13 +137,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.urlParameters$ = combineLatest(
+    this.mobileMode = this.userSettingsService.isMobile();
+
+    this.urlParametersSubscription = combineLatest(
       [this.route.params, this.route.queryParams]
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams}))
-    );
-     
-    this.urlParametersSubscription = this.urlParameters$.subscribe(routeParams => {
+    ).subscribe(routeParams => {
       
       // Check if there is a text position in the route params
       // (comes from queryParams)
@@ -173,7 +152,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       } else {
         this.pos = null;
       }
-
 
       if (routeParams['q'] !== undefined) {
         this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(routeParams['q']);
@@ -184,12 +162,12 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       // content. If it's the same collection id, try to scroll
       // the text to this.pos (will only scroll if not null).
       if (routeParams['collectionID']) {
-        if (routeParams['collectionID'] !== this.id) {
-          this.id = routeParams['collectionID'];
+        if (routeParams['collectionID'] !== this.collectionID) {
+          this.collectionID = routeParams['collectionID'];
           if (config.app?.enableCollectionLegacyIDs) {
-            this.setCollectionLegacyId(this.id);
+            this.setCollectionLegacyId(this.collectionID);
           }
-          this.loadIntroduction(this.id, this.activeLocale);
+          this.loadIntroduction(this.collectionID, this.activeLocale);
         } else {
           // Try to scroll to a position in the text
           this.scrollToPos(100);
@@ -220,7 +198,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           // Fix paths for images and file extensions for icons
           let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
 
-          // TODO: this manipulation of the introductions TOC should be made using htmlparser2
+          // TODO: this manipulation of the introductions TOC should maybe be made using htmlparser2,
+          // TODO: on the other hand using regex doesn't rely on an external dependency ...
           // Find the introduction's table of contents in the text
           const pattern = /<div data-id="content">(.*?)<\/div>/;
           const matches = textContent.match(pattern);
@@ -278,8 +257,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             iterationsLeft -= 1;
             if (that.pos !== undefined && that.pos !== null) {
               // Look for position in name attributes
-              let posElem: HTMLElement | null = document.querySelector(
-                'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]'
+              let posElem: HTMLElement | null = that.elementRef.nativeElement.querySelector(
+                '[name="' + that.pos + '"]'
               );
               if (posElem) {
                 const parentElem = posElem.parentElement;
@@ -293,8 +272,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                     // (footnote elements are copied to a list at the
                     // end of the introduction and that's the position
                     // we need to find).
-                    posElem = document.querySelectorAll(
-                      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [name="' + that.pos + '"]'
+                    posElem = that.elementRef.nativeElement.querySelectorAll(
+                      '[name="' + that.pos + '"]'
                     )[1] as HTMLElement;
                   }
                 }
@@ -303,8 +282,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                 }
               } else {
                 // Look for position in data-id attributes
-                posElem = document.querySelector(
-                  'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) [data-id="' + that.pos + '"]'
+                posElem = that.elementRef.nativeElement.querySelector(
+                  '[data-id="' + that.pos + '"]'
                 );
               }
               if (posElem) {
@@ -466,7 +445,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               // Link to introduction.
               if (hrefTargetItems.length === 1 && hrefTargetItems[0].startsWith('#')) {
                 // If only a position starting with a hash, assume it's in the same publication.
-                publicationId = this.id;
+                publicationId = this.collectionID;
                 positionId = hrefTargetItems[0];
               } else {
                 publicationId = hrefTargetItems[0];
@@ -481,7 +460,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               // Check if we are already on the same page.
               if (
                 (
-                  String(publicationId) === String(this.id) ||
+                  String(publicationId) === String(this.collectionID) ||
                   String(publicationId) === String(this.collectionLegacyId)
                 ) && positionId !== undefined 
               ) {
@@ -676,8 +655,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
     // Get page content element and adjust viewport height with horizontal scrollbar height if such is present
-    const contentElem = document.querySelector(
-      'page-introduction:not([ion-page-hidden]):not(.ion-page-hidden) ion-content.collection-ion-content'
+    const contentElem = this.elementRef.nativeElement.querySelector(
+      'ion-content.collection-ion-content'
     ) as HTMLElement;
     let horizontalScrollbarOffsetHeight = 0;
     if (contentElem.clientHeight < contentElem.offsetHeight) {
@@ -686,8 +665,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
     // Get bounding rectangle of the div.scroll-content-container element which is the container for the column that the trigger element resides in.
     let containerElem = triggerElement.parentElement;
-    while (containerElem !== null && containerElem.parentElement !== null &&
-     !containerElem.classList.contains('scroll-content-container')) {
+    while (
+      containerElem !== null &&
+      containerElem.parentElement !== null &&
+      !containerElem.classList.contains('scroll-content-container')
+    ) {
        containerElem = containerElem.parentElement;
     }
 
@@ -791,6 +773,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: SemanticDataObjectModal,
       componentProps: { id, type }
     });
+
     modal.present();
   }
 
@@ -799,6 +782,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: IllustrationModal,
       componentProps: { 'imageNumber': imageNumber }
     });
+
     modal.present();
   }
 
@@ -812,6 +796,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       side: 'bottom',
       alignment: 'end'
     });
+
     popover.present(event);
   }
 
@@ -820,27 +805,21 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       component: ReferenceDataModal,
       componentProps: { origin: 'page-introduction' }
     });
+
     modal.present();
   }
 
   async showDownloadModal() {
     const modal = await this.modalCtrl.create({
       component: DownloadTextsModalPage,
-      componentProps: { textId: this.id, origin: 'page-introduction' }
+      componentProps: { textId: this.collectionID, origin: 'page-introduction' }
     });
+
     modal.present();
   }
 
   toggleTocMenu() {
     this.tocMenuOpen = !this.tocMenuOpen;
-  }
-
-  printMainContentClasses() {
-    if (this.userSettingsService.isMobile()) {
-      return 'mobile-mode-content';
-    } else {
-      return '';
-    }
   }
 
 }
