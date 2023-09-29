@@ -5,12 +5,8 @@ ion-popover.view-options-popover {
     --offset-y: -30px;
 }
 
-/* Inline popover in page-text to add new view */
+/* Inline popover in page-text to add new view, additional styles defined inline in the template */
 ion-popover.page-text-add-view-popover {
-    --background: transparent;
-    --box-shadow: none;
-    --offset-y: 30px;
-  
     &::part(content) {
         width: 350px;
     }
@@ -28,20 +24,9 @@ ion-popover.page-text-add-view-popover {
     }
 
     ion-button.custom-outline-button {
-        --background: #f2f2f2;
-        --border-radius: 16px;
-        --border-color: transparent;
-        --color: #000;
-        --padding-bottom: 0.375rem;
-        --padding-top: 0.375rem;
-        font-size: 1rem;
-        margin: 2px;
-        text-transform: unset;
-        transition: all ease-in-out 0.2s;
-
         &:hover,
         &:focus {
-            --border-color: var(--button-background-color);
+            --border-color: var(--button-background-color) !important;
         }
     }
 }

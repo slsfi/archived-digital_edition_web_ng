@@ -9,10 +9,13 @@ ion-button.button.circular-icon-button {
   font-size: 0.8125rem;
   letter-spacing: 0;
   min-height: 1.875rem;
+  transition: all ease-in-out 0.2s;
 }
 ion-button.button.custom-outline-button,
 ion-button.button.circular-icon-button {
   --background: transparent;
+  --background-hover: var(--button-background-color);
+  --background-focused: var(--button-background-color);
   --border-color: var(--button-background-color);
   --border-width: 1px;
   --color: var(--button-background-color);

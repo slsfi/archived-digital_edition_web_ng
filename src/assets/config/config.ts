@@ -226,11 +226,12 @@ export const config: Config = {
         showAll: true,
         established: true,
         comments: true,
+        facsimiles: true,
         manuscripts: true,
         variants: true,
-        facsimiles: true,
         illustrations: true,
-        legend: true
+        legend: true,
+        metadata: false
       }
     },
     title: {
@@ -1449,9 +1450,9 @@ export const config_mechelin: Config = {
         showAll: true,
         established: true,
         comments: false,
+        facsimiles: true,
         manuscripts: true,
         variants: false,
-        facsimiles: true,
         illustrations: false,
         legend: false,
         metadata: true

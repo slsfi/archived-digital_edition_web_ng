@@ -23,18 +23,17 @@ ion-content.collection-ion-content::part(scroll) {
   width: 100%;
 }
 .read-columns-wrapper {
-  -webkit-overflow-scrolling: touch;
-  white-space: nowrap;
-  display: flex;
   align-content: center;
+  display: flex;
+  white-space: nowrap;
   width: 100%;
 
   .read-column {
-    position: relative;
     flex: 1 1 auto;
-    width: 100%;
+    position: relative;
     max-width: 730px;
     min-width: 500px;
+    width: 100%;
 
     ion-card {
       --background: var(--page-text-columns-background-color);
@@ -103,36 +102,36 @@ ion-fab.column-options {
 
 // Styles for the narrow column where you can add new columns
 .add-view-column {
-  position: relative;
-  flex: 0 0 auto;
-  width: 80px;
   display: flex;
+  flex: 0 0 auto;
+  position: relative;
   visibility: hidden; /* Hides the column by default, set to visible below when preceded by a read-column in the DOM. This prevents the column from flashing to the left in page-text when read-columns have not been loaded yet. */
+  width: 80px;
 
   .add-column {
+    align-items: center;
     background: var(--page-text-add-column-background-color);
     color: var(--page-text-add-column-text-color);
-    margin: 10px 25px 0 25px;
-    width: 30px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
+    margin: 10px 25px 0 25px;
+    width: 30px;
   }
 
   .add-column p {
-    transform: rotate(90deg) translateX(100%);
-    text-transform: uppercase;
     font-size: 0.8125rem;
     font-weight: bold;
     line-height: 1;
     margin: 0;
+    text-transform: uppercase;
+    transform: rotate(90deg) translateX(100%);
   }
 
   ion-fab {
-    top: -18px;
     left: 50%;
+    top: -18px;
     transform: translate(-50%, 0);
 
     ion-fab-button.toggle-fab-list-button ion-icon {

@@ -129,7 +129,7 @@
                       (selectedIllustration)="updateIllustrationViewImage($event)"
                 ></read-text>
 
-                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
+                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
                   <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
                     <read-text *ngIf="view.type === 'established_' + lang"
                           [textItemID]="textItemID + '_' + lang"
@@ -212,57 +212,109 @@
                 [isOpen]="addViewPopoverisOpen"
                 (didDismiss)="addViewPopoverisOpen = false"
                 [dismissOnSelect]="true"
+                [ngStyle]="{
+                  '--background': 'transparent',
+                  '--box-shadow': 'none',
+                  '--offset-y': '1.25rem'
+                }"
           >
             <ng-template>
               <ion-content class="no-padding">
-                <ion-button *ngIf="viewTypes['showAll']" (click)="showAllViewTypes(); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="albums-outline"></ion-icon>
-                  <ng-container i18n="@@Read.ShowAll">Visa alla</ng-container>
-                </ion-button>
-                <ion-button *ngIf="multilingualReadingTextLanguages.length < 2 && viewTypes['established']" (click)="addView('established'); commonFunctions.scrollLastViewIntoView()"class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="reader-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Established.AddButtonText">Lästext</ng-container>
-                </ion-button>
-                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1 && viewTypes['established']">
-                  <ion-button *ngFor="let lang of multilingualReadingTextLanguages" (click)="addView('established', null, null, lang); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
+
+                <ion-button *ngFor="let type of enabledViewTypes"
+                      class="custom-outline-button"
+                      fill="outline"
+                      (click)="addView(type); commonFunctions.scrollLastViewIntoView()"
+                      [ngStyle]="{
+                        '--background': '#f2f2f2',
+                        '--border-radius': '1rem',
+                        '--border-color': 'transparent',
+                        '--color': '#000',
+                        '--padding-bottom': '0.375rem',
+                        '--padding-top': '0.375rem',
+                        'font-size': '1rem',
+                        'margin': '2px',
+                        'text-transform': 'unset'
+                      }"
+                >
+                  <ng-container *ngIf="type === 'showAll'">
+                    <ion-icon slot="start" name="albums-outline"></ion-icon>
+                    <ng-container i18n="@@Read.ShowAll">Visa alla</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'established'">
                     <ion-icon slot="start" name="reader-outline"></ion-icon>
-                    <ng-container [ngSwitch]="lang">
+                    <ng-container i18n="@@Read.Established.AddButtonText">Lästext</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type.startsWith('established_')">
+                    <ion-icon slot="start" name="reader-outline"></ion-icon>
+                    <ng-container [ngSwitch]="type.split('_')[1]">
                       <ng-container *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
                       <ng-container *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
                     </ng-container>
-                  </ion-button>
-                </ng-container>
-                <ion-button *ngIf="viewTypes['comments']" (click)="addView('comments'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Comments.AddButtonText">Kommentarer</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'comments'">
+                    <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Comments.AddButtonText">Kommentarer</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'manuscripts'">
+                    <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'variants'">
+                    <ion-icon slot="start" name="documents-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Variants.AddButtonText">Tryckt variant</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'facsimiles'">
+                    <ion-icon slot="start" name="image-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Facsimiles.AddButtonText">Faksimil</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'illustrations'">
+                    <ion-icon slot="start" name="images-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Illustrations.AddButtonText">Illustrationer</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'legend'">
+                    <ion-icon slot="start" name="bulb-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="type === 'metadata'">
+                    <ion-icon slot="start" name="server-outline"></ion-icon>
+                    <ng-container i18n="@@Read.Metadata.AddButtonText">Metadata</ng-container>
+                  </ng-container>
+
                 </ion-button>
-                <ion-button *ngIf="viewTypes['facsimiles']" (click)="addView('facsimiles'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="image-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Facsimiles.AddButtonText">Faksimil</ng-container>
+
+                <ion-button fill="outline"
+                      class="custom-outline-button circular-icon-button"
+                      [ngStyle]="{
+                        '--background': '#f2f2f2',
+                        '--border-radius': '1rem',
+                        '--border-color': 'transparent',
+                        '--color': '#000',
+                        '--padding-bottom': '0.375rem',
+                        '--padding-end': '0.375rem',
+                        '--padding-start': '0.375rem',
+                        '--padding-top': '0.375rem',
+                        'font-size': '1rem',
+                        'margin': '2px',
+                        'text-transform': 'unset'
+                      }"
+                >
+                  <ion-icon slot="icon-only" name="close"></ion-icon>
                 </ion-button>
-                <ion-button *ngIf="viewTypes['illustrations']" (click)="addView('illustrations'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="images-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Illustrations.AddButtonText">Illustrationer</ng-container>
-                </ion-button>
-                <ion-button *ngIf="viewTypes['manuscripts']" (click)="addView('manuscripts'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="document-text-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ng-container>
-                </ion-button>
-                <ion-button *ngIf="viewTypes['variants']" (click)="addView('variants'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="documents-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Variants.AddButtonText">Tryckt variant</ng-container>
-                </ion-button>
-                <ion-button *ngIf="viewTypes['legend']" (click)="addView('legend'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="bulb-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ng-container>
-                </ion-button>
-                <ion-button *ngIf="viewTypes['metadata']" (click)="addView('metadata'); commonFunctions.scrollLastViewIntoView()" class="custom-outline-button" fill="outline">
-                  <ion-icon slot="start" name="server-outline"></ion-icon>
-                  <ng-container i18n="@@Read.Metadata.AddButtonText">Metadata</ng-container>
-                </ion-button>
+
               </ion-content>
             </ng-template>
           </ion-popover>
+
           <div class="add-column">
             <p id="add-column-label" i18n="@@Read.AddColumn">Ny kolumn</p>
           </div>

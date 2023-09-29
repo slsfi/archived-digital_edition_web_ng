@@ -70,7 +70,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   views: any[] = [];
-  viewTypes: any;
   
   private unlistenFirstTouchStartEvent?: () => void;
   private unlistenClickEvents?: () => void;
@@ -137,10 +136,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
 
     // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
-    this.viewTypes = config.page?.read?.viewTypeSettings ?? {};
-    for (const type in this.viewTypes) {
-      if (this.viewTypes.hasOwnProperty(type)) {
-        if (type === 'established' && this.multilingualReadingTextLanguages.length > 1) {
+    const viewTypes = config.page?.read?.viewTypeSettings ?? {};
+    for (const type in viewTypes) {
+      if (
+        viewTypes.hasOwnProperty(type) &&
+        viewTypes[type]
+      ) {
+        if (
+          type === 'established' &&
+          this.multilingualReadingTextLanguages.length > 1
+        ) {
           for (const estLanguage of this.multilingualReadingTextLanguages) {
             this.enabledViewTypes.push(type + '_' + estLanguage);
           }
@@ -314,60 +319,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
 
     this.updateViewsInRouterQueryParams(newViews);
-  }
-
-  showAllViewTypes() {
-    this.enabledViewTypes.forEach((type: any) => {
-      const viewTypesShown = this.getViewTypesShown();
-      if (
-        type !== 'showAll' &&
-        this.viewTypeShouldBeShown(type) &&
-        viewTypesShown.indexOf(type) === -1
-      ) {
-        if (type.startsWith('established') && type.split('_')[1]) {
-          this.addView('established', null, null, type.split('_')[1]);
-        } else {
-          this.addView(type);
-        }
-      }
-    });
-  }
-
-  private getViewTypesShown(): string[] {
-    const viewTypes: string[] = [];
-    this.views.forEach((view: any) => {
-      viewTypes.push(view.type);
-    });
-    return viewTypes;
-  }
-
-  private viewTypeShouldBeShown(type: string): boolean {
-    if (type.startsWith('established') && !this.viewTypes['established']) {
-      return false;
-    } else if (type === 'comments' && !this.viewTypes['comments']) {
-      return false;
-    } else if (type === 'facsimiles' && !this.viewTypes['facsimiles']) {
-      return false;
-    } else if (type === 'manuscripts' && !this.viewTypes['manuscripts']) {
-      return false;
-    } else if (type === 'variants' && !this.viewTypes['variants']) {
-      return false;
-    } else if (type === 'illustrations' && !this.viewTypes['illustrations']) {
-      return false;
-    } else if (type === 'legend' && !this.viewTypes['legend']) {
-      return false;
-    }
-    return true;
-  }
-
-  private viewTypeIsShown(type: string, views?: any[]): boolean {
-    views = views ? views : this.views;
-    for (let i = 0; i < views.length; i++) {
-      if (views[i].type === type) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private getEventTarget(event: any) {
@@ -1405,6 +1356,24 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     modal.present();
   }
 
+  private getViewTypesShown(): string[] {
+    const viewTypes: string[] = [];
+    this.views.forEach((view: any) => {
+      viewTypes.push(view.type);
+    });
+    return viewTypes;
+  }
+
+  private viewTypeIsShown(type: string, views?: any[]): boolean {
+    views = views ? views : this.views;
+    for (let i = 0; i < views.length; i++) {
+      if (views[i].type === type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   openNewView(event: any) {
     if (event.viewType === 'facsimiles') {
       this.addView(event.viewType, event.id);
@@ -1419,13 +1388,22 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  addView(type: string, id?: number | null, image?: any, language?: string | null) {
-    if (
-      type === 'established' &&
-      language &&
-      this.multilingualReadingTextLanguages.length > 1
-    ) {
-      type = 'established_' + language;
+  showAllViewTypes() {
+    this.enabledViewTypes.forEach((type: any) => {
+      const viewTypesShown = this.getViewTypesShown();
+      if (
+        type !== 'showAll' &&
+        viewTypesShown.indexOf(type) < 0
+      ) {
+        this.addView(type);
+      }
+    });
+  }
+
+  addView(type: string, id?: number | null, image?: any) {
+    if (type === 'showAll') {
+      this.showAllViewTypes();
+      return;
     }
 
     if (this.enabledViewTypes.indexOf(type) !== -1) {
