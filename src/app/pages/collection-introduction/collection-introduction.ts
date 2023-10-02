@@ -45,7 +45,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   textLoading: boolean = true;
   textMenu: SafeHtml;
   tocMenuOpen: boolean;
-  toolTipsSettings: any = {};
   toolTipPosType: string;
   toolTipPosition: any;
   toolTipMaxWidth: string | null;
@@ -96,7 +95,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       left: -1500 + 'px'
     };
 
-    this.toolTipsSettings = config.settings?.toolTips ?? undefined;
     this.viewOptionsTogglesIntro = config.page?.introduction?.viewOptions ?? undefined;
 
     if (
@@ -571,28 +569,30 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           ) {
             this.ngZone.run(() => {
               if (
-                this.toolTipsSettings.personInfo &&
                 eventTarget.classList.contains('person') &&
                 this.readPopoverService.show.personInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'person', eventTarget
+                );
               } else if (
-                this.toolTipsSettings.placeInfo &&
                 eventTarget.classList.contains('placeName') &&
                 this.readPopoverService.show.placeInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'place', eventTarget
+                );
               } else if (
-                this.toolTipsSettings.workInfo &&
                 eventTarget.classList.contains('title') &&
                 this.readPopoverService.show.workInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
-              } else if (
-                this.toolTipsSettings.footNotes &&
-                eventTarget.classList.contains('ttFoot')
-              ) {
-                this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'work', eventTarget
+                );
+              } else if (eventTarget.classList.contains('ttFoot')) {
+                this.showFootnoteTooltip(
+                  eventTarget.getAttribute('data-id'), eventTarget
+                );
               }
             });
           }

@@ -64,7 +64,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     left: -1500 + 'px'
   };
   toolTipScaleValue: number | null = null;
-  toolTipsSettings: any = {};
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
   usePrintNotDownloadIcon: boolean = false;
@@ -97,7 +96,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
     this.showURNButton = config.page?.text?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.text?.showViewOptionsButton ?? true;
-    this.toolTipsSettings = config.settings?.toolTips ?? undefined;
 
     try {
       const textDownloadOptions = config.textDownloadOptions ?? undefined;
@@ -868,7 +866,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           while (!this.tooltipVisible && eventTarget['classList'].contains('tooltiptrigger')) {
             if (eventTarget.hasAttribute('data-id')) {
               if (
-                this.toolTipsSettings?.['personInfo'] &&
                 eventTarget['classList'].contains('person') &&
                 this.readPopoverService.show.personInfo
               ) {
@@ -876,7 +873,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
                 });
               } else if (
-                this.toolTipsSettings?.['placeInfo'] &&
                 eventTarget['classList'].contains('placeName') &&
                 this.readPopoverService.show.placeInfo
               ) {
@@ -884,7 +880,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
                 });
               } else if (
-                this.toolTipsSettings?.['workInfo'] &&
                 eventTarget['classList'].contains('title') &&
                 this.readPopoverService.show.workInfo
               ) {
@@ -892,7 +887,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
                 });
               } else if (
-                this.toolTipsSettings?.['comments'] &&
                 eventTarget['classList'].contains('comment') &&
                 this.readPopoverService.show.comments
               ) {
@@ -900,31 +894,27 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   this.showCommentTooltip(eventTarget.getAttribute('data-id'), eventTarget);
                 });
               } else if (
-                this.toolTipsSettings?.['footNotes'] &&
                 eventTarget['classList'].contains('teiManuscript') &&
                 eventTarget['classList'].contains('ttFoot')
               ) {
                 this.ngZone.run(() => {
                   this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'manuscript', eventTarget);
                 });
-              } else if (
-                this.toolTipsSettings?.['footNotes'] &&
-                eventTarget['classList'].contains('ttFoot')
-              ) {
+              } else if (eventTarget['classList'].contains('ttFoot')) {
                 this.ngZone.run(() => {
                   this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'read-text', eventTarget);
                 });
               }
             } else if (
               (
-                this.toolTipsSettings && this.toolTipsSettings['changes'] &&
-                eventTarget['classList'].contains('ttChanges') && this.readPopoverService.show.changes
+                eventTarget['classList'].contains('ttChanges') &&
+                this.readPopoverService.show.changes
               ) || (
-                this.toolTipsSettings && this.toolTipsSettings['normalisations'] &&
-                eventTarget['classList'].contains('ttNormalisations') && this.readPopoverService.show.normalisations
+                eventTarget['classList'].contains('ttNormalisations') &&
+                this.readPopoverService.show.normalisations
               ) || (
-                this.toolTipsSettings && this.toolTipsSettings['abbreviations'] &&
-                eventTarget['classList'].contains('ttAbbreviations') && this.readPopoverService.show.abbreviations
+                eventTarget['classList'].contains('ttAbbreviations') &&
+                this.readPopoverService.show.abbreviations
               )
             ) {
               this.ngZone.run(() => {
@@ -949,23 +939,24 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               } else {
                 let parentElem: HTMLElement | null = eventTarget as HTMLElement;
                 parentElem = parentElem.parentElement;
-                while (parentElem !== null && parentElem.tagName !== 'MANUSCRIPTS') {
+                while (parentElem !== null && parentElem?.tagName !== 'MANUSCRIPTS') {
                   parentElem = parentElem.parentElement;
                 }
-                if (parentElem !== null) {
+                if (parentElem) {
                   this.ngZone.run(() => {
                     this.showTooltipFromInlineHtml(eventTarget);
                   });
                 }
               }
             } else if (
-              this.toolTipsSettings?.['footNotes'] &&
               eventTarget.hasAttribute('id') &&
               eventTarget['classList'].contains('teiVariant') &&
               eventTarget['classList'].contains('ttFoot')
             ) {
               this.ngZone.run(() => {
-                this.showFootnoteTooltip(eventTarget.getAttribute('id'), 'variant', eventTarget);
+                this.showFootnoteTooltip(
+                  eventTarget.getAttribute('id'), 'variant', eventTarget
+                );
               });
             } else if (
               (

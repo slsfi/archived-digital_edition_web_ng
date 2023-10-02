@@ -39,6 +39,12 @@ export const config: Config = {
       215: "215_20568", 217: "217_20559_ch1", 204: "204_20322",
       212: "212_20323", 209: "209_20479"
     },
+    frontMatterPages: {
+      cover: true,
+      title: true,
+      foreword: true,
+      introduction: true
+    },
     highlightSearchMatches: true,
     mediaCollectionMappings: { 214: 44, 206: 19 },
     order: [
@@ -310,6 +316,9 @@ export const config: Config = {
     fullscreenImageViewer: {
       imageQuality: 4
     },
+    referenceData: {
+      URNResolverURL: "https://urn.fi/",
+    },
     semanticDataObject: {
       showAliasAndPrevLastName: false,
       showArticleData: false,
@@ -322,21 +331,7 @@ export const config: Config = {
       showType: false
     }
   },
-  urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: true,
-  settings: {
-    toolTips: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      variants: true,
-      abbreviations: true,
-      workInfo: true,
-      footNotes: true
-    }
-  },
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -369,12 +364,7 @@ export const config: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaultSelectedItem: "cover",
-  HasCover: true,
-  HasTitle: true,
-  HasForeword: true,
-  HasIntro: true
+  }
 }
 
 /**
@@ -472,6 +462,12 @@ export const config_soderholm: Config = {
       529: "529_27350", 530: "530_27354", 531: "531_27356",
       532: "532_27358", 533: "533_26046", 534: "534_26048",
       535: "535_27366", 536: "536_27368", 540: "540_37812"
+    },
+    frontMatterPages: {
+      cover: false,
+      title: false,
+      foreword: false,
+      introduction: false
     },
     highlightSearchMatches: true,
     order: [
@@ -676,25 +672,14 @@ export const config_soderholm: Config = {
     fullscreenImageViewer: {
       imageQuality: 2
     },
+    referenceData: {
+      URNResolverURL: "https://urn.fi/",
+    },
     semanticDataObject: {
       showAliasAndPrevLastName: false
     }
   },
-  urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  settings: {
-    toolTips: {
-        comments: false,
-        personInfo: false,
-        placeInfo: false,
-        changes: false,
-        normalisations: false,
-        variants: false,
-        abbreviations: false,
-        workInfo: false,
-        footNotes: false
-    }
-  },
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: false,
@@ -727,12 +712,7 @@ export const config_soderholm: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaultSelectedItem: "cover",
-  HasCover: false,
-  HasTitle: false,
-  HasForeword: false,
-  HasIntro: false
+  }
 }
 
 /**
@@ -761,6 +741,12 @@ export const config_vonWright: Config = {
     enableMathJax: true,
     firstReadItem: {
       146: "", 225: ""
+    },
+    frontMatterPages: {
+      cover: true,
+      title: true,
+      foreword: false,
+      introduction: true
     },
     highlightSearchMatches: true,
     mediaCollectionMappings: { 225: 46 },
@@ -937,25 +923,14 @@ export const config_vonWright: Config = {
     fullscreenImageViewer: {
       imageQuality: 4
     },
+    referenceData: {
+      URNResolverURL: "https://urn.fi/",
+    },
     semanticDataObject: {
       showAliasAndPrevLastName: false
     }
   },
-  urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  settings: {
-    toolTips: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      variants: false,
-      abbreviations: false,
-      workInfo: true,
-      footNotes: true
-    }
-  },
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -988,12 +963,7 @@ export const config_vonWright: Config = {
       Books: false,
       EPUB: false
     }
-  },
-  defaultSelectedItem: "cover",
-  HasCover: true,
-  HasTitle: true,
-  HasForeword: false,
-  HasIntro: true
+  }
 }
 
 /**
@@ -1021,6 +991,12 @@ export const config_granqvist: Config = {
   collections: {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "09",
+    frontMatterPages: {
+      cover: false,
+      title: true,
+      foreword: false,
+      introduction: false
+    },
     highlightSearchMatches: true,
     order: [
       [537, 538, 539, 29, 147, 148, 149, 30, 31]
@@ -1263,6 +1239,9 @@ export const config_granqvist: Config = {
     fullscreenImageViewer: {
       imageQuality: 1
     },
+    referenceData: {
+      URNResolverURL: "https://urn.fi/",
+    },
     semanticDataObject: {
       showAliasAndPrevLastName: false,
       showArticleData: true,
@@ -1271,21 +1250,7 @@ export const config_granqvist: Config = {
       showMediaData: true
     }
   },
-  urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  settings: {
-    toolTips: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      variants: false,
-      abbreviations: false,
-      workInfo: true,
-      footNotes: true
-    }
-  },
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -1318,12 +1283,7 @@ export const config_granqvist: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaultSelectedItem: "title",
-  HasCover: false,
-  HasTitle: true,
-  HasForeword: false,
-  HasIntro: false
+  }
 }
 
 /**
@@ -1354,6 +1314,12 @@ export const config_mechelin: Config = {
     titlesMarkdownFolderNumber: "",
     firstReadItem: {
       1: "1_1199"
+    },
+    frontMatterPages: {
+      cover: true,
+      title: true,
+      foreword: false,
+      introduction: true
     },
     order: [
       [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -1476,25 +1442,14 @@ export const config_mechelin: Config = {
     fullscreenImageViewer: {
       imageQuality: 1
     },
+    referenceData: {
+      URNResolverURL: "https://urn.fi/",
+    },
     semanticDataObject: {
       showOccurrences: false
     }
   },
-  urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  settings: {
-    toolTips: {
-      comments: true,
-      personInfo: true,
-      placeInfo: false,
-      changes: true,
-      normalisations: true,
-      variants: false,
-      abbreviations: true,
-      workInfo: false,
-      footNotes: true
-    }
-  },
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: false,
@@ -1528,9 +1483,5 @@ export const config_mechelin: Config = {
       EPUB: false,
       ExtraText: true
     }
-  },
-  HasCover: false,
-  HasTitle: false,
-  HasForeword: false,
-  HasIntro: true
+  }
 }

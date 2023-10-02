@@ -16,10 +16,10 @@ async function generateSitemap() {
     let urlOrigin = config.app?.siteURLOrigin ?? '';
     const locale = config.app?.i18n?.defaultLanguage ?? 'sv';
     const multilingualCollectionTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
-    const collectionCovers = config.HasCover ?? false;
-    const collectionTitles = config.HasTitle ?? false;
-    const collectionForewords = config.HasForeword ?? false;
-    const collectionIntros = config.HasIntro ?? false;
+    const collectionCovers = config.collections?.frontMatterPages?.cover ?? false;
+    const collectionTitles = config.collections?.frontMatterPages?.title ?? false;
+    const collectionForewords = config.collections?.frontMatterPages?.foreword ?? false;
+    const collectionIntros = config.collections?.frontMatterPages?.introduction ?? false;
 
     const APIBase = API + '/' + projectName;
     if (urlOrigin.length && urlOrigin[urlOrigin.length - 1] === '/') {

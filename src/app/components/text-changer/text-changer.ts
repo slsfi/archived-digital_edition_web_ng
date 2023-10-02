@@ -45,10 +45,10 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
     private tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService
   ) {
-    this.collectionHasCover = config.HasCover ?? false;
-    this.collectionHasTitle = config.HasTitle ?? false;
-    this.collectionHasForeword = config.HasForeword ?? false;
-    this.collectionHasIntro = config.HasIntro ?? false;
+    this.collectionHasCover = config.collections?.frontMatterPages?.cover ?? false;
+    this.collectionHasTitle = config.collections?.frontMatterPages?.title ?? false;
+    this.collectionHasForeword = config.collections?.frontMatterPages?.foreword ?? false;
+    this.collectionHasIntro = config.collections?.frontMatterPages?.introduction ?? false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
