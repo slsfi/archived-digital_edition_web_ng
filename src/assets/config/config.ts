@@ -40,11 +40,13 @@ export const config: Config = {
       212: "212_20323", 209: "209_20479"
     },
     highlightSearchMatches: true,
+    mediaCollectionMappings: { 214: 44, 206: 19 },
     order: [
       [216, 219, 220, 218, 210, 208, 207, 214, 203, 213,
         202, 199, 221, 206, 201, 211, 200, 205, 215, 217,
         204, 212, 209]
-    ]
+    ],
+    visibleInlineReadTextIllustrations: [206]
   },
   ebooks: [
     {
@@ -214,15 +216,35 @@ export const config: Config = {
     introduction: {
       hasSeparateTOC: true,
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewOptions: {
+        personInfo: true,
+        placeInfo: false,
+        workInfo: true,
+        paragraphNumbering: true,
+        pageBreakEdition: true
+      }
     },
     mediaCollection: {
       showURNButton: true
     },
-    read: {
+    text: {
+      defaultViews: ["established", "comments", "facsimiles"],
       showURNButton: true,
       showViewOptionsButton: true,
-      viewTypeSettings: {
+      viewOptions: {
+        comments: true,
+        personInfo: true,
+        placeInfo: true,
+        changes: true,
+        normalisations: true,
+        workInfo: true,
+        abbreviations: true,
+        paragraphNumbering: true,
+        pageBreakOriginal: true,
+        pageBreakEdition: true
+      },
+      viewTypes: {
         showAll: true,
         established: true,
         comments: true,
@@ -255,6 +277,20 @@ export const config: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
+    facsimileColumn: {
+      imageQuality: 4,
+      showFacsimileTitle: true
+    },
+    manuscripts: {
+      showOpenLegendButton: true
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: ["211", "215", "219", "220"],
+      sortableCollectionsChronological: ["215", "219", "220"],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -266,16 +302,8 @@ export const config: Config = {
       siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
-    sideMenu: {
-      sortableCollectionsAlphabetical: ["211", "215", "219", "220"],
-      sortableCollectionsChronological: ["215", "219", "220"],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
-    },
-    facsimileColumn: {
-      imageQuality: 4,
-      showFacsimileTitle: true
+    variants: {
+      showOpenLegendButton: true
     }
   },
   modal: {
@@ -296,31 +324,7 @@ export const config: Config = {
   },
   urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: true,
-  showOpenLegendButton: {
-    manuscripts: true,
-    variants: true
-  },
   settings: {
-    disableReadToggles: false,
-    readToggles: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      workInfo: true,
-      abbreviations: true,
-      paragraphNumbering: true,
-      pageBreakOriginal: true,
-      pageBreakEdition: true
-    },
-    introToggles: {
-      personInfo: true,
-      placeInfo: false,
-      workInfo: true,
-      paragraphNumbering: true,
-      pageBreakEdition: true
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -331,15 +335,7 @@ export const config: Config = {
       abbreviations: true,
       workInfo: true,
       footNotes: true
-    },
-    enableModeToggle: true,
-    galleryCollectionMapping: { 214: 44, 206: 19 },
-    showReadTextIllustrations: ["20212", "20213", "206"]
-  },
-  collectionDownloads: {
-    isDownloadOnly: false,
-    pdf: {},
-    epub: {}
+    }
   },
   textDownloadOptions: {
     enabledIntroductionFormats: {
@@ -373,9 +369,6 @@ export const config: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaults: {
-    ReadModeView: ["established", "comments", "facsimiles"]
   },
   defaultSelectedItem: "cover",
   HasCover: true,
@@ -594,24 +587,45 @@ export const config_soderholm: Config = {
     introduction: {
       hasSeparateTOC: true,
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewOptions: {
+        personInfo: false,
+        placeInfo: false,
+        workInfo: false,
+        paragraphNumbering: false,
+        pageBreakEdition: false
+      }
     },
     mediaCollection: {
       showURNButton: true
     },
-    read: {
+    text: {
+      defaultViews: ["facsimiles", "manuscripts"],
       showURNButton: true,
       showViewOptionsButton: true,
-      viewTypeSettings: {
+      viewOptions: {
+        comments: false,
+        personInfo: false,
+        placeInfo: false,
+        changes: false,
+        normalisations: false,
+        workInfo: false,
+        abbreviations: false,
+        paragraphNumbering: false,
+        pageBreakOriginal: false,
+        pageBreakEdition: false
+      },
+      viewTypes: {
         showAll: false,
         established: false,
         comments: false,
+        facsimiles: true,
         manuscripts: true,
         variants: false,
-        facsimiles: true,
         illustrations: false,
-        legend: false
-      },
+        legend: false,
+        metadata: false
+      }
     },
     title: {
       showURNButton: true,
@@ -629,6 +643,20 @@ export const config_soderholm: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
+    facsimileColumn: {
+      imageQuality: 2,
+      showFacsimileTitle: false
+    },
+    manuscripts: {
+      showOpenLegendButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -640,16 +668,8 @@ export const config_soderholm: Config = {
       siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
-    },
-    facsimileColumn: {
-      imageQuality: 2,
-      showFacsimileTitle: false
+    variants: {
+      showOpenLegendButton: false
     }
   },
   modal: {
@@ -662,31 +682,7 @@ export const config_soderholm: Config = {
   },
   urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  showOpenLegendButton: {
-    manuscripts: false,
-    variants: false
-  },
   settings: {
-    disableReadToggles: false,
-    readToggles: {
-      comments: false,
-      personInfo: false,
-      placeInfo: false,
-      changes: false,
-      normalisations: false,
-      workInfo: false,
-      abbreviations: false,
-      paragraphNumbering: false,
-      pageBreakOriginal: false,
-      pageBreakEdition: false
-    },
-    introToggles: {
-      personInfo: false,
-      placeInfo: false,
-      workInfo: false,
-      paragraphNumbering: false,
-      pageBreakEdition: false
-    },
     toolTips: {
         comments: false,
         personInfo: false,
@@ -697,15 +693,7 @@ export const config_soderholm: Config = {
         abbreviations: false,
         workInfo: false,
         footNotes: false
-    },
-    enableModeToggle: true,
-    galleryCollectionMapping: {},
-    showReadTextIllustrations: []
-  },
-  collectionDownloads: {
-    isDownloadOnly: false,
-    pdf: {},
-    epub: {}
+    }
   },
   textDownloadOptions: {
     enabledIntroductionFormats: {
@@ -739,9 +727,6 @@ export const config_soderholm: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaults: {
-    ReadModeView: ["facsimiles", "manuscripts"]
   },
   defaultSelectedItem: "cover",
   HasCover: false,
@@ -778,6 +763,7 @@ export const config_vonWright: Config = {
       146: "", 225: ""
     },
     highlightSearchMatches: true,
+    mediaCollectionMappings: { 225: 46 },
     order: [
       [146, 225]
     ]
@@ -862,23 +848,44 @@ export const config_vonWright: Config = {
     introduction: {
       hasSeparateTOC: true,
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewOptions: {
+        personInfo: false,
+        placeInfo: false,
+        workInfo: false,
+        paragraphNumbering: true,
+        pageBreakEdition: false
+      }
     },
     mediaCollection: {
       showURNButton: true
     },
-    read: {
+    text: {
+      defaultViews: ["established", "comments"],
       showURNButton: true,
       showViewOptionsButton: true,
-      viewTypeSettings: {
+      viewOptions: {
+        comments: true,
+        personInfo: true,
+        placeInfo: true,
+        changes: true,
+        normalisations: true,
+        workInfo: true,
+        abbreviations: false,
+        paragraphNumbering: true,
+        pageBreakOriginal: true,
+        pageBreakEdition: false
+      },
+      viewTypes: {
         showAll: true,
         established: true,
         comments: true,
+        facsimiles: true,
         manuscripts: false,
         variants: false,
-        facsimiles: true,
         illustrations: false,
-        legend: false
+        legend: false,
+        metadata: false
       }
     },
     title: {
@@ -897,6 +904,20 @@ export const config_vonWright: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
+    facsimileColumn: {
+      imageQuality: 4,
+      showFacsimileTitle: false
+    },
+    manuscripts: {
+      showOpenLegendButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -908,16 +929,8 @@ export const config_vonWright: Config = {
       siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
-    },
-    facsimileColumn: {
-      imageQuality: 4,
-      showFacsimileTitle: false
+    variants: {
+      showOpenLegendButton: false
     }
   },
   modal: {
@@ -930,31 +943,7 @@ export const config_vonWright: Config = {
   },
   urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  showOpenLegendButton: {
-    manuscripts: false,
-    variants: false
-  },
   settings: {
-    disableReadToggles: false,
-    readToggles: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      workInfo: true,
-      abbreviations: false,
-      paragraphNumbering: true,
-      pageBreakOriginal: true,
-      pageBreakEdition: false
-    },
-    introToggles: {
-      personInfo: false,
-      placeInfo: false,
-      workInfo: false,
-      paragraphNumbering: true,
-      pageBreakEdition: false
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -965,15 +954,7 @@ export const config_vonWright: Config = {
       abbreviations: false,
       workInfo: true,
       footNotes: true
-    },
-    enableModeToggle: true,
-    galleryCollectionMapping: { "225": 46 },
-    showReadTextIllustrations: []
-  },
-  collectionDownloads: {
-    isDownloadOnly: false,
-    pdf: {},
-    epub: {}
+    }
   },
   textDownloadOptions: {
     enabledIntroductionFormats: {
@@ -1008,9 +989,6 @@ export const config_vonWright: Config = {
       EPUB: false
     }
   },
-  defaults: {
-    ReadModeView: ["established", "comments"]
-  },
   defaultSelectedItem: "cover",
   HasCover: true,
   HasTitle: true,
@@ -1043,12 +1021,10 @@ export const config_granqvist: Config = {
   collections: {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "09",
-    firstReadItem: {
-    },
     highlightSearchMatches: true,
     order: [
       [537, 538, 539, 29, 147, 148, 149, 30, 31]
-    ],
+    ]
   },
   ebooks: [
     {
@@ -1217,18 +1193,20 @@ export const config_granqvist: Config = {
     mediaCollection: {
       showURNButton: true
     },
-    read: {
+    text: {
+      defaultViews: ["facsimiles"],
       showURNButton: true,
       showViewOptionsButton: true,
-      viewTypeSettings: {
+      viewTypes: {
         showAll: false,
         established: false,
         comments: false,
+        facsimiles: true,
         manuscripts: false,
         variants: false,
-        facsimiles: true,
         illustrations: false,
-        legend: false
+        legend: false,
+        metadata: false
       }
     },
     title: {
@@ -1252,6 +1230,20 @@ export const config_granqvist: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
+    facsimileColumn: {
+      imageQuality: 1,
+      showFacsimileTitle: false
+    },
+    manuscripts: {
+      showOpenLegendButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -1263,16 +1255,8 @@ export const config_granqvist: Config = {
       siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
       siteLogoLinkUrl: "https://www.sls.fi/"
     },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
-    },
-    facsimileColumn: {
-      imageQuality: 1,
-      showFacsimileTitle: false
+    variants: {
+      showOpenLegendButton: false
     }
   },
   modal: {
@@ -1289,31 +1273,7 @@ export const config_granqvist: Config = {
   },
   urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  showOpenLegendButton: {
-    manuscripts: false,
-    variants: false
-  },
   settings: {
-    disableReadToggles: false,
-    readToggles: {
-      comments: true,
-      personInfo: true,
-      placeInfo: true,
-      changes: true,
-      normalisations: true,
-      workInfo: true,
-      abbreviations: false,
-      paragraphNumbering: true,
-      pageBreakOriginal: true,
-      pageBreakEdition: false
-    },
-    introToggles: {
-      personInfo: false,
-      placeInfo: false,
-      workInfo: false,
-      paragraphNumbering: true,
-      pageBreakEdition: false
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -1324,15 +1284,7 @@ export const config_granqvist: Config = {
       abbreviations: false,
       workInfo: true,
       footNotes: true
-    },
-    enableModeToggle: true,
-    galleryCollectionMapping: { "225": 46 },
-    showReadTextIllustrations: []
-  },
-  collectionDownloads: {
-    isDownloadOnly: false,
-    pdf: {},
-    epub: {}
+    }
   },
   textDownloadOptions: {
     enabledIntroductionFormats: {
@@ -1366,9 +1318,6 @@ export const config_granqvist: Config = {
       Books: false,
       EPUB: true
     }
-  },
-  defaults: {
-    ReadModeView: ["facsimiles"]
   },
   defaultSelectedItem: "title",
   HasCover: false,
@@ -1438,15 +1387,35 @@ export const config_mechelin: Config = {
     introduction: {
       hasSeparateTOC: true,
       showURNButton: true,
-      showViewOptionsButton: true
+      showViewOptionsButton: true,
+      viewOptions: {
+        personInfo: false,
+        placeInfo: false,
+        workInfo: false,
+        paragraphNumbering: false,
+        pageBreakEdition: false
+      }
     },
     mediaCollection: {
       showURNButton: true
     },
-    read: {
+    text: {
+      defaultViews: ["established_sv", "established_fi", "manuscripts", "facsimiles"],
       showURNButton: true,
       showViewOptionsButton: true,
-      viewTypeSettings: {
+      viewOptions: {
+        comments: true,
+        personInfo: true,
+        placeInfo: false,
+        changes: true,
+        normalisations: true,
+        workInfo: false,
+        abbreviations: true,
+        paragraphNumbering: false,
+        pageBreakOriginal: true,
+        pageBreakEdition: false
+      },
+      viewTypes: {
         showAll: true,
         established: true,
         comments: false,
@@ -1456,7 +1425,7 @@ export const config_mechelin: Config = {
         illustrations: false,
         legend: false,
         metadata: true
-      },
+      }
     },
     title: {
       showURNButton: true,
@@ -1474,6 +1443,20 @@ export const config_mechelin: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
+    facsimileColumn: {
+      imageQuality: 1,
+      showFacsimileTitle: false
+    },
+    manuscripts: {
+      showOpenLegendButton: false
+    },
+    sideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: ["1"],
+      sortableCollectionsCategorical: ["1"],
+      categoricalSortingPrimaryKey: "genre",
+      categoricalSortingSecondaryKey: "date"
+    },
     topMenu: {
       showAboutButton: true,
       showContentButton: true,
@@ -1485,16 +1468,8 @@ export const config_mechelin: Config = {
       siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
       siteLogoLinkUrl: ""
     },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: ["1"],
-      sortableCollectionsCategorical: ["1"],
-      categoricalSortingPrimaryKey: "genre",
-      categoricalSortingSecondaryKey: "date"
-    },
-    facsimileColumn: {
-      imageQuality: 1,
-      showFacsimileTitle: false
+    variants: {
+      showOpenLegendButton: false
     }
   },
   modal: {
@@ -1507,31 +1482,7 @@ export const config_mechelin: Config = {
   },
   urnResolverUrl: "https://urn.fi/",
   useSimpleWorkMetadata: false,
-  showOpenLegendButton: {
-    manuscripts: true,
-    variants: true
-  },
   settings: {
-    disableReadToggles: false,
-    readToggles: {
-      comments: true,
-      personInfo: true,
-      placeInfo: false,
-      changes: true,
-      normalisations: true,
-      workInfo: false,
-      abbreviations: true,
-      paragraphNumbering: false,
-      pageBreakOriginal: true,
-      pageBreakEdition: false
-    },
-    introToggles: {
-      personInfo: false,
-      placeInfo: false,
-      workInfo: false,
-      paragraphNumbering: false,
-      pageBreakEdition: false
-    },
     toolTips: {
       comments: true,
       personInfo: true,
@@ -1542,15 +1493,7 @@ export const config_mechelin: Config = {
       abbreviations: true,
       workInfo: false,
       footNotes: true
-    },
-    enableModeToggle: true,
-    galleryCollectionMapping: {},
-    showReadTextIllustrations: []
-  },
-  collectionDownloads: {
-    isDownloadOnly: false,
-    pdf: {},
-    epub: {}
+    }
   },
   textDownloadOptions: {
     enabledIntroductionFormats: {
@@ -1585,9 +1528,6 @@ export const config_mechelin: Config = {
       EPUB: false,
       ExtraText: true
     }
-  },
-  defaults: {
-      ReadModeView: ["established_sv", "established_fi", "manuscripts", "facsimiles"]
   },
   HasCover: false,
   HasTitle: false,

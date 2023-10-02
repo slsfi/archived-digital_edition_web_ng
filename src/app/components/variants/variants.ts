@@ -41,7 +41,7 @@ export class VariantsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private textService: TextService
   ) {
-    this.showOpenLegendButton = config.showOpenLegendButton?.variants ?? false;
+    this.showOpenLegendButton = config.component?.variants?.showOpenLegendButton ?? false;
   }
 
   ngOnInit() {

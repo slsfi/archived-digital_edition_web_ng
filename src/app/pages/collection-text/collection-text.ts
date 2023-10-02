@@ -95,8 +95,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
-    this.showURNButton = config.page?.read?.showURNButton ?? true;
-    this.showViewOptionsButton = config.page?.read?.showViewOptionsButton ?? true;
+    this.showURNButton = config.page?.text?.showURNButton ?? true;
+    this.showViewOptionsButton = config.page?.text?.showViewOptionsButton ?? true;
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
 
     try {
@@ -136,7 +136,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
 
     // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
-    const viewTypes = config.page?.read?.viewTypeSettings ?? {};
+    const viewTypes = config.page?.text?.viewTypes ?? {};
     for (const type in viewTypes) {
       if (
         viewTypes.hasOwnProperty(type) &&
@@ -165,7 +165,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
     this.availableMobileModeViews.push('facsimiles');
     // availableMobileModeViews.push('manuscripts');
-    const defaultViews = config.defaults?.ReadModeView ?? ['established'];
+    const defaultViews = config.page?.text?.defaultViews ?? ['established'];
     this.activeMobileModeViewType = defaultViews.filter(
       (value: string) => this.availableMobileModeViews.includes(value) && this.enabledViewTypes.includes(value)
     )[0] || 'established';
@@ -310,8 +310,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         newViews.push({ type });
       });
     } else {
-      const defaultReadModes: any = config.defaults?.ReadModeView ?? ['established'];
-      defaultReadModes.forEach((type: string) => {
+      const defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
+      defaultViews.forEach((type: string) => {
         if (this.enabledViewTypes.indexOf(type) !== -1) {
           newViews.push({ type });
         }

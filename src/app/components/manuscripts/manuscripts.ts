@@ -41,7 +41,7 @@ export class ManuscriptsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private textService: TextService
   ) {
-    this.showOpenLegendButton = config.showOpenLegendButton?.manuscripts ?? false;
+    this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
   }
 
   ngOnInit() {

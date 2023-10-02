@@ -97,7 +97,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     };
 
     this.toolTipsSettings = config.settings?.toolTips ?? undefined;
-    this.viewOptionsTogglesIntro = config.settings?.introToggles ?? undefined;
+    this.viewOptionsTogglesIntro = config.page?.introduction?.viewOptions ?? undefined;
 
     if (
       this.viewOptionsTogglesIntro === undefined ||
