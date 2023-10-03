@@ -208,7 +208,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         this.paramCollectionID = params['collectionID'];
         this.paramPublicationID = params['publicationID'];
 
-        if (config.app?.enableCollectionLegacyIDs) {
+        if (config.collections?.enableLegacyIDs) {
           this.setCollectionAndPublicationLegacyId(this.paramPublicationID);
         }
       }

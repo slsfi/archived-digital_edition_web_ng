@@ -39,7 +39,7 @@ async function generateSitemap() {
     }
 
     // Get about-pages URLs
-    if (config.show?.TOC?.About) {
+    if (config.component?.mainSideMenu?.items?.about) {
         let aboutPages = await fetchFromAPI(APIBase + '/static-pages-toc/' + locale);
         if (aboutPages && aboutPages.children) {
             urlCounter += generateAboutPagesURLs(aboutPages.children, (config.page?.about?.markdownFolderNumber ?? '03'), urlOrigin, locale);
@@ -47,7 +47,7 @@ async function generateSitemap() {
     }
 
     // Get ebook-pages URLs
-    if (config.show?.TOC?.EPUB && config.ebooks?.length) {
+    if (config.component?.mainSideMenu?.items?.ebooks && config.ebooks?.length) {
         urlCounter += generateEbookURLs(config.ebooks, urlOrigin, locale);
     }
 

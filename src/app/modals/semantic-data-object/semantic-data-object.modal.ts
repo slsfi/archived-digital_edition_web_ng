@@ -54,7 +54,7 @@ export class SemanticDataObjectModal implements OnInit {
     this.showOccupation = config.modal?.semanticDataObject?.showOccupation ?? false;
     this.showOccurrences = config.modal?.semanticDataObject?.showOccurrences ?? true;
     this.showType = config.modal?.semanticDataObject?.showType ?? false;
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {

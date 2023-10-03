@@ -7,7 +7,7 @@ import { existsOne, findAll, getAttributeValue } from 'domutils';
 import { render } from 'dom-serializer';
 
 import { CommonFunctionsService } from './common-functions.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -16,7 +16,6 @@ import { config } from "src/assets/config/config";
 export class TextService {
   appMachineName: string = '';
   apiEndpoint: string = '';
-  simpleApi: string = '';
   readViewTextId: string = '';
   previousReadViewTextId: string = '';
   recentCollectionTextViews: Array<any> = [];
@@ -28,7 +27,6 @@ export class TextService {
   ) {
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    this.simpleApi = config.app?.simpleApi ?? '';
   }
 
   getEstablishedText(id: string): Observable<any> {
@@ -39,13 +37,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/est${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/est${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -57,7 +49,7 @@ export class TextService {
   }
 
   getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
-    if (config.app?.enableCollectionLegacyIDs) {
+    if (config.collections?.enableLegacyIDs) {
       return this.http.get(
         `${this.apiEndpoint}/${this.appMachineName}/legacy/${legacyId}`
       );
@@ -99,7 +91,6 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
     const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/var${
       (ch_id ? '/' + ch_id : '')
     }`;
@@ -114,13 +105,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/ms${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/ms${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -169,13 +154,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/downloadable/${format}/${coll_id}/${pub_id}/est${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/downloadable/${format}/${coll_id}/${pub_id}/est${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);

@@ -9,7 +9,7 @@ import { Occurrence } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -39,7 +39,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     private commonFunctions: CommonFunctionsService,
     private semanticDataService: SemanticDataService
   ) {
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {

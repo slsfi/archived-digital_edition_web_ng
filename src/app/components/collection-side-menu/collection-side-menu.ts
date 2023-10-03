@@ -115,8 +115,8 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
               this.chronologicalMenu = this.constructCategoricalMenu(flattenedMenu, 'date');
             }
             if (this.sortOptions.includes('categorical')) {
-              const primaryKey = this._config.component?.sideMenu?.categoricalSortingPrimaryKey ?? 'date';
-              const secondaryKey = this._config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
+              const primaryKey = this._config.component?.collectionSideMenu?.categoricalSortingPrimaryKey ?? 'date';
+              const secondaryKey = this._config.component?.collectionSideMenu?.categoricalSortingSecondaryKey ?? '';
               this.categoricalMenu = this.constructCategoricalMenu(flattenedMenu, primaryKey, secondaryKey);
             }
             this.sortSelectOptions = {
@@ -228,13 +228,13 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
   private setSortOptions(collectionID: string) {
     const sortOptions: string[] = [];
-    if (this._config.component?.sideMenu?.sortableCollectionsAlphabetical?.includes(collectionID)) {
+    if (this._config.component?.collectionSideMenu?.sortableCollectionsAlphabetical?.includes(collectionID)) {
       sortOptions.push('alphabetical');
     }
-    if (this._config.component?.sideMenu?.sortableCollectionsChronological?.includes(collectionID)) {
+    if (this._config.component?.collectionSideMenu?.sortableCollectionsChronological?.includes(collectionID)) {
       sortOptions.push('chronological');
     }
-    if (this._config.component?.sideMenu?.sortableCollectionsCategorical?.includes(collectionID)) {
+    if (this._config.component?.collectionSideMenu?.sortableCollectionsCategorical?.includes(collectionID)) {
       sortOptions.push('categorical');
     }
     return sortOptions;

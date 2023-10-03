@@ -184,7 +184,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       if (routeParams['collectionID']) {
         if (routeParams['collectionID'] !== this.id) {
           this.id = routeParams['collectionID'];
-          if (config.app?.enableCollectionLegacyIDs) {
+          if (config.collections?.enableLegacyIDs) {
             this.setCollectionLegacyId(this.id);
           }
           this.loadIntroduction(this.id, this.activeLocale);

@@ -8,8 +8,7 @@ export const config: Config = {
     siteURLOrigin: "https://topelius.sls.fi",
     machineName: "topelius",
     projectId: 10,
-    apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
-    simpleApi: "",
+    apiEndpoint: "https://api.sls.fi/digitaledition",
     facsimileBase: "",
     i18n: {
       languages: [
@@ -17,17 +16,16 @@ export const config: Config = {
         { code: "fi", label: "Suomi" }
       ],
       defaultLanguage: "sv",
-      enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: [],
       multilingualSemanticData: false
     },
-    enableCollectionLegacyIDs: true,
     enableRouterLoadingBar: true
   },
   collections: {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "",
+    enableLegacyIDs: true,
     enableMathJax: false,
     firstReadItem: {
       216: "216_20280", 219: "219_19443", 220: "220_20122",
@@ -268,6 +266,13 @@ export const config: Config = {
     }
   },
   component: {
+    collectionSideMenu: {
+      sortableCollectionsAlphabetical: ["211", "215", "219", "220"],
+      sortableCollectionsChronological: ["215", "219", "220"],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     contentGrid: {
       includeEbooks: false,
       includeMediaCollection: false,
@@ -283,19 +288,25 @@ export const config: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
-    facsimileColumn: {
+    facsimiles: {
       imageQuality: 4,
       showFacsimileTitle: true
     },
+    mainSideMenu: {
+      items: {
+        home: false,
+        about: true,
+        ebooks: true,
+        collections: true,
+        mediaCollections: true,
+        indexKeywords: false,
+        indexPersons: true,
+        indexPlaces: true,
+        indexWorks: false
+      }
+    },
     manuscripts: {
       showOpenLegendButton: true
-    },
-    sideMenu: {
-      sortableCollectionsAlphabetical: ["211", "215", "219", "220"],
-      sortableCollectionsChronological: ["215", "219", "220"],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
     },
     topMenu: {
       showAboutButton: true,
@@ -328,10 +339,10 @@ export const config: Config = {
       showMediaData: false,
       showOccupation: false,
       showOccurrences: true,
-      showType: false
+      showType: false,
+      useSimpleWorkMetadata: true
     }
   },
-  useSimpleWorkMetadata: true,
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -348,22 +359,6 @@ export const config: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  show: {
-    TOC: {
-      Home: false,
-      About: true,
-      Read: true,
-      Facsimiles: false,
-      ImageGallery: false,
-      PersonSearch: true,
-      PlaceSearch: true,
-      MediaCollections: true,
-      TagSearch: false,
-      WorkSearch: false,
-      Books: false,
-      EPUB: true
-    }
   }
 }
 
@@ -376,13 +371,11 @@ export const config_soderholm: Config = {
     machineName: "soderholm",
     projectId: 7,
     apiEndpoint: "https://api.sls.fi/digitaledition",
-    simpleApi: '',
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" }
       ],
       defaultLanguage: "sv",
-      enableLanguageChanges: false,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
     },
@@ -629,6 +622,13 @@ export const config_soderholm: Config = {
     }
   },
   component: {
+    collectionSideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     contentGrid: {
       includeEbooks: true,
       includeMediaCollection: false,
@@ -639,19 +639,25 @@ export const config_soderholm: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
-    facsimileColumn: {
+    facsimiles: {
       imageQuality: 2,
       showFacsimileTitle: false
     },
+    mainSideMenu: {
+      items: {
+        home: true,
+        about: true,
+        ebooks: true,
+        collections: true,
+        mediaCollections: false,
+        indexKeywords: false,
+        indexPersons: true,
+        indexPlaces: false,
+        indexWorks: false
+      }
+    },
     manuscripts: {
       showOpenLegendButton: false
-    },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
     },
     topMenu: {
       showAboutButton: true,
@@ -676,10 +682,10 @@ export const config_soderholm: Config = {
       URNResolverURL: "https://urn.fi/",
     },
     semanticDataObject: {
-      showAliasAndPrevLastName: false
+      showAliasAndPrevLastName: false,
+      useSimpleWorkMetadata: false
     }
   },
-  useSimpleWorkMetadata: false,
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: false,
@@ -696,22 +702,6 @@ export const config_soderholm: Config = {
         print: false
     },
     usePrintNotDownloadIcon: false
-  },
-  show: {
-    TOC: {
-      Home: true,
-      About: true,
-      Read: true,
-      Facsimiles: false,
-      ImageGallery: false,
-      PersonSearch: true,
-      PlaceSearch: false,
-      MediaCollections: false,
-      TagSearch: false,
-      WorkSearch: false,
-      Books: false,
-      EPUB: true
-    }
   }
 }
 
@@ -724,13 +714,11 @@ export const config_vonWright: Config = {
     machineName: "vonwright",
     projectId: 6,
     apiEndpoint: "https://api.sls.fi/digitaledition",
-    simpleApi: '',
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" }
       ],
       defaultLanguage: "sv",
-      enableLanguageChanges: false,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
     },
@@ -880,6 +868,13 @@ export const config_vonWright: Config = {
     }
   },
   component: {
+    collectionSideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     contentGrid: {
       includeEbooks: false,
       includeMediaCollection: false,
@@ -890,19 +885,25 @@ export const config_vonWright: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
-    facsimileColumn: {
+    facsimiles: {
       imageQuality: 4,
       showFacsimileTitle: false
     },
+    mainSideMenu: {
+      items: {
+        home: false,
+        about: true,
+        ebooks: false,
+        collections: true,
+        mediaCollections: false,
+        indexPersons: true,
+        indexPlaces: true,
+        indexKeywords: true,
+        indexWorks: true
+      }
+    },
     manuscripts: {
       showOpenLegendButton: false
-    },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
     },
     topMenu: {
       showAboutButton: true,
@@ -927,10 +928,10 @@ export const config_vonWright: Config = {
       URNResolverURL: "https://urn.fi/",
     },
     semanticDataObject: {
-      showAliasAndPrevLastName: false
+      showAliasAndPrevLastName: false,
+      useSimpleWorkMetadata: false
     }
   },
-  useSimpleWorkMetadata: false,
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -947,22 +948,6 @@ export const config_vonWright: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  show: {
-    TOC: {
-      Home: false,
-      About: true,
-      Read: true,
-      Facsimiles: false,
-      ImageGallery: false,
-      PersonSearch: true,
-      PlaceSearch: true,
-      MediaCollections: false,
-      TagSearch: true,
-      WorkSearch: true,
-      Books: false,
-      EPUB: false
-    }
   }
 }
 
@@ -975,7 +960,6 @@ export const config_granqvist: Config = {
     machineName: "granqvist",
     projectId: 2,
     apiEndpoint: "https://api.sls.fi/digitaledition",
-    simpleApi: '',
     i18n: {
       languages: [
         { code: "sv", label: "Svenska" },
@@ -983,7 +967,6 @@ export const config_granqvist: Config = {
         { code: "ar", label: "Arabic" },
       ],
       defaultLanguage: "sv",
-      enableLanguageChanges: true,
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: []
     },
@@ -1191,6 +1174,13 @@ export const config_granqvist: Config = {
     }
   },
   component: {
+    collectionSideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: [],
+      sortableCollectionsCategorical: [],
+      categoricalSortingPrimaryKey: "",
+      categoricalSortingSecondaryKey: ""
+    },
     contentGrid: {
       includeEbooks: true,
       includeMediaCollection: true,
@@ -1206,19 +1196,25 @@ export const config_granqvist: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
-    facsimileColumn: {
+    facsimiles: {
       imageQuality: 1,
       showFacsimileTitle: false
     },
+    mainSideMenu: {
+      items: {
+        home: false,
+        about: true,
+        collections: true,
+        mediaCollections: true,
+        ebooks: true,
+        indexPersons: true,
+        indexPlaces: true,
+        indexKeywords: true,
+        indexWorks: false
+      }
+    },
     manuscripts: {
       showOpenLegendButton: false
-    },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: [],
-      sortableCollectionsCategorical: [],
-      categoricalSortingPrimaryKey: "",
-      categoricalSortingSecondaryKey: ""
     },
     topMenu: {
       showAboutButton: true,
@@ -1247,10 +1243,10 @@ export const config_granqvist: Config = {
       showArticleData: true,
       showCityRegionCountry: true,
       showGalleryOccurrences: true,
-      showMediaData: true
+      showMediaData: true,
+      useSimpleWorkMetadata: false
     }
   },
-  useSimpleWorkMetadata: false,
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: true,
@@ -1267,22 +1263,6 @@ export const config_granqvist: Config = {
         print: true
     },
     usePrintNotDownloadIcon: false
-  },
-  show: {
-    TOC: {
-      Home: false,
-      About: true,
-      Read: true,
-      Facsimiles: false,
-      ImageGallery: false,
-      PersonSearch: true,
-      PlaceSearch: true,
-      MediaCollections: true,
-      TagSearch: true,
-      WorkSearch: false,
-      Books: false,
-      EPUB: true
-    }
   }
 }
 
@@ -1295,7 +1275,6 @@ export const config_mechelin: Config = {
     machineName: "leomechelin",
     projectId: 1,
     apiEndpoint: "https://leomechelin.fi/api",
-    simpleApi: "",
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     i18n: {
       languages: [
@@ -1303,7 +1282,6 @@ export const config_mechelin: Config = {
         { code: "fi", label: "Suomi" }
       ],
       defaultLanguage: "sv",
-      enableLanguageChanges: true,
       multilingualCollectionTableOfContents: true,
       multilingualReadingTextLanguages: ["sv", "fi"],
       multilingualSemanticData: true
@@ -1399,6 +1377,13 @@ export const config_mechelin: Config = {
     }
   },
   component: {
+    collectionSideMenu: {
+      sortableCollectionsAlphabetical: [],
+      sortableCollectionsChronological: ["1"],
+      sortableCollectionsCategorical: ["1"],
+      categoricalSortingPrimaryKey: "genre",
+      categoricalSortingSecondaryKey: "date"
+    },
     contentGrid: {
       includeEbooks: false,
       includeMediaCollection: false,
@@ -1409,19 +1394,25 @@ export const config_mechelin: Config = {
       showURNButton: true,
       showViewOptionsButton: true
     },
-    facsimileColumn: {
+    facsimiles: {
       imageQuality: 1,
       showFacsimileTitle: false
     },
+    mainSideMenu: {
+      items: {
+        home: false,
+        about: true,
+        ebooks: false,
+        collections: true,
+        mediaCollections: false,
+        indexKeywords: false,
+        indexPersons: false,
+        indexPlaces: false,
+        indexWorks: false
+      }
+    },
     manuscripts: {
       showOpenLegendButton: false
-    },
-    sideMenu: {
-      sortableCollectionsAlphabetical: [],
-      sortableCollectionsChronological: ["1"],
-      sortableCollectionsCategorical: ["1"],
-      categoricalSortingPrimaryKey: "genre",
-      categoricalSortingSecondaryKey: "date"
     },
     topMenu: {
       showAboutButton: true,
@@ -1446,10 +1437,10 @@ export const config_mechelin: Config = {
       URNResolverURL: "https://urn.fi/",
     },
     semanticDataObject: {
-      showOccurrences: false
+      showOccurrences: false,
+      useSimpleWorkMetadata: false
     }
   },
-  useSimpleWorkMetadata: false,
   textDownloadOptions: {
     enabledIntroductionFormats: {
         xml: false,
@@ -1466,22 +1457,5 @@ export const config_mechelin: Config = {
         print: false
     },
     usePrintNotDownloadIcon: false
-  },
-  show: {
-    TOC: {
-      Home: false,
-      About: true,
-      Read: true,
-      Facsimiles: false,
-      ImageGallery: false,
-      PersonSearch: true,
-      PlaceSearch: false,
-      MediaCollections: false,
-      TagSearch: false,
-      WorkSearch: false,
-      Books: false,
-      EPUB: false,
-      ExtraText: true
-    }
   }
 }

@@ -505,8 +505,8 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   sortFlattenedTocCategorically() {
-    const primarySortKey = config.component?.sideMenu?.categoricalSortingPrimaryKey ?? '';
-    const secondarySortKey = config.component?.sideMenu?.categoricalSortingSecondaryKey ?? '';
+    const primarySortKey = config.component?.collectionSideMenu?.categoricalSortingPrimaryKey ?? '';
+    const secondarySortKey = config.component?.collectionSideMenu?.categoricalSortingSecondaryKey ?? '';
 
     if (this.flattened.length > 0 && primarySortKey && secondarySortKey) {
       if (primarySortKey === 'date') {
