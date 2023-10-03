@@ -8,7 +8,7 @@ export const config: Config = {
     siteURLOrigin: "https://topelius.sls.fi",
     machineName: "topelius",
     projectId: 10,
-    apiEndpoint: "https://api.sls.fi/digitaledition",
+    apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
     facsimileBase: "",
     i18n: {
       languages: [
