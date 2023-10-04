@@ -1344,6 +1344,18 @@
         <target>Översättningar</target>
       </segment>
     </unit>
+    <unit id="Read.MoveColumnLeft">
+      <segment state="initial">
+        <source>Byt plats med kolumnen till vänster</source>
+        <target>Byt plats med kolumnen till vänster</target>
+      </segment>
+    </unit>
+    <unit id="Read.MoveColumnRight">
+      <segment state="initial">
+        <source>Byt plats med kolumnen till höger</source>
+        <target>Byt plats med kolumnen till höger</target>
+      </segment>
+    </unit>
     <unit id="Read.Popover.Abbreviations">
       <segment state="initial">
         <source>Förkortningar</source>
@@ -1464,6 +1476,12 @@
         <target>Verkupplysningar</target>
       </segment>
     </unit>
+    <unit id="Read.RemoveColumn">
+      <segment state="initial">
+        <source>Ta bort kolumnen</source>
+        <target>Ta bort kolumnen</target>
+      </segment>
+    </unit>
     <unit id="Read.ShowAll">
       <segment state="initial">
         <source>Visa alla</source>
@@ -1480,6 +1498,12 @@
       <segment state="initial">
         <source>Titelblad</source>
         <target>Titelblad</target>
+      </segment>
+    </unit>
+    <unit id="Read.ToggleColumnOptionsMenu">
+      <segment state="initial">
+        <source>Öppna/stäng alternativ för kolumnen</source>
+        <target>Öppna/stäng alternativ för kolumnen</target>
       </segment>
     </unit>
     <unit id="Read.Variants.AddButtonText">
