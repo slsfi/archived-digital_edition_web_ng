@@ -192,8 +192,11 @@ export const config: Config = {
       siteTitleOnTopOfImageInMobileModeIfPortrait: false,
       imageUrl: "assets/images/frontpage-image-portrait.jpg",
       portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
-      portraitImageAltText: "Zacharias Topelius",
-      showEditionList: false,
+      portraitImageAltText: {
+        sv: "Zacharias Topelius",
+        fi: "Zacharias Topelius"
+      },
+      showContentGrid: false,
       showFooter: true
     },
     index: {
@@ -281,7 +284,7 @@ export const config: Config = {
         sv: "Alt-text",
         fi: "Alt-teksti"
       },
-      showTitles: false
+      showTitles: true
     },
     epub: {
       showTOCButton: true,
@@ -550,9 +553,9 @@ export const config_soderholm: Config = {
       imageOnRightIfPortrait: false,
       siteTitleOnTopOfImageInMobileModeIfPortrait: false,
       imageUrl: "assets/images/frontpage-image-portrait.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
-      portraitImageAltText: "",
-      showEditionList: false,
+      portraitImageUrlInMobileMode: "",
+      portraitImageAltText: {},
+      showContentGrid: false,
       showFooter: false
     },
     index: {
@@ -796,9 +799,9 @@ export const config_vonWright: Config = {
       imageOnRightIfPortrait: false,
       siteTitleOnTopOfImageInMobileModeIfPortrait: false,
       imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageAltText: "Svartvitt fotografi av Georg Henrik von Wright 1950",
-      showEditionList: false,
+      portraitImageUrlInMobileMode: "",
+      portraitImageAltText: {},
+      showContentGrid: false,
       showFooter: false
     },
     index: {
@@ -1121,9 +1124,9 @@ export const config_granqvist: Config = {
       imageOnRightIfPortrait: false,
       siteTitleOnTopOfImageInMobileModeIfPortrait: false,
       imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageAltText: "Hilma Granqvist",
-      showEditionList: true,
+      portraitImageUrlInMobileMode: "",
+      portraitImageAltText: {},
+      showContentGrid: true,
       showFooter: true
     },
     index: {
@@ -1318,8 +1321,8 @@ export const config_mechelin: Config = {
       siteTitleOnTopOfImageInMobileModeIfPortrait: false,
       imageUrl: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg",
       portraitImageUrlInMobileMode: "",
-      portraitImageAltText: "",
-      showEditionList: false,
+      portraitImageAltText: {},
+      showContentGrid: false,
       showFooter: false
     },
     index: {

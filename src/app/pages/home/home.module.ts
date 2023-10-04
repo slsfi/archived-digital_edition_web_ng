@@ -6,15 +6,16 @@ import { ContentGridComponent } from 'src/app/components/content-grid/content-gr
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home';
 
+
 @NgModule({
   declarations: [
-    HomePage,
+    HomePage
   ],
   imports: [
     CommonModule,
     IonicModule,
     ContentGridComponent,
-    HomePageRoutingModule,
+    HomePageRoutingModule
   ],
 })
 export class HomePageModule {}

@@ -1,49 +1,47 @@
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
+
 import { MdContentService } from 'src/app/services/md-content.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { TextService } from 'src/app/services/text.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
+
 
 @Component({
-  selector: 'home-page',
+  selector: 'page-home',
   templateUrl: 'home.html',
   styleUrls: ['home.scss'],
 })
-export class HomePage {
-  siteHasSubtitle: boolean = false;
+export class HomePage implements OnInit {
   descriptionText$: Observable<SafeHtml>;
   footerText$: Observable<SafeHtml>;
-  imageOrientationPortrait: Boolean = false;
-  imageOnRight: Boolean = false;
-  titleOnImage: Boolean = false;
-  showEditionList: Boolean = false;
-  showFooter: Boolean = false;
-  imageUrl = '';
-  imageUrlStyle = '';
-  portraitImageAltText = '';
+  imageOnRight: boolean = false;
+  imageOrientationPortrait: boolean = false;
+  imageUrl: string = '';
+  imageUrlStyle: string = '';
+  portraitImageAltText: string = '';
+  showContentGrid: boolean = false;
+  showFooter: boolean = false;
+  siteHasSubtitle: boolean = false;
+  titleOnImage: boolean = false;
 
   constructor(
-    private sanitizer: DomSanitizer,
     private mdContentService: MdContentService,
+    private sanitizer: DomSanitizer,
     private userSettingsService: UserSettingsService,
-    protected textService: TextService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-
-    // Get config for front page image and text content
-    this.imageOrientationPortrait = config.page?.home?.imageOrientationIsPortrait ?? false;
     this.imageOnRight = config.page?.home?.imageOnRightIfPortrait ?? false;
-    this.titleOnImage = config.page?.home?.siteTitleOnTopOfImageInMobileModeIfPortrait ?? false;
-    this.portraitImageAltText = config.page?.home?.portraitImageAltText ?? 'front image';
-    this.showEditionList = config.page?.home?.showEditionList ?? false;
-    this.showFooter = config.page?.home?.showFooter ?? false;
+    this.imageOrientationPortrait = config.page?.home?.imageOrientationIsPortrait ?? false;
     this.imageUrl = config.page?.home?.imageUrl ?? 'assets/images/frontpage-image-landscape.jpg';
+    this.portraitImageAltText = config.page?.home?.portraitImageAltText?.[this.activeLocale] ?? 'front image';
+    this.showContentGrid = config.page?.home?.showContentGrid ?? false;
+    this.showFooter = config.page?.home?.showFooter ?? false;
+    this.titleOnImage = config.page?.home?.siteTitleOnTopOfImageInMobileModeIfPortrait ?? false;
 
-    // Change front page image if not in desktop mode and the image orientation is set to portrait
-    if (!this.userSettingsService.isDesktop() && this.imageOrientationPortrait) {
+    // Change front page image if mobile mode and the image orientation is set to portrait
+    if (this.userSettingsService.isMobile() && this.imageOrientationPortrait) {
       const imageUrlMobile = config.page?.home?.portraitImageUrlInMobileMode ?? '';
       if (imageUrlMobile) {
         this.imageUrl = imageUrlMobile;
@@ -67,12 +65,13 @@ export class HomePage {
     }
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
+  private getMdContent(fileID: string): Observable<SafeHtml> {
     return this.mdContentService.getMdContent(fileID).pipe(
       map((res: any) => {
         return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
       }),
       catchError((e) => {
+        console.error(e);
         return of('');
       })
     );

@@ -67,12 +67,9 @@ ion-content.portrait-mode::part(scroll) {
 	margin: 0 auto 3rem auto;
 }
 
-.text-content .front-page-edition-list {
+.text-content .content-grid-wrapper {
 	margin: 0 auto 3rem auto;
-}
-
-.text-content .front-page-edition-list .grid-mobile {
-	padding: 0;
+	max-width: 1000px;
 }
 
 .text-content .footer {
@@ -143,36 +140,6 @@ ion-content.portrait-mode::part(scroll) {
 	text-align: left;
 }
 
-/* Override the number of columns in the edition list to 1, 2 or max 3 
-	based on screen width in portrait mode. Both [col-xxl-3] and [col-xl-3] 
-	are needed as selectors as one is for desktop, the other tablet. */
-@media only screen and (min-width: 0) {
-	.portrait-mode .text-content .front-page-edition-list [col-xxl-3],
-	.portrait-mode .text-content .front-page-edition-list [col-xl-3] {
-		flex: 0 0 100%;
-		width: 100%;
-		max-width: 100%;
-	}
-}
-
-@media only screen and (min-width: 901px) {
-	.portrait-mode .text-content .front-page-edition-list [col-xxl-3],
-	.portrait-mode .text-content .front-page-edition-list [col-xl-3] {
-		flex: 0 0 50%;
-		width: 50%;
-		max-width: 50%;
-	}
-}
-
-@media only screen and (min-width: 1300px) {
-	.portrait-mode .text-content .front-page-edition-list [col-xxl-3],
-	.portrait-mode .text-content .front-page-edition-list [col-xl-3] {
-		flex: 0 0 33.33333%;
-		width: 33.33333%;
-		max-width: 33.33333%;
-	}
-}
-
 /* The following rules are adjustments for small screens. */
 
 @media only screen and (max-width: 1180px) {
@@ -213,7 +180,6 @@ ion-content.portrait-mode::part(scroll) {
 
 	.portrait-mode .text-content {
 		order: 1;
-		margin: 1.5rem 1.5rem 0 1.5rem;
 	}
 
 	.portrait-mode .text-content .site-title {
@@ -228,14 +194,29 @@ ion-content.portrait-mode::part(scroll) {
 	}
 }
 
-@media only screen and (max-width: 680px) {
-	.text-content.text-content {
-		margin: 1.5rem 1rem 0 1rem;
-	}
-}
-
 @media only screen and (min-width: 901px) {
 	.portrait-mode.title-on-image .banner .title-wrapper {
 		display: none;
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	.text-content.text-content {
+		margin-left: 2rem;
+		margin-right: 2rem;
+	}
+}
+
+@media only screen and (max-width: 820px) {
+	.text-content.text-content {
+		margin-left: 1.125rem;
+		margin-right: 1.125rem;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.text-content.text-content {
+		margin-left: 0.625rem;
+		margin-right: 0.625rem;
 	}
 }

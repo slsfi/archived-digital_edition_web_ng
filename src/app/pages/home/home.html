@@ -16,8 +16,8 @@
 
     <div class="site-presentation markdown" [innerHTML]="descriptionText$ | async"></div>
 
-    <div *ngIf="showEditionList" class="front-page-edition-list">
-      <content-grid class="edition_boxes"></content-grid>
+    <div *ngIf="showContentGrid" class="content-grid-wrapper">
+      <content-grid></content-grid>
     </div>
 
     <footer *ngIf="showFooter" class="footer markdown" [innerHTML]="footerText$ | async"></footer>
