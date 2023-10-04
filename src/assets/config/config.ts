@@ -187,14 +187,20 @@ export const config: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: true,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-portrait.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
-      portraitImageAltText: {
-        sv: "Zacharias Topelius",
-        fi: "Zacharias Topelius"
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Zacharias Topelius",
+          fi: "Zacharias Topeliuksen muotokuva"
+        },
+        orientationPortrait: true,
+        URL: "assets/images/frontpage-image-portrait.jpg"
+      },
+      portraitOrientationSettings: {
+        imagePlacement: {
+          onRight: false,
+          squareCroppedVerticalOffset: "10%"
+        },
+        siteTitleOnImageOnSmallScreens: false
       },
       showContentGrid: false,
       showFooter: true
@@ -549,12 +555,13 @@ export const config_soderholm: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-portrait.jpg",
-      portraitImageUrlInMobileMode: "",
-      portraitImageAltText: {},
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Kerstin Söderholm"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
       showContentGrid: false,
       showFooter: false
     },
@@ -795,12 +802,13 @@ export const config_vonWright: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "",
-      portraitImageAltText: {},
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Georg Henrik von Wright"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
       showContentGrid: false,
       showFooter: false
     },
@@ -1120,12 +1128,15 @@ export const config_granqvist: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "",
-      portraitImageAltText: {},
+      bannerImage: {
+        altTexts: {
+          sv: "Hilma Granqvist",
+          en: "Hilma Granqvist",
+          ar: "Hilma Granqvist"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
       showContentGrid: true,
       showFooter: true
     },
@@ -1316,12 +1327,14 @@ export const config_mechelin: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg",
-      portraitImageUrlInMobileMode: "",
-      portraitImageAltText: {},
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Leo Mechelin",
+          fi: "Leo Mechelinin muotokuva"
+        },
+        orientationPortrait: false,
+        URL: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg"
+      },
       showContentGrid: false,
       showFooter: false
     },

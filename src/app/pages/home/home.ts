@@ -4,7 +4,6 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
 import { config } from 'src/assets/config/config';
 
 
@@ -16,11 +15,12 @@ import { config } from 'src/assets/config/config';
 export class HomePage implements OnInit {
   descriptionText$: Observable<SafeHtml>;
   footerText$: Observable<SafeHtml>;
+  imageAltText: string = '';
   imageOnRight: boolean = false;
   imageOrientationPortrait: boolean = false;
-  imageUrl: string = '';
-  imageUrlStyle: string = '';
-  portraitImageAltText: string = '';
+  imageURL: string = '';
+  imageURLStyle: string = '';
+  portraitImageObjectPosition: string | null = null;
   showContentGrid: boolean = false;
   showFooter: boolean = false;
   siteHasSubtitle: boolean = false;
@@ -29,26 +29,20 @@ export class HomePage implements OnInit {
   constructor(
     private mdContentService: MdContentService,
     private sanitizer: DomSanitizer,
-    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.imageOnRight = config.page?.home?.imageOnRightIfPortrait ?? false;
-    this.imageOrientationPortrait = config.page?.home?.imageOrientationIsPortrait ?? false;
-    this.imageUrl = config.page?.home?.imageUrl ?? 'assets/images/frontpage-image-landscape.jpg';
-    this.portraitImageAltText = config.page?.home?.portraitImageAltText?.[this.activeLocale] ?? 'front image';
+    this.imageAltText = config.page?.home?.bannerImage?.altTexts?.[this.activeLocale] ?? 'image';
+    this.imageOnRight = config.page?.home?.portraitOrientationSettings?.imagePlacement?.onRight ?? false;
+    this.imageOrientationPortrait = config.page?.home?.bannerImage?.orientationPortrait ?? false;
+    this.imageURL = config.page?.home?.bannerImage?.URL ?? 'assets/images/home-page-banner.jpg';
+    this.imageURLStyle = `url(${this.imageURL})`;
     this.showContentGrid = config.page?.home?.showContentGrid ?? false;
     this.showFooter = config.page?.home?.showFooter ?? false;
-    this.titleOnImage = config.page?.home?.siteTitleOnTopOfImageInMobileModeIfPortrait ?? false;
+    this.titleOnImage = config.page?.home?.portraitOrientationSettings?.siteTitleOnImageOnSmallScreens ?? false;
 
-    // Change front page image if mobile mode and the image orientation is set to portrait
-    if (this.userSettingsService.isMobile() && this.imageOrientationPortrait) {
-      const imageUrlMobile = config.page?.home?.portraitImageUrlInMobileMode ?? '';
-      if (imageUrlMobile) {
-        this.imageUrl = imageUrlMobile;
-      }
+    if (config.page?.home?.portraitOrientationSettings?.imagePlacement?.squareCroppedVerticalOffset) {
+      this.portraitImageObjectPosition = '50% ' + config.page?.home?.portraitOrientationSettings?.imagePlacement?.squareCroppedVerticalOffset;
     }
-
-    this.imageUrlStyle = `url(${this.imageUrl})`;
 
     // Only show subtitle if translation for it not missing
     if ($localize`:@@Site.Subtitle:Webbplatsens undertitel`) {
