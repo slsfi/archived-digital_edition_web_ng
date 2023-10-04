@@ -16,10 +16,10 @@ async function generateSitemap() {
     let urlOrigin = config.app?.siteURLOrigin ?? '';
     const locale = config.app?.i18n?.defaultLanguage ?? 'sv';
     const multilingualCollectionTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
-    const collectionCovers = config.HasCover ?? false;
-    const collectionTitles = config.HasTitle ?? false;
-    const collectionForewords = config.HasForeword ?? false;
-    const collectionIntros = config.HasIntro ?? false;
+    const collectionCovers = config.collections?.frontMatterPages?.cover ?? false;
+    const collectionTitles = config.collections?.frontMatterPages?.title ?? false;
+    const collectionForewords = config.collections?.frontMatterPages?.foreword ?? false;
+    const collectionIntros = config.collections?.frontMatterPages?.introduction ?? false;
 
     const APIBase = API + '/' + projectName;
     if (urlOrigin.length && urlOrigin[urlOrigin.length - 1] === '/') {
@@ -39,7 +39,7 @@ async function generateSitemap() {
     }
 
     // Get about-pages URLs
-    if (config.show?.TOC?.About) {
+    if (config.component?.mainSideMenu?.items?.about) {
         let aboutPages = await fetchFromAPI(APIBase + '/static-pages-toc/' + locale);
         if (aboutPages && aboutPages.children) {
             urlCounter += generateAboutPagesURLs(aboutPages.children, (config.page?.about?.markdownFolderNumber ?? '03'), urlOrigin, locale);
@@ -47,7 +47,7 @@ async function generateSitemap() {
     }
 
     // Get ebook-pages URLs
-    if (config.show?.TOC?.EPUB && config.ebooks?.length) {
+    if (config.component?.mainSideMenu?.items?.ebooks && config.ebooks?.length) {
         urlCounter += generateEbookURLs(config.ebooks, urlOrigin, locale);
     }
 

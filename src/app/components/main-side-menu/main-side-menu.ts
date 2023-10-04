@@ -10,7 +10,7 @@ import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { CollectionsService } from "src/app/services/collections.service";
 import { GalleryService } from "src/app/services/gallery.service";
 import { MdContentService } from "src/app/services/md-content.service";
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -71,24 +71,13 @@ export class MainSideMenu implements OnInit, OnChanges {
   private getMenuData(): Observable<any> {
     // The order of the functions in the array which is fed to forkJoin
     // determines the order of the menu items in the menu.
-    return forkJoin(
-      [
-        this.getHomePageMenuItem(),
-        this.getAboutPagesMenu(),
-        this.getEbookPagesMenu(),
-        this.getCollectionPagesMenu(),
-        this.getMediaCollectionPagesMenu(),
-        this.getIndexPageMenuItem('persons'),
-        this.getIndexPageMenuItem('places'),
-        this.getIndexPageMenuItem('keywords'),
-        this.getIndexPageMenuItem('works')
-      ]
-    ).pipe(
+    return forkJoin(this.getMenuItemsArray()).pipe(
       map((res: any[]) => {
         let menu: any[] = [];
 
         // Filter out menu groups that have no data, i.e. are not supposed
-        // to be in the menu according to the config.
+        // to be in the menu according to the config or are empty because
+        // of a loading error.
         for (let i = 0; i < res.length; i++) {
           if (res[i].menuData && res[i].menuData.length) {
             for (let x = 0; x < res[i].menuData.length; x++) {
@@ -104,37 +93,69 @@ export class MainSideMenu implements OnInit, OnChanges {
     );
   }
 
-  private getHomePageMenuItem(): Observable<any> {
-    let menuData: any[] = [];
-    if (this._config.show?.TOC?.Home) {
-      menuData = [{ id: '', title: $localize`:@@TOC.Home:Hem`, parentPath: '/' }];
+  /**
+   * Returns an array of observables with only those menu items that
+   * have been enabled in the config, in the order specified in the
+   * config.
+   */
+  private getMenuItemsArray(): Observable<any>[] {
+    const menuItemArray: Observable<any>[] = [];
+    const enabledPages = config.component?.mainSideMenu?.items ?? {};
+
+    for (const page in enabledPages) {
+      if (
+        enabledPages.hasOwnProperty(page) &&
+        enabledPages[page]
+      ) {
+        if (page === 'home') {
+          menuItemArray.push(this.getHomePageMenuItem());
+        } else if (page === 'about') {
+          menuItemArray.push(this.getAboutPagesMenu());
+        } else if (page === 'ebooks') {
+          menuItemArray.push(this.getEbookPagesMenu());
+        } else if (page === 'collections') {
+          menuItemArray.push(this.getCollectionPagesMenu());
+        } else if (page === 'mediaCollections') {
+          menuItemArray.push(this.getMediaCollectionPagesMenu());
+        } else if (page === 'indexKeywords') {
+          menuItemArray.push(this.getIndexPageMenuItem('keywords'));
+        } else if (page === 'indexPersons') {
+          menuItemArray.push(this.getIndexPageMenuItem('persons'));
+        } else if (page === 'indexPlaces') {
+          menuItemArray.push(this.getIndexPageMenuItem('places'));
+        } else if (page === 'indexWorks') {
+          menuItemArray.push(this.getIndexPageMenuItem('works'));
+        }
+      }
     }
+
+    return menuItemArray;
+  }
+
+  private getHomePageMenuItem(): Observable<any> {
+    const menuData: any[] = [{ id: '', title: $localize`:@@TOC.Home:Hem`, parentPath: '/' }];
     return of({ menuType: 'home', menuData });
   }
 
   private getAboutPagesMenu(): Observable<any> {
-    if (this._config.show?.TOC?.About) {
-      return this.mdcontentService.getMarkdownMenu(
-        this.activeLocale, this.aboutPagesRootNodeID
-      ).pipe(
-        map((res: any) => {
-          res = [res];
-          this.recursivelyAddParentPagePath(res, '/about');
-          return { menuType: 'about', menuData: res };
-        }),
-        catchError((error: any) => {
-          console.error(error);
-          return of({ menuType: 'about', menuData: [] });
-        })
-      );
-    } else {
-      return of({ menuType: 'about', menuData: [] });
-    }
+    return this.mdcontentService.getMarkdownMenu(
+      this.activeLocale, this.aboutPagesRootNodeID
+    ).pipe(
+      map((res: any) => {
+        res = [res];
+        this.recursivelyAddParentPagePath(res, '/about');
+        return { menuType: 'about', menuData: res };
+      }),
+      catchError((error: any) => {
+        console.error(error);
+        return of({ menuType: 'about', menuData: [] });
+      })
+    );
   }
 
   private getEbookPagesMenu(): Observable<any> {
     let menuData: any[] = [];
-    if (this._config.show?.TOC?.EPUB && this.ebooksList?.length) {
+    if (this.ebooksList.length) {
       this.ebooksList.forEach(epub => {
         menuData.push({
           id: epub.id,
@@ -183,38 +204,34 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   private getMediaCollectionPagesMenu(): Observable<any> {
-    if (this._config.show?.TOC?.MediaCollections) {
-      return this.galleryService.getGalleries(this.activeLocale).pipe(
-        map((res: any) => {
-          if (res && res.length > 0) {
-            this.commonFunctions.sortArrayOfObjectsAlphabetically(res, 'title');
-            this.recursivelyAddParentPagePath(res, '/media-collection');
-            res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collections' });
-            res = [{ title: $localize`:@@TOC.MediaCollections:Bildbank`, children: res }];
-          } else {
-            res = [];
-          }
-          return { menuType: 'media-collections', menuData: res };
-        }),
-        catchError((error: any) => {
-          console.error(error);
-          return of({ menuType: 'media-collections', menuData: [] });
-        })
-      );
-    } else {
-      return of({ menuType: 'media-collections', menuData: [] });
-    }
+    return this.galleryService.getGalleries(this.activeLocale).pipe(
+      map((res: any) => {
+        if (res?.length > 0) {
+          this.commonFunctions.sortArrayOfObjectsAlphabetically(res, 'title');
+          this.recursivelyAddParentPagePath(res, '/media-collection');
+          res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collections' });
+          res = [{ title: $localize`:@@TOC.MediaCollections:Bildbank`, children: res }];
+        } else {
+          res = [];
+        }
+        return { menuType: 'media-collections', menuData: res };
+      }),
+      catchError((error: any) => {
+        console.error(error);
+        return of({ menuType: 'media-collections', menuData: [] });
+      })
+    );
   }
 
   private getIndexPageMenuItem(indexType: string): Observable<any> {
     let menuData: any[] = [];
-    if (indexType === 'persons' && this._config.show?.TOC?.PersonSearch) {
+    if (indexType === 'persons') {
       menuData = [{ id: '', title: $localize`:@@TOC.PersonSearch:Personregister`, parentPath: '/index/persons' }];
-    } else if (indexType === 'places' && this._config.show?.TOC?.PlaceSearch) {
+    } else if (indexType === 'places') {
       menuData = [{ id: '', title: $localize`:@@TOC.PlaceSearch:Ortregister`, parentPath: '/index/places' }];
-    } else if (indexType === 'keywords' && this._config.show?.TOC?.TagSearch) {
+    } else if (indexType === 'keywords') {
       menuData = [{ id: '', title: $localize`:@@TOC.TagSearch:Ämnesord`, parentPath: '/index/keywords' }];
-    } else if (indexType === 'works' && this._config.show?.TOC?.WorkSearch) {
+    } else if (indexType === 'works') {
       menuData = [{ id: '', title: $localize`:@@TOC.WorkSearch:Verkregister`, parentPath: '/index/works' }];
     }
     return of({ menuType: indexType, menuData });

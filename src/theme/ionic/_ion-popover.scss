@@ -5,12 +5,8 @@ ion-popover.view-options-popover {
     --offset-y: -30px;
 }
 
-/* Inline popover in page-text to add new view */
+/* Inline popover in page-text to add new view, additional styles defined inline in the template */
 ion-popover.page-text-add-view-popover {
-    --background: transparent;
-    --box-shadow: none;
-    --offset-y: 40px;
-  
     &::part(content) {
         width: 350px;
     }
@@ -20,27 +16,17 @@ ion-popover.page-text-add-view-popover {
     }
 
     ion-content::part(scroll) {
-        display: flex;
-        justify-content: flex-end;
         align-items: flex-end;
+        display: flex;
         flex-direction: column;
+        gap: 0.75rem;
+        justify-content: flex-end;
     }
 
-    ion-chip {
-        --background: #f2f2f2;
-        --color: #000;
-        font-size: 1rem;
-        margin-top: 10px;
-        margin-right: 0;
-        padding: 18px 14px;
-        transition: all linear 0.2s;
-
-        ion-icon.md {
-            color: #000;
-            font-size: 24px;
+    ion-button.custom-outline-button {
+        &:hover,
+        &:focus {
+            --border-color: var(--button-background-color) !important;
         }
-    }
-    ion-chip:hover {
-        --background: #dbdbdb;
     }
 }

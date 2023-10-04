@@ -172,7 +172,11 @@
         },
         "ShowAll": "Show all",
         "ShowSearchResults": "Occurrences",
-        "AddColumn": "Add column"
+        "AddColumn": "Add column",
+        "ToggleColumnOptionsMenu": "Open/close column options menu",
+        "RemoveColumn": "Remove column",
+        "MoveColumnRight": "Switch places with the column to the right",
+        "MoveColumnLeft": "Switch places with the column to the left"
     },
     "About": {
         "LoadingError": "Failed to load page content."

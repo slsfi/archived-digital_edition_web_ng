@@ -45,7 +45,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     private textService: TextService,
     public userSettingsService: UserSettingsService
   ) {
-    this.illustrationsViewAvailable = config.page?.read?.viewTypeSettings?.illustrations ?? false;
+    this.illustrationsViewAvailable = config.page?.text?.viewTypes?.illustrations ?? false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,7 +72,6 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   ngOnInit() {
     if (this.textItemID) {
       this.loadReadText();
-      this.setIllustrationsInReadtextStatus();
     }
     if (isBrowser()) {
       this.setUpTextListeners();
@@ -87,15 +86,16 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     this.textService.getEstablishedText(this.textItemID).subscribe({
       next: (res) => {
         if (
-          res &&
-          res.content &&
-          res.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+          res?.content &&
+          res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
         ) {
           const collectionID = this.textItemID.split('_')[0];
           let text = res.content as string;
           text = this.textService.postprocessEstablishedText(text, collectionID);
           text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
+          this.illustrationsVisibleInReadtext = this.textService.readTextHasVisibleIllustrations(text);
+
           if (this.textPosition) {
             this.scrollToTextPosition();
           } else if (this.searchMatches.length) {
@@ -104,7 +104,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
         } else {
           this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
         }
-        if (res && res.language) {
+        if (res?.language) {
           this.textLanguage = res.language;
         } else {
           this.textLanguage = '';
@@ -115,23 +115,6 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
         this.text = $localize`:@@Read.Established.Error:Ett fel har uppstått. Lästexten kunde inte hämtas.`;
       }
     });
-  }
-
-  /**
-   * Checks config settings if the current reading text has illustrations that are
-   * shown inline in the reading text view (based on matching publication id or collection id).
-   * Sets this.illustrationsVisibleInReadtext either true or false.
-   */
-  private setIllustrationsInReadtextStatus() {
-    const showIllustrations = config.settings?.showReadTextIllustrations ?? [];
-    if (
-      showIllustrations.includes(this.textItemID.split('_')[0]) ||
-      showIllustrations.includes(this.textItemID.split('_')[1])
-    ) {
-      this.illustrationsVisibleInReadtext = true;
-    } else {
-      this.illustrationsVisibleInReadtext = false;
-    }
   }
 
   private setUpTextListeners() {

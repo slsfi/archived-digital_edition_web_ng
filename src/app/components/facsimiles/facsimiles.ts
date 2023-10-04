@@ -54,9 +54,9 @@ export class FacsimilesComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService
   ) {
-    this.facsSize = config.component?.facsimileColumn?.imageQuality ?? 1;
+    this.facsSize = config.component?.facsimiles?.imageQuality ?? 1;
     this.facsURLAlternate = config.app?.facsimileBase ?? '';
-    this.showTitle = config.component?.facsimileColumn?.showFacsimileTitle ?? true;
+    this.showTitle = config.component?.facsimiles?.showFacsimileTitle ?? true;
   }
 
   ngOnInit() {

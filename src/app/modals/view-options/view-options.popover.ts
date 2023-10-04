@@ -50,7 +50,7 @@ export class ViewOptionsPopover implements OnInit {
     private popoverCtrl: PopoverController,
     public viewOptionsService: ReadPopoverService
   ) {
-    this.optionsToggles = config.settings?.readToggles ?? undefined;
+    this.optionsToggles = config.page?.text?.viewOptions ?? undefined;
   }
 
   ngOnInit(): void {

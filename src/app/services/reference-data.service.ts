@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -10,12 +10,12 @@ import { config } from "src/assets/config/config";
 })
 export class ReferenceDataService {
   private referenceDataUrl = '/urn/';
-  private urnResolverUrl: string;
+  private urnResolverUrl: string = 'https://urn.fi/';
 
   constructor(
     private http: HttpClient
   ) {
-    this.urnResolverUrl = config.urnResolverUrl ?? 'https://urn.fi/';
+    this.urnResolverUrl = config.modal?.referenceData?.URNResolverURL ?? 'https://urn.fi/';
   }
 
   getReferenceData(id: string): Observable<any> {
@@ -26,7 +26,7 @@ export class ReferenceDataService {
     );
   }
 
-  public getUrnResolverUrl() {
+  getUrnResolverUrl() {
     return this.urnResolverUrl;
   }
 }

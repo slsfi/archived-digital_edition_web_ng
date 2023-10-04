@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { CommentService } from 'src/app/services/comment.service';
 import { SemanticDataService } from 'src/app/services/semantic-data.service';
 import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -28,7 +28,7 @@ export class TooltipService {
     private semanticDataService: SemanticDataService,
     private userSettingsService: UserSettingsService
   ) {
-    this.simpleWorkMetadata = config.useSimpleWorkMetadata ?? false;
+    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
 
   getSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement): Observable<string> {

@@ -172,7 +172,11 @@
         },
         "ShowAll": "Näytä kaikki",
         "ShowSearchResults": "Esiintymät",
-        "AddColumn": "Lisää sarake"
+        "AddColumn": "Lisää sarake",
+        "ToggleColumnOptionsMenu": "Avaa/sulje sarakkeen valikko",
+        "RemoveColumn": "Poista sarake",
+        "MoveColumnRight": "Vaihda paikkaa oikeanpuoleisen sarakkeen kanssa",
+        "MoveColumnLeft": "Vaihda paikkaa vasemmanpuoleisen sarakkeen kanssa"
     },
     "About": {
         "LoadingError": "Sivun sisällön lataus epäonnistui."

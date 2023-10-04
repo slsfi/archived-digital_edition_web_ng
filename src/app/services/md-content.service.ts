@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -17,10 +17,6 @@ export class MdContentService {
     private http: HttpClient
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    const simpleApi = config.app?.simpleApi ?? '';
-    if (simpleApi) {
-      this.apiEndpoint = simpleApi as string;
-    }
   }
 
   getMdContent(fileID: string): Observable<any> {

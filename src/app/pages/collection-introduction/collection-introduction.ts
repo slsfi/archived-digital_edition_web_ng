@@ -53,7 +53,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   };
   toolTipPosType: string = 'fixed';
   toolTipScaleValue: number | null = null;
-  toolTipsSettings: any = {};
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
   urlParametersSubscription: Subscription | null = null;
@@ -85,8 +84,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
     this.showURNButton = config.page?.introduction?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.introduction?.showViewOptionsButton ?? true;
-    this.toolTipsSettings = config.settings?.toolTips ?? undefined;
-    this.viewOptionsTogglesIntro = config.settings?.introToggles ?? undefined;
+    this.viewOptionsTogglesIntro = config.page?.introduction?.viewOptions ?? undefined;
 
     if (
       this.viewOptionsTogglesIntro === undefined ||
@@ -164,7 +162,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       if (routeParams['collectionID']) {
         if (routeParams['collectionID'] !== this.collectionID) {
           this.collectionID = routeParams['collectionID'];
-          if (config.app?.enableCollectionLegacyIDs) {
+          if (config.collections?.enableLegacyIDs) {
             this.setCollectionLegacyId(this.collectionID);
           }
           this.loadIntroduction(this.collectionID, this.activeLocale);
@@ -550,28 +548,30 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           ) {
             this.ngZone.run(() => {
               if (
-                this.toolTipsSettings.personInfo &&
                 eventTarget.classList.contains('person') &&
                 this.readPopoverService.show.personInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'person', eventTarget
+                );
               } else if (
-                this.toolTipsSettings.placeInfo &&
                 eventTarget.classList.contains('placeName') &&
                 this.readPopoverService.show.placeInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'place', eventTarget
+                );
               } else if (
-                this.toolTipsSettings.workInfo &&
                 eventTarget.classList.contains('title') &&
                 this.readPopoverService.show.workInfo
               ) {
-                this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
-              } else if (
-                this.toolTipsSettings.footNotes &&
-                eventTarget.classList.contains('ttFoot')
-              ) {
-                this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), eventTarget);
+                this.showSemanticDataObjectTooltip(
+                  eventTarget.getAttribute('data-id'), 'work', eventTarget
+                );
+              } else if (eventTarget.classList.contains('ttFoot')) {
+                this.showFootnoteTooltip(
+                  eventTarget.getAttribute('data-id'), eventTarget
+                );
               }
             });
           }

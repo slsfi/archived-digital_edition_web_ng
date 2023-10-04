@@ -14,13 +14,13 @@ import { config } from 'src/assets/config/config';
 export class ParentChildPagePathPipe implements PipeTransform {
     transform(parentPath: string, childId: string): string {
         if (parentPath === '/collection') {
-            if (config.HasCover) {
+            if (config.collections?.frontMatterPages?.cover) {
                 return `${parentPath}/${childId}/cover`;
-            } else if (config.HasTitle) {
+            } else if (config.collections?.frontMatterPages?.title) {
                 return `${parentPath}/${childId}/title`;
-            } else if (config.HasForeword) {
+            } else if (config.collections?.frontMatterPages?.foreword) {
                 return `${parentPath}/${childId}/foreword`;
-            } else if (config.HasIntro) {
+            } else if (config.collections?.frontMatterPages?.introduction) {
                 return `${parentPath}/${childId}/introduction`;
             } else if (config.collections?.firstReadItem) {
                 const idPath = config.collections.firstReadItem[childId]?.split('_') || [];

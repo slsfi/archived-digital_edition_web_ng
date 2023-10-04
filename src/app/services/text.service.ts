@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Parser } from 'htmlparser2';
 import { DomHandler } from 'domhandler';
-import { findAll, getAttributeValue } from 'domutils';
+import { existsOne, findAll, getAttributeValue } from 'domutils';
 import { render } from 'dom-serializer';
 
-import { config } from "src/assets/config/config";
+import { CommonFunctionsService } from './common-functions.service';
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -15,18 +16,17 @@ import { config } from "src/assets/config/config";
 export class TextService {
   appMachineName: string = '';
   apiEndpoint: string = '';
-  simpleApi: string = '';
   readViewTextId: string = '';
   previousReadViewTextId: string = '';
   recentCollectionTextViews: Array<any> = [];
   activeCollectionTextMobileModeView: string = '';
 
   constructor(
+    private commonFunctions: CommonFunctionsService,
     private http: HttpClient
   ) {
     this.appMachineName = config.app?.machineName ?? '';
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    this.simpleApi = config.app?.simpleApi ?? '';
   }
 
   getEstablishedText(id: string): Observable<any> {
@@ -37,13 +37,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/est${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/est${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -55,7 +49,7 @@ export class TextService {
   }
 
   getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
-    if (config.app?.enableCollectionLegacyIDs) {
+    if (config.collections?.enableLegacyIDs) {
       return this.http.get(
         `${this.apiEndpoint}/${this.appMachineName}/legacy/${legacyId}`
       );
@@ -97,7 +91,6 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
     const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/var${
       (ch_id ? '/' + ch_id : '')
     }`;
@@ -112,13 +105,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/${coll_id}/${pub_id}/ms${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/${coll_id}/${pub_id}/ms${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -167,13 +154,7 @@ export class TextService {
     if (idParts[2] !== undefined) {
       ch_id = idParts[2];
     }
-
-    let api = this.apiEndpoint;
-    if (this.simpleApi) {
-      api = this.simpleApi;
-    }
-
-    const url = `${api}/${this.appMachineName}/text/downloadable/${format}/${coll_id}/${pub_id}/est${
+    const url = `${this.apiEndpoint}/${this.appMachineName}/text/downloadable/${format}/${coll_id}/${pub_id}/est${
       (ch_id ? '/' + ch_id : '')
     }`;
     return this.http.get(url);
@@ -244,41 +225,55 @@ export class TextService {
     text = text.replace(/images\//g, 'assets/images/');
     text = text.replace(/assets\/images\/verk\/http/g, 'http');
 
-    const showReadTextIllustrations = config.settings?.showReadTextIllustrations ?? [];
-    if (showReadTextIllustrations.length > 0) {
-      let galleryId = 44;
-      const galleries = config.settings?.galleryCollectionMapping ?? [];
-      if (galleries.length > 0) {
-        galleryId = galleries[collectionId];
-      }
+    const galleries = config.collections?.mediaCollectionMappings ?? {};
+    const galleryId = !this.commonFunctions.isEmptyObject(galleries)
+                      ? galleries[collectionId]
+                      : undefined;
+    const visibleInlineIllustrations = config.collections?.visibleInlineReadTextIllustrations ?? [];
 
-      if (
-        !showReadTextIllustrations.includes(collectionId) &&
-        (text.includes('est_figure_graphic') || text.includes('assets/images/verk/'))
-      ) {
-        // Use SSR compatible htmlparser2 and related DOM-handling modules
-        // (domhandler: https://domhandler.js.org/, domutils: https://domutils.js.org/,
-        // dom-serializer: https://github.com/cheeriojs/dom-serializer)
-        // to add class names to images and replace image file paths.
-        const handler = new DomHandler();
-        const parser = new Parser(handler);
-        parser.write(text);
-        parser.end();
-        const m = findAll(el => String(getAttributeValue(el, 'class')).includes('est_figure_graphic'), handler.dom);
+    if (text.includes('est_figure_graphic') || text.includes('assets/images/verk/')) {
+      // Use SSR compatible htmlparser2 and related DOM-handling modules
+      // (domhandler: https://domhandler.js.org/, domutils: https://domutils.js.org/,
+      // dom-serializer: https://github.com/cheeriojs/dom-serializer)
+      // to add class names to images and replace image file paths.
+      const handler = new DomHandler();
+      const parser = new Parser(handler);
+      parser.write(text);
+      parser.end();
+      if (!visibleInlineIllustrations.includes(Number(collectionId))) {
+        // Hide inline illustrations in the read text
+        const m = findAll(
+          el => String(getAttributeValue(el, 'class')).includes('est_figure_graphic'), handler.dom
+        );
         m.forEach(element => {
           element.attribs.class += ' hide-illustration';
         });
-        const m2 = findAll(el => String(getAttributeValue(el, 'src')).includes('assets/images/verk/'), handler.dom);
-        m2.forEach(element => {
-          element.attribs.src = element.attribs.src.replace(
-                'assets/images/verk/',
-                `${this.apiEndpoint}/${this.appMachineName}/gallery/get/${galleryId}/`
-          );
-        });
-        text = render(handler.dom, { decodeEntities: false });
       }
+      const m2 = findAll(
+        el => String(getAttributeValue(el, 'src')).includes('assets/images/verk/'), handler.dom
+      );
+      m2.forEach(element => {
+        element.attribs.src = element.attribs.src.replace(
+              'assets/images/verk/',
+              `${this.apiEndpoint}/${this.appMachineName}/gallery/get/${galleryId}/`
+        );
+      });
+      text = render(handler.dom, { decodeEntities: false });
     }
+
     return text;
+  }
+
+  readTextHasVisibleIllustrations(text: string): boolean {
+    const handler = new DomHandler();
+    const parser = new Parser(handler);
+    parser.write(text);
+    parser.end();
+
+    return existsOne(
+      el => (String(getAttributeValue(el, 'class')).includes('est_figure_graphic') &&
+            !String(getAttributeValue(el, 'class')).includes('hide-illustration')), handler.dom
+    );
   }
 
   private async handleError(error: Response | any) {

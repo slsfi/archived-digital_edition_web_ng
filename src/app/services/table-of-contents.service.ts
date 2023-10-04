@@ -2,7 +2,7 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -20,10 +20,6 @@ export class TableOfContentsService {
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    const simpleApi = config.app?.simpleApi ?? '';
-    if (simpleApi) {
-      this.apiEndpoint = simpleApi as string;
-    }
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
