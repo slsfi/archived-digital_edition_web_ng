@@ -1,56 +1,53 @@
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
+
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { TextService } from 'src/app/services/text.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
+
 
 @Component({
-  selector: 'home-page',
+  selector: 'page-home',
   templateUrl: 'home.html',
   styleUrls: ['home.scss'],
 })
-export class HomePage {
-  siteHasSubtitle: boolean = false;
+export class HomePage implements OnInit {
   descriptionText$: Observable<SafeHtml>;
   footerText$: Observable<SafeHtml>;
-  imageOrientationPortrait: Boolean = false;
-  imageOnRight: Boolean = false;
-  titleOnImage: Boolean = false;
-  showEditionList: Boolean = false;
-  showFooter: Boolean = false;
-  imageUrl = '';
-  imageUrlStyle = '';
-  portraitImageAltText = '';
+  imageAltText: string = '';
+  imageOnRight: boolean = false;
+  imageOrientationPortrait: boolean = false;
+  imageURL: string = '';
+  imageURLStyle: string = '';
+  portraitImageObjectPosition: string | null = null;
+  searchQuery: string = '';
+  showContentGrid: boolean = false;
+  showFooter: boolean = false;
+  showSearchbar: boolean = false;
+  siteHasSubtitle: boolean = false;
+  titleOnImage: boolean = false;
 
   constructor(
-    private sanitizer: DomSanitizer,
     private mdContentService: MdContentService,
-    private userSettingsService: UserSettingsService,
-    protected textService: TextService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private router: Router,
+    private sanitizer: DomSanitizer,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-
-    // Get config for front page image and text content
-    this.imageOrientationPortrait = config.page?.home?.imageOrientationIsPortrait ?? false;
-    this.imageOnRight = config.page?.home?.imageOnRightIfPortrait ?? false;
-    this.titleOnImage = config.page?.home?.siteTitleOnTopOfImageInMobileModeIfPortrait ?? false;
-    this.portraitImageAltText = config.page?.home?.portraitImageAltText ?? 'front image';
-    this.showEditionList = config.page?.home?.showEditionList ?? false;
+    this.imageAltText = config.page?.home?.bannerImage?.altTexts?.[this.activeLocale] ?? 'image';
+    this.imageOnRight = config.page?.home?.portraitOrientationSettings?.imagePlacement?.onRight ?? false;
+    this.imageOrientationPortrait = config.page?.home?.bannerImage?.orientationPortrait ?? false;
+    this.imageURL = config.page?.home?.bannerImage?.URL ?? 'assets/images/home-page-banner.jpg';
+    this.imageURLStyle = `url(${this.imageURL})`;
+    this.showContentGrid = config.page?.home?.showContentGrid ?? false;
     this.showFooter = config.page?.home?.showFooter ?? false;
-    this.imageUrl = config.page?.home?.imageUrl ?? 'assets/images/frontpage-image-landscape.jpg';
+    this.showSearchbar = config.page?.home?.showSearchbar ?? false;
+    this.titleOnImage = config.page?.home?.portraitOrientationSettings?.siteTitleOnImageOnSmallScreens ?? false;
 
-    // Change front page image if not in desktop mode and the image orientation is set to portrait
-    if (!this.userSettingsService.isDesktop() && this.imageOrientationPortrait) {
-      const imageUrlMobile = config.page?.home?.portraitImageUrlInMobileMode ?? '';
-      if (imageUrlMobile) {
-        this.imageUrl = imageUrlMobile;
-      }
+    if (config.page?.home?.portraitOrientationSettings?.imagePlacement?.squareCroppedVerticalOffset) {
+      this.portraitImageObjectPosition = '50% ' + config.page?.home?.portraitOrientationSettings?.imagePlacement?.squareCroppedVerticalOffset;
     }
-
-    this.imageUrlStyle = `url(${this.imageUrl})`;
 
     // Only show subtitle if translation for it not missing
     if ($localize`:@@Site.Subtitle:Webbplatsens undertitel`) {
@@ -67,15 +64,31 @@ export class HomePage {
     }
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
+  private getMdContent(fileID: string): Observable<SafeHtml> {
     return this.mdContentService.getMdContent(fileID).pipe(
       map((res: any) => {
         return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
       }),
       catchError((e) => {
+        console.error(e);
         return of('');
       })
     );
+  }
+
+  submitSearchQuery() {
+    if (this.searchQuery) {
+      this.router.navigate(
+        ['/search'],
+        {
+          queryParams: { query: this.searchQuery }
+        }
+      );
+    }
+  }
+
+  clearSearchQuery() {
+    this.searchQuery = '';
   }
 
 }

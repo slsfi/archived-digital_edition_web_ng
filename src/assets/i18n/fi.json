@@ -6,6 +6,10 @@
             "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
         }
     },
+    "Home": {
+        "SearchButtonAriaLabel": "Hae",
+        "SearchPlaceholder": "Hae ..."
+    },
     "TopMenu": {
         "Menu": "Valikko",
         "Home": "Etusivu",

@@ -6,6 +6,10 @@
             "Home": "A general description of the website for search engines."
         }
     },
+    "Home": {
+        "SearchButtonAriaLabel": "Search",
+        "SearchPlaceholder": "Search ..."
+    },
     "TopMenu": {
         "Menu": "Menu",
         "Home": "Home",

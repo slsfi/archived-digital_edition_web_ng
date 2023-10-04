@@ -187,14 +187,24 @@ export const config: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: true,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-portrait.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
-      portraitImageAltText: "Zacharias Topelius",
-      showEditionList: false,
-      showFooter: true
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Zacharias Topelius",
+          fi: "Zacharias Topeliuksen muotokuva"
+        },
+        orientationPortrait: true,
+        URL: "assets/images/home-page-banner-portrait.jpg"
+      },
+      portraitOrientationSettings: {
+        imagePlacement: {
+          onRight: false,
+          squareCroppedVerticalOffset: "10%"
+        },
+        siteTitleOnImageOnSmallScreens: false
+      },
+      showContentGrid: false,
+      showFooter: true,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -546,14 +556,16 @@ export const config_soderholm: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-portrait.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-square.jpg",
-      portraitImageAltText: "",
-      showEditionList: false,
-      showFooter: false
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Kerstin Söderholm"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
+      showContentGrid: false,
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -792,14 +804,16 @@ export const config_vonWright: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageAltText: "Svartvitt fotografi av Georg Henrik von Wright 1950",
-      showEditionList: false,
-      showFooter: false
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Georg Henrik von Wright"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
+      showContentGrid: false,
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -1117,14 +1131,18 @@ export const config_granqvist: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageUrlInMobileMode: "assets/images/frontpage-image-landscape.jpg",
-      portraitImageAltText: "Hilma Granqvist",
-      showEditionList: true,
-      showFooter: true
+      bannerImage: {
+        altTexts: {
+          sv: "Hilma Granqvist",
+          en: "Hilma Granqvist",
+          ar: "Hilma Granqvist"
+        },
+        orientationPortrait: false,
+        URL: "assets/images/home-page-banner.jpg"
+      },
+      showContentGrid: true,
+      showFooter: true,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -1313,14 +1331,17 @@ export const config_mechelin: Config = {
       showViewOptionsButton: true
     },
     home: {
-      imageOrientationIsPortrait: false,
-      imageOnRightIfPortrait: false,
-      siteTitleOnTopOfImageInMobileModeIfPortrait: false,
-      imageUrl: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg",
-      portraitImageUrlInMobileMode: "",
-      portraitImageAltText: "",
-      showEditionList: false,
-      showFooter: false
+      bannerImage: {
+        altTexts: {
+          sv: "Porträtt av Leo Mechelin",
+          fi: "Leo Mechelinin muotokuva"
+        },
+        orientationPortrait: false,
+        URL: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg"
+      },
+      showContentGrid: false,
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       persons: {
