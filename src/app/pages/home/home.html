@@ -30,6 +30,25 @@
       <p *ngIf="siteHasSubtitle" role="doc-subtitle" class="site-subtitle" i18n="@@Site.Subtitle">Webbplatsens undertitel</p>
     </div>
 
+    <div *ngIf="showSearchbar" class="search-bar-wrapper">
+      <ion-searchbar
+            class="custom-searchbar manual-exec"
+            [class.highlight]="searchQuery"
+            placeholder="Sök ..."
+            i18n-placeholder="@@Home.SearchPlaceholder"
+            show-clear-button="always"
+            enterkeyhint="search"
+            inputmode="search"
+            [searchIcon]="undefined"
+            [(ngModel)]="searchQuery"
+            (ionClear)="clearSearchQuery()"
+            (keyup.enter)="submitSearchQuery()"
+      ></ion-searchbar>
+      <ion-button (click)="submitSearchQuery()">
+        <ion-icon slot="icon-only" name="search" aria-label="Sök" i18n-aria-label="@@Home.SearchButtonAriaLabel"></ion-icon>
+      </ion-button>
+    </div>
+
     <div class="site-presentation markdown" [innerHTML]="descriptionText$ | async"></div>
 
     <div *ngIf="showContentGrid" class="content-grid-wrapper">

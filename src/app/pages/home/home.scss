@@ -74,12 +74,31 @@ ion-content.portrait-mode::part(scroll) {
 		text-align: center;
 	}
 
+	.search-bar-wrapper {
+		align-items: center;
+		display: flex;
+		margin: 1rem auto;
+		max-width: 520px;
+		width: 100%;
+
+		ion-searchbar {
+			flex-basis: 200px;
+			flex-grow: 1;
+			max-width: 520px;
+			min-width: 200px;
+			padding-inline-start: 0;
+			width: auto;
+		}
+	}
+
 	.content-grid-wrapper {
 		margin: 0 auto 3rem auto;
 		max-width: 1000px;
 	}
 
 	.footer {
+		color: #353535;
+		font-size: 1rem;
 		margin: auto auto 0 auto;
 		max-width: 1000px;
 		padding: 0 0 1.5rem 0;
@@ -219,8 +238,15 @@ ion-content.portrait-mode::part(scroll) {
 }
 
 @media only screen and (min-width: 901px) {
-	.portrait-mode.title-on-image .banner .title-wrapper {
-		display: none;
+	.portrait-mode {
+		&.title-on-image .banner .title-wrapper {
+			display: none;
+		}
+
+		.text-content .search-bar-wrapper {
+			margin-left: 0;
+			width: 100%;
+		}
 	}
 }
 

@@ -6,6 +6,10 @@
             "Home": "En generell beskrivning av webbplatsen för sökmotorer."
         }
     },
+    "Home": {
+        "SearchButtonAriaLabel": "Sök",
+        "SearchPlaceholder": "Sök ..."
+    },
     "TopMenu": {
         "Menu": "Meny",
         "Home": "Hem",

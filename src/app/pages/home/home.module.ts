@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ContentGridComponent } from 'src/app/components/content-grid/content-grid';
@@ -13,6 +14,7 @@ import { HomePage } from './home';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     IonicModule,
     ContentGridComponent,
     HomePageRoutingModule

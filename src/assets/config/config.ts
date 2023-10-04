@@ -193,7 +193,7 @@ export const config: Config = {
           fi: "Zacharias Topeliuksen muotokuva"
         },
         orientationPortrait: true,
-        URL: "assets/images/frontpage-image-portrait.jpg"
+        URL: "assets/images/home-page-banner-portrait.jpg"
       },
       portraitOrientationSettings: {
         imagePlacement: {
@@ -203,7 +203,8 @@ export const config: Config = {
         siteTitleOnImageOnSmallScreens: false
       },
       showContentGrid: false,
-      showFooter: true
+      showFooter: true,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -563,7 +564,8 @@ export const config_soderholm: Config = {
         URL: "assets/images/home-page-banner.jpg"
       },
       showContentGrid: false,
-      showFooter: false
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -810,7 +812,8 @@ export const config_vonWright: Config = {
         URL: "assets/images/home-page-banner.jpg"
       },
       showContentGrid: false,
-      showFooter: false
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -1138,7 +1141,8 @@ export const config_granqvist: Config = {
         URL: "assets/images/home-page-banner.jpg"
       },
       showContentGrid: true,
-      showFooter: true
+      showFooter: true,
+      showSearchbar: false
     },
     index: {
       keywords: {
@@ -1336,7 +1340,8 @@ export const config_mechelin: Config = {
         URL: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg"
       },
       showContentGrid: false,
-      showFooter: false
+      showFooter: false,
+      showSearchbar: false
     },
     index: {
       persons: {

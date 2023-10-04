@@ -426,6 +426,18 @@
         <target>Genre</target>
       </segment>
     </unit>
+    <unit id="Home.SearchButtonAriaLabel">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Search</target>
+      </segment>
+    </unit>
+    <unit id="Home.SearchPlaceholder">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Search ...</target>
+      </segment>
+    </unit>
     <unit id="illustrations">
       <segment state="initial">
         <source>Illustrationer</source>

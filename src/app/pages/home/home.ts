@@ -1,5 +1,6 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
@@ -21,13 +22,16 @@ export class HomePage implements OnInit {
   imageURL: string = '';
   imageURLStyle: string = '';
   portraitImageObjectPosition: string | null = null;
+  searchQuery: string = '';
   showContentGrid: boolean = false;
   showFooter: boolean = false;
+  showSearchbar: boolean = false;
   siteHasSubtitle: boolean = false;
   titleOnImage: boolean = false;
 
   constructor(
     private mdContentService: MdContentService,
+    private router: Router,
     private sanitizer: DomSanitizer,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -38,6 +42,7 @@ export class HomePage implements OnInit {
     this.imageURLStyle = `url(${this.imageURL})`;
     this.showContentGrid = config.page?.home?.showContentGrid ?? false;
     this.showFooter = config.page?.home?.showFooter ?? false;
+    this.showSearchbar = config.page?.home?.showSearchbar ?? false;
     this.titleOnImage = config.page?.home?.portraitOrientationSettings?.siteTitleOnImageOnSmallScreens ?? false;
 
     if (config.page?.home?.portraitOrientationSettings?.imagePlacement?.squareCroppedVerticalOffset) {
@@ -69,6 +74,21 @@ export class HomePage implements OnInit {
         return of('');
       })
     );
+  }
+
+  submitSearchQuery() {
+    if (this.searchQuery) {
+      this.router.navigate(
+        ['/search'],
+        {
+          queryParams: { query: this.searchQuery }
+        }
+      );
+    }
+  }
+
+  clearSearchQuery() {
+    this.searchQuery = '';
   }
 
 }
