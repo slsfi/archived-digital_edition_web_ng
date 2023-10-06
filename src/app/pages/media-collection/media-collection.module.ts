@@ -12,9 +12,9 @@ import { MediaCollectionPage } from './media-collection';
     MediaCollectionPage,
   ],
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
+    IonicModule,
     MediaCollectionRoutingModule
   ],
 })

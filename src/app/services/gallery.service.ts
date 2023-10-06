@@ -1,8 +1,8 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({
@@ -10,14 +10,15 @@ import { config } from "src/assets/config/config";
 })
 export class GalleryService {
 
-  constructor(
-    private http: HttpClient,
-    @Inject(LOCALE_ID) public activeLocale: string
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getGalleries(language: string): Observable<any> {
     const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language;
     return this.http.get(url);
+  }
+
+  getGallery(id: string, lang: string): Observable<any> {
+    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + id + '/' + lang;    return this.http.get(url);
   }
 
   async getGalleryTags(id?: any): Promise<any> {
@@ -78,18 +79,6 @@ export class GalleryService {
       );
       return response.json();
     } catch (e) {}
-  }
-
-  getGallery(id: string, lang: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/gallery/data/' +
-        id +
-        '/' +
-        lang
-    );
   }
 
   getMediaMetadata(id: string, lang: String): Observable<any> {

@@ -1,14 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { MediaCollectionPage } from './media-collection';
+
 
 const routes: Routes = [
   {
-    path: ':mediaCollectionId/:id/:type',
+    path: ':mediaCollectionID',
     component: MediaCollectionPage,
   },
   {
-    path: ':mediaCollectionId',
+    path: '',
     component: MediaCollectionPage,
   }
 ];

@@ -70,17 +70,6 @@ export class FullscreenImageViewerModal implements OnInit {
     }
 
     this.inputImageNumber = this.activeImageIndex + 1;
-
-    // Loop through backsides array and check if backside image-files actually exist
-    if (isBrowser() && this.backsides.length > 0) {
-      for (let i = 0; i < this.backsides.length; i++) {
-        this.commonFunctions.urlExists(this.backsides[i]).then((res) => {
-          if (res < 1) {
-            this.backsides[i] = null;
-          }
-        });
-      }
-    }
   }
 
   ionViewDidEnter() {

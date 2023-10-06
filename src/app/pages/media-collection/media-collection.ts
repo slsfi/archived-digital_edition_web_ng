@@ -1,41 +1,47 @@
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { catchError, map, Observable, of } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { catchError, combineLatest, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
+
+import { GalleryItem } from 'src/app/models/gallery-item-model';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
-// @IonicPage({
-//   name: 'media-collection',
-//   segment: 'media-collection/:mediaCollectionId/:id/:type'
-// })
 @Component({
   selector: 'page-media-collection',
   templateUrl: 'media-collection.html',
   styleUrls: ['media-collection.scss']
 })
-export class MediaCollectionPage {
+export class MediaCollectionPage implements OnDestroy, OnInit {
+  apiEndPoint: string = '';
+  galleries: any[] = [];
+  galleryData: any[] = [];
+  mdContent$: Observable<SafeHtml | null>;
+  mediaCollection: any[] = [];
+  mediaCollectionID: string = '';
+  mediaDescription: string = '';
+  mediaTitle: string = '';
+  projectMachineName: string = '';
+  showURNButton: boolean = false;
+  singleId: string = '';
+  type: string = '';
+  urlParametersSubscription: Subscription | null = null;
+  zoomLoadingIndex?: number = undefined;
 
-  mediaCollectionId?: string;
-  mediaTitle?: string;
-  mediaDescription?: string;
-  mediaCollection = [] as any;
-  public apiEndPoint: string;
-  public projectMachineName: string;
-  singleId?: string;
-  type?: string;
+
+
 
   allTags = [];
   allLocations = [];
   allSubjects = [];
-  allMediaCollection = [];
+  allMediaCollection: any[] = [];
   galleryTags = [] as any;
   galleryLocations = [] as any;
   gallerySubjects = [] as any;
@@ -45,33 +51,160 @@ export class MediaCollectionPage {
   prevTag = '';
   prevLoc = '';
   prevSub = '';
-  mdContent$: Observable<SafeHtml>;
-  showURNButton: boolean;
 
   constructor(
+    private commonFunctions: CommonFunctionsService,
     private sanitizer: DomSanitizer,
     private galleryService: GalleryService,
-    public userSettingsService: UserSettingsService,
     private modalController: ModalController,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    // this.mediaCollectionId = this.navParams.get('mediaCollectionId');
-    // this.singleId = this.navParams.get('id');
-    // this.type = this.navParams.get('type');
-    // this.mediaTitle = this.navParams.get('mediaTitle');
-    // this.tagModel = this.navParams.get('tag');
-    // this.subjectModel = this.navParams.get('subject');
-    // this.locationModel = this.navParams.get('location');
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
-    this.showURNButton = config.page?.mediaCollection?.showURNButton ?? true;
+    this.showURNButton = config.page?.mediaCollection?.showURNButton ?? false;
+  }
+
+  ngOnInit() {
+    this.urlParametersSubscription = combineLatest(
+      [this.route.params, this.route.queryParams]
+    ).pipe(
+      map(([params, queryParams]) => ({...params, ...queryParams}))
+    ).subscribe(routeParams => {
+      if (this.commonFunctions.isEmptyObject(routeParams)) {
+        // Load all albums
+        this.mediaCollectionID = '';
+        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
+        this.mediaTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
+        this.getGalleries();
+      } else {
+        // Load specific album or specific images
+        if (routeParams.mediaCollectionID) {
+          this.mediaCollectionID = routeParams.mediaCollectionID;
+          this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + this.mediaCollectionID);
+          this.getGallery(this.mediaCollectionID);
+        } else if (routeParams.entityID && routeParams.entityType) {
+          this.mediaCollectionID = '';
+          this.singleId = routeParams.entityID;
+          this.type = routeParams.entityType;
+          this.getMediaCollections(this.singleId, this.type);
+        }
+      }
+      
+    });
+
+/*
+    this.route.params.subscribe(params => {
+      this.mediaCollectionId = params['mediaCollectionId'];
+      this.singleId = params['id'];
+      this.type = params['type'];
+      this.initStuff();
+    })
+
+    this.route.queryParams.subscribe(params => {
+      this.mediaTitle = params['mediaTitle'];
+      this.tagModel = params['tag'];
+      this.subjectModel = params['subject'];
+      this.locationModel = params['location'];
+    });
+    */
+  }
+
+  ngOnDestroy() {
+    this.urlParametersSubscription?.unsubscribe();
+  }
+
+  initStuff() {
+    let fileID = '11-' + this.mediaCollectionID;
+    if (this.mediaCollectionID !== null && this.mediaCollectionID !== 'null') {
+      if ( !String(fileID).startsWith(this.activeLocale) ) {
+        fileID = this.activeLocale + '-' + fileID;
+      }
+      this.mdContent$ = this.getMdContent(fileID);
+      this.getCollectionTags();
+      this.getCollectionLocations();
+      this.getCollectionSubjects();
+      this.getMediaCollections();
+    } else {
+      
+      this.getMediaCollections(this.singleId, this.type);
+    }
+  }
+
+  private getGalleries() {
+    this.galleryService.getGalleries(this.activeLocale).subscribe(
+      (galleries: any[]) => {
+        const galleriesList: GalleryItem[] = [];
+        if (galleries?.length) {
+          galleries.forEach((gallery: any) => {
+            const galleryItem = new GalleryItem(gallery);
+            galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.id}/gallery_thumb.jpg`;
+            galleryItem.imageURLThumb = galleryItem.imageURL;
+
+            galleriesList.push(galleryItem);
+          });
+          this.commonFunctions.sortArrayOfObjectsAlphabetically(galleriesList, 'title');
+          this.commonFunctions.sortArrayOfObjectsNumerically(galleriesList, 'sortOrder');
+        }
+        this.galleryData = galleriesList;
+        this.galleries = galleriesList;
+      }
+    );
+  }
+
+  private getGallery(galleryID: string) {
+    this.galleryService.getGallery(galleryID, this.activeLocale).subscribe(
+      (galleryItems: any[]) => {
+        if (this.galleries.length < 1) {
+          this.galleryService.getGalleries(this.activeLocale).subscribe(
+            (galleries: any[]) => {
+              for (let i = 0; i < galleries.length; i++) {
+                if (galleries[i].id === Number(galleryID)) {
+                  this.mediaDescription = galleries[i].description || '';
+                  break;
+                }
+              }
+            }
+          );
+        } else {
+          for (let i = 0; i < this.galleries.length; i++) {
+            if (this.galleries[i].id === Number(galleryID)) {
+              this.mediaDescription = this.galleries[i].description || '';
+              break;
+            }
+          }
+        }
+
+        const galleryItemsList: GalleryItem[] = [];
+        if (galleryItems?.length) {
+          this.mediaTitle = galleryItems[0].title;
+          galleryItems.forEach((item: any) => {
+            const galleryItem = new GalleryItem(item);
+            const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
+            if (lastIndex > -1) {
+              galleryItem.imageURLThumb = galleryItem.imageURL.substring(0, lastIndex) + '_thumb' + galleryItem.imageURL.substring(lastIndex);
+            }
+            galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURL}`;
+            galleryItem.imageURLThumb = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURLThumb}`;
+            galleryItem.imageURLBack = galleryItem.imageURLBack ? `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURLBack}` : undefined;
+
+            if (!galleryItem.imageAltText) {
+              galleryItem.imageAltText = $localize`:@@MediaCollections.altText:Galleribild`;
+            }
+
+            galleryItemsList.push(galleryItem);
+          });
+          this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
+        }
+        this.galleryData = galleryItemsList;
+      }
+    );
   }
 
   getMediaCollections(id?: any, type?: any) {
-    if ( id === undefined && this.mediaCollectionId ) {
-      this.galleryService.getGallery(this.mediaCollectionId, this.activeLocale).subscribe(gallery => {
+    if ( id === undefined && this.mediaCollectionID ) {
+      this.galleryService.getGallery(this.mediaCollectionID, this.activeLocale).subscribe(gallery => {
         this.mediaCollection = gallery.gallery ? gallery.gallery : gallery;
         this.allMediaCollection = this.mediaCollection;
         this.mediaTitle = gallery[0].title ? gallery[0].title : this.mediaTitle;
@@ -120,56 +253,12 @@ export class MediaCollectionPage {
     }
   }
 
-  asThumb(url: any) {
-    return url.replace('.jpg', '_thumb.jpg');
-  }
-
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.mediaCollectionId = params['mediaCollectionId'];
-      this.singleId = params['id'];
-      this.type = params['type'];
-      this.initStuff();
-    })
-
-    this.route.queryParams.subscribe(params => {
-      this.mediaTitle = params['mediaTitle'];
-      this.tagModel = params['tag'];
-      this.subjectModel = params['subject'];
-      this.locationModel = params['location'];
-    });
-  }
-
-  initStuff() {
-    let fileID = '11-' + this.mediaCollectionId;
-    if (this.mediaCollectionId !== null && this.mediaCollectionId !== 'null') {
-      if ( !String(fileID).startsWith(this.activeLocale) ) {
-        fileID = this.activeLocale + '-' + fileID;
-      }
-      this.mdContent$ = this.getMdContent(fileID);
-      this.getCollectionTags();
-      this.getCollectionLocations();
-      this.getCollectionSubjects();
-      this.getMediaCollections();
-    } else {
-      this.mediaCollectionId = undefined;
-      this.getMediaCollections(this.singleId, this.type);
-    }
-  }
-
-  getImageUrl(filename: any, mediaCollectionId: any) {
-    if (!filename) {
-      return null;
-    }
-    return this.apiEndPoint + '/' + this.projectMachineName + '/gallery/get/' + mediaCollectionId +
-           '/' + filename;
-  }
-
-  async openImage(index: any, mediaCollectionId: any) {
-    const zoomedImages = this.mediaCollection.map((i: any) => this.getImageUrl(i.front, mediaCollectionId));
-    const backsides = zoomedImages.map((i: any) => i.replace('.jpg', 'B.jpg'));
-    const descriptions = this.mediaCollection.map((i: any) => i.description);
-    const imageTitles = this.mediaCollection.map((i: any) => i.media_title_translation);
+  async openImage(index: number) {
+    this.zoomLoadingIndex = index;
+    const zoomedImages = this.galleryData.map((i: GalleryItem) => i.imageURL);
+    const backsides = this.galleryData.map((i: GalleryItem) => i.imageURLBack);
+    const descriptions = this.galleryData.map((i: GalleryItem) => i.description);
+    const imageTitles = this.galleryData.map((i: GalleryItem) => i.title);
 
     const params = {
       activeImageIndex: index,
@@ -186,12 +275,17 @@ export class MediaCollectionPage {
     });
     
     modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role) {
+      this.zoomLoadingIndex = undefined;
+    }
   }
 
   getCollectionTags(filter?: any) {
     (async () => {
       let tags = [] as any;
-      tags = await this.galleryService.getGalleryTags(this.mediaCollectionId);
+      tags = await this.galleryService.getGalleryTags(this.mediaCollectionID);
       this.allTags = tags;
       const addedTags: Array<any> = [];
       tags.forEach((element: any) => {
@@ -224,7 +318,7 @@ export class MediaCollectionPage {
   getCollectionLocations(filter?: any) {
     (async () => {
       let locations = [];
-      locations = await this.galleryService.getGalleryLocations(this.mediaCollectionId);
+      locations = await this.galleryService.getGalleryLocations(this.mediaCollectionID);
       this.allLocations = locations;
       const addedLocations: Array<any> = [];
       locations.forEach((element: any) => {
@@ -257,7 +351,7 @@ export class MediaCollectionPage {
   getCollectionSubjects(filter?: any) {
     (async () => {
       let subjects = [];
-      subjects = await this.galleryService.getGallerySubjects(this.mediaCollectionId);
+      subjects = await this.galleryService.getGallerySubjects(this.mediaCollectionID);
       this.allSubjects = subjects;
       const addedSubjects: Array<any> = [];
       subjects.forEach((element: any) => {
@@ -401,10 +495,12 @@ export class MediaCollectionPage {
     return;
   }
 
-  getMdContent(fileID: string): Observable<SafeHtml> {
+  private getMdContent(fileID: string): Observable<SafeHtml | null> {
     return this.mdContentService.getMdContent(fileID).pipe(
       map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+        return this.sanitizer.sanitize(
+          SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(marked(res.content))
+        );
       }),
       catchError((e) => {
         return of('');
@@ -420,4 +516,9 @@ export class MediaCollectionPage {
     });
     modal.present();
   }
+
+  trackById(index: number | string, item: any) {
+    return item.id;
+  }
+
 }
