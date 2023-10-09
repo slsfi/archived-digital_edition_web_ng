@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
@@ -20,26 +20,35 @@ import { config } from 'src/assets/config/config';
   styleUrls: ['media-collection.scss']
 })
 export class MediaCollectionPage implements OnDestroy, OnInit {
+  allGalleries: GalleryItem[] = [];
+  allGalleryConnections: any = {};
   apiEndPoint: string = '';
-  galleries: any[] = [];
+  filterOptionsKeywords: any[] = [];
+  filterOptionsPersons: any[] = [];
+  filterOptionsPlaces: any[] = [];
+  filterResultCount: number = -1;
+  filterSelectOptions: Record<string, any> = {};
   galleryBacksideImageURLs: (string | undefined)[] = [];
-  galleryData: any[] = [];
+  galleryData: GalleryItem[] = [];
   galleryDescriptions: (string | undefined)[] = [];
   galleryImageURLs: (string | undefined)[] = [];
   galleryTitles: (string | undefined)[] = [];
   mdContent$: Observable<SafeHtml | null>;
-  mediaCollection: any[] = [];
   mediaCollectionID: string = '';
   mediaDescription: string = '';
   mediaTitle: string = '';
+  namedEntityID: string = '';
+  namedEntityType: string = '';
   projectMachineName: string = '';
+  selectedKeywordFilter: any = null;
+  selectedPersonFilter: any = null;
+  selectedPlaceFilter: any = null;
   showURNButton: boolean = false;
-  singleId: string = '';
-  type: string = '';
   urlParametersSubscription: Subscription | null = null;
+  zoomLoading: boolean = false;
 
 
-
+  mediaCollection: any[] = [];
   allTags = [];
   allLocations = [];
   allSubjects = [];
@@ -55,6 +64,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   prevSub = '';
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private commonFunctions: CommonFunctionsService,
     private sanitizer: DomSanitizer,
     private galleryService: GalleryService,
@@ -66,6 +76,21 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
     this.projectMachineName = config.app?.machineName ?? '';
     this.showURNButton = config.page?.mediaCollection?.showURNButton ?? false;
+
+    this.filterSelectOptions = {
+      person: {
+        header: $localize`:@@MediaCollections.filterPerson:Filtrera enligt person`,
+        cssClass: 'custom-select-alert'
+      },
+      place: {
+        header: $localize`:@@MediaCollections.filterPlace:Filtrera enligt plats`,
+        cssClass: 'custom-select-alert'
+      },
+      keyword: {
+        header: $localize`:@@MediaCollections.filterKeyword:Filtrera enligt ämnesord`,
+        cssClass: 'custom-select-alert'
+      }
+    };
   }
 
   ngOnInit() {
@@ -75,80 +100,49 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       map(([params, queryParams]) => ({...params, ...queryParams}))
     ).subscribe(routeParams => {
       if (this.commonFunctions.isEmptyObject(routeParams)) {
-        // Load all albums
+        // Load all galleries
         this.mediaCollectionID = '';
+        this.namedEntityID = '';
         this.mediaTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
         this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
-        if (this.galleries.length < 1) {
+        if (this.allGalleries.length < 1) {
           this.getGalleries();
         } else {
-          this.galleryData = this.galleries;
+          this.galleryData = this.allGalleries;
         }
       } else {
-        // Load specific album or specific images
+        // Load specific gallery or specific images based on a semantic data object
         if (routeParams.mediaCollectionID) {
           this.mediaCollectionID = routeParams.mediaCollectionID;
-          this.getGallery(this.mediaCollectionID);
+          this.namedEntityID = '';
+          this.getSingleGallery(this.mediaCollectionID);
+          this.initFilterOptions();
         } else if (routeParams.entityID && routeParams.entityType) {
           this.mediaCollectionID = '';
-          this.singleId = routeParams.entityID;
-          this.type = routeParams.entityType;
-          this.getMediaCollections(this.singleId, this.type);
+          this.namedEntityID = routeParams.entityID;
+          this.namedEntityType = routeParams.entityType;
+          this.getSemanticDataObjectGallery(this.namedEntityID, this.namedEntityType);
         }
       }
-      
     });
-
-/*
-    this.route.params.subscribe(params => {
-      this.mediaCollectionId = params['mediaCollectionId'];
-      this.singleId = params['id'];
-      this.type = params['type'];
-      this.initStuff();
-    })
-
-    this.route.queryParams.subscribe(params => {
-      this.mediaTitle = params['mediaTitle'];
-      this.tagModel = params['tag'];
-      this.subjectModel = params['subject'];
-      this.locationModel = params['location'];
-    });
-    */
   }
 
   ngOnDestroy() {
     this.urlParametersSubscription?.unsubscribe();
   }
 
-  initStuff() {
-    let fileID = '11-' + this.mediaCollectionID;
-    if (this.mediaCollectionID !== null && this.mediaCollectionID !== 'null') {
-      if ( !String(fileID).startsWith(this.activeLocale) ) {
-        fileID = this.activeLocale + '-' + fileID;
-      }
-      this.mdContent$ = this.getMdContent(fileID);
-      this.getCollectionTags();
-      this.getCollectionLocations();
-      this.getCollectionSubjects();
-      this.getMediaCollections();
-    } else {
-      
-      this.getMediaCollections(this.singleId, this.type);
-    }
-  }
-
   private getGalleries() {
     this.galleryService.getGalleries(this.activeLocale).subscribe(
       (galleries: any[]) => {
-        this.galleries = this.processGalleriesData(galleries);
-        this.galleryData = this.galleries;
+        this.allGalleries = this.processGalleriesData(galleries);
+        this.galleryData = this.allGalleries;
       }
     );
   }
 
-  private getGallery(galleryID: string) {
+  private getSingleGallery(galleryID: string) {
     // Get galleries if not yet loaded, set gallery title and description
-    if (this.galleries.length < 1) {
+    if (this.allGalleries.length < 1) {
       this.galleryService.getGalleries(this.activeLocale).subscribe(
         (galleries: any[]) => {
           for (let i = 0; i < galleries.length; i++) {
@@ -158,14 +152,14 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
               break;
             }
           }
-          this.galleries = this.processGalleriesData(galleries);
+          this.allGalleries = this.processGalleriesData(galleries);
         }
       );
     } else {
-      for (let i = 0; i < this.galleries.length; i++) {
-        if (this.galleries[i].id === Number(galleryID)) {
-          this.mediaTitle = this.galleries[i].title || '';
-          this.mediaDescription = this.galleries[i].description || '';
+      for (let i = 0; i < this.allGalleries.length; i++) {
+        if (this.allGalleries[i].id === Number(galleryID)) {
+          this.mediaTitle = this.allGalleries[i].title || '';
+          this.mediaDescription = this.allGalleries[i].description || '';
           break;
         }
       }
@@ -175,49 +169,64 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     this.galleryService.getGallery(galleryID, this.activeLocale).subscribe(
       (galleryItems: any[]) => {
         this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + galleryID);
-
-        const galleryItemsList: GalleryItem[] = [];
-        if (galleryItems?.length) {
-          galleryItems.forEach((item: any) => {
-            const galleryItem = new GalleryItem(item);
-            const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
-            if (lastIndex > -1) {
-              galleryItem.imageURLThumb = galleryItem.imageURL.substring(0, lastIndex) + '_thumb' + galleryItem.imageURL.substring(lastIndex);
-            }
-            galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURL}`;
-            galleryItem.imageURLThumb = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURLThumb}`;
-            galleryItem.imageURLBack = galleryItem.imageURLBack ? `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/${galleryItem.imageURLBack}` : undefined;
-
-            if (!galleryItem.imageAltText) {
-              galleryItem.imageAltText = $localize`:@@MediaCollections.altText:Galleribild`;
-            }
-
-            galleryItemsList.push(galleryItem);
-          });
-          this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
-        }
-        this.galleryData = galleryItemsList;
+        this.galleryData = this.processGalleriesData(galleryItems, true);
         this.setGalleryZoomedImageData();
       }
     );
   }
 
-  private processGalleriesData(galleries: any[]): GalleryItem[] {
-    const galleriesList: GalleryItem[] = [];
-    if (galleries?.length) {
-      galleries.forEach((gallery: any) => {
+  private processGalleriesData(galleryItems: any[], singleGallery = false): GalleryItem[] {
+    const galleryItemsList: GalleryItem[] = [];
+    if (galleryItems?.length) {
+      galleryItems.forEach((gallery: any) => {
         const galleryItem = new GalleryItem(gallery);
-        galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.id}/gallery_thumb.jpg`;
-        galleryItem.imageURLThumb = galleryItem.imageURL;
+        const urlStart = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/`;
 
-        galleriesList.push(galleryItem);
+        if (singleGallery) {
+          const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
+          if (lastIndex > -1) {
+            galleryItem.imageURLThumb = galleryItem.imageURL.substring(0, lastIndex) + '_thumb' + galleryItem.imageURL.substring(lastIndex);
+          }
+          galleryItem.imageURL = urlStart + `${galleryItem.imageURL}`;
+          galleryItem.imageURLThumb = urlStart + `${galleryItem.imageURLThumb}`;
+          galleryItem.imageURLBack = galleryItem.imageURLBack ? urlStart + `${galleryItem.imageURLBack}` : undefined;
+        } else {
+          galleryItem.imageURL = urlStart + `gallery_thumb.jpg`;
+          galleryItem.imageURLThumb = galleryItem.imageURL;
+        }
+
+        if (!galleryItem.imageAltText) {
+          galleryItem.imageAltText = $localize`:@@MediaCollections.altText:Galleribild`;
+        }
+
+        galleryItemsList.push(galleryItem);
       });
-      this.commonFunctions.sortArrayOfObjectsAlphabetically(galleriesList, 'title');
-      this.commonFunctions.sortArrayOfObjectsNumerically(galleriesList, 'sortOrder');
+
+      !singleGallery && this.commonFunctions.sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
+      this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
     }
-    return galleriesList;
+    return galleryItemsList;
   }
 
+  private getSemanticDataObjectGallery(objectID: string, objectType: string) {
+    this.galleryService.getNamedEntityGalleryOccurrences(objectType, objectID).subscribe(
+      (occurrences: any) => {
+        this.galleryData = this.processGalleriesData(occurrences, true);
+
+        if (objectType === 'subject') {
+          this.mediaTitle = occurrences[0]['full_name'];
+          this.mediaDescription = '';
+        } else {
+          this.mediaTitle = occurrences[0]['name'];
+          this.mediaDescription = '';
+        }
+
+        this.setGalleryZoomedImageData();
+      }
+    );
+  }
+
+  /*
   getMediaCollections(id?: any, type?: any) {
     if ( id === undefined && this.mediaCollectionID ) {
       this.galleryService.getGallery(this.mediaCollectionID, this.activeLocale).subscribe(gallery => {
@@ -251,7 +260,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         }
       });
     } else {
-      this.galleryService.getGalleryOccurrences(type, id).subscribe((occurrences: any) => {
+      this.galleryService.getNamedEntityGalleryOccurrences(type, id).subscribe((occurrences: any) => {
         occurrences.forEach((element: any) => {
           element['mediaCollectionId'] = element['media_collection_id'];
           element['front'] = element['filename'];
@@ -268,96 +277,13 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       });
     }
   }
+  */
 
   private setGalleryZoomedImageData() {
     this.galleryImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURL);
     this.galleryBacksideImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURLBack);
     this.galleryDescriptions = this.galleryData.map((i: GalleryItem) => i.description);
     this.galleryTitles = this.galleryData.map((i: GalleryItem) => i.title);
-  }
-
-  async openImage(index: number) {
-    const params = {
-      activeImageIndex: index,
-      backsides: this.galleryBacksideImageURLs,
-      imageDescriptions: this.galleryDescriptions,
-      imageTitles: this.galleryTitles,
-      imageURLs: this.galleryImageURLs
-    };
-
-    const modal = await this.modalController.create({
-      component: FullscreenImageViewerModal,
-      componentProps: params,
-      cssClass: 'fullscreen-image-viewer-modal',
-    });
-    
-    modal.present();
-  }
-
-  getCollectionTags(filter?: any) {
-    (async () => {
-      let tags = [] as any;
-      tags = await this.galleryService.getGalleryTags(this.mediaCollectionID);
-      this.allTags = tags;
-      const addedTags: Array<any> = [];
-      tags.forEach((element: any) => {
-        if (addedTags.indexOf(element['id']) === -1) {
-          this.galleryTags.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedTags.push(element['id']);
-        }
-      });
-      this.galleryTags.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsByTag(filter);
-      }
-    }).bind(this)();
-  }
-
-  getCollectionLocations(filter?: any) {
-    (async () => {
-      let locations = [];
-      locations = await this.galleryService.getGalleryLocations(this.mediaCollectionID);
-      this.allLocations = locations;
-      const addedLocations: Array<any> = [];
-      locations.forEach((element: any) => {
-        if (addedLocations.indexOf(element['id']) === -1) {
-          this.galleryLocations.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedLocations.push(element['id']);
-        }
-      });
-      this.galleryLocations.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsByLocation(filter);
-      }
-    }).bind(this)();
   }
 
   getCollectionSubjects(filter?: any) {
@@ -391,6 +317,131 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         this.filterCollectionsBySubject(filter);
       }
     }).bind(this)();
+  }
+
+  private initFilterOptions() {
+    this.getFilterOptions('keyword');
+    this.getFilterOptions('person');
+    this.getFilterOptions('place');
+  }
+
+  private getFilterOptions(type: string, filter?: any) {
+    this.galleryService.getGalleryNamedEntityConnections(type, this.mediaCollectionID).subscribe(
+      (entities: any[]) => {
+        console.log(entities);
+        const filterOptions: any[] = [];
+        const addedIDs: number[] = [];
+
+        this.allGalleryConnections[type] = {};
+        
+        entities.forEach((entity: any) => {
+          if (!addedIDs.includes(entity.id)) {
+            filterOptions.push(
+              {
+                id: entity.id,
+                name: entity.name
+              }
+            );
+            addedIDs.push(entity.id);
+          }
+          if (!this.allGalleryConnections[type][entity.id]) {
+            this.allGalleryConnections[type][entity.id] = {
+              filenames: [],
+              galleryIDs: []
+            };
+          }
+          if (!this.allGalleryConnections[type][entity.id]['filenames'].includes(entity.filename)) {
+            this.allGalleryConnections[type][entity.id]['filenames'].push(entity.filename);
+          }
+          if (!this.allGalleryConnections[type][entity.id]['galleryIDs'].includes(entity.media_collection_id)) {
+            this.allGalleryConnections[type][entity.id]['galleryIDs'].push(entity.media_collection_id);
+          }
+        });
+        
+        this.commonFunctions.sortArrayOfObjectsAlphabetically(filterOptions, 'name');
+        // console.log(filterOptions);
+        if (type === 'person') {
+          this.filterOptionsPersons = filterOptions;
+          // console.log(filterOptions);
+        } else if (type === 'place') {
+          this.filterOptionsPlaces = filterOptions;
+        } else if (type === 'keyword') {
+          this.filterOptionsKeywords = filterOptions;
+        }
+      }
+    );
+  }
+
+  onFilterChanged(type: string, event: any) {
+    if (type === 'person') {
+      this.selectedPersonFilter = event?.detail?.value ?? null;
+    } else if (type === 'place') {
+      this.selectedPlaceFilter = event?.detail?.value ?? null;
+    } else if (type === 'keyword') {
+      this.selectedKeywordFilter = event?.detail?.value ?? null;
+    }
+    this.filterGallery();
+  }
+
+  private filterGallery() {
+    let filterResultCount = 0;
+
+    if (
+      this.selectedPersonFilter?.id ||
+      this.selectedPlaceFilter?.id ||
+      this.selectedKeywordFilter?.id
+    ) {
+      // Apply filters
+      this.galleryData.forEach((item: GalleryItem) => {
+        let personFilterApplies = false;
+        let placeFilterApplies = false;
+        let keywordFilterApplies = false;
+
+        if (this.selectedPersonFilter?.id) {
+          if (this.allGalleryConnections['person']?.[this.selectedPersonFilter.id]?.['filenames']?.includes(item.filename)) {
+            personFilterApplies = true;
+          } else {
+            personFilterApplies = false;
+          }
+        } else {
+          personFilterApplies = true;
+        }
+
+        if (this.selectedPlaceFilter?.id) {
+          if (this.allGalleryConnections['place']?.[this.selectedPlaceFilter.id]?.['filenames']?.includes(item.filename)) {
+            placeFilterApplies = true;
+          } else {
+            placeFilterApplies = false;
+          }
+        } else {
+          placeFilterApplies = true;
+        }
+
+        if (this.selectedKeywordFilter?.id) {
+          if (this.allGalleryConnections['keyword']?.[this.selectedKeywordFilter.id]?.['filenames']?.includes(item.filename)) {
+            keywordFilterApplies = true;
+          } else {
+            keywordFilterApplies = false;
+          }
+        } else {
+          keywordFilterApplies = true;
+        }
+        
+        item.visible = personFilterApplies && placeFilterApplies && keywordFilterApplies;
+        if (item.visible) {
+          filterResultCount++;
+        }
+      });
+    } else {
+      // Clear all filters
+      this.galleryData.forEach((item: GalleryItem) => {
+        item.visible = true;
+      });
+      filterResultCount = -1;
+    }
+
+    this.filterResultCount = filterResultCount;
+
   }
 
   filterCollectionsByTag(name: any) {
@@ -520,17 +571,57 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     );
   }
 
+  async openImage(index: number) {
+    this.zoomLoading = true;
+
+    //TODO: if active filters, params need to be recreated
+
+    const params = {
+      activeImageIndex: index,
+      backsides: this.galleryBacksideImageURLs,
+      imageDescriptions: this.galleryDescriptions,
+      imageTitles: this.galleryTitles,
+      imageURLs: this.galleryImageURLs
+    };
+
+    const modal = await this.modalController.create({
+      component: FullscreenImageViewerModal,
+      componentProps: params,
+      cssClass: 'fullscreen-image-viewer-modal',
+    });
+    
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role) {
+      this.zoomLoading = false;
+    }
+  }
+
   async showReference() {
     // Get URL of Page and then the URI
     const modal = await this.modalController.create({
       component: ReferenceDataModal,
       componentProps: { origin: 'media-collection' }
     });
+
     modal.present();
   }
 
   trackById(index: number | string, item: any) {
     return item.id;
+  }
+
+  compareFilterOptionsWith(o1: any, o2: any) {
+    if (!o1 || !o2) {
+      return o1 === o2;
+    }
+
+    if (Array.isArray(o2)) {
+      return o2.some((o) => o.id === o1.id);
+    }
+
+    return o1.id === o2.id;
   }
 
 }

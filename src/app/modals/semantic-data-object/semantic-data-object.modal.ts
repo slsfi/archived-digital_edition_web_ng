@@ -220,7 +220,10 @@ export class SemanticDataObjectModal implements OnInit {
       type = 'subject';
     }
 
-    this.router.navigate([`/media-collection/${null}/${data.id}/${type}`]);
+    this.router.navigate(
+      ['/media-collection'],
+      { queryParams: { entityID: data.id, entityType: type } }
+    );
   }
 
   cancel() {

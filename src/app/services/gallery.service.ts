@@ -9,16 +9,40 @@ import { config } from 'src/assets/config/config';
   providedIn: 'root',
 })
 export class GalleryService {
+  projectAPIBaseURL: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.projectAPIBaseURL = config.app.apiEndpoint + '/' + config.app.machineName;
+  }
 
   getGalleries(language: string): Observable<any> {
-    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + language;
+    const url = this.projectAPIBaseURL + '/gallery/data/' + language;
     return this.http.get(url);
   }
 
   getGallery(id: string, lang: string): Observable<any> {
-    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/gallery/data/' + id + '/' + lang;    return this.http.get(url);
+    const url = this.projectAPIBaseURL + '/gallery/data/' + id + '/' + lang;
+    return this.http.get(url);
+  }
+
+  getNamedEntityGalleryOccurrences(namedEntityType: string, namedEntityID: any): Observable<any> {
+    const url = this.projectAPIBaseURL + '/gallery/' + namedEntityType + '/connections/' + namedEntityID;
+    return this.http.get(url);
+  }
+
+  getGalleryNamedEntityConnections(entityType: string, galleryID?: string): Observable<any> {
+    entityType = (entityType === 'person') ? 'subject'
+      : (entityType === 'place') ? 'location'
+      : (entityType === 'keyword') ? 'tag'
+      : entityType;
+    
+    const url = this.projectAPIBaseURL + '/gallery/connections/' + entityType + (galleryID ? '/' + galleryID : '');
+    return this.http.get(url);
+  }
+
+  getMediaMetadata(id: string, lang: string): Observable<any> {
+    const url = this.projectAPIBaseURL + '/media/image/metadata/' + id + '/' + lang;
+    return this.http.get(url);
   }
 
   async getGalleryTags(id?: any): Promise<any> {
@@ -81,39 +105,4 @@ export class GalleryService {
     } catch (e) {}
   }
 
-  getMediaMetadata(id: string, lang: String): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/media/image/metadata/' +
-        id +
-        '/' +
-        lang
-    );
-  }
-
-  getGalleryOccurrences(type: any, id: any): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/gallery/' +
-        type +
-        '/connections/' +
-        id
-    );
-  }
-
-  private async handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = (await error.json()) || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    throw errMsg;
-  }
 }

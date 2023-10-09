@@ -196,7 +196,10 @@
         "collections": "Samlingar",
         "works": "Verk",
         "photos": "foton",
-        "altText": "Galleribild"
+        "altText": "Galleribild",
+        "filterKeyword": "Filtrera enligt ämnesord",
+        "filterPerson": "Filtrera enligt person",
+        "filterPlace": "Filtrera enligt plats"
     },
     "media": "Fotografier",
     "TOC": {

@@ -1,6 +1,7 @@
 export class GalleryItem {
     collectionID: number;
     description?: string;
+    filename: string;
     id: number | string;
     imageAltText?: string;
     imageURL: string;
@@ -10,18 +11,21 @@ export class GalleryItem {
     subItemCount?: number;
     subTitle?: string;
     title?: string;
+    visible: boolean;
 
     constructor(obj: any) {
-        this.collectionID = obj.collection_id || obj.id;
+        this.collectionID = obj.collection_id || obj.media_collection_id || obj.id;
         this.description = obj.description || undefined;
-        this.id = obj.id ? obj.id : (obj.collection_id && obj.front ? String(obj.collection_id) + '_' + obj.front : '');
-        this.imageURL = obj.imageURL || obj.front;
+        this.filename = obj.front || obj.filename;
+        this.imageURL = obj.imageURL || this.filename;
+        this.id = String(this.collectionID) + '_' + this.imageURL;
         this.imageURLThumb = this.imageURL;
         this.imageURLBack = obj.imageURLBack || obj.back || undefined;
         this.sortOrder = obj.sortOrder || obj.sort_order || undefined;
         this.subItemCount = obj.subItemCount || obj.media_count || undefined;
-        this.title = (obj.front ? obj.media_title_translation : obj.title) || undefined;
+        this.title = obj.full_name || obj.name || (obj.front ? obj.media_title_translation : obj.title) || undefined;
         this.subTitle = obj.subTitle || obj.subject_name || undefined;
         this.imageAltText = obj.imageAltText || this.title;
+        this.visible = true;
     }
 }

@@ -57,7 +57,7 @@ export class ElasticSearchService {
     }
   }
 
-  executeTermQuery(terms: String[], ids: String[]): Observable<any> {
+  executeTermQuery(terms: string[], ids: string[]): Observable<any> {
     const payload = {
       ids: ids,
       parameters: {

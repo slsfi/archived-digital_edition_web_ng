@@ -29,6 +29,32 @@ a.back-link {
   }
 }
 
+.loading-overlay {
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid var(--button-background-color);
+  border-radius: 0.5rem;
+  display: flex;
+  height: 150px;
+  justify-content: center;
+  left: 50%;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  z-index: 10;
+
+  ion-spinner {
+    height: 64px;
+    width: 64px;
+
+    * {
+      height: 64px;
+      width: 64px;
+    }
+  }
+}
+
 .page-title-wrapper {
   align-items: center;
   display: flex;
@@ -58,9 +84,39 @@ a.back-link {
   width: 100%;
 }
 
+.gallery-filters {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  max-width: 1000px;
+
+  ion-select {
+    --border-color: var(--elastic-search-filter-border-color);
+    --highlight-color-focused: var(--button-background-color);
+    --highlight-color-valid: var(--button-background-color);
+    flex-grow: 1;
+    max-width: 30%;
+    min-width: 240px;
+
+    &:hover {
+      --border-color: var(--button-background-color);
+    }
+  }
+}
+
+.filter-results {
+  font-style: italic;
+}
+
 ion-grid {
   --ion-grid-padding: 0;
   margin: -0.75rem -0.75rem 0 -0.75rem;
+
+  @media only screen and (min-width: 821px) {
+    margin-top: 0;
+  }
 }
 
 ion-col {
