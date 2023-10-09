@@ -1,9 +1,13 @@
 <ion-header *ngIf="mediaCollectionID || singleId" class="ion-no-border">
   <ion-toolbar class="secondary">
+    <a *ngIf="mediaCollectionID || singleId" class="back-link" slot="start" [routerLink]="['/media-collection']">
+      <ion-icon slot="start" name="arrow-back"></ion-icon>
+      <span i18n="@@TOC.All">Alla</span>
+    </a>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showURNButton && mediaCollectionID" (click)="showReference()">
-        <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
+        <ion-icon slot="start" name="arrow-redo-sharp"></ion-icon>
         <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
     </ion-buttons>
@@ -59,9 +63,6 @@
             <button (click)="openImage(i)">
               <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
             </button>
-            <div class="loading-overlay" [style.display]="zoomLoadingIndex === i ? 'flex' : 'none'">
-              <ion-spinner class="loading" name="crescent"></ion-spinner>
-            </div>
           </ng-container>
           <ng-template #allGalleries>
             <a [routerLink]="item.subItemCount ? ['/media-collection', item.id] : ''" [title]="item.title">

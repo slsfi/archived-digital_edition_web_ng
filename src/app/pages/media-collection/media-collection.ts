@@ -22,7 +22,11 @@ import { config } from 'src/assets/config/config';
 export class MediaCollectionPage implements OnDestroy, OnInit {
   apiEndPoint: string = '';
   galleries: any[] = [];
+  galleryBacksideImageURLs: (string | undefined)[] = [];
   galleryData: any[] = [];
+  galleryDescriptions: (string | undefined)[] = [];
+  galleryImageURLs: (string | undefined)[] = [];
+  galleryTitles: (string | undefined)[] = [];
   mdContent$: Observable<SafeHtml | null>;
   mediaCollection: any[] = [];
   mediaCollectionID: string = '';
@@ -33,8 +37,6 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   singleId: string = '';
   type: string = '';
   urlParametersSubscription: Subscription | null = null;
-  zoomLoadingIndex?: number = undefined;
-
 
 
 
@@ -75,14 +77,17 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       if (this.commonFunctions.isEmptyObject(routeParams)) {
         // Load all albums
         this.mediaCollectionID = '';
-        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
         this.mediaTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
-        this.getGalleries();
+        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
+        if (this.galleries.length < 1) {
+          this.getGalleries();
+        } else {
+          this.galleryData = this.galleries;
+        }
       } else {
         // Load specific album or specific images
         if (routeParams.mediaCollectionID) {
           this.mediaCollectionID = routeParams.mediaCollectionID;
-          this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + this.mediaCollectionID);
           this.getGallery(this.mediaCollectionID);
         } else if (routeParams.entityID && routeParams.entityType) {
           this.mediaCollectionID = '';
@@ -135,50 +140,44 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   private getGalleries() {
     this.galleryService.getGalleries(this.activeLocale).subscribe(
       (galleries: any[]) => {
-        const galleriesList: GalleryItem[] = [];
-        if (galleries?.length) {
-          galleries.forEach((gallery: any) => {
-            const galleryItem = new GalleryItem(gallery);
-            galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.id}/gallery_thumb.jpg`;
-            galleryItem.imageURLThumb = galleryItem.imageURL;
-
-            galleriesList.push(galleryItem);
-          });
-          this.commonFunctions.sortArrayOfObjectsAlphabetically(galleriesList, 'title');
-          this.commonFunctions.sortArrayOfObjectsNumerically(galleriesList, 'sortOrder');
-        }
-        this.galleryData = galleriesList;
-        this.galleries = galleriesList;
+        this.galleries = this.processGalleriesData(galleries);
+        this.galleryData = this.galleries;
       }
     );
   }
 
   private getGallery(galleryID: string) {
-    this.galleryService.getGallery(galleryID, this.activeLocale).subscribe(
-      (galleryItems: any[]) => {
-        if (this.galleries.length < 1) {
-          this.galleryService.getGalleries(this.activeLocale).subscribe(
-            (galleries: any[]) => {
-              for (let i = 0; i < galleries.length; i++) {
-                if (galleries[i].id === Number(galleryID)) {
-                  this.mediaDescription = galleries[i].description || '';
-                  break;
-                }
-              }
-            }
-          );
-        } else {
-          for (let i = 0; i < this.galleries.length; i++) {
-            if (this.galleries[i].id === Number(galleryID)) {
-              this.mediaDescription = this.galleries[i].description || '';
+    // Get galleries if not yet loaded, set gallery title and description
+    if (this.galleries.length < 1) {
+      this.galleryService.getGalleries(this.activeLocale).subscribe(
+        (galleries: any[]) => {
+          for (let i = 0; i < galleries.length; i++) {
+            if (galleries[i].id === Number(galleryID)) {
+              this.mediaTitle = galleries[i].title || '';
+              this.mediaDescription = galleries[i].description || '';
               break;
             }
           }
+          this.galleries = this.processGalleriesData(galleries);
         }
+      );
+    } else {
+      for (let i = 0; i < this.galleries.length; i++) {
+        if (this.galleries[i].id === Number(galleryID)) {
+          this.mediaTitle = this.galleries[i].title || '';
+          this.mediaDescription = this.galleries[i].description || '';
+          break;
+        }
+      }
+    }
+
+    // Get selected gallery data
+    this.galleryService.getGallery(galleryID, this.activeLocale).subscribe(
+      (galleryItems: any[]) => {
+        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + galleryID);
 
         const galleryItemsList: GalleryItem[] = [];
         if (galleryItems?.length) {
-          this.mediaTitle = galleryItems[0].title;
           galleryItems.forEach((item: any) => {
             const galleryItem = new GalleryItem(item);
             const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
@@ -198,8 +197,25 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
           this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
         }
         this.galleryData = galleryItemsList;
+        this.setGalleryZoomedImageData();
       }
     );
+  }
+
+  private processGalleriesData(galleries: any[]): GalleryItem[] {
+    const galleriesList: GalleryItem[] = [];
+    if (galleries?.length) {
+      galleries.forEach((gallery: any) => {
+        const galleryItem = new GalleryItem(gallery);
+        galleryItem.imageURL = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.id}/gallery_thumb.jpg`;
+        galleryItem.imageURLThumb = galleryItem.imageURL;
+
+        galleriesList.push(galleryItem);
+      });
+      this.commonFunctions.sortArrayOfObjectsAlphabetically(galleriesList, 'title');
+      this.commonFunctions.sortArrayOfObjectsNumerically(galleriesList, 'sortOrder');
+    }
+    return galleriesList;
   }
 
   getMediaCollections(id?: any, type?: any) {
@@ -253,19 +269,20 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     }
   }
 
-  async openImage(index: number) {
-    this.zoomLoadingIndex = index;
-    const zoomedImages = this.galleryData.map((i: GalleryItem) => i.imageURL);
-    const backsides = this.galleryData.map((i: GalleryItem) => i.imageURLBack);
-    const descriptions = this.galleryData.map((i: GalleryItem) => i.description);
-    const imageTitles = this.galleryData.map((i: GalleryItem) => i.title);
+  private setGalleryZoomedImageData() {
+    this.galleryImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURL);
+    this.galleryBacksideImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURLBack);
+    this.galleryDescriptions = this.galleryData.map((i: GalleryItem) => i.description);
+    this.galleryTitles = this.galleryData.map((i: GalleryItem) => i.title);
+  }
 
+  async openImage(index: number) {
     const params = {
       activeImageIndex: index,
-      backsides: backsides,
-      imageDescriptions: descriptions,
-      imageTitles: imageTitles,
-      imageURLs: zoomedImages
+      backsides: this.galleryBacksideImageURLs,
+      imageDescriptions: this.galleryDescriptions,
+      imageTitles: this.galleryTitles,
+      imageURLs: this.galleryImageURLs
     };
 
     const modal = await this.modalController.create({
@@ -275,11 +292,6 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     });
     
     modal.present();
-
-    const { data, role } = await modal.onWillDismiss();
-    if (role) {
-      this.zoomLoadingIndex = undefined;
-    }
   }
 
   getCollectionTags(filter?: any) {
