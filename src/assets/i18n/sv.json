@@ -185,21 +185,16 @@
     "About": {
         "LoadingError": "Sidans innehåll kunde inte laddas."
     },
-    "MediaCollections": {
-        "MediaCollections": "Faksimilsamlingar",
-        "locations": "Platser",
-        "location": "Plats",
-        "tags": "Ämnesord",
-        "tag": "Ämnesord",
-        "subjects": "Personer",
-        "subject": "Person",
-        "collections": "Samlingar",
-        "works": "Verk",
-        "photos": "foton",
-        "altText": "Galleribild",
-        "filterKeyword": "Filtrera enligt ämnesord",
-        "filterPerson": "Filtrera enligt person",
-        "filterPlace": "Filtrera enligt plats"
+    "MediaCollection": {
+        "MediaCollections": "Bildsamlingar",
+        "GenericAltText": "Galleribild",
+        "FilterKeyword": "Avgränsa enligt ämnesord",
+        "FilterPerson": "Avgränsa enligt person",
+        "FilterPlace": "Avgränsa enligt plats",
+        "Showing": "Visar",
+        "Images": "bilder",
+        "Collections": "samlingar",
+        "ClearFilters": "Ta bort aktiva avgränsningar"
     },
     "media": "Fotografier",
     "TOC": {

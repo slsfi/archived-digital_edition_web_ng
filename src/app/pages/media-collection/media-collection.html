@@ -2,7 +2,7 @@
   <ion-toolbar class="secondary">
     <a *ngIf="mediaCollectionID || namedEntityID" class="back-link" slot="start" [routerLink]="['/media-collection']">
       <ion-icon slot="start" name="arrow-back"></ion-icon>
-      <span i18n="@@TOC.All">Alla</span>
+      <span i18n="@@MediaCollection.MediaCollections">Bildsamlingar</span>
     </a>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
@@ -22,21 +22,21 @@
   </div>
 
   <div class="page-title-wrapper">
-    <h1 [innerHTML]="mediaTitle"></h1>
-    <p *ngIf="(mediaCollectionID || namedEntityID) && galleryData.length">{{galleryData.length}} <ng-container i18n="@@MediaCollections.photos">foton</ng-container></p>
+    <h1 [innerHTML]="mediaCollectionTitle"></h1>
+    <p *ngIf="(mediaCollectionID || namedEntityID) && galleryData.length">{{galleryData.length}} <ng-container i18n="@@MediaCollection.Images">bilder</ng-container></p>
   </div>
   
-  <p *ngIf="mediaDescription" [innerHTML]="mediaDescription"></p>
+  <p *ngIf="mediaCollectionDescription" [innerHTML]="mediaCollectionDescription"></p>
 
   <ng-container *ngIf="(mdContent$ | async) as mdContent">
     <div class="info markdown" [innerHTML]="mdContent"></div>
   </ng-container>
 
-  <div *ngIf="galleryData.length && (filterOptionsKeywords.length > 1 || filterOptionsPersons.length > 1 || filterOptionsPlaces.length > 1)" class="gallery-filters">
+  <div *ngIf="!namedEntityID && galleryData.length && (filterOptionsKeywords.length > 1 || filterOptionsPersons.length > 1 || filterOptionsPlaces.length > 1)" class="filters-wrapper">
     <ion-select *ngIf="filterOptionsPersons.length > 1"
           class="filter-persons"
-          label="Filtrera enligt person"
-          i18n-label="@@MediaCollections.filterPerson"
+          label="Avgränsa enligt person"
+          i18n-label="@@MediaCollection.FilterPerson"
           label-placement="floating"
           fill="outline"
           okText="Ok"
@@ -45,10 +45,10 @@
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.person"
           [compareWith]="compareFilterOptionsWith"
+          [multiple]="true"
           (ionChange)="onFilterChanged('person', $event)"
           [value]="selectedPersonFilter"
     >
-      <ion-select-option [value]="null"></ion-select-option>
       <ion-select-option *ngFor="let filterOption of filterOptionsPersons; trackBy: trackById"
             [value]="filterOption" [innerHTML]="filterOption.name"
       ></ion-select-option>
@@ -56,8 +56,8 @@
 
     <ion-select *ngIf="filterOptionsPlaces.length > 1"
           class="filter-places"
-          label="Filtrera enligt plats"
-          i18n-label="@@MediaCollections.filterPlace"
+          label="Avgränsa enligt plats"
+          i18n-label="@@MediaCollection.FilterPlace"
           label-placement="floating"
           fill="outline"
           okText="Ok"
@@ -66,10 +66,10 @@
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.place"
           [compareWith]="compareFilterOptionsWith"
+          [multiple]="true"
           (ionChange)="onFilterChanged('place', $event)"
           [value]="selectedPlaceFilter"
     >
-      <ion-select-option [value]="null"></ion-select-option>
       <ion-select-option *ngFor="let filterOption of filterOptionsPlaces; trackBy: trackById"
             [value]="filterOption" [innerHTML]="filterOption.name"
       ></ion-select-option>
@@ -77,8 +77,8 @@
 
     <ion-select *ngIf="filterOptionsKeywords.length > 1"
           class="filter-keywords"
-          label="Filtrera enligt ämnesord"
-          i18n-label="@@MediaCollections.filterKeyword"
+          label="Avgränsa enligt ämnesord"
+          i18n-label="@@MediaCollection.FilterKeyword"
           label-placement="floating"
           fill="outline"
           okText="Ok"
@@ -87,34 +87,44 @@
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.keyword"
           [compareWith]="compareFilterOptionsWith"
+          [multiple]="true"
           (ionChange)="onFilterChanged('keyword', $event)"
           [value]="selectedKeywordFilter"
     >
-      <ion-select-option [value]="null"></ion-select-option>
       <ion-select-option *ngFor="let filterOption of filterOptionsKeywords; trackBy: trackById"
             [value]="filterOption" [innerHTML]="filterOption.name"
       ></ion-select-option>
     </ion-select>
+    <ion-button
+          class="close"
+          fill="clear"
+          (click)="clearFilters()"
+          [disabled]="!(selectedKeywordFilter.length || selectedPersonFilter.length || selectedPlaceFilter.length)"
+          title="Ta bort aktiva avgränsningar"
+          i18n-title="@@MediaCollection.ClearFilters"
+    >
+      <ion-icon name="close" slot="icon-only" aria-label="Ta bort aktiva avgränsningar" i18n-aria-label="@@MediaCollection.ClearFilters"></ion-icon>
+    </ion-button>
   </div>
 
-  <p *ngIf="filterResultCount > -1" class="filter-results"><ng-container>Filterresultat</ng-container>: {{filterResultCount}}</p>
+  <p *ngIf="filterResultCount > -1" class="filter-results">
+    <ng-container i18n="@@MediaCollection.Showing">Visar</ng-container> {{filterResultCount}} / {{galleryData.length}} <ng-container *ngIf="mediaCollectionID" i18n="@@MediaCollection.Images">bilder</ng-container><ng-container *ngIf="!mediaCollectionID" i18n="@@MediaCollection.Collections">samlingar</ng-container>
+  </p>
 
   <ion-grid>
     <ion-row>
-      <ng-container *ngFor="let item of galleryData; index as i; trackBy: trackById">
+      <ng-container *ngFor="let item of galleryData; trackBy: trackById">
         <ion-col *ngIf="item.visible" size="12" size-sm="6" size-md="4" size-xl="3">
-          <div class="item-wrapper">
-            <ng-container *ngIf="mediaCollectionID || namedEntityID; else allGalleries">
-              <button (click)="openImage(i)">
-                <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
-              </button>
-            </ng-container>
-            <ng-template #allGalleries>
-              <a [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''" [title]="item.title">
-                <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
-              </a>
-            </ng-template>
-          </div>
+          <ng-container *ngIf="mediaCollectionID || namedEntityID; else allCollections">
+            <button (click)="openImage(item.imageURL)">
+              <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
+            </button>
+          </ng-container>
+          <ng-template #allCollections>
+            <a [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''" [title]="item.title">
+              <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
+            </a>
+          </ng-template>
         </ion-col>
       </ng-container>
     </ion-row>
@@ -123,20 +133,23 @@
 </ion-content>
 
 <ng-template #innerGridItem let-item>
-  <img *ngIf="item.imageURLThumb"
-        [src]="item.imageURLThumb"
-        [alt]="item.imageAltText"
-        loading="lazy"
-  >
-  <div *ngIf="(item.title || item.subTitle) && !namedEntityID || item.description" class="item-meta-wrapper">
-    <div *ngIf="(item.title || item.subTitle) && !namedEntityID" class="item-title">
-      <h2>
-        <span *ngIf="item.title" [innerHTML]="item.title"></span>
-        <br *ngIf="item.title && item.subTitle">
-        <span *ngIf="item.subTitle" class="subtitle" [innerHTML]="item.subTitle"></span>
-      </h2>
-      <p *ngIf="item.subItemCount">{{item.subItemCount}} <ng-container i18n="@@MediaCollections.photos">foton</ng-container></p>
-    </div>
-    <p *ngIf="item.description" class="description" [innerHTML]="item.description"></p>
-  </div>
+  <figure>
+    <img *ngIf="item.imageURLThumb"
+          [src]="item.imageURLThumb"
+          [alt]="item.imageAltText"
+          loading="lazy"
+    >
+    <figcaption *ngIf="(item.title || item.subTitle) && !namedEntityID || item.description">
+      <div *ngIf="(item.title || item.subTitle) && !namedEntityID" class="item-title">
+        <h2>
+          <span *ngIf="item.title" [innerHTML]="item.title"></span>
+          <br *ngIf="item.title && item.subTitle">
+          <span *ngIf="item.subTitle" class="subtitle" [innerHTML]="item.subTitle"></span>
+        </h2>
+        <p *ngIf="item.subItemCount">{{item.subItemCount}} <ng-container i18n="@@MediaCollection.Images">bilder</ng-container></p>
+      </div>
+      <p *ngIf="item.description" class="description" [innerHTML]="item.description"></p>
+    </figcaption>
+  </figure>
+  
 </ng-template>

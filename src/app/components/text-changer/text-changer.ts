@@ -286,7 +286,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
     this.nextItemTitle = '';
     this.nextItem = {
       itemId: 'mediaCollections',
-      page: 'media-collections'
+      page: 'media-collection'
     };
   }
 
@@ -563,7 +563,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
   async open(item: any) {
     if (item.page !== undefined) {
-      // Open text in page-cover, page-title, page-foreword, page-introduction or media-collections
+      // Open text in page-cover, page-title, page-foreword, page-introduction or media-collection
       if (item.page === 'page-cover') {
         this.router.navigate(['/collection', item.itemId, 'cover']);
       } else if (item.page === 'page-title') {
@@ -572,8 +572,8 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
         this.router.navigate(['/collection', item.itemId, 'foreword']);
       } else if (item.page === 'page-introduction') {
         this.router.navigate(['/collection', item.itemId, 'introduction']);
-      } else if (item.page === 'media-collections') {
-        this.router.navigate(['/media-collections']);
+      } else if (item.page === 'media-collection') {
+        this.router.navigate(['/media-collection']);
       }
     } else {
       // Open text in page-text

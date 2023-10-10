@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
@@ -9,7 +9,7 @@ import { GalleryItem } from 'src/app/models/gallery-item-model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { GalleryService } from 'src/app/services/gallery.service';
+import { MediaCollectionService } from 'src/app/services/media-collection.service';
 import { MdContentService } from 'src/app/services/md-content.service';
 import { config } from 'src/assets/config/config';
 
@@ -20,8 +20,8 @@ import { config } from 'src/assets/config/config';
   styleUrls: ['media-collection.scss']
 })
 export class MediaCollectionPage implements OnDestroy, OnInit {
-  allGalleries: GalleryItem[] = [];
-  allGalleryConnections: any = {};
+  allMediaCollections: GalleryItem[] = [];
+  allMediaConnections: any = {};
   apiEndPoint: string = '';
   filterOptionsKeywords: any[] = [];
   filterOptionsPersons: any[] = [];
@@ -34,60 +34,43 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   galleryImageURLs: (string | undefined)[] = [];
   galleryTitles: (string | undefined)[] = [];
   mdContent$: Observable<SafeHtml | null>;
-  mediaCollectionID: string = '';
-  mediaDescription: string = '';
-  mediaTitle: string = '';
+  mediaCollectionID: string | undefined = undefined;
+  mediaCollectionDescription: string = '';
+  mediaCollectionTitle: string = '';
   namedEntityID: string = '';
   namedEntityType: string = '';
-  projectMachineName: string = '';
-  selectedKeywordFilter: any = null;
-  selectedPersonFilter: any = null;
-  selectedPlaceFilter: any = null;
+  projectName: string = '';
+  selectedKeywordFilter: any = [];
+  selectedPersonFilter: any = [];
+  selectedPlaceFilter: any = [];
   showURNButton: boolean = false;
   urlParametersSubscription: Subscription | null = null;
   zoomLoading: boolean = false;
 
-
-  mediaCollection: any[] = [];
-  allTags = [];
-  allLocations = [];
-  allSubjects = [];
-  allMediaCollection: any[] = [];
-  galleryTags = [] as any;
-  galleryLocations = [] as any;
-  gallerySubjects = [] as any;
-  locationModel = '';
-  tagModel = '';
-  subjectModel = '';
-  prevTag = '';
-  prevLoc = '';
-  prevSub = '';
-
   constructor(
-    private cdRef: ChangeDetectorRef,
     private commonFunctions: CommonFunctionsService,
     private sanitizer: DomSanitizer,
-    private galleryService: GalleryService,
+    private mediaCollectionService: MediaCollectionService,
     private modalController: ModalController,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.projectMachineName = config.app?.machineName ?? '';
+    this.projectName = config.app?.machineName ?? '';
     this.showURNButton = config.page?.mediaCollection?.showURNButton ?? false;
 
     this.filterSelectOptions = {
       person: {
-        header: $localize`:@@MediaCollections.filterPerson:Filtrera enligt person`,
+        header: $localize`:@@MediaCollection.FilterPerson:Avgränsa enligt person`,
         cssClass: 'custom-select-alert'
       },
       place: {
-        header: $localize`:@@MediaCollections.filterPlace:Filtrera enligt plats`,
+        header: $localize`:@@MediaCollection.FilterPlace:Avgränsa enligt plats`,
         cssClass: 'custom-select-alert'
       },
       keyword: {
-        header: $localize`:@@MediaCollections.filterKeyword:Filtrera enligt ämnesord`,
+        header: $localize`:@@MediaCollection.FilterKeyword:Avgränsa enligt ämnesord`,
         cssClass: 'custom-select-alert'
       }
     };
@@ -99,29 +82,38 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     ).pipe(
       map(([params, queryParams]) => ({...params, ...queryParams}))
     ).subscribe(routeParams => {
-      if (this.commonFunctions.isEmptyObject(routeParams)) {
-        // Load all galleries
+      if (
+        this.commonFunctions.isEmptyObject(routeParams) &&
+        (this.mediaCollectionID !== '' || this.namedEntityID)
+      ) {
+        // Load all media collections
         this.mediaCollectionID = '';
         this.namedEntityID = '';
-        this.mediaTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
+        this.mediaCollectionTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
         this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
-        if (this.allGalleries.length < 1) {
-          this.getGalleries();
+        if (this.allMediaCollections.length < 1) {
+          this.getMediaCollections();
         } else {
-          this.galleryData = this.allGalleries;
+          this.galleryData = this.allMediaCollections;
         }
+        this.initFilterOptions();
       } else {
-        // Load specific gallery or specific images based on a semantic data object
-        if (routeParams.mediaCollectionID) {
+        // Load single media collection or specific images related to a named entity
+        if (routeParams.mediaCollectionID && routeParams.mediaCollectionID !== this.mediaCollectionID) {
           this.mediaCollectionID = routeParams.mediaCollectionID;
           this.namedEntityID = '';
-          this.getSingleGallery(this.mediaCollectionID);
+          this.getSingleMediaCollection(routeParams.mediaCollectionID);
           this.initFilterOptions();
-        } else if (routeParams.entityID && routeParams.entityType) {
+        } else if (
+          routeParams.entityID &&
+          routeParams.entityType &&
+          routeParams.entityID !== this.namedEntityID &&
+          routeParams.entityType !== this.namedEntityType
+        ) {
           this.mediaCollectionID = '';
           this.namedEntityID = routeParams.entityID;
           this.namedEntityType = routeParams.entityType;
-          this.getSemanticDataObjectGallery(this.namedEntityID, this.namedEntityType);
+          this.getNamedEntityGallery(this.namedEntityID, this.namedEntityType);
         }
       }
     });
@@ -131,44 +123,49 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     this.urlParametersSubscription?.unsubscribe();
   }
 
-  private getGalleries() {
-    this.galleryService.getGalleries(this.activeLocale).subscribe(
-      (galleries: any[]) => {
-        this.allGalleries = this.processGalleriesData(galleries);
-        this.galleryData = this.allGalleries;
+  private getMediaCollections() {
+    this.galleryData = [];
+
+    this.mediaCollectionService.getMediaCollections(this.activeLocale).subscribe(
+      (collections: any[]) => {
+        this.allMediaCollections = this.processGalleriesData(collections);
+        this.galleryData = this.allMediaCollections;
       }
     );
   }
 
-  private getSingleGallery(galleryID: string) {
-    // Get galleries if not yet loaded, set gallery title and description
-    if (this.allGalleries.length < 1) {
-      this.galleryService.getGalleries(this.activeLocale).subscribe(
-        (galleries: any[]) => {
-          for (let i = 0; i < galleries.length; i++) {
-            if (galleries[i].id === Number(galleryID)) {
-              this.mediaTitle = galleries[i].title || '';
-              this.mediaDescription = galleries[i].description || '';
+  private getSingleMediaCollection(mediaCollectionID: string) {
+    this.galleryData = [];
+
+    // Get all media collections if not yet loaded, set current collection title and description
+    if (this.allMediaCollections.length < 1) {
+      this.mediaCollectionService.getMediaCollections(this.activeLocale).subscribe(
+        (collections: any[]) => {
+          for (let i = 0; i < collections.length; i++) {
+            if (collections[i].id === Number(mediaCollectionID)) {
+              this.mediaCollectionTitle = collections[i].title || '';
+              this.mediaCollectionDescription = collections[i].description || '';
               break;
             }
           }
-          this.allGalleries = this.processGalleriesData(galleries);
+          this.allMediaCollections = this.processGalleriesData(collections);
         }
       );
     } else {
-      for (let i = 0; i < this.allGalleries.length; i++) {
-        if (this.allGalleries[i].id === Number(galleryID)) {
-          this.mediaTitle = this.allGalleries[i].title || '';
-          this.mediaDescription = this.allGalleries[i].description || '';
+      for (let i = 0; i < this.allMediaCollections.length; i++) {
+        if (this.allMediaCollections[i].collectionID === Number(mediaCollectionID)) {
+          this.mediaCollectionTitle = this.allMediaCollections[i].title || '';
+          this.mediaCollectionDescription = this.allMediaCollections[i].description || '';
           break;
         }
       }
     }
 
-    // Get selected gallery data
-    this.galleryService.getGallery(galleryID, this.activeLocale).subscribe(
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + mediaCollectionID);
+
+    // Get selected media collection data
+    this.mediaCollectionService.getSingleMediaCollection(mediaCollectionID, this.activeLocale).subscribe(
       (galleryItems: any[]) => {
-        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + galleryID);
         this.galleryData = this.processGalleriesData(galleryItems, true);
         this.setGalleryZoomedImageData();
       }
@@ -180,7 +177,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     if (galleryItems?.length) {
       galleryItems.forEach((gallery: any) => {
         const galleryItem = new GalleryItem(gallery);
-        const urlStart = `${this.apiEndPoint}/${this.projectMachineName}/gallery/get/${galleryItem.collectionID}/`;
+        const urlStart = `${this.apiEndPoint}/${this.projectName}/gallery/get/${galleryItem.collectionID}/`;
 
         if (singleGallery) {
           const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
@@ -196,7 +193,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         }
 
         if (!galleryItem.imageAltText) {
-          galleryItem.imageAltText = $localize`:@@MediaCollections.altText:Galleribild`;
+          galleryItem.imageAltText = $localize`:@@MediaCollection.GenericAltText:Galleribild`;
         }
 
         galleryItemsList.push(galleryItem);
@@ -208,17 +205,17 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     return galleryItemsList;
   }
 
-  private getSemanticDataObjectGallery(objectID: string, objectType: string) {
-    this.galleryService.getNamedEntityGalleryOccurrences(objectType, objectID).subscribe(
+  private getNamedEntityGallery(objectID: string, objectType: string) {
+    this.mediaCollectionService.getNamedEntityOccInMediaColls(objectType, objectID).subscribe(
       (occurrences: any) => {
         this.galleryData = this.processGalleriesData(occurrences, true);
 
         if (objectType === 'subject') {
-          this.mediaTitle = occurrences[0]['full_name'];
-          this.mediaDescription = '';
+          this.mediaCollectionTitle = occurrences[0]['full_name'];
+          this.mediaCollectionDescription = '';
         } else {
-          this.mediaTitle = occurrences[0]['name'];
-          this.mediaDescription = '';
+          this.mediaCollectionTitle = occurrences[0]['name'];
+          this.mediaCollectionDescription = '';
         }
 
         this.setGalleryZoomedImageData();
@@ -226,97 +223,20 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     );
   }
 
-  /*
-  getMediaCollections(id?: any, type?: any) {
-    if ( id === undefined && this.mediaCollectionID ) {
-      this.galleryService.getGallery(this.mediaCollectionID, this.activeLocale).subscribe(gallery => {
-        this.mediaCollection = gallery.gallery ? gallery.gallery : gallery;
-        this.allMediaCollection = this.mediaCollection;
-        this.mediaTitle = gallery[0].title ? gallery[0].title : this.mediaTitle;
-        this.mediaDescription = gallery.description ? gallery.description : '';
-        if (this.tagModel !== undefined && this.tagModel !== '') {
-          this.prevTag = this.tagModel;
-          if (this.allTags.length > 0) {
-            this.filterCollectionsByTag(this.tagModel);
-          } else {
-            this.getCollectionTags(this.tagModel);
-          }
-        }
-        if (this.locationModel !== undefined && this.locationModel !== '') {
-          this.prevLoc = this.locationModel;
-          if (this.allLocations.length > 0) {
-            this.filterCollectionsByLocation(this.locationModel);
-          } else {
-            this.getCollectionLocations(this.locationModel);
-          }
-        }
-        if (this.subjectModel !== undefined && this.subjectModel !== '') {
-          this.prevSub = this.subjectModel;
-          if (this.allSubjects.length > 0) {
-            this.filterCollectionsBySubject(this.subjectModel);
-          } else {
-            this.getCollectionSubjects(this.subjectModel);
-          }
-        }
-      });
-    } else {
-      this.galleryService.getNamedEntityGalleryOccurrences(type, id).subscribe((occurrences: any) => {
-        occurrences.forEach((element: any) => {
-          element['mediaCollectionId'] = element['media_collection_id'];
-          element['front'] = element['filename'];
-          this.mediaCollection.push(element)
-        });
-
-        if ( type === 'subject' ) {
-          this.mediaTitle = occurrences[0]['full_name'];
-          this.mediaDescription = '';
-        } else {
-          this.mediaTitle = occurrences[0]['name'];
-          this.mediaDescription = '';
-        }
-      });
-    }
-  }
-  */
-
   private setGalleryZoomedImageData() {
-    this.galleryImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURL);
-    this.galleryBacksideImageURLs = this.galleryData.map((i: GalleryItem) => i.imageURLBack);
-    this.galleryDescriptions = this.galleryData.map((i: GalleryItem) => i.description);
-    this.galleryTitles = this.galleryData.map((i: GalleryItem) => i.title);
-  }
+    this.galleryImageURLs = [];
+    this.galleryBacksideImageURLs = [];
+    this.galleryDescriptions = [];
+    this.galleryTitles = [];
 
-  getCollectionSubjects(filter?: any) {
-    (async () => {
-      let subjects = [];
-      subjects = await this.galleryService.getGallerySubjects(this.mediaCollectionID);
-      this.allSubjects = subjects;
-      const addedSubjects: Array<any> = [];
-      subjects.forEach((element: any) => {
-        if (addedSubjects.indexOf(element['id']) === -1) {
-          this.gallerySubjects.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedSubjects.push(element['id']);
-        }
-      });
-      this.gallerySubjects.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsBySubject(filter);
+    this.galleryData.forEach((element: GalleryItem) => {
+      if (element.visible) {
+        this.galleryImageURLs.push(element.imageURL);
+        this.galleryBacksideImageURLs.push(element.imageURLBack);
+        this.galleryDescriptions.push(element.description);
+        this.galleryTitles.push(element.title);
       }
-    }).bind(this)();
+    });
   }
 
   private initFilterOptions() {
@@ -325,14 +245,12 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     this.getFilterOptions('place');
   }
 
-  private getFilterOptions(type: string, filter?: any) {
-    this.galleryService.getGalleryNamedEntityConnections(type, this.mediaCollectionID).subscribe(
+  private getFilterOptions(type: string) {
+    this.mediaCollectionService.getAllNamedEntityOccInMediaCollsByType(type, this.mediaCollectionID).subscribe(
       (entities: any[]) => {
-        console.log(entities);
         const filterOptions: any[] = [];
         const addedIDs: number[] = [];
-
-        this.allGalleryConnections[type] = {};
+        this.allMediaConnections[type] = {};
         
         entities.forEach((entity: any) => {
           if (!addedIDs.includes(entity.id)) {
@@ -344,25 +262,23 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
             );
             addedIDs.push(entity.id);
           }
-          if (!this.allGalleryConnections[type][entity.id]) {
-            this.allGalleryConnections[type][entity.id] = {
+          if (!this.allMediaConnections[type][entity.id]) {
+            this.allMediaConnections[type][entity.id] = {
               filenames: [],
-              galleryIDs: []
+              mediaCollectionIDs: []
             };
           }
-          if (!this.allGalleryConnections[type][entity.id]['filenames'].includes(entity.filename)) {
-            this.allGalleryConnections[type][entity.id]['filenames'].push(entity.filename);
+          if (!this.allMediaConnections[type][entity.id]['filenames'].includes(entity.filename)) {
+            this.allMediaConnections[type][entity.id]['filenames'].push(entity.filename);
           }
-          if (!this.allGalleryConnections[type][entity.id]['galleryIDs'].includes(entity.media_collection_id)) {
-            this.allGalleryConnections[type][entity.id]['galleryIDs'].push(entity.media_collection_id);
+          if (!this.allMediaConnections[type][entity.id]['mediaCollectionIDs'].includes(entity.media_collection_id)) {
+            this.allMediaConnections[type][entity.id]['mediaCollectionIDs'].push(entity.media_collection_id);
           }
         });
         
         this.commonFunctions.sortArrayOfObjectsAlphabetically(filterOptions, 'name');
-        // console.log(filterOptions);
         if (type === 'person') {
           this.filterOptionsPersons = filterOptions;
-          // console.log(filterOptions);
         } else if (type === 'place') {
           this.filterOptionsPlaces = filterOptions;
         } else if (type === 'keyword') {
@@ -374,66 +290,82 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
   onFilterChanged(type: string, event: any) {
     if (type === 'person') {
-      this.selectedPersonFilter = event?.detail?.value ?? null;
+      this.selectedPersonFilter = event?.detail?.value ?? [];
     } else if (type === 'place') {
-      this.selectedPlaceFilter = event?.detail?.value ?? null;
+      this.selectedPlaceFilter = event?.detail?.value ?? [];
     } else if (type === 'keyword') {
-      this.selectedKeywordFilter = event?.detail?.value ?? null;
+      this.selectedKeywordFilter = event?.detail?.value ?? [];
     }
+
     this.filterGallery();
+
+    if (this.mediaCollectionID) {
+      this.setGalleryZoomedImageData();
+    }
   }
 
   private filterGallery() {
     let filterResultCount = 0;
+    const connKey = this.mediaCollectionID ? 'filenames' : 'mediaCollectionIDs';
+    const itemKey = this.mediaCollectionID ? 'filename' : 'collectionID';
 
     if (
-      this.selectedPersonFilter?.id ||
-      this.selectedPlaceFilter?.id ||
-      this.selectedKeywordFilter?.id
+      this.selectedPersonFilter.length ||
+      this.selectedPlaceFilter.length ||
+      this.selectedKeywordFilter.length
     ) {
       // Apply filters
       this.galleryData.forEach((item: GalleryItem) => {
-        let personFilterApplies = false;
-        let placeFilterApplies = false;
-        let keywordFilterApplies = false;
+        let personOk = false;
+        let placeOk = false;
+        let keywordOk = false;
 
-        if (this.selectedPersonFilter?.id) {
-          if (this.allGalleryConnections['person']?.[this.selectedPersonFilter.id]?.['filenames']?.includes(item.filename)) {
-            personFilterApplies = true;
-          } else {
-            personFilterApplies = false;
+        if (this.selectedPersonFilter.length) {
+          for (let f = 0; f < this.selectedPersonFilter.length; f++) {
+            if (this.allMediaConnections['person']?.[this.selectedPersonFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+              personOk = true;
+              break;
+            } else {
+              personOk = false;
+            }
           }
         } else {
-          personFilterApplies = true;
+          personOk = true;
         }
 
-        if (this.selectedPlaceFilter?.id) {
-          if (this.allGalleryConnections['place']?.[this.selectedPlaceFilter.id]?.['filenames']?.includes(item.filename)) {
-            placeFilterApplies = true;
-          } else {
-            placeFilterApplies = false;
+        if (this.selectedPlaceFilter.length) {
+          for (let f = 0; f < this.selectedPlaceFilter.length; f++) {
+            if (this.allMediaConnections['place']?.[this.selectedPlaceFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+              placeOk = true;
+              break;
+            } else {
+              placeOk = false;
+            }
           }
         } else {
-          placeFilterApplies = true;
+          placeOk = true;
         }
 
-        if (this.selectedKeywordFilter?.id) {
-          if (this.allGalleryConnections['keyword']?.[this.selectedKeywordFilter.id]?.['filenames']?.includes(item.filename)) {
-            keywordFilterApplies = true;
-          } else {
-            keywordFilterApplies = false;
+        if (this.selectedKeywordFilter.length) {
+          for (let f = 0; f < this.selectedKeywordFilter.length; f++) {
+            if (this.allMediaConnections['keyword']?.[this.selectedKeywordFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+              keywordOk = true;
+              break;
+            } else {
+              keywordOk = false;
+            }
           }
         } else {
-          keywordFilterApplies = true;
+          keywordOk = true;
         }
         
-        item.visible = personFilterApplies && placeFilterApplies && keywordFilterApplies;
+        item.visible = personOk && placeOk && keywordOk;
         if (item.visible) {
           filterResultCount++;
         }
       });
     } else {
-      // Clear all filters
+      // Clear all filters --> show all collection items
       this.galleryData.forEach((item: GalleryItem) => {
         item.visible = true;
       });
@@ -441,121 +373,15 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     }
 
     this.filterResultCount = filterResultCount;
-
   }
 
-  filterCollectionsByTag(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-      return true;
-    }
-    if (name !== this.prevTag) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevTag = name;
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allTags.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase()) {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
+  clearFilters() {
+    this.selectedKeywordFilter = [];
+    this.selectedPersonFilter = [];
+    this.selectedPlaceFilter = [];
 
-    return;
-  }
-
-  filterCollectionsByLocation(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if (this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-      return true;
-    }
-    if (name !== this.prevLoc) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevLoc = name;
-      if (this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allLocations.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase()) {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
-
-    return;
-  }
-
-  filterCollectionsBySubject(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if ( this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      return true;
-    }
-    if (name !== this.prevSub) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevSub = name;
-      if ( this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if ( this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allSubjects.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase() || name === '') {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
-
-    return;
+    this.filterGallery();
+    this.setGalleryZoomedImageData();
   }
 
   private getMdContent(fileID: string): Observable<SafeHtml | null> {
@@ -571,10 +397,16 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     );
   }
 
-  async openImage(index: number) {
+  async openImage(imageURL: string) {
     this.zoomLoading = true;
+    let index = 0;
 
-    //TODO: if active filters, params need to be recreated
+    for(let i = 0; i < this.galleryImageURLs.length; i++) {
+      if (imageURL === this.galleryImageURLs[i]) {
+        index = i;
+        break;
+      }
+    }
 
     const params = {
       activeImageIndex: index,

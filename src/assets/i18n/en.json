@@ -185,18 +185,16 @@
     "About": {
         "LoadingError": "Failed to load page content."
     },
-    "MediaCollections": {
-        "MediaCollections": "Faksimilsamlingar",
-        "locations": "Platser",
-        "location": "Plats",
-        "tags": "Ämnesord",
-        "tag": "Ämnesord",
-        "subjects": "Personer",
-        "subject": "Person",
-        "collections": "Samlingar",
-        "works": "Verk",
-        "photos": "foton",
-        "altText": "Gallery image"
+    "MediaCollection": {
+        "MediaCollections": "Media collections",
+        "GenericAltText": "collection image",
+        "FilterKeyword": "Filter by keyword",
+        "FilterPerson": "Filter by  person",
+        "FilterPlace": "Filter by location",
+        "Showing": "Showing",
+        "Images": "images",
+        "Collections": "collections",
+        "ClearFilters": "Clear active filters"
     },
 	"media": "Photos",
     "TOC": {

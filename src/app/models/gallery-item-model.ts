@@ -2,7 +2,7 @@ export class GalleryItem {
     collectionID: number;
     description?: string;
     filename: string;
-    id: number | string;
+    id: string;
     imageAltText?: string;
     imageURL: string;
     imageURLThumb?: string;

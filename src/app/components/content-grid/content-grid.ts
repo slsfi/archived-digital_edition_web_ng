@@ -129,7 +129,7 @@ export class ContentGridComponent implements OnInit {
           imageAltText: config.component?.contentGrid?.mediaCollectionCoverAltTexts?.[this.activeLocale] ?? $localize`:@@TOC.MediaCollections:Bildbank`,
           imageURL: config.component?.contentGrid?.mediaCollectionCoverURL ?? '',
           title: $localize`:@@TOC.MediaCollections:Bildbank`,
-          type: 'media-collections'
+          type: 'media-collection'
         }
       );
       itemsList.push(ebookItem);
