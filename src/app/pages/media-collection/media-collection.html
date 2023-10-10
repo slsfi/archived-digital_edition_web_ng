@@ -44,13 +44,12 @@
           cancelText="Avbryt"
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.person"
-          [compareWith]="compareFilterOptionsWith"
           [multiple]="true"
           (ionChange)="onFilterChanged('person', $event)"
           [value]="selectedPersonFilter"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsPersons; trackBy: trackById"
-            [value]="filterOption" [innerHTML]="filterOption.name"
+            [value]="filterOption.id" [innerHTML]="filterOption.name"
       ></ion-select-option>
     </ion-select>
 
@@ -65,13 +64,12 @@
           cancelText="Avbryt"
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.place"
-          [compareWith]="compareFilterOptionsWith"
           [multiple]="true"
           (ionChange)="onFilterChanged('place', $event)"
           [value]="selectedPlaceFilter"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsPlaces; trackBy: trackById"
-            [value]="filterOption" [innerHTML]="filterOption.name"
+            [value]="filterOption.id" [innerHTML]="filterOption.name"
       ></ion-select-option>
     </ion-select>
 
@@ -86,13 +84,12 @@
           cancelText="Avbryt"
           i18n-cancelText="@@BasicActions.Cancel"
           [interfaceOptions]="filterSelectOptions.keyword"
-          [compareWith]="compareFilterOptionsWith"
           [multiple]="true"
           (ionChange)="onFilterChanged('keyword', $event)"
           [value]="selectedKeywordFilter"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsKeywords; trackBy: trackById"
-            [value]="filterOption" [innerHTML]="filterOption.name"
+            [value]="filterOption.id" [innerHTML]="filterOption.name"
       ></ion-select-option>
     </ion-select>
     <ion-button

@@ -40,9 +40,9 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   namedEntityID: string = '';
   namedEntityType: string = '';
   projectName: string = '';
-  selectedKeywordFilter: any = [];
-  selectedPersonFilter: any = [];
-  selectedPlaceFilter: any = [];
+  selectedKeywordFilter: number[] = [];
+  selectedPersonFilter: number[] = [];
+  selectedPlaceFilter: number[] = [];
   showURNButton: boolean = false;
   urlParametersSubscription: Subscription | null = null;
   zoomLoading: boolean = false;
@@ -322,7 +322,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
         if (this.selectedPersonFilter.length) {
           for (let f = 0; f < this.selectedPersonFilter.length; f++) {
-            if (this.allMediaConnections['person']?.[this.selectedPersonFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+            if (this.allMediaConnections['person']?.[this.selectedPersonFilter[f]]?.[connKey]?.includes(item[itemKey])) {
               personOk = true;
               break;
             } else {
@@ -335,7 +335,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
         if (this.selectedPlaceFilter.length) {
           for (let f = 0; f < this.selectedPlaceFilter.length; f++) {
-            if (this.allMediaConnections['place']?.[this.selectedPlaceFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+            if (this.allMediaConnections['place']?.[this.selectedPlaceFilter[f]]?.[connKey]?.includes(item[itemKey])) {
               placeOk = true;
               break;
             } else {
@@ -348,7 +348,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
         if (this.selectedKeywordFilter.length) {
           for (let f = 0; f < this.selectedKeywordFilter.length; f++) {
-            if (this.allMediaConnections['keyword']?.[this.selectedKeywordFilter[f].id]?.[connKey]?.includes(item[itemKey])) {
+            if (this.allMediaConnections['keyword']?.[this.selectedKeywordFilter[f]]?.[connKey]?.includes(item[itemKey])) {
               keywordOk = true;
               break;
             } else {
@@ -442,18 +442,6 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
   trackById(index: number | string, item: any) {
     return item.id;
-  }
-
-  compareFilterOptionsWith(o1: any, o2: any) {
-    if (!o1 || !o2) {
-      return o1 === o2;
-    }
-
-    if (Array.isArray(o2)) {
-      return o2.some((o) => o.id === o1.id);
-    }
-
-    return o1.id === o2.id;
   }
 
 }
