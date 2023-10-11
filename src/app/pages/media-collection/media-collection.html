@@ -46,7 +46,7 @@
           [interfaceOptions]="filterSelectOptions.person"
           [multiple]="true"
           (ionChange)="onFilterChanged('person', $event)"
-          [value]="selectedPersonFilter"
+          [value]="activePersonFilters"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsPersons; trackBy: trackById"
             [value]="filterOption.id" [innerHTML]="filterOption.name"
@@ -66,7 +66,7 @@
           [interfaceOptions]="filterSelectOptions.place"
           [multiple]="true"
           (ionChange)="onFilterChanged('place', $event)"
-          [value]="selectedPlaceFilter"
+          [value]="activePlaceFilters"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsPlaces; trackBy: trackById"
             [value]="filterOption.id" [innerHTML]="filterOption.name"
@@ -86,7 +86,7 @@
           [interfaceOptions]="filterSelectOptions.keyword"
           [multiple]="true"
           (ionChange)="onFilterChanged('keyword', $event)"
-          [value]="selectedKeywordFilter"
+          [value]="activeKeywordFilters"
     >
       <ion-select-option *ngFor="let filterOption of filterOptionsKeywords; trackBy: trackById"
             [value]="filterOption.id" [innerHTML]="filterOption.name"
@@ -95,8 +95,8 @@
     <ion-button
           class="close"
           fill="clear"
-          (click)="clearFilters()"
-          [disabled]="!(selectedKeywordFilter.length || selectedPersonFilter.length || selectedPlaceFilter.length)"
+          (click)="clearActiveFilters()"
+          [disabled]="!(activeKeywordFilters.length || activePersonFilters.length || activePlaceFilters.length)"
           title="Ta bort aktiva avgränsningar"
           i18n-title="@@MediaCollection.ClearFilters"
     >
@@ -118,7 +118,11 @@
             </button>
           </ng-container>
           <ng-template #allCollections>
-            <a [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''" [title]="item.title">
+            <a
+                  [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''"
+                  [title]="item.title"
+                  [queryParamsHandling]="'preserve'"
+            >
               <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
             </a>
           </ng-template>
