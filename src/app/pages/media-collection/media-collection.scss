@@ -29,6 +29,10 @@ a.back-link {
   }
 }
 
+.loading-gallery {
+  padding-top: 8rem;
+}
+
 .loading-overlay {
   align-items: center;
   background-color: rgb(255, 255, 255);
@@ -43,16 +47,6 @@ a.back-link {
   transform: translate(-50%, -50%);
   width: 150px;
   z-index: 10;
-
-  ion-spinner {
-    height: 64px;
-    width: 64px;
-
-    * {
-      height: 64px;
-      width: 64px;
-    }
-  }
 }
 
 .page-title-wrapper {

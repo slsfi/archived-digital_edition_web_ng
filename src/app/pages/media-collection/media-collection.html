@@ -17,7 +17,7 @@
 
 <ion-content>
 
-  <div class="loading-overlay" [style.display]="zoomLoading ? null : 'none'">
+  <div class="loading-overlay" [style.display]="loadingImageModal ? null : 'none'">
     <ion-spinner class="loading" name="crescent"></ion-spinner>
   </div>
 
@@ -32,104 +32,110 @@
     <div class="info markdown" [innerHTML]="mdContent"></div>
   </ng-container>
 
-  <div *ngIf="!namedEntityID && galleryData.length && (filterOptionsKeywords.length > 1 || filterOptionsPersons.length > 1 || filterOptionsPlaces.length > 1)" class="filters-wrapper">
-    <ion-select *ngIf="filterOptionsPersons.length > 1"
-          class="filter-persons"
-          label="Avgränsa enligt person"
-          i18n-label="@@MediaCollection.FilterPerson"
-          label-placement="floating"
-          fill="outline"
-          okText="Ok"
-          i18n-okText="@@BasicActions.Ok"
-          cancelText="Avbryt"
-          i18n-cancelText="@@BasicActions.Cancel"
-          [interfaceOptions]="filterSelectOptions.person"
-          [multiple]="true"
-          (ionChange)="onFilterChanged('person', $event)"
-          [value]="activePersonFilters"
-    >
-      <ion-select-option *ngFor="let filterOption of filterOptionsPersons; trackBy: trackById"
-            [value]="filterOption.id" [innerHTML]="filterOption.name"
-      ></ion-select-option>
-    </ion-select>
+  <ng-container *ngIf="loadingGallery">
+    <ion-spinner class="loading loading-gallery" name="crescent"></ion-spinner>
+  </ng-container>
 
-    <ion-select *ngIf="filterOptionsPlaces.length > 1"
-          class="filter-places"
-          label="Avgränsa enligt plats"
-          i18n-label="@@MediaCollection.FilterPlace"
-          label-placement="floating"
-          fill="outline"
-          okText="Ok"
-          i18n-okText="@@BasicActions.Ok"
-          cancelText="Avbryt"
-          i18n-cancelText="@@BasicActions.Cancel"
-          [interfaceOptions]="filterSelectOptions.place"
-          [multiple]="true"
-          (ionChange)="onFilterChanged('place', $event)"
-          [value]="activePlaceFilters"
-    >
-      <ion-select-option *ngFor="let filterOption of filterOptionsPlaces; trackBy: trackById"
-            [value]="filterOption.id" [innerHTML]="filterOption.name"
-      ></ion-select-option>
-    </ion-select>
-
-    <ion-select *ngIf="filterOptionsKeywords.length > 1"
-          class="filter-keywords"
-          label="Avgränsa enligt ämnesord"
-          i18n-label="@@MediaCollection.FilterKeyword"
-          label-placement="floating"
-          fill="outline"
-          okText="Ok"
-          i18n-okText="@@BasicActions.Ok"
-          cancelText="Avbryt"
-          i18n-cancelText="@@BasicActions.Cancel"
-          [interfaceOptions]="filterSelectOptions.keyword"
-          [multiple]="true"
-          (ionChange)="onFilterChanged('keyword', $event)"
-          [value]="activeKeywordFilters"
-    >
-      <ion-select-option *ngFor="let filterOption of filterOptionsKeywords; trackBy: trackById"
-            [value]="filterOption.id" [innerHTML]="filterOption.name"
-      ></ion-select-option>
-    </ion-select>
-    <ion-button
-          class="close"
-          fill="clear"
-          (click)="clearActiveFilters()"
-          [disabled]="!(activeKeywordFilters.length || activePersonFilters.length || activePlaceFilters.length)"
-          title="Ta bort aktiva avgränsningar"
-          i18n-title="@@MediaCollection.ClearFilters"
-    >
-      <ion-icon name="close" slot="icon-only" aria-label="Ta bort aktiva avgränsningar" i18n-aria-label="@@MediaCollection.ClearFilters"></ion-icon>
-    </ion-button>
-  </div>
-
-  <p *ngIf="filterResultCount > -1" class="filter-results">
-    <ng-container i18n="@@MediaCollection.Showing">Visar</ng-container> {{filterResultCount}} / {{galleryData.length}} <ng-container *ngIf="mediaCollectionID" i18n="@@MediaCollection.Images">bilder</ng-container><ng-container *ngIf="!mediaCollectionID" i18n="@@MediaCollection.Collections">samlingar</ng-container>
-  </p>
-
-  <ion-grid>
-    <ion-row>
-      <ng-container *ngFor="let item of galleryData; trackBy: trackById">
-        <ion-col *ngIf="item.visible" size="12" size-sm="6" size-md="4" size-xl="3">
-          <ng-container *ngIf="mediaCollectionID || namedEntityID; else allCollections">
-            <button (click)="openImage(item.imageURL)">
-              <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
-            </button>
-          </ng-container>
-          <ng-template #allCollections>
-            <a
-                  [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''"
-                  [title]="item.title"
-                  [queryParamsHandling]="'preserve'"
-            >
-              <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
-            </a>
-          </ng-template>
-        </ion-col>
-      </ng-container>
-    </ion-row>
-  </ion-grid>
+  <ng-container *ngIf="!loadingGallery">
+    <div *ngIf="!namedEntityID && galleryData.length && (filterOptionsKeywords.length > 1 || filterOptionsPersons.length > 1 || filterOptionsPlaces.length > 1)" class="filters-wrapper">
+      <ion-select *ngIf="filterOptionsPersons.length > 1"
+            class="filter-persons"
+            label="Avgränsa enligt person"
+            i18n-label="@@MediaCollection.FilterPerson"
+            label-placement="floating"
+            fill="outline"
+            okText="Ok"
+            i18n-okText="@@BasicActions.Ok"
+            cancelText="Avbryt"
+            i18n-cancelText="@@BasicActions.Cancel"
+            [interfaceOptions]="filterSelectOptions.person"
+            [multiple]="true"
+            (ionChange)="onFilterChanged('person', $event)"
+            [value]="activePersonFilters"
+      >
+        <ion-select-option *ngFor="let filterOption of filterOptionsPersons; trackBy: trackById"
+              [value]="filterOption.id" [innerHTML]="filterOption.name"
+        ></ion-select-option>
+      </ion-select>
+  
+      <ion-select *ngIf="filterOptionsPlaces.length > 1"
+            class="filter-places"
+            label="Avgränsa enligt plats"
+            i18n-label="@@MediaCollection.FilterPlace"
+            label-placement="floating"
+            fill="outline"
+            okText="Ok"
+            i18n-okText="@@BasicActions.Ok"
+            cancelText="Avbryt"
+            i18n-cancelText="@@BasicActions.Cancel"
+            [interfaceOptions]="filterSelectOptions.place"
+            [multiple]="true"
+            (ionChange)="onFilterChanged('place', $event)"
+            [value]="activePlaceFilters"
+      >
+        <ion-select-option *ngFor="let filterOption of filterOptionsPlaces; trackBy: trackById"
+              [value]="filterOption.id" [innerHTML]="filterOption.name"
+        ></ion-select-option>
+      </ion-select>
+  
+      <ion-select *ngIf="filterOptionsKeywords.length > 1"
+            class="filter-keywords"
+            label="Avgränsa enligt ämnesord"
+            i18n-label="@@MediaCollection.FilterKeyword"
+            label-placement="floating"
+            fill="outline"
+            okText="Ok"
+            i18n-okText="@@BasicActions.Ok"
+            cancelText="Avbryt"
+            i18n-cancelText="@@BasicActions.Cancel"
+            [interfaceOptions]="filterSelectOptions.keyword"
+            [multiple]="true"
+            (ionChange)="onFilterChanged('keyword', $event)"
+            [value]="activeKeywordFilters"
+      >
+        <ion-select-option *ngFor="let filterOption of filterOptionsKeywords; trackBy: trackById"
+              [value]="filterOption.id" [innerHTML]="filterOption.name"
+        ></ion-select-option>
+      </ion-select>
+      <ion-button
+            class="close"
+            fill="clear"
+            (click)="clearActiveFilters()"
+            [disabled]="!(activeKeywordFilters.length || activePersonFilters.length || activePlaceFilters.length)"
+            title="Ta bort aktiva avgränsningar"
+            i18n-title="@@MediaCollection.ClearFilters"
+      >
+        <ion-icon name="close" slot="icon-only" aria-label="Ta bort aktiva avgränsningar" i18n-aria-label="@@MediaCollection.ClearFilters"></ion-icon>
+      </ion-button>
+    </div>
+  
+    <p *ngIf="filterResultCount > -1" class="filter-results">
+      <ng-container i18n="@@MediaCollection.Showing">Visar</ng-container> {{filterResultCount}} / {{galleryData.length}} <ng-container *ngIf="mediaCollectionID" i18n="@@MediaCollection.Images">bilder</ng-container><ng-container *ngIf="!mediaCollectionID" i18n="@@MediaCollection.Collections">samlingar</ng-container>
+    </p>
+  
+    <ion-grid>
+      <ion-row>
+        <ng-container *ngFor="let item of galleryData; trackBy: trackById">
+          <ion-col *ngIf="item.visible" size="12" size-sm="6" size-md="4" size-xl="3">
+            <ng-container *ngIf="mediaCollectionID || namedEntityID; else allCollections">
+              <button (click)="openImage(item.imageURL)">
+                <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
+              </button>
+            </ng-container>
+            <ng-template #allCollections>
+              <a
+                    [routerLink]="item.subItemCount ? ['/media-collection', item.collectionID] : ''"
+                    [title]="item.title"
+                    [queryParamsHandling]="'preserve'"
+              >
+                <ng-container *ngTemplateOutlet="innerGridItem; context: {$implicit: item}"/>
+              </a>
+            </ng-template>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
 
 </ion-content>
 
