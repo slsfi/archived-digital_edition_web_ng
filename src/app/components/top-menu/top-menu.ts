@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonModule, DOCUMENT } from "@angular/common";
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { config } from "src/assets/config/config";
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

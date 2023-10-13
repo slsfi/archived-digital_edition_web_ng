@@ -2,12 +2,12 @@ import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
-import { CommentService } from 'src/app/services/comment.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
-import { TextService } from 'src/app/services/text.service';
-import { config } from "src/assets/config/config";
+import { CommentService } from '@services/comment.service';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { ReadPopoverService } from '@services/read-popover.service';
+import { TableOfContentsService } from '@services/table-of-contents.service';
+import { TextService } from '@services/text.service';
+import { config } from 'src/assets/config/config';
 
 
 @Component({

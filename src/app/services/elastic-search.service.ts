@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, TimeRange } from 'src/app/models/elastic-search.model';
-import { config } from "src/assets/config/config";
+import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, TimeRange } from '@models/elastic-search.model';
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({

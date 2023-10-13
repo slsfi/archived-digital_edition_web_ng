@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { MediaCollectionService } from 'src/app/services/media-collection.service';
-import { config } from "src/assets/config/config";
+import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { MediaCollectionService } from '@services/media-collection.service';
+import { config } from 'src/assets/config/config';
 
 
 @Component({

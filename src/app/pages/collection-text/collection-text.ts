@@ -4,17 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
-import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
-import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
-import { CommentService } from 'src/app/services/comment.service';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { TextService } from 'src/app/services/text.service';
-import { TooltipService } from 'src/app/services/tooltip.service';
-import { UrlService } from 'src/app/services/url.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
+import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
+import { CommentService } from '@services/comment.service';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { ReadPopoverService } from '@services/read-popover.service';
+import { TextService } from '@services/text.service';
+import { TooltipService } from '@services/tooltip.service';
+import { UrlService } from '@services/url.service';
+import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 

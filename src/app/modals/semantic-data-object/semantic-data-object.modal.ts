@@ -4,11 +4,11 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subject, Subscription, timeout } from 'rxjs';
 
-import { OccurrencesAccordionComponent } from 'src/app/components/occurrences-accordion/occurrences-accordion.component';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { OccurrenceService } from 'src/app/services/occurence.service';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TooltipService } from 'src/app/services/tooltip.service';
+import { OccurrencesAccordionComponent } from '@components/occurrences-accordion/occurrences-accordion.component';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { OccurrenceService } from '@services/occurence.service';
+import { SemanticDataService } from '@services/semantic-data.service';
+import { TooltipService } from '@services/tooltip.service';
 import { config } from 'src/assets/config/config';
 
 

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { DraggableImageDirective } from 'src/directives/draggable-image.directive';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

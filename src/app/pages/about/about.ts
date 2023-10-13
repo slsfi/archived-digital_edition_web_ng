@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
-import { MdContentService } from 'src/app/services/md-content.service';
+import { MdContentService } from '@services/md-content.service';
 
 
 @Component({

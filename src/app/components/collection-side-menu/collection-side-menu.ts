@@ -1,15 +1,15 @@
-import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from "@angular/core";
+import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Params, RouterLink, UrlSegment } from "@angular/router";
+import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from "src/pipes/collection-page-path.pipe";
-import { CollectionPagePositionQueryparamPipe } from "src/pipes/collection-page-position-queryparam.pipe";
-import { CommonFunctionsService } from "src/app/services/common-functions.service";
-import { DocumentHeadService } from 'src/app/services/document-head.service';
-import { TableOfContentsService } from "src/app/services/table-of-contents.service";
-import { config } from "src/assets/config/config";
-import { isBrowser } from "src/standalone/utility-functions";
+import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
+import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { DocumentHeadService } from '@services/document-head.service';
+import { TableOfContentsService } from '@services/table-of-contents.service';
+import { config } from 'src/assets/config/config';
+import { isBrowser } from 'src/standalone/utility-functions';
 
 
 @Component({

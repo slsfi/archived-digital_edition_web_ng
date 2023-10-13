@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule, ModalController } from '@ionic/angular';
 
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { Facsimile } from 'src/app/models/facsimile.model';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { FacsimileService } from 'src/app/services/facsimile.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
-import { DraggableImageDirective } from 'src/directives/draggable-image.directive';
+import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { Facsimile } from '@models/facsimile.model';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { FacsimileService } from '@services/facsimile.service';
+import { ReadPopoverService } from '@services/read-popover.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { config } from 'src/assets/config/config';
+import { DraggableImageDirective } from '@directives/draggable-image.directive';
 
 
 @Component({

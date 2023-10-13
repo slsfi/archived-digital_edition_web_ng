@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
-import { CommonFunctionsService } from "src/app/services/common-functions.service";
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { TableOfContentsService } from '@services/table-of-contents.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { config } from 'src/assets/config/config';
 
 
 @Component({

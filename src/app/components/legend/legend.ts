@@ -5,9 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { MdContentService } from '@services/md-content.service';
+import { ReadPopoverService } from '@services/read-popover.service';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { UrlService } from 'src/app/services/url.service';
+import { UrlService } from '@services/url.service';
 import { config } from 'src/assets/config/config';
 
 

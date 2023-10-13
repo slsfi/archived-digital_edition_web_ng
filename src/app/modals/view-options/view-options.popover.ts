@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, PopoverController } from '@ionic/angular';
 
-import { Fontsize, ReadPopoverService } from 'src/app/services/read-popover.service';
-import { config } from "src/assets/config/config";
+import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
+import { config } from 'src/assets/config/config';
 
 
 @Component({

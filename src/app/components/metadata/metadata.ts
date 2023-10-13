@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { catchError, Observable, of, Subject } from 'rxjs';
 
-import { MetadataService } from 'src/app/services/metadata.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
+import { MetadataService } from '@services/metadata.service';
+import { ReadPopoverService } from '@services/read-popover.service';
 
 
 @Component({

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { SemanticDataService } from '@services/semantic-data.service';
 
 
 @Component({

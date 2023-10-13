@@ -5,13 +5,13 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 import { marked } from 'marked';
 
-import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { TextService } from 'src/app/services/text.service';
+import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { MdContentService } from '@services/md-content.service';
+import { ReadPopoverService } from '@services/read-popover.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { TextService } from '@services/text.service';
 import { config } from 'src/assets/config/config';
 
 

@@ -1,15 +1,15 @@
 import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, UrlSegment } from "@angular/router";
+import { RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
-import { CommonFunctionsService } from "src/app/services/common-functions.service";
-import { DocumentHeadService } from 'src/app/services/document-head.service';
-import { CollectionsService } from "src/app/services/collections.service";
-import { MediaCollectionService } from "src/app/services/media-collection.service";
-import { MdContentService } from "src/app/services/md-content.service";
+import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { DocumentHeadService } from '@services/document-head.service';
+import { CollectionsService } from '@services/collections.service';
+import { MediaCollectionService } from '@services/media-collection.service';
+import { MdContentService } from '@services/md-content.service';
 import { config } from 'src/assets/config/config';
 
 

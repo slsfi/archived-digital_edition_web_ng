@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from 'src/pipes/collection-page-path.pipe';
-import { OccurrenceCollectionTextPageQueryparamsPipe } from 'src/pipes/occurrence-collection-text-page-queryparams.pipe';
-import { Occurrence } from 'src/app/models/occurrence.model';
-import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
+import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
+import { OccurrenceCollectionTextPageQueryparamsPipe } from '@pipes/occurrence-collection-text-page-queryparams.pipe';
+import { Occurrence } from '@models/occurrence.model';
+import { SingleOccurrence } from '@models/single-occurrence.model';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { SemanticDataService } from '@services/semantic-data.service';
+import { TableOfContentsService } from '@services/table-of-contents.service';
 import { config } from 'src/assets/config/config';
 
 

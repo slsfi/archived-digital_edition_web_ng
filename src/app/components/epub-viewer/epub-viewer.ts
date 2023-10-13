@@ -1,18 +1,18 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, LOCALE_ID, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { CommonModule, DOCUMENT } from "@angular/common";
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AlertController, IonicModule, ModalController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
-import { IsExternalURLPipe } from 'src/pipes/is-external-url.pipe';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { ViewOptionsPopover } from 'src/app/modals/view-options/view-options.popover';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { Fontsize, ReadPopoverService } from 'src/app/services/read-popover.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
+import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { config } from 'src/assets/config/config';
 import { isBrowser } from 'src/standalone/utility-functions';
 
 

@@ -2,8 +2,8 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
+import { MdContentService } from '@services/md-content.service';
+import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
 
 

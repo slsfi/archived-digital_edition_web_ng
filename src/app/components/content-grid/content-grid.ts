@@ -1,13 +1,13 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 
-import { ContentItem } from 'src/app/models/content-item.model';
-import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
-import { CollectionsService } from 'src/app/services/collections.service';
-import { MdContentService } from 'src/app/services/md-content.service';
+import { ContentItem } from '@models/content-item.model';
+import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
+import { CollectionsService } from '@services/collections.service';
+import { MdContentService } from '@services/md-content.service';
 import { config } from 'src/assets/config/config';
 
 

@@ -24,7 +24,15 @@
     ],
     "useDefineForClassFields": false,
     "allowSyntheticDefaultImports": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@components/*": ["src/app/components/*"],
+      "@directives/*": ["src/directives/*"],
+      "@modals/*": ["src/app/modals/*"],
+      "@models/*": ["src/app/models/*"],
+      "@pipes/*": ["src/pipes/*"],
+      "@services/*": ["src/app/services/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

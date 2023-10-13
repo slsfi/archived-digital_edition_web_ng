@@ -3,7 +3,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { ReferenceDataService } from 'src/app/services/reference-data.service';
+import { ReferenceDataService } from '@services/reference-data.service';
 
 
 @Component({
