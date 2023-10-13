@@ -5,8 +5,8 @@
       <span i18n="@@MediaCollection.MediaCollections">Bildsamlingar</span>
     </a>
 
-    <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
-      <ion-button *ngIf="showURNButton && mediaCollectionID" (click)="showReference()">
+    <ion-buttons *ngIf="showURNButton && mediaCollectionID" slot="end" class="secondary-toolbar-buttons-wrapper">
+      <ion-button (click)="showReference()">
         <ion-icon slot="start" name="arrow-redo-sharp"></ion-icon>
         <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
       </ion-button>
