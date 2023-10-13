@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { config } from 'src/assets/config/config';
+import { convertNamedEntityTypeForBackend } from 'src/standalone/utility-functions';
 
 
 @Injectable({
@@ -25,16 +26,14 @@ export class MediaCollectionService {
     return this.http.get(url);
   }
 
-  getNamedEntityOccInMediaColls(namedEntityType: string, namedEntityID: any): Observable<any> {
-    const url = this.projectAPIBaseURL + '/gallery/' + namedEntityType + '/connections/' + namedEntityID;
+  getNamedEntityOccInMediaColls(entityType: string, entityID: any): Observable<any> {
+    entityType = convertNamedEntityTypeForBackend(entityType);
+    const url = this.projectAPIBaseURL + '/gallery/' + entityType + '/connections/' + entityID;
     return this.http.get(url);
   }
 
   getAllNamedEntityOccInMediaCollsByType(entityType: string, mediaCollectionID?: string): Observable<any> {
-    entityType = (entityType === 'person') ? 'subject'
-      : (entityType === 'place') ? 'location'
-      : (entityType === 'keyword') ? 'tag'
-      : entityType;
+    entityType = convertNamedEntityTypeForBackend(entityType);
     
     const url = this.projectAPIBaseURL + '/gallery/connections/' + entityType
                 + (mediaCollectionID ? '/' + mediaCollectionID : '');

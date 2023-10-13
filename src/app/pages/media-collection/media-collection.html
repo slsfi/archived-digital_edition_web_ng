@@ -23,7 +23,7 @@
 
   <div class="page-title-wrapper">
     <h1 [innerHTML]="mediaCollectionTitle"></h1>
-    <p *ngIf="(mediaCollectionID || namedEntityID) && galleryData.length">{{galleryData.length}} <ng-container i18n="@@MediaCollection.Images">bilder</ng-container></p>
+    <p *ngIf="mediaCollectionID && galleryData.length">{{galleryData.length}} <ng-container i18n="@@MediaCollection.Images">bilder</ng-container></p>
   </div>
   
   <p *ngIf="mediaCollectionDescription" [innerHTML]="mediaCollectionDescription"></p>

@@ -106,6 +106,10 @@ a.back-link {
   }
 }
 
+.page-title-wrapper + .filters-wrapper {
+  margin-top: 2rem;
+}
+
 .filter-results {
   font-style: italic;
 }

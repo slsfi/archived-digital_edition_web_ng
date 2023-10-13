@@ -9,6 +9,7 @@ import { Occurrence } from 'src/app/models/occurrence.model';
 import { SingleOccurrence } from 'src/app/models/single-occurrence.model';
 import { CommonFunctionsService } from 'src/app/services/common-functions.service';
 import { SemanticDataService } from 'src/app/services/semantic-data.service';
+import { TableOfContentsService } from 'src/app/services/table-of-contents.service';
 import { config } from 'src/assets/config/config';
 
 
@@ -37,17 +38,18 @@ export class OccurrencesAccordionComponent implements OnInit {
 
   constructor(
     private commonFunctions: CommonFunctionsService,
-    private semanticDataService: SemanticDataService
+    private semanticDataService: SemanticDataService,
+    private tocService: TableOfContentsService
   ) {
     this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {
-    if (this.type === 'tag') {
+    if (this.type === 'keyword') {
       this.showPublishedStatus = config.page?.index?.keywords?.publishedStatus ?? 2;
-    } else if (this.type === 'subject') {
+    } else if (this.type === 'person') {
       this.showPublishedStatus = config.page?.index?.persons?.publishedStatus ?? 2;
-    } else if (this.type === 'location') {
+    } else if (this.type === 'place') {
       this.showPublishedStatus = config.page?.index?.places?.publishedStatus ?? 2;
     } else if (this.type === 'work') {
       this.showPublishedStatus = config.page?.index?.works?.publishedStatus ?? 2;
@@ -193,7 +195,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     // update publication names from TOC-files. Finally, sort the publication names.
     this.groupedTexts.forEach((item: any) => {
       if (item.collection_id && item.publications) {
-        this.semanticDataService.getPublicationTOC(item.collection_id).subscribe(
+        this.tocService.getTableOfContents(item.collection_id).subscribe(
           (tocData: any) => {
             const flattenedTocData: any[] = this.commonFunctions.flattenObjectTree(
               tocData, 'children', 'itemId'

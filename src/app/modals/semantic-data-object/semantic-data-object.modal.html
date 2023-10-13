@@ -29,9 +29,9 @@
             {{data.media.description}}
           </div>
         </div>
-  
+
         <div class="sd-box"
-            *ngIf="(showCityRegionCountry && (data?.details?.city || data?.details?.region || data?.details?.country)) || data?.details?.place_of_birth || (data?.details?.type && showType) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || data?.details?.description || data?.articles?.length || data?.galleryOccurrences?.length || data?.details?.alias || data?.details?.previous_last_name"
+            *ngIf="(showCityRegionCountry && (data?.details?.city || data?.details?.region || data?.details?.country)) || data?.details?.place_of_birth || (data?.details?.type && showType) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || data?.details?.description || data?.articles?.length || data?.galleryOccurrences?.length || (showAliasAndPrevLastName && (data?.details?.alias || data?.details?.previous_last_name))"
         >
           <dl
                 *ngIf="(showCityRegionCountry && (data?.details?.city || data?.details?.region || data?.details?.country)) || data?.details?.place_of_birth || (data?.details?.type && showType) || data?.details?.source || data?.details?.publisher || data?.details?.published_year || data?.details?.isbn || (data?.details?.author_data?.length && data?.details?.author_data[0]) || data?.details?.journal || (data?.details?.description && showDescriptionLabel) || data?.articles?.length"
@@ -99,7 +99,13 @@
           </dl>
           <p *ngIf="showAliasAndPrevLastName && (data?.details?.alias || data?.details?.previous_last_name)" class="alias" [innerHTML]="data?.details?.alias ? (data?.details?.previous_last_name ? data?.details?.alias + ', ' + data?.details?.previous_last_name : data?.details?.alias) : data?.details?.previous_last_name"></p>
           <p *ngIf="data?.details?.description && !showDescriptionLabel" class="description">{{data.details.description}}</p>
-          <ion-button *ngIf="data?.galleryOccurrences?.length" class="custom-outline-button" fill="outline" i18n="@@TOC.MediaCollections" (click)="openGallery(data.galleryOccurrences[0])">Bildbank</ion-button>
+          <ion-button *ngIf="data?.galleryOccurrences?.length"
+                class="custom-outline-button"
+                fill="outline"
+                [routerLink]="['/media-collection', 'entity']"
+                [queryParams]="{ id: data.galleryOccurrences[0].id, type: type }"
+                i18n="@@TOC.MediaCollections"
+          >Bildbank</ion-button>
         </div>
   
         <ng-container *ngIf="showOccurrences && data?.details?.id">

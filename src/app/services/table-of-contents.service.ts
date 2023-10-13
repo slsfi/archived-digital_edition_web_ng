@@ -9,15 +9,14 @@ import { config } from 'src/assets/config/config';
   providedIn: 'root',
 })
 export class TableOfContentsService {
-  tocPath = '/toc/';
-  multilingualTOC = false;
-  cachedTableOfContents: any = {};
-  apiEndpoint: string;
   activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
+  apiEndpoint: string = '';
+  cachedTableOfContents: any = {};
+  multilingualTOC: boolean = false;
 
   constructor(
     private http: HttpClient,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.apiEndpoint = config.app?.apiEndpoint ?? '';
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
@@ -27,7 +26,7 @@ export class TableOfContentsService {
     if (this.cachedTableOfContents?.collectionId === id) {
       return of(this.cachedTableOfContents);
     } else {
-      let url = this.apiEndpoint + '/' + config.app.machineName + this.tocPath + id;
+      let url = this.apiEndpoint + '/' + config.app.machineName + '/toc/' + id;
 
       if (this.multilingualTOC) {
         url += '/' + this.activeLocale;
@@ -43,14 +42,10 @@ export class TableOfContentsService {
     }
   }
 
-  getTableOfContentsRoot(id: string): Observable<any> {
-    return this.getTableOfContents(id);
-  }
-
   getTableOfContentsGroup(id: string, group_id: string): Observable<any> {
     // @TODO add multilingual support to this as well...
     const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                this.tocPath + id + '/group/' + group_id;
+                '/toc/' + id + '/group/' + group_id;
     return this.http.get(url);
   }
 
@@ -60,15 +55,15 @@ export class TableOfContentsService {
     const ed_id = arr[0];
     const item_id = arr[1];
     const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                this.tocPath + ed_id + '/prevnext/' + item_id;
+                '/toc/' + ed_id + '/prevnext/' + item_id;
     return this.http.get(url);
   }
 
   /**
-   * Get first TOC item which has itemId property and type property has value other
-   * than 'subtitle' and 'section_title'
+   * Get first TOC item which has 'itemId' property and 'type' property
+   * has value other than 'subtitle' and 'section_title'.
    * @param collectionID 
-   * @param language 
+   * @param language optional
    */
   getFirst(collectionID: string, language?: string): Observable<any> {
     let url = config.app.apiEndpoint + '/' + config.app.machineName +

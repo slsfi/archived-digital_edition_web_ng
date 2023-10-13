@@ -58,11 +58,6 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   ngOnInit() {
-    this.type === 'person' ? this.type = 'subject'
-      : this.type === 'place' ? this.type = 'location'
-      : this.type === 'keyword' ? this.type = 'tag'
-      : this.type;
-
     this.objectData$ = this.getSemanticDataObjectData(this.type, this.id);
 
     // Close the modal on route change
@@ -207,22 +202,6 @@ export class SemanticDataObjectModal implements OnInit {
       catchError((error: any) => {
         return of({});
       })
-    );
-  }
-
-  openGallery(data: any) {
-    let type = this.type;
-    if (type === 'places') {
-      type = 'location';
-    } else if (type === 'tags' || type === 'keyword') {
-      type = 'tag';
-    } else if (type === 'subjects' || type === 'person')  {
-      type = 'subject';
-    }
-
-    this.router.navigate(
-      ['/media-collection'],
-      { queryParams: { entityID: data.id, entityType: type } }
     );
   }
 

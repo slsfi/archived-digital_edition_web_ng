@@ -76,6 +76,13 @@ async function generateSitemap() {
         }
     }
 
+    if (config.component?.mainSideMenu?.items?.mediaCollections) {
+        const mediaCollections = await fetchFromAPI(APIBase + '/gallery/data/' + locale);
+        if (mediaCollections && mediaCollections.length) {
+            urlCounter += await generateMediaCollectionURLs(mediaCollections, urlOrigin, locale);
+        }
+    }
+
     console.log('Number of generated URLs: ', urlCounter);
     console.log('');
 }
@@ -252,6 +259,19 @@ async function generateCollectionTextURLs(collection_id, urlOrigin, locale, API,
                 }
             }
         }
+    }
+
+    return counter;
+}
+
+async function generateMediaCollectionURLs(mediaCollections, urlOrigin, locale) {
+    let counter = 1;
+    appendToSitemapFile(`${urlOrigin}/${locale}/media-collection` + '\n');
+
+    for (let i = 0; i < mediaCollections.length; i++) {
+        const url = `${urlOrigin}/${locale}/media-collection/${mediaCollections[i]['id']}`;
+        appendToSitemapFile(url + '\n');
+        counter += 1;
     }
 
     return counter;
