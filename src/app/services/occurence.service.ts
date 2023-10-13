@@ -2,61 +2,35 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
+import { convertNamedEntityTypeForBackend } from 'src/standalone/utility-functions';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class OccurrenceService {
-  constructor(
-    private http: HttpClient
-  ) {}
+  projectAPIBaseURL: string = '';
 
-  getOccurences(object_type: string, id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/occurrences/' +
-        object_type +
-        '/' +
-        id
-    );
+  constructor(private http: HttpClient) {
+    this.projectAPIBaseURL = config.app.apiEndpoint + '/' + config.app.machineName;
   }
 
   getMediaData(object_type: string, id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/media/data/' +
-        object_type +
-        '/' +
-        id
-    );
+    object_type = convertNamedEntityTypeForBackend(object_type);
+    const url = this.projectAPIBaseURL + '/media/data/' + object_type + '/' + id;
+    return this.http.get(url);
   }
 
-  getGalleryOccurrences(type: any, id: any) {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/gallery/' +
-        type +
-        '/connections/' +
-        id +
-        '/1'
-    );
+  getGalleryOccurrences(object_type: any, id: any) {
+    object_type = convertNamedEntityTypeForBackend(object_type);
+    const url = this.projectAPIBaseURL + '/gallery/' + object_type + '/connections/' + id + '/1';
+    return this.http.get(url);
   }
 
   getArticleData(object_type: string, id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/media/articles/' +
-        object_type +
-        '/' +
-        id
-    );
+    object_type = convertNamedEntityTypeForBackend(object_type);
+    const url = this.projectAPIBaseURL + '/media/articles/' + object_type + '/' + id;
+    return this.http.get(url);
   }
 }

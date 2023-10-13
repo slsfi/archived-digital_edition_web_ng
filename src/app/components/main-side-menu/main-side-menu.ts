@@ -8,7 +8,7 @@ import { ParentChildPagePathPipe } from 'src/pipes/parent-child-page-path.pipe';
 import { CommonFunctionsService } from "src/app/services/common-functions.service";
 import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { CollectionsService } from "src/app/services/collections.service";
-import { GalleryService } from "src/app/services/gallery.service";
+import { MediaCollectionService } from "src/app/services/media-collection.service";
 import { MdContentService } from "src/app/services/md-content.service";
 import { config } from 'src/assets/config/config';
 
@@ -40,7 +40,7 @@ export class MainSideMenu implements OnInit, OnChanges {
     private headService: DocumentHeadService,
     private mdcontentService: MdContentService,
     private collectionsService: CollectionsService,
-    private galleryService: GalleryService,
+    private mediaCollectionService: MediaCollectionService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {
     this.aboutPagesRootNodeID = this._config.page?.about?.markdownFolderNumber ?? '03';
@@ -204,21 +204,21 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   private getMediaCollectionPagesMenu(): Observable<any> {
-    return this.galleryService.getGalleries(this.activeLocale).pipe(
+    return this.mediaCollectionService.getMediaCollections(this.activeLocale).pipe(
       map((res: any) => {
         if (res?.length > 0) {
           this.commonFunctions.sortArrayOfObjectsAlphabetically(res, 'title');
           this.recursivelyAddParentPagePath(res, '/media-collection');
-          res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collections' });
+          res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collection' });
           res = [{ title: $localize`:@@TOC.MediaCollections:Bildbank`, children: res }];
         } else {
           res = [];
         }
-        return { menuType: 'media-collections', menuData: res };
+        return { menuType: 'media-collection', menuData: res };
       }),
       catchError((error: any) => {
         console.error(error);
-        return of({ menuType: 'media-collections', menuData: [] });
+        return of({ menuType: 'media-collection', menuData: [] });
       })
     );
   }
@@ -316,7 +316,7 @@ export class MainSideMenu implements OnInit, OnChanges {
       }
       if (itemPath === stringForComparison) {
         this.highlightedMenu = item.nodeId;
-        if (item.parentPath === '/media-collections' || item.parentPath === '/media-collection') {
+        if (item.parentPath === '/media-collection') {
           this.headService.setTitle([String(item.title), $localize`:@@TOC.MediaCollections:Bildbank`]);
         } else if (!this.topMenuItems.includes(item.parentPath) && this.urlSegments[0]?.path !== 'collection') {
           // For top menu items the title is set by app.component, and

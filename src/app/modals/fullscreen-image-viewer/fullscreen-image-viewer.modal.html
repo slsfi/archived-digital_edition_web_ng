@@ -47,7 +47,7 @@
             </ion-fab>
         </div>
         <div *ngIf="(imageDescriptions && imageDescriptions[activeImageIndex]) || (imageTitles && imageTitles[activeImageIndex])" class="image-description" [class.visuallyhidden]="!showDescription">
-            <span class="image-title" *ngIf="imageTitles && imageTitles[activeImageIndex]" [innerHTML]="imageTitles[activeImageIndex]"></span> <span *ngIf="imageDescriptions && imageDescriptions[activeImageIndex]" [innerHTML]="imageDescriptions[activeImageIndex]"></span>
+            <span class="image-title" *ngIf="imageTitles && imageTitles[activeImageIndex]" [innerHTML]="imageTitles[activeImageIndex] + ' '"></span> <span *ngIf="imageDescriptions && imageDescriptions[activeImageIndex]" [innerHTML]="imageDescriptions[activeImageIndex]"></span>
         </div>
     </div>
     <ion-fab *ngIf="userSettingsService.isMobile()" class="left-controls">

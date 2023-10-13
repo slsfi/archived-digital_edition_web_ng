@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { GalleryService } from 'src/app/services/gallery.service';
+import { MediaCollectionService } from 'src/app/services/media-collection.service';
 import { config } from "src/assets/config/config";
 
 
@@ -23,7 +23,7 @@ export class IllustrationModal implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private galleryService: GalleryService,
+    private mediaCollectionService: MediaCollectionService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
@@ -32,7 +32,7 @@ export class IllustrationModal implements OnInit {
   }
 
   private getImageMetadata() {
-    this.galleryService.getMediaMetadata(this.imageNumber, this.activeLocale).subscribe(
+    this.mediaCollectionService.getMediaMetadata(this.imageNumber, this.activeLocale).subscribe(
       (data: any) => {
         this.imgMetadata = data;
         if (data?.media_collection_id && data?.image_filename_front) {

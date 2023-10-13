@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { CommonFunctionsService } from './common-functions.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
+import { convertNamedEntityTypeForBackend } from 'src/standalone/utility-functions';
 
 
 @Injectable({
@@ -35,20 +36,13 @@ export class SemanticDataService {
    * place/location, work.
    */
   getSingleSemanticDataObject(type: string, id: string): Observable<any> {
-    type = (type === 'person') ? 'subject'
-      : (type === 'place') ? 'location'
-      : (type === 'keyword') ? 'tag'
-      : type;
+    type = convertNamedEntityTypeForBackend(type);
     
     let url = `${config.app.apiEndpoint}/${config.app.machineName}/${type}/${id}`;
     if (config.app?.i18n?.multilingualSemanticData) {
       url = url + '/' + this.activeLocale;
     }
     return this.http.get(url);
-  }
-
-  getFilterCollections(): Observable<any> {
-    return this.http.get('assets/filterCollections.json');
   }
 
   getFilterPersonTypes(): Observable<any> {
@@ -175,21 +169,6 @@ export class SemanticDataService {
     );
   }
 
-  getOccurrencesByType(object_type: string, object_subtype?: string): Observable<any> {
-    let occurrenceURL = `/occurrences/${object_type}`;
-
-    if (object_subtype) {
-      occurrenceURL = `${occurrenceURL}/${object_subtype}`;
-    }
-
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        occurrenceURL
-    );
-  }
-
   getPersons(language: string): Observable<any> {
     return this.http.get(
       `${config.app.apiEndpoint}/${config.app.machineName}/persons/${language}`
@@ -216,6 +195,8 @@ export class SemanticDataService {
   }
 
   getSingleObjectElastic(type: any, id: any) {
+    type = convertNamedEntityTypeForBackend(type);
+    
     const payload: any = {
       from: 0,
       size: 200,
@@ -680,13 +661,9 @@ export class SemanticDataService {
   }
 
   getOccurrences(type: string, id: string): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/occurrences/' +
-        type +
-        '/' +
-        id
-    );
+    type = convertNamedEntityTypeForBackend(type);
+    const url = config.app.apiEndpoint + '/occurrences/' + type + '/' + id;
+    return this.http.get(url);
   }
 
   getLocationOccurrencesById(id: string): Observable<any> {
@@ -758,16 +735,6 @@ export class SemanticDataService {
         object_type +
         '/' +
         id
-    );
-  }
-
-  getPublicationTOC(collection_id: any): Observable<any> {
-    return this.http.get(
-      config.app.apiEndpoint +
-        '/' +
-        config.app.machineName +
-        '/toc/' +
-        collection_id
     );
   }
 

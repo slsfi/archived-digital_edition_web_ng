@@ -3,7 +3,7 @@
     <ion-row>
         <ion-col size="12" size-sm="6" size-md="4" size-xl="3" *ngFor="let item of data; trackBy: trackById">
           <div class="item-wrapper">
-            <a [routerLink]="item.type !== 'media-collections' ? ('/' + item.type | parentChildPagePath: item.id) : ('/' + item.type)" [title]="item.title">
+            <a [routerLink]="item.type !== 'media-collection' ? ('/' + item.type | parentChildPagePath: item.id) : ('/' + item.type)" [title]="item.title">
               <img *ngIf="item.imageURL"
                     [src]="item.imageURL"
                     [alt]="item.imageAltText"

@@ -1,182 +1,574 @@
-import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { catchError, map, Observable, of } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { catchError, combineLatest, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
+
+import { GalleryItem } from 'src/app/models/gallery-item-model';
+import { CommonFunctionsService } from 'src/app/services/common-functions.service';
+import { DocumentHeadService } from 'src/app/services/document-head.service';
 import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { GalleryService } from 'src/app/services/gallery.service';
+import { MediaCollectionService } from 'src/app/services/media-collection.service';
 import { MdContentService } from 'src/app/services/md-content.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
+import { UrlService } from 'src/app/services/url.service';
 
 
-// @IonicPage({
-//   name: 'media-collection',
-//   segment: 'media-collection/:mediaCollectionId/:id/:type'
-// })
 @Component({
   selector: 'page-media-collection',
   templateUrl: 'media-collection.html',
-  styleUrls: ['media-collection.scss']
+  styleUrls: ['media-collection.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MediaCollectionPage {
-
-  mediaCollectionId?: string;
-  mediaTitle?: string;
-  mediaDescription?: string;
-  mediaCollection = [] as any;
-  public apiEndPoint: string;
-  public projectMachineName: string;
-  singleId?: string;
-  type?: string;
-
-  allTags = [];
-  allLocations = [];
-  allSubjects = [];
-  allMediaCollection = [];
-  galleryTags = [] as any;
-  galleryLocations = [] as any;
-  gallerySubjects = [] as any;
-  locationModel = '';
-  tagModel = '';
-  subjectModel = '';
-  prevTag = '';
-  prevLoc = '';
-  prevSub = '';
-  mdContent$: Observable<SafeHtml>;
-  showURNButton: boolean;
+export class MediaCollectionPage implements OnDestroy, OnInit {
+  activeKeywordFilters: number[] = [];
+  activePersonFilters: number[] = [];
+  activePlaceFilters: number[] = [];
+  allMediaCollections: GalleryItem[] = [];
+  allMediaConnections: any = {};
+  apiEndPoint: string = '';
+  filterOptionsKeywords: any[] = [];
+  filterOptionsPersons: any[] = [];
+  filterOptionsPlaces: any[] = [];
+  filterOptionsSubscription: Subscription | null = null;
+  filterResultCount: number = -1;
+  filterSelectOptions: Record<string, any> = {};
+  galleryBacksideImageURLs: (string | undefined)[] = [];
+  galleryData: GalleryItem[] = [];
+  galleryDescriptions: (string | undefined)[] = [];
+  galleryImageURLs: (string | undefined)[] = [];
+  galleryTitles: (string | undefined)[] = [];
+  loadingGallery: boolean = true;
+  loadingImageModal: boolean = false;
+  mdContent$: Observable<SafeHtml | null>;
+  mediaCollectionID: string | undefined = undefined;
+  mediaCollectionDescription: string = '';
+  mediaCollectionTitle: string = '';
+  namedEntityID: string = '';
+  namedEntityType: string = '';
+  projectName: string = '';
+  showURNButton: boolean = false;
+  urlParametersSubscription: Subscription | null = null;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
+    private commonFunctions: CommonFunctionsService,
+    private headService: DocumentHeadService,
     private sanitizer: DomSanitizer,
-    private galleryService: GalleryService,
-    public userSettingsService: UserSettingsService,
+    private mediaCollectionService: MediaCollectionService,
     private modalController: ModalController,
     private mdContentService: MdContentService,
     private route: ActivatedRoute,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private router: Router,
+    private urlService: UrlService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    // this.mediaCollectionId = this.navParams.get('mediaCollectionId');
-    // this.singleId = this.navParams.get('id');
-    // this.type = this.navParams.get('type');
-    // this.mediaTitle = this.navParams.get('mediaTitle');
-    // this.tagModel = this.navParams.get('tag');
-    // this.subjectModel = this.navParams.get('subject');
-    // this.locationModel = this.navParams.get('location');
     this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.projectMachineName = config.app?.machineName ?? '';
-    this.showURNButton = config.page?.mediaCollection?.showURNButton ?? true;
-  }
+    this.projectName = config.app?.machineName ?? '';
+    this.showURNButton = config.page?.mediaCollection?.showURNButton ?? false;
 
-  getMediaCollections(id?: any, type?: any) {
-    if ( id === undefined && this.mediaCollectionId ) {
-      this.galleryService.getGallery(this.mediaCollectionId, this.activeLocale).subscribe(gallery => {
-        this.mediaCollection = gallery.gallery ? gallery.gallery : gallery;
-        this.allMediaCollection = this.mediaCollection;
-        this.mediaTitle = gallery[0].title ? gallery[0].title : this.mediaTitle;
-        this.mediaDescription = gallery.description ? gallery.description : '';
-        if (this.tagModel !== undefined && this.tagModel !== '') {
-          this.prevTag = this.tagModel;
-          if (this.allTags.length > 0) {
-            this.filterCollectionsByTag(this.tagModel);
-          } else {
-            this.getCollectionTags(this.tagModel);
-          }
-        }
-        if (this.locationModel !== undefined && this.locationModel !== '') {
-          this.prevLoc = this.locationModel;
-          if (this.allLocations.length > 0) {
-            this.filterCollectionsByLocation(this.locationModel);
-          } else {
-            this.getCollectionLocations(this.locationModel);
-          }
-        }
-        if (this.subjectModel !== undefined && this.subjectModel !== '') {
-          this.prevSub = this.subjectModel;
-          if (this.allSubjects.length > 0) {
-            this.filterCollectionsBySubject(this.subjectModel);
-          } else {
-            this.getCollectionSubjects(this.subjectModel);
-          }
-        }
-      });
-    } else {
-      this.galleryService.getGalleryOccurrences(type, id).subscribe((occurrences: any) => {
-        occurrences.forEach((element: any) => {
-          element['mediaCollectionId'] = element['media_collection_id'];
-          element['front'] = element['filename'];
-          this.mediaCollection.push(element)
-        });
-
-        if ( type === 'subject' ) {
-          this.mediaTitle = occurrences[0]['full_name'];
-          this.mediaDescription = '';
-        } else {
-          this.mediaTitle = occurrences[0]['name'];
-          this.mediaDescription = '';
-        }
-      });
-    }
-  }
-
-  asThumb(url: any) {
-    return url.replace('.jpg', '_thumb.jpg');
+    this.filterSelectOptions = {
+      person: {
+        header: $localize`:@@MediaCollection.FilterPerson:Avgränsa enligt person`,
+        cssClass: 'custom-select-alert'
+      },
+      place: {
+        header: $localize`:@@MediaCollection.FilterPlace:Avgränsa enligt plats`,
+        cssClass: 'custom-select-alert'
+      },
+      keyword: {
+        header: $localize`:@@MediaCollection.FilterKeyword:Avgränsa enligt ämnesord`,
+        cssClass: 'custom-select-alert'
+      }
+    };
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.mediaCollectionId = params['mediaCollectionId'];
-      this.singleId = params['id'];
-      this.type = params['type'];
-      this.initStuff();
-    })
+    this.urlParametersSubscription = combineLatest(
+      [this.route.params, this.route.queryParams]
+    ).pipe(
+      map(([params, queryParams]) => ({...params, ...queryParams}))
+    ).subscribe((routeParams: any) => {
+      if (
+        (this.commonFunctions.isEmptyObject(routeParams) && this.mediaCollectionID !== '') ||
+        (
+          !routeParams.mediaCollectionID &&
+          (
+            routeParams.filters ||
+            !routeParams.filters &&
+            (
+              this.activePersonFilters.length ||
+              this.activePlaceFilters.length ||
+              this.activeKeywordFilters.length
+            )
+          )
+        )
+      ) {
+        // Load all media collections
+        this.loadingGallery = true;
+        const shouldSetFilters = this.mediaCollectionID !== '' ? true : false;
+        this.mediaCollectionID = '';
+        this.namedEntityID = '';
+        this.mediaCollectionTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
+        this.cdRef.detectChanges();
+        this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
 
-    this.route.queryParams.subscribe(params => {
-      this.mediaTitle = params['mediaTitle'];
-      this.tagModel = params['tag'];
-      this.subjectModel = params['subject'];
-      this.locationModel = params['location'];
+        if (routeParams.filters) {
+          this.setActiveFiltersFromQueryParams(routeParams.filters);
+        } else {
+          this.activePersonFilters = [];
+          this.activePlaceFilters = [];
+          this.activeKeywordFilters = [];
+        }
+
+        if (this.allMediaCollections.length < 1) {
+          this.loadMediaCollections();
+        } else {
+          this.galleryData = this.allMediaCollections;
+          if (shouldSetFilters) {
+            this.setFilterOptionsAndApplyActiveFilters();
+          } else {
+            this.applyActiveFilters();
+          }
+        }
+      } else if (
+        routeParams.mediaCollectionID &&
+        routeParams.mediaCollectionID !== 'entity' &&
+        (
+          routeParams.mediaCollectionID !== this.mediaCollectionID ||
+          routeParams.filters ||
+          !routeParams.filters &&
+          (
+            this.activePersonFilters.length ||
+            this.activePlaceFilters.length ||
+            this.activeKeywordFilters.length
+          )
+        )
+      ) {
+        // Load single media collection
+        if (routeParams.filters) {
+          this.setActiveFiltersFromQueryParams(routeParams.filters);
+        } else {
+          this.activePersonFilters = [];
+          this.activePlaceFilters = [];
+          this.activeKeywordFilters = [];
+        }
+
+        if (routeParams.mediaCollectionID !== this.mediaCollectionID) {
+          this.loadingGallery = true;
+          this.mediaCollectionID = routeParams.mediaCollectionID;
+          this.loadSingleMediaCollection(routeParams.mediaCollectionID);
+        } else {
+          this.mediaCollectionID = routeParams.mediaCollectionID;
+          this.applyActiveFilters();
+        }
+        this.namedEntityID = '';
+      } else if (
+        routeParams.mediaCollectionID === 'entity' &&
+        routeParams.id &&
+        routeParams.type
+      ) {
+        // Load specific images related to a named entity
+        this.loadingGallery = true;
+        this.mediaCollectionID = 'entity';
+        this.namedEntityID = routeParams.id;
+        this.namedEntityType = routeParams.type;
+        this.loadNamedEntityGallery(this.namedEntityID, this.namedEntityType);
+      }
     });
   }
 
-  initStuff() {
-    let fileID = '11-' + this.mediaCollectionId;
-    if (this.mediaCollectionId !== null && this.mediaCollectionId !== 'null') {
-      if ( !String(fileID).startsWith(this.activeLocale) ) {
-        fileID = this.activeLocale + '-' + fileID;
+  ngOnDestroy() {
+    this.filterOptionsSubscription?.unsubscribe();
+    this.urlParametersSubscription?.unsubscribe();
+  }
+
+  private getMdContent(fileID: string): Observable<SafeHtml | null> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.sanitize(
+          SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(marked(res.content))
+        );
+      }),
+      catchError((e) => {
+        return of('');
+      })
+    );
+  }
+
+  private loadMediaCollections() {
+    this.galleryData = [];
+
+    this.mediaCollectionService.getMediaCollections(this.activeLocale).subscribe(
+      (collections: any[]) => {
+        this.allMediaCollections = this.getTransformedGalleryData(collections);
+        this.galleryData = this.allMediaCollections;
+        this.setFilterOptionsAndApplyActiveFilters();
       }
-      this.mdContent$ = this.getMdContent(fileID);
-      this.getCollectionTags();
-      this.getCollectionLocations();
-      this.getCollectionSubjects();
-      this.getMediaCollections();
+    );
+  }
+
+  private loadSingleMediaCollection(mediaCollectionID: string) {
+    this.galleryData = [];
+
+    // Get all media collections if not yet loaded, set current collection title and description
+    if (this.allMediaCollections.length < 1) {
+      this.mediaCollectionService.getMediaCollections(this.activeLocale).subscribe(
+        (collections: any[]) => {
+          for (let i = 0; i < collections.length; i++) {
+            if (collections[i].id === Number(mediaCollectionID)) {
+              this.mediaCollectionTitle = collections[i].title || '';
+              this.mediaCollectionDescription = collections[i].description || '';
+              this.cdRef.detectChanges();
+              break;
+            }
+          }
+          this.allMediaCollections = this.getTransformedGalleryData(collections);
+        }
+      );
     } else {
-      this.mediaCollectionId = undefined;
-      this.getMediaCollections(this.singleId, this.type);
+      for (let i = 0; i < this.allMediaCollections.length; i++) {
+        if (this.allMediaCollections[i].collectionID === Number(mediaCollectionID)) {
+          this.mediaCollectionTitle = this.allMediaCollections[i].title || '';
+          this.mediaCollectionDescription = this.allMediaCollections[i].description || '';
+          this.cdRef.detectChanges();
+          break;
+        }
+      }
+    }
+
+    this.mdContent$ = this.getMdContent(this.activeLocale + '-11-' + mediaCollectionID);
+
+    // Get selected media collection data, then filter options and apply any active filters
+    this.mediaCollectionService.getSingleMediaCollection(mediaCollectionID, this.activeLocale).subscribe(
+      (galleryItems: any[]) => {
+        this.galleryData = this.getTransformedGalleryData(galleryItems, true);
+        this.setFilterOptionsAndApplyActiveFilters();
+      }
+    );
+  }
+
+  private loadNamedEntityGallery(objectID: string, objectType: string) {
+    this.mediaCollectionService.getNamedEntityOccInMediaColls(objectType, objectID).subscribe(
+      (occurrences: any) => {
+        this.galleryData = this.getTransformedGalleryData(occurrences, true);
+
+        if (objectType === 'person') {
+          this.mediaCollectionTitle = occurrences[0]['full_name'];
+          this.mediaCollectionDescription = '';
+        } else {
+          this.mediaCollectionTitle = occurrences[0]['name'];
+          this.mediaCollectionDescription = '';
+        }
+
+        this.headService.setTitle([this.mediaCollectionTitle, $localize`:@@TOC.MediaCollections:Bildbank`]);
+
+        this.loadingGallery = false;
+        this.cdRef.detectChanges();
+        this.setGalleryZoomedImageData();
+      }
+    );
+  }
+
+  private getTransformedGalleryData(galleryItems: any[], singleGallery = false): GalleryItem[] {
+    const galleryItemsList: GalleryItem[] = [];
+    if (galleryItems?.length) {
+      galleryItems.forEach((gallery: any) => {
+        const galleryItem = new GalleryItem(gallery);
+        const urlStart = `${this.apiEndPoint}/${this.projectName}/gallery/get/${galleryItem.collectionID}/`;
+
+        if (singleGallery) {
+          const lastIndex = galleryItem.imageURL?.lastIndexOf('.') ?? -1;
+          if (lastIndex > -1) {
+            galleryItem.imageURLThumb = galleryItem.imageURL.substring(0, lastIndex) + '_thumb' + galleryItem.imageURL.substring(lastIndex);
+          }
+          galleryItem.imageURL = urlStart + `${galleryItem.imageURL}`;
+          galleryItem.imageURLThumb = urlStart + `${galleryItem.imageURLThumb}`;
+          galleryItem.imageURLBack = galleryItem.imageURLBack ? urlStart + `${galleryItem.imageURLBack}` : undefined;
+        } else {
+          galleryItem.imageURL = urlStart + `gallery_thumb.jpg`;
+          galleryItem.imageURLThumb = galleryItem.imageURL;
+        }
+
+        if (!galleryItem.imageAltText) {
+          galleryItem.imageAltText = $localize`:@@MediaCollection.GenericAltText:Galleribild`;
+        }
+
+        galleryItemsList.push(galleryItem);
+      });
+
+      !singleGallery && this.commonFunctions.sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
+      this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
+    }
+    return galleryItemsList;
+  }
+
+  private setGalleryZoomedImageData() {
+    this.galleryImageURLs = [];
+    this.galleryBacksideImageURLs = [];
+    this.galleryDescriptions = [];
+    this.galleryTitles = [];
+
+    this.galleryData.forEach((element: GalleryItem) => {
+      if (element.visible) {
+        this.galleryImageURLs.push(element.imageURL);
+        this.galleryBacksideImageURLs.push(element.imageURLBack);
+        this.galleryDescriptions.push(element.description);
+        this.galleryTitles.push(element.title);
+      }
+    });
+  }
+
+  private setActiveFiltersFromQueryParams(urlFilters: string) {
+    const parsedActiveFilters = this.urlService.parse(urlFilters, true) || [];
+
+    parsedActiveFilters.forEach((filterGroup: any) => {
+      if (filterGroup.person?.length) {
+        this.activePersonFilters = filterGroup.person;
+      }
+
+      if (filterGroup.place?.length) {
+        this.activePlaceFilters = filterGroup.place;
+      }
+      
+      if (filterGroup.keyword?.length) {
+        this.activeKeywordFilters = filterGroup.keyword;
+      }
+    });
+  }
+
+  /**
+   * Sets filter options for media collection and applies any
+   * active filters. this.galleryData must be set before
+   * calling this function.
+   */
+  private setFilterOptionsAndApplyActiveFilters() {
+    this.filterOptionsSubscription?.unsubscribe();
+    this.filterOptionsSubscription = forkJoin(
+      [
+        this.mediaCollectionService.getAllNamedEntityOccInMediaCollsByType(
+          'keyword', this.mediaCollectionID
+        ),
+        this.mediaCollectionService.getAllNamedEntityOccInMediaCollsByType(
+          'person', this.mediaCollectionID
+        ),
+        this.mediaCollectionService.getAllNamedEntityOccInMediaCollsByType(
+          'place', this.mediaCollectionID
+        )
+      ]
+    ).pipe(
+      map((res: any[]) => {
+        const entityOccs = [
+          {
+            type: 'keyword',
+            data: res[0] || []
+          },
+          {
+            type: 'person',
+            data: res[1] || []
+          },
+          {
+            type: 'place',
+            data: res[2] || []
+          },
+        ];
+        return entityOccs;
+      })
+    ).subscribe(
+      (filterGroups: any[]) => {
+        filterGroups.forEach((group: any) => {
+          this.setFilterOptionsByType(group.type, group.data);
+        });
+
+        this.applyActiveFilters();
+      }
+    );
+  }
+
+  private setFilterOptionsByType(type: string, entities: any[]) {
+    const filterOptions: any[] = [];
+    const addedIDs: number[] = [];
+    this.allMediaConnections[type] = {};
+    
+    entities.forEach((entity: any) => {
+      if (!addedIDs.includes(entity.id)) {
+        filterOptions.push(
+          {
+            id: entity.id,
+            name: entity.name
+          }
+        );
+        addedIDs.push(entity.id);
+      }
+      if (!this.allMediaConnections[type][entity.id]) {
+        this.allMediaConnections[type][entity.id] = {
+          filenames: [],
+          mediaCollectionIDs: []
+        };
+      }
+      if (!this.allMediaConnections[type][entity.id]['filenames'].includes(entity.filename)) {
+        this.allMediaConnections[type][entity.id]['filenames'].push(entity.filename);
+      }
+      if (!this.allMediaConnections[type][entity.id]['mediaCollectionIDs'].includes(entity.media_collection_id)) {
+        this.allMediaConnections[type][entity.id]['mediaCollectionIDs'].push(entity.media_collection_id);
+      }
+    });
+    
+    this.commonFunctions.sortArrayOfObjectsAlphabetically(filterOptions, 'name');
+    if (type === 'person') {
+      this.filterOptionsPersons = filterOptions;
+    } else if (type === 'place') {
+      this.filterOptionsPlaces = filterOptions;
+    } else if (type === 'keyword') {
+      this.filterOptionsKeywords = filterOptions;
     }
   }
 
-  getImageUrl(filename: any, mediaCollectionId: any) {
-    if (!filename) {
-      return null;
+  private applyActiveFilters() {
+    let filterResultCount = 0;
+    const connKey = this.mediaCollectionID ? 'filenames' : 'mediaCollectionIDs';
+    const itemKey = this.mediaCollectionID ? 'filename' : 'collectionID';
+
+    if (
+      this.activePersonFilters.length ||
+      this.activePlaceFilters.length ||
+      this.activeKeywordFilters.length
+    ) {
+      // Apply filters
+      this.galleryData.forEach((item: GalleryItem) => {
+        let personOk = false;
+        let placeOk = false;
+        let keywordOk = false;
+
+        if (this.activePersonFilters.length) {
+          for (let f = 0; f < this.activePersonFilters.length; f++) {
+            if (this.allMediaConnections['person']?.[this.activePersonFilters[f]]?.[connKey]?.includes(item[itemKey])) {
+              personOk = true;
+              break;
+            } else {
+              personOk = false;
+            }
+          }
+        } else {
+          personOk = true;
+        }
+
+        if (this.activePlaceFilters.length) {
+          for (let f = 0; f < this.activePlaceFilters.length; f++) {
+            if (this.allMediaConnections['place']?.[this.activePlaceFilters[f]]?.[connKey]?.includes(item[itemKey])) {
+              placeOk = true;
+              break;
+            } else {
+              placeOk = false;
+            }
+          }
+        } else {
+          placeOk = true;
+        }
+
+        if (this.activeKeywordFilters.length) {
+          for (let f = 0; f < this.activeKeywordFilters.length; f++) {
+            if (this.allMediaConnections['keyword']?.[this.activeKeywordFilters[f]]?.[connKey]?.includes(item[itemKey])) {
+              keywordOk = true;
+              break;
+            } else {
+              keywordOk = false;
+            }
+          }
+        } else {
+          keywordOk = true;
+        }
+        
+        item.visible = personOk && placeOk && keywordOk;
+        if (item.visible) {
+          filterResultCount++;
+        }
+      });
+    } else {
+      // Clear all filters --> show all collection items
+      this.galleryData.forEach((item: GalleryItem) => {
+        item.visible = true;
+      });
+      filterResultCount = -1;
     }
-    return this.apiEndPoint + '/' + this.projectMachineName + '/gallery/get/' + mediaCollectionId +
-           '/' + filename;
+
+    this.filterResultCount = filterResultCount;
+    this.loadingGallery = false;
+    this.cdRef.detectChanges();
+
+    if (this.mediaCollectionID) {
+      this.setGalleryZoomedImageData();
+    }
   }
 
-  async openImage(index: any, mediaCollectionId: any) {
-    const zoomedImages = this.mediaCollection.map((i: any) => this.getImageUrl(i.front, mediaCollectionId));
-    const backsides = zoomedImages.map((i: any) => i.replace('.jpg', 'B.jpg'));
-    const descriptions = this.mediaCollection.map((i: any) => i.description);
-    const imageTitles = this.mediaCollection.map((i: any) => i.media_title_translation);
+  private updateURLQueryParameters(params: any) {
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: params,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      }
+    );
+  }
+
+  onFilterChanged(type: string, event: any) {
+    const filters: any[] = [];
+
+    if (type === 'person' && event?.detail?.value?.length) {
+      filters.push({ person: event?.detail?.value });
+    } else if (type !== 'person' && this.activePersonFilters.length) {
+      filters.push({ person: this.activePersonFilters });
+    }
+
+    if (type === 'place' && event?.detail?.value?.length) {
+      filters.push({ place: event?.detail?.value });
+    } else if (type !== 'place' && this.activePlaceFilters.length) {
+      filters.push({ place: this.activePlaceFilters });
+    }
+
+    if (type === 'keyword' && event?.detail?.value?.length) {
+      filters.push({ keyword: event?.detail?.value });
+    } else if (type !== 'keyword' && this.activeKeywordFilters.length) {
+      filters.push({ keyword: this.activeKeywordFilters });
+    }
+
+    this.updateURLQueryParameters(
+      {
+        filters: filters.length ? this.urlService.stringify(filters, true) : null
+      }
+    );
+  }
+
+  clearActiveFilters() {
+    this.updateURLQueryParameters(
+      {
+        filters: null
+      }
+    );
+  }
+
+  async openImage(imageURL: string) {
+    this.loadingImageModal = true;
+    this.cdRef.detectChanges();
+    let index = 0;
+
+    for(let i = 0; i < this.galleryImageURLs.length; i++) {
+      if (imageURL === this.galleryImageURLs[i]) {
+        index = i;
+        break;
+      }
+    }
 
     const params = {
       activeImageIndex: index,
-      backsides: backsides,
-      imageDescriptions: descriptions,
-      imageTitles: imageTitles,
-      imageURLs: zoomedImages
+      backsides: this.galleryBacksideImageURLs,
+      imageDescriptions: this.galleryDescriptions,
+      imageTitles: this.galleryTitles,
+      imageURLs: this.galleryImageURLs
     };
 
     const modal = await this.modalController.create({
@@ -186,230 +578,12 @@ export class MediaCollectionPage {
     });
     
     modal.present();
-  }
 
-  getCollectionTags(filter?: any) {
-    (async () => {
-      let tags = [] as any;
-      tags = await this.galleryService.getGalleryTags(this.mediaCollectionId);
-      this.allTags = tags;
-      const addedTags: Array<any> = [];
-      tags.forEach((element: any) => {
-        if (addedTags.indexOf(element['id']) === -1) {
-          this.galleryTags.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedTags.push(element['id']);
-        }
-      });
-      this.galleryTags.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsByTag(filter);
-      }
-    }).bind(this)();
-  }
-
-  getCollectionLocations(filter?: any) {
-    (async () => {
-      let locations = [];
-      locations = await this.galleryService.getGalleryLocations(this.mediaCollectionId);
-      this.allLocations = locations;
-      const addedLocations: Array<any> = [];
-      locations.forEach((element: any) => {
-        if (addedLocations.indexOf(element['id']) === -1) {
-          this.galleryLocations.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedLocations.push(element['id']);
-        }
-      });
-      this.galleryLocations.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsByLocation(filter);
-      }
-    }).bind(this)();
-  }
-
-  getCollectionSubjects(filter?: any) {
-    (async () => {
-      let subjects = [];
-      subjects = await this.galleryService.getGallerySubjects(this.mediaCollectionId);
-      this.allSubjects = subjects;
-      const addedSubjects: Array<any> = [];
-      subjects.forEach((element: any) => {
-        if (addedSubjects.indexOf(element['id']) === -1) {
-          this.gallerySubjects.push({
-            'name': String(element['name']),
-            id: element['id'],
-            'media_collection_id': element['media_collection_id']
-          });
-          addedSubjects.push(element['id']);
-        }
-      });
-      this.gallerySubjects.sort(function(a: any, b: any) {
-        const nameA = a.name.toLowerCase(); // ignore upper and lowercase
-        const nameB = b.name.toLowerCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-      if (filter) {
-        this.filterCollectionsBySubject(filter);
-      }
-    }).bind(this)();
-  }
-
-  filterCollectionsByTag(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-      return true;
+    const { data, role } = await modal.onWillDismiss();
+    if (role) {
+      this.loadingImageModal = false;
+      this.cdRef.detectChanges();
     }
-    if (name !== this.prevTag) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevTag = name;
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allTags.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase()) {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
-
-    return;
-  }
-
-  filterCollectionsByLocation(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if (this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-      return true;
-    }
-    if (name !== this.prevLoc) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevLoc = name;
-      if (this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.subjectModel !== undefined && this.subjectModel !== '') {
-        this.filterCollectionsBySubject(this.subjectModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allLocations.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase()) {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
-
-    return;
-  }
-
-  filterCollectionsBySubject(name: any) {
-    if (name === '') {
-      this.mediaCollection = this.allMediaCollection;
-      if ( this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if (this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-      return true;
-    }
-    if (name !== this.prevSub) {
-      this.mediaCollection = this.allMediaCollection;
-      this.prevSub = name;
-      if ( this.tagModel !== undefined && this.tagModel !== '') {
-        this.filterCollectionsByTag(this.tagModel);
-      }
-      if ( this.locationModel !== undefined && this.locationModel !== '') {
-        this.filterCollectionsByLocation(this.locationModel);
-      }
-    }
-    const filenames: Array<any> = [];
-    const filteredGalleries = [] as any;
-    this.allSubjects.forEach(element => {
-      if (String(element['name']).toLowerCase() === String(name).toLowerCase() || name === '') {
-        filenames.push(element['filename']);
-      }
-    });
-    this.mediaCollection.forEach((element: any) => {
-      if (filenames.indexOf(element['front']) !== -1) {
-        filteredGalleries.push(element);
-      }
-    });
-    this.mediaCollection = filteredGalleries;
-
-    return;
-  }
-
-  getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
-      map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
-      }),
-      catchError((e) => {
-        return of('');
-      })
-    );
   }
 
   async showReference() {
@@ -418,6 +592,12 @@ export class MediaCollectionPage {
       component: ReferenceDataModal,
       componentProps: { origin: 'media-collection' }
     });
+
     modal.present();
   }
+
+  trackById(index: number | string, item: any) {
+    return item.id;
+  }
+
 }

@@ -486,29 +486,49 @@
         <source>Manuskript</source>
       </segment>
     </unit>
-    <unit id="MediaCollections.altText">
+    <unit id="MediaCollection.ClearFilters">
+      <segment>
+        <source>Ta bort aktiva avgränsningar</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.Collections">
+      <segment>
+        <source>samlingar</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterKeyword">
+      <segment>
+        <source>Avgränsa enligt ämnesord</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPerson">
+      <segment>
+        <source>Avgränsa enligt person</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPlace">
+      <segment>
+        <source>Avgränsa enligt plats</source>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.GenericAltText">
       <segment>
         <source>Galleribild</source>
       </segment>
     </unit>
-    <unit id="MediaCollections.locations">
+    <unit id="MediaCollection.Images">
       <segment>
-        <source>Platser</source>
+        <source>bilder</source>
       </segment>
     </unit>
-    <unit id="MediaCollections.photos">
+    <unit id="MediaCollection.MediaCollections">
       <segment>
-        <source>foton</source>
+        <source>Bildsamlingar</source>
       </segment>
     </unit>
-    <unit id="MediaCollections.subjects">
+    <unit id="MediaCollection.Showing">
       <segment>
-        <source>Personer</source>
-      </segment>
-    </unit>
-    <unit id="MediaCollections.tags">
-      <segment>
-        <source>Ämnesord</source>
+        <source>Visar</source>
       </segment>
     </unit>
     <unit id="metadata">

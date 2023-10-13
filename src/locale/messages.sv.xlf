@@ -582,34 +582,58 @@
         <target>Manuskript</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.altText">
+    <unit id="MediaCollection.ClearFilters">
+      <segment state="initial">
+        <source>Ta bort aktiva avgränsningar</source>
+        <target>Ta bort aktiva avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.Collections">
+      <segment state="initial">
+        <source>samlingar</source>
+        <target>samlingar</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterKeyword">
+      <segment state="initial">
+        <source>Avgränsa enligt ämnesord</source>
+        <target>Avgränsa enligt ämnesord</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPerson">
+      <segment state="initial">
+        <source>Avgränsa enligt person</source>
+        <target>Avgränsa enligt person</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPlace">
+      <segment state="initial">
+        <source>Avgränsa enligt plats</source>
+        <target>Avgränsa enligt plats</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.GenericAltText">
       <segment state="initial">
         <source>Galleribild</source>
         <target>Galleribild</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.locations">
+    <unit id="MediaCollection.Images">
       <segment state="initial">
-        <source>Platser</source>
-        <target>Platser</target>
+        <source>bilder</source>
+        <target>bilder</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.photos">
+    <unit id="MediaCollection.MediaCollections">
       <segment state="initial">
-        <source>foton</source>
-        <target>foton</target>
+        <source>Bildsamlingar</source>
+        <target>Bildsamlingar</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.subjects">
+    <unit id="MediaCollection.Showing">
       <segment state="initial">
-        <source>Personer</source>
-        <target>Personer</target>
-      </segment>
-    </unit>
-    <unit id="MediaCollections.tags">
-      <segment state="initial">
-        <source>Ämnesord</source>
-        <target>Ämnesord</target>
+        <source>Visar</source>
+        <target>Visar</target>
       </segment>
     </unit>
     <unit id="metadata">

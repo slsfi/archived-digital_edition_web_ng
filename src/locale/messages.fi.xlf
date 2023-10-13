@@ -582,34 +582,58 @@
         <target>Käsikirjoitukset</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.altText">
+    <unit id="MediaCollection.ClearFilters">
+      <segment state="initial">
+        <source>Ta bort aktiva avgränsningar</source>
+        <target>Poista aktiiviset rajaukset</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.Collections">
+      <segment state="initial">
+        <source>samlingar</source>
+        <target>kokoelmaa</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterKeyword">
+      <segment state="initial">
+        <source>Avgränsa enligt ämnesord</source>
+        <target>Aihesanarajaus</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPerson">
+      <segment state="initial">
+        <source>Avgränsa enligt person</source>
+        <target>Henkilörajaus</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.FilterPlace">
+      <segment state="initial">
+        <source>Avgränsa enligt plats</source>
+        <target>Paikkarajaus</target>
+      </segment>
+    </unit>
+    <unit id="MediaCollection.GenericAltText">
       <segment state="initial">
         <source>Galleribild</source>
         <target>Galleriakuva</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.locations">
+    <unit id="MediaCollection.Images">
       <segment state="initial">
-        <source>Platser</source>
-        <target>Paikat</target>
-      </segment>
-    </unit>
-    <unit id="MediaCollections.photos">
-      <segment state="initial">
-        <source>foton</source>
+        <source>bilder</source>
         <target>kuvaa</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.subjects">
+    <unit id="MediaCollection.MediaCollections">
       <segment state="initial">
-        <source>Personer</source>
-        <target>Henkilöt</target>
+        <source>Bildsamlingar</source>
+        <target>Kuvakokoelmat</target>
       </segment>
     </unit>
-    <unit id="MediaCollections.tags">
+    <unit id="MediaCollection.Showing">
       <segment state="initial">
-        <source>Ämnesord</source>
-        <target>Aihesanat</target>
+        <source>Visar</source>
+        <target>Näytetään</target>
       </segment>
     </unit>
     <unit id="metadata">

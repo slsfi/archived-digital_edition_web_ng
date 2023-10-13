@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Re
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { combineLatest, map, Observable, Subscription } from 'rxjs';
+import { combineLatest, map, Subscription } from 'rxjs';
 
 import { DownloadTextsModalPage } from 'src/app/modals/download-texts-modal/download-texts-modal';
 import { IllustrationModal } from 'src/app/modals/illustration/illustration.modal';

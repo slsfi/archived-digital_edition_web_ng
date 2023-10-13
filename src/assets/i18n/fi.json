@@ -185,18 +185,16 @@
     "About": {
         "LoadingError": "Sivun sisällön lataus epäonnistui."
     },
-    "MediaCollections": {
-        "MediaCollections": "Faksimilet",
-        "locations": "Paikat",
-        "location": "Paikka",
-        "tags": "Aihesanat",
-        "tag": "Aihesana",
-        "subjects": "Henkilöt",
-        "subject": "Henkilö",
-        "collections": "Kokoelmat",
-        "works": "Teokset",
-        "photos": "kuvaa",
-        "altText": "Galleriakuva"
+    "MediaCollection": {
+        "MediaCollections": "Kuvakokoelmat",
+        "GenericAltText": "Galleriakuva",
+        "FilterKeyword": "Aihesanarajaus",
+        "FilterPerson": "Henkilörajaus",
+        "FilterPlace": "Paikkarajaus",
+        "Showing": "Näytetään",
+        "Images": "kuvaa",
+        "Collections": "kokoelmaa",
+        "ClearFilters": "Poista aktiiviset rajaukset"
     },
 	"media": "Kuvat",
     "TOC": {
