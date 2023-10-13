@@ -291,7 +291,7 @@ export const config: Config = {
         sv: "Alt-text",
         fi: "Alt-teksti"
       },
-      showTitles: false
+      showTitles: true
     },
     epub: {
       showTOCButton: true,
