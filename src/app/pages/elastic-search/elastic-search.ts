@@ -5,14 +5,14 @@ import { IonContent } from '@ionic/angular';
 import { catchError, map, merge, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
-import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from 'src/app/models/elastic-search.model';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { ElasticSearchService } from 'src/app/services/elastic-search.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { UrlService } from 'src/app/services/url.service';
-import { UserSettingsService } from 'src/app/services/user-settings.service';
-import { config } from "src/assets/config/config";
-import { isBrowser } from 'src/standalone/utility-functions';
+import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from '@models/elastic-search.model';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { ElasticSearchService } from '@services/elastic-search.service';
+import { MdContentService } from '@services/md-content.service';
+import { UrlService } from '@services/url.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { config } from 'src/assets/config/config';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

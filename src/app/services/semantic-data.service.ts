@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { CommonFunctionsService } from './common-functions.service';
 import { config } from 'src/assets/config/config';
-import { convertNamedEntityTypeForBackend } from 'src/standalone/utility-functions';
+import { convertNamedEntityTypeForBackend } from '@utility-functions';
 
 
 @Injectable({

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { MdContentService } from 'src/app/services/md-content.service';
+import { MdContentService } from '@services/md-content.service';
 import { config } from 'src/assets/config/config';
 
 

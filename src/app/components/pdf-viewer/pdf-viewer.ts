@@ -1,11 +1,11 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
-import { CommonModule, DOCUMENT } from "@angular/common";
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { IsExternalURLPipe } from 'src/pipes/is-external-url.pipe';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { config } from "src/assets/config/config";
+import { IsExternalURLPipe } from 'src/app/pipes/is-external-url.pipe';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { config } from 'src/assets/config/config';
 
 
 @Component({

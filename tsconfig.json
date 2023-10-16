@@ -24,7 +24,17 @@
     ],
     "useDefineForClassFields": false,
     "allowSyntheticDefaultImports": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@components/*": ["src/app/components/*"],
+      "@directives/*": ["src/app/directives/*"],
+      "@modals/*": ["src/app/dialogs/modals/*"],
+      "@models/*": ["src/app/models/*"],
+      "@popovers/*": ["src/app/dialogs/popovers/*"],
+      "@pipes/*": ["src/app/pipes/*"],
+      "@services/*": ["src/app/services/*"],
+      "@utility-functions": ["src/app/utils/utility-functions"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

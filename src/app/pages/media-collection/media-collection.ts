@@ -5,15 +5,15 @@ import { ModalController } from '@ionic/angular';
 import { catchError, combineLatest, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
-import { GalleryItem } from 'src/app/models/gallery-item-model';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { DocumentHeadService } from 'src/app/services/document-head.service';
-import { FullscreenImageViewerModal } from 'src/app/modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { ReferenceDataModal } from 'src/app/modals/reference-data/reference-data.modal';
-import { MediaCollectionService } from 'src/app/services/media-collection.service';
-import { MdContentService } from 'src/app/services/md-content.service';
+import { GalleryItem } from '@models/gallery-item-model';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { DocumentHeadService } from '@services/document-head.service';
+import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { MediaCollectionService } from '@services/media-collection.service';
+import { MdContentService } from '@services/md-content.service';
 import { config } from 'src/assets/config/config';
-import { UrlService } from 'src/app/services/url.service';
+import { UrlService } from '@services/url.service';
 
 
 @Component({

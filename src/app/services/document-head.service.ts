@@ -1,8 +1,8 @@
 import { Inject, Injectable, LOCALE_ID, Renderer2, RendererFactory2 } from '@angular/core';
-import { DOCUMENT } from "@angular/common";
-import { Meta, Title } from "@angular/platform-browser";
+import { DOCUMENT } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
 
-import { config } from "src/assets/config/config";
+import { config } from 'src/assets/config/config';
 
 
 @Injectable({

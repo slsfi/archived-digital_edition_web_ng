@@ -7,9 +7,10 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { DigitalEditionsApp } from './app.component';
-import { CollectionSideMenu } from './components/collection-side-menu/collection-side-menu';
-import { MainSideMenu } from './components/main-side-menu/main-side-menu';
-import { TopMenuComponent } from './components/top-menu/top-menu';
+import { CollectionSideMenu } from '@components/menus/collection-side/collection-side-menu';
+import { MainSideMenu } from '@components/menus/main-side/main-side-menu';
+import { TopMenuComponent } from '@components/menus/top/top-menu';
+
 
 @NgModule({
   declarations: [

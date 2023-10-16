@@ -5,13 +5,13 @@ import { IonContent, ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
-import { IndexFilterModal } from 'src/app/modals/index-filter/index-filter.modal';
-import { SemanticDataObjectModal } from 'src/app/modals/semantic-data-object/semantic-data-object.modal';
-import { CommonFunctionsService } from 'src/app/services/common-functions.service';
-import { MdContentService } from 'src/app/services/md-content.service';
-import { SemanticDataService } from 'src/app/services/semantic-data.service';
-import { TooltipService } from 'src/app/services/tooltip.service';
-import { config } from "src/assets/config/config";
+import { IndexFilterModal } from '@modals/index-filter/index-filter.modal';
+import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
+import { CommonFunctionsService } from '@services/common-functions.service';
+import { MdContentService } from '@services/md-content.service';
+import { SemanticDataService } from '@services/semantic-data.service';
+import { TooltipService } from '@services/tooltip.service';
+import { config } from 'src/assets/config/config';
 
 
 /**
