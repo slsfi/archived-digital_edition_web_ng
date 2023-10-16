@@ -53,7 +53,7 @@ export class VariantsComponent implements OnInit {
   }
 
   loadVariantTexts() {
-    this.textService.getVariants(this.textItemID).subscribe({
+    this.textService.getCollectionVariantTexts(this.textItemID).subscribe({
       next: (res) => {
         if (res?.variations?.length > 0) {
           this.variants = res.variations;

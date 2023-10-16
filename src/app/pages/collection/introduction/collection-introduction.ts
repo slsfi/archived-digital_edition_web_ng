@@ -191,7 +191,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   private loadIntroduction(id: string, lang: string) {
     this.text = '';
     this.textLoading = true;
-    this.textService.getIntroduction(id, lang).subscribe({
+    this.textService.getCollectionIntroductionText(id, lang).subscribe({
       next: (res: any) => {
         if (res?.content) {
           this.textLoading = false;

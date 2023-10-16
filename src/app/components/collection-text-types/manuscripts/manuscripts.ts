@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
-import { ScrollService } from '@services/scroll.service';
+import { config } from '@config';
 import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
+import { ScrollService } from '@services/scroll.service';
 import { TextService } from '@services/text.service';
-import { config } from '@config';
 
 
 @Component({
@@ -53,7 +53,7 @@ export class ManuscriptsComponent implements OnInit {
   }
 
   loadManuscriptTexts() {
-    this.textService.getManuscripts(this.textItemID).subscribe({
+    this.textService.getCollectionManuscriptTexts(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.manuscripts?.length > 0 &&

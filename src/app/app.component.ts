@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Params, PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 
+import { config } from '@config';
 import { DocumentHeadService } from '@services/document-head.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { isBrowser } from '@utility-functions';
-import { config } from '@config';
 
 
 @Component({

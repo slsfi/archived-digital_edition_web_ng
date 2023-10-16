@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule, ModalController } from '@ionic/angular';
 
+import { config } from '@config';
 import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from '@models/facsimile.model';
@@ -11,7 +12,6 @@ import { FacsimileService } from '@services/facsimile.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { sortArrayOfObjectsNumerically } from '@utility-functions';
-import { config } from '@config';
 
 
 @Component({

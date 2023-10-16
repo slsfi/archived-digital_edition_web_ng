@@ -85,7 +85,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   loadReadText() {
-    this.textService.getEstablishedText(this.textItemID).subscribe({
+    this.textService.getCollectionReadText(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.content &&

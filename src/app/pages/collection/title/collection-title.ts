@@ -74,7 +74,7 @@ export class CollectionTitlePage implements OnInit {
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {
     if (!this.titleFromMarkdownFolderId) {
-      return this.textService.getTitlePage(id, lang).pipe(
+      return this.textService.getCollectionTitleText(id, lang).pipe(
         map((res: any) => {
           if (res?.content) {
             let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');

@@ -68,7 +68,7 @@ export class CollectionForewordPage implements OnInit {
   }
 
   private loadForeword(id: string, lang: string): Observable<SafeHtml> {
-    return this.textService.getForewordPage(id, lang).pipe(
+    return this.textService.getCollectionForewordText(id, lang).pipe(
       map((res: any) => {
         if (res?.content && res?.content !== 'File not found') {
           let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');

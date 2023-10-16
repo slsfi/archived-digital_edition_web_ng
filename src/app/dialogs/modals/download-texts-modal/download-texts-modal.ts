@@ -2,12 +2,12 @@ import { Component, Inject, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
+import { config } from '@config';
+import { CollectionsService } from '@services/collections.service';
 import { CommentService } from '@services/comment.service';
-import { ScrollService } from '@services/scroll.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { TextService } from '@services/text.service';
-import { config } from '@config';
 import { concatenateNames } from '@utility-functions';
 
 
@@ -49,8 +49,8 @@ export class DownloadTextsModalPage {
   textSizeTranslation?: string;
 
   constructor(
+    private collectionsService: CollectionsService,
     private commentService: CommentService,
-    private commonFunctions: ScrollService,
     private params: NavParams,
     private readPopoverService: ReadPopoverService,
     private textService: TextService,
@@ -172,7 +172,7 @@ export class DownloadTextsModalPage {
     }
 
     // Get collection title from database
-    this.textService.getCollection(this.collectionId as string).subscribe({
+    this.collectionsService.getCollection(this.collectionId as string).subscribe({
       next: (collectionData) => {
         if (collectionData[0] !== undefined) {
           this.collectionTitle = collectionData[0]['name'];
@@ -310,7 +310,7 @@ export class DownloadTextsModalPage {
   }
 
   private openIntroductionForPrint() {
-    this.textService.getIntroduction(this.textId, this.activeLocale).subscribe({
+    this.textService.getCollectionIntroductionText(this.textId, this.activeLocale).subscribe({
       next: (res) => {
         let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
         content = this.constructHtmlForPrint(content, 'intro');
@@ -341,7 +341,7 @@ export class DownloadTextsModalPage {
   }
 
   private openEstablishedForPrint() {
-    this.textService.getEstablishedText(this.textId).subscribe({
+    this.textService.getCollectionReadText(this.textId).subscribe({
       next: content => {
         if (content === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
           content = '';
