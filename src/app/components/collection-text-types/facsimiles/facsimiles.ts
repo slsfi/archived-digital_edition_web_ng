@@ -11,7 +11,7 @@ import { FacsimileService } from '@services/facsimile.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { DraggableImageDirective } from '@directives/draggable-image.directive';
+import { DraggableImageDirective } from 'src/app/directives/draggable-image.directive';
 
 
 @Component({

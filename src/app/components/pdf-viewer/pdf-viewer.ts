@@ -3,7 +3,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
+import { IsExternalURLPipe } from 'src/app/pipes/is-external-url.pipe';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { config } from 'src/assets/config/config';
 

@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Parser } from 'htmlparser2';
 
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Injectable({

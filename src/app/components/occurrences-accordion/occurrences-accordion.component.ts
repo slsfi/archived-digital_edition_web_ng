@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
-import { OccurrenceCollectionTextPageQueryparamsPipe } from '@pipes/occurrence-collection-text-page-queryparams.pipe';
+import { CollectionPagePathPipe } from 'src/app/pipes/collection-page-path.pipe';
+import { OccurrenceCollectionTextPageQueryparamsPipe } from 'src/app/pipes/occurrence-collection-text-page-queryparams.pipe';
 import { Occurrence } from '@models/occurrence.model';
 import { SingleOccurrence } from '@models/single-occurrence.model';
 import { CommonFunctionsService } from '@services/common-functions.service';

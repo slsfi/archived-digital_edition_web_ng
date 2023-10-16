@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { config } from 'src/assets/config/config';
-import { convertNamedEntityTypeForBackend } from 'src/standalone/utility-functions';
+import { convertNamedEntityTypeForBackend } from '@utility-functions';
 
 
 @Injectable({

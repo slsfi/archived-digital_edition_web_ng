@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

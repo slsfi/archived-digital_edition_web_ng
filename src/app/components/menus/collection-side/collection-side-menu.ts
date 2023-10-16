@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
-import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
+import { CollectionPagePathPipe } from 'src/app/pipes/collection-page-path.pipe';
+import { CollectionPagePositionQueryparamPipe } from 'src/app/pipes/collection-page-position-queryparam.pipe';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { DocumentHeadService } from '@services/document-head.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

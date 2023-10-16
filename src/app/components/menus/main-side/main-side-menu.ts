@@ -4,7 +4,7 @@ import { RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
+import { ParentChildPagePathPipe } from 'src/app/pipes/parent-child-page-path.pipe';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { DocumentHeadService } from '@services/document-head.service';
 import { CollectionsService } from '@services/collections.service';

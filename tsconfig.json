@@ -27,11 +27,13 @@
     "strictPropertyInitialization": false,
     "paths": {
       "@components/*": ["src/app/components/*"],
-      "@directives/*": ["src/directives/*"],
-      "@modals/*": ["src/app/modals/*"],
+      "@directives/*": ["src/app/directives/*"],
+      "@modals/*": ["src/app/dialogs/modals/*"],
       "@models/*": ["src/app/models/*"],
-      "@pipes/*": ["src/pipes/*"],
-      "@services/*": ["src/app/services/*"]
+      "@popovers/*": ["src/app/dialogs/popovers/*"],
+      "@pipes/*": ["src/app/pipes/*"],
+      "@services/*": ["src/app/services/*"],
+      "@utility-functions": ["src/app/utils/utility-functions"]
     }
   },
   "angularCompilerOptions": {

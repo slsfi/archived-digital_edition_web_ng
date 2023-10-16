@@ -6,14 +6,14 @@ import { AlertController, IonicModule, ModalController, PopoverController } from
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
-import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
+import { IsExternalURLPipe } from 'src/app/pipes/is-external-url.pipe';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
+import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

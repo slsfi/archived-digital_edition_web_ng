@@ -3,37 +3,33 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
-import { marked } from 'marked';
 
-import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CommonFunctionsService } from '@services/common-functions.service';
-import { MdContentService } from '@services/md-content.service';
 import { ReadPopoverService } from '@services/read-popover.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { TextService } from '@services/text.service';
+import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
 
 
 @Component({
-  selector: 'page-title',
-  templateUrl: 'collection-title.html',
-  styleUrls: ['collection-title.scss'],
+  selector: 'page-foreword',
+  templateUrl: 'collection-foreword.html',
+  styleUrls: ['collection-foreword.scss']
 })
-export class CollectionTitlePage implements OnInit {
+export class CollectionForewordPage implements OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
   searchMatches: string[] = [];
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
-  titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
 
   constructor(
     private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
     private modalController: ModalController,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
@@ -43,9 +39,8 @@ export class CollectionTitlePage implements OnInit {
     private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.titleFromMarkdownFolderId = config.collections?.titlesMarkdownFolderNumber ?? '';
-    this.showURNButton = config.page?.title?.showURNButton ?? false;
-    this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
+    this.showURNButton = config.page?.foreword?.showURNButton ?? false;
+    this.showViewOptionsButton = config.page?.foreword?.showViewOptionsButton ?? true;
   }
 
   ngOnInit() {
@@ -65,46 +60,28 @@ export class CollectionTitlePage implements OnInit {
         }
       }),
       switchMap(({collectionID}) => {
-        return this.loadTitle(collectionID, this.activeLocale);
+        return this.loadForeword(collectionID, this.activeLocale);
       })
     );
   }
 
-  private loadTitle(id: string, lang: string): Observable<SafeHtml> {
-    if (!this.titleFromMarkdownFolderId) {
-      return this.textService.getTitlePage(id, lang).pipe(
-        map((res: any) => {
-          if (res?.content) {
-            let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-            text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
-            return this.sanitizer.bypassSecurityTrustHtml(text);
-          } else {
-            return of(this.sanitizer.bypassSecurityTrustHtml(
-              $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
-            ));
-          }
-        }),
-        catchError((e: any) => {
-          console.error(e);
-          return of(this.sanitizer.bypassSecurityTrustHtml(
-            $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
-          ));
-        })
-      );
-    } else {
-      return this.getMdContent(`${lang}-${this.titleFromMarkdownFolderId}-${id}`);
-    }
-  }
-
-  private getMdContent(fileID: string): Observable<SafeHtml> {
-    return this.mdContentService.getMdContent(fileID).pipe(
+  private loadForeword(id: string, lang: string): Observable<SafeHtml> {
+    return this.textService.getForewordPage(id, lang).pipe(
       map((res: any) => {
-        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+        if (res?.content && res?.content !== 'File not found') {
+          let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          return this.sanitizer.bypassSecurityTrustHtml(text);
+        } else {
+          return of(this.sanitizer.bypassSecurityTrustHtml(
+            $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
+          ));
+        }
       }),
       catchError((e: any) => {
         console.error(e);
         return of(this.sanitizer.bypassSecurityTrustHtml(
-          $localize`:@@Read.TitlePage.NoTitle:Titelbladet kunde inte laddas.`
+          $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
         ));
       })
     );
@@ -139,7 +116,7 @@ export class CollectionTitlePage implements OnInit {
   async showReference() {
     const modal = await this.modalController.create({
       component: ReferenceDataModal,
-      componentProps: { origin: 'page-title' }
+      componentProps: { origin: 'page-foreword' }
     });
 
     modal.present();

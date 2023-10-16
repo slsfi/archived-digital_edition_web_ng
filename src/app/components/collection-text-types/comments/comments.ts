@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
+import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { ReadPopoverService } from '@services/read-popover.service';
-import { IllustrationModal } from '@modals/illustration/illustration.modal';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

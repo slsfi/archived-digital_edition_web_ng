@@ -8,14 +8,14 @@ import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-te
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
-import { ViewOptionsPopover } from '@modals/view-options/view-options.popover';
+import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

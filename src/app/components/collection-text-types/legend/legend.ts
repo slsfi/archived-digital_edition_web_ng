@@ -8,7 +8,7 @@ import { marked } from 'marked';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { MdContentService } from '@services/md-content.service';
 import { ReadPopoverService } from '@services/read-popover.service';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({

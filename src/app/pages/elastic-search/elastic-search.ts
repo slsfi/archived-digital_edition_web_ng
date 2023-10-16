@@ -12,7 +12,7 @@ import { MdContentService } from '@services/md-content.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from 'src/standalone/utility-functions';
+import { isBrowser } from '@utility-functions';
 
 
 @Component({
