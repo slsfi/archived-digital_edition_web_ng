@@ -6,14 +6,14 @@ import { AlertController, IonicModule, ModalController, PopoverController } from
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
-import { IsExternalURLPipe } from 'src/app/pipes/is-external-url.pipe';
+import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { concatenateNames, isBrowser, numberIsEven } from '@utility-functions';
 
 
 @Component({
@@ -204,9 +204,9 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
                 }
                 // Form concatenated string with epub writer names
                 if (this.epubCreators.length > 0) {
-                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubCreators, ',');
+                  this.epubWritersString = concatenateNames(this.epubCreators, ',');
                 } else if (this.epubContributors.length > 0) {
-                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubContributors, ',');
+                  this.epubWritersString = concatenateNames(this.epubContributors, ',');
                 }
               }
             } catch {}
@@ -304,12 +304,12 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     const area = this.elementRef.nativeElement.querySelector('#epub-render-area');
     let areaWidth: number | string = Math.floor(area?.getBoundingClientRect().width || 1);
     let areaHeight: number | string = Math.floor(area?.getBoundingClientRect().height || 1);
-    if (areaWidth > 1 && !this.commonFunctions.numberIsEven(areaWidth)) {
+    if (areaWidth > 1 && !numberIsEven(areaWidth)) {
       areaWidth = areaWidth - 1;
     } else {
       areaWidth = '100%';
     }
-    if (areaHeight > 1 && !this.commonFunctions.numberIsEven(areaHeight)) {
+    if (areaHeight > 1 && !numberIsEven(areaHeight)) {
       areaHeight = areaHeight - 1;
     } else {
       areaHeight = '100%';
@@ -392,10 +392,10 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     if (area) {
       let areaWidth = Math.floor(area?.getBoundingClientRect().width || 1);
       let areaHeight = Math.floor(area?.getBoundingClientRect().height || 1);
-      if (!this.commonFunctions.numberIsEven(areaWidth)) {
+      if (!numberIsEven(areaWidth)) {
         areaWidth = areaWidth - 1;
       }
-      if (!this.commonFunctions.numberIsEven(areaHeight)) {
+      if (!numberIsEven(areaHeight)) {
         areaHeight = areaHeight - 1;
       }
       if (areaWidth > 0 && areaHeight > 0) {

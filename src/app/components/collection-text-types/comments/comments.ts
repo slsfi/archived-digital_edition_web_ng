@@ -7,7 +7,7 @@ import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { ReadPopoverService } from '@services/read-popover.service';
-import { isBrowser } from '@utility-functions';
+import { concatenateNames, isBrowser } from '@utility-functions';
 
 
 @Component({
@@ -89,8 +89,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
                 receivers.push(subject['mottagare']);
               }
             });
-            this.sender = this.commonFunctions.concatenateNames(senders);
-            this.receiver = this.commonFunctions.concatenateNames(receivers);
+            this.sender = concatenateNames(senders);
+            this.receiver = concatenateNames(receivers);
           }
         }
 

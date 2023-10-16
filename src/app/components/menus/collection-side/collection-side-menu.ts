@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from 'src/app/pipes/collection-page-path.pipe';
-import { CollectionPagePositionQueryparamPipe } from 'src/app/pipes/collection-page-position-queryparam.pipe';
+import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
+import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { DocumentHeadService } from '@services/document-head.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { addOrRemoveValueInArray, isBrowser, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -249,7 +249,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    this.commonFunctions.sortArrayOfObjectsAlphabetically(alphabeticalMenu, 'text');
+    sortArrayOfObjectsAlphabetically(alphabeticalMenu, 'text');
     return alphabeticalMenu;
   }
 
@@ -267,9 +267,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
 
     if (primarySortKey === 'date') {
-      this.commonFunctions.sortArrayOfObjectsNumerically(orderedList, primarySortKey, 'asc');
+      sortArrayOfObjectsNumerically(orderedList, primarySortKey, 'asc');
     } else {
-      this.commonFunctions.sortArrayOfObjectsAlphabetically(orderedList, primarySortKey);
+      sortArrayOfObjectsAlphabetically(orderedList, primarySortKey);
     }
 
     const categoricalMenu: any[] = [];
@@ -289,9 +289,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
       if (prevCategory !== currentCategory) {
         if (secondarySortKey === 'date') {
-          this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+          sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
         } else if (secondarySortKey) {
-          this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+          sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
         }
         categoricalMenu[categoricalMenu.length - 1].children = childItems;
         childItems = [];
@@ -303,9 +303,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
     if (childItems.length > 0) {
       if (secondarySortKey === 'date') {
-        this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+        sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
       } else if (secondarySortKey) {
-        this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+        sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
       }
     }
 
@@ -320,7 +320,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   }
 
   toggle(menuItem: any) {
-    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
+    addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
   }
 
   setActiveMenuSorting(event: any) {

@@ -8,6 +8,7 @@ import { ReadPopoverService } from '@services/read-popover.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { TextService } from '@services/text.service';
 import { config } from 'src/assets/config/config';
+import { concatenateNames } from '@utility-functions';
 
 
 @Component({
@@ -410,8 +411,8 @@ export class DownloadTextsModalPage {
                       receivers.push(subject['mottagare']);
                     }
                   });
-                  concatSenders = this.commonFunctions.concatenateNames(senders);
-                  concatReceivers = this.commonFunctions.concatenateNames(receivers);
+                  concatSenders = concatenateNames(senders);
+                  concatReceivers = concatenateNames(receivers);
                 }
               }
               if (metadata['letter'] !== undefined && metadata['letter'] !== null) {

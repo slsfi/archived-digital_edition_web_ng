@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { DraggableImageDirective } from 'src/app/directives/draggable-image.directive';
+import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { isBrowser } from '@utility-functions';
 
 

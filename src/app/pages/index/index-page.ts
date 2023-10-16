@@ -7,10 +7,10 @@ import { marked } from 'marked';
 
 import { IndexFilterModal } from '@modals/index-filter/index-filter.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { MdContentService } from '@services/md-content.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TooltipService } from '@services/tooltip.service';
+import { sortArrayOfObjectsAlphabetically } from '@utility-functions';
 import { config } from 'src/assets/config/config';
 
 
@@ -43,7 +43,6 @@ export class IndexPage implements OnInit {
   showLoading: boolean = true;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private mdContentService: MdContentService,
     private modalCtrl: ModalController,
     public route: ActivatedRoute,
@@ -474,7 +473,7 @@ export class IndexPage implements OnInit {
     const data = list;
 
     // Sort alphabetically
-    this.commonFunctions.sortArrayOfObjectsAlphabetically(data, sortableKey);
+    sortArrayOfObjectsAlphabetically(data, sortableKey);
 
     // Check when first character changes in order to divide names into alphabetical groups
     for (let i = 0; i < data.length ; i++) {

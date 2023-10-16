@@ -4,12 +4,12 @@ import { RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-import { ParentChildPagePathPipe } from 'src/app/pipes/parent-child-page-path.pipe';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
 import { DocumentHeadService } from '@services/document-head.service';
 import { CollectionsService } from '@services/collections.service';
 import { MediaCollectionService } from '@services/media-collection.service';
 import { MdContentService } from '@services/md-content.service';
+import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 import { config } from 'src/assets/config/config';
 
 
@@ -36,7 +36,6 @@ export class MainSideMenu implements OnInit, OnChanges {
   ]; // app.component handles setting html-title for these
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private headService: DocumentHeadService,
     private mdcontentService: MdContentService,
     private collectionsService: CollectionsService,
@@ -207,7 +206,7 @@ export class MainSideMenu implements OnInit, OnChanges {
     return this.mediaCollectionService.getMediaCollections(this.activeLocale).pipe(
       map((res: any) => {
         if (res?.length > 0) {
-          this.commonFunctions.sortArrayOfObjectsAlphabetically(res, 'title');
+          sortArrayOfObjectsAlphabetically(res, 'title');
           this.recursivelyAddParentPagePath(res, '/media-collection');
           res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collection' });
           res = [{ title: $localize`:@@TOC.MediaCollections:Bildbank`, children: res }];
@@ -337,7 +336,7 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   toggle(menuItem: any) {
-    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.nodeId);
+    addOrRemoveValueInArray(this.selectedMenu, menuItem.nodeId);
   }
 
 }

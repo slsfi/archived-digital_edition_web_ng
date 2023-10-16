@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { MathJaxDirective } from 'src/app/directives/math-jax.directive';
+import { MathJaxDirective } from '@directives/math-jax.directive';
 import { CommentsComponent } from '@components/collection-text-types/comments/comments';
 import { FacsimilesComponent } from '@components/collection-text-types/facsimiles/facsimiles';
 import { IllustrationsComponent } from '@components/collection-text-types/illustrations/illustrations';

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { UserSettingsService } from '@services/user-settings.service';
+import { sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 import { config } from 'src/assets/config/config';
 
 
@@ -510,9 +511,9 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
     if (this.flattened.length > 0 && primarySortKey && secondarySortKey) {
       if (primarySortKey === 'date') {
-        this.commonFunctions.sortArrayOfObjectsNumerically(this.flattened, primarySortKey, 'asc');
+        sortArrayOfObjectsNumerically(this.flattened, primarySortKey, 'asc');
       } else {
-        this.commonFunctions.sortArrayOfObjectsAlphabetically(this.flattened, primarySortKey);
+        sortArrayOfObjectsAlphabetically(this.flattened, primarySortKey);
       }
 
       const categorized: any[] = [];
@@ -526,9 +527,9 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
         }
         if (currentCategory !== prevCategory) {
           if (secondarySortKey === 'date') {
-            this.commonFunctions.sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
+            sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
           } else if (secondarySortKey) {
-            this.commonFunctions.sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
+            sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
           }
           categorized.push(categoryItems);
           categoryItems = [];
@@ -538,9 +539,9 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
       if (categoryItems.length > 0) {
         if (secondarySortKey === 'date') {
-          this.commonFunctions.sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
+          sortArrayOfObjectsNumerically(categoryItems, secondarySortKey, 'asc');
         } else if (secondarySortKey) {
-          this.commonFunctions.sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
+          sortArrayOfObjectsAlphabetically(categoryItems, secondarySortKey);
         }
         categorized.push(categoryItems);
       }

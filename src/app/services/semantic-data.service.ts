@@ -2,9 +2,8 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { CommonFunctionsService } from './common-functions.service';
 import { config } from 'src/assets/config/config';
-import { convertNamedEntityTypeForBackend } from '@utility-functions';
+import { convertNamedEntityTypeForBackend, isEmptyObject } from '@utility-functions';
 
 
 @Injectable({
@@ -19,7 +18,6 @@ export class SemanticDataService {
   flattened: any;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -320,7 +318,7 @@ export class SemanticDataService {
 
     if (
       after_key !== undefined &&
-      !this.commonFunctions.isEmptyObject(after_key)
+      !isEmptyObject(after_key)
     ) {
       payload.aggs.unique_subjects.composite.after = after_key;
     }
@@ -433,7 +431,7 @@ export class SemanticDataService {
 
     if (
       after_key !== undefined &&
-      !this.commonFunctions.isEmptyObject(after_key)
+      !isEmptyObject(after_key)
     ) {
       payload.aggs.unique_places.composite.after = after_key;
     }
@@ -605,7 +603,7 @@ export class SemanticDataService {
 
     if (
       after_key !== undefined &&
-      !this.commonFunctions.isEmptyObject(after_key)
+      !isEmptyObject(after_key)
     ) {
       payload.aggs.unique_tags.composite.after = after_key;
     }

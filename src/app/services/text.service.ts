@@ -6,7 +6,7 @@ import { DomHandler } from 'domhandler';
 import { existsOne, findAll, getAttributeValue } from 'domutils';
 import { render } from 'dom-serializer';
 
-import { CommonFunctionsService } from './common-functions.service';
+import { isEmptyObject } from '@utility-functions';
 import { config } from 'src/assets/config/config';
 
 
@@ -22,7 +22,6 @@ export class TextService {
   activeCollectionTextMobileModeView: string = '';
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private http: HttpClient
   ) {
     this.appMachineName = config.app?.machineName ?? '';
@@ -226,7 +225,7 @@ export class TextService {
     text = text.replace(/assets\/images\/verk\/http/g, 'http');
 
     const galleries = config.collections?.mediaCollectionMappings ?? {};
-    const galleryId = !this.commonFunctions.isEmptyObject(galleries)
+    const galleryId = !isEmptyObject(galleries)
                       ? galleries[collectionId]
                       : undefined;
     const visibleInlineIllustrations = config.collections?.visibleInlineReadTextIllustrations ?? [];

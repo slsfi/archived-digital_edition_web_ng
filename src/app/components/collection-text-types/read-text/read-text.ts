@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { MathJaxDirective } from 'src/app/directives/math-jax.directive';
+import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommonFunctionsService } from '@services/common-functions.service';
 import { ReadPopoverService } from '@services/read-popover.service';

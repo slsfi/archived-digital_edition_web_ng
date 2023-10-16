@@ -5,10 +5,10 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subject, Subscription, timeout } from 'rxjs';
 
 import { OccurrencesAccordionComponent } from '@components/occurrences-accordion/occurrences-accordion.component';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { OccurrenceService } from '@services/occurence.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TooltipService } from '@services/tooltip.service';
+import { isEmptyObject } from '@utility-functions';
 import { config } from 'src/assets/config/config';
 
 
@@ -38,7 +38,6 @@ export class SemanticDataObjectModal implements OnInit {
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private occurrenceService: OccurrenceService,
     private modalCtrl: ModalController,
     private router: Router,
@@ -91,7 +90,7 @@ export class SemanticDataObjectModal implements OnInit {
               Array.isArray(res[i]) && res[i].length
             ) ||
             (
-              typeof res[i] === 'object' && res[i] !== null && !this.commonFunctions.isEmptyObject(res[i])
+              typeof res[i] === 'object' && res[i] !== null && !isEmptyObject(res[i])
             )
           ) {
             emptyData = false;

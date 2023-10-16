@@ -6,13 +6,12 @@ import { catchError, map, merge, Observable, of, Subject, Subscription, switchMa
 import { marked } from 'marked';
 
 import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from '@models/elastic-search.model';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { ElasticSearchService } from '@services/elastic-search.service';
 import { MdContentService } from '@services/md-content.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { isBrowser, isEmptyObject, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -59,7 +58,6 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
 
   constructor(
     private cf: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
     private elasticService: ElasticSearchService,
     private elementRef: ElementRef,
     private mdContentService: MdContentService,
@@ -331,7 +329,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
         // Clear all search parameters and trigger new search if no
         // query params and not initializing page
         if (
-          this.commonFunctions.isEmptyObject(queryParams) &&
+          isEmptyObject(queryParams) &&
           !this.initializing
         ) {
           this.query = '';
@@ -776,7 +774,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
           filtersAsArray.push(filterGroupObj[keys[i]]);
         }
         if (!config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order?._key) {
-          this.commonFunctions.sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
+          sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
         }
         return filtersAsArray;
       } else {

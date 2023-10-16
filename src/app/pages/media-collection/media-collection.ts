@@ -6,14 +6,14 @@ import { catchError, combineLatest, forkJoin, map, Observable, of, Subscription 
 import { marked } from 'marked';
 
 import { GalleryItem } from '@models/gallery-item-model';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { DocumentHeadService } from '@services/document-head.service';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { MediaCollectionService } from '@services/media-collection.service';
 import { MdContentService } from '@services/md-content.service';
-import { config } from 'src/assets/config/config';
 import { UrlService } from '@services/url.service';
+import { isEmptyObject, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
+import { config } from 'src/assets/config/config';
 
 
 @Component({
@@ -54,7 +54,6 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
     private headService: DocumentHeadService,
     private sanitizer: DomSanitizer,
     private mediaCollectionService: MediaCollectionService,
@@ -92,7 +91,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       map(([params, queryParams]) => ({...params, ...queryParams}))
     ).subscribe((routeParams: any) => {
       if (
-        (this.commonFunctions.isEmptyObject(routeParams) && this.mediaCollectionID !== '') ||
+        (isEmptyObject(routeParams) && this.mediaCollectionID !== '') ||
         (
           !routeParams.mediaCollectionID &&
           (
@@ -299,8 +298,8 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         galleryItemsList.push(galleryItem);
       });
 
-      !singleGallery && this.commonFunctions.sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
-      this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
+      !singleGallery && sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
+      sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
     }
     return galleryItemsList;
   }
@@ -416,7 +415,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       }
     });
     
-    this.commonFunctions.sortArrayOfObjectsAlphabetically(filterOptions, 'name');
+    sortArrayOfObjectsAlphabetically(filterOptions, 'name');
     if (type === 'person') {
       this.filterOptionsPersons = filterOptions;
     } else if (type === 'place') {
