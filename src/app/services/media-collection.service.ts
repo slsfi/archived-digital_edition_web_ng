@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { convertNamedEntityTypeForBackend } from '@utility-functions';
 
 

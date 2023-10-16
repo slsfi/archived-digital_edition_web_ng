@@ -5,11 +5,11 @@ import { IonicModule } from '@ionic/angular';
 
 import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
 import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { DocumentHeadService } from '@services/document-head.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
-import { config } from 'src/assets/config/config';
-import { addOrRemoveValueInArray, isBrowser, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
+import { config } from '@config';
+import { addOrRemoveValueInArray, flattenObjectTree, isBrowser, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -46,7 +46,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private cref: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private headService: DocumentHeadService,
     private tocService: TableOfContentsService
   ) {}
@@ -107,7 +107,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
           // Construct sorted menus
           if (this.sortOptions.length > 0) {
-            const flattenedMenu = this.commonFunctions.flattenObjectTree(data);
+            const flattenedMenu = flattenObjectTree(data);
             if (this.sortOptions.includes('alphabetical')) {
               this.alphabeticalMenu = this.constructAlphabeticalMenu(flattenedMenu);
             }

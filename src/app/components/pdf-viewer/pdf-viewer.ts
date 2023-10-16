@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

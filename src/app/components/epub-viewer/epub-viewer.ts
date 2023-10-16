@@ -9,10 +9,10 @@ import { Book } from 'epubjs';
 import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { concatenateNames, isBrowser, numberIsEven } from '@utility-functions';
 
 
@@ -67,7 +67,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(
     private alertController: AlertController,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,

@@ -4,7 +4,7 @@ import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { MdContentService } from '@services/md-content.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

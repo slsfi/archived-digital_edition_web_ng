@@ -6,11 +6,12 @@ import { catchError, combineLatest, map, Observable, of, switchMap, tap } from '
 
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({
@@ -28,9 +29,10 @@ export class CollectionForewordPage implements OnInit {
   text$: Observable<SafeHtml>;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
+    private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
     private route: ActivatedRoute,
@@ -53,7 +55,7 @@ export class CollectionForewordPage implements OnInit {
       tap(({collectionID, q}) => {
         this.collectionID = collectionID;
         if (q) {
-          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
+          this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
             this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
@@ -70,7 +72,7 @@ export class CollectionForewordPage implements OnInit {
       map((res: any) => {
         if (res?.content && res?.content !== 'File not found') {
           let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           return this.sanitizer.bypassSecurityTrustHtml(text);
         } else {
           return of(this.sanitizer.bypassSecurityTrustHtml(

@@ -11,7 +11,7 @@ import { MdContentService } from '@services/md-content.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TooltipService } from '@services/tooltip.service';
 import { sortArrayOfObjectsAlphabetically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 /**

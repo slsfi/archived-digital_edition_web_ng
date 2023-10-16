@@ -27,6 +27,7 @@
     "strictPropertyInitialization": false,
     "paths": {
       "@components/*": ["src/app/components/*"],
+      "@config": ["src/assets/config/config"],
       "@directives/*": ["src/app/directives/*"],
       "@modals/*": ["src/app/dialogs/modals/*"],
       "@models/*": ["src/app/models/*"],

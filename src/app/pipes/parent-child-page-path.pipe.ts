@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 /**

@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { CommentService } from '@services/comment.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Injectable({

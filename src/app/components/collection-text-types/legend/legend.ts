@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { MdContentService } from '@services/md-content.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { isBrowser } from '@utility-functions';
@@ -30,7 +30,7 @@ export class LegendComponent implements OnDestroy, OnInit {
   private unlistenClickEvents?: () => void;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private mdContentService: MdContentService,
     private ngZone: NgZone,

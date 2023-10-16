@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 declare var MathJax: {

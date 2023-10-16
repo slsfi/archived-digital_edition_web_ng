@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 
-import { CommonFunctionsService } from './common-functions.service';
-import { config } from 'src/assets/config/config';
+import { ScrollService } from './scroll.service';
+import { config } from '@config';
 
 
 @Injectable({
@@ -16,7 +16,7 @@ export class CommentService {
 
   constructor(
     private http: HttpClient,
-    public commonFunctions: CommonFunctionsService
+    public commonFunctions: ScrollService
   ) {
     this.activeCommentHighlight = {
       commentTimeOutId: null,

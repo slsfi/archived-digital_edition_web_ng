@@ -9,13 +9,14 @@ import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal'
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CommentService } from '@services/comment.service';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { isBrowser } from '@utility-functions';
 
 
@@ -77,10 +78,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   constructor(
     private commentService: CommentService,
-    public commonFunctions: CommonFunctionsService,
+    public commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
+    private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
@@ -218,7 +220,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       (queryParams: any) => {
 
         if (queryParams['q']) {
-          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(queryParams['q']);
+          this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(queryParams['q']);
         }
 
         if (queryParams['views']) {

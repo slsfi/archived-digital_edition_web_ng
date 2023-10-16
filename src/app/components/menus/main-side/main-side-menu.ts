@@ -10,7 +10,7 @@ import { CollectionsService } from '@services/collections.service';
 import { MediaCollectionService } from '@services/media-collection.service';
 import { MdContentService } from '@services/md-content.service';
 import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

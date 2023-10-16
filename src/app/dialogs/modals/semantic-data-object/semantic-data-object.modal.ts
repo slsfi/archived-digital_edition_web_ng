@@ -9,7 +9,7 @@ import { OccurrenceService } from '@services/occurence.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TooltipService } from '@services/tooltip.service';
 import { isEmptyObject } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

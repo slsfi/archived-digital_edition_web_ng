@@ -7,11 +7,10 @@ import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
 import { OccurrenceCollectionTextPageQueryparamsPipe } from '@pipes/occurrence-collection-text-page-queryparams.pipe';
 import { Occurrence } from '@models/occurrence.model';
 import { SingleOccurrence } from '@models/single-occurrence.model';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
-import { sortArrayOfObjectsAlphabetically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { flattenObjectTree, sortArrayOfObjectsAlphabetically } from '@utility-functions';
+import { config } from '@config';
 
 
 @Component({
@@ -38,7 +37,6 @@ export class OccurrencesAccordionComponent implements OnInit {
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private semanticDataService: SemanticDataService,
     private tocService: TableOfContentsService
   ) {
@@ -198,7 +196,7 @@ export class OccurrencesAccordionComponent implements OnInit {
       if (item.collection_id && item.publications) {
         this.tocService.getTableOfContents(item.collection_id).subscribe(
           (tocData: any) => {
-            const flattenedTocData: any[] = this.commonFunctions.flattenObjectTree(
+            const flattenedTocData: any[] = flattenObjectTree(
               tocData, 'children', 'itemId'
             );
             item.publications.forEach((pub: any) => {

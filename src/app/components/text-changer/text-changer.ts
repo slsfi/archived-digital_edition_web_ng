@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({
@@ -41,7 +41,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   tocItemId: string = '';
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private router: Router,
     private tocService: TableOfContentsService,
     public userSettingsService: UserSettingsService

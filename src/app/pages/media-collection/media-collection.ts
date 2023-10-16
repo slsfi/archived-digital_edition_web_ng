@@ -13,7 +13,7 @@ import { MediaCollectionService } from '@services/media-collection.service';
 import { MdContentService } from '@services/md-content.service';
 import { UrlService } from '@services/url.service';
 import { isEmptyObject, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

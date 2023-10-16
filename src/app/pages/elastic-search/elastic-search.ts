@@ -10,7 +10,7 @@ import { ElasticSearchService } from '@services/elastic-search.service';
 import { MdContentService } from '@services/md-content.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { isBrowser, isEmptyObject, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 

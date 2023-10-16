@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { UrlService } from '@services/url.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 /**

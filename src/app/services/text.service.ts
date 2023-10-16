@@ -7,7 +7,7 @@ import { existsOne, findAll, getAttributeValue } from 'domutils';
 import { render } from 'dom-serializer';
 
 import { isEmptyObject } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Injectable({

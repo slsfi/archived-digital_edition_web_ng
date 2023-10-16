@@ -5,7 +5,8 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { concatenateNames, isBrowser } from '@utility-functions';
 
@@ -31,10 +32,11 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   constructor(
     private commentService: CommentService,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
+    private parserService: HtmlParserService,
     public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer
@@ -58,7 +60,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.commentService.getComments(this.textItemID).subscribe({
       next: (text) => {
         if (text) {
-          text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
+          text = this.parserService.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           if (this.searchMatches.length) {
             this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);

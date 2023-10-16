@@ -9,12 +9,13 @@ import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { isBrowser } from '@utility-functions';
 
 
@@ -66,10 +67,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   private unlistenFirstTouchStartEvent?: () => void;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
+    private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
     public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
@@ -152,7 +154,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       }
 
       if (routeParams['q'] !== undefined) {
-        this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(routeParams['q']);
+        this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(routeParams['q']);
       }
 
       // If there is a collection id in the route params and it's
@@ -215,7 +217,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             this.hasSeparateIntroToc = false;
           }
 
-          textContent = this.commonFunctions.insertSearchMatchTags(textContent, this.searchMatches);
+          textContent = this.parserService.insertSearchMatchTags(textContent, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(textContent);
           // Try to scroll to a position in the text or first search match
           if (this.pos) {

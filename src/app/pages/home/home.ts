@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
 import { MdContentService } from '@services/md-content.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

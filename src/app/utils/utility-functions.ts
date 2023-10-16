@@ -68,6 +68,40 @@ export function decodeHtmlEntity(string: string): string {
 
 
 /**
+ * Given an object with nested objects in the property 'branchingKey',
+ * returns a flattened array of the object. If 'requiredKey' is not
+ * undefined, only objects that have a non-empty 'requiredKey' property
+ * are included.
+ */
+export function flattenObjectTree(
+    data: any,
+    branchingKey: string = 'children',
+    requiredKey ?: string
+) {
+    const dataWithoutChildren = (({ [branchingKey]: _, ...d }) => d)(data);
+    let list: any[] = [];
+    if (!requiredKey || (requiredKey && data[requiredKey])) {
+        list = [dataWithoutChildren];
+    }
+    if (
+        !data[branchingKey] && (
+            !requiredKey || (requiredKey && data[requiredKey])
+        )
+    ) {
+        return list;
+    }
+    if (data[branchingKey]?.length) {
+        for (const child of data[branchingKey]) {
+            list = list.concat(
+                flattenObjectTree(child, branchingKey, requiredKey)
+            );
+        }
+    }
+    return list;
+}
+
+
+/**
  * Checks if the code is running in a browser by checking the existance
  * of the window object.
  * @returns boolean

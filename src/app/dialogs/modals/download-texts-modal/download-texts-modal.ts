@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
 import { CommentService } from '@services/comment.service';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
 import { TextService } from '@services/text.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { concatenateNames } from '@utility-functions';
 
 
@@ -50,7 +50,7 @@ export class DownloadTextsModalPage {
 
   constructor(
     private commentService: CommentService,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private params: NavParams,
     private readPopoverService: ReadPopoverService,
     private textService: TextService,

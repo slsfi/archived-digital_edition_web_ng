@@ -5,7 +5,7 @@ import { filter, Subscription } from 'rxjs';
 import { DocumentHeadService } from '@services/document-head.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { isBrowser } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { MediaCollectionService } from '@services/media-collection.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({

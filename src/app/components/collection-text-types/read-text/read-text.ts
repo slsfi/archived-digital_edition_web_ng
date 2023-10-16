@@ -5,12 +5,13 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
 import { isBrowser } from '@utility-functions';
+import { config } from '@config';
 
 
 @Component({
@@ -35,10 +36,11 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   private unlistenClickEvents?: () => void;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
+    private parserService: HtmlParserService,
     public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
@@ -92,7 +94,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           const collectionID = this.textItemID.split('_')[0];
           let text = res.content as string;
           text = this.textService.postprocessEstablishedText(text, collectionID);
-          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           this.illustrationsVisibleInReadtext = this.textService.readTextHasVisibleIllustrations(text);
 

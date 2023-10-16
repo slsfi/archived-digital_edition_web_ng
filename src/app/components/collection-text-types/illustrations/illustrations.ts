@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
 
@@ -28,7 +28,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   viewAll: boolean = true;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private modalCtrl: ModalController,
     public readPopoverService: ReadPopoverService,
     private textService: TextService

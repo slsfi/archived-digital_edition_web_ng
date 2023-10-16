@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { TextService } from '@services/text.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({
@@ -35,8 +36,9 @@ export class VariantsComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
+    private parserService: HtmlParserService,
     public readPopoverService: ReadPopoverService,
     private sanitizer: DomSanitizer,
     private textService: TextService
@@ -100,7 +102,7 @@ export class VariantsComponent implements OnInit {
     }
     if (this.selectedVariant) {
       let text = this.postprocessVariantText(this.selectedVariant.content);
-      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+      text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
     }
   }

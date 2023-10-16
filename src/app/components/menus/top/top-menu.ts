@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 import { isBrowser } from '@utility-functions';
 
 

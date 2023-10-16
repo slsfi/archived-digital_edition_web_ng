@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { ScrollService } from '@services/scroll.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { isBrowser } from '@utility-functions';
@@ -34,7 +34,7 @@ export class FullscreenImageViewerModal implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private commonFunctions: CommonFunctionsService,
+    private commonFunctions: ScrollService,
     public userSettingsService: UserSettingsService
   ) {}
 

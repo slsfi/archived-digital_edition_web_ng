@@ -11,7 +11,7 @@ import { FacsimileService } from '@services/facsimile.service';
 import { ReadPopoverService } from '@services/read-popover.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { sortArrayOfObjectsNumerically } from '@utility-functions';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({
