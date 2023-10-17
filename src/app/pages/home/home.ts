@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { config } from '@config';
 
 
@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
   titleOnImage: boolean = false;
 
   constructor(
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private router: Router,
     private sanitizer: DomSanitizer,
     @Inject(LOCALE_ID) private activeLocale: string

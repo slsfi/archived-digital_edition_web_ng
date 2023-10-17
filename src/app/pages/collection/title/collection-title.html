@@ -20,12 +20,12 @@
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
   <div class="scroll-content-container">
     <ng-container *ngIf="(text$ | async) as text; else loading">
-      <div
+      <div *ngIf="(textsize$ | async) as textsize"
             [class.tei]="!titleFromMarkdownFolderId"
             [class.teiContainer]="!titleFromMarkdownFolderId"
             [class.markdown]="titleFromMarkdownFolderId"
             [class.md_content]="titleFromMarkdownFolderId"
-            [ngClass]="((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
+            [ngClass]="((textsize==0)?'xsmallFontSize':(textsize==1)?'smallFontSize':(textsize==2)?'mediumFontSize':(textsize==3)?'largeFontSize':'xlargeFontSize')"
             [innerHTML]="text"
       ></div>
     </ng-container>

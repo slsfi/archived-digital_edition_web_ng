@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
 import { config } from '@config';
+import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
 import { CommentService } from '@services/comment.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { TableOfContentsService } from '@services/table-of-contents.service';
-import { TextService } from '@services/text.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames } from '@utility-functions';
 
 
@@ -49,13 +50,14 @@ export class DownloadTextsModalPage {
   textSizeTranslation?: string;
 
   constructor(
+    private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private commentService: CommentService,
     private params: NavParams,
-    private readPopoverService: ReadPopoverService,
-    private textService: TextService,
+    private parserService: HtmlParserService,
     private tocService: TableOfContentsService,
-    private viewCtrl: ModalController,
+    private modalCtrl: ModalController,
+    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     // Get configs
@@ -227,7 +229,7 @@ export class DownloadTextsModalPage {
     }
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.textService.getDownloadableIntroduction(this.textId, format, this.activeLocale).subscribe({
+      this.collectionContentService.getDownloadableIntroduction(this.textId, format, this.activeLocale).subscribe({
         next: (content) => {
           const blob = new Blob([String(content)], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
@@ -247,7 +249,7 @@ export class DownloadTextsModalPage {
       });
     } else if (textType === 'est') {
       this.loadingEst = true;
-      this.textService.getDownloadableEstablishedText(this.textId, format).subscribe({
+      this.collectionContentService.getDownloadableReadText(this.textId, format).subscribe({
         next: content => {
           const blob = new Blob([String(content)], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
@@ -306,11 +308,11 @@ export class DownloadTextsModalPage {
     this.objectURLs.forEach(object => {
       URL.revokeObjectURL(object);
     });
-    this.viewCtrl.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   private openIntroductionForPrint() {
-    this.textService.getCollectionIntroductionText(this.textId, this.activeLocale).subscribe({
+    this.collectionContentService.getIntroduction(this.textId, this.activeLocale).subscribe({
       next: (res) => {
         let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
         content = this.constructHtmlForPrint(content, 'intro');
@@ -341,13 +343,13 @@ export class DownloadTextsModalPage {
   }
 
   private openEstablishedForPrint() {
-    this.textService.getCollectionReadText(this.textId).subscribe({
+    this.collectionContentService.getReadText(this.textId).subscribe({
       next: content => {
         if (content === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
           content = '';
         } else {
           const c_id = String(this.textId).split('_')[0];
-          content = this.textService.postprocessEstablishedText(content, c_id);
+          content = this.parserService.postprocessEstablishedText(content, c_id);
 
           content = content.substring(content.indexOf('<body>') + 6, content.indexOf('</body>'));
           content = content.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
@@ -669,13 +671,13 @@ export class DownloadTextsModalPage {
   private getViewOptionsAsClassNames(textType: string) {
     let classes = 'xxxsmallFontSize '; // Default font size for printing, equals about 11pt
     if (textType === 'est' || textType === 'intro') {
-      if (this.readPopoverService.show.paragraphNumbering) {
+      if (this.viewOptionsService.show.paragraphNumbering) {
         classes += 'show_paragraphNumbering ';
       }
-      if (this.readPopoverService.show.pageBreakEdition) {
+      if (this.viewOptionsService.show.pageBreakEdition) {
         classes += 'show_pageBreakEdition ';
       }
-      if (textType === 'est' && this.readPopoverService.show.pageBreakOriginal) {
+      if (textType === 'est' && this.viewOptionsService.show.pageBreakOriginal) {
         classes += 'show_pageBreakOriginal ';
       }
     }

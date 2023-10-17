@@ -8,8 +8,8 @@ import { config } from '@config';
 import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from '@models/facsimile.model';
-import { FacsimileService } from '@services/facsimile.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { CollectionContentService } from '@services/collection-content.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { sortArrayOfObjectsNumerically } from '@utility-functions';
 
@@ -47,9 +47,9 @@ export class FacsimilesComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private facsimileService: FacsimileService,
+    private collectionContentService: CollectionContentService,
     private modalCtrl: ModalController,
-    public readPopoverService: ReadPopoverService,
+    public viewOptionsService: ViewOptionsService,
     private sanitizer: DomSanitizer,
     public userSettingsService: UserSettingsService
   ) {
@@ -65,7 +65,7 @@ export class FacsimilesComponent implements OnInit {
   }
 
   loadFacsimiles() {
-    this.facsimileService.getFacsimiles(this.textItemID).subscribe({
+    this.collectionContentService.getFacsimiles(this.textItemID).subscribe({
       next: (facs) => {
         if (facs && facs.length > 0) {
           const sectionId = this.textItemID.split('_')[2]?.split(';')[0]?.replace('ch', '') || '';

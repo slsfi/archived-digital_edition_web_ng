@@ -7,14 +7,25 @@ import { isBrowser } from '@utility-functions';
   providedIn: 'root',
 })
 export class ScrollService {
-  intervalTimerId: number;
+  private activeComHighl: Record<string, any> = {};
+  private activeLemHighl: Record<string, any> = {};
+  private intervalTimerId: number;
 
   constructor(
     public ngZone: NgZone
   ) {
+    this.activeComHighl = {
+      commentTimeOutId: null,
+      commentLemmaElement: null,
+    };
+
+    this.activeLemHighl = {
+      lemmaTimeOutId: null,
+      lemmaElement: null,
+    };
+
     this.intervalTimerId = 0;
   }
-
 
   /**
    * This function can be used to scroll a container so that the element which it
@@ -25,8 +36,14 @@ export class ScrollService {
    * Valid values for yPosition are 'top' and 'center'. The scroll behavior can
    * either be 'auto' or the default 'smooth'.
    */
-  scrollElementIntoView(element: HTMLElement, yPosition = 'center', offset = 0, scrollBehavior = 'smooth', container?: HTMLElement) {
-    if (element === undefined || element === null || (yPosition !== 'center' && yPosition !== 'top')) {
+  scrollElementIntoView(
+    element: HTMLElement,
+    yPosition = 'center',
+    offset = 0,
+    scrollBehavior = 'smooth',
+    container?: HTMLElement
+  ) {
+    if (!element || (yPosition !== 'center' && yPosition !== 'top')) {
       return;
     }
 
@@ -69,7 +86,12 @@ export class ScrollService {
    * @param timeOut Timeout in milliseconds.
    * @param scrollBehavior Either 'smooth' or 'auto'.
    */
-  scrollToHTMLElement(element: HTMLElement, position = 'top', timeOut = 5000, scrollBehavior = 'smooth') {
+  scrollToHTMLElement(
+    element: HTMLElement,
+    position = 'top',
+    timeOut = 5000,
+    scrollBehavior = 'smooth'
+  ) {
     try {
       this.ngZone.runOutsideAngular(() => {
         const tmpImage: HTMLImageElement = new Image();
@@ -129,8 +151,10 @@ export class ScrollService {
             clearInterval(that.intervalTimerId);
           } else {
             iterationsLeft -= 1;
-            const viewElements = document.querySelector('page-text:not([ion-page-hidden]):not(.ion-page-hidden)')?.getElementsByClassName('read-column');
-            if (viewElements && viewElements[0] !== undefined) {
+            const viewElements = document.querySelector(
+              'page-text:not([ion-page-hidden]):not(.ion-page-hidden)'
+            )?.getElementsByClassName('read-column');
+            if (viewElements?.[0]) {
               const lastViewElement = viewElements[viewElements.length - 1] as HTMLElement;
               that.scrollCollectionTextColumnIntoView(lastViewElement, 0) && clearInterval(that.intervalTimerId);
             }
@@ -186,6 +210,85 @@ export class ScrollService {
           }
         }.bind(this), 1000);
       });
+    }
+  }
+
+  /**
+   * Function used to scroll the lemma of a comment into view in the reading text view.
+   * @param lemmaStartElem The html element marking the start of the lemma in the reading text view.
+   * @param timeOut Duration for showing an arrow at the start of the lemma in the reading text view.
+   */
+  scrollToCommentLemma(lemmaStartElem: HTMLElement, timeOut = 5000) {
+    if (lemmaStartElem?.classList.contains('anchor_lemma')) {
+      if (this.activeLemHighl.lemmaTimeOutId !== null) {
+        // Clear previous lemma highlight if still active
+        this.activeLemHighl.lemmaElement.style.display = null;
+        window.clearTimeout(this.activeLemHighl.lemmaTimeOutId);
+      }
+
+      lemmaStartElem.style.display = 'inline';
+      this.scrollElementIntoView(lemmaStartElem);
+      const settimeoutId = setTimeout(() => {
+        lemmaStartElem.style.display = '';
+        this.activeLemHighl = {
+          lemmaTimeOutId: null,
+          lemmaElement: null,
+        };
+      }, timeOut);
+
+      this.activeLemHighl = {
+        lemmaTimeOutId: settimeoutId,
+        lemmaElement: lemmaStartElem,
+      };
+    }
+  }
+
+  /**
+   * Function for scrolling to the comment with the specified numeric id
+   * (excluding prefixes like 'end') in the first comments view on the page.
+   * Alternatively, the comment element can be passed as an optional parameter.
+   * @param numericId The numeric id of the comment as a string. Must not
+   * contain prefixes like 'en', 'end' or 'start'.
+   * @param commentElement Optionally passed comment element. If omitted, the
+   * correct comment element will be searched for using numericId.
+   */
+  scrollToComment(numericId: string, commentElement?: HTMLElement) {
+    if (!commentElement || !commentElement.classList.contains('en' + numericId)) {
+      // Find the comment in the comments view.
+      const commentsWrapper = document.querySelector(
+        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) comments'
+      ) as HTMLElement;
+      commentElement = commentsWrapper.getElementsByClassName(
+        'en' + numericId
+      )[0] as HTMLElement;
+    }
+    if (commentElement) {
+      if (this.activeComHighl.commentTimeOutId !== null) {
+        // Clear previous comment highlight if still active
+        this.activeComHighl.commentLemmaElement.classList.remove(
+          'highlight'
+        );
+        window.clearTimeout(this.activeComHighl.commentTimeOutId);
+      }
+
+      // Scroll the comment into view.
+      this.scrollElementIntoView(commentElement, 'center', -5);
+      const noteLemmaElem = commentElement.getElementsByClassName(
+        'noteLemma'
+      )[0] as HTMLElement;
+      noteLemmaElem.classList.add('highlight');
+      const settimeoutId = setTimeout(() => {
+        noteLemmaElem.classList.remove('highlight');
+        this.activeComHighl = {
+          commentTimeOutId: null,
+          commentLemmaElement: null,
+        };
+      }, 5000);
+
+      this.activeComHighl = {
+        commentTimeOutId: settimeoutId,
+        commentLemmaElement: noteLemmaElem,
+      };
     }
   }
 

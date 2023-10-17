@@ -4,10 +4,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
 import { config } from '@config';
+import { CollectionContentService } from '@services/collection-content.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { ReadPopoverService } from '@services/read-popover.service';
 import { ScrollService } from '@services/scroll.service';
-import { TextService } from '@services/text.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -36,12 +36,12 @@ export class ManuscriptsComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
+    private collectionContentService: CollectionContentService,
     private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private parserService: HtmlParserService,
-    public readPopoverService: ReadPopoverService,
     private sanitizer: DomSanitizer,
-    private textService: TextService
+    public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
   }
@@ -53,7 +53,7 @@ export class ManuscriptsComponent implements OnInit {
   }
 
   loadManuscriptTexts() {
-    this.textService.getCollectionManuscriptTexts(this.textItemID).subscribe({
+    this.collectionContentService.getManuscripts(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.manuscripts?.length > 0 &&

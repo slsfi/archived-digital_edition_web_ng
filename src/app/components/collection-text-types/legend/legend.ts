@@ -5,9 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { ScrollService } from '@services/scroll.service';
-import { MdContentService } from '@services/md-content.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -32,11 +32,11 @@ export class LegendComponent implements OnDestroy, OnInit {
   constructor(
     private commonFunctions: ScrollService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private ngZone: NgZone,
-    public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
+    public viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) public activeLocale: string
   ) {}
 

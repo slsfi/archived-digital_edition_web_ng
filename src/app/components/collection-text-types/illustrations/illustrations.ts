@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { HtmlParserService } from '@services/html-parser.service';
 import { ScrollService } from '@services/scroll.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -30,8 +30,8 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   constructor(
     private commonFunctions: ScrollService,
     private modalCtrl: ModalController,
-    public readPopoverService: ReadPopoverService,
-    private textService: TextService
+    private parserService: HtmlParserService,
+    public viewOptionsService: ViewOptionsService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,7 +59,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   }
 
   private getIllustrationImages() {
-    this.textService.getEstablishedTextIllustrations(this.textItemID).subscribe(
+    this.parserService.getEstablishedTextIllustrations(this.textItemID).subscribe(
       (images: any[]) => {
         this.images = images;
         this.imageCountTotal = this.images.length;

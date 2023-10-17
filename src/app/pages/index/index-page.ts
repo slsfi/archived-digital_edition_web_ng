@@ -7,7 +7,7 @@ import { marked } from 'marked';
 
 import { IndexFilterModal } from '@modals/index-filter/index-filter.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { TooltipService } from '@services/tooltip.service';
 import { sortArrayOfObjectsAlphabetically } from '@utility-functions';
@@ -43,7 +43,7 @@ export class IndexPage implements OnInit {
   showLoading: boolean = true;
 
   constructor(
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private modalCtrl: ModalController,
     public route: ActivatedRoute,
     private router: Router,

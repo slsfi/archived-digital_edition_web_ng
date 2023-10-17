@@ -1,5 +1,5 @@
-<div class="tei teiContainer"
-            [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+<div *ngIf="(textsize$ | async) as textsize" class="tei teiContainer"
+            [ngClass]="(textsize==0)?'xsmallFontSize':(textsize==1)?'smallFontSize':(textsize==2)?'mediumFontSize':(textsize==3)?'largeFontSize':'xlargeFontSize'"
 >
     <ng-container *ngIf="(metadata$ | async) as metadata; else loadingOrError">
         <h2 i18n="@@Read.Metadata.Title">Metadata</h2>

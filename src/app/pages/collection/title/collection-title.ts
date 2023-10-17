@@ -5,15 +5,16 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 import { marked } from 'marked';
 
-import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { ScrollService } from '@services/scroll.service';
-import { HtmlParserService } from '@services/html-parser.service';
-import { MdContentService } from '@services/md-content.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { TextService } from '@services/text.service';
 import { config } from '@config';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { Textsize } from '@models/textsize.model';
+import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
+import { ScrollService } from '@services/scroll.service';
+import { UserSettingsService } from '@services/user-settings.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -30,19 +31,20 @@ export class CollectionTitlePage implements OnInit {
   showViewOptionsButton: boolean = true;
   titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
+  textsize$: Observable<number>;
 
   constructor(
-    private commonFunctions: ScrollService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private modalController: ModalController,
     private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
-    public readPopoverService: ReadPopoverService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
+    private scrollService: ScrollService,
     private userSettingsService: UserSettingsService,
+    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.titleFromMarkdownFolderId = config.collections?.titlesMarkdownFolderNumber ?? '';
@@ -53,6 +55,12 @@ export class CollectionTitlePage implements OnInit {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
+    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
+      map((size: Textsize) => {
+        return Number(size);
+      })
+    );
+
     this.text$ = combineLatest(
       [this.route.params, this.route.queryParams]
     ).pipe(
@@ -62,7 +70,7 @@ export class CollectionTitlePage implements OnInit {
         if (q) {
           this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         }
       }),
@@ -74,7 +82,7 @@ export class CollectionTitlePage implements OnInit {
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {
     if (!this.titleFromMarkdownFolderId) {
-      return this.textService.getCollectionTitleText(id, lang).pipe(
+      return this.collectionContentService.getTitle(id, lang).pipe(
         map((res: any) => {
           if (res?.content) {
             let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');

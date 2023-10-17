@@ -5,9 +5,9 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
-import { ScrollService } from '@services/scroll.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { ViewOptionsService } from '@services/view-options.service';
+import { ScrollService } from '@services/scroll.service';
 import { concatenateNames, isBrowser } from '@utility-functions';
 
 
@@ -32,14 +32,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   constructor(
     private commentService: CommentService,
-    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
-    public readPopoverService: ReadPopoverService,
+    public viewOptionsService: ViewOptionsService,
     private renderer2: Renderer2,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private scrollService: ScrollService
   ) {}
 
   ngOnInit() {
@@ -63,7 +63,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
           text = this.parserService.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
@@ -131,7 +131,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             targetIsLink = true;
           }
 
-          if (!targetIsLink && this.readPopoverService.show.comments) {
+          if (!targetIsLink && this.viewOptionsService.show.comments) {
             // This is linking to a comment lemma ("asterisk") in the reading text,
             // i.e. the user has clicked a comment in the comments-column.
             event.preventDefault();
@@ -175,9 +175,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
               }
               if (lemmaStart !== null && lemmaStart !== undefined) {
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
-                this.commentService.scrollToCommentLemma(lemmaStart);
+                this.scrollService.scrollToCommentLemma(lemmaStart);
                 // Scroll to comment in the comments-column.
-                this.commentService.scrollToComment(numId, targetElem);
+                this.scrollService.scrollToComment(numId, targetElem);
               }
             }
           }

@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { Textsize } from '@models/textsize.model';
 
-export enum Fontsize {
-    xsmall = 0,
-    small,
-    medium,
-    large,
-    xlarge
-}
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReadPopoverService {
+export class ViewOptionsService {
   show = {
     'comments': true,
     'personInfo': false,
@@ -26,14 +20,17 @@ export class ReadPopoverService {
     'pageBreakOriginal': false,
     'pageBreakEdition': false
   };
-  fontsize = Fontsize.small;
-  private fontsizeSubject: BehaviorSubject<Fontsize> = new BehaviorSubject<Fontsize>(this.fontsize);
-  fontsize$: Observable<Fontsize> = this.fontsizeSubject.asObservable();
+
+  private textsizeSubject: BehaviorSubject<Textsize> = new BehaviorSubject<Textsize>(Textsize.small);
 
   constructor() {}
 
-  sendFontsizeToSubscribers(fontsize: Fontsize) {
-    this.fontsizeSubject.next(fontsize);
+  getTextsize(): Observable<Textsize> {
+    return this.textsizeSubject.asObservable();
+  }
+
+  setTextsize(textsize: Textsize) {
+    this.textsizeSubject.next(textsize);
   }
 
 }

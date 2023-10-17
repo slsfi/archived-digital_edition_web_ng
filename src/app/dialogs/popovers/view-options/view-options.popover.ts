@@ -2,9 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, PopoverController } from '@ionic/angular';
+import { map, Observable } from 'rxjs';
 
-import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
 import { config } from '@config';
+import { Textsize } from '@models/textsize.model';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -43,12 +45,12 @@ export class ViewOptionsPopover implements OnInit {
     'pageBreakEdition': false
   };
 
-  fontsize: Fontsize | null = null;
+  textsize$: Observable<number>;
   togglesCounter: number;
 
   constructor(
     private popoverCtrl: PopoverController,
-    public viewOptionsService: ReadPopoverService
+    private viewOptionsService: ViewOptionsService
   ) {
     this.optionsToggles = config.page?.text?.viewOptions ?? undefined;
   }
@@ -72,7 +74,13 @@ export class ViewOptionsPopover implements OnInit {
     }
 
     this.show = this.viewOptionsService.show;
-    this.fontsize = this.viewOptionsService.fontsize;
+
+    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
+      map((size: Textsize) => {
+        return Number(size);
+      }
+      )
+    );
   }
 
   close() {
@@ -176,10 +184,8 @@ export class ViewOptionsPopover implements OnInit {
   }
 
   setFontSize(size: number) {
-    if (size in Fontsize) {
-      this.fontsize = size;
-      this.viewOptionsService.fontsize = this.fontsize;
-      this.viewOptionsService.sendFontsizeToSubscribers(this.fontsize);
+    if (size in Textsize) {
+      this.viewOptionsService.setTextsize(size);
     }
   }
 

@@ -5,12 +5,12 @@
         <ion-icon slot="icon-only" name="close" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
       </ion-button>
   </ion-list-header>
-  <div class="font-size-buttons-wrapper">
-    <ion-button [class.selected-font-size]="viewOptionsService.fontsize==0" [attr.aria-pressed]="viewOptionsService.fontsize==0" class="text-button text-xsmall item-block" (click)="setFontSize(0)" aria-label="Textstorlek: liten" i18n-aria-label="@@Read.Popover.TextsizeXSmall">A</ion-button>
-    <ion-button [class.selected-font-size]="viewOptionsService.fontsize==1" [attr.aria-pressed]="viewOptionsService.fontsize==1" class="text-button text-small item-block" (click)="setFontSize(1)" aria-label="Textstorlek: normal" i18n-aria-label="@@Read.Popover.TextsizeSmall">A</ion-button>
-    <ion-button [class.selected-font-size]="viewOptionsService.fontsize==2" [attr.aria-pressed]="viewOptionsService.fontsize==2" class="text-button text-medium item-block" (click)="setFontSize(2)" aria-label="Textstorlek: stor" i18n-aria-label="@@Read.Popover.TextsizeMedium">A</ion-button>
-    <ion-button [class.selected-font-size]="viewOptionsService.fontsize==3" [attr.aria-pressed]="viewOptionsService.fontsize==3" class="text-button text-large item-block" (click)="setFontSize(3)" aria-label="Textstorlek: mycket stor" i18n-aria-label="@@Read.Popover.TextsizeLarge">A</ion-button>
-    <ion-button [class.selected-font-size]="viewOptionsService.fontsize==4" [attr.aria-pressed]="viewOptionsService.fontsize==4" class="text-button text-xlarge item-block" (click)="setFontSize(4)" aria-label="Textstorlek: störst" i18n-aria-label="@@Read.Popover.TextsizeXLarge">A</ion-button>
+  <div *ngIf="(textsize$ | async) as textsize" class="font-size-buttons-wrapper">
+    <ion-button [class.selected-font-size]="textsize==0" [attr.aria-pressed]="textsize==0" class="text-button text-xsmall item-block" (click)="setFontSize(0)" aria-label="Textstorlek: liten" i18n-aria-label="@@Read.Popover.TextsizeXSmall">A</ion-button>
+    <ion-button [class.selected-font-size]="textsize==1" [attr.aria-pressed]="textsize==1" class="text-button text-small item-block" (click)="setFontSize(1)" aria-label="Textstorlek: normal" i18n-aria-label="@@Read.Popover.TextsizeSmall">A</ion-button>
+    <ion-button [class.selected-font-size]="textsize==2" [attr.aria-pressed]="textsize==2" class="text-button text-medium item-block" (click)="setFontSize(2)" aria-label="Textstorlek: stor" i18n-aria-label="@@Read.Popover.TextsizeMedium">A</ion-button>
+    <ion-button [class.selected-font-size]="textsize==3" [attr.aria-pressed]="textsize==3" class="text-button text-large item-block" (click)="setFontSize(3)" aria-label="Textstorlek: mycket stor" i18n-aria-label="@@Read.Popover.TextsizeLarge">A</ion-button>
+    <ion-button [class.selected-font-size]="textsize==4" [attr.aria-pressed]="textsize==4" class="text-button text-xlarge item-block" (click)="setFontSize(4)" aria-label="Textstorlek: störst" i18n-aria-label="@@Read.Popover.TextsizeXLarge">A</ion-button>
   </div>
 </ion-list>
 

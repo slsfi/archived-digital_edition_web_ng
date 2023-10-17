@@ -1,6 +1,6 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { config } from '@config';
 
@@ -23,16 +23,38 @@ export class CollectionsService {
   }
 
   getCollections(): Observable<any> {
-    let url = `${this.apiEndpoint}/collections`;
-    if (this.multilingualTOC) {
-      url += '/' + this.activeLocale;
-    }
+    const locale = this.multilingualTOC ? '/' + this.activeLocale : '';
+    const url = `${this.apiEndpoint}/collections${locale}`;
     return this.http.get(url);
   }
 
   getCollection(id: string): Observable<any> {
     const url = `${this.apiEndpoint}/collection/${id}`;
     return this.http.get(url);
+  }
+
+  getLegacyIdByCollectionId(id: string): Observable<any> {
+    const url = `${this.apiEndpoint}/legacy/collection/${id}`;
+    return this.http.get(url);
+  }
+
+  getLegacyIdByPublicationId(id: string): Observable<any> {
+    const url = `${this.apiEndpoint}/legacy/publication/${id}`;
+    return this.http.get(url);
+  }
+
+  getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
+    if (config.collections?.enableLegacyIDs) {
+      const url = `${this.apiEndpoint}/legacy/${legacyId}`;
+      return this.http.get(url);
+    } else {
+      return of([
+        {
+          coll_id: Number(legacyId.split('_')[0]),
+          pub_id: Number(legacyId.split('_')[1])
+        }
+      ]);
+    }
   }
 
 }

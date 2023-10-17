@@ -7,7 +7,7 @@ import { marked } from 'marked';
 
 import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from '@models/elastic-search.model';
 import { ElasticSearchService } from '@services/elastic-search.service';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from '@config';
@@ -60,7 +60,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
     private cf: ChangeDetectorRef,
     private elasticService: ElasticSearchService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,

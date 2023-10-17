@@ -2,21 +2,22 @@ import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Qu
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 
+import { config } from '@config';
 import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
+import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommentService } from '@services/comment.service';
-import { ScrollService } from '@services/scroll.service';
+import { CollectionContentService } from '@services/collection-content.service';
+import { CollectionsService } from '@services/collections.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
+import { ScrollService } from '@services/scroll.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UrlService } from '@services/url.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from '@config';
+import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -58,6 +59,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   showViewOptionsButton: boolean = true;
   textItemID: string = '';
   textPosition: string = '';
+  textsize$: Observable<number>;
   toolTipMaxWidth: string | null = null;
   toolTipPosType: string = 'fixed';
   toolTipPosition: any = {
@@ -77,22 +79,22 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   private unlistenMouseoutEvents?: () => void;
 
   constructor(
-    private commentService: CommentService,
-    public commonFunctions: ScrollService,
+    private collectionContentService: CollectionContentService,
+    private collectionsService: CollectionsService,
     private elementRef: ElementRef,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
-    public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
+    public scrollService: ScrollService,
     private tooltipService: TooltipService,
     private urlService: UrlService,
     private userSettingsService: UserSettingsService,
+    public viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
@@ -177,17 +179,23 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       this.activeMobileModeViewType = 'established_' + this.activeLocale;
     }
     if (
-      this.textService.activeCollectionTextMobileModeView &&
+      this.collectionContentService.activeCollectionTextMobileModeView &&
       this.availableMobileModeViews.includes(
-        this.textService.activeCollectionTextMobileModeView
+        this.collectionContentService.activeCollectionTextMobileModeView
       )
     ) {
-      this.activeMobileModeViewType = this.textService.activeCollectionTextMobileModeView;
+      this.activeMobileModeViewType = this.collectionContentService.activeCollectionTextMobileModeView;
     }
   }
 
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
+
+    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
+      map((size: Textsize) => {
+        return Number(size);
+      })
+    );
 
     this.routeParamsSubscription = this.route.params.subscribe(
       (params: any) => {
@@ -203,8 +211,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         if (this.textItemID !== textItemID) {
           this.textItemID = textItemID;
           // Save the id of the previous and current read view text in textService.
-          this.textService.previousReadViewTextId = this.textService.readViewTextId;
-          this.textService.readViewTextId = this.textItemID;
+          this.collectionContentService.previousReadViewTextId = this.collectionContentService.readViewTextId;
+          this.collectionContentService.readViewTextId = this.textItemID;
         }
 
         this.paramCollectionID = params['collectionID'];
@@ -247,7 +255,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
           // Clear the array keeping track of recently open views in
           // text service and populate it with the current ones.
-          this.textService.recentCollectionTextViews = [];
+          this.collectionContentService.recentCollectionTextViews = [];
           parsedViews.forEach((viewObj: any) => {
             const cachedViewObj: any = { type: viewObj.type };
             if (
@@ -256,7 +264,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             ) {
               cachedViewObj.sortOrder = viewObj.sortOrder;
             }
-            this.textService.recentCollectionTextViews.push(cachedViewObj);
+            this.collectionContentService.recentCollectionTextViews.push(cachedViewObj);
           });
         } else {
           this.setViews();
@@ -291,11 +299,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     if (this.views.length > 0) {
       // show current views
       this.updateViewsInRouterQueryParams(this.views);
-    } else if (this.textService.recentCollectionTextViews.length > 0) {
+    } else if (this.collectionContentService.recentCollectionTextViews.length > 0) {
       // show recent view types
       // if different collection than previously pass type of views only
-      let typesOnly = this.textItemID.split('_')[0] !== this.textService.previousReadViewTextId.split('_')[0] ? true : false;
-      this.updateViewsInRouterQueryParams(this.textService.recentCollectionTextViews, typesOnly);
+      let typesOnly = this.textItemID.split('_')[0] !== this.collectionContentService.previousReadViewTextId.split('_')[0] ? true : false;
+      this.updateViewsInRouterQueryParams(this.collectionContentService.recentCollectionTextViews, typesOnly);
     } else {
       // show default view types
       this.setDefaultViewsFromConfig();
@@ -412,7 +420,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           if (eventTarget.hasAttribute('data-id')) {
             if (
               eventTarget['classList'].contains('person') &&
-              this.readPopoverService.show.personInfo
+              this.viewOptionsService.show.personInfo
             ) {
               this.ngZone.run(() => {
                 this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'subject');
@@ -420,7 +428,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               modalShown = true;
             } else if (
               eventTarget['classList'].contains('placeName') &&
-              this.readPopoverService.show.placeInfo
+              this.viewOptionsService.show.placeInfo
             ) {
               this.ngZone.run(() => {
                 this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'location');
@@ -428,7 +436,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               modalShown = true;
             } else if (
               eventTarget['classList'].contains('title') &&
-              this.readPopoverService.show.workInfo
+              this.viewOptionsService.show.workInfo
             ) {
               this.ngZone.run(() => {
                 this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id'), 'work');
@@ -436,7 +444,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               modalShown = true;
             } else if (
               eventTarget['classList'].contains('comment') &&
-              this.readPopoverService.show.comments
+              this.viewOptionsService.show.comments
             ) {
               /* The user has clicked a comment lemma ("asterisk") in the reading-text.
                 Check if comments view is shown. */
@@ -464,9 +472,9 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 }
                 if (lemmaStart !== null && lemmaStart !== undefined) {
                   // Scroll to start of lemma in reading text and temporarily prepend arrow.
-                  this.commentService.scrollToCommentLemma(lemmaStart);
+                  this.scrollService.scrollToCommentLemma(lemmaStart);
                   // Scroll to comment in the comments-column.
-                  this.commentService.scrollToComment(numId);
+                  this.scrollService.scrollToComment(numId);
                 }
               } else {
                 // If a comments view isn't shown or viewmode is mobile, show comment in infoOverlay.
@@ -492,9 +500,9 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               modalShown = true;
             }
           } else if (
-            (eventTarget['classList'].contains('ttChanges') && this.readPopoverService.show.changes) ||
-            (eventTarget['classList'].contains('ttNormalisations') && this.readPopoverService.show.normalisations) ||
-            (eventTarget['classList'].contains('ttAbbreviations') && this.readPopoverService.show.abbreviations)
+            (eventTarget['classList'].contains('ttChanges') && this.viewOptionsService.show.changes) ||
+            (eventTarget['classList'].contains('ttNormalisations') && this.viewOptionsService.show.normalisations) ||
+            (eventTarget['classList'].contains('ttAbbreviations') && this.viewOptionsService.show.abbreviations)
           ) {
             this.ngZone.run(() => {
               this.showInfoOverlayFromInlineHtml(eventTarget);
@@ -670,7 +678,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 }
                 const target = containerElem.querySelector(dataIdSelector) as HTMLElement;
                 if (target) {
-                  this.commonFunctions.scrollToHTMLElement(target, 'top');
+                  this.scrollService.scrollToHTMLElement(target, 'top');
                 }
               }
             }
@@ -680,14 +688,14 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             const varTargets = Array.from(document.querySelectorAll('#' + sid));
 
             if (varTargets.length > 0) {
-              this.commonFunctions.scrollElementIntoView(anchorElem);
+              this.scrollService.scrollElementIntoView(anchorElem);
               anchorElem.classList.add('highlight');
               window.setTimeout(function(elem: any) {
                 elem.classList.remove('highlight');
               }.bind(null, anchorElem), 5000);
 
               varTargets.forEach((varTarget: any) => {
-                this.commonFunctions.scrollElementIntoView(varTarget);
+                this.scrollService.scrollElementIntoView(varTarget);
                 if (varTarget.firstElementChild?.classList.contains('var_margin')) {
                   const marginElem = varTarget.firstElementChild;
 
@@ -795,7 +803,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   }
                 }
                 if (targetElement?.classList.contains('anchor')) {
-                  this.commonFunctions.scrollToHTMLElement(targetElement);
+                  this.scrollService.scrollToHTMLElement(targetElement);
                 }
               } else {
                 // We are not on the same page, open in new window.
@@ -803,7 +811,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 // we have to open the new window first and set its location later.)
                 const newWindowRef = window.open();
 
-                this.textService.getCollectionAndPublicationByLegacyId(
+                this.collectionsService.getCollectionAndPublicationByLegacyId(
                   publicationId + '_' + textId
                 ).subscribe(
                   (data: any) => {
@@ -836,7 +844,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
               const newWindowRef = window.open();
 
-              this.textService.getCollectionAndPublicationByLegacyId(
+              this.collectionsService.getCollectionAndPublicationByLegacyId(
                 publicationId
               ).subscribe(
                 (data: any) => {
@@ -869,28 +877,28 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             if (eventTarget.hasAttribute('data-id')) {
               if (
                 eventTarget['classList'].contains('person') &&
-                this.readPopoverService.show.personInfo
+                this.viewOptionsService.show.personInfo
               ) {
                 this.ngZone.run(() => {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'person', eventTarget);
                 });
               } else if (
                 eventTarget['classList'].contains('placeName') &&
-                this.readPopoverService.show.placeInfo
+                this.viewOptionsService.show.placeInfo
               ) {
                 this.ngZone.run(() => {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'place', eventTarget);
                 });
               } else if (
                 eventTarget['classList'].contains('title') &&
-                this.readPopoverService.show.workInfo
+                this.viewOptionsService.show.workInfo
               ) {
                 this.ngZone.run(() => {
                   this.showSemanticDataObjectTooltip(eventTarget.getAttribute('data-id'), 'work', eventTarget);
                 });
               } else if (
                 eventTarget['classList'].contains('comment') &&
-                this.readPopoverService.show.comments
+                this.viewOptionsService.show.comments
               ) {
                 this.ngZone.run(() => {
                   this.showCommentTooltip(eventTarget.getAttribute('data-id'), eventTarget);
@@ -910,13 +918,13 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             } else if (
               (
                 eventTarget['classList'].contains('ttChanges') &&
-                this.readPopoverService.show.changes
+                this.viewOptionsService.show.changes
               ) || (
                 eventTarget['classList'].contains('ttNormalisations') &&
-                this.readPopoverService.show.normalisations
+                this.viewOptionsService.show.normalisations
               ) || (
                 eventTarget['classList'].contains('ttAbbreviations') &&
-                this.readPopoverService.show.abbreviations
+                this.viewOptionsService.show.abbreviations
               )
             ) {
               this.ngZone.run(() => {
@@ -1539,7 +1547,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               }
               if (variantNotScrolled) {
                 variantNotScrolled = false;
-                this.commonFunctions.scrollElementIntoView(elems[i]);
+                this.scrollService.scrollElementIntoView(elems[i]);
               }
               setTimeout(function () {
                 elems[i]?.classList.remove('highlight');
@@ -1575,7 +1583,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 elems[i]?.classList.remove('highlight');
               }, 5000);
               if (iClassList[y] === targetClassName) {
-                this.commonFunctions.scrollElementIntoView(elems[i]);
+                this.scrollService.scrollElementIntoView(elems[i]);
               }
             }
           }
@@ -1586,7 +1594,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   private setCollectionAndPublicationLegacyId(publicationID: string) {
-    this.textService.getLegacyIdByPublicationId(publicationID).subscribe({
+    this.collectionsService.getLegacyIdByPublicationId(publicationID).subscribe({
       next: (publication) => {
         this.collectionAndPublicationLegacyId = '';
         if (publication[0].legacy_id) {
@@ -1606,7 +1614,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   storeActiveMobileModeViewType() {
-    this.textService.activeCollectionTextMobileModeView = this.activeMobileModeViewType;
+    this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewType;
   }
 
 }

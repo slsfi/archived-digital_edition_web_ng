@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
-import { ScrollService } from '@services/scroll.service';
-import { HtmlParserService } from '@services/html-parser.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
 import { config } from '@config';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -36,12 +36,12 @@ export class VariantsComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
+    private collectionContentService: CollectionContentService,
     private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private parserService: HtmlParserService,
-    public readPopoverService: ReadPopoverService,
     private sanitizer: DomSanitizer,
-    private textService: TextService
+    public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.variants?.showOpenLegendButton ?? false;
   }
@@ -53,7 +53,7 @@ export class VariantsComponent implements OnInit {
   }
 
   loadVariantTexts() {
-    this.textService.getCollectionVariantTexts(this.textItemID).subscribe({
+    this.collectionContentService.getVariants(this.textItemID).subscribe({
       next: (res) => {
         if (res?.variations?.length > 0) {
           this.variants = res.variations;

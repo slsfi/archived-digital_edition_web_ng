@@ -7,7 +7,7 @@ import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } fr
 import { ContentItem } from '@models/content-item.model';
 import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
 import { CollectionsService } from '@services/collections.service';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { config } from '@config';
 
 
@@ -29,7 +29,7 @@ export class ContentGridComponent implements OnInit {
 
   constructor(
     private collectionsService: CollectionsService,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.availableEbooks = config.ebooks ?? [];

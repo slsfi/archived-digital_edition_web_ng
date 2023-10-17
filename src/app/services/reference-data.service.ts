@@ -9,7 +9,6 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class ReferenceDataService {
-  private referenceDataUrl = '/urn/';
   private urnResolverUrl: string = 'https://urn.fi/';
 
   constructor(
@@ -21,9 +20,8 @@ export class ReferenceDataService {
   getReferenceData(id: string): Observable<any> {
     // We need to double encode the URL for the API
     id = encodeURI(encodeURIComponent(id));
-    return this.http.get(
-      config.app.apiEndpoint + '/' + config.app.machineName + this.referenceDataUrl + id + '/'
-    );
+    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/urn/' + id + '/';
+    return this.http.get(url);
   }
 
   getUrnResolverUrl() {

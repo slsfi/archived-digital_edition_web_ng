@@ -15,18 +15,6 @@ export class UserSettingsService {
     this.detectPlatform();
   }
 
-  detectPlatform() {
-    try {
-      if (this.platform.is('desktop')) {
-        this.mode = 'desktop';
-      } else {
-        this.mode = 'mobile';
-      }
-    } catch (e) {
-      this.mode = 'desktop';
-    }
-  }
-
   isMobile() {
     return this.mode === 'mobile';
   }
@@ -41,6 +29,18 @@ export class UserSettingsService {
 
   markEpubAlertAsDismissed() {
     this.epubAlertDismissed = true;
+  }
+
+  private detectPlatform() {
+    try {
+      if (this.platform.is('desktop')) {
+        this.mode = 'desktop';
+      } else {
+        this.mode = 'mobile';
+      }
+    } catch (e) {
+      this.mode = 'desktop';
+    }
   }
 
 }

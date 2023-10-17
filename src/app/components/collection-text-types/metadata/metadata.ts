@@ -1,10 +1,11 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { catchError, Observable, of, Subject } from 'rxjs';
+import { catchError, map, Observable, of, Subject } from 'rxjs';
 
-import { MetadataService } from '@services/metadata.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { Textsize } from '@models/textsize.model';
+import { CollectionContentService } from '@services/collection-content.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -19,21 +20,28 @@ export class MetadataComponent implements OnInit {
 
   loadingError$: Subject<boolean> = new Subject<boolean>();
   metadata$: Observable<any>;
+  textsize$: Observable<number>;
 
   constructor(
-    private metadataService: MetadataService,
-    public readPopoverService: ReadPopoverService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private collectionContentService: CollectionContentService,
+    private viewOptionsService: ViewOptionsService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
   ngOnInit() {
-    this.metadata$ = this.metadataService.getMetadata(
+    this.metadata$ = this.collectionContentService.getMetadata(
       this.textItemID.split('_')[1] || '0', this.activeLocale
     ).pipe(
       catchError((error) => {
         console.error('Error loading metadata', error);
         this.loadingError$.next(true);
         return of();
+      })
+    );
+
+    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
+      map((size: Textsize) => {
+        return Number(size);
       })
     );
   }

@@ -2,7 +2,7 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { UserSettingsService } from '@services/user-settings.service';
 import { config } from '@config';
 
@@ -20,7 +20,7 @@ export class CollectionCoverPage implements OnInit {
 
   constructor(
     private userSettingsService: UserSettingsService,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {

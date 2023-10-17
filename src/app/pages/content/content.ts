@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class ContentPage implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 

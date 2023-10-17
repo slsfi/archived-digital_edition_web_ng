@@ -8,7 +8,7 @@ import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
 import { DocumentHeadService } from '@services/document-head.service';
 import { CollectionsService } from '@services/collections.service';
 import { MediaCollectionService } from '@services/media-collection.service';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 import { config } from '@config';
 
@@ -37,7 +37,7 @@ export class MainSideMenu implements OnInit, OnChanges {
 
   constructor(
     private headService: DocumentHeadService,
-    private mdcontentService: MdContentService,
+    private mdcontentService: MarkdownContentService,
     private collectionsService: CollectionsService,
     private mediaCollectionService: MediaCollectionService,
     @Inject(LOCALE_ID) public activeLocale: string
@@ -137,7 +137,7 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   private getAboutPagesMenu(): Observable<any> {
-    return this.mdcontentService.getMarkdownMenu(
+    return this.mdcontentService.getMenuTree(
       this.activeLocale, this.aboutPagesRootNodeID
     ).pipe(
       map((res: any) => {

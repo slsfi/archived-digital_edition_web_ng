@@ -10,7 +10,7 @@ import { DocumentHeadService } from '@services/document-head.service';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { MediaCollectionService } from '@services/media-collection.service';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { UrlService } from '@services/url.service';
 import { isEmptyObject, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 import { config } from '@config';
@@ -58,7 +58,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     private sanitizer: DomSanitizer,
     private mediaCollectionService: MediaCollectionService,
     private modalController: ModalController,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private route: ActivatedRoute,
     private router: Router,
     private urlService: UrlService,

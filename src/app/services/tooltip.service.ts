@@ -2,10 +2,10 @@ import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError, map, Observable, of } from 'rxjs';
 
+import { config } from '@config';
 import { CommentService } from '@services/comment.service';
 import { SemanticDataService } from '@services/semantic-data.service';
 import { UserSettingsService } from '@services/user-settings.service';
-import { config } from '@config';
 
 
 @Injectable({
@@ -187,19 +187,16 @@ export class TooltipService {
   }
 
   constructPersonTooltipText(tooltip: any, targetElem: HTMLElement) {
-    let text = '';
-    let uncertainPretext = '';
-    let fictionalPretext = '';
+    const uncertainPretext = (
+      targetElem.classList.contains('uncertain') &&
+      $localize`:@@uncertainPersonCorresp:ev.`
+    ) ? $localize`:@@uncertainPersonCorresp:ev.` + ' ' : '';
+    const fictionalPretext = (
+      targetElem.classList.contains('fictional') &&
+      $localize`:@@fictionalPersonCorresp:historisk förebild`
+    ) ? $localize`:@@fictionalPersonCorresp:historisk förebild` + ':<br/>' : '';
 
-    (targetElem.classList.contains('uncertain') &&
-      $localize`:@@uncertainPersonCorresp:ev.`) &&
-      (uncertainPretext = $localize`:@@uncertainPersonCorresp:ev.` + ' ');
-
-    (targetElem.classList.contains('fictional') &&
-      $localize`:@@fictionalPersonCorresp:historisk förebild`) &&
-      (fictionalPretext = $localize`:@@fictionalPersonCorresp:historisk förebild` + ':<br/>');
-
-    text = '<b>' + tooltip.full_name.trim() + '</b>';
+    let text = '<b>' + tooltip.full_name.trim() + '</b>';
     const yearBornDeceasedString = this.constructYearBornDeceasedString(
       tooltip.date_born,
       tooltip.date_deceased
@@ -339,7 +336,7 @@ export class TooltipService {
     const tooltipElement: HTMLElement | null = document.querySelector(
       pageOrigin + ':not([ion-page-hidden]):not(.ion-page-hidden) div.toolTip'
     );
-    if (tooltipElement === null) {
+    if (!tooltipElement) {
       return null;
     }
 
@@ -347,11 +344,8 @@ export class TooltipService {
     const initialTTDimensions = this.getToolTipDimensions(tooltipElement, ttText, 0, true);
     let ttHeight = initialTTDimensions?.height || 0;
     let ttWidth = initialTTDimensions?.width || 0;
-    if (initialTTDimensions?.compMaxWidth) {
-      toolTipMaxWidth = initialTTDimensions.compMaxWidth;
-    } else {
-      toolTipMaxWidth = '425px';
-    }
+
+    toolTipMaxWidth = initialTTDimensions?.compMaxWidth || '425px';
 
     // Calculate default position, this is relative to the viewport's top-left corner.
     let x = elemRect.right + triggerPaddingX;
@@ -504,11 +498,9 @@ export class TooltipService {
       ) {
         // The tooltip fits without resizing. Calculate position, check for possible overset and adjust.
         x = elemRect.left;
-        if (positionAbove) {
-          y = elemRect.top - (initialTTDimensions?.height || 0) - toolbarsHeight - triggerPaddingY;
-        } else {
-          y = elemRect.bottom + triggerPaddingY - toolbarsHeight;
-        }
+        y = positionAbove
+              ? elemRect.top - (initialTTDimensions?.height || 0) - toolbarsHeight - triggerPaddingY
+              : elemRect.bottom + triggerPaddingY - toolbarsHeight;
 
         // Check if tooltip would be drawn outside the viewport horisontally.
         oversetX = x + (initialTTDimensions?.width || 0) - vw;
@@ -531,11 +523,10 @@ export class TooltipService {
           // Set new max-width and calculate position. Adjust if overset.
           toolTipMaxWidth = (ttNewDimensions?.width || 0) + 'px';
           x = elemRect.left;
-          if (positionAbove) {
-            y = elemRect.top - (ttNewDimensions?.height || 0) - toolbarsHeight - triggerPaddingY;
-          } else {
-            y = elemRect.bottom + triggerPaddingY - toolbarsHeight;
-          }
+          y = positionAbove
+                ? elemRect.top - (ttNewDimensions?.height || 0) - toolbarsHeight - triggerPaddingY
+                : elemRect.bottom + triggerPaddingY - toolbarsHeight;
+
           // Check if tooltip would be drawn outside the viewport horisontally.
           oversetX = x + (ttNewDimensions?.width || 0) - vw;
           if (oversetX > 0) {
@@ -552,11 +543,10 @@ export class TooltipService {
           toolTipMaxWidth = (ttNewDimensions?.width || 0) + 'px';
           toolTipScaleValue = scaleRatio;
           x = elemRect.left;
-          if (positionAbove) {
-            y = elemRect.top - availableHeight - triggerPaddingY - toolbarsHeight;
-          } else {
-            y = elemRect.bottom + triggerPaddingY - toolbarsHeight;
-          }
+          y = positionAbove
+                ? elemRect.top - availableHeight - triggerPaddingY - toolbarsHeight
+                : elemRect.bottom + triggerPaddingY - toolbarsHeight;
+
           oversetX = x + (ttNewDimensions?.width || 0) - vw;
           if (oversetX > 0) {
             x = x - oversetX - edgePadding;
@@ -635,6 +625,7 @@ export class TooltipService {
       height: ttHeight,
       compMaxWidth: compToolTipMaxWidth,
     };
+
     return dimensions;
   }
 

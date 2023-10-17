@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
+import { config } from '@config';
 import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
-import { ScrollService } from '@services/scroll.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
+import { CollectionContentService } from '@services/collection-content.service';
+import { ScrollService } from '@services/scroll.service';
 import { UserSettingsService } from '@services/user-settings.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
-import { config } from '@config';
 
 
 @Component({
@@ -36,16 +36,16 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   private unlistenClickEvents?: () => void;
 
   constructor(
+    private collectionContentService: CollectionContentService,
     private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
-    public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
-    public userSettingsService: UserSettingsService
+    public userSettingsService: UserSettingsService,
+    public viewOptionsService: ViewOptionsService
   ) {
     this.illustrationsViewAvailable = config.page?.text?.viewTypes?.illustrations ?? false;
   }
@@ -85,7 +85,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   loadReadText() {
-    this.textService.getCollectionReadText(this.textItemID).subscribe({
+    this.collectionContentService.getReadText(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.content &&
@@ -93,10 +93,10 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
         ) {
           const collectionID = this.textItemID.split('_')[0];
           let text = res.content as string;
-          text = this.textService.postprocessEstablishedText(text, collectionID);
+          text = this.parserService.postprocessEstablishedText(text, collectionID);
           text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
-          this.illustrationsVisibleInReadtext = this.textService.readTextHasVisibleIllustrations(text);
+          this.illustrationsVisibleInReadtext = this.parserService.readTextHasVisibleIllustrations(text);
 
           if (this.textPosition) {
             this.scrollToTextPosition();

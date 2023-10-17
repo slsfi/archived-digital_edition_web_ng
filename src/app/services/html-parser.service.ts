@@ -1,11 +1,144 @@
 import { Injectable } from '@angular/core';
+import { catchError, map, Observable, of } from 'rxjs';
 import { Parser } from 'htmlparser2';
+import { DomHandler } from 'domhandler';
+import { existsOne, findAll, getAttributeValue } from 'domutils';
+import { render } from 'dom-serializer';
+
+import { config } from '@config';
+import { isEmptyObject } from '@utility-functions';
+import { CollectionContentService } from '@services/collection-content.service';
 
 
 @Injectable({
     providedIn: 'root',
 })
 export class HtmlParserService {
+    apiEndpoint: string = '';
+
+    constructor(
+        private textService: CollectionContentService
+    ) {
+        const apiURL = config.app?.apiEndpoint ?? '';
+        const machineName = config.app?.machineName ?? '';
+        this.apiEndpoint = apiURL + '/' + machineName;
+    }
+
+    postprocessEstablishedText(text: string, collectionId: string) {
+        text = text.trim();
+        text = this.mapIllustrationImagePaths(text, collectionId);
+
+        // Add "tei" class to all classlists
+        text = text.replace(
+            /class="([a-z A-Z _ 0-9]{1,140})"/g,
+            'class="tei $1"'
+        );
+
+        return text;
+    }
+
+    getEstablishedTextIllustrations(id: string): Observable<any> {
+        return this.textService.getReadText(id).pipe(
+            map((res) => {
+                const images: any[] = [];
+                if (
+                    res &&
+                    res.content &&
+                    res.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+                ) {
+                    const collectionID = String(id).split('_')[0];
+                    let text = res.content as string;
+                    text = this.postprocessEstablishedText(text, collectionID);
+
+                    // Parse the read text html to get all illustrations in it using
+                    // SSR compatible htmlparser2
+                    const parser = new Parser({
+                        onopentag(name, attributes) {
+                            if (name === 'img' && attributes.src) {
+                                if (attributes.class?.includes('est_figure_graphic')) {
+                                    let illustrationClass = 'illustration';
+                                    if (!attributes.class?.includes('hide-illustration')) {
+                                        illustrationClass = 'visible-illustration';
+                                    }
+                                    const image = { src: attributes.src, class: illustrationClass };
+                                    images.push(image);
+                                } else if (attributes.class?.includes('doodle') && attributes['data-id']) {
+                                    const image = {
+                                        src: 'assets/images/verk/' + attributes['data-id'].replace('tag_', '') + '.jpg',
+                                        class: 'doodle'
+                                    };
+                                    images.push(image);
+                                }
+                            }
+                        }
+                    });
+                    parser.write(text);
+                    parser.end();
+                }
+                return images;
+            }),
+            catchError((e: any) => {
+                console.error('Error loading established text illustrations', e);
+                return of([]);
+            })
+        );
+    }
+
+    mapIllustrationImagePaths(text: string, collectionId: string) {
+        text = text.replace(/\.png/g, '.svg');
+        text = text.replace(/images\//g, 'assets/images/');
+        text = text.replace(/assets\/images\/verk\/http/g, 'http');
+
+        const galleries = config.collections?.mediaCollectionMappings ?? {};
+        const galleryId = !isEmptyObject(galleries)
+            ? galleries[collectionId]
+            : undefined;
+        const visibleInlineIllustrations = config.collections?.visibleInlineReadTextIllustrations ?? [];
+
+        if (text.includes('est_figure_graphic') || text.includes('assets/images/verk/')) {
+            // Use SSR compatible htmlparser2 and related DOM-handling modules
+            // (domhandler: https://domhandler.js.org/, domutils: https://domutils.js.org/,
+            // dom-serializer: https://github.com/cheeriojs/dom-serializer)
+            // to add class names to images and replace image file paths.
+            const handler = new DomHandler();
+            const parser = new Parser(handler);
+            parser.write(text);
+            parser.end();
+            if (!visibleInlineIllustrations.includes(Number(collectionId))) {
+                // Hide inline illustrations in the read text
+                const m = findAll(
+                    el => String(getAttributeValue(el, 'class')).includes('est_figure_graphic'), handler.dom
+                );
+                m.forEach(element => {
+                    element.attribs.class += ' hide-illustration';
+                });
+            }
+            const m2 = findAll(
+                el => String(getAttributeValue(el, 'src')).includes('assets/images/verk/'), handler.dom
+            );
+            m2.forEach(element => {
+                element.attribs.src = element.attribs.src.replace(
+                    'assets/images/verk/',
+                    `${this.apiEndpoint}/gallery/get/${galleryId}/`
+                );
+            });
+            text = render(handler.dom, { decodeEntities: false });
+        }
+
+        return text;
+    }
+
+    readTextHasVisibleIllustrations(text: string): boolean {
+        const handler = new DomHandler();
+        const parser = new Parser(handler);
+        parser.write(text);
+        parser.end();
+
+        return existsOne(
+            el => (String(getAttributeValue(el, 'class')).includes('est_figure_graphic') &&
+                !String(getAttributeValue(el, 'class')).includes('hide-illustration')), handler.dom
+        );
+    }
 
     /**
      * Inserts <mark> tags in 'text' (html as a string) around the strings
