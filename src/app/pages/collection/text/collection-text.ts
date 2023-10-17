@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Qu
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { map, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
@@ -59,7 +59,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   showViewOptionsButton: boolean = true;
   textItemID: string = '';
   textPosition: string = '';
-  textsize$: Observable<number>;
+  textsize: Textsize;
+  textsizeSubscription: Subscription | null = null;
   toolTipMaxWidth: string | null = null;
   toolTipPosType: string = 'fixed';
   toolTipPosition: any = {
@@ -72,6 +73,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   views: any[] = [];
+
+  TextsizeEnum = Textsize;
   
   private unlistenFirstTouchStartEvent?: () => void;
   private unlistenClickEvents?: () => void;
@@ -191,10 +194,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
-      })
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
     );
 
     this.routeParamsSubscription = this.route.params.subscribe(
@@ -285,6 +288,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.routeParamsSubscription?.unsubscribe();
     this.routeQueryParamsSubscription?.unsubscribe();
+    this.textsizeSubscription?.unsubscribe();
     this.unlistenClickEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();

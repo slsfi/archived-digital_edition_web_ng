@@ -31,13 +31,12 @@
   >
     <div class="column-container">
       <!-- Wrapper for all columns -->
-      <div *ngIf="(textsize$ | async) as textsize"
-            class="read-columns-wrapper"
-            [class.xsmallFontSize]="textsize == 0"
-            [class.smallFontSize]="textsize == 1"
-            [class.mediumFontSize]="textsize == 2"
-            [class.largeFontSize]="textsize == 3"
-            [class.xlargeFontSize]="textsize == 4"
+      <div class="read-columns-wrapper"
+            [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+            [class.smallFontSize]="textsize == TextsizeEnum.Small"
+            [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+            [class.largeFontSize]="textsize == TextsizeEnum.Large"
+            [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
             [class.illustrations-view-shown]="illustrationsViewShown"
             [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
       >
@@ -331,45 +330,49 @@
 
 <!-- Main content in mobile mode -->
 <ng-container *ngIf="mobileMode">
-  <ion-content class="collection-ion-content mobile-mode-content"
+  <ion-content
+        class="collection-ion-content mobile-mode-content"
+        [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+        [class.smallFontSize]="textsize == TextsizeEnum.Small"
+        [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+        [class.largeFontSize]="textsize == TextsizeEnum.Large"
+        [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
         [scrollX]="false"
         [scrollY]="false"
   >
-    <ng-container *ngIf="(textsize$ | async) as textsize">
-      <!-- Tooltip wrapper in mobile mode -->
-      <div
-            [ngClass]="'toolTip tei teiContainer ' + ((textsize==0)?'xsmallFontSize':(textsize==1)?'smallFontSize':(textsize==2)?'mediumFontSize':(textsize==3)?'largeFontSize':'xlargeFontSize')"
-            [class.show_comments]="viewOptionsService.show.comments"
-            [class.show_personInfo]="viewOptionsService.show.personInfo"
-            [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-            [class.show_workInfo]="viewOptionsService.show.workInfo"
-            [class.show_normalisations]="viewOptionsService.show.normalisations"
-            [class.show_changes]="viewOptionsService.show.changes"
-            [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-            [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-            [innerHTML]="toolTipText"
-            [MathJax]="toolTipText"
-      ></div>
+    <!-- Tooltip wrapper in mobile mode -->
+    <div
+          class="toolTip tei teiContainer"
+          [class.show_comments]="viewOptionsService.show.comments"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [class.show_normalisations]="viewOptionsService.show.normalisations"
+          [class.show_changes]="viewOptionsService.show.changes"
+          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+          [innerHTML]="toolTipText"
+          [MathJax]="toolTipText"
+    ></div>
 
-      <!-- Info overlay wrapper in mobile mode -->
-      <div
-            [ngClass]="'infoOverlay tei teiContainer ' + ((textsize==0)?'xsmallFontSize':(textsize==1)?'smallFontSize':(textsize==2)?'mediumFontSize':(textsize==3)?'largeFontSize':'xlargeFontSize')"
-            [class.show_comments]="viewOptionsService.show.comments"
-            [class.show_personInfo]="viewOptionsService.show.personInfo"
-            [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-            [class.show_workInfo]="viewOptionsService.show.workInfo"
-            [class.show_normalisations]="viewOptionsService.show.normalisations"
-            [class.show_changes]="viewOptionsService.show.changes"
-            [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-            [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
-      >
-        <div class="infoOverlayHeader">
-          <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-          <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
-        </div>
-        <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
+    <!-- Info overlay wrapper in mobile mode -->
+    <div
+          class="infoOverlay tei teiContainer"
+          [class.show_comments]="viewOptionsService.show.comments"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [class.show_normalisations]="viewOptionsService.show.normalisations"
+          [class.show_changes]="viewOptionsService.show.changes"
+          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+    >
+      <div class="infoOverlayHeader">
+        <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
+        <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
       </div>
-    </ng-container>
+      <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
+    </div>
 
     <!-- Ion segment for choosing displayed column type -->
     <ion-segment mode="ios" [(ngModel)]="activeMobileModeViewType" (ionChange)="storeActiveMobileModeViewType()">

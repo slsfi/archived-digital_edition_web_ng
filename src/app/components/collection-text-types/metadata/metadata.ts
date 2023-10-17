@@ -1,11 +1,9 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { catchError, map, Observable, of, Subject } from 'rxjs';
+import { catchError, Observable, of, Subject } from 'rxjs';
 
-import { Textsize } from '@models/textsize.model';
 import { CollectionContentService } from '@services/collection-content.service';
-import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -20,11 +18,9 @@ export class MetadataComponent implements OnInit {
 
   loadingError$: Subject<boolean> = new Subject<boolean>();
   metadata$: Observable<any>;
-  textsize$: Observable<number>;
 
   constructor(
     private collectionContentService: CollectionContentService,
-    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
@@ -36,12 +32,6 @@ export class MetadataComponent implements OnInit {
         console.error('Error loading metadata', error);
         this.loadingError$.next(true);
         return of();
-      })
-    );
-
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
       })
     );
   }

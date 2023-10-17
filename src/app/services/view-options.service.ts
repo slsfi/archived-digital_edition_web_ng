@@ -21,7 +21,7 @@ export class ViewOptionsService {
     'pageBreakEdition': false
   };
 
-  private textsizeSubject: BehaviorSubject<Textsize> = new BehaviorSubject<Textsize>(Textsize.small);
+  private textsizeSubject: BehaviorSubject<Textsize> = new BehaviorSubject<Textsize>(Textsize.Small);
 
   constructor() {}
 

@@ -45,8 +45,10 @@ export class ViewOptionsPopover implements OnInit {
     'pageBreakEdition': false
   };
 
-  textsize$: Observable<number>;
+  textsize$: Observable<Textsize>;
   togglesCounter: number;
+
+  TextsizeEnum = Textsize;
 
   constructor(
     private popoverCtrl: PopoverController,
@@ -75,12 +77,7 @@ export class ViewOptionsPopover implements OnInit {
 
     this.show = this.viewOptionsService.show;
 
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
-      }
-      )
-    );
+    this.textsize$ = this.viewOptionsService.getTextsize();
   }
 
   close() {
@@ -183,10 +180,8 @@ export class ViewOptionsPopover implements OnInit {
     this.viewOptionsService.show.pageBreakEdition = this.show.pageBreakEdition;
   }
 
-  setFontSize(size: number) {
-    if (size in Textsize) {
-      this.viewOptionsService.setTextsize(size);
-    }
+  setTextSize(size: Textsize) {
+    this.viewOptionsService.setTextsize(size);
   }
 
 }

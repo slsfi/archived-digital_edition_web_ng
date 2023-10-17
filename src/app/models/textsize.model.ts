@@ -1,7 +1,7 @@
 export enum Textsize {
-    xsmall = 0,
-    small,
-    medium,
-    large,
-    xlarge
+    XSmall = 'XS',
+    Small = 'S',
+    Medium = 'M',
+    Large = 'L',
+    XLarge = 'XL'
 }

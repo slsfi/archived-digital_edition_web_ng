@@ -48,7 +48,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   text: SafeHtml;
   textLoading: boolean = true;
   textMenu: SafeHtml;
-  textsize$: Observable<number>;
+  textsize$: Observable<Textsize>;
   tocMenuOpen: boolean = false;
   toolTipMaxWidth: string | null = null;
   toolTipPosition: any = {
@@ -63,6 +63,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   viewOptionsTogglesIntro: any = {};
+
+  TextsizeEnum = Textsize;
 
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
@@ -143,11 +145,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
-      })
-    );
+    this.textsize$ = this.viewOptionsService.getTextsize();
 
     this.urlParametersSubscription = combineLatest(
       [this.route.params, this.route.queryParams]
