@@ -12,8 +12,8 @@ import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover'
 import { CollectionContentService } from '@services/collection-content.service';
 import { HtmlParserService } from '@services/html-parser.service';
 import { MarkdownContentService } from '@services/markdown-content.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { ViewOptionsService } from '@services/view-options.service';
 
 
@@ -46,7 +46,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private scrollService: ScrollService,
-    private userSettingsService: UserSettingsService,
+    private platformService: PlatformService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -56,7 +56,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {

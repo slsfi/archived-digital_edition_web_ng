@@ -11,7 +11,7 @@ import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal'
 import { Textsize } from '@models/textsize.model';
 import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { UserSettingsService } from '@services/user-settings.service';
+import { PlatformService } from '@services/platform.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames, isBrowser, numberIsEven } from '@utility-functions';
 
@@ -70,10 +70,10 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
+    public platformService: PlatformService,
     private popoverCtrl: PopoverController,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string,
     @Inject(DOCUMENT) private document: Document
@@ -151,7 +151,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
       this.renderEpub();
 
       this.book.ready.then((res: any) => {
-        if (!this.userSettingsService.epubAlertIsDismissed() && $localize`:@@Epub.NoticeHeader:Anmärkning`) {
+        if (!this.viewOptionsService.epubAlertIsDismissed() && $localize`:@@Epub.NoticeHeader:Anmärkning`) {
           this.showNotice();
         }
 
@@ -691,7 +691,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     const { data, role } = await alert.onWillDismiss();
 
     if (role === 'dismiss') {
-      this.userSettingsService.markEpubAlertAsDismissed();
+      this.viewOptionsService.markEpubAlertAsDismissed();
     }
   }
 

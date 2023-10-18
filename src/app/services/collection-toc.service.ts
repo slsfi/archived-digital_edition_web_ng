@@ -8,7 +8,7 @@ import { config } from '@config';
 @Injectable({
   providedIn: 'root',
 })
-export class TableOfContentsService {
+export class CollectionTableOfContentsService {
   activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
   apiEndpoint: string = '';
   cachedTableOfContents: any = {};
@@ -18,7 +18,9 @@ export class TableOfContentsService {
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.apiEndpoint = config.app?.apiEndpoint ?? '';
+    const apiURL = config.app?.apiEndpoint ?? '';
+    const machineName = config.app?.machineName ?? '';
+    this.apiEndpoint = apiURL + '/' + machineName;
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
@@ -26,11 +28,8 @@ export class TableOfContentsService {
     if (this.cachedTableOfContents?.collectionId === id) {
       return of(this.cachedTableOfContents);
     } else {
-      let url = this.apiEndpoint + '/' + config.app.machineName + '/toc/' + id;
-
-      if (this.multilingualTOC) {
-        url += '/' + this.activeLocale;
-      }
+      const locale = this.multilingualTOC ? '/' + this.activeLocale : '';
+      const url = `${this.apiEndpoint}/toc/${id}${locale}`;
 
       return this.http.get(url).pipe(
         map((res: any) => {
@@ -42,36 +41,15 @@ export class TableOfContentsService {
     }
   }
 
-  getTableOfContentsGroup(id: string, group_id: string): Observable<any> {
-    // @TODO add multilingual support to this as well...
-    const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                '/toc/' + id + '/group/' + group_id;
-    return this.http.get(url);
-  }
-
-  getPrevNext(id: string): Observable<any> {
-    // @TODO add multilingual support to this as well...
-    const arr = id.split('_');
-    const ed_id = arr[0];
-    const item_id = arr[1];
-    const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                '/toc/' + ed_id + '/prevnext/' + item_id;
-    return this.http.get(url);
-  }
-
   /**
    * Get first TOC item which has 'itemId' property and 'type' property
    * has value other than 'subtitle' and 'section_title'.
    * @param collectionID 
    * @param language optional
    */
-  getFirst(collectionID: string, language?: string): Observable<any> {
-    let url = config.app.apiEndpoint + '/' + config.app.machineName +
-              '/toc-first/' + collectionID;
-    if (language && this.multilingualTOC) {
-      url = url + '/' + language;
-    }
-
+  getFirstItem(collectionID: string, language?: string): Observable<any> {
+    language = language && this.multilingualTOC ? '/' + language : '';
+    const url = `${this.apiEndpoint}/toc-first/${collectionID}${language}`;
     return this.http.get(url);
   }
 

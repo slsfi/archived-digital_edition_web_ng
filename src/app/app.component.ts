@@ -4,7 +4,7 @@ import { filter, Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { DocumentHeadService } from '@services/document-head.service';
-import { UserSettingsService } from '@services/user-settings.service';
+import { PlatformService } from '@services/platform.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -31,10 +31,10 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
   constructor(
     private router: Router,
     private headService: DocumentHeadService,
-    private userSettingsService: UserSettingsService
+    private platformService: PlatformService
   ) {
     // Side menu is shown by default in desktop mode but not in mobile mode.
-    this.userSettingsService.isDesktop() ? this.showSideNav = true : this.showSideNav = false;
+    this.platformService.isDesktop() ? this.showSideNav = true : this.showSideNav = false;
 
     this.enableRouterLoadingBar = config.app?.enableRouterLoadingBar ?? false;
   }
@@ -68,13 +68,13 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
       // 2. App is starting on the home page in desktop mode.
       if (
         (
-          this.userSettingsService.isMobile() &&
+          this.platformService.isMobile() &&
           this.currentRouterUrl.split('?')[0] !== this.previousRouterUrl.split('?')[0]
         ) ||
         (
           this.appIsStarting &&
           !this.currentUrlSegments &&
-          this.userSettingsService.isDesktop()
+          this.platformService.isDesktop()
         )
       ) {
         this.showSideNav = false;

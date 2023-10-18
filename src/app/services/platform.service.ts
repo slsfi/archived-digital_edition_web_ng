@@ -5,8 +5,7 @@ import { Platform } from '@ionic/angular';
 @Injectable({
   providedIn: 'root',
 })
-export class UserSettingsService {
-  private epubAlertDismissed: boolean = false;
+export class PlatformService {
   private mode: string = 'desktop'; // mode is either desktop or mobile
 
   constructor(
@@ -21,14 +20,6 @@ export class UserSettingsService {
 
   isDesktop() {
     return this.mode === 'desktop';
-  }
-
-  epubAlertIsDismissed() {
-    return this.epubAlertDismissed;
-  }
-
-  markEpubAlertAsDismissed() {
-    this.epubAlertDismissed = true;
   }
 
   private detectPlatform() {

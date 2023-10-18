@@ -13,10 +13,10 @@ import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover'
 import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UrlService } from '@services/url.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
@@ -88,6 +88,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
     private renderer2: Renderer2,
     private route: ActivatedRoute,
@@ -96,7 +97,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     public scrollService: ScrollService,
     private tooltipService: TooltipService,
     private urlService: UrlService,
-    private userSettingsService: UserSettingsService,
     public viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -192,7 +192,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {
@@ -317,7 +317,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   private setDefaultViewsFromConfig() {
     let newViews: Array<any> = [];
 
-    if (this.userSettingsService.isMobile()) {
+    if (this.platformService.isMobile()) {
       this.availableMobileModeViews.forEach((type: string) => {
         newViews.push({ type });
       });
@@ -454,7 +454,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 Check if comments view is shown. */
               const viewTypesShown = this.getViewTypesShown();
               const commentsViewIsShown = viewTypesShown.includes('comments');
-              if (commentsViewIsShown && this.userSettingsService.isDesktop()) {
+              if (commentsViewIsShown && this.platformService.isDesktop()) {
                 // Scroll to comment in comments view and scroll lemma in reading-text view.
                 const numId = eventTarget.getAttribute('data-id').replace( /^\D+/g, '');
                 const targetId = 'start' + numId;

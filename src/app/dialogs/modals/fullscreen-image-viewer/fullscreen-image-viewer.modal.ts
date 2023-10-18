@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { ScrollService } from '@services/scroll.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { DraggableImageDirective } from '@directives/draggable-image.directive';
+import { PlatformService } from '@services/platform.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -25,6 +24,7 @@ export class FullscreenImageViewerModal implements OnInit {
 
   angle: number = 0;
   inputImageNumber: number = 1;
+  mobileMode: boolean = false;
   prevX: number = 0;
   prevY: number = 0;
   showDescription: boolean = true;
@@ -34,8 +34,7 @@ export class FullscreenImageViewerModal implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private commonFunctions: ScrollService,
-    public userSettingsService: UserSettingsService
+    private platformService: PlatformService
   ) {}
 
   @HostListener('document:keyup.arrowleft') onKeyArrowLeft() {
@@ -47,6 +46,8 @@ export class FullscreenImageViewerModal implements OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     // Append dot to image titles
     if (this.imageTitles.length > 0) {
       for (let x = 0; x < this.imageTitles.length; x++) {

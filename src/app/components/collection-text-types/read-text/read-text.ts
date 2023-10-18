@@ -8,8 +8,8 @@ import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { HtmlParserService } from '@services/html-parser.service';
 import { CollectionContentService } from '@services/collection-content.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
@@ -42,9 +42,9 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
+    public platformService: PlatformService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService,
     public viewOptionsService: ViewOptionsService
   ) {
     this.illustrationsViewAvailable = config.page?.text?.viewTypes?.illustrations ?? false;
@@ -137,7 +137,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             event.preventDefault();
           }
 
-          if (!this.userSettingsService.isMobile()) {
+          if (!this.platformService.isMobile()) {
             let image = null as any;
 
             // Check if click on an illustration or icon representing an illustration

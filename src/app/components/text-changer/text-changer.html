@@ -1,8 +1,8 @@
-<div class="text-changer-wrapper" [class.mobile-mode]="userSettingsService.isMobile()" [class.desktop-mode]="!userSettingsService.isMobile()">
+<div class="text-changer-wrapper" [class.mobile-mode]="platformService.isMobile()" [class.desktop-mode]="!platformService.isMobile()">
   <div class="prev-wrapper">
     <button *ngIf="!firstItem" class="prev-button" (click)="previous()">
       <ion-icon name="arrow-back"></ion-icon>
-      <span *ngIf="userSettingsService.isDesktop()" class="prev-text-name">{{ prevItemTitle }}</span>
+      <span *ngIf="platformService.isDesktop()" class="prev-text-name">{{ prevItemTitle }}</span>
     </button>
   </div>
   <div class="current-text-name">
@@ -10,7 +10,7 @@
   </div>
   <div class="next-wrapper">
     <button *ngIf="!lastItem" class="next-button" (click)="next()">
-      <span *ngIf="userSettingsService.isDesktop()" class="next-text-name">{{ nextItemTitle }}</span>
+      <span *ngIf="platformService.isDesktop()" class="next-text-name">{{ nextItemTitle }}</span>
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </div>

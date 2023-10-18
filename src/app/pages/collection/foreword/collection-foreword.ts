@@ -10,8 +10,8 @@ import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CollectionContentService } from '@services/collection-content.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { ViewOptionsService } from '@services/view-options.service';
 
 
@@ -38,11 +38,11 @@ export class CollectionForewordPage implements OnDestroy, OnInit {
     private elementRef: ElementRef,
     private modalController: ModalController,
     private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private scrollService: ScrollService,
-    private userSettingsService: UserSettingsService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -51,7 +51,7 @@ export class CollectionForewordPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {

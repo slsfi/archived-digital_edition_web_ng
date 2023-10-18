@@ -2,9 +2,9 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { MarkdownContentService } from '@services/markdown-content.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { config } from '@config';
+import { MarkdownContentService } from '@services/markdown-content.service';
+import { PlatformService } from '@services/platform.service';
 
 
 @Component({
@@ -19,8 +19,8 @@ export class CollectionCoverPage implements OnInit {
   mobileMode: boolean = false;
 
   constructor(
-    private userSettingsService: UserSettingsService,
     private mdContentService: MarkdownContentService,
+    private platformService: PlatformService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -28,7 +28,7 @@ export class CollectionCoverPage implements OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
 
     this.coverData$ = this.route.params.pipe(
       tap(({collectionID}) => {

@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
-import { ScrollService } from '@services/scroll.service';
-import { TableOfContentsService } from '@services/table-of-contents.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 import { config } from '@config';
+import { CollectionTableOfContentsService } from '@services/collection-toc.service';
+import { PlatformService } from '@services/platform.service';
+import { sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -24,7 +23,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   @Input() textPosition: string = '';
 
   activeTocOrder: string = '';
-  activeTocOrderSubscription: Subscription;
+  activeTocOrderSubscription: Subscription | null = null;
   collectionHasCover: boolean = false;
   collectionHasTitle: boolean = false;
   collectionHasForeword: boolean = false;
@@ -41,10 +40,9 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   tocItemId: string = '';
 
   constructor(
-    private commonFunctions: ScrollService,
     private router: Router,
-    private tocService: TableOfContentsService,
-    public userSettingsService: UserSettingsService
+    public platformService: PlatformService,
+    private tocService: CollectionTableOfContentsService
   ) {
     this.collectionHasCover = config.collections?.frontMatterPages?.cover ?? false;
     this.collectionHasTitle = config.collections?.frontMatterPages?.title ?? false;

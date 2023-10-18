@@ -5,9 +5,9 @@ import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
+import { CollectionTableOfContentsService } from '@services/collection-toc.service';
 import { CommentService } from '@services/comment.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { TableOfContentsService } from '@services/table-of-contents.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames } from '@utility-functions';
 
@@ -55,7 +55,7 @@ export class DownloadTextsModalPage {
     private commentService: CommentService,
     private params: NavParams,
     private parserService: HtmlParserService,
-    private tocService: TableOfContentsService,
+    private tocService: CollectionTableOfContentsService,
     private modalCtrl: ModalController,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { config } from '@config';
 import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
 import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
-import { ScrollService } from '@services/scroll.service';
+import { CollectionTableOfContentsService } from '@services/collection-toc.service';
 import { DocumentHeadService } from '@services/document-head.service';
-import { TableOfContentsService } from '@services/table-of-contents.service';
-import { config } from '@config';
+import { ScrollService } from '@services/scroll.service';
 import { addOrRemoveValueInArray, flattenObjectTree, isBrowser, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
@@ -46,9 +46,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private cref: ChangeDetectorRef,
-    private commonFunctions: ScrollService,
+    private scrollService: ScrollService,
     private headService: DocumentHeadService,
-    private tocService: TableOfContentsService
+    private tocService: CollectionTableOfContentsService
   ) {}
 
   ngOnInit() {
@@ -220,7 +220,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
         const container = document.querySelector('.side-navigation') as HTMLElement;
         const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
         if (container && target) {
-          this.commonFunctions.scrollElementIntoView(target, 'center', 0, 'smooth', container);
+          this.scrollService.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }
       }, scrollTimeout);
     }

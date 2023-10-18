@@ -14,9 +14,9 @@ import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover'
 import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
 import { TooltipService } from '@services/tooltip.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
@@ -79,6 +79,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
@@ -86,7 +87,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private scrollService: ScrollService,
-    private userSettingsService: UserSettingsService,
     public viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -144,7 +144,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {
@@ -222,7 +222,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             // copy it to this.textMenu and remove it from this.text
             this.textMenu = this.sanitizer.bypassSecurityTrustHtml(matches[1]);
             textContent = textContent.replace(pattern, '');
-            if (!this.userSettingsService.isMobile()) {
+            if (!this.platformService.isMobile()) {
               if (!this.tocMenuOpen) {
                 this.tocMenuOpen = true;
               }
@@ -650,7 +650,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         left: ttProperties.left
       };
       this.toolTipPosType = 'absolute';
-      if (!this.userSettingsService.isDesktop()) {
+      if (!this.platformService.isDesktop()) {
         this.toolTipPosType = 'fixed';
       }
       this.tooltipVisible = true;
@@ -702,8 +702,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
       let bottomPos = vh - horizontalScrollbarOffsetHeight - containerElemRect.bottom;
       if (
-        vw <= bottomPosBreakpointWidth && !(this.userSettingsService.isMobile()) ||
-        this.userSettingsService.isMobile()
+        vw <= bottomPosBreakpointWidth && !(this.platformService.isMobile()) ||
+        this.platformService.isMobile()
       ) {
         bottomPos = 0;
       }

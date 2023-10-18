@@ -13,5 +13,5 @@
       [class.show_paragraphNumbering]="viewOptionsService.show.paragraphNumbering"
       [class.show_pageBreakOriginal]="viewOptionsService.show.pageBreakOriginal"
       [class.show_pageBreakEdition]="viewOptionsService.show.pageBreakEdition"
-      [class.clickable-illustrations]="illustrationsVisibleInReadtext && illustrationsViewAvailable && !userSettingsService.isMobile()"
+      [class.clickable-illustrations]="illustrationsVisibleInReadtext && illustrationsViewAvailable && !platformService.isMobile()"
 ></div>

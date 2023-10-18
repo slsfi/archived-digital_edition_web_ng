@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AggregationQuery, Facets, SearchQuery, TimeRange } from '@models/elastic-search.model';
 import { config } from '@config';
+import { AggregationQuery, Facets, SearchQuery, TimeRange } from '@models/elastic-search.model';
 
 
 @Injectable({
@@ -15,7 +15,7 @@ export class ElasticSearchService {
   private indices: string[] = [];
   private searchURL: string = '';
   private source: string[] = [];
-  private textTypes = [];
+  private textTypes: string[] = [];
 
   constructor(
     private http: HttpClient
@@ -68,7 +68,6 @@ export class ElasticSearchService {
    */
   executeAggregationQuery(options: any): Observable<any> {
     const payload = this.generateAggregationQueryPayload(options);
-
     return this.http.post(this.searchURL, payload);
   }
 

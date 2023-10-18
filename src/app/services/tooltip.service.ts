@@ -4,8 +4,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 
 import { config } from '@config';
 import { CommentService } from '@services/comment.service';
+import { PlatformService } from '@services/platform.service';
 import { SemanticDataService } from '@services/semantic-data.service';
-import { UserSettingsService } from '@services/user-settings.service';
 
 
 @Injectable({
@@ -24,9 +24,9 @@ export class TooltipService {
 
   constructor(
     private commentService: CommentService,
+    private platformService: PlatformService,
     private sanitizer: DomSanitizer,
-    private semanticDataService: SemanticDataService,
-    private userSettingsService: UserSettingsService
+    private semanticDataService: SemanticDataService
   ) {
     this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
@@ -104,7 +104,7 @@ export class TooltipService {
     return this.commentService.getSingleComment(textItemID, elementID).pipe(
       map((comment: any) => {
         this.cachedTooltips.comments.size > this.maxTooltipCacheSize && this.cachedTooltips.comments.clear();
-        this.userSettingsService.isDesktop() && this.cachedTooltips.comments.set(elementID, comment);
+        this.platformService.isDesktop() && this.cachedTooltips.comments.set(elementID, comment);
         return (
           { name: 'Comment', description: comment } ||
           { name: 'Error', description: '' }
@@ -154,7 +154,7 @@ export class TooltipService {
       ttText = ttText.replaceAll(' xmlns:tei="http://www.tei-c.org/ns/1.0"', '');
 
       let columnId = '';
-      if (this.userSettingsService.isDesktop()) {
+      if (this.platformService.isDesktop()) {
         // Get column id of the column where the footnote is.
         let containerElem = triggerElem.parentElement;
         while (
@@ -179,7 +179,7 @@ export class TooltipService {
         SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(footnoteWithIndicator)
       );
       this.cachedTooltips.footnotes.size > this.maxTooltipCacheSize && this.cachedTooltips.footnotes.clear();
-      this.userSettingsService.isDesktop() && this.cachedTooltips.footnotes.set(textType + '_' + id, footnoteHTML);
+      this.platformService.isDesktop() && this.cachedTooltips.footnotes.set(textType + '_' + id, footnoteHTML);
       return of(footnoteHTML || '');
     } else {
       return of('');

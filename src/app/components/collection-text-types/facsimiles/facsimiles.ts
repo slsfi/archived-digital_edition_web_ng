@@ -9,8 +9,8 @@ import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from '@models/facsimile.model';
 import { CollectionContentService } from '@services/collection-content.service';
+import { PlatformService } from '@services/platform.service';
 import { ViewOptionsService } from '@services/view-options.service';
-import { UserSettingsService } from '@services/user-settings.service';
 import { sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
@@ -51,7 +51,7 @@ export class FacsimilesComponent implements OnInit {
     private modalCtrl: ModalController,
     public viewOptionsService: ViewOptionsService,
     private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService
+    public platformService: PlatformService
   ) {
     this.facsSize = config.component?.facsimiles?.imageQuality ?? 1;
     this.facsURLAlternate = config.app?.facsimileBase ?? '';

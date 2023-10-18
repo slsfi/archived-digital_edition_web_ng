@@ -21,6 +21,7 @@ export class ViewOptionsService {
     'pageBreakEdition': false
   };
 
+  private epubAlertDismissed: boolean = false;
   private textsizeSubject: BehaviorSubject<Textsize> = new BehaviorSubject<Textsize>(Textsize.Small);
 
   constructor() {}
@@ -31,6 +32,14 @@ export class ViewOptionsService {
 
   setTextsize(textsize: Textsize) {
     this.textsizeSubject.next(textsize);
+  }
+
+  epubAlertIsDismissed() {
+    return this.epubAlertDismissed;
+  }
+
+  markEpubAlertAsDismissed() {
+    this.epubAlertDismissed = true;
   }
 
 }

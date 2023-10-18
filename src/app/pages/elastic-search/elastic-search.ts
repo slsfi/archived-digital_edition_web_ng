@@ -5,12 +5,12 @@ import { IonContent } from '@ionic/angular';
 import { catchError, map, merge, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
+import { config } from '@config';
 import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from '@models/elastic-search.model';
 import { ElasticSearchService } from '@services/elastic-search.service';
 import { MarkdownContentService } from '@services/markdown-content.service';
+import { PlatformService } from '@services/platform.service';
 import { UrlService } from '@services/url.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from '@config';
 import { isBrowser, isEmptyObject, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
@@ -61,11 +61,11 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
     private elasticService: ElasticSearchService,
     private elementRef: ElementRef,
     private mdContentService: MarkdownContentService,
+    private platformService: PlatformService,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
     private urlService: UrlService,
-    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.enableFilters = config.page?.elasticSearch?.enableFilters ?? true;
@@ -75,7 +75,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
     this.textHighlightType = config.page?.elasticSearch?.textHighlightType ?? 'fvh';
     this.textTitleHighlightType = config.page?.elasticSearch?.textTitleHighlightType ?? 'fvh';
 
-    this.filtersVisible = this.userSettingsService.isMobile() ? false : true;
+    this.filtersVisible = this.platformService.isMobile() ? false : true;
     
     if (
       this.textTitleHighlightType !== 'fvh' &&
