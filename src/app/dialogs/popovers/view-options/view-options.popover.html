@@ -5,9 +5,9 @@
         <ion-icon slot="icon-only" name="close" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
       </ion-button>
   </ion-list-header>
-  <div *ngIf="(textsize$ | async) as textsize" class="font-size-buttons-wrapper">
+  <div class="font-size-buttons-wrapper">
     <ion-button
-          class="text-button text-xsmall item-block"
+          class="text-button text-xsmall"
           [class.selected-font-size]="textsize == TextsizeEnum.XSmall"
           [attr.aria-pressed]="textsize == TextsizeEnum.XSmall"
           (click)="setTextSize(TextsizeEnum.XSmall)"
@@ -15,7 +15,7 @@
           i18n-aria-label="@@Read.Popover.TextsizeXSmall"
     >A</ion-button>
     <ion-button
-          class="text-button text-small item-block"
+          class="text-button text-small"
           [class.selected-font-size]="textsize == TextsizeEnum.Small"
           [attr.aria-pressed]="textsize == TextsizeEnum.Small"
           (click)="setTextSize(TextsizeEnum.Small)"
@@ -23,7 +23,7 @@
           i18n-aria-label="@@Read.Popover.TextsizeSmall"
     >A</ion-button>
     <ion-button
-          class="text-button text-medium item-block"
+          class="text-button text-medium"
           [class.selected-font-size]="textsize == TextsizeEnum.Medium"
           [attr.aria-pressed]="textsize == TextsizeEnum.Medium"
           (click)="setTextSize(TextsizeEnum.Medium)"
@@ -31,7 +31,7 @@
           i18n-aria-label="@@Read.Popover.TextsizeMedium"
     >A</ion-button>
     <ion-button
-          class="text-button text-large item-block"
+          class="text-button text-large"
           [class.selected-font-size]="textsize == TextsizeEnum.Large"
           [attr.aria-pressed]="textsize == TextsizeEnum.Large"
           (click)="setTextSize(TextsizeEnum.Large)"
@@ -39,7 +39,7 @@
           i18n-aria-label="@@Read.Popover.TextsizeLarge"
     >A</ion-button>
     <ion-button
-          class="text-button text-xlarge item-block"
+          class="text-button text-xlarge"
           [class.selected-font-size]="textsize == TextsizeEnum.XLarge"
           [attr.aria-pressed]="textsize == TextsizeEnum.XLarge"
           (click)="setTextSize(TextsizeEnum.XLarge)"

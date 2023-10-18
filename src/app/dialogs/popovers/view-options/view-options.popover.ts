@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, PopoverController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { Textsize } from '@models/textsize.model';
@@ -16,7 +16,7 @@ import { ViewOptionsService } from '@services/view-options.service';
   styleUrls: ['view-options.popover.scss'],
   imports: [CommonModule, FormsModule, IonicModule]
 })
-export class ViewOptionsPopover implements OnInit {
+export class ViewOptionsPopover implements OnDestroy, OnInit {
   @Input() toggles: any = undefined;
 
   optionsToggles: {
@@ -43,7 +43,8 @@ export class ViewOptionsPopover implements OnInit {
     'pageBreakOriginal': false,
     'pageBreakEdition': false
   };
-  textsize$: Observable<Textsize>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
   togglesCounter: number;
 
   TextsizeEnum = Textsize;
@@ -75,7 +76,15 @@ export class ViewOptionsPopover implements OnInit {
 
     this.show = this.viewOptionsService.show;
 
-    this.textsize$ = this.viewOptionsService.getTextsize();
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.textsizeSubscription?.unsubscribe();
   }
 
   close() {
