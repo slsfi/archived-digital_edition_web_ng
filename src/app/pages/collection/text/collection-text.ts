@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
+import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController, IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { config } from '@config';
@@ -19,12 +19,26 @@ import { TooltipService } from '@services/tooltip.service';
 import { UrlService } from '@services/url.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
+import { FormsModule } from '@angular/forms';
+import { MetadataComponent } from '../../../components/collection-text-types/metadata/metadata';
+import { LegendComponent } from '../../../components/collection-text-types/legend/legend';
+import { IllustrationsComponent } from '../../../components/collection-text-types/illustrations/illustrations';
+import { VariantsComponent } from '../../../components/collection-text-types/variants/variants';
+import { ManuscriptsComponent } from '../../../components/collection-text-types/manuscripts/manuscripts';
+import { FacsimilesComponent } from '../../../components/collection-text-types/facsimiles/facsimiles';
+import { CommentsComponent } from '../../../components/collection-text-types/comments/comments';
+import { ReadTextComponent } from '../../../components/collection-text-types/read-text/read-text';
+import { MathJaxDirective } from '../../../directives/math-jax.directive';
+import { TextChangerComponent } from '../../../components/text-changer/text-changer';
+import { NgIf, NgClass, NgStyle, NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
 
 
 @Component({
-  selector: 'page-text',
-  templateUrl: 'collection-text.html',
-  styleUrls: ['collection-text.scss'],
+    selector: 'page-text',
+    templateUrl: 'collection-text.html',
+    styleUrls: ['collection-text.scss'],
+    standalone: true,
+    imports: [IonicModule, NgIf, TextChangerComponent, NgClass, NgStyle, MathJaxDirective, NgFor, ReadTextComponent, CommentsComponent, FacsimilesComponent, ManuscriptsComponent, VariantsComponent, IllustrationsComponent, LegendComponent, MetadataComponent, NgSwitch, NgSwitchCase, FormsModule]
 })
 export class CollectionTextPage implements OnDestroy, OnInit {
   @ViewChild('addViewPopover') addViewPopover: IonPopover;

@@ -7,9 +7,9 @@ describe('DigitalEditionsApp', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DigitalEditionsApp],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
+    imports: [DigitalEditionsApp],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+}).compileComponents();
   });
 
   it('should create the app', () => {

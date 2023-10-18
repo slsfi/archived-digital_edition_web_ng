@@ -8,14 +8,12 @@ import { CollectionTitlePageRoutingModule } from './collection-title-routing.mod
 
 
 @NgModule({
-  declarations: [
-    CollectionTitlePage,
-  ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    TextChangerComponent,
-    CollectionTitlePageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        TextChangerComponent,
+        CollectionTitlePageRoutingModule,
+        CollectionTitlePage
+    ]
 })
 export class CollectionTitlePageModule {}

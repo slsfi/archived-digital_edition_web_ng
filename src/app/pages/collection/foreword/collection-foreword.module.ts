@@ -8,14 +8,12 @@ import { CollectionForewordPageRoutingModule } from './collection-foreword-routi
 
 
 @NgModule({
-  declarations: [
-    CollectionForewordPage,
-  ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    TextChangerComponent,
-    CollectionForewordPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        TextChangerComponent,
+        CollectionForewordPageRoutingModule,
+        CollectionForewordPage
+    ]
 })
 export class CollectionForewordPageModule {}

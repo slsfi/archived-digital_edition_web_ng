@@ -18,24 +18,22 @@ import { CollectionTextPageRoutingModule } from './collection-text-routing.modul
 
 
 @NgModule({
-  declarations: [
-    CollectionTextPage
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    MathJaxDirective,
-    CommentsComponent,
-    FacsimilesComponent,
-    IllustrationsComponent,
-    LegendComponent,
-    ManuscriptsComponent,
-    MetadataComponent,
-    ReadTextComponent,
-    TextChangerComponent,
-    VariantsComponent,
-    CollectionTextPageRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        MathJaxDirective,
+        CommentsComponent,
+        FacsimilesComponent,
+        IllustrationsComponent,
+        LegendComponent,
+        ManuscriptsComponent,
+        MetadataComponent,
+        ReadTextComponent,
+        TextChangerComponent,
+        VariantsComponent,
+        CollectionTextPageRoutingModule,
+        CollectionTextPage
+    ]
 })
 export class CollectionTextPageModule {}

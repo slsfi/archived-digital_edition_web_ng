@@ -1,10 +1,17 @@
 /// <reference types="@angular/localize" />
 
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppModule } from './app/app.module';
+
 import { environment } from './environments/environment';
+import { DigitalEditionsApp } from './app/app.component';
+import { CommonModule } from '@angular/common';
+import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
+import { AppRoutingModule } from './app/app-routing.module';
+import { IonicRouteStrategy, IonicModule } from '@ionic/angular';
+import { RouteReuseStrategy } from '@angular/router';
+import { Title, BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 
 
 if (environment.production) {
@@ -12,7 +19,17 @@ if (environment.production) {
 }
 
 function bootstrap() {
-  platformBrowserDynamic().bootstrapModule(AppModule)
+  bootstrapApplication(DigitalEditionsApp, {
+    providers: [
+        importProvidersFrom(BrowserModule.withServerTransition({ appId: 'serverApp' }), IonicModule.forRoot({
+            mode: 'md',
+            backButtonText: '',
+        }), AppRoutingModule, CommonModule),
+        Title,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
     .catch(err => console.log(err));
 };
 

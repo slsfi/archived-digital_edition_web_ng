@@ -11,20 +11,18 @@ import { ElasticSearchPage } from './elastic-search';
 
 
 @NgModule({
-  declarations: [
-    ElasticSearchPage
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    DateHistogram,
-    ElasticHitCollectionPagePathPipe,
-    ElasticHitCollectionPageQueryparamsPipe,
-    ElasticSearchPageRoutingModule
-  ],
-  entryComponents: [
-    ElasticSearchPage
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        DateHistogram,
+        ElasticHitCollectionPagePathPipe,
+        ElasticHitCollectionPageQueryparamsPipe,
+        ElasticSearchPageRoutingModule,
+        ElasticSearchPage
+    ],
+    entryComponents: [
+        ElasticSearchPage
+    ]
 })
 export class ElasticSearchPageModule {}

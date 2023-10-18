@@ -10,19 +10,17 @@ import { PdfViewerComponent } from '@components/pdf-viewer/pdf-viewer';
 
 
 @NgModule({
-  declarations: [
-    EbookPage
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    EbookPageRoutingModule,
-    EpubViewerComponent,
-    PdfViewerComponent
-  ],
-  entryComponents: [
-    EbookPage
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        EbookPageRoutingModule,
+        EpubViewerComponent,
+        PdfViewerComponent,
+        EbookPage
+    ],
+    entryComponents: [
+        EbookPage
+    ]
 })
 export class EbookPageModule {}

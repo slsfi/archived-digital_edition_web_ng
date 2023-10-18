@@ -8,14 +8,12 @@ import { CollectionIntroductionPageRoutingModule } from './collection-introducti
 
 
 @NgModule({
-  declarations: [
-    CollectionIntroductionPage,
-  ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    TextChangerComponent,
-    CollectionIntroductionPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        TextChangerComponent,
+        CollectionIntroductionPageRoutingModule,
+        CollectionIntroductionPage
+    ]
 })
 export class CollectionIntroductionPageModule {}

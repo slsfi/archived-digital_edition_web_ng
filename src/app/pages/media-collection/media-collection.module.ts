@@ -8,14 +8,12 @@ import { MediaCollectionPage } from './media-collection';
 
 
 @NgModule({
-  declarations: [
-    MediaCollectionPage,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    MediaCollectionRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        MediaCollectionRoutingModule,
+        MediaCollectionPage
+    ]
 })
 export class MediaCollectionPageModule {}

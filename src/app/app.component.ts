@@ -6,12 +6,19 @@ import { config } from '@config';
 import { DocumentHeadService } from '@services/document-head.service';
 import { PlatformService } from '@services/platform.service';
 import { isBrowser } from '@utility-functions';
+import { CollectionSideMenu } from './components/menus/collection-side/collection-side-menu';
+import { MainSideMenu } from './components/menus/main-side/main-side-menu';
+import { NgIf } from '@angular/common';
+import { TopMenuComponent } from './components/menus/top/top-menu';
+import { IonicModule } from '@ionic/angular';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.scss'],
+    standalone: true,
+    imports: [IonicModule, TopMenuComponent, NgIf, MainSideMenu, CollectionSideMenu]
 })
 export class DigitalEditionsApp implements OnDestroy, OnInit {
   appIsStarting: boolean = true;

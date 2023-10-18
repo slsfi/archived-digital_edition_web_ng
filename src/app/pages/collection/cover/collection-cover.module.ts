@@ -7,14 +7,12 @@ import { CollectionCoverPageRoutingModule } from './collection-cover-routing.mod
 import { CollectionCoverPage } from './collection-cover';
 
 @NgModule({
-  declarations: [
-    CollectionCoverPage,
-  ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    TextChangerComponent,
-    CollectionCoverPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        TextChangerComponent,
+        CollectionCoverPageRoutingModule,
+        CollectionCoverPage
+    ]
 })
 export class CollectionCoverPageModule {}

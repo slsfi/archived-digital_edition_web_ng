@@ -4,12 +4,17 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
 import { MarkdownContentService } from '@services/markdown-content.service';
+import { ContentGridComponent } from '../../components/content-grid/content-grid';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 
 @Component({
-  selector: 'page-content',
-  templateUrl: 'content.html',
-  styleUrls: ['content.scss']
+    selector: 'page-content',
+    templateUrl: 'content.html',
+    styleUrls: ['content.scss'],
+    standalone: true,
+    imports: [IonicModule, NgIf, ContentGridComponent, AsyncPipe]
 })
 export class ContentPage implements OnInit {
   mdContent$: Observable<SafeHtml | null>;

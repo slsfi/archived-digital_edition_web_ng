@@ -9,15 +9,13 @@ import { HomePage } from './home';
 
 
 @NgModule({
-  declarations: [
-    HomePage
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ContentGridComponent,
-    HomePageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        ContentGridComponent,
+        HomePageRoutingModule,
+        HomePage
+    ]
 })
 export class HomePageModule {}

@@ -8,14 +8,12 @@ import { IndexPage } from './index-page';
 
 
 @NgModule({
-  declarations: [
-    IndexPage,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    IndexPageRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        IndexPageRoutingModule,
+        IndexPage
+    ]
 })
 export class IndexPageModule {}

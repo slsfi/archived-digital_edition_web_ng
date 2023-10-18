@@ -9,18 +9,16 @@ import { ContentPageRoutingModule } from './content-routing.module';
 
 
 @NgModule({
-  declarations: [
-    ContentPage
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ContentGridComponent,
-    ContentPageRoutingModule
-  ],
-  entryComponents: [
-    ContentPage
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        ContentGridComponent,
+        ContentPageRoutingModule,
+        ContentPage
+    ],
+    entryComponents: [
+        ContentPage
+    ]
 })
 export class ContentPageModule { }
