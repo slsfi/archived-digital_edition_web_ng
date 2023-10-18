@@ -9,7 +9,7 @@ import { OccurrenceCollectionTextPageQueryparamsPipe } from '@pipes/occurrence-c
 import { Occurrence } from '@models/occurrence.model';
 import { SingleOccurrence } from '@models/single-occurrence.model';
 import { CollectionTableOfContentsService } from '@services/collection-toc.service';
-import { SemanticDataService } from '@services/semantic-data.service';
+import { NamedEntityService } from '@services/named-entity.service';
 import { flattenObjectTree, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 
 
@@ -37,7 +37,7 @@ export class OccurrencesAccordionComponent implements OnInit {
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private semanticDataService: SemanticDataService,
+    private namedEntityService: NamedEntityService,
     private tocService: CollectionTableOfContentsService
   ) {
     this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
@@ -67,7 +67,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     if (objectType === 'work') {
       objectType = 'work_manifestation';
     }
-    this.semanticDataService.getOccurrences(objectType, id).subscribe({
+    this.namedEntityService.getEntityOccurrences(objectType, id).subscribe({
       next: (occ: any) => {
         occ.forEach((item: any) => {
           if (item.occurrences?.length) {

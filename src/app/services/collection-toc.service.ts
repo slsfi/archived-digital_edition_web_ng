@@ -9,18 +9,18 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class CollectionTableOfContentsService {
-  activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
-  apiEndpoint: string = '';
-  cachedTableOfContents: any = {};
-  multilingualTOC: boolean = false;
+  private activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
+  private apiURL: string = '';
+  private cachedTableOfContents: any = {};
+  private multilingualTOC: boolean = false;
 
   constructor(
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    const apiURL = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.apiEndpoint = apiURL + '/' + machineName;
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
@@ -29,9 +29,9 @@ export class CollectionTableOfContentsService {
       return of(this.cachedTableOfContents);
     } else {
       const locale = this.multilingualTOC ? '/' + this.activeLocale : '';
-      const url = `${this.apiEndpoint}/toc/${id}${locale}`;
+      const endpoint = `${this.apiURL}/toc/${id}${locale}`;
 
-      return this.http.get(url).pipe(
+      return this.http.get(endpoint).pipe(
         map((res: any) => {
           this.cachedTableOfContents = res;
           return res;
@@ -49,8 +49,8 @@ export class CollectionTableOfContentsService {
    */
   getFirstItem(collectionID: string, language?: string): Observable<any> {
     language = language && this.multilingualTOC ? '/' + language : '';
-    const url = `${this.apiEndpoint}/toc-first/${collectionID}${language}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/toc-first/${collectionID}${language}`;
+    return this.http.get(endpoint);
   }
 
   setActiveTocOrder(newTocOrder: string) {

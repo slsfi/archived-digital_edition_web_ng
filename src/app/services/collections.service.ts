@@ -9,44 +9,44 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class CollectionsService {
-  private apiEndpoint: string = '';
+  private apiURL: string = '';
   private multilingualTOC: boolean = false;
 
   constructor(
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    const apiURL = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.apiEndpoint = apiURL + '/' + machineName;
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
   getCollections(): Observable<any> {
     const locale = this.multilingualTOC ? '/' + this.activeLocale : '';
-    const url = `${this.apiEndpoint}/collections${locale}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/collections${locale}`;
+    return this.http.get(endpoint);
   }
 
   getCollection(id: string): Observable<any> {
-    const url = `${this.apiEndpoint}/collection/${id}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/collection/${id}`;
+    return this.http.get(endpoint);
   }
 
   getLegacyIdByCollectionId(id: string): Observable<any> {
-    const url = `${this.apiEndpoint}/legacy/collection/${id}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/legacy/collection/${id}`;
+    return this.http.get(endpoint);
   }
 
   getLegacyIdByPublicationId(id: string): Observable<any> {
-    const url = `${this.apiEndpoint}/legacy/publication/${id}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/legacy/publication/${id}`;
+    return this.http.get(endpoint);
   }
 
   getCollectionAndPublicationByLegacyId(legacyId: string): Observable<any> {
     if (config.collections?.enableLegacyIDs) {
-      const url = `${this.apiEndpoint}/legacy/${legacyId}`;
-      return this.http.get(url);
+      const endpoint = `${this.apiURL}/legacy/${legacyId}`;
+      return this.http.get(endpoint);
     } else {
       return of([
         {

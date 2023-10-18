@@ -4,11 +4,11 @@ import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 
+import { config } from '@config';
 import { ContentItem } from '@models/content-item.model';
 import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
 import { CollectionsService } from '@services/collections.service';
 import { MarkdownContentService } from '@services/markdown-content.service';
-import { config } from '@config';
 
 
 @Component({

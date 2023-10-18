@@ -4,13 +4,13 @@ import { RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
-import { DocumentHeadService } from '@services/document-head.service';
-import { CollectionsService } from '@services/collections.service';
-import { MediaCollectionService } from '@services/media-collection.service';
-import { MarkdownContentService } from '@services/markdown-content.service';
-import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 import { config } from '@config';
+import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
+import { CollectionsService } from '@services/collections.service';
+import { DocumentHeadService } from '@services/document-head.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
+import { MediaCollectionService } from '@services/media-collection.service';
+import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 
 
 @Component({
@@ -36,11 +36,11 @@ export class MainSideMenu implements OnInit, OnChanges {
   ]; // app.component handles setting html-title for these
 
   constructor(
+    private collectionsService: CollectionsService,
     private headService: DocumentHeadService,
     private mdcontentService: MarkdownContentService,
-    private collectionsService: CollectionsService,
     private mediaCollectionService: MediaCollectionService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.aboutPagesRootNodeID = this._config.page?.about?.markdownFolderNumber ?? '03';
     this.ebooksList = this._config.ebooks ?? [];

@@ -10,40 +10,42 @@ import { convertNamedEntityTypeForBackend } from '@utility-functions';
   providedIn: 'root',
 })
 export class MediaCollectionService {
-  private apiEndpoint: string = '';
+  private apiURL: string = '';
 
-  constructor(private http: HttpClient) {
-    const apiURL = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.apiEndpoint = apiURL + '/' + machineName;
+  constructor(
+    private http: HttpClient
+  ) {
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
   }
 
   getMediaCollections(language: string): Observable<any> {
-    const url = this.apiEndpoint + '/gallery/data/' + language;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/gallery/data/${language}`;
+    return this.http.get(endpoint);
   }
 
-  getSingleMediaCollection(mediaCollectionID: string, language: string): Observable<any> {
-    const url = this.apiEndpoint + '/gallery/data/' + mediaCollectionID + '/' + language;
-    return this.http.get(url);
+  getSingleMediaCollection(id: string, language: string): Observable<any> {
+    const endpoint = `${this.apiURL}/gallery/data/${id}/${language}`;
+    return this.http.get(endpoint);
   }
 
   getNamedEntityOccInMediaColls(entityType: string, entityID: any): Observable<any> {
     entityType = convertNamedEntityTypeForBackend(entityType);
-    const url = this.apiEndpoint + '/gallery/' + entityType + '/connections/' + entityID;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/gallery/${entityType}/connections/${entityID}`;
+    return this.http.get(endpoint);
   }
 
   getAllNamedEntityOccInMediaCollsByType(entityType: string, mediaCollectionID?: string): Observable<any> {
     entityType = convertNamedEntityTypeForBackend(entityType);
-    const url = this.apiEndpoint + '/gallery/connections/' + entityType
+    const endpoint = this.apiURL + '/gallery/connections/' + entityType
                 + (mediaCollectionID ? '/' + mediaCollectionID : '');
-    return this.http.get(url);
+    return this.http.get(endpoint);
   }
 
   getMediaMetadata(id: string, language: string): Observable<any> {
-    const url = this.apiEndpoint + '/media/image/metadata/' + id + '/' + language;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/media/image/metadata/${id}/${language}`;
+    return this.http.get(endpoint);
   }
 
 }

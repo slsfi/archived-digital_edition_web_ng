@@ -5,7 +5,6 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { HtmlParserService } from '@services/html-parser.service';
 import { ScrollService } from '@services/scroll.service';
-import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -28,10 +27,9 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   viewAll: boolean = true;
 
   constructor(
-    private commonFunctions: ScrollService,
     private modalCtrl: ModalController,
     private parserService: HtmlParserService,
-    public viewOptionsService: ViewOptionsService
+    private scrollService: ScrollService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -149,12 +147,12 @@ export class IllustrationsComponent implements OnChanges, OnInit {
             tmpImage.alt = 'ms arrow right image';
             tmpImage.classList.add('inl_ms_arrow');
             target.parentElement.insertBefore(tmpImage, target);
-            this.commonFunctions.scrollElementIntoView(tmpImage);
+            this.scrollService.scrollElementIntoView(tmpImage);
             setTimeout(function() {
               target?.parentElement?.removeChild(tmpImage);
             }, 5000);
           } else {
-            this.commonFunctions.scrollElementIntoView(target, 'top', 75);
+            this.scrollService.scrollElementIntoView(target, 'top', 75);
           }
         } else {
           console.log('Unable to find target when scrolling to image position in text, imageSrc:', imageSrc);

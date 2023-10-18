@@ -19,7 +19,9 @@ export class MathJaxDirective implements OnChanges {
 
   private mathJaxEnabled: boolean = false;
 
-  constructor(private elRef: ElementRef) {
+  constructor(
+    private elRef: ElementRef
+  ) {
     this.mathJaxEnabled = config.collections?.enableMathJax ?? false;
   }
 

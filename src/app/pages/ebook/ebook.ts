@@ -9,7 +9,6 @@ import { config } from '@config';
   templateUrl: 'ebook.html',
   styleUrls: ['ebook.scss'],
 })
-
 export class EbookPage implements OnInit {
   ebookType: string = '';
   filename: string = '';

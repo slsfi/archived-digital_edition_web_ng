@@ -9,15 +9,15 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class CommentService {
-  private apiEndpoint: string = '';
+  private apiURL: string = '';
   private cachedCollectionComments: Record<string, any> = {};
 
   constructor(
     private http: HttpClient
   ) {
-    const apiURL = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.apiEndpoint = apiURL + '/' + machineName;
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
   }
 
   /**
@@ -37,9 +37,9 @@ export class CommentService {
       const ch_id = textIDParts.length > 2
             ? '/' + textIDParts[2] + '/' + textIDParts[2]
             : '';
-      const url = `${this.apiEndpoint}/text/${textIDParts[0]}/${textIDParts[1]}/com${ch_id}`;
+      const endpoint = `${this.apiURL}/text/${textIDParts[0]}/${textIDParts[1]}/com${ch_id}`;
 
-      return this.http.get(url).pipe(
+      return this.http.get(endpoint).pipe(
         map((body: any) => {
           if (body?.content) {
             body = body.content.trim();
@@ -84,16 +84,16 @@ export class CommentService {
   }
 
   getCorrespondanceMetadata(pub_id: any): Observable<any> {
-    const url = `${this.apiEndpoint}/correspondence/publication/metadata/${pub_id}`;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/correspondence/publication/metadata/${pub_id}`;
+    return this.http.get(endpoint);
   }
 
   getDownloadableComments(textItemID: string, format: string): Observable<any> {
     const textIDParts = textItemID.replace('_com', '').split(';')[0].split('_');
     const ch_id = textIDParts.length > 2 ? '/' + textIDParts[2] : '';
-    const url = `${this.apiEndpoint}/text/downloadable/${format}`
+    const endpoint = `${this.apiURL}/text/downloadable/${format}`
           + `/${textIDParts[0]}/${textIDParts[1]}/com${ch_id}`;
-    return this.http.get(this.apiEndpoint + url);
+    return this.http.get(endpoint);
   }
 
   /**

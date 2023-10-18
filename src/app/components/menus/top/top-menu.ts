@@ -3,8 +3,8 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { config } from '@config';
+import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { isBrowser } from '@utility-functions';
 
 

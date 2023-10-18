@@ -24,9 +24,9 @@ export class ElasticSearchService {
     this.indices = config.page?.elasticSearch?.indices ?? [];
     this.fixedFilters = config.page?.elasticSearch?.fixedFilters ?? [];
     this.textTypes = config.page?.elasticSearch?.typeFilterGroupOptions ?? [];
-    const apiEndpoint = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.searchURL = apiEndpoint + '/' + machineName + '/search/elastic/' + this.indices.join(',');
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.searchURL = apiBaseURL + '/' + projectName + '/search/elastic/' + this.indices.join(',');
 
     // Add fields that should always be returned in hits
     this.source = [

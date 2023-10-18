@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { marked } from 'marked';
 
-import { MarkdownContentService } from '@services/markdown-content.service';
 import { config } from '@config';
+import { MarkdownContentService } from '@services/markdown-content.service';
 
 
 @Component({

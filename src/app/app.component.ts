@@ -29,14 +29,13 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
   showSideNav: boolean = false;
 
   constructor(
-    private router: Router,
     private headService: DocumentHeadService,
-    private platformService: PlatformService
+    private platformService: PlatformService,
+    private router: Router
   ) {
-    // Side menu is shown by default in desktop mode but not in mobile mode.
-    this.platformService.isDesktop() ? this.showSideNav = true : this.showSideNav = false;
-
     this.enableRouterLoadingBar = config.app?.enableRouterLoadingBar ?? false;
+    // Side menu is shown by default in desktop mode but not in mobile mode.
+    this.showSideNav = this.platformService.isDesktop() ? true : false;
   }
 
   ngOnInit(): void {
@@ -49,7 +48,7 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
       this.currentUrlSegments = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
 
       // Check if a collection-page in order to show collection side menu instead of main side menu.
-      if (this.currentUrlSegments && this.currentUrlSegments[0]?.path === 'collection') {
+      if (this.currentUrlSegments?.[0]?.path === 'collection') {
         this.collectionID = this.currentUrlSegments[1]?.path || '';
         this.collectionSideMenuInitialUrlSegments = this.currentUrlSegments;
         this.collectionSideMenuInitialQueryParams = currentUrlTree?.queryParams;
@@ -84,7 +83,7 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
         this.appIsStarting = false;
       }
 
-      this.setTitleForTopMenuPages(this.currentUrlSegments && this.currentUrlSegments[0]?.path || '');
+      this.setTitleForTopMenuPages(this.currentUrlSegments?.[0]?.path || '');
 
       this.currentRouterUrl === '/' && this.headService.setMetaProperty('description', $localize`:@@Site.MetaDescription.Home:En generell beskrivning av webbplatsen för sökmotorer.`);
       this.currentRouterUrl !== '/' && this.headService.setMetaProperty('description', '');
@@ -101,6 +100,16 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
     this.showSideNav = !this.showSideNav;
   }
 
+  hideLoadingBar(hide: boolean): void {
+    if (hide && isBrowser()) {
+      setTimeout(() => {
+        this.loadingBarHidden = hide;
+      }, 700);
+    } else {
+      this.loadingBarHidden = hide;
+    }
+  }
+
   private setTitleForTopMenuPages(routeBasePath?: string) {
     switch (routeBasePath) {
       case 'content':
@@ -112,16 +121,6 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
       default:
         !routeBasePath && this.headService.setTitle();
         return;
-    }
-  }
-
-  hideLoadingBar(hide: boolean): void {
-    if (hide && isBrowser()) {
-      setTimeout(() => {
-        this.loadingBarHidden = hide;
-      }, 700);
-    } else {
-      this.loadingBarHidden = hide;
     }
   }
 

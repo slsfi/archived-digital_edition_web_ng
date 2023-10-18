@@ -6,8 +6,8 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
 import { HtmlParserService } from '@services/html-parser.service';
-import { ViewOptionsService } from '@services/view-options.service';
 import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames, isBrowser } from '@utility-functions';
 
 
@@ -28,6 +28,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   receiver: string = '';
   sender: string = '';
   text: SafeHtml | string = '';
+
   private unlistenClickEvents?: () => void;
 
   constructor(
@@ -36,10 +37,10 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
-    public viewOptionsService: ViewOptionsService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService
   ) {}
 
   ngOnInit() {

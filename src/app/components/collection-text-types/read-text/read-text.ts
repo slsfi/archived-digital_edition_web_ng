@@ -6,8 +6,8 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { config } from '@config';
 import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
-import { HtmlParserService } from '@services/html-parser.service';
 import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
 import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
 import { ViewOptionsService } from '@services/view-options.service';
@@ -31,20 +31,22 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   illustrationsViewAvailable: boolean = false;
   illustrationsVisibleInReadtext: boolean = false;
   intervalTimerId: number = 0;
+  mobileMode: boolean = false;
   text: SafeHtml = '';
   textLanguage: string = '';
+
   private unlistenClickEvents?: () => void;
 
   constructor(
     private collectionContentService: CollectionContentService,
-    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
-    public platformService: PlatformService,
+    private platformService: PlatformService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
+    private scrollService: ScrollService,
     public viewOptionsService: ViewOptionsService
   ) {
     this.illustrationsViewAvailable = config.page?.text?.viewTypes?.illustrations ?? false;
@@ -72,6 +74,8 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.loadReadText();
     }
@@ -101,7 +105,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           if (this.textPosition) {
             this.scrollToTextPosition();
           } else if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
@@ -208,7 +212,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   openIllustrationInNewView(image: any) {
     image.viewType = 'illustrations';
     this.openNewIllustrView.emit(image);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
   updateSelectedIllustrationImage(image: any) {
@@ -252,7 +256,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
               )[1] as HTMLAnchorElement;
             }
             if (target) {
-              that.commonFunctions.scrollToHTMLElement(target);
+              that.scrollService.scrollToHTMLElement(target);
               clearInterval(that.intervalTimerId);
             }
           }
@@ -268,7 +272,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
         ) as HTMLElement;
         if (target) {
-          this.commonFunctions.scrollElementIntoView(target, 'top', 50);
+          this.scrollService.scrollElementIntoView(target, 'top', 50);
         }
       });
     }

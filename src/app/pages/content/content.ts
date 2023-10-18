@@ -15,8 +15,8 @@ export class ContentPage implements OnInit {
   mdContent$: Observable<SafeHtml | null>;
 
   constructor(
-    private sanitizer: DomSanitizer,
     private mdContentService: MarkdownContentService,
+    private sanitizer: DomSanitizer,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 

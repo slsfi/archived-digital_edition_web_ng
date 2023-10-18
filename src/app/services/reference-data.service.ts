@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { config } from '@config';
@@ -17,11 +17,11 @@ export class ReferenceDataService {
     this.urnResolverUrl = config.modal?.referenceData?.URNResolverURL ?? 'https://urn.fi/';
   }
 
-  getReferenceData(id: string): Observable<any> {
+  getReferenceData(url: string): Observable<any> {
     // We need to double encode the URL for the API
-    id = encodeURI(encodeURIComponent(id));
-    const url = config.app.apiEndpoint + '/' + config.app.machineName + '/urn/' + id + '/';
-    return this.http.get(url);
+    url = encodeURI(encodeURIComponent(url));
+    const endpoint = `${config.app.apiEndpoint}/${config.app.machineName}/urn/${url}/`;
+    return this.http.get(endpoint);
   }
 
   getUrnResolverUrl() {

@@ -6,22 +6,22 @@ import { existsOne, findAll, getAttributeValue } from 'domutils';
 import { render } from 'dom-serializer';
 
 import { config } from '@config';
-import { isEmptyObject } from '@utility-functions';
 import { CollectionContentService } from '@services/collection-content.service';
+import { isEmptyObject } from '@utility-functions';
 
 
 @Injectable({
     providedIn: 'root',
 })
 export class HtmlParserService {
-    apiEndpoint: string = '';
+    private apiURL: string = '';
 
     constructor(
-        private textService: CollectionContentService
+        private collectionContentService: CollectionContentService
     ) {
-        const apiURL = config.app?.apiEndpoint ?? '';
-        const machineName = config.app?.machineName ?? '';
-        this.apiEndpoint = apiURL + '/' + machineName;
+        const apiBaseURL = config.app?.apiEndpoint ?? '';
+        const projectName = config.app?.machineName ?? '';
+        this.apiURL = apiBaseURL + '/' + projectName;
     }
 
     postprocessEstablishedText(text: string, collectionId: string) {
@@ -38,7 +38,7 @@ export class HtmlParserService {
     }
 
     getEstablishedTextIllustrations(id: string): Observable<any> {
-        return this.textService.getReadText(id).pipe(
+        return this.collectionContentService.getReadText(id).pipe(
             map((res) => {
                 const images: any[] = [];
                 if (
@@ -119,7 +119,7 @@ export class HtmlParserService {
             m2.forEach(element => {
                 element.attribs.src = element.attribs.src.replace(
                     'assets/images/verk/',
-                    `${this.apiEndpoint}/gallery/get/${galleryId}/`
+                    `${this.apiURL}/gallery/get/${galleryId}/`
                 );
             });
             text = render(handler.dom, { decodeEntities: false });

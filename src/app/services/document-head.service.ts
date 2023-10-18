@@ -79,7 +79,7 @@ export class DocumentHeadService {
         }
     }
 
-    addLinkTag(
+    private addLinkTag(
         relType: string,
         locale: string,
         routerURL: string,
@@ -96,7 +96,7 @@ export class DocumentHeadService {
         this.renderer.appendChild(this.document.head, tag);
     }
 
-    removeLinkTags(relType: string, hreflang: boolean = false) {
+    private removeLinkTags(relType: string, hreflang: boolean = false) {
         const hreflangAttr = hreflang ? '[hreflang]' : '';
         const linkTags = this.document.head.querySelectorAll(
             'link[rel="' + relType + '"]' + hreflangAttr
@@ -106,11 +106,11 @@ export class DocumentHeadService {
         }
     }
 
-    getAbsoluteURL(relativeURL: string) {
+    private getAbsoluteURL(relativeURL: string) {
         return String(this.document.defaultView?.location.origin) + '/' + relativeURL;
     }
 
-    canonicalizeURL(url: string): string {
+    private canonicalizeURL(url: string): string {
         return url.split('?')[0];
     }
     

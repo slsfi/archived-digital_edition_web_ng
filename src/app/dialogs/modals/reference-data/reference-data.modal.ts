@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';

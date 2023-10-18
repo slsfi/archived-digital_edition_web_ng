@@ -7,7 +7,6 @@ import { marked } from 'marked';
 
 import { MarkdownContentService } from '@services/markdown-content.service';
 import { ScrollService } from '@services/scroll.service';
-import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -27,17 +26,17 @@ export class LegendComponent implements OnDestroy, OnInit {
   publicationId: string = '';
   staticMdLegendFolderNumber: string = '13';
   text$: Observable<SafeHtml>;
+
   private unlistenClickEvents?: () => void;
 
   constructor(
-    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private mdContentService: MarkdownContentService,
     private ngZone: NgZone,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    public viewOptionsService: ViewOptionsService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private scrollService: ScrollService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
   ngOnInit() {
@@ -100,7 +99,7 @@ export class LegendComponent implements OnDestroy, OnInit {
                 const targetElem = containerElem.querySelector(
                   '[data-id="' + targetHref.slice(1) + '"]'
                 ) as HTMLElement;
-                this.commonFunctions.scrollElementIntoView(targetElem, 'top');
+                this.scrollService.scrollElementIntoView(targetElem, 'top');
               }
             }
           }
@@ -130,7 +129,7 @@ export class LegendComponent implements OnDestroy, OnInit {
             const legendElements = document.querySelectorAll('page-text:not([ion-page-hidden]):not(.ion-page-hidden) text-legend');
             const element = legendElements[legendElements.length - 1].querySelector('[data-id="' + that.scrollToElementId + '"]') as any;
             if (element) {
-              that.commonFunctions.scrollElementIntoView(element, 'top');
+              that.scrollService.scrollElementIntoView(element, 'top');
               clearInterval(that.intervalTimerId);
             }
           }

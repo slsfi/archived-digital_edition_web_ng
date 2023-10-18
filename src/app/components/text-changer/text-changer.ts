@@ -33,6 +33,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   firstItem?: boolean;
   flattened: Array<any> = [];
   lastItem?: boolean;
+  mobileMode: boolean = false;
   nextItem: any;
   nextItemTitle?: string;
   prevItem: any;
@@ -40,8 +41,8 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   tocItemId: string = '';
 
   constructor(
+    private platformService: PlatformService,
     private router: Router,
-    public platformService: PlatformService,
     private tocService: CollectionTableOfContentsService
   ) {
     this.collectionHasCover = config.collections?.frontMatterPages?.cover ?? false;
@@ -108,6 +109,8 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     this.activeTocOrderSubscription = this.tocService.getActiveTocOrder().subscribe(
       (tocOrder: string) => {
         if (tocOrder !== this.activeTocOrder) {

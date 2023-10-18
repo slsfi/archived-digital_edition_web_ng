@@ -22,8 +22,8 @@ export class IllustrationModal implements OnInit {
   imgMetadata: Record<string, any> | undefined | null = undefined;
 
   constructor(
-    private modalCtrl: ModalController,
     private mediaCollectionService: MediaCollectionService,
+    private modalCtrl: ModalController,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 

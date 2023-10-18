@@ -10,7 +10,6 @@ import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/full
 import { Facsimile } from '@models/facsimile.model';
 import { CollectionContentService } from '@services/collection-content.service';
 import { PlatformService } from '@services/platform.service';
-import { ViewOptionsService } from '@services/view-options.service';
 import { sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
@@ -36,6 +35,7 @@ export class FacsimilesComponent implements OnInit {
   facsimiles: any[] = [];
   facsSize: number | null = 1;
   facsURLDefault: string = '';
+  mobileMode: boolean = false;
   numberOfImages: number = 0;
   prevX: number = 0;
   prevY: number = 0;
@@ -49,9 +49,8 @@ export class FacsimilesComponent implements OnInit {
     private alertCtrl: AlertController,
     private collectionContentService: CollectionContentService,
     private modalCtrl: ModalController,
-    public viewOptionsService: ViewOptionsService,
-    private sanitizer: DomSanitizer,
-    public platformService: PlatformService
+    private platformService: PlatformService,
+    private sanitizer: DomSanitizer
   ) {
     this.facsSize = config.component?.facsimiles?.imageQuality ?? 1;
     this.facsURLAlternate = config.app?.facsimileBase ?? '';
@@ -59,6 +58,8 @@ export class FacsimilesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.loadFacsimiles();
     }

@@ -4,12 +4,11 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subject, Subscription, timeout } from 'rxjs';
 
+import { config } from '@config';
 import { OccurrencesAccordionComponent } from '@components/occurrences-accordion/occurrences-accordion.component';
-import { OccurrenceService } from '@services/occurence.service';
-import { SemanticDataService } from '@services/semantic-data.service';
+import { NamedEntityService } from '@services/named-entity.service';
 import { TooltipService } from '@services/tooltip.service';
 import { isEmptyObject } from '@utility-functions';
-import { config } from '@config';
 
 
 @Component({
@@ -38,10 +37,9 @@ export class SemanticDataObjectModal implements OnInit {
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private occurrenceService: OccurrenceService,
     private modalCtrl: ModalController,
+    private namedEntityService: NamedEntityService,
     private router: Router,
-    private semanticDataService: SemanticDataService,
     private tooltipService: TooltipService
   ) {
     this.showAliasAndPrevLastName = config.modal?.semanticDataObject?.showAliasAndPrevLastName ?? true;
@@ -122,7 +120,7 @@ export class SemanticDataObjectModal implements OnInit {
   private getSemanticDataObjectDetails(type: string, id: string): Observable<any> {
     if (type !== 'work' || (type === 'work' && this.simpleWorkMetadata)) {
       // Get semantic data object details from the backend API
-      return this.semanticDataService.getSingleSemanticDataObject(type, id).pipe(
+      return this.namedEntityService.getEntity(type, id).pipe(
         timeout(20000),
         map((data: any) => {
           if (type === 'work') {
@@ -146,7 +144,7 @@ export class SemanticDataObjectModal implements OnInit {
       );
     } else {
       // For work manifestations, get semantic data object details from Elasticsearch API
-      return this.semanticDataService.getSingleObjectElastic(type, id).pipe(
+      return this.namedEntityService.getEntityFromElastic(type, id).pipe(
         timeout(20000),
         map((data: any) => {
           if (data?.hits?.hits?.length < 1) {
@@ -174,7 +172,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectMediaData(type: string, id: string): Observable<any> {
-    return (!this.showMediaData && of({})) || this.occurrenceService.getMediaData(type, id).pipe(
+    return (!this.showMediaData && of({})) || this.namedEntityService.getEntityMediaData(type, id).pipe(
       timeout(20000),
       map((data: any) => {
         data.imageUrl = data.image_path;
@@ -187,7 +185,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectArticleData(type: string, id: string): Observable<any> {
-    return (!this.showArticleData && of({})) || this.occurrenceService.getArticleData(type, id).pipe(
+    return (!this.showArticleData && of({})) || this.namedEntityService.getEntityArticleData(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
         return of({});
@@ -196,7 +194,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   private getSemanticDataObjectGalleryOccurrences(type: string, id: string): Observable<any> {
-    return (!this.showGalleryOccurrences && of({})) || this.occurrenceService.getGalleryOccurrences(type, id).pipe(
+    return (!this.showGalleryOccurrences && of({})) || this.namedEntityService.getEntityMediaCollectionOccurrences(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
         return of({});

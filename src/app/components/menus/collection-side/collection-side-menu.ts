@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -46,8 +46,8 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private cref: ChangeDetectorRef,
-    private scrollService: ScrollService,
     private headService: DocumentHeadService,
+    private scrollService: ScrollService,
     private tocService: CollectionTableOfContentsService
   ) {}
 

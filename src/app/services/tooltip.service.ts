@@ -4,8 +4,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 
 import { config } from '@config';
 import { CommentService } from '@services/comment.service';
+import { NamedEntityService } from '@services/named-entity.service';
 import { PlatformService } from '@services/platform.service';
-import { SemanticDataService } from '@services/semantic-data.service';
 
 
 @Injectable({
@@ -24,9 +24,9 @@ export class TooltipService {
 
   constructor(
     private commentService: CommentService,
+    private namedEntityService: NamedEntityService,
     private platformService: PlatformService,
-    private sanitizer: DomSanitizer,
-    private semanticDataService: SemanticDataService
+    private sanitizer: DomSanitizer
   ) {
     this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
@@ -45,7 +45,7 @@ export class TooltipService {
     const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
 
     if (type === 'work' && !this.simpleWorkMetadata) {
-      return this.semanticDataService.getSingleObjectElastic('work', id).pipe(
+      return this.namedEntityService.getEntityFromElastic('work', id).pipe(
         map((tooltip) => {
           let text = noInfoFound;
           if (tooltip?.hits?.hits?.[0]?.['_source']) {
@@ -61,7 +61,7 @@ export class TooltipService {
         })
       );
     } else {
-      return this.semanticDataService.getSingleSemanticDataObject(type, id).pipe(
+      return this.namedEntityService.getEntity(type, id).pipe(
         map((tooltip) => {
           let text = '';
           if (type === 'person') {

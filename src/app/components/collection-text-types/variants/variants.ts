@@ -37,10 +37,10 @@ export class VariantsComponent implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private collectionContentService: CollectionContentService,
-    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private parserService: HtmlParserService,
     private sanitizer: DomSanitizer,
+    private scrollService: ScrollService,
     public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.variants?.showOpenLegendButton ?? false;
@@ -59,7 +59,7 @@ export class VariantsComponent implements OnInit {
           this.variants = res.variations;
           this.setVariant();
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Variants.NoVariations:Inga tryckta varianter tillgängliga.`;
@@ -221,7 +221,7 @@ export class VariantsComponent implements OnInit {
   openVariationInNewView(variant?: any) {
     variant.viewType = 'variants';
     this.openNewVarView.emit(variant);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
   /*
@@ -243,7 +243,7 @@ export class VariantsComponent implements OnInit {
       id: 'var-legend'
     }
     this.openNewLegendView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
 }

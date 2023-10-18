@@ -7,25 +7,19 @@ import { isBrowser } from '@utility-functions';
   providedIn: 'root',
 })
 export class ScrollService {
-  private activeComHighl: Record<string, any> = {};
-  private activeLemHighl: Record<string, any> = {};
-  private intervalTimerId: number;
+  private activeComHighl: Record<string, any> = {
+    commentTimeOutId: null,
+    commentLemmaElement: null,
+  };
+  private activeLemHighl: Record<string, any> = {
+    lemmaTimeOutId: null,
+    lemmaElement: null,
+  };
+  private intervalTimerId: number = 0;
 
   constructor(
-    public ngZone: NgZone
-  ) {
-    this.activeComHighl = {
-      commentTimeOutId: null,
-      commentLemmaElement: null,
-    };
-
-    this.activeLemHighl = {
-      lemmaTimeOutId: null,
-      lemmaElement: null,
-    };
-
-    this.intervalTimerId = 0;
-  }
+    private ngZone: NgZone
+  ) {}
 
   /**
    * This function can be used to scroll a container so that the element which it

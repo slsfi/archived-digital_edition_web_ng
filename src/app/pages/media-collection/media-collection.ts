@@ -5,15 +5,15 @@ import { ModalController } from '@ionic/angular';
 import { catchError, combineLatest, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
-import { GalleryItem } from '@models/gallery-item-model';
-import { DocumentHeadService } from '@services/document-head.service';
-import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { MediaCollectionService } from '@services/media-collection.service';
+import { GalleryItem } from '@models/gallery-item-model';
+import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { DocumentHeadService } from '@services/document-head.service';
 import { MarkdownContentService } from '@services/markdown-content.service';
+import { MediaCollectionService } from '@services/media-collection.service';
 import { UrlService } from '@services/url.service';
 import { isEmptyObject, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
-import { config } from '@config';
 
 
 @Component({
@@ -55,12 +55,12 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private headService: DocumentHeadService,
-    private sanitizer: DomSanitizer,
+    private mdContentService: MarkdownContentService,
     private mediaCollectionService: MediaCollectionService,
     private modalController: ModalController,
-    private mdContentService: MarkdownContentService,
     private route: ActivatedRoute,
     private router: Router,
+    private sanitizer: DomSanitizer,
     private urlService: UrlService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {

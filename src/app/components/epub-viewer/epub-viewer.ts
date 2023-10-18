@@ -47,6 +47,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   epubWritersString: string = '';
   intervalTimerId: ReturnType<typeof setInterval> | undefined = undefined;
   loading: boolean = true;
+  mobileMode: boolean = false;
   previousLocationCfi: any = '';
   rendition: any = null;
   resizeObserver: ResizeObserver | null = null;
@@ -70,7 +71,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
-    public platformService: PlatformService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
@@ -85,6 +86,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
     this.subscribeToTextsizeChanges();
 
     const availableEbooks: any[] = config.ebooks ?? [];

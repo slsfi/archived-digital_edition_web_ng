@@ -37,10 +37,10 @@ export class ManuscriptsComponent implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private collectionContentService: CollectionContentService,
-    private commonFunctions: ScrollService,
     private elementRef: ElementRef,
     private parserService: HtmlParserService,
     private sanitizer: DomSanitizer,
+    private scrollService: ScrollService,
     public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
@@ -62,7 +62,7 @@ export class ManuscriptsComponent implements OnInit {
           this.manuscripts = res.manuscripts;
           this.setManuscript();
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Manuscripts.NoManuscripts:Inga manuskript.`;
@@ -210,7 +210,7 @@ export class ManuscriptsComponent implements OnInit {
       id: 'ms-legend'
     }
     this.openNewLegendView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
 }

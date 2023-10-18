@@ -9,24 +9,24 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class MarkdownContentService {
-  private apiEndpoint: string = '';
+  private apiURL: string = '';
 
   constructor(
     private http: HttpClient
   ) {
-    const apiURL = config.app?.apiEndpoint ?? '';
-    const machineName = config.app?.machineName ?? '';
-    this.apiEndpoint = apiURL + '/' + machineName;
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
   }
 
   getMdContent(fileID: string): Observable<any> {
-    const url = this.apiEndpoint + '/md/' + fileID;
-    return this.http.get(url);
+    const endpoint = `${this.apiURL}/md/${fileID}`;
+    return this.http.get(endpoint);
   }
 
   getMenuTree(language: string, rootNodeID: string): Observable<any> {
-    const url = `${this.apiEndpoint}/static-pages-toc/${language}`;
-    return this.http.get(url).pipe(
+    const endpoint = `${this.apiURL}/static-pages-toc/${language}`;
+    return this.http.get(endpoint).pipe(
       map((res: any) => {
         if (language && rootNodeID) {
           res = this.getNodeById(`${language}-${rootNodeID}`, res);

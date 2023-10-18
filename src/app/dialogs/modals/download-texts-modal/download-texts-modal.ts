@@ -55,8 +55,8 @@ export class DownloadTextsModalPage {
     private commentService: CommentService,
     private params: NavParams,
     private parserService: HtmlParserService,
-    private tocService: CollectionTableOfContentsService,
     private modalCtrl: ModalController,
+    private tocService: CollectionTableOfContentsService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {

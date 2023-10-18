@@ -5,13 +5,13 @@ import { IonContent, ModalController } from '@ionic/angular';
 import { catchError, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
+import { config } from '@config';
 import { IndexFilterModal } from '@modals/index-filter/index-filter.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { MarkdownContentService } from '@services/markdown-content.service';
-import { SemanticDataService } from '@services/semantic-data.service';
+import { NamedEntityService } from '@services/named-entity.service';
 import { TooltipService } from '@services/tooltip.service';
 import { sortArrayOfObjectsAlphabetically } from '@utility-functions';
-import { config } from '@config';
 
 
 /**
@@ -26,7 +26,11 @@ export class IndexPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
 
   agg_after_key: Record<string, any> = {};
-  alphabet: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'];
+  alphabet: string[] = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'
+  ];
   cachedData: any[] = [];
   data: any[] = [];
   filters: any = {};
@@ -45,12 +49,12 @@ export class IndexPage implements OnInit {
   constructor(
     private mdContentService: MarkdownContentService,
     private modalCtrl: ModalController,
+    private namedEntityService: NamedEntityService,
     public route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private semanticDataService: SemanticDataService,
     private tooltipService: TooltipService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
   ngOnInit() {
@@ -151,7 +155,7 @@ export class IndexPage implements OnInit {
   }
 
   private getPersonsDataSimple() {
-    this.semanticDataService.getPersons(this.activeLocale).subscribe({
+    this.namedEntityService.getPersons(this.activeLocale).subscribe({
       next: (persons) => {
         this.data = persons;
         this.cachedData = persons;
@@ -165,7 +169,7 @@ export class IndexPage implements OnInit {
   }
 
   private getPersonsDataElastic() {
-    this.semanticDataService.getSubjectsElastic(
+    this.namedEntityService.getPersonsFromElastic(
       this.agg_after_key, this.searchText, this.filters, this.maxFetchSize
     ).subscribe({
       next: (persons: any) => {
@@ -201,7 +205,7 @@ export class IndexPage implements OnInit {
   }
 
   private getPlacesData() {
-    this.semanticDataService.getLocationElastic(
+    this.namedEntityService.getPlacesFromElastic(
       this.agg_after_key, this.searchText, this.filters, this.maxFetchSize
     ).subscribe({
       next: (places) => {
@@ -236,7 +240,7 @@ export class IndexPage implements OnInit {
   }
 
   private getKeywordsData() {
-    this.semanticDataService.getTagElastic(
+    this.namedEntityService.getKeywordsFromElastic(
       this.agg_after_key, this.searchText, this.filters, this.maxFetchSize
     ).subscribe({
       next: (keywords) => {
@@ -276,7 +280,7 @@ export class IndexPage implements OnInit {
    * TODO: Recreate the elastic index for works according to persons, places and keywords and refactor here.
    */
   private getWorksData() {
-    this.semanticDataService.getWorksElastic(
+    this.namedEntityService.getWorksFromElastic(
       0, this.searchText, this.maxFetchSize
     ).subscribe({
       next: (works) => {
