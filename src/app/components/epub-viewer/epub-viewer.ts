@@ -45,7 +45,6 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   epubTitle: string = '';
   epubToc: any[] = [];
   epubWritersString: string = '';
-  textsizeSubscription: Subscription | null = null;
   intervalTimerId: ReturnType<typeof setInterval> | undefined = undefined;
   loading: boolean = true;
   previousLocationCfi: any = '';
@@ -58,7 +57,8 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   showTOCButton: boolean = true;
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
-  textsize: Textsize | null = null;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
   tocMenuOpen: boolean = false;
   resizeTimeoutId: any = null;
   _window: Window | null = null;
@@ -85,7 +85,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscribeToReadPopoverFontsizeChanges();
+    this.subscribeToTextsizeChanges();
 
     const availableEbooks: any[] = config.ebooks ?? [];
     for (const ebook of availableEbooks) {
@@ -314,29 +314,38 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     // Render the epub in the specified HTML element with rendering options
-    this.rendition = this.book.renderTo(area, { method: 'continuous', width: areaWidth, height: areaHeight, spread: 'auto', allowPopups: true });
+    this.rendition = this.book.renderTo(
+      area,
+      {
+        method: 'continuous',
+        width: areaWidth,
+        height: areaHeight,
+        spread: 'auto',
+        allowPopups: true
+      }
+    );
 
     // Register epub themes for switching font size and setting font family to
     // browser default serif for the search to highlight matches correctly.
-    this.rendition.themes.register('fontsize_0', { 'body': { 'font-size': '1em' },
+    this.rendition.themes.register('fontsize_XS', { 'body': { 'font-size': '1em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_1', { 'body': { 'font-size': '1.0625em' },
+    this.rendition.themes.register('fontsize_S', { 'body': { 'font-size': '1.0625em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_2', { 'body': { 'font-size': '1.125em' },
+    this.rendition.themes.register('fontsize_M', { 'body': { 'font-size': '1.125em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_3', { 'body': { 'font-size': '1.1875em' },
+    this.rendition.themes.register('fontsize_L', { 'body': { 'font-size': '1.1875em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_4', { 'body': { 'font-size': '1.3125em' },
+    this.rendition.themes.register('fontsize_XL', { 'body': { 'font-size': '1.3125em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_0', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_XS', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_1', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_S', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.0625em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_2', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_M', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.125em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_3', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_L', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.1875em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_4', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_XL', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.3125em' }, 'img': { 'max-width': '100% !important;' } });
 
     this.rendition.themes.select('fontsize_' + this.textsize);
@@ -349,11 +358,11 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
    * Get fontsize changes from the read popover service and update epub
    * font size when new size has been set.
    */
-  private subscribeToReadPopoverFontsizeChanges() {
+  private subscribeToTextsizeChanges() {
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
-      (size: Textsize) => {
-      if (size !== this.textsize) {
-        this.setEpubFontsize(size);
+      (textsize: Textsize) => {
+      if (textsize !== this.textsize) {
+        this.setEpubFontsize(textsize);
       }
     });
   }
@@ -361,15 +370,17 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   private setEpubFontsize(size: Textsize) {
     const currentLocation = this.currentLocationCfi;
     try {
-      if (this.searchMenuOpen) {
-        this.rendition.themes.select('search_fontsize_' + size);
-      } else {
-        this.rendition.themes.select('fontsize_' + size);
+      if (this.rendition !== null) {
+        if (this.searchMenuOpen) {
+          this.rendition.themes.select('search_fontsize_' + size);
+        } else {
+          this.rendition.themes.select('fontsize_' + size);
+        }
+        this.textsize = size;
+        this.rendition.clear();
+        this.rendition.start();
+        this.rendition.display(currentLocation);
       }
-      this.textsize = size;
-      this.rendition.clear();
-      this.rendition.start();
-      this.rendition.display(currentLocation);
     } catch(e) {
       console.error('Error setting epub font size', e);
     }

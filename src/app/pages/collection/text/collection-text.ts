@@ -59,7 +59,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   showViewOptionsButton: boolean = true;
   textItemID: string = '';
   textPosition: string = '';
-  textsize: Textsize;
+  textsize: Textsize = Textsize.Small;
   textsizeSubscription: Subscription | null = null;
   toolTipMaxWidth: string | null = null;
   toolTipPosType: string = 'fixed';

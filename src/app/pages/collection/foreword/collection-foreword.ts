@@ -1,8 +1,8 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 
 import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
@@ -20,7 +20,7 @@ import { ViewOptionsService } from '@services/view-options.service';
   templateUrl: 'collection-foreword.html',
   styleUrls: ['collection-foreword.scss']
 })
-export class CollectionForewordPage implements OnInit {
+export class CollectionForewordPage implements OnDestroy, OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
@@ -28,7 +28,10 @@ export class CollectionForewordPage implements OnInit {
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
   text$: Observable<SafeHtml>;
-  textsize$: Observable<number>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
+
+  TextsizeEnum = Textsize;
 
   constructor(
     private collectionContentService: CollectionContentService,
@@ -50,10 +53,10 @@ export class CollectionForewordPage implements OnInit {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
-      })
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
     );
 
     this.text$ = combineLatest(
@@ -73,6 +76,10 @@ export class CollectionForewordPage implements OnInit {
         return this.loadForeword(collectionID, this.activeLocale);
       })
     );
+  }
+
+  ngOnDestroy() {
+    this.textsizeSubscription?.unsubscribe();
   }
 
   private loadForeword(id: string, lang: string): Observable<SafeHtml> {

@@ -18,13 +18,17 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
-  <div class="scroll-content-container">
-    <ng-container *ngIf="(text$ | async) as text; else loading">
-      <div *ngIf="(textsize$ | async) as textsize" class="tei teiContainer"
-            [ngClass]="((textsize==0)?'xsmallFontSize':(textsize==1)?'smallFontSize':(textsize==2)?'mediumFontSize':(textsize==3)?'largeFontSize':'xlargeFontSize')"
-            [innerHTML]="text"
-      ></div>
-    </ng-container>
+  <div class="scroll-content-container"
+        [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+        [class.smallFontSize]="textsize == TextsizeEnum.Small"
+        [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+        [class.largeFontSize]="textsize == TextsizeEnum.Large"
+        [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
+  >
+    <div *ngIf="(text$ | async) as text; else loading"
+          class="tei teiContainer"
+          [innerHTML]="text"
+    ></div>
     <ng-template #loading>
       <ion-spinner class="loading" name="crescent"></ion-spinner>
     </ng-template>

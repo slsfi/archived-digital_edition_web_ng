@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, Re
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { combineLatest, map, Observable, Subscription } from 'rxjs';
+import { combineLatest, map, Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
@@ -48,7 +48,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   text: SafeHtml;
   textLoading: boolean = true;
   textMenu: SafeHtml;
-  textsize$: Observable<Textsize>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
   tocMenuOpen: boolean = false;
   toolTipMaxWidth: string | null = null;
   toolTipPosition: any = {
@@ -145,7 +146,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
-    this.textsize$ = this.viewOptionsService.getTextsize();
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
+    );
 
     this.urlParametersSubscription = combineLatest(
       [this.route.params, this.route.queryParams]
@@ -190,6 +195,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.urlParametersSubscription?.unsubscribe();
+    this.textsizeSubscription?.unsubscribe();
     this.unlistenClickEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();

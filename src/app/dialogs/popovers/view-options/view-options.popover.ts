@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, PopoverController } from '@ionic/angular';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { config } from '@config';
 import { Textsize } from '@models/textsize.model';
@@ -31,7 +31,6 @@ export class ViewOptionsPopover implements OnInit {
     'pageBreakOriginal': boolean,
     'pageBreakEdition': boolean
   };
-
   show = {
     'comments': false,
     'personInfo': false,
@@ -44,7 +43,6 @@ export class ViewOptionsPopover implements OnInit {
     'pageBreakOriginal': false,
     'pageBreakEdition': false
   };
-
   textsize$: Observable<Textsize>;
   togglesCounter: number;
 

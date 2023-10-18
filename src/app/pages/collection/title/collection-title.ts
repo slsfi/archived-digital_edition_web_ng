@@ -1,8 +1,8 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { marked } from 'marked';
 
 import { config } from '@config';
@@ -22,7 +22,7 @@ import { ViewOptionsService } from '@services/view-options.service';
   templateUrl: 'collection-title.html',
   styleUrls: ['collection-title.scss'],
 })
-export class CollectionTitlePage implements OnInit {
+export class CollectionTitlePage implements OnDestroy, OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
@@ -31,7 +31,10 @@ export class CollectionTitlePage implements OnInit {
   showViewOptionsButton: boolean = true;
   titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
-  textsize$: Observable<number>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
+
+  TextsizeEnum = Textsize;
 
   constructor(
     private collectionContentService: CollectionContentService,
@@ -55,10 +58,10 @@ export class CollectionTitlePage implements OnInit {
   ngOnInit() {
     this.mobileMode = this.userSettingsService.isMobile();
 
-    this.textsize$ = this.viewOptionsService.getTextsize().pipe(
-      map((size: Textsize) => {
-        return Number(size);
-      })
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
     );
 
     this.text$ = combineLatest(
@@ -78,6 +81,10 @@ export class CollectionTitlePage implements OnInit {
         return this.loadTitle(collectionID, this.activeLocale);
       })
     );
+  }
+
+  ngOnDestroy() {
+    this.textsizeSubscription?.unsubscribe();
   }
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {

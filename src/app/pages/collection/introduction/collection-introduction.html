@@ -28,8 +28,7 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
-  <div *ngIf="(textsize$ | async) as textsize"
-        class="scroll-content-container"
+  <div class="scroll-content-container"
         [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
         [class.smallFontSize]="textsize == TextsizeEnum.Small"
         [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
