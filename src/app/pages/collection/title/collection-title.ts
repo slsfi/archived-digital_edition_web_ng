@@ -1,18 +1,20 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { marked } from 'marked';
 
-import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
+import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { MdContentService } from '@services/md-content.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { TextService } from '@services/text.service';
-import { config } from 'src/assets/config/config';
+import { Textsize } from '@models/textsize.model';
+import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
+import { PlatformService } from '@services/platform.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -20,7 +22,7 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'collection-title.html',
   styleUrls: ['collection-title.scss'],
 })
-export class CollectionTitlePage implements OnInit {
+export class CollectionTitlePage implements OnDestroy, OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
@@ -29,18 +31,23 @@ export class CollectionTitlePage implements OnInit {
   showViewOptionsButton: boolean = true;
   titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
+
+  TextsizeEnum = Textsize;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private modalController: ModalController,
+    private parserService: HtmlParserService,
     private popoverCtrl: PopoverController,
-    public readPopoverService: ReadPopoverService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
-    private userSettingsService: UserSettingsService,
+    private scrollService: ScrollService,
+    private platformService: PlatformService,
+    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.titleFromMarkdownFolderId = config.collections?.titlesMarkdownFolderNumber ?? '';
@@ -49,7 +56,13 @@ export class CollectionTitlePage implements OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
+
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
+    );
 
     this.text$ = combineLatest(
       [this.route.params, this.route.queryParams]
@@ -58,9 +71,9 @@ export class CollectionTitlePage implements OnInit {
       tap(({collectionID, q}) => {
         this.collectionID = collectionID;
         if (q) {
-          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
+          this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         }
       }),
@@ -70,13 +83,17 @@ export class CollectionTitlePage implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.textsizeSubscription?.unsubscribe();
+  }
+
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {
     if (!this.titleFromMarkdownFolderId) {
-      return this.textService.getTitlePage(id, lang).pipe(
+      return this.collectionContentService.getTitle(id, lang).pipe(
         map((res: any) => {
           if (res?.content) {
             let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-            text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+            text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
             return this.sanitizer.bypassSecurityTrustHtml(text);
           } else {
             return of(this.sanitizer.bypassSecurityTrustHtml(

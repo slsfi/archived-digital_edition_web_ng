@@ -4,11 +4,11 @@ import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 
+import { config } from '@config';
 import { ContentItem } from '@models/content-item.model';
-import { ParentChildPagePathPipe } from 'src/app/pipes/parent-child-page-path.pipe';
+import { ParentChildPagePathPipe } from '@pipes/parent-child-page-path.pipe';
 import { CollectionsService } from '@services/collections.service';
-import { MdContentService } from '@services/md-content.service';
-import { config } from 'src/assets/config/config';
+import { MarkdownContentService } from '@services/markdown-content.service';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class ContentGridComponent implements OnInit {
 
   constructor(
     private collectionsService: CollectionsService,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.availableEbooks = config.ebooks ?? [];

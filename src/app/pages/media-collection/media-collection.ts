@@ -5,15 +5,15 @@ import { ModalController } from '@ionic/angular';
 import { catchError, combineLatest, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { marked } from 'marked';
 
-import { GalleryItem } from '@models/gallery-item-model';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { DocumentHeadService } from '@services/document-head.service';
-import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { GalleryItem } from '@models/gallery-item-model';
+import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
+import { DocumentHeadService } from '@services/document-head.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { MediaCollectionService } from '@services/media-collection.service';
-import { MdContentService } from '@services/md-content.service';
-import { config } from 'src/assets/config/config';
 import { UrlService } from '@services/url.service';
+import { isEmptyObject, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -54,14 +54,13 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
     private headService: DocumentHeadService,
-    private sanitizer: DomSanitizer,
+    private mdContentService: MarkdownContentService,
     private mediaCollectionService: MediaCollectionService,
     private modalController: ModalController,
-    private mdContentService: MdContentService,
     private route: ActivatedRoute,
     private router: Router,
+    private sanitizer: DomSanitizer,
     private urlService: UrlService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
@@ -92,7 +91,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       map(([params, queryParams]) => ({...params, ...queryParams}))
     ).subscribe((routeParams: any) => {
       if (
-        (this.commonFunctions.isEmptyObject(routeParams) && this.mediaCollectionID !== '') ||
+        (isEmptyObject(routeParams) && this.mediaCollectionID !== '') ||
         (
           !routeParams.mediaCollectionID &&
           (
@@ -299,8 +298,8 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         galleryItemsList.push(galleryItem);
       });
 
-      !singleGallery && this.commonFunctions.sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
-      this.commonFunctions.sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
+      !singleGallery && sortArrayOfObjectsAlphabetically(galleryItemsList, 'title');
+      sortArrayOfObjectsNumerically(galleryItemsList, 'sortOrder');
     }
     return galleryItemsList;
   }
@@ -416,7 +415,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
       }
     });
     
-    this.commonFunctions.sortArrayOfObjectsAlphabetically(filterOptions, 'name');
+    sortArrayOfObjectsAlphabetically(filterOptions, 'name');
     if (type === 'person') {
       this.filterOptionsPersons = filterOptions;
     } else if (type === 'place') {

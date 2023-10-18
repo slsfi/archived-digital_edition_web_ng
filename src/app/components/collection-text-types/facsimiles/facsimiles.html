@@ -3,7 +3,7 @@
       [class.external-urls-header]="selectedFacsimileIsExternal"
       [class.facs-change-possible]="facsimiles.length > 1 || (facsimiles.length == 1 && externalFacsimiles.length > 0)"
       [class.facs-title-shown]="!selectedFacsimileIsExternal && showTitle"
-      [class.mobile-mode]="userSettingsService.isMobile()"
+      [class.mobile-mode]="mobileMode"
 >
   <h3 *ngIf="!selectedFacsimileIsExternal && showTitle" [innerHTML]="selectedFacsimile.title"></h3>
   <h3 *ngIf="selectedFacsimileIsExternal" i18n="@@Read.Facsimiles.ExternalHeading">Externa faksimil</h3>
@@ -18,8 +18,7 @@
 
 <div *ngIf="selectedFacsimileIsExternal"
       class="external-urls-wrapper tei teiContainer"
-      [class.mobile-mode]="userSettingsService.isMobile()"
-      [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+      [class.mobile-mode]="mobileMode"
 >
   <ul>
     <li *ngFor="let ext of externalFacsimiles">
@@ -30,7 +29,7 @@
 
 <ion-input *ngIf="!selectedFacsimileIsExternal && numberOfImages && numberOfImages > 1"
       class="image-nr-input"
-      [class.mobile-mode]="userSettingsService.isMobile()"
+      [class.mobile-mode]="mobileMode"
       fill="solid"
       label="Bild:"
       i18n-label="@@Read.Facsimiles.Page"
@@ -102,6 +101,4 @@
   </ion-fab>
 </ng-container>
 
-<div *ngIf="text" class="tei teiContainer" [innerHTML]="text"
-  [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'">
-</div>
+<div *ngIf="text" class="tei teiContainer" [innerHTML]="text"></div>

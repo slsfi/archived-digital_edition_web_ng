@@ -3,19 +3,18 @@
  */
 import '@angular/localize/init';
 import 'zone.js/dist/zone-node';
-import {LOCALE_ID} from '@angular/core';
-import {APP_BASE_HREF} from '@angular/common';
-import {ngExpressEngine} from '@nguniversal/express-engine';
+import { LOCALE_ID } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
-import {existsSync} from 'fs';
-import {join} from 'path';
+import { existsSync } from 'fs';
+import { join } from 'path';
 
-import {AppServerModule} from './src/main.server';
-import {environment} from "./src/environments/environment";
+import { AppServerModule } from './src/main.server';
+import { environment } from './src/environments/environment';
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(lang: string): express.Express
-{
+export function app(lang: string): express.Express {
     const server = express();
     const distFolder = join(process.cwd(), `dist/app/browser/${lang}`);
     const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
@@ -54,6 +53,7 @@ export function app(lang: string): express.Express
     return server;
 }
 
+// ! SK 18.10.2023: This function doesn't seem to be used.
 function run(): void {
     const port = process.env['PORT'] || 4000;
 

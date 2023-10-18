@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -35,11 +36,12 @@ export class VariantsComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
-    public readPopoverService: ReadPopoverService,
+    private parserService: HtmlParserService,
     private sanitizer: DomSanitizer,
-    private textService: TextService
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.variants?.showOpenLegendButton ?? false;
   }
@@ -51,13 +53,13 @@ export class VariantsComponent implements OnInit {
   }
 
   loadVariantTexts() {
-    this.textService.getVariants(this.textItemID).subscribe({
+    this.collectionContentService.getVariants(this.textItemID).subscribe({
       next: (res) => {
         if (res?.variations?.length > 0) {
           this.variants = res.variations;
           this.setVariant();
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Variants.NoVariations:Inga tryckta varianter tillgängliga.`;
@@ -100,7 +102,7 @@ export class VariantsComponent implements OnInit {
     }
     if (this.selectedVariant) {
       let text = this.postprocessVariantText(this.selectedVariant.content);
-      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+      text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
     }
   }
@@ -219,7 +221,7 @@ export class VariantsComponent implements OnInit {
   openVariationInNewView(variant?: any) {
     variant.viewType = 'variants';
     this.openNewVarView.emit(variant);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
   /*
@@ -241,7 +243,7 @@ export class VariantsComponent implements OnInit {
       id: 'var-legend'
     }
     this.openNewLegendView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
 }

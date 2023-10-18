@@ -6,14 +6,14 @@ import { AlertController, IonicModule, ModalController, PopoverController } from
 import { Subscription } from 'rxjs';
 import { Book } from 'epubjs';
 
-import { IsExternalURLPipe } from 'src/app/pipes/is-external-url.pipe';
+import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { Textsize } from '@models/textsize.model';
+import { IsExternalURLPipe } from '@pipes/is-external-url.pipe';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { Fontsize, ReadPopoverService } from '@services/read-popover.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { PlatformService } from '@services/platform.service';
+import { ViewOptionsService } from '@services/view-options.service';
+import { concatenateNames, isBrowser, numberIsEven } from '@utility-functions';
 
 
 @Component({
@@ -45,10 +45,9 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   epubTitle: string = '';
   epubToc: any[] = [];
   epubWritersString: string = '';
-  fontsize: Fontsize | undefined = undefined;
-  fontsizeSubscription: Subscription | null = null;
   intervalTimerId: ReturnType<typeof setInterval> | undefined = undefined;
   loading: boolean = true;
+  mobileMode: boolean = false;
   previousLocationCfi: any = '';
   rendition: any = null;
   resizeObserver: ResizeObserver | null = null;
@@ -59,6 +58,8 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   showTOCButton: boolean = true;
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
   tocMenuOpen: boolean = false;
   resizeTimeoutId: any = null;
   _window: Window | null = null;
@@ -67,19 +68,17 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(
     private alertController: AlertController,
-    private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
-    private readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService,
+    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.fontsize = this.readPopoverService.fontsize;
     this.showTOCButton = config.component?.epub?.showTOCButton ?? true;
     this.showURNButton = config.component?.epub?.showURNButton ?? false;
     this.showViewOptionsButton = config.component?.epub?.showViewOptionsButton ?? true;
@@ -87,7 +86,8 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscribeToReadPopoverFontsizeChanges();
+    this.mobileMode = this.platformService.isMobile();
+    this.subscribeToTextsizeChanges();
 
     const availableEbooks: any[] = config.ebooks ?? [];
     for (const ebook of availableEbooks) {
@@ -140,7 +140,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.unlistenKeyDownEvents?.();
-    this.fontsizeSubscription?.unsubscribe();
+    this.textsizeSubscription?.unsubscribe();
     this.resizeObserver?.unobserve(this.elementRef.nativeElement);
     this.rendition?.destroy();
     this.book?.destroy();
@@ -153,7 +153,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
       this.renderEpub();
 
       this.book.ready.then((res: any) => {
-        if (!this.userSettingsService.epubAlertIsDismissed() && $localize`:@@Epub.NoticeHeader:Anmärkning`) {
+        if (!this.viewOptionsService.epubAlertIsDismissed() && $localize`:@@Epub.NoticeHeader:Anmärkning`) {
           this.showNotice();
         }
 
@@ -204,9 +204,9 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
                 }
                 // Form concatenated string with epub writer names
                 if (this.epubCreators.length > 0) {
-                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubCreators, ',');
+                  this.epubWritersString = concatenateNames(this.epubCreators, ',');
                 } else if (this.epubContributors.length > 0) {
-                  this.epubWritersString = this.commonFunctions.concatenateNames(this.epubContributors, ',');
+                  this.epubWritersString = concatenateNames(this.epubContributors, ',');
                 }
               }
             } catch {}
@@ -304,44 +304,53 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     const area = this.elementRef.nativeElement.querySelector('#epub-render-area');
     let areaWidth: number | string = Math.floor(area?.getBoundingClientRect().width || 1);
     let areaHeight: number | string = Math.floor(area?.getBoundingClientRect().height || 1);
-    if (areaWidth > 1 && !this.commonFunctions.numberIsEven(areaWidth)) {
+    if (areaWidth > 1 && !numberIsEven(areaWidth)) {
       areaWidth = areaWidth - 1;
     } else {
       areaWidth = '100%';
     }
-    if (areaHeight > 1 && !this.commonFunctions.numberIsEven(areaHeight)) {
+    if (areaHeight > 1 && !numberIsEven(areaHeight)) {
       areaHeight = areaHeight - 1;
     } else {
       areaHeight = '100%';
     }
 
     // Render the epub in the specified HTML element with rendering options
-    this.rendition = this.book.renderTo(area, { method: 'continuous', width: areaWidth, height: areaHeight, spread: 'auto', allowPopups: true });
+    this.rendition = this.book.renderTo(
+      area,
+      {
+        method: 'continuous',
+        width: areaWidth,
+        height: areaHeight,
+        spread: 'auto',
+        allowPopups: true
+      }
+    );
 
     // Register epub themes for switching font size and setting font family to
     // browser default serif for the search to highlight matches correctly.
-    this.rendition.themes.register('fontsize_0', { 'body': { 'font-size': '1em' },
+    this.rendition.themes.register('fontsize_XS', { 'body': { 'font-size': '1em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_1', { 'body': { 'font-size': '1.0625em' },
+    this.rendition.themes.register('fontsize_S', { 'body': { 'font-size': '1.0625em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_2', { 'body': { 'font-size': '1.125em' },
+    this.rendition.themes.register('fontsize_M', { 'body': { 'font-size': '1.125em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_3', { 'body': { 'font-size': '1.1875em' },
+    this.rendition.themes.register('fontsize_L', { 'body': { 'font-size': '1.1875em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('fontsize_4', { 'body': { 'font-size': '1.3125em' },
+    this.rendition.themes.register('fontsize_XL', { 'body': { 'font-size': '1.3125em' },
       'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_0', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_XS', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_1', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_S', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.0625em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_2', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_M', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.125em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_3', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_L', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.1875em' }, 'img': { 'max-width': '100% !important;' } });
-    this.rendition.themes.register('search_fontsize_4', { '*': { 'font-family': 'serif !important' },
+    this.rendition.themes.register('search_fontsize_XL', { '*': { 'font-family': 'serif !important' },
       'body': { 'font-size': '1.3125em' }, 'img': { 'max-width': '100% !important;' } });
 
-    this.rendition.themes.select('fontsize_' + this.fontsize);
+    this.rendition.themes.select('fontsize_' + this.textsize);
 
     // Display the epub from the beginning
     this.rendition.display();
@@ -351,26 +360,29 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
    * Get fontsize changes from the read popover service and update epub
    * font size when new size has been set.
    */
-  private subscribeToReadPopoverFontsizeChanges() {
-    this.fontsizeSubscription = this.readPopoverService.fontsize$.subscribe(newFontsize => {
-      if (newFontsize in Fontsize && newFontsize !== this.fontsize) {
-        this.setEpubFontsize(newFontsize);
+  private subscribeToTextsizeChanges() {
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+      if (textsize !== this.textsize) {
+        this.setEpubFontsize(textsize);
       }
     });
   }
 
-  private setEpubFontsize(fontsize: Fontsize) {
+  private setEpubFontsize(size: Textsize) {
     const currentLocation = this.currentLocationCfi;
     try {
-      if (this.searchMenuOpen) {
-        this.rendition.themes.select('search_fontsize_' + fontsize);
-      } else {
-        this.rendition.themes.select('fontsize_' + fontsize);
+      if (this.rendition !== null) {
+        if (this.searchMenuOpen) {
+          this.rendition.themes.select('search_fontsize_' + size);
+        } else {
+          this.rendition.themes.select('fontsize_' + size);
+        }
+        this.textsize = size;
+        this.rendition.clear();
+        this.rendition.start();
+        this.rendition.display(currentLocation);
       }
-      this.fontsize = fontsize;
-      this.rendition.clear();
-      this.rendition.start();
-      this.rendition.display(currentLocation);
     } catch(e) {
       console.error('Error setting epub font size', e);
     }
@@ -392,10 +404,10 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     if (area) {
       let areaWidth = Math.floor(area?.getBoundingClientRect().width || 1);
       let areaHeight = Math.floor(area?.getBoundingClientRect().height || 1);
-      if (!this.commonFunctions.numberIsEven(areaWidth)) {
+      if (!numberIsEven(areaWidth)) {
         areaWidth = areaWidth - 1;
       }
-      if (!this.commonFunctions.numberIsEven(areaHeight)) {
+      if (!numberIsEven(areaHeight)) {
         areaHeight = areaHeight - 1;
       }
       if (areaWidth > 0 && areaHeight > 0) {
@@ -506,7 +518,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
         currentLocation = this.currentHighlight;
       }
       this.clearSearch();
-      this.rendition.themes.select('fontsize_' + this.fontsize);
+      this.rendition.themes.select('fontsize_' + this.textsize);
       try {
         this.rendition.clear();
         this.rendition.start();
@@ -514,7 +526,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
       this.rendition.display(currentLocation);
     } else {
       this.searchMenuOpen = true;
-      this.rendition.themes.select('search_fontsize_' + this.fontsize);
+      this.rendition.themes.select('search_fontsize_' + this.textsize);
       this.rendition.display(currentLocation);
     }
   }
@@ -681,7 +693,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     const { data, role } = await alert.onWillDismiss();
 
     if (role === 'dismiss') {
-      this.userSettingsService.markEpubAlertAsDismissed();
+      this.viewOptionsService.markEpubAlertAsDismissed();
     }
   }
 

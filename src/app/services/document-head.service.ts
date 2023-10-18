@@ -1,8 +1,8 @@
-import { Inject, Injectable, LOCALE_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Injectable({
@@ -17,11 +17,10 @@ export class DocumentHeadService {
         private meta: Meta,
         private rendererFactory: RendererFactory2,
         private title: Title,
-        @Inject(LOCALE_ID) private activeLocale: string,
         @Inject(DOCUMENT) private document: Document
     ) {
-        this.renderer = this.rendererFactory.createRenderer(null, null);
         this.languages = config.app?.i18n?.languages ?? [];
+        this.renderer = this.rendererFactory.createRenderer(null, null);
     }
 
     setTitle(pageTitleParts: string[] = []) {
@@ -80,7 +79,13 @@ export class DocumentHeadService {
         }
     }
 
-    addLinkTag(relType: string, locale: string, routerURL: string, hreflang: boolean = false, x_default: boolean = false) {
+    private addLinkTag(
+        relType: string,
+        locale: string,
+        routerURL: string,
+        hreflang: boolean = false,
+        x_default: boolean = false
+    ) {
         const tag: HTMLLinkElement = this.renderer.createElement('link');
         this.renderer.setAttribute(tag, 'rel', relType);
         if (hreflang) {
@@ -91,19 +96,21 @@ export class DocumentHeadService {
         this.renderer.appendChild(this.document.head, tag);
     }
 
-    removeLinkTags(relType: string, hreflang: boolean = false) {
+    private removeLinkTags(relType: string, hreflang: boolean = false) {
         const hreflangAttr = hreflang ? '[hreflang]' : '';
-        const linkTags = this.document.head.querySelectorAll('link[rel="' + relType + '"]' + hreflangAttr);
+        const linkTags = this.document.head.querySelectorAll(
+            'link[rel="' + relType + '"]' + hreflangAttr
+        );
         for (let i = 0; i < linkTags.length; i++) {
             this.renderer.removeChild(this.document.head, linkTags[i]);
         }
     }
 
-    getAbsoluteURL(relativeURL: string) {
+    private getAbsoluteURL(relativeURL: string) {
         return String(this.document.defaultView?.location.origin) + '/' + relativeURL;
     }
 
-    canonicalizeURL(url: string): string {
+    private canonicalizeURL(url: string): string {
         return url.split('?')[0];
     }
     

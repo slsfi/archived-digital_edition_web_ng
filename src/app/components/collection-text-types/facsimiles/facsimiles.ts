@@ -4,14 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule, ModalController } from '@ionic/angular';
 
+import { config } from '@config';
+import { DraggableImageDirective } from '@directives/draggable-image.directive';
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { Facsimile } from '@models/facsimile.model';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { FacsimileService } from '@services/facsimile.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
-import { DraggableImageDirective } from 'src/app/directives/draggable-image.directive';
+import { CollectionContentService } from '@services/collection-content.service';
+import { PlatformService } from '@services/platform.service';
+import { sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -36,6 +35,7 @@ export class FacsimilesComponent implements OnInit {
   facsimiles: any[] = [];
   facsSize: number | null = 1;
   facsURLDefault: string = '';
+  mobileMode: boolean = false;
   numberOfImages: number = 0;
   prevX: number = 0;
   prevY: number = 0;
@@ -47,12 +47,10 @@ export class FacsimilesComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private commonFunctions: CommonFunctionsService,
-    private facsimileService: FacsimileService,
+    private collectionContentService: CollectionContentService,
     private modalCtrl: ModalController,
-    public readPopoverService: ReadPopoverService,
-    private sanitizer: DomSanitizer,
-    public userSettingsService: UserSettingsService
+    private platformService: PlatformService,
+    private sanitizer: DomSanitizer
   ) {
     this.facsSize = config.component?.facsimiles?.imageQuality ?? 1;
     this.facsURLAlternate = config.app?.facsimileBase ?? '';
@@ -60,13 +58,15 @@ export class FacsimilesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.loadFacsimiles();
     }
   }
 
   loadFacsimiles() {
-    this.facsimileService.getFacsimiles(this.textItemID).subscribe({
+    this.collectionContentService.getFacsimiles(this.textItemID).subscribe({
       next: (facs) => {
         if (facs && facs.length > 0) {
           const sectionId = this.textItemID.split('_')[2]?.split(';')[0]?.replace('ch', '') || '';
@@ -93,10 +93,10 @@ export class FacsimilesComponent implements OnInit {
             }
           }
           if (this.facsimiles.length > 1) {
-            this.commonFunctions.sortArrayOfObjectsNumerically(this.facsimiles, 'priority', 'asc');
+            sortArrayOfObjectsNumerically(this.facsimiles, 'priority', 'asc');
           }
           if (this.externalFacsimiles.length > 1) {
-            this.commonFunctions.sortArrayOfObjectsNumerically(this.externalFacsimiles, 'priority', 'asc');
+            sortArrayOfObjectsNumerically(this.externalFacsimiles, 'priority', 'asc');
           }
           this.setInitialFacsimile();
         } else {

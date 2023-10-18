@@ -28,25 +28,29 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
-  <div class="scroll-content-container">
+  <div class="scroll-content-container"
+        [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+        [class.smallFontSize]="textsize == TextsizeEnum.Small"
+        [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+        [class.largeFontSize]="textsize == TextsizeEnum.Large"
+        [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
+  >
 
     <!-- Tooltip wrapper -->
     <div
-      [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':
-            (readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-      [class.show_personInfo]="readPopoverService.show.personInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo"
-      [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-      [innerHTML]="toolTipText"
+          class="toolTip tei teiContainer"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+          [innerHTML]="toolTipText"
     ></div>
     
     <!-- Info overlay wrapper -->
     <div
-      [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':
-            (readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-      [class.show_personInfo]="readPopoverService.show.personInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo"
-      [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+          class="infoOverlay tei teiContainer"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
     >
       <div class="infoOverlayHeader">
         <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
@@ -60,14 +64,13 @@
     
     <!-- Introduction text wrapper -->
     <div class="tei teiContainer"
-      [class.show_personInfo]="readPopoverService.show.personInfo && viewOptionsTogglesIntro.personInfo"
-      [class.show_placeInfo]="readPopoverService.show.placeInfo && viewOptionsTogglesIntro.placeInfo"
-      [class.show_workInfo]="readPopoverService.show.workInfo && viewOptionsTogglesIntro.workInfo"
-      [class.show_paragraphNumbering]="readPopoverService.show.paragraphNumbering && viewOptionsTogglesIntro.paragraphNumbering"
-      [class.show_pageBreakEdition]="readPopoverService.show.pageBreakEdition && viewOptionsTogglesIntro.pageBreakEdition"
-      [ngClass]="(hasSeparateIntroToc ? 'hideIntro' : '') + ' ' +
-            ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-      [innerHTML]="text"
+          [class.show_personInfo]="viewOptionsService.show.personInfo && viewOptionsTogglesIntro.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo && viewOptionsTogglesIntro.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo && viewOptionsTogglesIntro.workInfo"
+          [class.show_paragraphNumbering]="viewOptionsService.show.paragraphNumbering && viewOptionsTogglesIntro.paragraphNumbering"
+          [class.show_pageBreakEdition]="viewOptionsService.show.pageBreakEdition && viewOptionsTogglesIntro.pageBreakEdition"
+          [class.hideIntro]="hasSeparateIntroToc"
+          [innerHTML]="text"
     ></div>
   </div>
 
@@ -75,7 +78,12 @@
   <nav id="TOC" *ngIf="hasSeparateIntroToc && tocMenuOpen">
     <div *ngIf="!mobileMode" id="toc-close-button" (click)="toggleTocMenu()">
       <ion-button class="close" fill="clear">
-        <ion-icon slot="icon-only" name="close" class="intro-toc-button" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
+        <ion-icon name="close"
+              class="intro-toc-button"
+              slot="icon-only"
+              aria-label="Stäng"
+              i18n-aria-label="@@BasicActions.Close"
+        ></ion-icon>
       </ion-button>
     </div>
     <div id="toc-text" [innerHTML]="textMenu"></div>

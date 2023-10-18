@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { SemanticDataService } from '@services/semantic-data.service';
+import { NamedEntityService } from '@services/named-entity.service';
 
 
 @Component({
@@ -28,8 +28,8 @@ export class IndexFilterModal implements OnInit {
   showLoading: boolean = false;
 
   constructor(
-    private semanticDataService: SemanticDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private namedEntityService: NamedEntityService
   ) {}
 
   ngOnInit() {
@@ -52,7 +52,7 @@ export class IndexFilterModal implements OnInit {
 
   getFilterPersonTypes() {
     this.showLoading = true;
-    this.semanticDataService.getFilterPersonTypes().subscribe(
+    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
       (filterPersonTypes) => {
         this.filterPersonTypes = filterPersonTypes['aggregations']['types']['buckets'];
         this.filterPersonTypes?.forEach(cat => {
@@ -77,7 +77,7 @@ export class IndexFilterModal implements OnInit {
 
   getFilterCategoryTypes() {
     this.showLoading = true;
-    this.semanticDataService.getFilterCategoryTypes().subscribe(
+    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
       (filterCategoryTypes) => {
         this.filterCategoryTypes = filterCategoryTypes['aggregations']['types']['buckets'];
         this.filterCategoryTypes?.forEach(cat => {
@@ -102,7 +102,7 @@ export class IndexFilterModal implements OnInit {
 
   getFilterPlaceCountries() {
     this.showLoading = true;
-    this.semanticDataService.getFilterPlaceCountries().subscribe(
+    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
       (filterPlaceCountries) => {
         this.filterPlaceCountries = filterPlaceCountries['aggregations']['countries']['buckets'];
         this.filterPlaceCountries?.forEach(cat => {

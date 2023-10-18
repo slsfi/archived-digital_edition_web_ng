@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { catchError, Observable, of, Subject } from 'rxjs';
 
-import { MetadataService } from '@services/metadata.service';
-import { ReadPopoverService } from '@services/read-popover.service';
+import { CollectionContentService } from '@services/collection-content.service';
 
 
 @Component({
@@ -21,13 +20,12 @@ export class MetadataComponent implements OnInit {
   metadata$: Observable<any>;
 
   constructor(
-    private metadataService: MetadataService,
-    public readPopoverService: ReadPopoverService,
-    @Inject(LOCALE_ID) public activeLocale: string
+    private collectionContentService: CollectionContentService,
+    @Inject(LOCALE_ID) private activeLocale: string
   ) {}
 
   ngOnInit() {
-    this.metadata$ = this.metadataService.getMetadata(
+    this.metadata$ = this.collectionContentService.getMetadata(
       this.textItemID.split('_')[1] || '0', this.activeLocale
     ).pipe(
       catchError((error) => {

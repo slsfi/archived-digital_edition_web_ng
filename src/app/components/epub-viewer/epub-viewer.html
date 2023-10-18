@@ -2,7 +2,7 @@
   <ion-toolbar class="secondary">
 
     <ng-container *ngIf="epubFileExists">
-      <div *ngIf="userSettingsService.isDesktop() && !loading" class="epub-nav-buttons">
+      <div *ngIf="!mobileMode && !loading" class="epub-nav-buttons">
         <ion-button id="epub-arrow-prev"
               class="navigation-buttons"
               [class.disabled-nav-button]="atStart"
@@ -116,7 +116,7 @@
 </ion-header>
 
 <ion-content class="epub-ion-content no-padding" [scrollX]="false" [scrollY]="false">
-  <div class="epub-content-wrapper" [class.mobile-mode-epub]="userSettingsService.isMobile()">
+  <div class="epub-content-wrapper" [class.mobile-mode-epub]="mobileMode">
 
     <div class="toc-epub-container">
       <div *ngIf="loading" class="spinner-wrapper">
@@ -131,7 +131,7 @@
     </div>
   </div>
 
-  <div *ngIf="userSettingsService.isMobile() && epubFileExists" class="epub-nav-buttons mobile-mode-epub">
+  <div *ngIf="mobileMode && epubFileExists" class="epub-nav-buttons mobile-mode-epub">
     <ng-container *ngIf="!loading">
       <ion-button id="epub-arrow-prev"
             class="navigation-buttons"
@@ -186,7 +186,7 @@
   <div *ngIf="showTOCButton"
         id="epub-toc-menu"
         [ngClass]="tocMenuOpen ? 'menuOpen' : 'menuClosed'"
-        [class.mobile-mode-epub]="userSettingsService.isMobile()"
+        [class.mobile-mode-epub]="mobileMode"
         [tabIndex]="tocMenuOpen ? '0' : '-1'"
         (click)="toggleTocMenu()"
   >

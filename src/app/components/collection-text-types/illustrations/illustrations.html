@@ -21,6 +21,6 @@
 </ng-template>
 
 <ng-template #none>
-  <div *ngIf="!imgLoading" class="tei teiContainer" [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'" i18n="@@Read.Illustrations.Nothing">Inga illustrationer.</div>
+  <div *ngIf="!imgLoading" class="tei teiContainer" i18n="@@Read.Illustrations.Nothing">Inga illustrationer.</div>
   <ion-spinner *ngIf="imgLoading" class="loading" name="crescent"></ion-spinner>
 </ng-template>

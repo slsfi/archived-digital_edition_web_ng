@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="tei teiContainer teiVariant" [innerHTML]="text"
-  [class.show_pageBreakOriginal]="readPopoverService.show.pageBreakOriginal"
-  [ngClass]="(readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize'"
+<div class="tei teiContainer teiVariant"
+      [class.show_pageBreakOriginal]="viewOptionsService.show.pageBreakOriginal"
+      [innerHTML]="text"
 ></div>

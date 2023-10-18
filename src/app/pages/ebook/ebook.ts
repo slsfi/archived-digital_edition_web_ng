@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Component({
@@ -9,7 +9,6 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'ebook.html',
   styleUrls: ['ebook.scss'],
 })
-
 export class EbookPage implements OnInit {
   ebookType: string = '';
   filename: string = '';

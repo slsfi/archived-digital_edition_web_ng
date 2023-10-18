@@ -1,16 +1,18 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { catchError, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 
+import { config } from '@config';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
+import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -18,7 +20,7 @@ import { config } from 'src/assets/config/config';
   templateUrl: 'collection-foreword.html',
   styleUrls: ['collection-foreword.scss']
 })
-export class CollectionForewordPage implements OnInit {
+export class CollectionForewordPage implements OnDestroy, OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
@@ -26,17 +28,22 @@ export class CollectionForewordPage implements OnInit {
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
   text$: Observable<SafeHtml>;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
+
+  TextsizeEnum = Textsize;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
     private modalController: ModalController,
+    private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
-    public readPopoverService: ReadPopoverService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
-    private userSettingsService: UserSettingsService,
+    private scrollService: ScrollService,
+    private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.showURNButton = config.page?.foreword?.showURNButton ?? false;
@@ -44,7 +51,13 @@ export class CollectionForewordPage implements OnInit {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
+
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
+    );
 
     this.text$ = combineLatest(
       [this.route.params, this.route.queryParams]
@@ -53,9 +66,9 @@ export class CollectionForewordPage implements OnInit {
       tap(({collectionID, q}) => {
         this.collectionID = collectionID;
         if (q) {
-          this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(q);
+          this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(q);
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         }
       }),
@@ -65,12 +78,16 @@ export class CollectionForewordPage implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.textsizeSubscription?.unsubscribe();
+  }
+
   private loadForeword(id: string, lang: string): Observable<SafeHtml> {
-    return this.textService.getForewordPage(id, lang).pipe(
+    return this.collectionContentService.getForeword(id, lang).pipe(
       map((res: any) => {
         if (res?.content && res?.content !== 'File not found') {
           let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           return this.sanitizer.bypassSecurityTrustHtml(text);
         } else {
           return of(this.sanitizer.bypassSecurityTrustHtml(

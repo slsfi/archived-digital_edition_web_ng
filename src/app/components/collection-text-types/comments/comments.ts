@@ -5,9 +5,10 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { isBrowser } from '@utility-functions';
+import { HtmlParserService } from '@services/html-parser.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
+import { concatenateNames, isBrowser } from '@utility-functions';
 
 
 @Component({
@@ -27,17 +28,19 @@ export class CommentsComponent implements OnInit, OnDestroy {
   receiver: string = '';
   sender: string = '';
   text: SafeHtml | string = '';
+
   private unlistenClickEvents?: () => void;
 
   constructor(
     private commentService: CommentService,
-    private commonFunctions: CommonFunctionsService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
-    public readPopoverService: ReadPopoverService,
+    private parserService: HtmlParserService,
     private renderer2: Renderer2,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService
   ) {}
 
   ngOnInit() {
@@ -58,10 +61,10 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.commentService.getComments(this.textItemID).subscribe({
       next: (text) => {
         if (text) {
-          text = this.commonFunctions.insertSearchMatchTags(String(text), this.searchMatches);
+          text = this.parserService.insertSearchMatchTags(String(text), this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
@@ -89,8 +92,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
                 receivers.push(subject['mottagare']);
               }
             });
-            this.sender = this.commonFunctions.concatenateNames(senders);
-            this.receiver = this.commonFunctions.concatenateNames(receivers);
+            this.sender = concatenateNames(senders);
+            this.receiver = concatenateNames(receivers);
           }
         }
 
@@ -129,7 +132,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             targetIsLink = true;
           }
 
-          if (!targetIsLink && this.readPopoverService.show.comments) {
+          if (!targetIsLink && this.viewOptionsService.show.comments) {
             // This is linking to a comment lemma ("asterisk") in the reading text,
             // i.e. the user has clicked a comment in the comments-column.
             event.preventDefault();
@@ -173,9 +176,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
               }
               if (lemmaStart !== null && lemmaStart !== undefined) {
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
-                this.commentService.scrollToCommentLemma(lemmaStart);
+                this.scrollService.scrollToCommentLemma(lemmaStart);
                 // Scroll to comment in the comments-column.
-                this.commentService.scrollToComment(numId, targetElem);
+                this.scrollService.scrollToComment(numId, targetElem);
               }
             }
           }

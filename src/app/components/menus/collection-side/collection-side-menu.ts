@@ -1,15 +1,15 @@
-import { Component, ChangeDetectorRef, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from 'src/app/pipes/collection-page-path.pipe';
-import { CollectionPagePositionQueryparamPipe } from 'src/app/pipes/collection-page-position-queryparam.pipe';
-import { CommonFunctionsService } from '@services/common-functions.service';
+import { config } from '@config';
+import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
+import { CollectionPagePositionQueryparamPipe } from '@pipes/collection-page-position-queryparam.pipe';
+import { CollectionTableOfContentsService } from '@services/collection-toc.service';
 import { DocumentHeadService } from '@services/document-head.service';
-import { TableOfContentsService } from '@services/table-of-contents.service';
-import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { ScrollService } from '@services/scroll.service';
+import { addOrRemoveValueInArray, flattenObjectTree, isBrowser, sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -46,9 +46,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private cref: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
     private headService: DocumentHeadService,
-    private tocService: TableOfContentsService
+    private scrollService: ScrollService,
+    private tocService: CollectionTableOfContentsService
   ) {}
 
   ngOnInit() {
@@ -107,7 +107,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
           // Construct sorted menus
           if (this.sortOptions.length > 0) {
-            const flattenedMenu = this.commonFunctions.flattenObjectTree(data);
+            const flattenedMenu = flattenObjectTree(data);
             if (this.sortOptions.includes('alphabetical')) {
               this.alphabeticalMenu = this.constructAlphabeticalMenu(flattenedMenu);
             }
@@ -220,7 +220,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
         const container = document.querySelector('.side-navigation') as HTMLElement;
         const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
         if (container && target) {
-          this.commonFunctions.scrollElementIntoView(target, 'center', 0, 'smooth', container);
+          this.scrollService.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }
       }, scrollTimeout);
     }
@@ -249,7 +249,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    this.commonFunctions.sortArrayOfObjectsAlphabetically(alphabeticalMenu, 'text');
+    sortArrayOfObjectsAlphabetically(alphabeticalMenu, 'text');
     return alphabeticalMenu;
   }
 
@@ -267,9 +267,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     }
 
     if (primarySortKey === 'date') {
-      this.commonFunctions.sortArrayOfObjectsNumerically(orderedList, primarySortKey, 'asc');
+      sortArrayOfObjectsNumerically(orderedList, primarySortKey, 'asc');
     } else {
-      this.commonFunctions.sortArrayOfObjectsAlphabetically(orderedList, primarySortKey);
+      sortArrayOfObjectsAlphabetically(orderedList, primarySortKey);
     }
 
     const categoricalMenu: any[] = [];
@@ -289,9 +289,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
       if (prevCategory !== currentCategory) {
         if (secondarySortKey === 'date') {
-          this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+          sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
         } else if (secondarySortKey) {
-          this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+          sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
         }
         categoricalMenu[categoricalMenu.length - 1].children = childItems;
         childItems = [];
@@ -303,9 +303,9 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
 
     if (childItems.length > 0) {
       if (secondarySortKey === 'date') {
-        this.commonFunctions.sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
+        sortArrayOfObjectsNumerically(childItems, secondarySortKey, 'asc');
       } else if (secondarySortKey) {
-        this.commonFunctions.sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
+        sortArrayOfObjectsAlphabetically(childItems, secondarySortKey);
       }
     }
 
@@ -320,7 +320,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   }
 
   toggle(menuItem: any) {
-    this.commonFunctions.addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
+    addOrRemoveValueInArray(this.selectedMenu, menuItem.itemId || menuItem.nodeId);
   }
 
   setActiveMenuSorting(event: any) {

@@ -2,23 +2,25 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class TableOfContentsService {
-  activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
-  apiEndpoint: string = '';
-  cachedTableOfContents: any = {};
-  multilingualTOC: boolean = false;
+export class CollectionTableOfContentsService {
+  private activeTocOrder: BehaviorSubject<string> = new BehaviorSubject('default');
+  private apiURL: string = '';
+  private cachedTableOfContents: any = {};
+  private multilingualTOC: boolean = false;
 
   constructor(
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.apiEndpoint = config.app?.apiEndpoint ?? '';
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.apiURL = apiBaseURL + '/' + projectName;
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }
 
@@ -26,13 +28,10 @@ export class TableOfContentsService {
     if (this.cachedTableOfContents?.collectionId === id) {
       return of(this.cachedTableOfContents);
     } else {
-      let url = this.apiEndpoint + '/' + config.app.machineName + '/toc/' + id;
+      const locale = this.multilingualTOC ? '/' + this.activeLocale : '';
+      const endpoint = `${this.apiURL}/toc/${id}${locale}`;
 
-      if (this.multilingualTOC) {
-        url += '/' + this.activeLocale;
-      }
-
-      return this.http.get(url).pipe(
+      return this.http.get(endpoint).pipe(
         map((res: any) => {
           this.cachedTableOfContents = res;
           return res;
@@ -42,37 +41,16 @@ export class TableOfContentsService {
     }
   }
 
-  getTableOfContentsGroup(id: string, group_id: string): Observable<any> {
-    // @TODO add multilingual support to this as well...
-    const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                '/toc/' + id + '/group/' + group_id;
-    return this.http.get(url);
-  }
-
-  getPrevNext(id: string): Observable<any> {
-    // @TODO add multilingual support to this as well...
-    const arr = id.split('_');
-    const ed_id = arr[0];
-    const item_id = arr[1];
-    const url = config.app.apiEndpoint + '/' + config.app.machineName +
-                '/toc/' + ed_id + '/prevnext/' + item_id;
-    return this.http.get(url);
-  }
-
   /**
    * Get first TOC item which has 'itemId' property and 'type' property
    * has value other than 'subtitle' and 'section_title'.
    * @param collectionID 
    * @param language optional
    */
-  getFirst(collectionID: string, language?: string): Observable<any> {
-    let url = config.app.apiEndpoint + '/' + config.app.machineName +
-              '/toc-first/' + collectionID;
-    if (language && this.multilingualTOC) {
-      url = url + '/' + language;
-    }
-
-    return this.http.get(url);
+  getFirstItem(collectionID: string, language?: string): Observable<any> {
+    language = language && this.multilingualTOC ? '/' + language : '';
+    const endpoint = `${this.apiURL}/toc-first/${collectionID}${language}`;
+    return this.http.get(endpoint);
   }
 
   setActiveTocOrder(newTocOrder: string) {

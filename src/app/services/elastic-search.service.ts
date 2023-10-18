@@ -1,34 +1,32 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AggregationQuery, Facets, FacetGroups, SearchQuery, SuggestionsConfig, TimeRange } from '@models/elastic-search.model';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
+import { AggregationQuery, Facets, SearchQuery, TimeRange } from '@models/elastic-search.model';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ElasticSearchService {
-  private searchApiPath = '/search/elastic/';
-  private termApiPath = '/search/mtermvector/';
-  private indices = [];
-  private apiEndpoint: string;
-  private machineName: string;
-  private source = [] as any;
   private aggregations: any = {};
   private fixedFilters?: object[];
-  private textTypes = [];
+  private indices: string[] = [];
+  private searchURL: string = '';
+  private source: string[] = [];
+  private textTypes: string[] = [];
 
   constructor(
     private http: HttpClient
   ) {
-    this.apiEndpoint = config.app?.apiEndpoint ?? '';
-    this.machineName = config.app?.machineName ?? '';
-    this.indices = config.page?.elasticSearch?.indices ?? undefined;
     this.aggregations = config.page?.elasticSearch?.aggregations ?? undefined;
+    this.indices = config.page?.elasticSearch?.indices ?? [];
     this.fixedFilters = config.page?.elasticSearch?.fixedFilters ?? [];
     this.textTypes = config.page?.elasticSearch?.typeFilterGroupOptions ?? [];
+    const apiBaseURL = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.machineName ?? '';
+    this.searchURL = apiBaseURL + '/' + projectName + '/search/elastic/' + this.indices.join(',');
 
     // Add fields that should always be returned in hits
     this.source = [
@@ -57,25 +55,12 @@ export class ElasticSearchService {
     }
   }
 
-  executeTermQuery(terms: string[], ids: string[]): Observable<any> {
-    const payload = {
-      ids: ids,
-      parameters: {
-        fields: ['text_data'],
-        term_statistics: false,
-        field_statistics: false,
-      },
-    };
-
-    return this.http.post(this.getTermUrl() + '/' + terms, payload);
-  }
-
   /**
    * Returns hits.
    */
   executeSearchQuery(options: any): Observable<any> {
     const payload = this.generateSearchQueryPayload(options);
-    return this.http.post(this.getSearchUrl(), payload);
+    return this.http.post(this.searchURL, payload);
   }
 
   /**
@@ -83,20 +68,8 @@ export class ElasticSearchService {
    */
   executeAggregationQuery(options: any): Observable<any> {
     const payload = this.generateAggregationQueryPayload(options);
-
-    return this.http.post(this.getSearchUrl(), payload);
+    return this.http.post(this.searchURL, payload);
   }
-
-  /**
-   * Returns facet suggestions.
-   */
-  /*
-  executeSuggestionsQuery(options: SuggestionsQuery): Observable<any> {
-    const payload = this.generateSuggestionsQueryPayload(options);
-
-    return this.http.post(this.getSearchUrl(), payload);
-  }
-  */
 
   private generateSearchQueryPayload({
     queries,
@@ -278,59 +251,6 @@ export class ElasticSearchService {
     return payload;
   }
 
-  /*
-  private generateSuggestionsQueryPayload({ query }: SuggestionsQuery): object {
-    const payload: any = {
-      from: 0,
-      size: 0,
-      _source: this.source,
-      aggs: {},
-    };
-
-    for (const [aggregationKey, suggestion] of Object.entries(
-      this.suggestions
-    )) {
-      const aggregation = this.aggregations[aggregationKey];
-      if (aggregation.terms) {
-        payload.aggs[aggregationKey] = {
-          filter: {
-            bool: {
-              should: [
-                {
-                  wildcard: {
-                    [suggestion.field]: {
-                      value: `*${query}*`,
-                    },
-                  },
-                },
-                {
-                  fuzzy: {
-                    [suggestion.field]: {
-                      value: query,
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          aggs: {
-            filtered: {
-              terms: {
-                field: aggregation.terms.field,
-                size: suggestion.size,
-              },
-            },
-          },
-        };
-      }
-    }
-
-    // console.log('suggestions payload', payload);
-
-    return payload;
-  }
-  */
-
   private injectFacetsToPayload(payload: any, facetGroups: any[]) {
     facetGroups.forEach(facetGroup => {
       const terms = this.filterSelectedFacetKeys(facetGroup.filters);
@@ -452,14 +372,6 @@ export class ElasticSearchService {
     }
   }
 
-  isTermsAggregation(aggregationKey: string): boolean {
-    if (this.aggregations[aggregationKey] !== undefined) {
-      return !!this.aggregations[aggregationKey]['terms'];
-    } else {
-      return false;
-    }
-  }
-
   getAggregationKeys(): string[] {
     return Object.keys(this.aggregations);
   }
@@ -473,36 +385,4 @@ export class ElasticSearchService {
     return '';
   }
 
-  private getSearchUrl(): string {
-    return (
-      this.apiEndpoint +
-      '/' +
-      this.machineName +
-      this.searchApiPath +
-      this.indices.join(',')
-    );
-  }
-
-  private getTermUrl(): string {
-    return (
-      this.apiEndpoint +
-      '/' +
-      this.machineName +
-      this.termApiPath +
-      this.indices.join(',')
-    );
-  }
-
-  private async handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = (await error.json()) || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error('Elastic search query failed.', error);
-    throw errMsg;
-  }
 }

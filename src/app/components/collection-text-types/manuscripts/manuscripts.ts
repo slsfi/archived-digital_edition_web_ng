@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
-import { config } from 'src/assets/config/config';
+import { config } from '@config';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 
 
 @Component({
@@ -35,11 +36,12 @@ export class ManuscriptsComponent implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
-    public readPopoverService: ReadPopoverService,
+    private parserService: HtmlParserService,
     private sanitizer: DomSanitizer,
-    private textService: TextService
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
   }
@@ -51,7 +53,7 @@ export class ManuscriptsComponent implements OnInit {
   }
 
   loadManuscriptTexts() {
-    this.textService.getManuscripts(this.textItemID).subscribe({
+    this.collectionContentService.getManuscripts(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.manuscripts?.length > 0 &&
@@ -60,7 +62,7 @@ export class ManuscriptsComponent implements OnInit {
           this.manuscripts = res.manuscripts;
           this.setManuscript();
           if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Manuscripts.NoManuscripts:Inga manuskript.`;
@@ -107,7 +109,7 @@ export class ManuscriptsComponent implements OnInit {
             ? this.selectedManuscript.manuscript_normalized
             : this.selectedManuscript.manuscript_changes;
       text = this.postprocessManuscriptText(text);
-      text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+      text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
 
       this.textLanguage = this.selectedManuscript.language
@@ -208,7 +210,7 @@ export class ManuscriptsComponent implements OnInit {
       id: 'ms-legend'
     }
     this.openNewLegendView.emit(id);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
 }

@@ -5,14 +5,13 @@ import { IonContent } from '@ionic/angular';
 import { catchError, map, merge, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
+import { config } from '@config';
 import { AggregationData, AggregationsData, Facet, Facets, TimeRange } from '@models/elastic-search.model';
-import { CommonFunctionsService } from '@services/common-functions.service';
 import { ElasticSearchService } from '@services/elastic-search.service';
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
+import { PlatformService } from '@services/platform.service';
 import { UrlService } from '@services/url.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
-import { isBrowser } from '@utility-functions';
+import { isBrowser, isEmptyObject, sortArrayOfObjectsNumerically } from '@utility-functions';
 
 
 @Component({
@@ -59,15 +58,14 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
 
   constructor(
     private cf: ChangeDetectorRef,
-    private commonFunctions: CommonFunctionsService,
     private elasticService: ElasticSearchService,
     private elementRef: ElementRef,
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
+    private platformService: PlatformService,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
     private urlService: UrlService,
-    private userSettingsService: UserSettingsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.enableFilters = config.page?.elasticSearch?.enableFilters ?? true;
@@ -77,7 +75,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
     this.textHighlightType = config.page?.elasticSearch?.textHighlightType ?? 'fvh';
     this.textTitleHighlightType = config.page?.elasticSearch?.textTitleHighlightType ?? 'fvh';
 
-    this.filtersVisible = this.userSettingsService.isMobile() ? false : true;
+    this.filtersVisible = this.platformService.isMobile() ? false : true;
     
     if (
       this.textTitleHighlightType !== 'fvh' &&
@@ -331,7 +329,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
         // Clear all search parameters and trigger new search if no
         // query params and not initializing page
         if (
-          this.commonFunctions.isEmptyObject(queryParams) &&
+          isEmptyObject(queryParams) &&
           !this.initializing
         ) {
           this.query = '';
@@ -776,7 +774,7 @@ export class ElasticSearchPage implements OnDestroy, OnInit {
           filtersAsArray.push(filterGroupObj[keys[i]]);
         }
         if (!config.page?.elasticSearch?.aggregations?.[filterGroupKey]?.terms?.order?._key) {
-          this.commonFunctions.sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
+          sortArrayOfObjectsNumerically(filtersAsArray, 'doc_count');
         }
         return filtersAsArray;
       } else {

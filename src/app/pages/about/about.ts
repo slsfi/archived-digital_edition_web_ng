@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { marked } from 'marked';
 
-import { MdContentService } from '@services/md-content.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class AboutPage implements OnInit {
   markdownText$: Observable<SafeHtml>;
 
   constructor(
-    private mdContentService: MdContentService,
+    private mdContentService: MarkdownContentService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     @Inject(LOCALE_ID) private activeLocale: string

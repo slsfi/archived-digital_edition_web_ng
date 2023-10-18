@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionPagePathPipe } from 'src/app/pipes/collection-page-path.pipe';
-import { OccurrenceCollectionTextPageQueryparamsPipe } from 'src/app/pipes/occurrence-collection-text-page-queryparams.pipe';
+import { config } from '@config';
+import { CollectionPagePathPipe } from '@pipes/collection-page-path.pipe';
+import { OccurrenceCollectionTextPageQueryparamsPipe } from '@pipes/occurrence-collection-text-page-queryparams.pipe';
 import { Occurrence } from '@models/occurrence.model';
 import { SingleOccurrence } from '@models/single-occurrence.model';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { SemanticDataService } from '@services/semantic-data.service';
-import { TableOfContentsService } from '@services/table-of-contents.service';
-import { config } from 'src/assets/config/config';
+import { CollectionTableOfContentsService } from '@services/collection-toc.service';
+import { NamedEntityService } from '@services/named-entity.service';
+import { flattenObjectTree, sortArrayOfObjectsAlphabetically } from '@utility-functions';
 
 
 @Component({
@@ -37,9 +37,8 @@ export class OccurrencesAccordionComponent implements OnInit {
   simpleWorkMetadata: boolean = false;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
-    private semanticDataService: SemanticDataService,
-    private tocService: TableOfContentsService
+    private namedEntityService: NamedEntityService,
+    private tocService: CollectionTableOfContentsService
   ) {
     this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
   }
@@ -68,7 +67,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     if (objectType === 'work') {
       objectType = 'work_manifestation';
     }
-    this.semanticDataService.getOccurrences(objectType, id).subscribe({
+    this.namedEntityService.getEntityOccurrences(objectType, id).subscribe({
       next: (occ: any) => {
         occ.forEach((item: any) => {
           if (item.occurrences?.length) {
@@ -78,7 +77,7 @@ export class OccurrencesAccordionComponent implements OnInit {
           }
         });
         // Sort collection names alphabetically
-        this.commonFunctions.sortArrayOfObjectsAlphabetically(this.groupedTexts, 'name');
+        sortArrayOfObjectsAlphabetically(this.groupedTexts, 'name');
 
         // Replace publication names (from the database) with the names
         // in the collection TOC-file and sort by publication name.
@@ -197,7 +196,7 @@ export class OccurrencesAccordionComponent implements OnInit {
       if (item.collection_id && item.publications) {
         this.tocService.getTableOfContents(item.collection_id).subscribe(
           (tocData: any) => {
-            const flattenedTocData: any[] = this.commonFunctions.flattenObjectTree(
+            const flattenedTocData: any[] = flattenObjectTree(
               tocData, 'children', 'itemId'
             );
             item.publications.forEach((pub: any) => {
@@ -209,11 +208,11 @@ export class OccurrencesAccordionComponent implements OnInit {
                 }
               });
               if (pub.occurrences?.length > 1) {
-                this.commonFunctions.sortArrayOfObjectsAlphabetically(pub.occurrences, 'textType');
+                sortArrayOfObjectsAlphabetically(pub.occurrences, 'textType');
               }
             });
             if (item.publications !== undefined) {
-              this.commonFunctions.sortArrayOfObjectsAlphabetically(item.publications, 'name');
+              sortArrayOfObjectsAlphabetically(item.publications, 'name');
             }
           }
         );

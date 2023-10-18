@@ -32,20 +32,24 @@
     <div class="column-container">
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper"
+            [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+            [class.smallFontSize]="textsize == TextsizeEnum.Small"
+            [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+            [class.largeFontSize]="textsize == TextsizeEnum.Large"
+            [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
             [class.illustrations-view-shown]="illustrationsViewShown"
             [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
       >
-
         <!-- Tooltip wrapper -->
         <div
-              [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-              [class.show_comments]="readPopoverService.show.comments"
-              [class.show_personInfo]="readPopoverService.show.personInfo"
-              [class.show_placeInfo]="readPopoverService.show.placeInfo"
-              [class.show_workInfo]="readPopoverService.show.workInfo"
-              [class.show_normalisations]="readPopoverService.show.normalisations"
-              [class.show_changes]="readPopoverService.show.changes"
-              [class.show_abbreviations]="readPopoverService.show.abbreviations"
+              class="toolTip tei teiContainer"
+              [class.show_comments]="viewOptionsService.show.comments"
+              [class.show_personInfo]="viewOptionsService.show.personInfo"
+              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+              [class.show_workInfo]="viewOptionsService.show.workInfo"
+              [class.show_normalisations]="viewOptionsService.show.normalisations"
+              [class.show_changes]="viewOptionsService.show.changes"
+              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
               [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
               [innerHTML]="toolTipText"
               [MathJax]="toolTipText"
@@ -53,14 +57,14 @@
 
         <!-- Info overlay wrapper -->
         <div
-              [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-              [class.show_comments]="readPopoverService.show.comments"
-              [class.show_personInfo]="readPopoverService.show.personInfo"
-              [class.show_placeInfo]="readPopoverService.show.placeInfo"
-              [class.show_workInfo]="readPopoverService.show.workInfo"
-              [class.show_normalisations]="readPopoverService.show.normalisations"
-              [class.show_changes]="readPopoverService.show.changes"
-              [class.show_abbreviations]="readPopoverService.show.abbreviations"
+              class="infoOverlay tei teiContainer"
+              [class.show_comments]="viewOptionsService.show.comments"
+              [class.show_personInfo]="viewOptionsService.show.personInfo"
+              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+              [class.show_workInfo]="viewOptionsService.show.workInfo"
+              [class.show_normalisations]="viewOptionsService.show.normalisations"
+              [class.show_changes]="viewOptionsService.show.changes"
+              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
               [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
         >
           <div class="infoOverlayHeader">
@@ -224,7 +228,7 @@
                 <ion-button *ngFor="let type of enabledViewTypes"
                       class="custom-outline-button"
                       fill="outline"
-                      (click)="addView(type); commonFunctions.scrollLastViewIntoView()"
+                      (click)="addView(type); scrollService.scrollLastViewIntoView()"
                       [ngStyle]="{
                         '--background': '#f2f2f2',
                         '--border-radius': '1rem',
@@ -326,20 +330,26 @@
 
 <!-- Main content in mobile mode -->
 <ng-container *ngIf="mobileMode">
-  <ion-content class="collection-ion-content mobile-mode-content"
+  <ion-content
+        class="collection-ion-content mobile-mode-content"
+        [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+        [class.smallFontSize]="textsize == TextsizeEnum.Small"
+        [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+        [class.largeFontSize]="textsize == TextsizeEnum.Large"
+        [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
         [scrollX]="false"
         [scrollY]="false"
   >
     <!-- Tooltip wrapper in mobile mode -->
     <div
-          [ngClass]="'toolTip tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-          [class.show_comments]="readPopoverService.show.comments"
-          [class.show_personInfo]="readPopoverService.show.personInfo"
-          [class.show_placeInfo]="readPopoverService.show.placeInfo"
-          [class.show_workInfo]="readPopoverService.show.workInfo"
-          [class.show_normalisations]="readPopoverService.show.normalisations"
-          [class.show_changes]="readPopoverService.show.changes"
-          [class.show_abbreviations]="readPopoverService.show.abbreviations"
+          class="toolTip tei teiContainer"
+          [class.show_comments]="viewOptionsService.show.comments"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [class.show_normalisations]="viewOptionsService.show.normalisations"
+          [class.show_changes]="viewOptionsService.show.changes"
+          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
           [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
           [innerHTML]="toolTipText"
           [MathJax]="toolTipText"
@@ -347,14 +357,14 @@
 
     <!-- Info overlay wrapper in mobile mode -->
     <div
-          [ngClass]="'infoOverlay tei teiContainer ' + ((readPopoverService.fontsize==0)?'xsmallFontSize':(readPopoverService.fontsize==1)?'smallFontSize':(readPopoverService.fontsize==2)?'mediumFontSize':(readPopoverService.fontsize==3)?'largeFontSize':'xlargeFontSize')"
-          [class.show_comments]="readPopoverService.show.comments"
-          [class.show_personInfo]="readPopoverService.show.personInfo"
-          [class.show_placeInfo]="readPopoverService.show.placeInfo"
-          [class.show_workInfo]="readPopoverService.show.workInfo"
-          [class.show_normalisations]="readPopoverService.show.normalisations"
-          [class.show_changes]="readPopoverService.show.changes"
-          [class.show_abbreviations]="readPopoverService.show.abbreviations"
+          class="infoOverlay tei teiContainer"
+          [class.show_comments]="viewOptionsService.show.comments"
+          [class.show_personInfo]="viewOptionsService.show.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo"
+          [class.show_normalisations]="viewOptionsService.show.normalisations"
+          [class.show_changes]="viewOptionsService.show.changes"
+          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
           [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
     >
       <div class="infoOverlayHeader">

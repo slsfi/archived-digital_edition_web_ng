@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { ScrollService } from '@services/scroll.service';
 
 
 @Component({
@@ -28,10 +27,9 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   viewAll: boolean = true;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
     private modalCtrl: ModalController,
-    public readPopoverService: ReadPopoverService,
-    private textService: TextService
+    private parserService: HtmlParserService,
+    private scrollService: ScrollService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,7 +57,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   }
 
   private getIllustrationImages() {
-    this.textService.getEstablishedTextIllustrations(this.textItemID).subscribe(
+    this.parserService.getEstablishedTextIllustrations(this.textItemID).subscribe(
       (images: any[]) => {
         this.images = images;
         this.imageCountTotal = this.images.length;
@@ -149,12 +147,12 @@ export class IllustrationsComponent implements OnChanges, OnInit {
             tmpImage.alt = 'ms arrow right image';
             tmpImage.classList.add('inl_ms_arrow');
             target.parentElement.insertBefore(tmpImage, target);
-            this.commonFunctions.scrollElementIntoView(tmpImage);
+            this.scrollService.scrollElementIntoView(tmpImage);
             setTimeout(function() {
               target?.parentElement?.removeChild(tmpImage);
             }, 5000);
           } else {
-            this.commonFunctions.scrollElementIntoView(target, 'top', 75);
+            this.scrollService.scrollElementIntoView(target, 'top', 75);
           }
         } else {
           console.log('Unable to find target when scrolling to image position in text, imageSrc:', imageSrc);

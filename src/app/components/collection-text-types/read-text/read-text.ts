@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
-import { MathJaxDirective } from 'src/app/directives/math-jax.directive';
+import { config } from '@config';
+import { MathJaxDirective } from '@directives/math-jax.directive';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { CollectionContentService } from '@services/collection-content.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
+import { ScrollService } from '@services/scroll.service';
+import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -30,20 +31,23 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   illustrationsViewAvailable: boolean = false;
   illustrationsVisibleInReadtext: boolean = false;
   intervalTimerId: number = 0;
+  mobileMode: boolean = false;
   text: SafeHtml = '';
   textLanguage: string = '';
+
   private unlistenClickEvents?: () => void;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
     private elementRef: ElementRef,
     private modalController: ModalController,
     private ngZone: NgZone,
-    public readPopoverService: ReadPopoverService,
+    private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
-    public userSettingsService: UserSettingsService
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService
   ) {
     this.illustrationsViewAvailable = config.page?.text?.viewTypes?.illustrations ?? false;
   }
@@ -70,6 +74,8 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.loadReadText();
     }
@@ -83,7 +89,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   loadReadText() {
-    this.textService.getEstablishedText(this.textItemID).subscribe({
+    this.collectionContentService.getReadText(this.textItemID).subscribe({
       next: (res) => {
         if (
           res?.content &&
@@ -91,15 +97,15 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
         ) {
           const collectionID = this.textItemID.split('_')[0];
           let text = res.content as string;
-          text = this.textService.postprocessEstablishedText(text, collectionID);
-          text = this.commonFunctions.insertSearchMatchTags(text, this.searchMatches);
+          text = this.parserService.postprocessEstablishedText(text, collectionID);
+          text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
-          this.illustrationsVisibleInReadtext = this.textService.readTextHasVisibleIllustrations(text);
+          this.illustrationsVisibleInReadtext = this.parserService.readTextHasVisibleIllustrations(text);
 
           if (this.textPosition) {
             this.scrollToTextPosition();
           } else if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
@@ -135,7 +141,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             event.preventDefault();
           }
 
-          if (!this.userSettingsService.isMobile()) {
+          if (!this.platformService.isMobile()) {
             let image = null as any;
 
             // Check if click on an illustration or icon representing an illustration
@@ -206,7 +212,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   openIllustrationInNewView(image: any) {
     image.viewType = 'illustrations';
     this.openNewIllustrView.emit(image);
-    this.commonFunctions.scrollLastViewIntoView();
+    this.scrollService.scrollLastViewIntoView();
   }
 
   updateSelectedIllustrationImage(image: any) {
@@ -250,7 +256,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
               )[1] as HTMLAnchorElement;
             }
             if (target) {
-              that.commonFunctions.scrollToHTMLElement(target);
+              that.scrollService.scrollToHTMLElement(target);
               clearInterval(that.intervalTimerId);
             }
           }
@@ -266,7 +272,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
         ) as HTMLElement;
         if (target) {
-          this.commonFunctions.scrollElementIntoView(target, 'top', 50);
+          this.scrollService.scrollElementIntoView(target, 'top', 50);
         }
       });
     }

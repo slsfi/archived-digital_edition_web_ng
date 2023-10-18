@@ -4,17 +4,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { combineLatest, map, Subscription } from 'rxjs';
 
+import { config } from '@config';
 import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
+import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
-import { CommonFunctionsService } from '@services/common-functions.service';
-import { ReadPopoverService } from '@services/read-popover.service';
-import { TextService } from '@services/text.service';
+import { CollectionContentService } from '@services/collection-content.service';
+import { CollectionsService } from '@services/collections.service';
+import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
+import { ScrollService } from '@services/scroll.service';
 import { TooltipService } from '@services/tooltip.service';
-import { UserSettingsService } from '@services/user-settings.service';
-import { config } from 'src/assets/config/config';
+import { ViewOptionsService } from '@services/view-options.service';
 import { isBrowser } from '@utility-functions';
 
 
@@ -45,6 +48,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   text: SafeHtml;
   textLoading: boolean = true;
   textMenu: SafeHtml;
+  textsize: Textsize = Textsize.Small;
+  textsizeSubscription: Subscription | null = null;
   tocMenuOpen: boolean = false;
   toolTipMaxWidth: string | null = null;
   toolTipPosition: any = {
@@ -60,25 +65,29 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   userIsTouching: boolean = false;
   viewOptionsTogglesIntro: any = {};
 
+  TextsizeEnum = Textsize;
+
   private unlistenClickEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
   private unlistenMouseoutEvents?: () => void;
   private unlistenFirstTouchStartEvent?: () => void;
 
   constructor(
-    private commonFunctions: CommonFunctionsService,
+    private collectionContentService: CollectionContentService,
+    private collectionsService: CollectionsService,
     private elementRef: ElementRef,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
+    private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private popoverCtrl: PopoverController,
-    public readPopoverService: ReadPopoverService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
-    private textService: TextService,
     private tooltipService: TooltipService,
     private route: ActivatedRoute,
     private router: Router,
-    private userSettingsService: UserSettingsService,
+    private scrollService: ScrollService,
+    public viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
@@ -135,7 +144,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mobileMode = this.userSettingsService.isMobile();
+    this.mobileMode = this.platformService.isMobile();
+
+    this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
+      (textsize: Textsize) => {
+        this.textsize = textsize;
+      }
+    );
 
     this.urlParametersSubscription = combineLatest(
       [this.route.params, this.route.queryParams]
@@ -152,7 +167,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       }
 
       if (routeParams['q'] !== undefined) {
-        this.searchMatches = this.commonFunctions.getSearchMatchesFromQueryParams(routeParams['q']);
+        this.searchMatches = this.parserService.getSearchMatchesFromQueryParams(routeParams['q']);
       }
 
       // If there is a collection id in the route params and it's
@@ -180,6 +195,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.urlParametersSubscription?.unsubscribe();
+    this.textsizeSubscription?.unsubscribe();
     this.unlistenClickEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();
@@ -189,7 +205,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   private loadIntroduction(id: string, lang: string) {
     this.text = '';
     this.textLoading = true;
-    this.textService.getIntroduction(id, lang).subscribe({
+    this.collectionContentService.getIntroduction(id, lang).subscribe({
       next: (res: any) => {
         if (res?.content) {
           this.textLoading = false;
@@ -206,7 +222,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             // copy it to this.textMenu and remove it from this.text
             this.textMenu = this.sanitizer.bypassSecurityTrustHtml(matches[1]);
             textContent = textContent.replace(pattern, '');
-            if (!this.userSettingsService.isMobile()) {
+            if (!this.platformService.isMobile()) {
               if (!this.tocMenuOpen) {
                 this.tocMenuOpen = true;
               }
@@ -215,13 +231,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             this.hasSeparateIntroToc = false;
           }
 
-          textContent = this.commonFunctions.insertSearchMatchTags(textContent, this.searchMatches);
+          textContent = this.parserService.insertSearchMatchTags(textContent, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(textContent);
           // Try to scroll to a position in the text or first search match
           if (this.pos) {
             this.scrollToPos();
           } else if (this.searchMatches.length) {
-            this.commonFunctions.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
+            this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
           this.textLoading = false;
@@ -289,9 +305,9 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
                   posElem.classList?.contains('anchor') ||
                   posElem.classList?.contains('footnoteindicator')
                 ) {
-                  that.commonFunctions.scrollToHTMLElement(posElem, 'top');
+                  that.scrollService.scrollToHTMLElement(posElem, 'top');
                 } else {
-                  that.commonFunctions.scrollElementIntoView(posElem, 'top');
+                  that.scrollService.scrollElementIntoView(posElem, 'top');
                 }
                 clearInterval(that.intervalTimerId);
               }
@@ -305,7 +321,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   private setCollectionLegacyId(id: string) {
-    this.textService.getLegacyIdByCollectionId(id).subscribe({
+    this.collectionsService.getLegacyIdByCollectionId(id).subscribe({
       next: (collection: any) => {
         this.collectionLegacyId = '';
         if (collection[0].legacy_id) {
@@ -345,11 +361,11 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         // Modal trigger for person-, place- or workinfo and info overlay trigger for footnote.
         if (eventTarget.classList.contains('tooltiptrigger') && eventTarget.hasAttribute('data-id')) {
           this.ngZone.run(() => {
-            if (eventTarget.classList.contains('person') && this.readPopoverService.show.personInfo) {
+            if (eventTarget.classList.contains('person') && this.viewOptionsService.show.personInfo) {
               this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'subject');
-            } else if (eventTarget.classList.contains('placeName') && this.readPopoverService.show.placeInfo) {
+            } else if (eventTarget.classList.contains('placeName') && this.viewOptionsService.show.placeInfo) {
               this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'location');
-            } else if (eventTarget.classList.contains('title') && this.readPopoverService.show.workInfo) {
+            } else if (eventTarget.classList.contains('title') && this.viewOptionsService.show.workInfo) {
               this.showSemanticDataObjectModal(eventTarget.getAttribute('data-id') || '', 'work');
             } else if (eventTarget.classList.contains('ttFoot')) {
               this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id') || '', eventTarget);
@@ -409,7 +425,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
               publicationId = hrefTargetItems[0];
               textId = hrefTargetItems[1];
-              this.textService.getCollectionAndPublicationByLegacyId(
+              this.collectionsService.getCollectionAndPublicationByLegacyId(
                 publicationId + '_' + textId
               ).subscribe({
                 next: (data: any) => {
@@ -481,7 +497,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
               } else {
                 // Different introduction, open in new window.
                 const newWindowRef = window.open();
-                this.textService.getCollectionAndPublicationByLegacyId(
+                this.collectionsService.getCollectionAndPublicationByLegacyId(
                   publicationId
                 ).subscribe({
                   next: (data: any) => {
@@ -549,21 +565,21 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             this.ngZone.run(() => {
               if (
                 eventTarget.classList.contains('person') &&
-                this.readPopoverService.show.personInfo
+                this.viewOptionsService.show.personInfo
               ) {
                 this.showSemanticDataObjectTooltip(
                   eventTarget.getAttribute('data-id'), 'person', eventTarget
                 );
               } else if (
                 eventTarget.classList.contains('placeName') &&
-                this.readPopoverService.show.placeInfo
+                this.viewOptionsService.show.placeInfo
               ) {
                 this.showSemanticDataObjectTooltip(
                   eventTarget.getAttribute('data-id'), 'place', eventTarget
                 );
               } else if (
                 eventTarget.classList.contains('title') &&
-                this.readPopoverService.show.workInfo
+                this.viewOptionsService.show.workInfo
               ) {
                 this.showSemanticDataObjectTooltip(
                   eventTarget.getAttribute('data-id'), 'work', eventTarget
@@ -634,7 +650,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         left: ttProperties.left
       };
       this.toolTipPosType = 'absolute';
-      if (!this.userSettingsService.isDesktop()) {
+      if (!this.platformService.isDesktop()) {
         this.toolTipPosType = 'fixed';
       }
       this.tooltipVisible = true;
@@ -686,8 +702,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
       let bottomPos = vh - horizontalScrollbarOffsetHeight - containerElemRect.bottom;
       if (
-        vw <= bottomPosBreakpointWidth && !(this.userSettingsService.isMobile()) ||
-        this.userSettingsService.isMobile()
+        vw <= bottomPosBreakpointWidth && !(this.platformService.isMobile()) ||
+        this.platformService.isMobile()
       ) {
         bottomPos = 0;
       }
