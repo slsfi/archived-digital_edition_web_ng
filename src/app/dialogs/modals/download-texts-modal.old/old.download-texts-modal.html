@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title i18n="@@DownloadTexts.Title">Ladda ner och skriv ut</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="close-button" (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-col>
+    <ion-card>
+      <ion-card-header>
+        <label class="header" [ngClass]="introductionMode ? 'introductionMode' : 'readTextsMode'">
+          <span class="header-pub-title" [innerHTML]="publicationTitle"></span>
+          <span class="header-coll-title" [innerHTML]="collectionTitle"></span>
+        </label>
+        <p *ngIf="showErrorMessage" class="errorMessage" i18n="@@DownloadTexts.TextLoadingError">Ett fel har uppstått. Texten kunde inte laddas.</p>
+      </ion-card-header>
+      <ion-card-content>
+        <ng-container *ngIf="introductionMode">
+          <ion-item>
+            <label i18n="@@introduction">Inledning</label>
+            <ion-buttons class="download-buttons">
+              <ion-button *ngIf="downloadFormatsIntro && downloadFormatsIntro['xml']" (click)="initiateDownload('intro', 'xml')" i18n="@@DownloadTexts.Format.XML">XML</ion-button>
+              <ion-button *ngIf="downloadFormatsIntro && downloadFormatsIntro['txt']" (click)="initiateDownload('intro', 'txt')" i18n="@@DownloadTexts.Format.TXT">TXT</ion-button>
+              <ion-button *ngIf="downloadFormatsIntro && downloadFormatsIntro['print']" fill="outline" (click)="openPrintFriendlyText('intro')" i18n="@@DownloadTexts.Format.Print">Utskrift</ion-button>
+              <ion-spinner *ngIf="loadingIntro" class="loading" name="crescent"></ion-spinner>
+            </ion-buttons>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="readTextsMode">
+          <ion-item *ngIf="downloadFormatsEst && (downloadFormatsEst['xml'] || downloadFormatsEst['txt'] || downloadFormatsEst['print'])">
+            <label i18n="@@Read.Established.Title">Lästext</label>
+            <ion-buttons class="download-buttons">
+              <ion-button *ngIf="downloadFormatsEst && downloadFormatsEst['xml']" (click)="initiateDownload('est', 'xml')" i18n="@@DownloadTexts.Format.XML">XML</ion-button>
+              <ion-button *ngIf="downloadFormatsEst && downloadFormatsEst['txt']" (click)="initiateDownload('est', 'txt')" i18n="@@DownloadTexts.Format.TXT">TXT</ion-button>
+              <ion-button *ngIf="downloadFormatsEst && downloadFormatsEst['print']" fill="outline" (click)="openPrintFriendlyText('est')" i18n="@@DownloadTexts.Format.Print">Utskrift</ion-button>
+              <ion-spinner *ngIf="loadingEst" class="loading" name="crescent"></ion-spinner>
+            </ion-buttons>
+          </ion-item>
+          <ion-item *ngIf="downloadFormatsCom && (downloadFormatsCom['xml'] || downloadFormatsCom['txt'] || downloadFormatsCom['print'])">
+            <label i18n="@@Read.Comments.Title">Kommentarer</label>
+            <ion-buttons *ngIf="downloadFormatsCom && downloadFormatsCom['xml']" class="download-buttons">
+              <ion-button (click)="initiateDownload('com', 'xml')" i18n="@@DownloadTexts.Format.XML">XML</ion-button>
+              <ion-button *ngIf="downloadFormatsCom && downloadFormatsCom['print']" fill="outline" (click)="openPrintFriendlyText('com')" i18n="@@DownloadTexts.Format.Print">Utskrift</ion-button>
+              <ion-spinner *ngIf="loadingCom" class="loading" name="crescent"></ion-spinner>
+            </ion-buttons>
+          </ion-item>
+        </ng-container>
+        <ion-item *ngIf="showInstructions || showCopyright">
+          <p *ngIf="showInstructions" class="download-instructions" [innerHTML]="instructionsText"></p>
+          <p *ngIf="showCopyright" class="copyright-notice" [innerHTML]="copyrightText"></p>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-content>

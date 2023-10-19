@@ -1,6 +1,6 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -17,43 +17,43 @@ import { concatenateNames } from '@utility-functions';
   selector: 'page-download-texts-modal',
   templateUrl: 'download-texts-modal.html',
   styleUrls: ['download-texts-modal.scss'],
-  imports: [NgClass, NgIf, IonicModule]
+  imports: [CommonModule, IonicModule]
 })
-export class DownloadTextsModal implements OnInit {
-  @Input() origin: string = '';
-  @Input() textItemID: string = '';
-
+export class DownloadTextsModalPage {
   apiEndPoint: string;
   appMachineName: string;
-  chapterId: string = '';
-  collectionId: string = '';
-  collectionTitle: string = '';
-  commentTitle: string = '';
-  copyrightText: string = '';
-  downloadFormatsCom: Record<string, any> | undefined = undefined;
-  downloadFormatsEst: Record<string, any> | undefined = undefined;
-  downloadFormatsIntro: Record<string, any> | undefined = undefined;
-  instructionsText: string = '';
+  chapterId?: string;
+  collectionId?: string;
+  collectionTitle?: string;
+  commentTitle?: string;
+  copyrightText?: string;
+  downloadFormatsCom?: Record<string, any> = {};
+  downloadFormatsEst?: Record<string, any> = {};
+  downloadFormatsIntro?: Record<string, any> = {};
+  instructionsText?: string;
   introductionMode: boolean = false;
-  introductionTitle: string = '';
+  introductionTitle?: string;
   loadingCom: boolean = false;
   loadingEst: boolean = false;
   loadingIntro: boolean = false;
-  positionId: string = '';
-  printTranslation: string = '';
-  publicationId: string = '';
-  publicationTitle: string = '';
+  objectURLs: any[] = [];
+  positionId?: string;
+  printTranslation?: string;
+  publicationId?: string;
+  publicationTitle?: string;
   readTextsMode: boolean = false;
   showCopyright: boolean = false;
   showErrorMessage: boolean = false;
   showInstructions: boolean = false;
-  siteUrl: string = '';
-  textSizeTranslation: string = '';
+  siteUrl: string;
+  textId: string;
+  textSizeTranslation?: string;
 
   constructor(
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private commentService: CommentService,
+    private params: NavParams,
     private parserService: HtmlParserService,
     private modalCtrl: ModalController,
     private tocService: CollectionTableOfContentsService,
@@ -68,73 +68,158 @@ export class DownloadTextsModal implements OnInit {
     this.downloadFormatsEst = config.textDownloadOptions?.enabledEstablishedFormats ?? undefined;
     this.downloadFormatsCom = config.textDownloadOptions?.enabledCommentsFormats ?? undefined;
 
-    // Set download formats options from config
-    if (
-      !this.downloadFormatsIntro ||
-      Object.keys(this.downloadFormatsIntro).length < 1
-    ) {
-      this.downloadFormatsIntro = {
-        xml: false,
-        print: false
+    // Process download formats options
+    if (this.downloadFormatsIntro === undefined ||
+      this.downloadFormatsIntro === null ||
+      Object.keys(this.downloadFormatsIntro).length === 0) {
+       this.downloadFormatsIntro = {
+        'xml': false,
+        'print': false
+       }
+    }
+    if (this.downloadFormatsEst === undefined ||
+      this.downloadFormatsEst === null ||
+      Object.keys(this.downloadFormatsEst).length === 0) {
+       this.downloadFormatsEst = {
+        'xml': false,
+        'txt': false,
+        'print': false
+       }
+    }
+    if (this.downloadFormatsCom === undefined ||
+      this.downloadFormatsCom === null ||
+      Object.keys(this.downloadFormatsCom).length === 0) {
+       this.downloadFormatsCom = {
+        'xml': false,
+        'txt': false,
+        'print': false
+       }
+    }
+
+    // Get which page has initiated the download modal from nav params
+    try {
+      const origin = String(this.params.get('origin'));
+      if (origin === 'page-text') {
+        this.readTextsMode = true;
+      } else if (origin === 'page-introduction') {
+        this.introductionMode = true;
       }
+    } catch (e) {}
+
+    // Get text id from nav params
+    try {
+      this.textId = String(this.params.get('textId'));
+    } catch (e) {
+      this.textId = '';
     }
 
-    if (
-      !this.downloadFormatsEst ||
-      Object.keys(this.downloadFormatsEst).length < 1
-    ) {
-      this.downloadFormatsEst = {
-        xml: false,
-        txt: false,
-        print: false
-      }
-    }
-
-    if (
-      !this.downloadFormatsCom ||
-      Object.keys(this.downloadFormatsCom).length < 1
-    ) {
-      this.downloadFormatsCom = {
-        xml: false,
-        txt: false,
-        print: false
-      }
-    }
-  }
-
-  ngOnInit(): void {
-    // Set which page has initiated the download modal
-    if (this.origin === 'page-text') {
-      this.readTextsMode = true;
-    } else if (this.origin === 'page-introduction') {
-      this.introductionMode = true;
-    }
-
-    this.setTranslations();
-
-    if (this.textItemID) {
-      // Parse text item id
-      const idParts = this.textItemID.split(';')[0].split('_');
+    // Parse text id
+    if (this.textId) {
+      const idParts = this.textId.split('_');
       this.collectionId = idParts[0];
-      this.publicationId = idParts[1] || '';
-      this.chapterId = idParts[2] || '';
-      this.positionId = this.textItemID.split(';')[1] || '';
-
-      this.setCollectionTitle();
-
-      // Get publication title from TOC (this way we can also get
-      // correct chapter titles for publications with chapters)
-      if (this.readTextsMode) {
-        this.setPublicationTitle();
+      if (idParts.length > 1) {
+        this.publicationId = idParts[1];
+        if (idParts.length > 2) {
+          this.chapterId = idParts[2].split(';')[0];
+          if (idParts[2].split(';')[1] !== undefined) {
+            this.positionId = idParts[2].split(';')[1];
+          }
+        } else {
+          this.chapterId = '';
+          this.positionId = '';
+        }
+      } else {
+        this.publicationId = '';
+        this.chapterId = '';
       }
     }
+
+    // Get translations
+    if (this.readTextsMode) {
+      if ($localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
+        this.showInstructions = true;
+        this.instructionsText = $localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
+      } else {
+        this.showInstructions = false;
+      }
+      if ($localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`) {
+        this.showCopyright = true;
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`;
+      } else {
+        this.showCopyright = false;
+      }
+    } else if (this.introductionMode) {
+      if ($localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
+        this.showInstructions = true;
+        this.instructionsText = $localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
+      } else {
+        this.showInstructions = false;
+      }
+      if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
+        this.showCopyright = true;
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
+      } else {
+        this.showCopyright = false;
+      }
+    }
+    if ($localize`:@@DownloadTexts.Print:Skriv ut`) {
+      this.printTranslation = $localize`:@@DownloadTexts.Print:Skriv ut`;
+    } else {
+      this.printTranslation = 'Skriv ut';
+    }
+    if ($localize`:@@DownloadTexts.Textsize:Textstorlek`) {
+      this.textSizeTranslation = $localize`:@@DownloadTexts.Textsize:Textstorlek`;
+    } else {
+      this.textSizeTranslation = 'Text storlek';
+    }
+
+    // Get collection title from database
+    this.collectionsService.getCollection(this.collectionId as string).subscribe({
+      next: (collectionData) => {
+        if (collectionData[0] !== undefined) {
+          this.collectionTitle = collectionData[0]['name'];
+        } else {
+          this.collectionTitle = '';
+        }
+      },
+      error: (e) => { this.collectionTitle = ''; }
+    });
+
+    // Get publication title from TOC (this way we can also get correct chapter titles for publications with chapters)
+    if (this.readTextsMode) {
+      this.tocService.getTableOfContents(this.collectionId as string).subscribe({
+        next: (toc: any) => {
+          if (toc !== null) {
+            if (toc.children) {
+              let searchItemId = this.collectionId + '_' + this.publicationId;
+              if (this.chapterId) {
+                searchItemId += '_' + this.chapterId;
+              }
+              if (!this.positionId) {
+                this.recursiveSearchTocForPublicationTitle(toc.children, searchItemId);
+              } else {
+                searchItemId += ';pos';
+                this.recursiveSearchTocForPublicationTitle(toc.children, searchItemId, true);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Get translation for comments-column title
+    if (this.readTextsMode) {
+      this.commentTitle = $localize`:@@Read.Comments.Title:Kommentarer`;
+    }
+
+    // Get translation for introduction title
+    if (this.introductionMode) {
+      this.introductionTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+    }
+
   }
 
-  dismiss() {
-    this.modalCtrl.dismiss();
-  }
-
-  initiateDownload(textType: string, format: string) {
+  public initiateDownload(textType: string, format: string) {
     this.showErrorMessage = false;
     let mimetype = 'application/xml';
     let fileExtension = 'xml';
@@ -144,64 +229,60 @@ export class DownloadTextsModal implements OnInit {
     }
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.collectionContentService.getDownloadableIntroduction(
-        this.textItemID, format, this.activeLocale
-      ).subscribe({
-        next: (res: any) => {
-          const blob = new Blob([res.content || ''], {type: mimetype});
+      this.collectionContentService.getDownloadableIntroduction(this.textId, format, this.activeLocale).subscribe({
+        next: (content) => {
+          const blob = new Blob([String(content)], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
+          this.objectURLs.push(blobUrl);
           const link = document.createElement('a');
           link.href = blobUrl;
           link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle) + '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingIntro = false;
-          URL.revokeObjectURL(blobUrl);
         },
-        error: (e: any) => {
-          console.error('error getting introduction in ' + format + ' format', e);
+        error: (e) => {
+          console.log('error getting introduction in ' + format + ' format');
           this.loadingIntro = false;
           this.showErrorMessage = true;
         }
       });
     } else if (textType === 'est') {
       this.loadingEst = true;
-      this.collectionContentService.getDownloadableReadText(
-        this.textItemID, format
-      ).subscribe({
-        next: (res: any) => {
-          const blob = new Blob([res.content], {type: mimetype});
+      this.collectionContentService.getDownloadableReadText(this.textId, format).subscribe({
+        next: content => {
+          const blob = new Blob([String(content)], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
+          this.objectURLs.push(blobUrl);
           const link = document.createElement('a');
           link.href = blobUrl;
           link.download = this.convertToFilename(this.publicationTitle) +  '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingEst = false;
-          URL.revokeObjectURL(blobUrl);
         },
-        error: (e: any) => {
-          console.error('error getting read text in ' + format + ' format', e);
+        error: e => {
+          console.log('error getting established text in ' + format + ' format');
           this.loadingEst = false;
           this.showErrorMessage = true;
         }
       });
     } else if (textType === 'com') {
       this.loadingCom = true;
-      this.commentService.getDownloadableComments(this.textItemID, format).subscribe({
-        next: (res: any) => {
-          const blob = new Blob([res.content], {type: mimetype});
+      this.commentService.getDownloadableComments(this.textId, format).subscribe({
+        next: content => {
+          const blob = new Blob([String(content)], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
+          this.objectURLs.push(blobUrl);
           const link = document.createElement('a');
           link.href = blobUrl;
           link.download = this.convertToFilename(this.publicationTitle + '-' + this.commentTitle) +  '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingCom = false;
-          URL.revokeObjectURL(blobUrl);
         },
-        error: (e: any) =>  {
-          console.error('error getting comments in ' + format + ' format', e);
+        error: e =>  {
+          console.log('error getting comments in ' + format + ' format');
           this.loadingCom = false;
           this.showErrorMessage = true;
         }
@@ -209,7 +290,7 @@ export class DownloadTextsModal implements OnInit {
     }
   }
 
-  openPrintFriendlyText(textType: string) {
+  public openPrintFriendlyText(textType: string) {
     this.showErrorMessage = false;
     if (textType === 'intro') {
       this.loadingIntro = true;
@@ -223,8 +304,15 @@ export class DownloadTextsModal implements OnInit {
     }
   }
 
+  dismiss() {
+    this.objectURLs.forEach(object => {
+      URL.revokeObjectURL(object);
+    });
+    this.modalCtrl.dismiss();
+  }
+
   private openIntroductionForPrint() {
-    this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale).subscribe({
+    this.collectionContentService.getIntroduction(this.textId, this.activeLocale).subscribe({
       next: (res) => {
         let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
         content = this.constructHtmlForPrint(content, 'intro');
@@ -255,12 +343,12 @@ export class DownloadTextsModal implements OnInit {
   }
 
   private openEstablishedForPrint() {
-    this.collectionContentService.getReadText(this.textItemID).subscribe({
+    this.collectionContentService.getReadText(this.textId).subscribe({
       next: content => {
         if (content === '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>') {
           content = '';
         } else {
-          const c_id = String(this.textItemID).split('_')[0];
+          const c_id = String(this.textId).split('_')[0];
           content = this.parserService.postprocessEstablishedText(content, c_id);
 
           content = content.substring(content.indexOf('<body>') + 6, content.indexOf('</body>'));
@@ -295,9 +383,9 @@ export class DownloadTextsModal implements OnInit {
   }
 
   private openCommentsForPrint() {
-    this.commentService.getComments(this.textItemID).subscribe({
+    this.commentService.getComments(this.textId).subscribe({
       next: content => {
-        this.commentService.getCorrespondanceMetadata(String(this.textItemID).split('_')[1].split(';')[0]).subscribe({
+        this.commentService.getCorrespondanceMetadata(String(this.textId).split('_')[1].split(';')[0]).subscribe({
           next: metadata => {
             if (content === null || content === undefined || content.length < 1) {
               content = '';
@@ -622,120 +710,23 @@ export class DownloadTextsModal implements OnInit {
     return title;
   }
 
-  private setTranslations() {
-    // Set translations
-    if (this.readTextsMode) {
-      this.commentTitle = $localize`:@@Read.Comments.Title:Kommentarer`;
-
-      if ($localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
-        this.showInstructions = true;
-        this.instructionsText = $localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
-      } else {
-        this.showInstructions = false;
-      }
-
-      if ($localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`) {
-        this.showCopyright = true;
-        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`;
-      } else {
-        this.showCopyright = false;
-      }
-    } else if (this.introductionMode) {
-      this.introductionTitle = $localize`:@@Read.Introduction.Title:Inledning`;
-
-      if ($localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
-        this.showInstructions = true;
-        this.instructionsText = $localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
-      } else {
-        this.showInstructions = false;
-      }
-
-      if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
-        this.showCopyright = true;
-        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
-      } else {
-        this.showCopyright = false;
-      }
-    }
-
-    if ($localize`:@@DownloadTexts.Print:Skriv ut`) {
-      this.printTranslation = $localize`:@@DownloadTexts.Print:Skriv ut`;
-    } else {
-      this.printTranslation = 'Skriv ut';
-    }
-
-    if ($localize`:@@DownloadTexts.Textsize:Textstorlek`) {
-      this.textSizeTranslation = $localize`:@@DownloadTexts.Textsize:Textstorlek`;
-    } else {
-      this.textSizeTranslation = 'Text storlek';
-    }
-  }
-
-  private setCollectionTitle() {
-    // Get collection title from database
-    if (this.collectionId) {
-      this.collectionsService.getCollection(this.collectionId).subscribe(
-        (collectionData: any) => {
-          if (collectionData?.[0]?.['name']) {
-            this.collectionTitle = collectionData[0]['name'];
-          } else {
-            this.collectionTitle = '';
-          }
-        }
-      );
-    }
-  }
-
-  private setPublicationTitle() {
-    if (this.collectionId) {
-      this.tocService.getTableOfContents(this.collectionId).subscribe(
-        (toc: any) => {
-          if (toc?.children) {
-            let searchItemId = this.textItemID.split(';')[0];
-            if (!this.positionId) {
-              this.recursiveSearchTocForPublicationTitle(toc.children, searchItemId);
-            } else {
-              searchItemId += ';';
-              this.recursiveSearchTocForPublicationTitle(toc.children, searchItemId, true);
-            }
-          }
-        }
-      );
-    }
-  }
-
-  private recursiveSearchTocForPublicationTitle(
-    tocArray: any[],
-    searchId: string,
-    idIncludesPosition: boolean = false,
-    parentTitle?: string
-  ) {
-    if (tocArray?.length) {
-      for (let i = 0; i < tocArray.length; i++) {
-        if (tocArray[i].itemId === searchId) {
-          this.publicationTitle = tocArray[i].text;
+  private recursiveSearchTocForPublicationTitle(toc_array: any, searchId: any, idIncludesPosition = false, parentTitle?: any) {
+    if (toc_array !== null && toc_array !== undefined) {
+      toc_array.forEach((item: any) => {
+        if (item.itemId !== undefined && item.itemId === searchId) {
+            this.publicationTitle = item.text;
           if (this.publicationTitle?.slice(-1) === '.') {
             this.publicationTitle = this.publicationTitle.slice(0, -1);
           }
-          break;
-        } else if (
-          idIncludesPosition &&
-          tocArray[i].itemId?.startsWith(searchId)
-        ) {
-          this.publicationTitle = parentTitle || '';
+        } else if (idIncludesPosition && item.itemId !== undefined && item.itemId.startsWith(searchId)) {
+          this.publicationTitle = parentTitle;
           if (this.publicationTitle?.slice(-1) === '.') {
             this.publicationTitle = this.publicationTitle.slice(0, -1);
           }
-          break;
-        } else if (tocArray[i].children) {
-          this.recursiveSearchTocForPublicationTitle(
-            tocArray[i].children,
-            searchId,
-            idIncludesPosition,
-            tocArray[i].text
-          );
+        } else if (item.children) {
+          this.recursiveSearchTocForPublicationTitle(item.children, searchId, idIncludesPosition, item.text);
         }
-      }
+      });
     }
   }
 

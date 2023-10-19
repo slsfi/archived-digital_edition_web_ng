@@ -5,7 +5,7 @@ import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverControlle
 import { Subscription } from 'rxjs';
 
 import { config } from '@config';
-import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
+import { DownloadTextsModal } from '@modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { Textsize } from '@models/textsize.model';
@@ -1354,8 +1354,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   async showDownloadModal() {
     const modal = await this.modalCtrl.create({
-      component: DownloadTextsModalPage,
-      componentProps: { textId: this.textItemID, origin: 'page-text' }
+      component: DownloadTextsModal,
+      componentProps: { origin: 'page-text', textItemID: this.textItemID }
     });
 
     modal.present();
