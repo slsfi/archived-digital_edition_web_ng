@@ -80,25 +80,23 @@ export class CommentsComponent implements OnInit, OnDestroy {
   getCorrespondanceMetadata() {
     this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).subscribe(
       (text: any) => {
-        if (text['subjects'] !== undefined && text['subjects'] !== null) {
-          if (text['subjects'].length > 0) {
-            const senders = [] as any;
-            const receivers = [] as any;
-            text['subjects'].forEach((subject: any) => {
-              if (subject['avs\u00e4ndare']) {
-                senders.push(subject['avs\u00e4ndare']);
-              }
-              if (subject['mottagare']) {
-                receivers.push(subject['mottagare']);
-              }
-            });
-            this.sender = concatenateNames(senders);
-            this.receiver = concatenateNames(receivers);
-          }
+        if (text?.subjects?.length > 0) {
+          const senders: string[] = [];
+          const receivers: string[] = [];
+          text.subjects.forEach((subject: any) => {
+            if (subject['avs\u00e4ndare']) {
+              senders.push(subject['avs\u00e4ndare']);
+            }
+            if (subject['mottagare']) {
+              receivers.push(subject['mottagare']);
+            }
+          });
+          this.sender = concatenateNames(senders);
+          this.receiver = concatenateNames(receivers);
         }
 
-        if (text['letter'] !== undefined && text['letter'] !== null) {
-          this.letter = text['letter'];
+        if (text?.letter) {
+          this.letter = text.letter;
         }
       }
     );

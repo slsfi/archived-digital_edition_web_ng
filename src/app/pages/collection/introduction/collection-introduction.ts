@@ -212,7 +212,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           // Fix paths for images and file extensions for icons
           let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
 
-          // TODO: this manipulation of the introductions TOC should maybe be made using htmlparser2,
+          // TODO: this manipulation of the introductions TOC should maybe be done using htmlparser2,
           // TODO: on the other hand using regex doesn't rely on an external dependency ...
           // Find the introduction's table of contents in the text
           const pattern = /<div data-id="content">(.*?)<\/div>/;

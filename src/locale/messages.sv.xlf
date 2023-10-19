@@ -114,6 +114,18 @@
         <target>Licens: CC BY-NC-ND 4.0</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightURL">
+      <segment state="initial">
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+        <target>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightURLIntroduction">
+      <segment state="initial">
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+        <target>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment state="initial">
         <source>Ladda ner</source>
@@ -150,6 +162,12 @@
         <target>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.OpenPrintError">
+      <segment state="initial">
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Print">
       <segment state="initial">
         <source>Skriv ut</source>
@@ -158,8 +176,8 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
-        <target>Ett fel har uppstått. Texten kunde inte laddas.</target>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Textsize">

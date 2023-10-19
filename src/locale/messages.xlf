@@ -96,6 +96,16 @@
         <source>Licens: CC BY-NC-ND 4.0</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightURL">
+      <segment>
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightURLIntroduction">
+      <segment>
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment>
         <source>Ladda ner</source>
@@ -126,6 +136,11 @@
         <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.OpenPrintError">
+      <segment>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Print">
       <segment>
         <source>Skriv ut</source>
@@ -133,7 +148,7 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment>
-        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.Textsize">
