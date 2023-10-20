@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content>
-  <div class="rd-wrapper">
+  <div class="modal-inner-wrapper">
     <h2 *ngIf="thisPageTranslation" i18n="@@Reference.thisPage">Hänvisa till denna sida</h2>
-    <div class="rd-box">
+    <div class="modal-inner-box">
       <h3 *ngIf="permaLinkTranslation && referenceData.urn"><ng-container i18n="@@Reference.permaLink">Beständig webbadress</ng-container>:</h3>
       <p class="urn" *ngIf="referenceData.urn"><a target="_blank" [href]="urnResolverUrl + referenceData.urn">{{urnResolverUrl + referenceData.urn}}</a></p>
       <p class="urn" *ngIf="!referenceData.urn" i18n="@@Reference.missing">Sidan saknar beständig webbadress</p>

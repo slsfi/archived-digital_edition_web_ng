@@ -111,6 +111,11 @@
         <source>Ladda ner</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.Format.HTML">
+      <segment>
+        <source>HTML</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Format.Print">
       <segment>
         <source>Utskrift</source>
@@ -119,6 +124,11 @@
     <unit id="DownloadTexts.Format.TXT">
       <segment>
         <source>TXT</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XHTML">
+      <segment>
+        <source>XHTML</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.Format.XML">

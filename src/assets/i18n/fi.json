@@ -425,9 +425,11 @@
         "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "Format": {
-            "XML": "XML",
+            "Print": "Tulosta",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Tulosta"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

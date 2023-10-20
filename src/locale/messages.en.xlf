@@ -132,6 +132,12 @@
         <target>Download</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.Format.HTML">
+      <segment state="initial">
+        <source>HTML</source>
+        <target>HTML</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Format.Print">
       <segment state="initial">
         <source>Utskrift</source>
@@ -142,6 +148,12 @@
       <segment state="initial">
         <source>TXT</source>
         <target>TXT</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XHTML">
+      <segment state="initial">
+        <source>XHTML</source>
+        <target>XHTML</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Format.XML">

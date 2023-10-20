@@ -5,8 +5,7 @@
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
-        <ion-icon slot="start" *ngIf="!usePrintNotDownloadIcon" class="download-icon" name="download"></ion-icon>
-        <ion-icon slot="start" *ngIf="usePrintNotDownloadIcon" class="print-icon" name="print"></ion-icon>
+        <ion-icon slot="start" class="download-icon" name="download"></ion-icon>
         <span class="side-title" i18n="@@DownloadTexts.Download">Ladda ner</span>
       </ion-button>
       <ion-button *ngIf="showURNButton" (click)="showReference()">

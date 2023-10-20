@@ -1,7 +1,7 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -18,7 +18,7 @@ import { concatenateNames } from '@utility-functions';
   selector: 'page-download-texts-modal',
   templateUrl: 'download-texts-modal.html',
   styleUrls: ['download-texts-modal.scss'],
-  imports: [NgClass, NgIf, NgStyle, IonicModule]
+  imports: [NgClass, NgFor, NgIf, NgStyle, IonicModule]
 })
 export class DownloadTextsModal implements OnInit {
   @Input() origin: string = '';
@@ -29,15 +29,16 @@ export class DownloadTextsModal implements OnInit {
   commentTitle: string = '';
   copyrightText: string = '';
   copyrightURL: string = '';
-  downloadFormatsCom: Record<string, any> | undefined = undefined;
-  downloadFormatsEst: Record<string, any> | undefined = undefined;
-  downloadFormatsIntro: Record<string, any> | undefined = undefined;
+  downloadFormatsCom: string[] = [];
+  downloadFormatsEst: string[] = [];
+  downloadFormatsIntro: string[] = [];
   instructionsText: string = '';
   introductionMode: boolean = false;
   introductionTitle: string = '';
   loadingCom: boolean = false;
   loadingEst: boolean = false;
   loadingIntro: boolean = false;
+  readTextLanguages: string[] = [];
   printTranslation: string = '';
   publicationTitle: string = '';
   readTextsMode: boolean = false;
@@ -50,50 +51,55 @@ export class DownloadTextsModal implements OnInit {
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private commentService: CommentService,
-    private parserService: HtmlParserService,
     private modalCtrl: ModalController,
+    private parserService: HtmlParserService,
     private tocService: CollectionTableOfContentsService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     // Get configs
+    this.readTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
+    if (this.readTextLanguages.length < 2) {
+      this.readTextLanguages = ['default'];
+    }
+
     this.siteUrl = config.app?.siteURLOrigin ?? '';
-    this.downloadFormatsIntro = config.textDownloadOptions?.enabledIntroductionFormats ?? undefined;
-    this.downloadFormatsEst = config.textDownloadOptions?.enabledEstablishedFormats ?? undefined;
-    this.downloadFormatsCom = config.textDownloadOptions?.enabledCommentsFormats ?? undefined;
 
-    // Set download formats options from config
-    if (
-      !this.downloadFormatsIntro ||
-      Object.keys(this.downloadFormatsIntro).length < 1
-    ) {
-      this.downloadFormatsIntro = {
-        xml: false,
-        print: false
-      }
-    }
+    const formatsCom = config.modal?.downloadTexts?.commentsFormats ?? {};
+    const formatsEst = config.modal?.downloadTexts?.readTextFormats ?? {};
+    const formatsIntro = config.modal?.downloadTexts?.introductionFormats ?? {};
 
-    if (
-      !this.downloadFormatsEst ||
-      Object.keys(this.downloadFormatsEst).length < 1
-    ) {
-      this.downloadFormatsEst = {
-        xml: false,
-        txt: false,
-        print: false
-      }
-    }
+    const supportedFormats: string[] = ['xml', 'html', 'xhtml', 'txt', 'print'];
 
-    if (
-      !this.downloadFormatsCom ||
-      Object.keys(this.downloadFormatsCom).length < 1
-    ) {
-      this.downloadFormatsCom = {
-        xml: false,
-        txt: false,
-        print: false
+    // Set enabled download formats
+    Object.entries(formatsCom).forEach(([key, value]) => {
+      if (value && supportedFormats.includes(key)) {
+        this.downloadFormatsCom.push(key);
       }
-    }
+    });
+
+    Object.entries(formatsEst).forEach(([key, value]) => {
+      if (value && supportedFormats.includes(key)) {
+        this.downloadFormatsEst.push(key);
+      }
+    });
+
+    Object.entries(formatsIntro).forEach(([key, value]) => {
+      if (value && supportedFormats.includes(key)) {
+        this.downloadFormatsIntro.push(key);
+      }
+    });
+
+    // Move any 'print' formats to the end of the arrays
+    this.downloadFormatsCom.length && this.downloadFormatsCom.push(
+      this.downloadFormatsCom.splice(this.downloadFormatsCom.indexOf('print'), 1)[0]
+    );
+    this.downloadFormatsEst.length && this.downloadFormatsEst.push(
+      this.downloadFormatsEst.splice(this.downloadFormatsEst.indexOf('print'), 1)[0]
+    );
+    this.downloadFormatsIntro.length && this.downloadFormatsIntro.push(
+      this.downloadFormatsIntro.splice(this.downloadFormatsIntro.indexOf('print'), 1)[0]
+    );
   }
 
   ngOnInit(): void {
@@ -125,14 +131,22 @@ export class DownloadTextsModal implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  initiateDownload(textType: string, format: string) {
+  initiateDownload(textType: string, format: string, language?: string) {
     this.showLoadingError = false;
     let mimetype = 'application/xml';
     let fileExtension = 'xml';
+
     if (format === 'txt') {
       mimetype = 'text/plain';
       fileExtension = 'txt';
+    } else if (format === 'html') {
+      mimetype = 'text/html';
+      fileExtension = 'html';
+    } else if (format === 'xhtml') {
+      mimetype = 'application/xhtml+xml';
+      fileExtension = 'xhtml';
     }
+
     if (textType === 'intro') {
       this.loadingIntro = true;
       this.collectionContentService.getDownloadableIntroduction(
@@ -157,8 +171,11 @@ export class DownloadTextsModal implements OnInit {
       });
     } else if (textType === 'est') {
       this.loadingEst = true;
+      if (language === 'default' || !language) {
+        language = '';
+      }
       this.collectionContentService.getDownloadableReadText(
-        this.textItemID, format
+        this.textItemID, format, language
       ).subscribe({
         next: (res: any) => {
           const blob = new Blob([res.content], {type: mimetype});
@@ -200,14 +217,17 @@ export class DownloadTextsModal implements OnInit {
     }
   }
 
-  openPrintFriendlyText(textType: string) {
+  openPrintFriendlyText(textType: string, language?: string) {
+    if (language === 'default' || !language) {
+      language = '';
+    }
     this.showPrintError = false;
     if (textType === 'intro') {
       this.loadingIntro = true;
       this.openIntroductionForPrint();
     } else if (textType === 'est') {
       this.loadingEst = true;
-      this.openEstablishedForPrint();
+      this.openEstablishedForPrint(language);
     } else if (textType === 'com') {
       this.loadingCom = true;
       this.openCommentsForPrint();
@@ -249,8 +269,12 @@ export class DownloadTextsModal implements OnInit {
     });
   }
 
-  private openEstablishedForPrint() {
-    this.collectionContentService.getReadText(this.textItemID).subscribe({
+  private openEstablishedForPrint(language: string) {
+    let lang = '';
+    if (language) {
+      lang = '_' + language;
+    }
+    this.collectionContentService.getReadText(this.textItemID + lang).subscribe({
       next: (res: any) => {
         if (
           res?.content &&
@@ -263,7 +287,7 @@ export class DownloadTextsModal implements OnInit {
           //text = text.substring(text.indexOf('<body>') + 6, text.indexOf('</body>'));
           text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
 
-          text = this.constructHtmlForPrint(text, 'est');
+          text = this.constructHtmlForPrint(text, 'est', language);
 
           try {
             const newWindowRef = window.open();
@@ -362,7 +386,7 @@ export class DownloadTextsModal implements OnInit {
     });
   }
 
-  private constructHtmlForPrint(text: string, textType: string) {
+  private constructHtmlForPrint(text: string, textType: string, language?: string) {
     const cssStylesheets = [];
     for (let i = 0; i < document.styleSheets.length; i++) {
       if (document.styleSheets[i].href) {
@@ -371,7 +395,11 @@ export class DownloadTextsModal implements OnInit {
     }
 
     let header = '<!DOCTYPE html>\n';
-    header += '<html class="hydrated">\n';
+    if (language) {
+      header += '<html lang="' + language + '" class="hydrated">\n';
+    } else {
+      header += '<html class="hydrated">\n';
+    }
     header += '<head>\n';
     header += '<meta charset="UTF-8">\n';
     header += '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
@@ -396,7 +424,7 @@ export class DownloadTextsModal implements OnInit {
     header += '    thead { display:table-header-group; }\n';
     header += '    tfoot { display:table-footer-group; }\n';
     header += '    .print-header { padding: 1px; margin-bottom: 2rem; background-color: #ededed; }\n';
-    header += '    .print-header button { display: block; font-family: var(--font-stack-system); font-size: 1rem; font-weight: 600; text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35); text-transform: uppercase; color: #fff; background-color: #2a75cb; border-radius: 0.4em; padding: 0.5em 1.3em; margin: 2em auto; cursor: pointer; transition: all 0.2s; }\n';
+    header += '    .print-header button { display: block; font-family: var(--font-stack-system); font-size: 1rem; font-weight: 600; text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35); text-transform: uppercase; color: #fff; background-color: #2a75cb; border-radius: 0.4em; padding: 0.5em 1.3em; margin: 2em auto; cursor: pointer; transition: all 0.2s; line-height: 1.5; }\n';
     header += '    .print-header button:hover, .print-header button:focus { background-color: #12447e; }\n';
     header += '    .slide-container { font-family: var(--font-stack-system); display: flex; flex-direction: column; align-items: center; }\n';
     header += '    .slide-container label { font-weight: 600; }\n';

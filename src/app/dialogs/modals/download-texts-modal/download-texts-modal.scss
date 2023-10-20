@@ -1,23 +1,7 @@
-.modal-inner-wrapper {
-    background: #fafafa;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    width: 100%;
-
-	h2 {
-		font-size: 1.3125rem;
-		line-height: 1.25;
-		margin: 0 0 0.5em 0;
-	}
-}
+// Import general styles for modal with inner wrapper and box
+@import "src/theme/common/modal-inner-wrapper.scss";
 
 .modal-inner-box {
-	background: var(--ion-modal-item-background-color);
-	line-height: 1.4;
-	margin: 0;
-	padding: 1rem;
-	width: 100%;
-
 	h3 {
 		font-size: 1em;
 		font-weight: bold;

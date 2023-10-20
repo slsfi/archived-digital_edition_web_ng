@@ -425,9 +425,11 @@
         "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "Format": {
-            "XML": "XML",
+            "Print": "Utskrift",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Utskrift"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

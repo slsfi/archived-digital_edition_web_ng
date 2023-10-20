@@ -29,7 +29,8 @@ export class CollectionsService {
   }
 
   getCollection(id: string): Observable<any> {
-    const endpoint = `${this.apiURL}/collection/${id}`;
+    const locale = this.multilingualTOC ? '/i18n/' + this.activeLocale : '';
+    const endpoint = `${this.apiURL}/collection/${id}${locale}`;
     return this.http.get(endpoint);
   }
 

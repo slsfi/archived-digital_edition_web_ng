@@ -425,9 +425,11 @@
         "TextLoadingError": "Failed to download text. Please try again and allow popup-windows from the web page.",
         "OpenPrintError": "The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.",
         "Format": {
-            "XML": "XML",
+            "Print": "Print",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Print"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

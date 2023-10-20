@@ -61,7 +61,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
   urlParametersSubscription: Subscription | null = null;
-  usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   viewOptionsTogglesIntro: any = {};
 
@@ -121,21 +120,18 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     }
 
     try {
-      const textDownloadOptions = config.textDownloadOptions ?? undefined;
+      const textDownloadOptions = config.modal?.downloadTexts ?? undefined;
       if (
-        textDownloadOptions.enabledIntroductionFormats !== undefined &&
-        textDownloadOptions.enabledIntroductionFormats !== null &&
-        Object.keys(textDownloadOptions.enabledIntroductionFormats).length !== 0
+        textDownloadOptions.introductionFormats !== undefined &&
+        textDownloadOptions.introductionFormats !== null &&
+        Object.keys(textDownloadOptions.introductionFormats).length !== 0
       ) {
-        for (const [key, value] of Object.entries(textDownloadOptions.enabledIntroductionFormats)) {
+        for (const [key, value] of Object.entries(textDownloadOptions.introductionFormats)) {
           if (value) {
             this.showTextDownloadButton = true;
             break;
           }
         }
-      }
-      if (textDownloadOptions.usePrintNotDownloadIcon !== undefined) {
-        this.usePrintNotDownloadIcon = textDownloadOptions.usePrintNotDownloadIcon;
       }
     } catch (e) {
       this.showTextDownloadButton = false;

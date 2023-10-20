@@ -334,6 +334,29 @@ export const config: Config = {
     }
   },
   modal: {
+    downloadTexts: {
+      introductionFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      readTextFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      commentsFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      }
+    },
     fullscreenImageViewer: {
       imageQuality: 4
     },
@@ -352,23 +375,6 @@ export const config: Config = {
       showType: false,
       useSimpleWorkMetadata: true
     }
-  },
-  textDownloadOptions: {
-    enabledIntroductionFormats: {
-        xml: true,
-        print: true
-    },
-    enabledEstablishedFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    enabledCommentsFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    usePrintNotDownloadIcon: false
   }
 }
 
@@ -687,6 +693,29 @@ export const config_soderholm: Config = {
     }
   },
   modal: {
+    downloadTexts: {
+      introductionFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      },
+      readTextFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      },
+      commentsFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      }
+    },
     fullscreenImageViewer: {
       imageQuality: 2
     },
@@ -697,23 +726,6 @@ export const config_soderholm: Config = {
       showAliasAndPrevLastName: false,
       useSimpleWorkMetadata: false
     }
-  },
-  textDownloadOptions: {
-    enabledIntroductionFormats: {
-        xml: false,
-        print: false
-    },
-    enabledEstablishedFormats: {
-        xml: false,
-        txt: false,
-        print: false
-    },
-    enabledCommentsFormats: {
-        xml: false,
-        txt: false,
-        print: false
-    },
-    usePrintNotDownloadIcon: false
   }
 }
 
@@ -935,6 +947,29 @@ export const config_vonWright: Config = {
     }
   },
   modal: {
+    downloadTexts: {
+      introductionFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      readTextFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      commentsFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      }
+    },
     fullscreenImageViewer: {
       imageQuality: 4
     },
@@ -945,23 +980,6 @@ export const config_vonWright: Config = {
       showAliasAndPrevLastName: false,
       useSimpleWorkMetadata: false
     }
-  },
-  textDownloadOptions: {
-    enabledIntroductionFormats: {
-        xml: true,
-        print: true
-    },
-    enabledEstablishedFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    enabledCommentsFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    usePrintNotDownloadIcon: false
   }
 }
 
@@ -1250,6 +1268,29 @@ export const config_granqvist: Config = {
     }
   },
   modal: {
+    downloadTexts: {
+      introductionFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      },
+      readTextFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      },
+      commentsFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: false
+      }
+    },
     fullscreenImageViewer: {
       imageQuality: 1
     },
@@ -1264,23 +1305,6 @@ export const config_granqvist: Config = {
       showMediaData: true,
       useSimpleWorkMetadata: false
     }
-  },
-  textDownloadOptions: {
-    enabledIntroductionFormats: {
-        xml: true,
-        print: true
-    },
-    enabledEstablishedFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    enabledCommentsFormats: {
-        xml: true,
-        txt: false,
-        print: true
-    },
-    usePrintNotDownloadIcon: false
   }
 }
 
@@ -1337,7 +1361,7 @@ export const config_mechelin: Config = {
           fi: "Leo Mechelinin muotokuva"
         },
         orientationPortrait: false,
-        URL: "https://leomechelin.fi/assets/images/MECHELIN_Aloituskuva_kevyempi.jpg"
+        URL: "https://leomechelin.fi/assets/images/Leo_Mechelin.jpg"
       },
       showContentGrid: false,
       showFooter: false,
@@ -1451,6 +1475,22 @@ export const config_mechelin: Config = {
     }
   },
   modal: {
+    downloadTexts: {
+      introductionFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      readTextFormats: {
+        xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      }
+    },
     fullscreenImageViewer: {
       imageQuality: 1
     },
@@ -1461,22 +1501,5 @@ export const config_mechelin: Config = {
       showOccurrences: false,
       useSimpleWorkMetadata: false
     }
-  },
-  textDownloadOptions: {
-    enabledIntroductionFormats: {
-        xml: false,
-        print: false
-    },
-    enabledEstablishedFormats: {
-        xml: false,
-        txt: false,
-        print: false
-    },
-    enabledCommentsFormats: {
-        xml: false,
-        txt: false,
-        print: false
-    },
-    usePrintNotDownloadIcon: false
   }
 }
