@@ -39,10 +39,13 @@ export class CollectionContentService {
     return this.http.get(endpoint);
   }
 
-  getReadText(id: string): Observable<any> {
+  getReadText(id: string, language: string = ''): Observable<any> {
+    const estFolder = language ? 'est-i18n' : 'est';
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';
-    const endpoint = `${this.apiURL}/text/${idParts[0]}/${idParts[1]}/est${ch_id}`;
+    language = language ? '/' + language : '';
+    const endpoint = `${this.apiURL}/text/`
+          + `${idParts[0]}/${idParts[1]}/${estFolder}${ch_id}${language}`;
     return this.http.get(endpoint);
   }
 
@@ -77,7 +80,7 @@ export class CollectionContentService {
     return this.http.get(endpoint);
   }
 
-  getDownloadableReadText(id: string, format: string, language?: string): Observable<any> {
+  getDownloadableReadText(id: string, format: string, language: string = ''): Observable<any> {
     const estFolder = language ? 'est-i18n' : 'est';
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';

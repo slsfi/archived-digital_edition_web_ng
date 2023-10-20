@@ -1,7 +1,7 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { Observable, catchError, forkJoin, map, of } from 'rxjs';
+import { catchError, forkJoin, map, of } from 'rxjs';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -157,7 +157,8 @@ export class DownloadTextsModal implements OnInit {
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = blobUrl;
-          link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle) + '.' + fileExtension;
+          link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle)
+                + '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingIntro = false;
@@ -178,11 +179,13 @@ export class DownloadTextsModal implements OnInit {
         this.textItemID, format, language
       ).subscribe({
         next: (res: any) => {
+          const langForFilename = language ? '_' + language : '';
           const blob = new Blob([res.content], {type: mimetype});
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = blobUrl;
-          link.download = this.convertToFilename(this.publicationTitle) +  '.' + fileExtension;
+          link.download = this.convertToFilename(this.publicationTitle)
+                + langForFilename + '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingEst = false;
@@ -202,7 +205,8 @@ export class DownloadTextsModal implements OnInit {
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = blobUrl;
-          link.download = this.convertToFilename(this.publicationTitle + '-' + this.commentTitle) +  '.' + fileExtension;
+          link.download = this.convertToFilename(this.publicationTitle + '-' + this.commentTitle)
+                + '.' + fileExtension;
           link.target = '_blank'
           link.click();
           this.loadingCom = false;
@@ -270,19 +274,14 @@ export class DownloadTextsModal implements OnInit {
   }
 
   private openEstablishedForPrint(language: string) {
-    let lang = '';
-    if (language) {
-      lang = '_' + language;
-    }
-    this.collectionContentService.getReadText(this.textItemID + lang).subscribe({
+    this.collectionContentService.getReadText(this.textItemID, language).subscribe({
       next: (res: any) => {
         if (
           res?.content &&
           res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
         ) {
-          const collectionID = this.textItemID.split('_')[0];
-          let text = res.content;
-          text = this.parserService.postprocessEstablishedText(text, collectionID);
+          let text: string = res.content;
+          text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
 
           //text = text.substring(text.indexOf('<body>') + 6, text.indexOf('</body>'));
           text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
@@ -440,7 +439,7 @@ export class DownloadTextsModal implements OnInit {
     header += '</style>\n';
     header += '</head>\n';
     header += '<body class="print-mode">\n';
-    header += '<div class="print-header">\n';
+    header += '<div class="print-header" lang="' + this.activeLocale + '">\n';
     header += '    <button type="button" tabindex="0" onclick="window.print();return false;">' + this.printTranslation + '</button>\n';
     header += '    <div class="slide-container">\n';
     header += '        <label for="textSizeSlider">' + this.textSizeTranslation + '</label>\n';

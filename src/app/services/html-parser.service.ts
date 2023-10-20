@@ -24,7 +24,7 @@ export class HtmlParserService {
         this.apiURL = apiBaseURL + '/' + projectName;
     }
 
-    postprocessEstablishedText(text: string, collectionId: string) {
+    postprocessReadText(text: string, collectionId: string) {
         text = text.trim();
         text = this.mapIllustrationImagePaths(text, collectionId);
 
@@ -37,7 +37,7 @@ export class HtmlParserService {
         return text;
     }
 
-    getEstablishedTextIllustrations(id: string): Observable<any> {
+    getReadTextIllustrations(id: string): Observable<any> {
         return this.collectionContentService.getReadText(id).pipe(
             map((res) => {
                 const images: any[] = [];
@@ -48,7 +48,7 @@ export class HtmlParserService {
                 ) {
                     const collectionID = String(id).split('_')[0];
                     let text = res.content as string;
-                    text = this.postprocessEstablishedText(text, collectionID);
+                    text = this.postprocessReadText(text, collectionID);
 
                     // Parse the read text html to get all illustrations in it using
                     // SSR compatible htmlparser2
