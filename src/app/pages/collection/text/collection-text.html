@@ -135,7 +135,8 @@
                 <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
                   <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
                     <read-text *ngIf="view.type === 'established_' + lang"
-                          [textItemID]="textItemID + '_' + lang"
+                          [language]="lang"
+                          [textItemID]="textItemID"
                           [textPosition]="textPosition"
                           [searchMatches]="searchMatches"
                           (openNewIllustrView)="openNewView($event)"
@@ -399,16 +400,26 @@
     </ion-segment>
 
     <!-- Columns in mobile mode -->
-    <div [class.visuallyhidden]="activeMobileModeViewType !== 'established'"
+    <div *ngIf="multilingualReadingTextLanguages.length < 2"
+          [class.visuallyhidden]="activeMobileModeViewType !== 'established'"
           class="mobile-mode-established scroll-content-container"
     >
-        <read-text [textItemID]="textItemID" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
+        <read-text
+              [textItemID]="textItemID"
+              [textPosition]="textPosition"
+              [searchMatches]="searchMatches"
+        ></read-text>
     </div>
     <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
       <div [class.visuallyhidden]="activeMobileModeViewType !== 'established_'+lang"
             class="mobile-mode-established scroll-content-container"
       >
-        <read-text [textItemID]="textItemID + '_' + lang" [textPosition]="textPosition" [searchMatches]="searchMatches"></read-text>
+        <read-text
+              [language]="lang"
+              [textItemID]="textItemID"
+              [textPosition]="textPosition"
+              [searchMatches]="searchMatches"
+        ></read-text>
       </div>
     </ng-container>
     <div [class.visuallyhidden]="activeMobileModeViewType !== 'facsimiles'"

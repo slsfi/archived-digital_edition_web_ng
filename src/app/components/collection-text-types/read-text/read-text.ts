@@ -22,6 +22,7 @@ import { isBrowser } from '@utility-functions';
   imports: [CommonModule, IonicModule, MathJaxDirective]
 })
 export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
+  @Input() language: string = '';
   @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
   @Input() textPosition: string = '';
@@ -89,15 +90,14 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   loadReadText() {
-    this.collectionContentService.getReadText(this.textItemID).subscribe({
+    this.collectionContentService.getReadText(this.textItemID, this.language).subscribe({
       next: (res) => {
         if (
           res?.content &&
           res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
         ) {
-          const collectionID = this.textItemID.split('_')[0];
-          let text = res.content as string;
-          text = this.parserService.postprocessEstablishedText(text, collectionID);
+          let text: string = res.content;
+          text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
           text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
           this.illustrationsVisibleInReadtext = this.parserService.readTextHasVisibleIllustrations(text);

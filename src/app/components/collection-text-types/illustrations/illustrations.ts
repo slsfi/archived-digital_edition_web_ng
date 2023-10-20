@@ -57,7 +57,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   }
 
   private getIllustrationImages() {
-    this.parserService.getEstablishedTextIllustrations(this.textItemID).subscribe(
+    this.parserService.getReadTextIllustrations(this.textItemID).subscribe(
       (images: any[]) => {
         this.images = images;
         this.imageCountTotal = this.images.length;
