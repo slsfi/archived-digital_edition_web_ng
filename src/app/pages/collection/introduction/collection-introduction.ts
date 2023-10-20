@@ -5,7 +5,7 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { combineLatest, map, Subscription } from 'rxjs';
 
 import { config } from '@config';
-import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
+import { DownloadTextsModal } from '@modals/download-texts-modal/download-texts-modal';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
@@ -61,7 +61,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
   urlParametersSubscription: Subscription | null = null;
-  usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   viewOptionsTogglesIntro: any = {};
 
@@ -121,21 +120,18 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     }
 
     try {
-      const textDownloadOptions = config.textDownloadOptions ?? undefined;
+      const textDownloadOptions = config.modal?.downloadTexts ?? undefined;
       if (
-        textDownloadOptions.enabledIntroductionFormats !== undefined &&
-        textDownloadOptions.enabledIntroductionFormats !== null &&
-        Object.keys(textDownloadOptions.enabledIntroductionFormats).length !== 0
+        textDownloadOptions.introductionFormats !== undefined &&
+        textDownloadOptions.introductionFormats !== null &&
+        Object.keys(textDownloadOptions.introductionFormats).length !== 0
       ) {
-        for (const [key, value] of Object.entries(textDownloadOptions.enabledIntroductionFormats)) {
+        for (const [key, value] of Object.entries(textDownloadOptions.introductionFormats)) {
           if (value) {
             this.showTextDownloadButton = true;
             break;
           }
         }
-      }
-      if (textDownloadOptions.usePrintNotDownloadIcon !== undefined) {
-        this.usePrintNotDownloadIcon = textDownloadOptions.usePrintNotDownloadIcon;
       }
     } catch (e) {
       this.showTextDownloadButton = false;
@@ -212,7 +208,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           // Fix paths for images and file extensions for icons
           let textContent = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
 
-          // TODO: this manipulation of the introductions TOC should maybe be made using htmlparser2,
+          // TODO: this manipulation of the introductions TOC should maybe be done using htmlparser2,
           // TODO: on the other hand using regex doesn't rely on an external dependency ...
           // Find the introduction's table of contents in the text
           const pattern = /<div data-id="content">(.*?)<\/div>/;
@@ -827,8 +823,8 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showDownloadModal() {
     const modal = await this.modalCtrl.create({
-      component: DownloadTextsModalPage,
-      componentProps: { textId: this.collectionID, origin: 'page-introduction' }
+      component: DownloadTextsModal,
+      componentProps: { origin: 'page-introduction', textItemID: this.collectionID }
     });
 
     modal.present();

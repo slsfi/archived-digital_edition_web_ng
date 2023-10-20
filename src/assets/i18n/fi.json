@@ -418,13 +418,18 @@
         "InstructionsIntroduction": "Tästä voit ladata johdannon tai avata sen uuteen ikkunaan tulostusta varten (sinun on sallittava popup-ikkunat verkkosivustolta).",
         "CopyrightNotice": "Lisenssi: CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "Lisenssi: CC BY-NC-ND 4.0",
+        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
+        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
         "Print": "Tulosta",
         "Textsize": "Tekstin koko",
-        "TextLoadingError": "On syntynyt virhe. Tekstin lataus epäonnistui.",
+        "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
+        "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "Format": {
-            "XML": "XML",
+            "Print": "Tulosta",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Tulosta"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

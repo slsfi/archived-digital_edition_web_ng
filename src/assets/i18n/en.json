@@ -418,13 +418,18 @@
         "InstructionsIntroduction": "Here you can download the introduction or open it in print-friendly format in a new window (you have to allow popup-windows from the web page).",
         "CopyrightNotice": "Licence: CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "Licence: CC BY-NC-ND 4.0",
+        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
+        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
         "Print": "Print",
         "Textsize": "Text size",
-        "TextLoadingError": "An error has occurred. Unable to load text.",
+        "TextLoadingError": "Failed to download text. Please try again and allow popup-windows from the web page.",
+        "OpenPrintError": "The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.",
         "Format": {
-            "XML": "XML",
+            "Print": "Print",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Print"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

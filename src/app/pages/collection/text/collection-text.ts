@@ -5,7 +5,7 @@ import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverControlle
 import { Subscription } from 'rxjs';
 
 import { config } from '@config';
-import { DownloadTextsModalPage } from '@modals/download-texts-modal/download-texts-modal';
+import { DownloadTextsModal } from '@modals/download-texts-modal/download-texts-modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
 import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { Textsize } from '@models/textsize.model';
@@ -70,7 +70,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   toolTipScaleValue: number | null = null;
   toolTipText: SafeHtml = '';
   tooltipVisible: boolean = false;
-  usePrintNotDownloadIcon: boolean = false;
   userIsTouching: boolean = false;
   views: any[] = [];
 
@@ -104,40 +103,22 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.showURNButton = config.page?.text?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.text?.showViewOptionsButton ?? true;
 
-    try {
-      const textDownloadOptions = config.textDownloadOptions ?? undefined;
-      if (
-        textDownloadOptions !== undefined &&
-        textDownloadOptions.enabledEstablishedFormats !== undefined &&
-        textDownloadOptions.enabledEstablishedFormats !== null &&
-        Object.keys(textDownloadOptions.enabledEstablishedFormats).length !== 0
-      ) {
-        for (const [key, value] of Object.entries(textDownloadOptions.enabledEstablishedFormats)) {
-          if (value) {
-            this.showTextDownloadButton = true;
-            break;
-          }
+    const textDownloadOptions = config.modal?.downloadTexts ?? undefined;
+    if (textDownloadOptions?.readTextFormats) {
+      for (const value of Object.values(textDownloadOptions.readTextFormats)) {
+        if (value) {
+          this.showTextDownloadButton = true;
+          break;
         }
       }
-      if (!this.showTextDownloadButton) {
-        if (
-          textDownloadOptions.enabledCommentsFormats !== undefined &&
-          textDownloadOptions.enabledCommentsFormats !== null &&
-          Object.keys(textDownloadOptions.enabledCommentsFormats).length !== 0
-        ) {
-          for (const [key, value] of Object.entries(textDownloadOptions.enabledCommentsFormats)) {
-            if (value) {
-              this.showTextDownloadButton = true;
-              break;
-            }
-          }
+    }
+    if (!this.showTextDownloadButton && textDownloadOptions?.commentsFormats) {
+      for (const value of Object.values(textDownloadOptions.commentsFormats)) {
+        if (value) {
+          this.showTextDownloadButton = true;
+          break;
         }
       }
-      if (textDownloadOptions.usePrintNotDownloadIcon !== undefined) {
-        this.usePrintNotDownloadIcon = textDownloadOptions.usePrintNotDownloadIcon;
-      }
-    } catch (e) {
-      this.showTextDownloadButton = false;
     }
 
     // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
@@ -1354,8 +1335,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   async showDownloadModal() {
     const modal = await this.modalCtrl.create({
-      component: DownloadTextsModalPage,
-      componentProps: { textId: this.textItemID, origin: 'page-text' }
+      component: DownloadTextsModal,
+      componentProps: { origin: 'page-text', textItemID: this.textItemID }
     });
 
     modal.present();

@@ -1,13 +1,9 @@
-.sd-wrapper {
-    background: #fafafa;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    width: 100%;
+// Import general styles for modal with inner wrapper and box
+@import "src/theme/common/modal-inner-wrapper.scss";
 
+.modal-inner-wrapper {
     .sd-header {
         h2 {
-            font-size: 1.3125rem;
-            line-height: 1.25;
             margin: 0.25rem 0 0.125rem 0;
     
             .date,
@@ -30,15 +26,17 @@
         }
     }
 
-    .sd-box,
     occurrences-accordion {
         background: var(--ion-modal-item-background-color);
         line-height: 1.4;
         margin: 0;
         padding: 1rem;
         width: 100%;
+    }
 
-        + .sd-box {
+    .modal-inner-box,
+    occurrences-accordion {
+        + .modal-inner-box {
             margin-top: 0.75rem;
         }
 
@@ -112,7 +110,7 @@
         }
     }
 
-    .sd-header + .sd-box {
+    .sd-header + .modal-inner-box {
         margin-top: 1rem;
     }
 

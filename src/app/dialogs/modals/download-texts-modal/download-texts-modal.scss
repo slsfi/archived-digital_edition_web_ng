@@ -1,44 +1,47 @@
-/* This hides the vertical scrollbar on the right edge of the modal when it is not necessary to show it. */
-ion-content > .scroll-content {
-	overflow: auto;
-	padding: 16px 24px 24px 24px;
-}
+// Import general styles for modal with inner wrapper and box
+@import "src/theme/common/modal-inner-wrapper.scss";
 
-@media(max-width: 480px) {
-	ion-content.content[padding] > .scroll-content {
-		padding: 0;
+.modal-inner-box {
+	h3 {
+		font-size: 1em;
+		font-weight: bold;
+		line-height: 1.25;
+		margin: 0 0 0.75rem 0;
 	}
 }
 
-ion-title {
-	margin-left: 12px;
+.dlt-group + .dlt-group,
+.notice {
+	border-top: 1px solid #646464;
+	margin-top: 1rem;
+	padding-top: 1rem;
+
+	p {
+		margin: 0;
+
+		+ p {
+			margin-top: 0.5rem;
+		}
+	}
 }
 
-.col {
-	padding: 0 0 4px 0;
-}
+ion-buttons {
+	ion-button {
+		margin-bottom: 0.25rem;
+		margin-top: 0.25rem;
+	}
+	ion-button + ion-button {
+		margin-left: 0.5rem;
+	}
 
-.close-button {
-	margin-right: 12.8px;
-	transition: var(--opacity-hover-transition);
-}
-
-.close-button:hover {
-	opacity: var(--opacity-hover);
-}
-
-.close-button:active {
-	opacity: 1;
-}
-
-.header {
-	font-size: 1.375rem;
-	white-space: initial;
+	ion-spinner {
+		margin: 0 0 0 1rem;
+	}
 }
 
 .errorMessage {
 	color: #8b0909;
-	margin: 0.35em 0 0 0;
+	margin: 0.35em 0 0.75em 0;
 	white-space: normal;
 }
 
@@ -48,33 +51,4 @@ ion-title {
 }
 .readTextsMode .header-coll-title::before {
 	content: " | ";
-}
-
-ion-item.item + ion-item.item ion-label.label {
-	border-top: 1px solid #999;
-	margin-top: 0;
-	padding-top: 13px;
-}
-
-ion-item.item label {
-	font-weight: bold;
-}
-
-ion-item.item p + p {
-	margin-top: 0.5em;
-}
-
-.download-buttons {
-	margin-top: 0.5em;
-}
-
-.download-buttons button.button {
-	font-size: 0.8125rem;
-	height: 1.875rem !important;
-}
-
-ion-spinner.loading.spinner-crescent {
-	margin: 0;
-	display: inline;
-	float: right;
 }

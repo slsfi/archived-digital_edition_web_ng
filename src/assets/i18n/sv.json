@@ -418,13 +418,18 @@
         "InstructionsIntroduction": "Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).",
         "CopyrightNotice": "Licens: CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "Licens: CC BY-NC-ND 4.0",
+        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
+        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
         "Print": "Skriv ut",
         "Textsize": "Textstorlek",
-        "TextLoadingError": "Ett fel har uppstått. Texten kunde inte laddas.",
+        "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
+        "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "Format": {
-            "XML": "XML",
+            "Print": "Utskrift",
+            "HTML": "HTML",
             "TXT": "TXT",
-            "Print": "Utskrift"
+            "XHTML": "XHTML",
+            "XML": "XML"
         }
     },
     "Modal": {

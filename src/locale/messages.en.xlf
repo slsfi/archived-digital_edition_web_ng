@@ -114,10 +114,28 @@
         <target>Licence: CC BY-NC-ND 4.0</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightURL">
+      <segment state="initial">
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+        <target>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightURLIntroduction">
+      <segment state="initial">
+        <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
+        <target>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Download">
       <segment state="initial">
         <source>Ladda ner</source>
         <target>Download</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.HTML">
+      <segment state="initial">
+        <source>HTML</source>
+        <target>HTML</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Format.Print">
@@ -130,6 +148,12 @@
       <segment state="initial">
         <source>TXT</source>
         <target>TXT</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Format.XHTML">
+      <segment state="initial">
+        <source>XHTML</source>
+        <target>XHTML</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Format.XML">
@@ -150,6 +174,12 @@
         <target>Here you can download the introduction or open it in print-friendly format in a new window (you have to allow popup-windows from the web page).</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.OpenPrintError">
+      <segment state="initial">
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <target>The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Print">
       <segment state="initial">
         <source>Skriv ut</source>
@@ -158,8 +188,8 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Ett fel har uppstått. Texten kunde inte laddas.</source>
-        <target>An error has occurred. Unable to load text.</target>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <target>Failed to download text. Please try again and allow popup-windows from the web page.</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Textsize">

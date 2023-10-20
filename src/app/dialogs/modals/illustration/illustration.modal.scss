@@ -1,9 +1,7 @@
-.modal-content-wrapper {
-    background: #fafafa;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    width: 100%;
+// Import general styles for modal with inner wrapper
+@import "src/theme/common/modal-inner-wrapper.scss";
 
+.modal-inner-wrapper {
     .illustration-thumb {
         cursor: zoom-in;
 

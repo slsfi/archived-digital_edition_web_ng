@@ -72,16 +72,18 @@ export class CollectionContentService {
     return this.http.get(endpoint);
 }
 
-  getDownloadableIntroduction(id: string, format: string, lang: string): Observable<any> {
-    const endpoint = `${this.apiURL}/text/downloadable/${format}/${id}/inl/${lang}`;
+  getDownloadableIntroduction(id: string, format: string, language: string): Observable<any> {
+    const endpoint = `${this.apiURL}/text/downloadable/${format}/${id}/inl/${language}`;
     return this.http.get(endpoint);
   }
 
-  getDownloadableReadText(id: string, format: string): Observable<any> {
+  getDownloadableReadText(id: string, format: string, language?: string): Observable<any> {
+    const estFolder = language ? 'est-i18n' : 'est';
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';
+    language = language ? '/' + language : '';
     const endpoint = `${this.apiURL}/text/downloadable/`
-          + `${format}/${idParts[0]}/${idParts[1]}/est${ch_id}`;
+          + `${format}/${idParts[0]}/${idParts[1]}/${estFolder}${ch_id}${language}`;
     return this.http.get(endpoint);
   }
 
