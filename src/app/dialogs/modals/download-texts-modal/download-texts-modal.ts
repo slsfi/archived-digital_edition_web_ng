@@ -1,7 +1,7 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, DOCUMENT, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -20,7 +20,7 @@ import { concatenateNames } from '@utility-functions';
   styleUrls: ['download-texts-modal.scss'],
   imports: [AsyncPipe, NgClass, NgFor, NgIf, NgStyle, IonicModule]
 })
-export class DownloadTextsModal implements OnInit {
+export class DownloadTextsModal implements OnDestroy, OnInit {
   @Input() origin: string = '';
   @Input() textItemID: string = '';
 
@@ -42,6 +42,7 @@ export class DownloadTextsModal implements OnInit {
   loadingMs: boolean = false;
   manuscriptsList$: Observable<any[]>;
   readTextLanguages: string[] = [];
+  printTextSubscription: Subscription | null = null;
   printTranslation: string = '';
   publicationTitle: string = '';
   readTextsMode: boolean = false;
@@ -141,12 +142,34 @@ export class DownloadTextsModal implements OnInit {
         this.setPublicationTitle();
 
         if (this.downloadFormatsEst.length || this.downloadFormatsCom.length) {
+          // Get publication data in order to determine if read-texts and
+          // comments are available. original_filename is used to determine if
+          // read-texts exist, and publication_comment_id if comments exist.
           this.publicationData$ = this.collectionsService.getPublication(
             idParts[1]
+          ).pipe(
+            catchError((e: any) => {
+              // Enable read-text and comments download even though
+              // the endpoint for publications can't tell if these exist
+              console.error('unable to get publication data', e);
+              let original_filename: any = {};
+              if (this.readTextLanguages.length > 1) {
+                this.readTextLanguages.forEach((language: string) => {
+                  original_filename[language] = "exists";
+                });
+              } else {
+                original_filename = "exists";
+              }
+              return of({
+                original_filename,
+                publication_comment_id: 1
+              });
+            })
           );
         }
 
         if (this.downloadFormatsMs.length) {
+          // Get a list of all manuscripts in the publication
           this.manuscriptsList$ = this.collectionContentService.getManuscriptsList(
             this.textItemID
           ).pipe(
@@ -157,6 +180,10 @@ export class DownloadTextsModal implements OnInit {
         }
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.printTextSubscription?.unsubscribe();
   }
 
   dismiss() {
@@ -181,6 +208,7 @@ export class DownloadTextsModal implements OnInit {
       fileExtension = 'xhtml';
     }
 
+    // TODO: Refactor below so code isn't repeated!
     if (textType === 'intro') {
       this.loadingIntro = true;
       this.collectionContentService.getDownloadableIntroduction(
@@ -283,207 +311,156 @@ export class DownloadTextsModal implements OnInit {
     this.showLoadingError = false;
     this.showMissingTextError = false;
     this.showPrintError = false;
+
+    let text$: Observable<any> | null = null;
+
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.openIntroductionForPrint();
+      text$ = this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale);
     } else if (textType === 'est') {
       this.loadingEst = true;
-      this.openReadTextForPrint(language);
+      text$ = this.collectionContentService.getReadText(this.textItemID, language);
     } else if (textType === 'com') {
       this.loadingCom = true;
-      this.openCommentsForPrint();
+      text$ = forkJoin([
+        this.commentService.getComments(this.textItemID).pipe(
+          catchError(error => of({ error }))
+        ),
+        this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).pipe(
+          catchError(error => of({ error }))
+        )
+      ]).pipe(
+        map((res: any[]) => {
+          return { comments: res[0], metadata: res[1] };
+        })
+      );
     } else if (textType === 'ms') {
       this.loadingMs = true;
-      this.openManuscriptForPrint(typeID || 0);
+      text$ = this.collectionContentService.getManuscripts(this.textItemID, typeID);
+    }
+
+    if (text$) {
+      this.printTextSubscription?.unsubscribe();
+      this.printTextSubscription = text$.subscribe({
+        next: (res: any) => {
+          if (
+            (textType === 'intro' && res?.content) ||
+            (
+              textType === 'est' &&
+              res?.content &&
+              res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+            ) ||
+            (textType === 'com' && res?.comments && !res.comments.error) ||
+            (
+              textType === 'ms' &&
+              res?.manuscripts?.length > 0 &&
+              res?.manuscripts[0]?.manuscript_changes
+            )
+          ) {
+            let text: string = '';
+
+            if (textType === 'intro') {
+              text = this.getProcessedPrintIntro(res.content);
+            } else if (textType === 'est') {
+              text = this.getProcessedPrintReadText(res.content, language);
+            } else if (textType === 'com') {
+              text = this.getProcessedPrintComments(res);
+            } else if (textType === 'ms') {
+              text = this.getProcessedPrintManuscripts(res.manuscripts[0].manuscript_changes, res.manuscripts[0].language);
+            }
+
+            try {
+              const newWindowRef = window.open();
+              if (newWindowRef) {
+                newWindowRef.document.write(text);
+                newWindowRef.document.close();
+                newWindowRef.focus();
+              } else {
+                this.showPrintError = true;
+                console.log('unable to open new window');
+              }
+            } catch (e: any) {
+              this.showPrintError = true;
+              console.error('unable to open new window', e);
+            }
+
+          } else {
+            if (textType === 'est') {
+              this.showMissingTextError = true;
+            } else {
+              this.showPrintError = true;
+            }
+            console.log('invalid text format for print version');
+          }
+
+          this.loadingIntro = false;
+          this.loadingEst = false;
+          this.loadingCom = false;
+          this.loadingMs = false;
+        },
+        error: (e: any) => {
+          console.error('error loading text', e);
+          this.loadingIntro = false;
+          this.loadingEst = false;
+          this.loadingCom = false;
+          this.loadingMs = false;
+          this.showPrintError = true;
+        }
+      });
     }
   }
 
-  private openIntroductionForPrint() {
-    this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale).subscribe({
-      next: (res: any) => {
-        if (res?.content) {
-          let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-          text = this.fixImagePaths(text);
-          text = this.constructHtmlForPrint(text, 'intro');
-
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(text);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showPrintError = true;
-              console.log('unable to open new window');
-            }
-          } catch (e: any) {
-            this.showPrintError = true;
-            console.error('error opening introduction in print format in new window', e);
-          }
-        } else {
-          this.showPrintError = true;
-          console.log('invalid introduction text format');
-        }
-        this.loadingIntro = false;
-      },
-      error: (e: any) => {
-        console.error('error loading introduction', e);
-        this.loadingIntro = false;
-        this.showPrintError = true;
-      }
-    });
+  private getProcessedPrintIntro(text: string): string {
+    text = text.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'intro');
   }
 
-  private openReadTextForPrint(language: string) {
-    this.collectionContentService.getReadText(this.textItemID, language).subscribe({
-      next: (res: any) => {
-        if (
-          res?.content &&
-          res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
-        ) {
-          let text: string = res.content;
-          text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
-          text = this.fixImagePaths(text);
-          text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
-
-          text = this.constructHtmlForPrint(text, 'est', language);
-
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(text);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showPrintError = true;
-              console.log('unable to open new window');
-            }           
-          } catch (e) {
-            this.showPrintError = true;
-            console.error('error opening read text in print format in new window', e);
-          }
-          this.loadingEst = false;
-        } else {
-          this.loadingEst = false;
-          this.showMissingTextError = true;
-          console.log('read text does not exits');
-        }
-      },
-      error: (e: any) => {
-        console.error('error loading read text', e);
-        this.loadingEst = false;
-        this.showPrintError = true;
-      }
-    });
+  private getProcessedPrintReadText(text: string, language?: string): string {
+    text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
+    text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'est', language);
   }
 
-  private openCommentsForPrint() {
-    forkJoin([
-      this.commentService.getComments(this.textItemID).pipe(
-        catchError(error => of({ error }))
-      ),
-      this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).pipe(
-        catchError(error => of({ error }))
-      )
-    ]).pipe(
-      map((res: any[]) => {
-        return { comments: res[0], metadata: res[1] };
-      })
-    ).subscribe((commentsData: any) => {
-      if (commentsData?.comments && !commentsData.comments.error) {
-        let comContent  = this.constructHtmlForPrint(commentsData.comments, 'com');
-        let metaContent = '';
+  private getProcessedPrintComments(commentsData: any): string {
+    let text = this.constructHtmlForPrint(commentsData.comments, 'com');
+    let metaContent = '';
 
-        if (commentsData.metadata?.letter) {
-          let concatSenders = '';
-          let concatReceivers = '';
+    if (commentsData.metadata?.letter) {
+      let concatSenders = '';
+      let concatReceivers = '';
 
-          if (commentsData.metadata?.subjects?.length > 0) {
-            const senders: string[] = [];
-            const receivers: string[] = [];
-            commentsData.metadata.subjects.forEach((subject: any) => {
-              if (subject['avs\u00e4ndare']) {
-                senders.push(subject['avs\u00e4ndare']);
-              }
-              if (subject['mottagare']) {
-                receivers.push(subject['mottagare']);
-              }
-            });
-            concatSenders = concatenateNames(senders);
-            concatReceivers = concatenateNames(receivers);
+      if (commentsData.metadata?.subjects?.length > 0) {
+        const senders: string[] = [];
+        const receivers: string[] = [];
+        commentsData.metadata.subjects.forEach((subject: any) => {
+          if (subject['avs\u00e4ndare']) {
+            senders.push(subject['avs\u00e4ndare']);
           }
-
-          if (commentsData.metadata.letter) {
-            metaContent = this.getCorrespondenceDataAsHtml(
-              commentsData.metadata.letter, concatSenders, concatReceivers
-            );
-            const contentParts = comContent.split('</div>\n</comments>');
-            comContent = contentParts[0] + metaContent + '</div>\n</comments>' + contentParts[1];
+          if (subject['mottagare']) {
+            receivers.push(subject['mottagare']);
           }
-        }
-
-        try {
-          const newWindowRef = window.open();
-          if (newWindowRef) {
-            newWindowRef.document.write(comContent);
-            newWindowRef.document.close();
-            newWindowRef.focus();
-          } else {
-            this.showPrintError = true;
-            console.log('unable to open new window');
-          }
-        } catch (e: any) {
-          this.showPrintError = true;
-          console.error('error opening comment text in print format in new window', e);
-        }
-        this.loadingCom = false;
-      } else {
-        console.log('invalid comments format or error loading comments data');
-        this.loadingCom = false;
-        this.showPrintError = true;
+        });
+        concatSenders = concatenateNames(senders);
+        concatReceivers = concatenateNames(receivers);
       }
-    });
+
+      if (commentsData.metadata.letter) {
+        metaContent = this.getCorrespondenceDataAsHtml(
+          commentsData.metadata.letter, concatSenders, concatReceivers
+        );
+        const contentParts = text.split('</div>\n</comments>');
+        text = contentParts[0] + metaContent + '</div>\n</comments>' + contentParts[1];
+      }
+    }
+    return text;
   }
 
-  private openManuscriptForPrint(typeID: number) {
-    this.collectionContentService.getManuscripts(this.textItemID, typeID).subscribe({
-      next: (res: any) => {
-        if (
-          res?.manuscripts?.length > 0 &&
-          res?.manuscripts[0]?.manuscript_changes
-        ) {
-          let text: string = res.manuscripts[0].manuscript_changes;
-          text = this.parserService.postprocessManuscriptText(text);
-          text = this.fixImagePaths(text);
-          text = this.constructHtmlForPrint(text, 'ms', res.manuscripts[0].language);
-
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(text);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showPrintError = true;
-              console.log('unable to open new window');
-            }           
-          } catch (e) {
-            this.showPrintError = true;
-            console.error('error opening manuscript text in print format in new window', e);
-          }
-          this.loadingMs = false;
-        } else {
-          this.loadingMs = false;
-          this.showPrintError = true;
-          console.log('invalid manuscript text format');
-        }
-      },
-      error: (e: any) => {
-        console.error('error loading manuscript text', e);
-        this.loadingMs = false;
-        this.showPrintError = true;
-      }
-    });
+  private getProcessedPrintManuscripts(text: string, language?: string): string {
+    text = this.parserService.postprocessManuscriptText(text);
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'ms', language);
   }
 
   private constructHtmlForPrint(text: string, textType: string, language?: string) {

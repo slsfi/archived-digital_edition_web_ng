@@ -50,7 +50,7 @@
       <ng-container *ngIf="(publicationData$ | async) as publicationData">
         <ng-container *ngIf="readTextsMode && downloadFormatsEst.length && publicationData.original_filename">
           <ng-container *ngFor="let language of readTextLanguages">
-            <div *ngIf="readTextLanguages.length < 2 || (readTextLanguages.length > 1 && publicationData.original_filename.language)" class="dlt-group">
+            <div *ngIf="readTextLanguages.length < 2 || (readTextLanguages.length > 1 && publicationData.original_filename[language])" class="dlt-group">
               <h3 *ngIf="readTextLanguages.length < 2" i18n="@@Read.Established.Title">Lästext</h3>
               <h3 *ngIf="readTextLanguages.length > 1">
                   <ng-container *ngIf="language === 'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>

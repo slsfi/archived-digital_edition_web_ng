@@ -1496,6 +1496,13 @@ export const config_mechelin: Config = {
         xhtml: false,
         txt: false,
         print: true
+      },
+      manuscriptsFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
       }
     },
     fullscreenImageViewer: {
