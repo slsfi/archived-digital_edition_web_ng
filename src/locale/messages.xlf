@@ -146,6 +146,11 @@
         <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.MissingTextError">
+      <segment>
+        <source>Texten saknas och går inte att ladda ner.</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment>
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
@@ -1054,6 +1059,11 @@
     <unit id="Read.Manuscripts.ShowNormalized">
       <segment>
         <source>Visa ändringar inarbetade</source>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment>
+        <source>Manuskript</source>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">

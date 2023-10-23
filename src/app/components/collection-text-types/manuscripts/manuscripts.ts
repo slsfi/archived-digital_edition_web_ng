@@ -108,7 +108,7 @@ export class ManuscriptsComponent implements OnInit {
       let text = this.showNormalizedMs
             ? this.selectedManuscript.manuscript_normalized
             : this.selectedManuscript.manuscript_changes;
-      text = this.postprocessManuscriptText(text);
+      text = this.parserService.postprocessManuscriptText(text);
       text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
 
@@ -121,20 +121,6 @@ export class ManuscriptsComponent implements OnInit {
   toggleNormalizedManuscript() {
     this.showNormalizedMs = !this.showNormalizedMs;
     this.changeManuscript();
-  }
-
-  postprocessManuscriptText(text: string) {
-    text = text.trim();
-    // Replace png images with svg counterparts
-    text = text.replace(/\.png/g, '.svg');
-    // Fix image paths
-    text = text.replace(/images\//g, 'assets/images/');
-    // Add "tei" and "teiManuscript" to all classlists
-    text = text.replace(
-      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
-      'class=\"teiManuscript tei $1\"'
-    );
-    return text;
   }
 
   async selectManuscript() {

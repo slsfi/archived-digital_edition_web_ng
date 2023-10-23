@@ -49,10 +49,17 @@ export class CollectionContentService {
     return this.http.get(endpoint);
   }
 
-  getManuscripts(id: string): Observable<any> {
+  getManuscripts(id: string, ms_id?: number | string): Observable<any> {
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';
-    const endpoint = `${this.apiURL}/text/${idParts[0]}/${idParts[1]}/ms${ch_id}`;
+    ms_id = ms_id ? '/' + ms_id : '';
+    const endpoint = `${this.apiURL}/text/${idParts[0]}/${idParts[1]}/ms${ms_id}${ch_id}`;
+    return this.http.get(endpoint);
+  }
+
+  getManuscriptsList(id: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const endpoint = `${this.apiURL}/text/${idParts[0]}/${idParts[1]}/list/ms`;
     return this.http.get(endpoint);
   }
 
@@ -73,7 +80,7 @@ export class CollectionContentService {
   getMetadata(pub_id: string, language: string): Observable<any> {
     const endpoint = `${this.apiURL}/publications/${pub_id}/metadata/${language}`;
     return this.http.get(endpoint);
-}
+  }
 
   getDownloadableIntroduction(id: string, format: string, language: string): Observable<any> {
     const endpoint = `${this.apiURL}/text/downloadable/${format}/${id}/inl/${language}`;
@@ -87,6 +94,14 @@ export class CollectionContentService {
     language = language ? '/' + language : '';
     const endpoint = `${this.apiURL}/text/downloadable/`
           + `${format}/${idParts[0]}/${idParts[1]}/${estFolder}${ch_id}${language}`;
+    return this.http.get(endpoint);
+  }
+
+  getDownloadableManuscript(id: string, msID: number, format: string): Observable<any> {
+    const idParts = id.split(';')[0].split('_');
+    const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';
+    const endpoint = `${this.apiURL}/text/downloadable/`
+          + `${format}/${idParts[0]}/${idParts[1]}/ms/${msID}${ch_id}`;
     return this.http.get(endpoint);
   }
 

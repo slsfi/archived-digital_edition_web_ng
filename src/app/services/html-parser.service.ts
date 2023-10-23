@@ -37,6 +37,20 @@ export class HtmlParserService {
         return text;
     }
 
+    postprocessManuscriptText(text: string) {
+        text = text.trim();
+        // Replace png images with svg counterparts
+        text = text.replace(/\.png/g, '.svg');
+        // Fix image paths
+        text = text.replace(/images\//g, 'assets/images/');
+        // Add "tei" and "teiManuscript" to all classlists
+        text = text.replace(
+            /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
+            'class=\"teiManuscript tei $1\"'
+        );
+        return text;
+      }
+
     getReadTextIllustrations(id: string): Observable<any> {
         return this.collectionContentService.getReadText(id).pipe(
             map((res) => {

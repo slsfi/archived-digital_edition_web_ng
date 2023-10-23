@@ -424,6 +424,7 @@
         "Textsize": "Tekstin koko",
         "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
+        "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
         "Format": {
             "Print": "Tulosta",
             "HTML": "HTML",
