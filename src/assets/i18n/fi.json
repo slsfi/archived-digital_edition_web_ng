@@ -300,7 +300,7 @@
         "ShowAllHitHighlights": "Näytä tekstin kaikki hakutulokset",
         "LoadingError": "Tapahtui virhe ladatessa hakutuloksia.",
         "LoadingFilters": "Pieni hetki, ladataan rajauksia ...",
-        "CommentsHitHeadingPrepend": "Kommentti tekstiin",
+        "CommentsHitHeadingPrepend": "Kommentaari tekstiin",
         "FilterResults": "Rajaa hakua",
         "ShowFacets": "Näytä rajaukset",
         "HideFacets": "Piilota rajaukset",
@@ -425,6 +425,8 @@
         "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
+        "CommentaryTo": "Kommentaari tekstiin",
+        "Source": "Teksti on haettu osoitteesta",
         "Format": {
             "Print": "Tulosta",
             "HTML": "HTML",

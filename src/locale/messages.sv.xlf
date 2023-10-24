@@ -102,6 +102,12 @@
         <target>Nollställ</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment state="initial">
+        <source>Kommentarer till</source>
+        <target>Kommentarer till</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -190,6 +196,12 @@
       <segment state="initial">
         <source>Skriv ut</source>
         <target>Skriv ut</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Source">
+      <segment state="initial">
+        <source>Texten är hämtad från</source>
+        <target>Texten är hämtad från</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.TextLoadingError">

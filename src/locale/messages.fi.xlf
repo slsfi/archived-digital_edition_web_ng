@@ -102,6 +102,12 @@
         <target>Nollaa</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment state="initial">
+        <source>Kommentarer till</source>
+        <target>Kommentaari tekstiin</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -192,6 +198,12 @@
         <target>Tulosta</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.Source">
+      <segment state="initial">
+        <source>Texten är hämtad från</source>
+        <target>Teksti on haettu osoitteesta</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
         <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
@@ -237,7 +249,7 @@
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment state="initial">
         <source>Kommentar till</source>
-        <target>Kommentti tekstiin</target>
+        <target>Kommentaari tekstiin</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.FilterResults">

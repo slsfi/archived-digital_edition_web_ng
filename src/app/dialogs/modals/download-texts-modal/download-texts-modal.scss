@@ -34,16 +34,17 @@
 }
 
 ion-buttons {
+	column-gap: 0.5rem;
+	flex-wrap: wrap;
+	row-gap: 0.3725rem;
+
 	ion-button {
 		margin-bottom: 0.25rem;
 		margin-top: 0.25rem;
 	}
-	ion-button + ion-button {
-		margin-left: 0.5rem;
-	}
 
 	ion-spinner {
-		margin: 0 0 0 1rem;
+		margin: 0 0 0 0.5rem;
 	}
 }
 

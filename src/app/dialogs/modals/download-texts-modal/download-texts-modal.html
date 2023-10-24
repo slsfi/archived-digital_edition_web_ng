@@ -49,8 +49,8 @@
 
       <ng-container *ngIf="(publicationData$ | async) as publicationData">
         <ng-container *ngIf="readTextsMode && downloadFormatsEst.length && publicationData.original_filename">
-          <ng-container *ngFor="let language of readTextLanguages">
-            <div *ngIf="readTextLanguages.length < 2 || (readTextLanguages.length > 1 && publicationData.original_filename[language])" class="dlt-group">
+          <ng-container *ngFor="let language of readTextLanguages; index as i">
+            <div *ngIf="readTextLanguages.length < 2 || (readTextLanguages.length > 1 && publicationData.original_filename?.[language])" class="dlt-group">
               <h3 *ngIf="readTextLanguages.length < 2" i18n="@@Read.Established.Title">Lästext</h3>
               <h3 *ngIf="readTextLanguages.length > 1">
                   <ng-container *ngIf="language === 'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
@@ -60,7 +60,7 @@
                 <ng-container *ngFor="let format of downloadFormatsEst">
                   <ion-button *ngIf="format !== 'print'"
                         class="custom-button"
-                        (click)="initiateDownload('est', format, language)"
+                        (click)="loadingGroupIndex = i; initiateDownload('est', format, language)"
                   >
                     <ng-container *ngIf="format === 'xml'" i18n="@@DownloadTexts.Format.XML">XML</ng-container>
                     <ng-container *ngIf="format === 'html'" i18n="@@DownloadTexts.Format.HTML">HTML</ng-container>
@@ -70,11 +70,11 @@
                   <ion-button *ngIf="format === 'print'"
                         class="custom-outline-button"
                         fill="outline"
-                        (click)="openPrintFriendlyText('est', language)"
+                        (click)="loadingGroupIndex = i; openPrintFriendlyText('est', language)"
                         i18n="@@DownloadTexts.Format.Print"
                   >Utskrift</ion-button>
                 </ng-container>
-                <ion-spinner *ngIf="loadingEst" class="loading" name="crescent"></ion-spinner>
+                <ion-spinner *ngIf="loadingEst && loadingGroupIndex === i" class="loading" name="crescent"></ion-spinner>
               </ion-buttons>
             </div>
           </ng-container>
@@ -112,13 +112,13 @@
       <ng-container *ngIf="(manuscriptsList$ | async) as manuscripts">
         <div *ngIf="readTextsMode && downloadFormatsMs.length" class="dlt-group">
           <h3 i18n="@@Read.Manuscripts.Title">Manuskript</h3>
-          <ng-container *ngFor="let ms of manuscripts">
+          <ng-container *ngFor="let ms of manuscripts; index as i">
             <h4 *ngIf="manuscripts.length > 1" [innerHTML]="ms.name"></h4>
             <ion-buttons class="download-buttons">
               <ng-container *ngFor="let format of downloadFormatsMs">
                 <ion-button *ngIf="format !== 'print'"
                       class="custom-button"
-                      (click)="initiateDownload('ms', format, '', ms.id)"
+                      (click)="loadingGroupIndex = i; initiateDownload('ms', format, '', ms.id)"
                 >
                   <ng-container *ngIf="format === 'xml'" i18n="@@DownloadTexts.Format.XML">XML</ng-container>
                   <ng-container *ngIf="format === 'html'" i18n="@@DownloadTexts.Format.HTML">HTML</ng-container>
@@ -128,11 +128,11 @@
                 <ion-button *ngIf="format === 'print'"
                       class="custom-outline-button"
                       fill="outline"
-                      (click)="openPrintFriendlyText('ms', '', ms.id)"
+                      (click)="loadingGroupIndex = i; openPrintFriendlyText('ms', '', ms.id, ms.name)"
                       i18n="@@DownloadTexts.Format.Print"
                 >Utskrift</ion-button>
               </ng-container>
-              <ion-spinner *ngIf="loadingMs" class="loading" name="crescent"></ion-spinner>
+              <ion-spinner *ngIf="loadingMs && loadingGroupIndex === i" class="loading" name="crescent"></ion-spinner>
             </ion-buttons>
           </ng-container>
         </div>

@@ -425,6 +425,8 @@
         "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "MissingTextError": "Texten saknas och går inte att ladda ner eller skriva ut.",
+        "CommentaryTo": "Kommentarer till",
+        "Source": "Texten är hämtad från",
         "Format": {
             "Print": "Utskrift",
             "HTML": "HTML",

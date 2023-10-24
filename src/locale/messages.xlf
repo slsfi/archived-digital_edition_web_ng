@@ -86,6 +86,11 @@
         <source>Nollställ</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment>
+        <source>Kommentarer till</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment>
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -159,6 +164,11 @@
     <unit id="DownloadTexts.Print">
       <segment>
         <source>Skriv ut</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Source">
+      <segment>
+        <source>Texten är hämtad från</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
