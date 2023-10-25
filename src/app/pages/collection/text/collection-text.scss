@@ -37,6 +37,7 @@ ion-content.collection-ion-content::part(scroll) {
 
     ion-card {
       --background: var(--page-text-columns-background-color);
+      --color: #222;
       border-radius: 0;
       box-shadow: none;
       margin: 0 10px;
