@@ -102,6 +102,12 @@
         <target>Nollaa</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment state="initial">
+        <source>Kommentarer till</source>
+        <target>Kommentaari tekstiin</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -174,6 +180,18 @@
         <target>Tästä voit ladata johdannon tai avata sen uuteen ikkunaan tulostusta varten (sinun on sallittava popup-ikkunat verkkosivustolta).</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.MissingTextError">
+      <segment state="initial">
+        <source>Texten saknas och går inte att ladda ner.</source>
+        <target>Tekstiä ei ole eikä sitä voi ladata tai tulostaa.</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment state="initial">
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+        <target>Laddattavia tai tulostettavia tekstejä ei ole saatavilla.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
@@ -184,6 +202,12 @@
       <segment state="initial">
         <source>Skriv ut</source>
         <target>Tulosta</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Source">
+      <segment state="initial">
+        <source>Texten är hämtad från</source>
+        <target>Teksti on haettu osoitteesta</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
@@ -231,7 +255,7 @@
     <unit id="ElasticSearch.CommentsHitHeadingPrepend">
       <segment state="initial">
         <source>Kommentar till</source>
-        <target>Kommentti tekstiin</target>
+        <target>Kommentaari tekstiin</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.FilterResults">
@@ -1264,6 +1288,12 @@
       <segment state="initial">
         <source>Visa ändringar inarbetade</source>
         <target>Näytä muutokset toteutettuina</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Käsikirjoitus</target>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">

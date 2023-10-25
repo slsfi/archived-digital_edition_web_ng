@@ -31,6 +31,7 @@ export class ManuscriptsComponent implements OnInit {
   selectedManuscript: any = undefined;
   showNormalizedMs: boolean = false;
   showOpenLegendButton: boolean = false;
+  showTitle: boolean = true;
   text: SafeHtml = '';
   textLanguage: string = '';
 
@@ -44,6 +45,7 @@ export class ManuscriptsComponent implements OnInit {
     public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
+    this.showTitle = config.component?.manuscripts?.showTitle ?? true;
   }
 
   ngOnInit() {
@@ -108,7 +110,7 @@ export class ManuscriptsComponent implements OnInit {
       let text = this.showNormalizedMs
             ? this.selectedManuscript.manuscript_normalized
             : this.selectedManuscript.manuscript_changes;
-      text = this.postprocessManuscriptText(text);
+      text = this.parserService.postprocessManuscriptText(text);
       text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
       this.text = this.sanitizer.bypassSecurityTrustHtml(text);
 
@@ -121,20 +123,6 @@ export class ManuscriptsComponent implements OnInit {
   toggleNormalizedManuscript() {
     this.showNormalizedMs = !this.showNormalizedMs;
     this.changeManuscript();
-  }
-
-  postprocessManuscriptText(text: string) {
-    text = text.trim();
-    // Replace png images with svg counterparts
-    text = text.replace(/\.png/g, '.svg');
-    // Fix image paths
-    text = text.replace(/images\//g, 'assets/images/');
-    // Add "tei" and "teiManuscript" to all classlists
-    text = text.replace(
-      /class=\"([a-z A-Z _ 0-9]{1,140})\"/g,
-      'class=\"teiManuscript tei $1\"'
-    );
-    return text;
   }
 
   async selectManuscript() {

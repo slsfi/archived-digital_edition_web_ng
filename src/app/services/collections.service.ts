@@ -1,6 +1,6 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 
 import { config } from '@config';
 
@@ -32,6 +32,29 @@ export class CollectionsService {
     const locale = this.multilingualTOC ? '/i18n/' + this.activeLocale : '';
     const endpoint = `${this.apiURL}/collection/${id}${locale}`;
     return this.http.get(endpoint);
+  }
+
+  /**
+   * Get metadata of first non-deleted publication with given id.
+   * @param id publication id
+   * @returns object or null
+   */
+  getPublication(id: string): Observable<any> {
+    const endpoint = `${this.apiURL}/publication/${id}`;
+    return this.http.get(endpoint).pipe(
+      map((res: any) => {
+        let pub: any = null;
+        if (res?.length) {
+          for (let p = 0; p < res.length; p++) {
+            if (res[p].deleted < 1) {
+              pub = res[p];
+              break;
+            }
+          }
+        }
+        return pub;
+      })
+    );
   }
 
   getLegacyIdByCollectionId(id: string): Observable<any> {

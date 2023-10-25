@@ -90,6 +90,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.hasSeparateIntroToc = config.page?.introduction?.hasSeparateTOC ?? false;
+    this.showTextDownloadButton = config.page?.introduction?.showTextDownloadButton ?? false;
     this.showURNButton = config.page?.introduction?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.introduction?.showViewOptionsButton ?? true;
     this.viewOptionsTogglesIntro = config.page?.introduction?.viewOptions ?? undefined;
@@ -118,25 +119,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       this.viewOptionsTogglesIntro.abbreviations = false;
       this.viewOptionsTogglesIntro.pageBreakOriginal = false;
     }
-
-    try {
-      const textDownloadOptions = config.modal?.downloadTexts ?? undefined;
-      if (
-        textDownloadOptions.introductionFormats !== undefined &&
-        textDownloadOptions.introductionFormats !== null &&
-        Object.keys(textDownloadOptions.introductionFormats).length !== 0
-      ) {
-        for (const [key, value] of Object.entries(textDownloadOptions.introductionFormats)) {
-          if (value) {
-            this.showTextDownloadButton = true;
-            break;
-          }
-        }
-      }
-    } catch (e) {
-      this.showTextDownloadButton = false;
-    }
-
   }
 
   ngOnInit() {

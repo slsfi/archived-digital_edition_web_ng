@@ -102,6 +102,12 @@
         <target>Clear</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment state="initial">
+        <source>Kommentarer till</source>
+        <target>Commentary to</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -174,6 +180,18 @@
         <target>Here you can download the introduction or open it in print-friendly format in a new window (you have to allow popup-windows from the web page).</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.MissingTextError">
+      <segment state="initial">
+        <source>Texten saknas och går inte att ladda ner.</source>
+        <target>The text doesn’t exist and can’t be downloaded or printed.</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment state="initial">
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+        <target>No downloadable or printable texts available.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
@@ -184,6 +202,12 @@
       <segment state="initial">
         <source>Skriv ut</source>
         <target>Print</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Source">
+      <segment state="initial">
+        <source>Texten är hämtad från</source>
+        <target>The text has been retrieved from</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
@@ -1264,6 +1288,12 @@
       <segment state="initial">
         <source>Visa ändringar inarbetade</source>
         <target>Visa ändringar inarbetade</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Manuscript</target>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">

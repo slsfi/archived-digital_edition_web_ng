@@ -8,6 +8,14 @@
 		line-height: 1.25;
 		margin: 0 0 0.75rem 0;
 	}
+
+	h4 {
+		font-size: 1em;
+		font-style: italic;
+		font-weight: normal;
+		line-height: 1.25;
+		margin: 0.375rem 0;
+	}
 }
 
 .dlt-group + .dlt-group,
@@ -26,16 +34,17 @@
 }
 
 ion-buttons {
+	column-gap: 0.5rem;
+	flex-wrap: wrap;
+	row-gap: 0.3725rem;
+
 	ion-button {
 		margin-bottom: 0.25rem;
 		margin-top: 0.25rem;
 	}
-	ion-button + ion-button {
-		margin-left: 0.5rem;
-	}
 
 	ion-spinner {
-		margin: 0 0 0 1rem;
+		margin: 0 0 0 0.5rem;
 	}
 }
 
@@ -51,4 +60,8 @@ ion-buttons {
 }
 .readTextsMode .header-coll-title::before {
 	content: " | ";
+}
+
+.no-dl-options {
+	margin: 0;
 }

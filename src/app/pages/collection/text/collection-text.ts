@@ -55,7 +55,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   routeQueryParamsSubscription: Subscription | null = null;
   searchMatches: string[] = [];
   showTextDownloadButton: boolean = false;
-  showURNButton: boolean;
+  showURNButton: boolean = true;
   showViewOptionsButton: boolean = true;
   textItemID: string = '';
   textPosition: string = '';
@@ -100,26 +100,9 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.multilingualReadingTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
+    this.showTextDownloadButton = config.page?.text?.showTextDownloadButton ?? false;
     this.showURNButton = config.page?.text?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.text?.showViewOptionsButton ?? true;
-
-    const textDownloadOptions = config.modal?.downloadTexts ?? undefined;
-    if (textDownloadOptions?.readTextFormats) {
-      for (const value of Object.values(textDownloadOptions.readTextFormats)) {
-        if (value) {
-          this.showTextDownloadButton = true;
-          break;
-        }
-      }
-    }
-    if (!this.showTextDownloadButton && textDownloadOptions?.commentsFormats) {
-      for (const value of Object.values(textDownloadOptions.commentsFormats)) {
-        if (value) {
-          this.showTextDownloadButton = true;
-          break;
-        }
-      }
-    }
 
     // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
     const viewTypes = config.page?.text?.viewTypes ?? {};

@@ -86,6 +86,11 @@
         <source>Nollställ</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CommentaryTo">
+      <segment>
+        <source>Kommentarer till</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment>
         <source>Licens: CC BY-NC-ND 4.0</source>
@@ -146,6 +151,16 @@
         <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.MissingTextError">
+      <segment>
+        <source>Texten saknas och går inte att ladda ner.</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment>
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment>
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
@@ -154,6 +169,11 @@
     <unit id="DownloadTexts.Print">
       <segment>
         <source>Skriv ut</source>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.Source">
+      <segment>
+        <source>Texten är hämtad från</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
@@ -1054,6 +1074,11 @@
     <unit id="Read.Manuscripts.ShowNormalized">
       <segment>
         <source>Visa ändringar inarbetade</source>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment>
+        <source>Manuskript</source>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">

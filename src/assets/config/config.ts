@@ -229,6 +229,7 @@ export const config: Config = {
     },
     introduction: {
       hasSeparateTOC: true,
+      showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -244,6 +245,7 @@ export const config: Config = {
     },
     text: {
       defaultViews: ["established", "comments", "facsimiles"],
+      showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -316,6 +318,7 @@ export const config: Config = {
       }
     },
     manuscripts: {
+      showTitle: true,
       showOpenLegendButton: true
     },
     topMenu: {
@@ -351,6 +354,13 @@ export const config: Config = {
       },
       commentsFormats: {
         xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      manuscriptsFormats: {
+        xml: false,
         html: false,
         xhtml: false,
         txt: false,
@@ -608,6 +618,7 @@ export const config_soderholm: Config = {
     },
     text: {
       defaultViews: ["facsimiles", "manuscripts"],
+      showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -675,7 +686,8 @@ export const config_soderholm: Config = {
       }
     },
     manuscripts: {
-      showOpenLegendButton: false
+      showOpenLegendButton: false,
+      showTitle: false
     },
     topMenu: {
       showAboutButton: true,
@@ -714,6 +726,13 @@ export const config_soderholm: Config = {
         xhtml: false,
         txt: false,
         print: false
+      },
+      manuscriptsFormats: {
+        xml: false,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
       }
     },
     fullscreenImageViewer: {
@@ -1374,7 +1393,8 @@ export const config_mechelin: Config = {
       }
     },
     introduction: {
-      hasSeparateTOC: true,
+      hasSeparateTOC: false,
+      showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -1390,6 +1410,7 @@ export const config_mechelin: Config = {
     },
     text: {
       defaultViews: ["established_sv", "established_fi", "manuscripts", "facsimiles"],
+      showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -1457,7 +1478,8 @@ export const config_mechelin: Config = {
       }
     },
     manuscripts: {
-      showOpenLegendButton: false
+      showOpenLegendButton: false,
+      showTitle: false
     },
     topMenu: {
       showAboutButton: true,
@@ -1485,6 +1507,13 @@ export const config_mechelin: Config = {
       },
       readTextFormats: {
         xml: true,
+        html: false,
+        xhtml: false,
+        txt: false,
+        print: true
+      },
+      manuscriptsFormats: {
+        xml: false,
         html: false,
         xhtml: false,
         txt: false,

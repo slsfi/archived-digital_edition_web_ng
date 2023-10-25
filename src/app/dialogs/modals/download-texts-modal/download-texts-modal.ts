@@ -1,7 +1,8 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
+import { AsyncPipe, DOCUMENT, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, Subscription, tap } from 'rxjs';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -9,6 +10,7 @@ import { CollectionsService } from '@services/collections.service';
 import { CollectionTableOfContentsService } from '@services/collection-toc.service';
 import { CommentService } from '@services/comment.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { ReferenceDataService } from '@services/reference-data.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames } from '@utility-functions';
 
@@ -18,9 +20,9 @@ import { concatenateNames } from '@utility-functions';
   selector: 'page-download-texts-modal',
   templateUrl: 'download-texts-modal.html',
   styleUrls: ['download-texts-modal.scss'],
-  imports: [NgClass, NgFor, NgIf, NgStyle, IonicModule]
+  imports: [AsyncPipe, NgClass, NgFor, NgIf, NgStyle, IonicModule]
 })
-export class DownloadTextsModal implements OnInit {
+export class DownloadTextsModal implements OnDestroy, OnInit {
   @Input() origin: string = '';
   @Input() textItemID: string = '';
 
@@ -29,23 +31,35 @@ export class DownloadTextsModal implements OnInit {
   commentTitle: string = '';
   copyrightText: string = '';
   copyrightURL: string = '';
+  currentUrl: string = '';
   downloadFormatsCom: string[] = [];
   downloadFormatsEst: string[] = [];
   downloadFormatsIntro: string[] = [];
+  downloadFormatsMs: string[] = [];
+  downloadOptionsExist: boolean = false;
+  downloadTextSubscription: Subscription | null = null;
   instructionsText: string = '';
   introductionMode: boolean = false;
   introductionTitle: string = '';
   loadingCom: boolean = false;
   loadingEst: boolean = false;
   loadingIntro: boolean = false;
+  loadingMs: boolean = false;
+  loadingGroupIndex: number = -1;
+  manuscriptsList$: Observable<any[]>;
   readTextLanguages: string[] = [];
+  referenceData: any = null;
+  printTextSubscription: Subscription | null = null;
   printTranslation: string = '';
+  publicationData$: Observable<any>;
   publicationTitle: string = '';
   readTextsMode: boolean = false;
   showLoadingError: boolean = false;
+  showMissingTextError: boolean = false;
   showPrintError: boolean = false;
   siteUrl: string = '';
   textSizeTranslation: string = '';
+  urnResolverUrl: string = '';
 
   constructor(
     private collectionContentService: CollectionContentService,
@@ -53,9 +67,12 @@ export class DownloadTextsModal implements OnInit {
     private commentService: CommentService,
     private modalCtrl: ModalController,
     private parserService: HtmlParserService,
+    private referenceDataService: ReferenceDataService,
+    private router: Router,
     private tocService: CollectionTableOfContentsService,
     private viewOptionsService: ViewOptionsService,
-    @Inject(LOCALE_ID) private activeLocale: string
+    @Inject(LOCALE_ID) private activeLocale: string,
+    @Inject(DOCUMENT) private document: Document
   ) {
     // Get configs
     this.readTextLanguages = config.app?.i18n?.multilingualReadingTextLanguages ?? [];
@@ -68,6 +85,7 @@ export class DownloadTextsModal implements OnInit {
     const formatsCom = config.modal?.downloadTexts?.commentsFormats ?? {};
     const formatsEst = config.modal?.downloadTexts?.readTextFormats ?? {};
     const formatsIntro = config.modal?.downloadTexts?.introductionFormats ?? {};
+    const formatsMs = config.modal?.downloadTexts?.manuscriptsFormats ?? {};
 
     const supportedFormats: string[] = ['xml', 'html', 'xhtml', 'txt', 'print'];
 
@@ -90,6 +108,12 @@ export class DownloadTextsModal implements OnInit {
       }
     });
 
+    Object.entries(formatsMs).forEach(([key, value]) => {
+      if (value && supportedFormats.includes(key)) {
+        this.downloadFormatsMs.push(key);
+      }
+    });
+
     // Move any 'print' formats to the end of the arrays
     this.downloadFormatsCom.length && this.downloadFormatsCom.push(
       this.downloadFormatsCom.splice(this.downloadFormatsCom.indexOf('print'), 1)[0]
@@ -100,6 +124,9 @@ export class DownloadTextsModal implements OnInit {
     this.downloadFormatsIntro.length && this.downloadFormatsIntro.push(
       this.downloadFormatsIntro.splice(this.downloadFormatsIntro.indexOf('print'), 1)[0]
     );
+    this.downloadFormatsMs.length && this.downloadFormatsMs.push(
+      this.downloadFormatsMs.splice(this.downloadFormatsMs.indexOf('print'), 1)[0]
+    );
   }
 
   ngOnInit(): void {
@@ -108,9 +135,15 @@ export class DownloadTextsModal implements OnInit {
       this.readTextsMode = true;
     } else if (this.origin === 'page-introduction') {
       this.introductionMode = true;
+      if (this.downloadFormatsIntro.length) {
+        this.downloadOptionsExist = true;
+      }
     }
 
+    this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
+    this.currentUrl = this.document.defaultView?.location.href.split('?')[0] || '';
     this.setTranslations();
+    this.setReferenceData();
 
     if (this.textItemID) {
       // Parse text item id
@@ -119,20 +152,62 @@ export class DownloadTextsModal implements OnInit {
 
       this.setCollectionTitle();
 
-      // Get publication title from TOC (this way we can also get
-      // correct chapter titles for publications with chapters)
       if (this.readTextsMode) {
+        // Get publication title from TOC (this way we can also get
+        // correct chapter titles for publications with chapters)
         this.setPublicationTitle();
+
+        if (this.downloadFormatsEst.length || this.downloadFormatsCom.length) {
+          // Get publication data in order to determine if read-texts and
+          // comments are available. original_filename is used to determine if
+          // read-texts exist, and publication_comment_id if comments exist.
+          this.publicationData$ = this.collectionsService.getPublication(
+            idParts[1]
+          ).pipe(
+            tap((res: any) => {
+              if (res?.original_filename) {
+                this.downloadOptionsExist = true;
+              }
+            }),
+            catchError((e: any) => {
+              console.error('unable to get publication data', e);
+              return of(null);
+            })
+          );
+        }
+
+        if (this.downloadFormatsMs.length) {
+          // Get a list of all manuscripts in the publication
+          this.manuscriptsList$ = this.collectionContentService.getManuscriptsList(
+            this.textItemID
+          ).pipe(
+            tap((res: any) => {
+              if (res?.manuscripts?.length) {
+                this.downloadOptionsExist = true;
+              }
+            }),
+            map((res: any) => {
+              return res?.manuscripts?.length ? res.manuscripts : null;
+            })
+          );
+        }
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.downloadTextSubscription?.unsubscribe();
+    this.printTextSubscription?.unsubscribe();
   }
 
   dismiss() {
     this.modalCtrl.dismiss();
   }
 
-  initiateDownload(textType: string, format: string, language?: string) {
+  initiateDownload(textType: string, format: string, language?: string, typeID?: number) {
     this.showLoadingError = false;
+    this.showMissingTextError = false;
+    this.showPrintError = false;
     let mimetype = 'application/xml';
     let fileExtension = 'xml';
 
@@ -147,251 +222,262 @@ export class DownloadTextsModal implements OnInit {
       fileExtension = 'xhtml';
     }
 
+    if (!language || language === 'default') {
+      language = '';
+    }
+
+    let dlText$: Observable<any> | null = null;
+
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.collectionContentService.getDownloadableIntroduction(
+      dlText$ = this.collectionContentService.getDownloadableIntroduction(
         this.textItemID, format, this.activeLocale
-      ).subscribe({
-        next: (res: any) => {
-          const blob = new Blob([res.content || ''], {type: mimetype});
-          const blobUrl = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = this.convertToFilename(this.introductionTitle + '-' + this.collectionTitle)
-                + '.' + fileExtension;
-          link.target = '_blank'
-          link.click();
-          this.loadingIntro = false;
-          URL.revokeObjectURL(blobUrl);
-        },
-        error: (e: any) => {
-          console.error('error getting introduction in ' + format + ' format', e);
-          this.loadingIntro = false;
-          this.showLoadingError = true;
-        }
-      });
+      );
     } else if (textType === 'est') {
       this.loadingEst = true;
-      if (language === 'default' || !language) {
-        language = '';
-      }
-      this.collectionContentService.getDownloadableReadText(
+      dlText$ = this.collectionContentService.getDownloadableReadText(
         this.textItemID, format, language
-      ).subscribe({
-        next: (res: any) => {
-          const langForFilename = language ? '_' + language : '';
-          const blob = new Blob([res.content], {type: mimetype});
-          const blobUrl = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = this.convertToFilename(this.publicationTitle)
-                + langForFilename + '.' + fileExtension;
-          link.target = '_blank'
-          link.click();
-          this.loadingEst = false;
-          URL.revokeObjectURL(blobUrl);
-        },
-        error: (e: any) => {
-          console.error('error getting read text in ' + format + ' format', e);
-          this.loadingEst = false;
-          this.showLoadingError = true;
-        }
-      });
+      );
     } else if (textType === 'com') {
       this.loadingCom = true;
-      this.commentService.getDownloadableComments(this.textItemID, format).subscribe({
+      dlText$ = this.commentService.getDownloadableComments(
+        this.textItemID, format
+      );
+    } else if (textType === 'ms') {
+      this.loadingMs = true;
+      dlText$ = this.collectionContentService.getDownloadableManuscript(
+        this.textItemID, typeID || 0, format
+      );
+    }
+
+    if (dlText$) {
+      this.downloadTextSubscription?.unsubscribe();
+      this.downloadTextSubscription = dlText$.subscribe({
         next: (res: any) => {
-          const blob = new Blob([res.content], {type: mimetype});
-          const blobUrl = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = this.convertToFilename(this.publicationTitle + '-' + this.commentTitle)
-                + '.' + fileExtension;
-          link.target = '_blank'
-          link.click();
+          let fileContent: any = res.content || '';
+          let fileName: string = 'file';
+
+          if (textType === 'intro') {
+            fileName = this.convertToFilename(
+              this.introductionTitle + '-' + this.collectionTitle
+            ) + '.' + fileExtension;
+          } else if (textType === 'est') {
+            const langForFilename = language ? '_' + language : '';
+            fileName = this.convertToFilename(this.publicationTitle)
+                  + langForFilename + '-id-' + this.textItemID.split('_')[1]
+                  + '.' + fileExtension;
+          } else if (textType === 'com') {
+            fileName = this.convertToFilename(
+              this.commentTitle + ' ' + this.publicationTitle
+            ) + '-id-' + this.textItemID.split('_')[1] + '.' + fileExtension;
+          } else if (textType === 'ms') {
+            fileName = this.convertToFilename(this.publicationTitle)
+                  + '-id-' + this.textItemID.split('_')[1]
+                  + '-ms-' + typeID + '.' + fileExtension;
+          }
+
+          if (fileContent && fileContent !== 'File not found') {
+            const blob = new Blob([fileContent], {type: mimetype});
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.target = '_blank'
+            link.click();
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            console.error('the text does not exist and can’t be downloaded');
+            this.showMissingTextError = true;
+          }
+          this.loadingIntro = false;
+          this.loadingEst = false;
           this.loadingCom = false;
-          URL.revokeObjectURL(blobUrl);
+          this.loadingMs = false;
         },
-        error: (e: any) =>  {
-          console.error('error getting comments in ' + format + ' format', e);
+        error: (e: any) => {
+          console.error('error getting downloadable ' + textType + ' in ' + format + ' format', e);
+          this.loadingIntro = false;
+          this.loadingEst = false;
           this.loadingCom = false;
+          this.loadingMs = false;
           this.showLoadingError = true;
         }
       });
     }
   }
 
-  openPrintFriendlyText(textType: string, language?: string) {
+  openPrintFriendlyText(textType: string, language?: string, typeID?: number, typeTitle?: string) {
     if (language === 'default' || !language) {
       language = '';
     }
+    this.showLoadingError = false;
+    this.showMissingTextError = false;
     this.showPrintError = false;
+
+    let text$: Observable<any> | null = null;
+
     if (textType === 'intro') {
       this.loadingIntro = true;
-      this.openIntroductionForPrint();
+      text$ = this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale);
     } else if (textType === 'est') {
       this.loadingEst = true;
-      this.openEstablishedForPrint(language);
+      text$ = this.collectionContentService.getReadText(this.textItemID, language);
     } else if (textType === 'com') {
       this.loadingCom = true;
-      this.openCommentsForPrint();
+      text$ = forkJoin([
+        this.commentService.getComments(this.textItemID).pipe(
+          catchError(error => of({ error }))
+        ),
+        this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).pipe(
+          catchError(error => of({ error }))
+        )
+      ]).pipe(
+        map((res: any[]) => {
+          return { comments: res[0], metadata: res[1] };
+        })
+      );
+    } else if (textType === 'ms') {
+      this.loadingMs = true;
+      text$ = this.collectionContentService.getManuscripts(this.textItemID, typeID);
+    }
+
+    if (text$) {
+      this.printTextSubscription?.unsubscribe();
+      this.printTextSubscription = text$.subscribe({
+        next: (res: any) => {
+          if (
+            (textType === 'intro' && res?.content) ||
+            (
+              textType === 'est' &&
+              res?.content &&
+              res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
+            ) ||
+            (textType === 'com' && res?.comments && !res.comments.error) ||
+            (
+              textType === 'ms' &&
+              res?.manuscripts?.length > 0 &&
+              res?.manuscripts[0]?.manuscript_changes
+            )
+          ) {
+            let text: string = '';
+
+            if (textType === 'intro') {
+              text = this.getProcessedPrintIntro(res.content);
+            } else if (textType === 'est') {
+              text = this.getProcessedPrintReadText(res.content, language);
+            } else if (textType === 'com') {
+              text = this.getProcessedPrintComments(res);
+            } else if (textType === 'ms') {
+              text = this.getProcessedPrintManuscripts(res.manuscripts[0].manuscript_changes, res.manuscripts[0].language, typeTitle);
+            }
+
+            try {
+              const newWindowRef = window.open();
+              if (newWindowRef) {
+                newWindowRef.document.write(text);
+                newWindowRef.document.close();
+                newWindowRef.focus();
+              } else {
+                this.showPrintError = true;
+                console.log('unable to open new window');
+              }
+            } catch (e: any) {
+              this.showPrintError = true;
+              console.error('unable to open new window', e);
+            }
+
+          } else {
+            if (textType === 'est') {
+              this.showMissingTextError = true;
+            } else {
+              this.showPrintError = true;
+            }
+            console.log('invalid text format for print version');
+          }
+
+          this.loadingIntro = false;
+          this.loadingEst = false;
+          this.loadingCom = false;
+          this.loadingMs = false;
+        },
+        error: (e: any) => {
+          console.error('error loading text', e);
+          this.loadingIntro = false;
+          this.loadingEst = false;
+          this.loadingCom = false;
+          this.loadingMs = false;
+          this.showPrintError = true;
+        }
+      });
     }
   }
 
-  private openIntroductionForPrint() {
-    this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale).subscribe({
-      next: (res: any) => {
-        if (res?.content) {
-          let content = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
-          content = this.constructHtmlForPrint(content, 'intro');
-
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(content);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showPrintError = true;
-              console.log('unable to open new window');
-            }
-          } catch (e: any) {
-            this.showPrintError = true;
-            console.error('error opening introduction in print format in new window', e);
-          }
-        } else {
-          this.showPrintError = true;
-          console.log('invalid introduction text format');
-        }
-        this.loadingIntro = false;
-      },
-      error: (e: any) => {
-        console.error('error loading introduction', e);
-        this.loadingIntro = false;
-        this.showPrintError = true;
-      }
-    });
+  private getProcessedPrintIntro(text: string): string {
+    text = text.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'intro');
   }
 
-  private openEstablishedForPrint(language: string) {
-    this.collectionContentService.getReadText(this.textItemID, language).subscribe({
-      next: (res: any) => {
-        if (
-          res?.content &&
-          res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
-        ) {
-          let text: string = res.content;
-          text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
-
-          //text = text.substring(text.indexOf('<body>') + 6, text.indexOf('</body>'));
-          text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
-
-          text = this.constructHtmlForPrint(text, 'est', language);
-
-          try {
-            const newWindowRef = window.open();
-            if (newWindowRef) {
-              newWindowRef.document.write(text);
-              newWindowRef.document.close();
-              newWindowRef.focus();
-            } else {
-              this.showPrintError = true;
-              console.log('unable to open new window');
-            }           
-          } catch (e) {
-            this.showPrintError = true;
-            console.error('error opening established text in print format in new window', e);
-          }
-          this.loadingEst = false;
-        } else {
-          this.loadingEst = false;
-          this.showPrintError = true;
-          console.log('invalid established text format');
-        }
-      },
-      error: (e: any) => {
-        console.error('error loading established text', e);
-        this.loadingEst = false;
-        this.showPrintError = true;
-      }
-    });
+  private getProcessedPrintReadText(text: string, language?: string): string {
+    text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
+    text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'est', language);
   }
 
-  private openCommentsForPrint() {
-    forkJoin([
-      this.commentService.getComments(this.textItemID).pipe(
-        catchError(error => of({ error }))
-      ),
-      this.commentService.getCorrespondanceMetadata(this.textItemID.split('_')[1]).pipe(
-        catchError(error => of({ error }))
-      )
-    ]).pipe(
-      map((res: any[]) => {
-        return { comments: res[0], metadata: res[1] };
-      })
-    ).subscribe((commentsData: any) => {
-      if (commentsData?.comments && !commentsData.comments.error) {
-        let comContent  = this.constructHtmlForPrint(commentsData.comments, 'com');
-        let metaContent = '';
+  private getProcessedPrintComments(commentsData: any): string {
+    let text = this.constructHtmlForPrint(commentsData.comments, 'com');
+    let metaContent = '';
 
-        if (commentsData.metadata?.letter) {
-          let concatSenders = '';
-          let concatReceivers = '';
+    if (commentsData.metadata?.letter) {
+      let concatSenders = '';
+      let concatReceivers = '';
 
-          if (commentsData.metadata?.subjects?.length > 0) {
-            const senders: string[] = [];
-            const receivers: string[] = [];
-            commentsData.metadata.subjects.forEach((subject: any) => {
-              if (subject['avs\u00e4ndare']) {
-                senders.push(subject['avs\u00e4ndare']);
-              }
-              if (subject['mottagare']) {
-                receivers.push(subject['mottagare']);
-              }
-            });
-            concatSenders = concatenateNames(senders);
-            concatReceivers = concatenateNames(receivers);
+      if (commentsData.metadata?.subjects?.length > 0) {
+        const senders: string[] = [];
+        const receivers: string[] = [];
+        commentsData.metadata.subjects.forEach((subject: any) => {
+          if (subject['avs\u00e4ndare']) {
+            senders.push(subject['avs\u00e4ndare']);
           }
-
-          if (commentsData.metadata.letter) {
-            metaContent = this.getCorrespondenceDataAsHtml(
-              commentsData.metadata.letter, concatSenders, concatReceivers
-            );
-            const contentParts = comContent.split('</div>\n</comments>');
-            comContent = contentParts[0] + metaContent + '</div>\n</comments>' + contentParts[1];
+          if (subject['mottagare']) {
+            receivers.push(subject['mottagare']);
           }
-        }
-
-        try {
-          const newWindowRef = window.open();
-          if (newWindowRef) {
-            newWindowRef.document.write(comContent);
-            newWindowRef.document.close();
-            newWindowRef.focus();
-          } else {
-            this.showPrintError = true;
-            console.log('unable to open new window');
-          }
-        } catch (e: any) {
-          this.showPrintError = true;
-          console.error('error opening comment text in print format in new window', e);
-        }
-        this.loadingCom = false;
-      } else {
-        console.log('invalid comments format or error loading comments data');
-        this.loadingCom = false;
-        this.showPrintError = true;
+        });
+        concatSenders = concatenateNames(senders);
+        concatReceivers = concatenateNames(receivers);
       }
-    });
+
+      if (commentsData.metadata.letter) {
+        metaContent = this.getCorrespondenceDataAsHtml(
+          commentsData.metadata.letter, concatSenders, concatReceivers
+        );
+        const contentParts = text.split('</div>\n</comments>');
+        text = contentParts[0] + metaContent + '</div>\n</comments>' + contentParts[1];
+      }
+    }
+    return text;
   }
 
-  private constructHtmlForPrint(text: string, textType: string, language?: string) {
+  private getProcessedPrintManuscripts(text: string, language?: string, typeTitle?: string): string {
+    text = this.parserService.postprocessManuscriptText(text);
+    text = this.fixImagePaths(text);
+    return this.constructHtmlForPrint(text, 'ms', language, typeTitle);
+  }
+
+  private constructHtmlForPrint(text: string, textType: string, language?: string, typeTitle?: string): string {
     const cssStylesheets = [];
     for (let i = 0; i < document.styleSheets.length; i++) {
       if (document.styleSheets[i].href) {
         cssStylesheets.push(document.styleSheets[i].href);
       }
     }
+
+    const textTitle = this.constructPrintHtmlTitle(textType);
+    typeTitle = typeTitle && config.component?.manuscripts?.showTitle ? typeTitle : '';
+    const referenceURL = this.referenceData?.urn
+          ? this.urnResolverUrl + this.referenceData.urn
+          : this.currentUrl;
 
     let header = '<!DOCTYPE html>\n';
     if (language) {
@@ -402,12 +488,12 @@ export class DownloadTextsModal implements OnInit {
     header += '<head>\n';
     header += '<meta charset="UTF-8">\n';
     header += '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
-    header += '<title>' + this.constructPrintHtmlTitle(textType) + '</title>\n';
+    header += '<title>' + textTitle + '</title>\n';
     cssStylesheets.forEach(sheetUrl => {
       header += '<link href="' + sheetUrl + '" rel="stylesheet">\n';
     });
     header += '<style>\n';
-    header += '    body  { background-color: #fff; position: static; overflow: auto; height: initial; max-height: initial; width: initial; }\n';
+    header += '    body  { background-color: #fff; position: static; overflow: auto; height: initial; max-height: initial; width: initial; font-family: var(--font-stack-app-base); font-size: 1.0625rem; }\n';
     header += '    page-text, page-introduction { display: block; padding: 0 1.5em 4em 1.5em; }\n';
     header += '    div.tei.teiContainer * { cursor: auto !important; }\n';
     header += '    div.tei.teiContainer { padding-bottom: 0; line-height: 1.45em; }\n';
@@ -423,9 +509,14 @@ export class DownloadTextsModal implements OnInit {
     header += '    thead { display:table-header-group; }\n';
     header += '    tfoot { display:table-footer-group; }\n';
     header += '    .print-header { padding: 1px; margin-bottom: 2rem; background-color: #ededed; }\n';
-    header += '    .print-header button { display: block; font-family: var(--font-stack-system); font-size: 1rem; font-weight: 600; text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35); text-transform: uppercase; color: #fff; background-color: #2a75cb; border-radius: 0.4em; padding: 0.5em 1.3em; margin: 2em auto; cursor: pointer; transition: all 0.2s; line-height: 1.5; }\n';
+    header += '    .print-header button { display: block; font-size: 1.0625rem; font-weight: 600; text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35); text-transform: uppercase; color: #fff; background-color: #2a75cb; border-radius: 0.4em; padding: 0.5em 1.3em; margin: 2em auto; cursor: pointer; transition: all 0.2s; line-height: 1.5; }\n';
     header += '    .print-header button:hover, .print-header button:focus { background-color: #12447e; }\n';
-    header += '    .slide-container { font-family: var(--font-stack-system); display: flex; flex-direction: column; align-items: center; }\n';
+    header += '    .text-metadata { padding: 0.625rem; margin: 0 0 2.5rem 0; border: 1px solid #000; }\n';
+    header += '    .text-metadata a { color: #000 !important; text-decoration: none !important; }\n';
+    header += '    .text-metadata p { padding-left: 1em; text-indent: 0 !important; line-height: 1.35em !important; }\n';
+    header += '    .text-metadata p.apart { margin-top: 1em !important; }\n';
+    header += '    .text-metadata p.apart::before, .text-metadata p:first-child::before { content: "▪"; margin-left: -1em; position: absolute; }\n';
+    header += '    .slide-container { display: flex; flex-direction: column; align-items: center; }\n';
     header += '    .slide-container label { font-weight: 600; }\n';
     header += '    .slider { width: 300px; max-width: 90%; margin: 1em auto 0.25em auto; display: block; }\n';
     header += '    .slide-container .range-labels { width: 300px; max-width: 90%; display: flex; justify-content: space-between; align-items: center; padding: 0 1px 0 4px; margin-bottom: 2em; font-size: 1rem; font-weight: 600; }\n';
@@ -438,6 +529,7 @@ export class DownloadTextsModal implements OnInit {
     header += '    @page { size: auto; margin: 25mm 20mm 25mm 20mm; }\n';
     header += '</style>\n';
     header += '</head>\n';
+
     header += '<body class="print-mode">\n';
     header += '<div class="print-header" lang="' + this.activeLocale + '">\n';
     header += '    <button type="button" tabindex="0" onclick="window.print();return false;">' + this.printTranslation + '</button>\n';
@@ -456,16 +548,45 @@ export class DownloadTextsModal implements OnInit {
     header += '        <div class="range-labels"><span class="smallest">A</span><span class="largest">A</span></div>\n';
     header += '    </div>\n';
     header += '</div>\n';
+
     if (textType === 'intro') {
       header += '<page-introduction>\n';
     } else {
       header += '<page-text>\n';
     }
     header += '<div id="contentContainer" class="content xxxsmallFontSize">\n';
+
+    header += '<div class="text-metadata tei" lang="' + this.activeLocale + '">\n';
+    if (textType === 'intro') {
+      header += '    <p><b>' + this.introductionTitle + '</b></p>\n';
+    } else if (textType === 'com') {
+      header += '    <p><b>' + this.commentTitle + ' ' + this.publicationTitle + '</b></p>\n';
+    } else if (textType === 'ms') {
+      header += '    <p><b>' + $localize`:@@Read.Manuscripts.Title:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
+    } else {
+      header += '    <p><b>' + this.publicationTitle + '</b></p>\n';
+    }
+    header += '    <p>' + this.collectionTitle + '</p>\n';
+    header += '    <p>' + $localize`:@@Site.Title:Webbplatsens titel` + (this.siteUrl ? (' – ' + '<a href="' + this.siteUrl + '">' + this.siteUrl + '</a>') : '') + '</p>\n';
+    if ((textType === 'est' || textType === 'intro') && this.referenceData) {
+
+      header += '    <p class="apart">' + (textType === 'est' ? $localize`:@@Reference.established:Hänvisa till denna lästext` : $localize`:@@Reference.intro:Hänvisa till denna inledning`) + ':</p>\n';
+      header += '    <p>' + this.referenceData.reference_text + ', <a href="' + referenceURL + '">' + referenceURL + '</a></p>\n';
+    } else {
+      header += '    <p class="apart">' + $localize`:@@DownloadTexts.Source:Texten är hämtad från` + ':</p>\n';
+      header += '    <p><a href="' + this.currentUrl + '">' + this.currentUrl + '</a></p>\n';
+    }
+    if (this.copyrightText) {
+      header += '    <p class="apart">' + this.copyrightText + (this.copyrightURL ? (', <a href="' + this.copyrightURL + '">' + this.copyrightURL + '</a>') : '') + '</p>\n';
+    }
+    header += '</div>\n';
+
     if (textType === 'est') {
       header += '<read-text>\n';
     } else if (textType === 'com') {
       header += '<comments>\n';
+    } else if (textType === 'ms') {
+      header += '<manuscripts>\n';
     }
     header += '<div class="tei teiContainer ' + this.getViewOptionsClassNames(textType) + '">\n';
     if (textType === 'com') {
@@ -477,6 +598,8 @@ export class DownloadTextsModal implements OnInit {
       closer += '</read-text>\n';
     } else if (textType === 'com') {
       closer += '</comments>\n';
+    } else if (textType === 'ms') {
+      closer += '</manuscripts>\n';
     }
     closer += '</div>\n';
     if (textType === 'intro') {
@@ -564,10 +687,23 @@ export class DownloadTextsModal implements OnInit {
     return title;
   }
 
+  private setReferenceData() {
+    const currentUrlTree: UrlTree = this.router.parseUrl(this.router.url);
+    const currentUrlSegments: UrlSegment[] = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
+
+    if (currentUrlSegments?.length) {
+      this.referenceDataService.getReferenceData(currentUrlSegments).subscribe(
+        (data: any) => {
+          this.referenceData = data;
+        }
+      );
+    }
+  }
+
   private setTranslations() {
     // Set translations
     if (this.readTextsMode) {
-      this.commentTitle = $localize`:@@Read.Comments.Title:Kommentarer`;
+      this.commentTitle = $localize`:@@DownloadTexts.CommentaryTo:Kommentarer till`;
 
       if ($localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
         this.instructionsText = $localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
@@ -679,7 +815,7 @@ export class DownloadTextsModal implements OnInit {
   }
 
   // Returns the given title string as a string that can be used as a filename
-  private convertToFilename(title: string, maxLength = 75): string {
+  private convertToFilename(title: string, maxLength = 70): string {
     let filename = title
           ? title.replace(/[àáåä]/gi, 'a')
                   .replace(/[öøô]/gi, 'o')
@@ -768,6 +904,16 @@ export class DownloadTextsModal implements OnInit {
     mContent += '</ul>\n';
     mContent += '</div>\n';
     return mContent;
+  }
+
+  private fixImagePaths(text: string): string {
+    // fix image paths
+    return text.replace(
+      /assets\/images\//g,
+      (this.document.defaultView?.location.origin ?? '')
+            + (this.document.defaultView?.location.pathname.split('/')[1] === this.activeLocale ? '/' + this.activeLocale : '')
+            + '/assets/images/'
+    );
   }
 
 }

@@ -424,6 +424,10 @@
         "Textsize": "Text size",
         "TextLoadingError": "Failed to download text. Please try again and allow popup-windows from the web page.",
         "OpenPrintError": "The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.",
+        "MissingTextError": "The text doesn’t exist and can’t be downloaded or printed.",
+        "CommentaryTo": "Commentary to",
+        "Source": "The text has been retrieved from",
+        "NoDownloads": "No downloadable or printable texts available.",
         "Format": {
             "Print": "Print",
             "HTML": "HTML",
