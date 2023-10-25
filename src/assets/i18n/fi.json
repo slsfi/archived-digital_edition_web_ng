@@ -427,6 +427,7 @@
         "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
         "CommentaryTo": "Kommentaari tekstiin",
         "Source": "Teksti on haettu osoitteesta",
+        "NoDownloads": "Laddattavia tai tulostettavia tekstejä ei ole saatavilla.",
         "Format": {
             "Print": "Tulosta",
             "HTML": "HTML",

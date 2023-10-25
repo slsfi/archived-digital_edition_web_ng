@@ -186,6 +186,12 @@
         <target>The text doesn’t exist and can’t be downloaded or printed.</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment state="initial">
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+        <target>No downloadable or printable texts available.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>

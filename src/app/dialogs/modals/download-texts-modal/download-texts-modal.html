@@ -138,24 +138,31 @@
         </div>
       </ng-container>
 
-      <div *ngIf="instructionsText || copyrightText" class="notice">
-        <p *ngIf="instructionsText" class="download-instructions" [innerHTML]="instructionsText"></p>
-        <p *ngIf="copyrightText && !copyrightURL" class="copyright-notice" [innerHTML]="copyrightText"></p>
-        <p *ngIf="copyrightText && copyrightURL" class="copyright-notice">
-          <a [href]="copyrightURL" target="_blank">
-            <span [innerHTML]="copyrightText"></span>
-            <ion-icon name="open-outline"
-                  [ngStyle]="{
-                    'font-size': '1.375rem',
-                    'padding-left': '0.125rem',
-                    'vertical-align': 'text-bottom'
-                  }"
-                  aria-label="Länken öppnas i ett nytt fönster"
-                  i18n-aria-label="@@BasicActions.OpenInNewWindow"
-            ></ion-icon>
-          </a>
-        </p>
-      </div>
+      <ng-container *ngIf="downloadOptionsExist; else noOptions">
+        <div *ngIf="instructionsText || copyrightText" class="notice">
+          <p *ngIf="instructionsText" class="download-instructions" [innerHTML]="instructionsText"></p>
+          <p *ngIf="copyrightText && !copyrightURL" class="copyright-notice" [innerHTML]="copyrightText"></p>
+          <p *ngIf="copyrightText && copyrightURL" class="copyright-notice">
+            <a [href]="copyrightURL" target="_blank">
+              <span [innerHTML]="copyrightText"></span>
+              <ion-icon name="open-outline"
+                    [ngStyle]="{
+                      'font-size': '1.375rem',
+                      'padding-left': '0.125rem',
+                      'vertical-align': 'text-bottom'
+                    }"
+                    aria-label="Länken öppnas i ett nytt fönster"
+                    i18n-aria-label="@@BasicActions.OpenInNewWindow"
+              ></ion-icon>
+            </a>
+          </p>
+        </div>
+      </ng-container>
+
+      <ng-template #noOptions>
+        <p class="no-dl-options" i18n="@@DownloadTexts.NoDownloads">Inga texter tillgängliga för nedladdning eller utskrift.</p>
+      </ng-template>
+      
     </div>
   </div>
 </ion-content>

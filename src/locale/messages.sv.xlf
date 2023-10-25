@@ -186,6 +186,12 @@
         <target>Texten saknas och går inte att ladda ner eller skriva ut.</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment state="initial">
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+        <target>Inga texter tillgängliga för nedladdning eller utskrift.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>

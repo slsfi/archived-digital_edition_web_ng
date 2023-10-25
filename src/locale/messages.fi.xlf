@@ -186,6 +186,12 @@
         <target>Tekstiä ei ole eikä sitä voi ladata tai tulostaa.</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.NoDownloads">
+      <segment state="initial">
+        <source>Inga texter tillgängliga för nedladdning eller utskrift.</source>
+        <target>Laddattavia tai tulostettavia tekstejä ei ole saatavilla.</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
         <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>

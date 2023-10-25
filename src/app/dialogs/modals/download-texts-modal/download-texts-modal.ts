@@ -2,7 +2,7 @@ import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular
 import { AsyncPipe, DOCUMENT, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { catchError, forkJoin, map, Observable, of, Subscription } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, Subscription, tap } from 'rxjs';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -36,6 +36,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   downloadFormatsEst: string[] = [];
   downloadFormatsIntro: string[] = [];
   downloadFormatsMs: string[] = [];
+  downloadOptionsExist: boolean = false;
   downloadTextSubscription: Subscription | null = null;
   instructionsText: string = '';
   introductionMode: boolean = false;
@@ -134,6 +135,9 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       this.readTextsMode = true;
     } else if (this.origin === 'page-introduction') {
       this.introductionMode = true;
+      if (this.downloadFormatsIntro.length) {
+        this.downloadOptionsExist = true;
+      }
     }
 
     this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
@@ -160,22 +164,14 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
           this.publicationData$ = this.collectionsService.getPublication(
             idParts[1]
           ).pipe(
-            catchError((e: any) => {
-              // Enable read-text and comments download even though
-              // the endpoint for publications can't tell if these exist
-              console.error('unable to get publication data', e);
-              let original_filename: any = {};
-              if (this.readTextLanguages.length > 1) {
-                this.readTextLanguages.forEach((language: string) => {
-                  original_filename[language] = "exists";
-                });
-              } else {
-                original_filename = "exists";
+            tap((res: any) => {
+              if (res?.original_filename) {
+                this.downloadOptionsExist = true;
               }
-              return of({
-                original_filename,
-                publication_comment_id: 1
-              });
+            }),
+            catchError((e: any) => {
+              console.error('unable to get publication data', e);
+              return of(null);
             })
           );
         }
@@ -185,6 +181,11 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
           this.manuscriptsList$ = this.collectionContentService.getManuscriptsList(
             this.textItemID
           ).pipe(
+            tap((res: any) => {
+              if (res?.manuscripts?.length) {
+                this.downloadOptionsExist = true;
+              }
+            }),
             map((res: any) => {
               return res?.manuscripts?.length ? res.manuscripts : null;
             })
@@ -263,30 +264,35 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
           } else if (textType === 'est') {
             const langForFilename = language ? '_' + language : '';
             fileName = this.convertToFilename(this.publicationTitle)
-                  + langForFilename + '_id-' + this.textItemID.split('_')[1]
+                  + langForFilename + '-id-' + this.textItemID.split('_')[1]
                   + '.' + fileExtension;
           } else if (textType === 'com') {
             fileName = this.convertToFilename(
               this.commentTitle + ' ' + this.publicationTitle
-            ) + '_id-' + this.textItemID.split('_')[1] + '.' + fileExtension;
+            ) + '-id-' + this.textItemID.split('_')[1] + '.' + fileExtension;
           } else if (textType === 'ms') {
             fileName = this.convertToFilename(this.publicationTitle)
-                  + '_id-' + this.textItemID.split('_')[1]
-                  + '_ms-' + typeID + '.' + fileExtension;
+                  + '-id-' + this.textItemID.split('_')[1]
+                  + '-ms-' + typeID + '.' + fileExtension;
           }
 
-          const blob = new Blob([fileContent], {type: mimetype});
-          const blobUrl = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = fileName;
-          link.target = '_blank'
-          link.click();
+          if (fileContent && fileContent !== 'File not found') {
+            const blob = new Blob([fileContent], {type: mimetype});
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.target = '_blank'
+            link.click();
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            console.error('the text does not exist and can’t be downloaded');
+            this.showMissingTextError = true;
+          }
           this.loadingIntro = false;
           this.loadingEst = false;
           this.loadingCom = false;
           this.loadingMs = false;
-          URL.revokeObjectURL(blobUrl);
         },
         error: (e: any) => {
           console.error('error getting downloadable ' + textType + ' in ' + format + ' format', e);
@@ -556,7 +562,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     } else if (textType === 'com') {
       header += '    <p><b>' + this.commentTitle + ' ' + this.publicationTitle + '</b></p>\n';
     } else if (textType === 'ms') {
-      header += '    <p><b>' + this.publicationTitle + ' (' + (typeTitle ? typeTitle : ($localize`:@@Read.Manuscripts.Title:Manuskript`).toLocaleLowerCase()) + ')</b></p>\n';
+      header += '    <p><b>' + $localize`:@@Read.Manuscripts.Title:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
     } else {
       header += '    <p><b>' + this.publicationTitle + '</b></p>\n';
     }
