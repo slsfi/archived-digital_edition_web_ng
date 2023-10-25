@@ -19,7 +19,7 @@ ion-col {
     width: 100%;
 
     &:hover {
-      border-color: var(--button-background-color);
+      border-color: var(--outline-button-color);
       box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.2) 0px 2px 2px 0px, rgba(0, 0, 0, 0.2) 0px 1px 5px 0px;
     }
   }
@@ -30,7 +30,7 @@ ion-col {
   }
 
   h2 {
-    border-top: 1px solid var(--button-background-color);
+    border-top: 1px solid var(--outline-button-color);
     font-size: 1.125rem;
     line-height: 1.35;
     margin: 0.5rem 0 0 0;

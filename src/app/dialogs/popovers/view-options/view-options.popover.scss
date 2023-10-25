@@ -39,7 +39,7 @@ ion-button.close {
 
 ion-button.text-button {
 	--background: transparent;
-	--background-hover: var(--button-background-color);
+	--background-hover: var(--outline-button-color);
 	--background-hover-opacity: 0.2;
 	--box-shadow: none;
 	--color: #000;
@@ -54,7 +54,7 @@ ion-button.text-button::part(native) {
 	width: 3.25rem;
 }
 ion-button.text-button.selected-font-size {
-	--background: var(--button-background-color);
+	--background: var(--outline-button-color);
 	--color: #fff;
 }
 ion-button.text-xsmall {

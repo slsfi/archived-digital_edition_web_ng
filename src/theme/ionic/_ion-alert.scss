@@ -1,8 +1,8 @@
 // Style for alert where a different variant, manuscript or facsimile text can be selected.
 ion-alert.custom-select-alert .alert-wrapper {
+    border-radius: var(--corner-border-radius);
     min-width: 300px;
     max-width: 500px;
-    border-radius: var(--corner-border-radius);
   
     .alert-title {
         font-size: 1.125rem;
@@ -21,7 +21,7 @@ ion-alert.custom-select-alert .alert-wrapper {
   
     button.alert-radio-button,
     button.alert-checkbox-button {
-        --color-checked: var(--button-background-color);
+        --color-checked: var(--outline-button-color);
         contain: content;
         font-size: 1rem;
         height: auto;
@@ -36,15 +36,15 @@ ion-alert.custom-select-alert .alert-wrapper {
         &[aria-checked="true"] {
             .alert-radio-icon,
             .alert-checkbox-icon {
-                border-color: var(--button-background-color);
+                border-color: var(--outline-button-color);
             }
             .alert-radio-inner,
             .alert-checkbox-icon {
-                background-color: var(--button-background-color);
+                background-color: var(--outline-button-color);
             }
             .alert-radio-label,
             .alert-checkbox-label {
-                color: var(--button-background-color);
+                color: var(--outline-button-color);
             }
         }
     }
@@ -53,12 +53,12 @@ ion-alert.custom-select-alert .alert-wrapper {
         align-items: center;
 
         .alert-button {
-            color: var(--button-background-color);
+            color: var(--outline-button-color);
         }
 
         .alert-button-highlighted {
-            color: var(--button-text-color);
             background-color: var(--button-background-color);
+            color: var(--button-text-color);
             height: 1.875rem;
         }
     }

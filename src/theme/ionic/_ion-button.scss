@@ -16,19 +16,20 @@ ion-button.button.circular-icon-button {
   --background: transparent;
   --background-hover: var(--button-background-color);
   --background-focused: var(--button-background-color);
-  --border-color: var(--button-background-color);
+  --border-color: var(--outline-button-color);
   --border-width: 1px;
-  --color: var(--button-background-color);
+  --color: var(--outline-button-color);
 }
 ion-button.button.circular-icon-button {
   --border-radius: 1.25rem;
   --padding-start: 0.25rem;
   --padding-end: 0.25rem;
-}
-ion-button.button.circular-icon-button ion-icon {
-  --color: var(--button-background-color);
-  --ionicon-stroke-width: 48px;
-  font-size: 1.25rem;
+
+  ion-icon {
+    --color: var(--outline-button-color);
+    --ionicon-stroke-width: 48px;
+    font-size: 1.25rem;
+  }
 }
 ion-button.button.close {
   --background-hover: transparent;
