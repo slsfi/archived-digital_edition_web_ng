@@ -31,6 +31,7 @@ export class ManuscriptsComponent implements OnInit {
   selectedManuscript: any = undefined;
   showNormalizedMs: boolean = false;
   showOpenLegendButton: boolean = false;
+  showTitle: boolean = true;
   text: SafeHtml = '';
   textLanguage: string = '';
 
@@ -44,6 +45,7 @@ export class ManuscriptsComponent implements OnInit {
     public viewOptionsService: ViewOptionsService
   ) {
     this.showOpenLegendButton = config.component?.manuscripts?.showOpenLegendButton ?? false;
+    this.showTitle = config.component?.manuscripts?.showTitle ?? true;
   }
 
   ngOnInit() {

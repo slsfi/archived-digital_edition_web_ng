@@ -1,8 +1,8 @@
 <ion-spinner *ngIf="!text" class="loading" name="crescent"></ion-spinner>
 
 <div *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
-  <h3 [innerHTML]="selectedManuscript.name"></h3>
-  <div class="flex-buttons">
+  <h3 *ngIf="showTitle" [innerHTML]="selectedManuscript.name"></h3>
+  <div *ngIf="manuscripts.length>1 || showOpenLegendButton" class="flex-buttons">
     <ion-button *ngIf="manuscripts.length>1" class="custom-button" (click)="selectManuscript()" i18n="@@Read.Manuscripts.ChangeManuscript">Byt manuskript</ion-button>
     <!--
     <ion-button fill="outline" class="custom-outline-button" (click)="openFacsimileMan($event, selectedManuscript)" i18n="@@Read.Manuscripts.OpenFacsimile">Öppna faksimil</ion-button>

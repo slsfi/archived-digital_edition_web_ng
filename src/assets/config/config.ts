@@ -686,8 +686,8 @@ export const config_soderholm: Config = {
       }
     },
     manuscripts: {
-      showTitle: true,
-      showOpenLegendButton: false
+      showOpenLegendButton: false,
+      showTitle: false
     },
     topMenu: {
       showAboutButton: true,
@@ -1478,7 +1478,8 @@ export const config_mechelin: Config = {
       }
     },
     manuscripts: {
-      showOpenLegendButton: false
+      showOpenLegendButton: false,
+      showTitle: false
     },
     topMenu: {
       showAboutButton: true,
