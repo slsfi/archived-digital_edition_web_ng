@@ -145,7 +145,7 @@ ion-fab.column-options {
 }
 
 ion-segment {
-  --background: var(--button-background-color);
+  --background: var(--outline-button-color);
   border-radius: 0;
   justify-content: center;
   margin: 0 auto;
@@ -158,7 +158,7 @@ ion-segment-button {
   font-size: 0.875rem;
 }
 ion-segment-button:not(.segment-button-checked) {
-  color: var(--button-text-color);
+  color: #fff;
 }
 
 // Adjust padding and background color of text and facsimile columns in mobile mode

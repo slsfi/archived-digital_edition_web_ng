@@ -169,9 +169,9 @@ h1.page-title {
         margin: 0.125rem 0 0 1.25rem;
 
         ion-fab-button {
-            --background: var(--button-background-color, var(--primary-color));
+            --background: var(--fab-button-primary-background-color, var(--primary-color));
             --box-shadow: none;
-            --color: var(--button-text-color, var(--text-color-on-primary-color-background));
+            --color: var(--fab-button-primary-icon-color, var(--text-color-on-primary-color-background));
             font-size: 1.125rem;
             margin-right: 0;
 

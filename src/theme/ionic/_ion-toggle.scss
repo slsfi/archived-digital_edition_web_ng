@@ -1,5 +1,5 @@
 ion-toggle {
+    --handle-background-checked: var(--outline-button-color);
     --track-background-checked: rgba(var(--button-background-color-rgb), 0.2);
-    --handle-background-checked: var(--button-background-color);
     font-size: 1rem;
 }

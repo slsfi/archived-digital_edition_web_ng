@@ -1,6 +1,6 @@
 ion-radio {
-    --color-checked: var(--button-background-color);
+    --color-checked: var(--outline-button-color);
 }
 ion-item.item-radio-checked {
-    --color: var(--button-background-color);
+    --color: var(--outline-button-color);
 }

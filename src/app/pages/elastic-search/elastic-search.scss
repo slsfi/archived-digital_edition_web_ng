@@ -59,7 +59,7 @@ h1.page-title {
 
 .active-filters-row {
   align-items: flex-start;
-  border: 1px solid var(--button-background-color);
+  border: 1px solid var(--outline-button-color);
   border-radius: 3px;
   display: flex;
   font-size: 1rem;
@@ -152,7 +152,7 @@ h1.page-title {
       transition: border-color 0.4s;
 
       &:hover {
-        border-color: var(--button-background-color);
+        border-color: var(--outline-button-color);
       }
 
       h3 {
@@ -171,7 +171,7 @@ h1.page-title {
         width: 100%;
 
         &:hover {
-          color: var(--button-background-color);
+          color: var(--outline-button-color);
         }
 
         ion-icon {
@@ -213,18 +213,18 @@ h1.page-title {
       }
 
       ion-checkbox {
-        --border-color-checked: var(--button-background-color);
+        --border-color-checked: var(--outline-button-color);
         --checkbox-background: transparent;
-        --checkbox-background-checked: var(--button-background-color);
-        --checkmark-color: var(--button-text-color);
+        --checkbox-background-checked: var(--outline-button-color);
+        --checkmark-color: #fff;
         --transition: none;
         display: block;
         margin: 0;
 
         &:hover {
-          --border-color: var(--button-background-color);
+          --border-color: var(--outline-button-color);
           --checkbox-background: #fff;
-          color: var(--button-background-color);
+          color: var(--outline-button-color);
         }
       }
 
@@ -264,8 +264,8 @@ h1.page-title {
 
   ion-select.sort-select {
     --border-color: var(--elastic-search-filter-border-color);
-    --highlight-color-focused: var(--button-background-color);
-    --highlight-color-valid: var(--button-background-color);
+    --highlight-color-focused: var(--outline-button-color);
+    --highlight-color-valid: var(--outline-button-color);
     display: none;
     min-width: 130px;
     margin-left: auto;
@@ -273,7 +273,7 @@ h1.page-title {
     min-height: 3.125rem;
 
     &:hover {
-      --border-color: var(--button-background-color);
+      --border-color: var(--outline-button-color);
     }
 
     &.show-sort-options {

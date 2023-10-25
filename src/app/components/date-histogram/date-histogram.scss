@@ -18,11 +18,11 @@
   }
 
   ion-datetime-button::part(native):hover {
-    border-color: var(--button-background-color);
+    border-color: var(--outline-button-color);
   }
 
   ion-datetime-button.date-active::part(native) {
-    color: var(--button-background-color) !important;
+    color: var(--outline-button-color) !important;
   }
 
   ion-datetime-button.blank::part(native) {
