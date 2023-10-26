@@ -38,7 +38,7 @@
 
   .current-year-range {
     align-items: center;
-    border: 1px solid var(--elastic-search-filter-border-color);
+    border: 1px solid var(--outline-frame-border-color);
     border-radius: 3px;
     display: flex;
     justify-content: center;
@@ -92,7 +92,7 @@
 }
 
 .yearBar {
-  background-color: var(--elastic-search-date-histogram-year-bar-color);
+  background-color: var(--date-histogram-year-bar-color);
   height: 100%;
   position: relative;
   width: 0;
@@ -110,11 +110,11 @@
 }
 
 .year:hover {
-  background-color: var(--elastic-search-date-histogram-year-hover-color);
+  background-color: var(--date-histogram-year-hover-color);
 }
 
 .year:hover > .yearBar, .yearBarInRange {
-  background-color: var(--elastic-search-date-histogram-year-in-range-color);
+  background-color: var(--date-histogram-year-in-range-color);
 }
 
 .year:hover .yearDetails {

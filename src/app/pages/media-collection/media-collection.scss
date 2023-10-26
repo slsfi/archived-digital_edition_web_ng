@@ -87,7 +87,7 @@ a.back-link {
   max-width: 1000px;
 
   ion-select {
-    --border-color: var(--elastic-search-filter-border-color);
+    --border-color: var(--outline-frame-border-color);
     --highlight-color-focused: var(--outline-button-color);
     --highlight-color-valid: var(--outline-button-color);
     flex-grow: 1;

@@ -1,0 +1,6 @@
+// CSS variables scoped to <page-introduction> by import
+
+:host {
+  --intro-toc-background-color: var(--secondary-color);
+  --intro-toc-text-color:       #000;
+}

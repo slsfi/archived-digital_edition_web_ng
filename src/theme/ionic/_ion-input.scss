@@ -1,8 +1,8 @@
 ion-input.image-nr-input.input-fill-solid {
-    --background: var(--facsimile-column-page-number-wrapper-background-color) !important;
+    --background: var(--tertiary-color) !important;
     --border-radius: 0;
-    --highlight-color-focused: var(--facsimile-column-highlight-color);
-    --highlight-color-valid: var(--facsimile-column-highlight-color);
+    --highlight-color-focused: var(--outline-button-color);
+    --highlight-color-valid: var(--outline-button-color);
     display: flex;
     font-size: initial;
     
@@ -25,13 +25,13 @@ ion-input.image-nr-input.input-fill-solid {
             background-color: #fafafa;
         }
         .native-input:focus {
-            border-color: var(--facsimile-column-highlight-color);
+            border-color: var(--outline-button-color);
         }
     }
   
     .input-bottom {
         font-size: initial;
-        background-color: var(--facsimile-column-page-number-wrapper-background-color);
+        background-color: var(--tertiary-color);
         padding: 0;
         align-items: center;
         border-bottom: 1px solid var(--border-color);

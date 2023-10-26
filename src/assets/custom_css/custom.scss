@@ -1,5 +1,36 @@
 /*
   In this file you can add:
-    1. Project specific styles that can expand or override the defaults.
-    2. Override the CSS variables defined in _variables.scss.
+    1. Project specific styles that can expand or override
+       the default styles.
+    2. Overrides to the global CSS variables defined in
+       /src/theme/_variables.scss.
+    3. Overrides to the scoped CSS variables defined in the
+       various files in /src/theme/scoped-variables.
+
+  To override global CSS variables, wrap them in the :root selector.
+  Example of overriding global CSS variables:
+
+  :root {
+    --primary-color: #281f47;
+  }
+
+  To override scoped CSS variables, wrap them in the appropriate
+  page/component selectors. You must also add the !important
+  property to the variable values for these variables to take
+  precedence. Example of overriding a scoped CSS variable:
+
+  page-elastic-search {
+    --inl-color: #000 !important;
+  }
+
+  Instead of overriding CSS variables in this file you can also
+  directly edit the variable values in /src/theme/_variables.scss
+  and in the various files in /src/theme/scoped-variables.
+  
+  The pros of this approach are that the size of the CSS bundle
+  of the website becomes slightly smaller, since CSS variables
+  with the same property names are not defined twice. This
+  increases page load speeds. The cons are that the risk for
+  merge conflicts between the base app and the project app increases
+  if the CSS variables are modified in the base app.
 */

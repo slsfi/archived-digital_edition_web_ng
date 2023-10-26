@@ -4,5 +4,5 @@ ion-datetime.ion-color-primary {
 }
 
 ion-datetime::part(wheel-item active) {
-    color: var(--elastic-search-date-histogram-year-in-range-color);
+    color: var(--date-histogram-year-in-range-color);
 }

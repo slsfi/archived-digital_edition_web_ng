@@ -1,35 +1,24 @@
 :root {
-  // CSS VARIABLES
+  // GLOBAL CSS VARIABLES
 
   // Base colors
-  --primary-color:                              #4F7A8C;
+  --primary-color:                                #4F7A8C;
   --primary-color-rgb:                            83, 132, 148;
-  --secondary-color:                            #e6e1d8;
-  --text-color-on-primary-color-background:     #fff;
-  --text-color-on-secondary-color-background:   #000;
+  --secondary-color:                              #e6e1d8;
+  --tertiary-color:                               var(--main-background-color); // Must be a light color: text color will be dark on this as a background
+  --text-color-on-primary-color-background:       #fff;
+  --text-color-on-secondary-color-background:     #000;
   --text-color-on-secondary-color-background-rgb: 0, 0, 0;
-  --default-link-color:                         #538494;
-  --main-background-color:                      #ecebe4;
-  --route-loading-progress-bar-color:           rgba(255, 255, 255, 0.8);
+  --default-link-color:                           #004ba7;
+  --main-background-color:                        #ecebe4;
+  --route-loading-progress-bar-color:             rgba(255, 255, 255, 0.8);
 
-  // Semantic code colors
-  --persName-color:                #f9e0bf;
-  --placeName-color:               #dee8ca;
-  --workTitle-color:               #f7efba;
-  --changes-color:                 #ccc;
-  --normalisations-color:          #e6e6e6;
-  --abbreviations-color:           #ffe2fa;
-  --pageBreakOriginal-color:       #c34be1;
-  --pageBreakEdition-color:        #d58205;
-
-  // Variant category colors
-  --lemma-identical-variant-background-color: #fff1b9;
-  --orthographic-variant-background-color:    #eee6ff;
-  --interpunction-variant-background-color:   #dbf0ec;
-  --substantial-variant-background-color:     #fee0e2;
-  --error-variant-background-color:           #f3c598;
-  --typographic-variant-background-color:     #f6e65b;
-  --variant-background-color:                 #c5c5c5;
+  // Top-menu
+  --top-menu-height:                                        62px;
+  --top-menu-toolbar-bottom-border:                         0;
+  --top-menu-toolbar-button-icons-font-size:                1.875rem;
+  --top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
+  --top-menu-logo-height:                                   56px;
 
   // TOC, i.e. the left navigation
   --toc-text-color:                         #000;
@@ -51,53 +40,23 @@
   --toc-sort-select-highlight-color:          var(--primary-color);
   --toc-sort-select-wrapper-background-color: transparent;
 
-  // Collection introduction page
-  --page-introduction-separate-toc-background-color:        var(--secondary-color);
-  --page-introduction-separate-toc-text-color:            #000;
+  // Collections
+  --collection-column-background-color: #fafafa;
 
-  // Collection text page
-  --page-text-columns-header-background-color:              var(--secondary-color);
-  --page-text-columns-background-color:                   #fafafa;
-  --page-text-add-column-text-color:                      #000;
-  --page-text-add-column-background-color:                  var(--secondary-color);
-
-  // Top-menu
-  --top-menu-height:                                        62px;
-  --top-menu-toolbar-bottom-border:                         0;
-  --top-menu-toolbar-button-icons-font-size:                1.875rem;
-  --top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
-  --top-menu-logo-height:                                   56px;
-
-  // Text-changer in read-page
-  --text-changer-background-color-mobile-mode:            #d8d8d8;
-  --text-changer-text-color-mobile-mode:                  #000;
-
-  // Facsimile column in read-page
-  --facsimile-column-page-number-wrapper-background-color:  var(--main-background-color);
-  --facsimile-column-highlight-color:                       var(--fab-button-primary-background-color);
-
-  // Elastic search
-  --elastic-search-filter-border-color:                     #ccc;
-  --elastic-search-hititem-border-color:                    #ccc;
-  --elastic-search-hititem-hover-background-color:          #fff;
-  --elastic-search-hititem-hover-border-color:                var(--primary-color);
-  --elastic-search-search-match-highlight-background-color: #a5d7a5;
-  --elastic-search-search-match-highlight-text-color:       #000;
-  --elastic-search-date-histogram-year-bar-color:             var(--primary-color);
-  --elastic-search-date-histogram-year-hover-color:           var(--secondary-color);
-  --elastic-search-date-histogram-year-in-range-color:      #751e22;
-
-  // Indices of persons, places, keywords and works
-  --index-list-item-background-color:             transparent;
-  --index-list-item-hover-background-color:     #f5f5f5;
-  --index-list-item-border-color:               #ccc;
-  --index-list-heading-background-color:        #e0e0e0;
-  --index-list-heading-border-color:            #979797;
+  // Semantic code colors
+  --persName-color:          #f9e0bf;
+  --placeName-color:         #dee8ca;
+  --workTitle-color:         #f7efba;
+  --changes-color:           #ccc;
+  --normalisations-color:    #e6e6e6;
+  --abbreviations-color:     #ffe2fa;
+  --pageBreakOriginal-color: #c34be1;
+  --pageBreakEdition-color:  #d58205;
 
   // Info overlay
 	--infoOverlay-background-color:               #333;
 	--infoOverlay-text-color:                     #e3e3e3;
-  --info-overlay-link-to-reference-color:       #7cc6de;
+  --info-overlay-link-to-reference-color:       #84cce3;
 
   // Ion-modal
   --ion-modal-item-background-color:              var(--main-background-color);
@@ -134,23 +93,14 @@
   --font-stack-tei-editorial-note:   "Helvetica Neue", "Arial Nova", Helvetica,
                                      Arial, sans-serif;
 
-  // Background color of search match highlighting. Text color on the background
-  // is #222 (almost black).
-  --search-match-background-color: #a5d7a5;
-
-  // Colors for different text types, only used in page-elastic-search
-  --est-color:       #0a2a80;
-  --com-color:       #980202;
-  --ms-color:        #69863a;
-  --inl-color:       #812b5d;
-  --tit-color:       #5e1a06;
-  --fore-color:      #113c49;
-  --var-color:       #803fa7;
+  // Misc.
+  --outline-frame-border-color:    #ccc;
+  --search-match-background-color: #a5d7a5; // Background color of search match highlighting. Text color on the background is #222 (almost black).
 
 
   // Override global Ionic CSS variables
-  --ion-font-family: var(--font-stack-app-base);
   --ion-backdrop-opacity: 0.3;
+  --ion-font-family:      var(--font-stack-app-base);
 }
 
 

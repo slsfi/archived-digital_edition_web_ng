@@ -139,8 +139,8 @@ ion-content.epub-ion-content::part(scroll) {
   }
 
   &.mobile-mode-epub {
-    background-color: var(--text-changer-background-color-mobile-mode);
-    color: var(--text-changer-text-color-mobile-mode);
+    background-color: #cbcbcb;
+    color: #000;
     height: 46px;
     justify-content: space-between;
     padding: 0;
