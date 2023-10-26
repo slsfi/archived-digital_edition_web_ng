@@ -111,7 +111,7 @@
 
       <ng-container *ngIf="(manuscriptsList$ | async) as manuscripts">
         <div *ngIf="readTextsMode && downloadFormatsMs.length" class="dlt-group">
-          <h3 i18n="@@Read.Manuscripts.Title">Manuskript</h3>
+          <h3 i18n="@@manuscripts">Manuskript</h3>
           <ng-container *ngFor="let ms of manuscripts; index as i">
             <h4 *ngIf="manuscripts.length > 1" [innerHTML]="ms.name"></h4>
             <ion-buttons class="download-buttons">

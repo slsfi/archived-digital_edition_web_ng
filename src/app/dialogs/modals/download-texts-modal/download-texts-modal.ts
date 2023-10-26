@@ -511,7 +511,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     header += '    .print-header { padding: 1px; margin-bottom: 2rem; background-color: #ededed; }\n';
     header += '    .print-header button { display: block; font-size: 1.0625rem; font-weight: 600; text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35); text-transform: uppercase; color: #fff; background-color: #2a75cb; border-radius: 0.4em; padding: 0.5em 1.3em; margin: 2em auto; cursor: pointer; transition: all 0.2s; line-height: 1.5; }\n';
     header += '    .print-header button:hover, .print-header button:focus { background-color: #12447e; }\n';
-    header += '    .text-metadata { padding: 0.625rem; margin: 0 0 2.5rem 0; border: 1px solid #000; }\n';
+    header += '    .text-metadata { padding: 0.625rem !important; margin: 0 0 2.5rem 0; border: 1px solid #000; }\n';
     header += '    .text-metadata a { color: #000 !important; text-decoration: none !important; }\n';
     header += '    .text-metadata p { padding-left: 1em; text-indent: 0 !important; line-height: 1.35em !important; }\n';
     header += '    .text-metadata p.apart { margin-top: 1em !important; }\n';
@@ -562,7 +562,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     } else if (textType === 'com') {
       header += '    <p><b>' + this.commentTitle + ' ' + this.publicationTitle + '</b></p>\n';
     } else if (textType === 'ms') {
-      header += '    <p><b>' + $localize`:@@Read.Manuscripts.Title:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
+      header += '    <p><b>' + $localize`:@@manuscripts:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
     } else {
       header += '    <p><b>' + this.publicationTitle + '</b></p>\n';
     }
