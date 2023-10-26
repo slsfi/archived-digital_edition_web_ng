@@ -1076,11 +1076,6 @@
         <source>Visa ändringar inarbetade</source>
       </segment>
     </unit>
-    <unit id="Read.Manuscripts.Title">
-      <segment>
-        <source>Manuskript</source>
-      </segment>
-    </unit>
     <unit id="Read.Metadata.AddButtonText">
       <segment>
         <source>Metadata</source>
