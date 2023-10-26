@@ -1290,12 +1290,6 @@
         <target>Näytä muutokset toteutettuina</target>
       </segment>
     </unit>
-    <unit id="Read.Manuscripts.Title">
-      <segment state="initial">
-        <source>Manuskript</source>
-        <target>Käsikirjoitus</target>
-      </segment>
-    </unit>
     <unit id="Read.Metadata.AddButtonText">
       <segment state="initial">
         <source>Metadata</source>
