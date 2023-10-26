@@ -10,7 +10,7 @@ ion-toolbar.secondary {
         letter-spacing: normal;
 
         &:hover {
-            --opacity: var(--opacity-hover);
+            --opacity: 0.6;
         }
     }
 
@@ -25,7 +25,7 @@ ion-toolbar.secondary {
             transition: color 0.2s;
 
             &:hover {
-                color: rgba(var(--text-color-on-secondary-color-background-rgb), var(--opacity-hover));
+                color: rgba(var(--text-color-on-secondary-color-background-rgb), 0.6);
             }
         }
 

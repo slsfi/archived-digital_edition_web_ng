@@ -1,9 +1,9 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * This file is used as an entry point to import CSS/Sass files with styles
- * that should be applied globally. These styles are for the entire app and
- * not just one component.
+/**
+ ** App Global CSS
+ ** ----------------------------------------------------------------------------
+ ** This file is used as an entry point to import CSS/Sass files with styles
+ ** that should be applied globally. These styles are for the entire app and
+ ** not just one component.
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -16,7 +16,10 @@
 @import "~@ionic/angular/css/typography.css";
 
 
-/* Import font files using @font-face rules */
+/**
+ * Import font files using @font-face rules. Comment out the import lines of
+ * the font-families you don’t use in your project.
+ */
 @import "./theme/font-face/roboto";
 @import "./theme/font-face/source-serif";
 @import "./theme/font-face/mulish";

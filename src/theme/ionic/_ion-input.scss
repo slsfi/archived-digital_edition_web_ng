@@ -21,7 +21,7 @@ ion-input.image-nr-input.input-fill-solid {
             padding: 5px 8px;
             border: 1px solid #666;
             margin: 8px 0;
-            border-radius: var(--corner-border-radius);
+            border-radius: 3px;
             background-color: #fafafa;
         }
         .native-input:focus {
@@ -54,14 +54,14 @@ ion-modal {
             --border-style: none;
     
             .input-wrapper {
-                border-top-left-radius: var(--corner-border-radius);
-                border-bottom-left-radius: var(--corner-border-radius);
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
             }
     
             .input-bottom {
                 border-bottom: none;
-                border-top-right-radius: var(--corner-border-radius);
-                border-bottom-right-radius: var(--corner-border-radius);
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
             }
         }
     }

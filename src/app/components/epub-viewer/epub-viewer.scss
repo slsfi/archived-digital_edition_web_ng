@@ -150,7 +150,7 @@ ion-content.epub-ion-content::part(scroll) {
       --background-hover: transparent !important;
       --box-shadow: none;
       --color: var(--text-color-on-secondary-color-background);
-      --color-hover: rgba(var(--text-color-on-secondary-color-background-rgb), var(--opacity-hover));
+      --color-hover: rgba(var(--text-color-on-secondary-color-background-rgb), 0.6);
       --ripple-color: transparent;
       --transition: color 0.2s;
       letter-spacing: normal;
@@ -289,7 +289,7 @@ ion-content.epub-ion-content::part(scroll) {
     --ripple-color: transparent;
 
     &:hover {
-      opacity: var(--opacity-hover);
+      opacity: 0.6;
     }
   }
 

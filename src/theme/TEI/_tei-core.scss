@@ -1251,8 +1251,8 @@ div.tei {
         padding: 3px;
         margin-left: 0.25em;
         border: 1px solid rgb(152, 0, 0);
-        background: var(--tooltip-background-color);
-        border-radius: var(--corner-border-radius);
+        background: var(--page-text-columns-background-color);
+        border-radius: 3px;
         box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     }
     span.extVariants.show-extVariants {
@@ -1980,9 +1980,9 @@ styles from div.tei
 */
 .tei.toolTip {
     z-index: 1001;
-    background: var(--tooltip-background-color);
+    background: var(--page-text-columns-background-color);
     border: 1px solid #222;
-    border-radius: var(--corner-border-radius);
+    border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     padding: 0.5rem 0.625rem !important;
     white-space: normal;
@@ -2084,7 +2084,7 @@ from div.tei
     text-align: left;
     line-height: 1.4em;
     overflow: auto;
-    border-radius: var(--corner-border-radius) var(--corner-border-radius) 0 0;
+    border-radius: 3px 3px 0 0;
     font-family: var(--font-stack-app-base);
 
     .infoOverlayHeader {
@@ -2109,11 +2109,11 @@ from div.tei
             cursor: pointer;
             float: right;
             opacity: 1;
-            transition: var(--opacity-hover-transition);
+            transition: opacity 0.2s;
             font-size: 1.5625rem;
         }
         .infoOverlayButton:hover {
-            opacity: var(--opacity-hover);
+            opacity: 0.6;
         }
     }
     .infoOverlayContent {
@@ -2673,10 +2673,10 @@ page-introduction {
     #TOC a {
         text-decoration: none;
         color: var(--page-introduction-separate-toc-text-color);
-        transition: var(--opacity-hover-transition);
+        transition: opacity 0.2s;
     }
     #TOC a:hover {
-        opacity: var(--opacity-hover);
+        opacity: 0.6;
     }
     
     #TOC p {

@@ -1,6 +1,6 @@
 ion-datetime.ion-color-primary {
     --ion-color-base: var(--button-background-color) !important;
-    --ion-color-base-rgb: var(--button-background-color-rgb) !important;
+    --ion-color-base-rgb: var(--primary-color-rgb) !important;
 }
 
 ion-datetime::part(wheel-item active) {

@@ -111,8 +111,8 @@
 
     button {
       &:hover {
-        opacity: var(--opacity-hover);
-        transition: var(--opacity-hover-transition);
+        opacity: 0.6;
+        transition: opacity 0.2s;
       }
 
       > span {
