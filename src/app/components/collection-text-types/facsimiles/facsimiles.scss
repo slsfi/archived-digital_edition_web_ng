@@ -41,7 +41,7 @@
     }
 
     &.mobile-mode {
-        background-color: var(--collection-column-background-color);
+        background-color: var(--collection-column-background-color, #fafafa);
         height: calc(100% - 35px);
         margin: 0 auto;
         max-width: 710px;

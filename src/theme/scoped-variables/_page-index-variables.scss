@@ -1,4 +1,11 @@
-// CSS variables scoped to <page-index> by import
+/*
+    CSS variables scoped to <page-index> by import.
+
+    To override any of these variables in custom.scss you must use
+    this selector for defining the scope:
+
+    page-index[class] { }
+*/
 
 :host {
     // Indices of persons, places, keywords and works

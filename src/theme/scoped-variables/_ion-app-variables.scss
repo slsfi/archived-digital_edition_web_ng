@@ -1,0 +1,17 @@
+/*
+  CSS variables scoped to <ion-app> by import.
+
+  To override any of these variables in custom.scss you must use
+  this selector for defining the scope:
+
+  ion-app[class] { }
+*/
+
+ion-app {
+  // Top-menu variables
+  --top-menu-height:                         62px;
+  --top-menu-toolbar-bottom-border:          0;
+  --top-menu-toolbar-button-icons-font-size: 1.875rem;
+  --top-menu-button-filter:                  drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
+  --top-menu-logo-height:                    56px;
+}

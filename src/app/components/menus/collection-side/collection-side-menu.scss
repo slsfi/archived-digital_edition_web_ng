@@ -59,5 +59,11 @@
 
 .sort-select {
     --background: #fafafa;
-    --highlight-color-focused: var(--toc-sort-select-highlight-color);
+    --border-color: var(--main-background-accent-color);
+    --highlight-color-focused: var(--outline-button-color);
+    --highlight-color-valid: var(--outline-button-color);
+
+    &:hover {
+        --border-color: var(--outline-button-color);
+    }
 }

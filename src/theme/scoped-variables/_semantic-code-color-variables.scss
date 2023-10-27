@@ -1,0 +1,23 @@
+/*
+    CSS variables scoped to <page-introduction>, <page-text> and
+    <popover-view-options> by import.
+
+    To override any of these variables in custom.scss you must use
+    these selectors for defining the scope:
+
+    page-introduction[class],
+    page-text[class],
+    popover-view-options[class] { }
+*/
+
+:host {
+    // Semantic code colors
+    --abbreviations-color:     #ffe2fa;
+    --changes-color:           #ccc;
+    --normalisations-color:    #e6e6e6;
+    --pageBreakEdition-color:  #8f6b28;
+    --pageBreakOriginal-color: #b32fa0;
+    --persName-color:          #f9e0bf;
+    --placeName-color:         #dee8ca;
+    --workTitle-color:         #f7efba;
+}

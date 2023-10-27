@@ -27,7 +27,7 @@ ul {
         }
 
         + li {
-            border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
+            border-top: 1px solid var(--main-background-accent-color);
         }
 
         button {
@@ -41,7 +41,7 @@ ul {
             width: 100%;
 
             &:hover {
-                color: var(--default-link-color);
+                color: var(--outline-button-color);
             }
 
             ion-icon.toggle-icon {
@@ -58,7 +58,7 @@ ul {
         }
 
         ul {
-            border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
+            border-top: 1px solid var(--main-background-accent-color);
             margin-top: 0.5rem;
             padding: 0.5rem 0 0 1.5rem;
 

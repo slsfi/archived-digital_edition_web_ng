@@ -57,8 +57,8 @@ ion-alert.custom-select-alert .alert-wrapper {
         }
 
         .alert-button-highlighted {
-            background-color: var(--button-background-color);
-            color: var(--button-text-color);
+            background-color: var(--outline-button-color);
+            color: #fff;
             height: 1.875rem;
         }
     }

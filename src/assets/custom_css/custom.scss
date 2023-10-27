@@ -1,36 +1,62 @@
 /*
-  In this file you can add:
-    1. Project specific styles that can expand or override
-       the default styles.
-    2. Overrides to the global CSS variables defined in
-       /src/theme/_variables.scss.
-    3. Overrides to the scoped CSS variables defined in the
-       various files in /src/theme/scoped-variables.
+  INSTRUCTIONS FOR USING THIS FILE
+
+  In this file you can:
+
+  1. Add project specific styles that can expand or override
+     the default styles.
+  2. Override the global CSS variables defined in
+     /src/theme/_variables.scss.
+  3. Override the scoped CSS variables defined in the various
+     files in /src/theme/scoped-variables.
 
   To override global CSS variables, wrap them in the :root selector.
-  Example of overriding global CSS variables:
+  Example of overriding a global CSS variable:
 
   :root {
     --primary-color: #281f47;
   }
 
   To override scoped CSS variables, wrap them in the appropriate
-  page/component selectors. You must also add the !important
-  property to the variable values for these variables to take
-  precedence. Example of overriding a scoped CSS variable:
+  page/component element selectors. The required selectors are listed
+  in the files in /src/theme/scoped-variables. You must also either
+  add the !important property to the variable values, or increase the
+  specificity of the selector by adding the [class] attribute selector
+  directly after the element selector. Otherwise these variables won’t
+  take precedence. Examples of overriding scoped CSS variables:
+
+  page-elastic-search[class] {
+    --inl-color: #000;
+  }
+
+  or (less preferred):
 
   page-elastic-search {
     --inl-color: #000 !important;
   }
 
-  Instead of overriding CSS variables in this file you can also
+  Notice that some scoped CSS variables are used in several components,
+  so you need to add all of their element names as selectors. Example:
+
+  page-introduction[class],
+  page-text[class],
+  popover-view-options[class] {
+    --persName-color: #f1adff;
+  }
+
+  Instead of using custom.scss to override CSS variables you can also
   directly edit the variable values in /src/theme/_variables.scss
   and in the various files in /src/theme/scoped-variables.
   
-  The pros of this approach are that the size of the CSS bundle
-  of the website becomes slightly smaller, since CSS variables
-  with the same property names are not defined twice. This
-  increases page load speeds. The cons are that the risk for
-  merge conflicts between the base app and the project app increases
-  if the CSS variables are modified in the base app.
+  The pros of this approach are that the size of the CSS bundle of the
+  website becomes slightly smaller, since CSS variables with the same
+  property names are not defined twice. This speeds up page loading a bit.
+  The cons are that the risk for merge conflicts between the base app
+  and the project app increases if the CSS variables are modified in the
+  base app.
+
+  If you directly edit /src/theme/_variables.scss or the files in
+  /src/theme/scoped-variables it’s recommended that you leave the default
+  values of the variables as comments at the end of edited lines.
+
 */

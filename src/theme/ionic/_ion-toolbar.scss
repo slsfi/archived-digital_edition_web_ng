@@ -1,10 +1,10 @@
 ion-toolbar {
     --background: var(--primary-color);
-    --color: var(--text-color-on-primary-color-background);
+    --color: var(--primary-color-contrast);
 }
 ion-toolbar.secondary {
     --background: var(--secondary-color);
-    --color: var(--text-color-on-secondary-color-background);
+    --color: var(--secondary-color-contrast);
     --min-height: 50px;
     max-height: 50px;
 }

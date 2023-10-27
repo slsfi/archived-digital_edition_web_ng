@@ -1189,49 +1189,49 @@ div.tei {
 
     /* VARIANTS */
     .lemma {
-        background-color: var(--lemma-identical-variant-background-color) !important;
+        background-color: var(--lemma-identical-variant-background-color, #fff1b9) !important;
     }
     div.lemma {
         display: inline-block;
     }
     .variant {
-        background-color: var(--variant-background-color) !important;
+        background-color: var(--variant-background-color, #c5c5c5) !important;
     }
     div.variant {
         display: inline-block;
     }
     .orthographic {
-        background-color:  var(--orthographic-variant-background-color) !important;
+        background-color:  var(--orthographic-variant-background-color, #eee6ff) !important;
     }
     div.orthographic {
         display: inline-block;
     }
     .substantial {
-        background-color: var(--substantial-variant-background-color) !important;
+        background-color: var(--substantial-variant-background-color, #fee0e2) !important;
     }
     div.substantial {
         display: inline-block;
     }
     .interpunction {
-        background-color: var(--interpunction-variant-background-color) !important;
+        background-color: var(--interpunction-variant-background-color, #dbf0ec) !important;
     }
     div.interpunction {
         display: inline-block;
     }
     .identical {
-        background-color: var(--lemma-identical-variant-background-color) !important;
+        background-color: var(--lemma-identical-variant-background-color, #fff1b9) !important;
     }
     div.identical {
         display: inline-block;
     }
     .typographic {
-        background-color: var(--typographic-variant-background-color) !important;
+        background-color: var(--typographic-variant-background-color, #f6e65b) !important;
     }
     div.typographic {
         display: inline-block;
     }
     .error {
-        background-color: var(--error-variant-background-color) !important;
+        background-color: var(--error-variant-background-color, #f3c598) !important;
     }
     div.error {
         display: inline-block;
@@ -1251,7 +1251,7 @@ div.tei {
         padding: 3px;
         margin-left: 0.25em;
         border: 1px solid rgb(152, 0, 0);
-        background: var(--collection-column-background-color);
+        background: var(--collection-column-background-color, #fafafa);
         border-radius: 3px;
         box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     }
@@ -1980,7 +1980,7 @@ styles from div.tei
 */
 .tei.toolTip {
     z-index: 1001;
-    background: var(--collection-column-background-color);
+    background: var(--collection-column-background-color, #fafafa);
     border: 1px solid #222;
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
@@ -2072,14 +2072,14 @@ from div.tei
 .tei.infoOverlay {
     z-index: 1000;
     display: inline-block;
-    background: var(--infoOverlay-background-color);
+    background: var(--info-overlay-background-color);
     margin: 0;
     padding: 0;
     max-height: 50%;
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.4);
     clip-path: inset(-12px -12px 0px -12px);
     white-space: normal;
-    color: var(--infoOverlay-text-color);
+    color: var(--info-overlay-text-color);
     font-size: 1em;
     text-align: left;
     line-height: 1.4em;
@@ -2092,14 +2092,14 @@ from div.tei
         padding: 12px 16px 8px 16px;
         position: sticky;
 	    top: 0;
-        background: var(--infoOverlay-background-color);
+        background: var(--info-overlay-background-color);
 	    width: 100%;
         z-index: 10;
 
         .infoOverlayTitle {
             font-size: 0.7em;
             text-transform: uppercase;
-            color: var(--infoOverlay-text-color);
+            color: var(--info-overlay-text-color);
             display: inline;
             font-weight: 600;
             line-height: 1.2;
@@ -2138,7 +2138,7 @@ from div.tei
             display: inline-block;
             text-indent: 0;
             width: 100%;
-            color: var(--infoOverlay-text-color);
+            color: var(--info-overlay-text-color);
             line-height: 1.4em;
             font-weight: 300;
 
@@ -2200,19 +2200,19 @@ div.tei .tooltip { display: none; }
 .tei                        img.comment { display: none; }
 .tei.show_comments          img.comment { display: inline-block; cursor: pointer; top: 0; }
 
-.tei.show_personInfo        span.person { background-color: var(--persName-color); cursor: pointer; }
+.tei.show_personInfo        span.person { background-color: var(--persName-color, #f9e0bf); cursor: pointer; }
 
-.tei.show_placeInfo         span.placeName { background-color: var(--placeName-color); cursor: pointer; }
+.tei.show_placeInfo         span.placeName { background-color: var(--placeName-color, #dee8ca); cursor: pointer; }
 
-.tei.show_workInfo          span.title { background-color: var(--workTitle-color); cursor: pointer; }
+.tei.show_workInfo          span.title { background-color: var(--workTitle-color, #f7efba); cursor: pointer; }
 
-.tei.show_abbreviations     span.abbr { background-color: var(--abbreviations-color); cursor: pointer; }
+.tei.show_abbreviations     span.abbr { background-color: var(--abbreviations-color, #ffe2fa); cursor: pointer; }
 
 .tei.show_changes           span.corr, 
-.tei.show_changes           span.corr_red { background-color: var(--changes-color); cursor: pointer; }
+.tei.show_changes           span.corr_red { background-color: var(--changes-color, #ccc); cursor: pointer; }
 .tei                        span.corr_hide { display: none; }
 
-.tei.show_normalisations    span.reg.ttNormalisations { background-color: var(--normalisations-color); cursor: pointer; }
+.tei.show_normalisations    span.reg.ttNormalisations { background-color: var(--normalisations-color, #e6e6e6); cursor: pointer; }
 .tei                        span.reg_hide { display: none; }
 .tei.show_normalisations    span.reg_hide,
 .tei.show_changes           span.corr_hide { display: inline; cursor: pointer; }
@@ -2293,11 +2293,11 @@ div.tei.show_pageBreakEdition .pb_edition {
     display: inline;
 }
 div.tei.show_pageBreakOriginal .pb_orig {
-    color: var(--pageBreakOriginal-color);
+    color: var(--pageBreakOriginal-color, #b32fa0);
 }
 div.tei.show_pageBreakEdition .pb_zts,
 div.tei.show_pageBreakEdition .pb_edition {
-    color: var(--pageBreakEdition-color);
+    color: var(--pageBreakEdition-color, #8f6b28);
 }
 
 .tei a.anchor, 

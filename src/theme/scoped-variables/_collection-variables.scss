@@ -1,0 +1,24 @@
+/*
+  CSS variables scoped to <page-foreword>, <page-introduction>,
+  <page-text>, <page-title> and by import.
+
+  To override any of these variables in custom.scss you must use
+  this selector for defining the scope:
+
+  page-foreword[class],
+  page-introduction[class],
+  page-text[class],
+  page-title[class] { }
+*/
+
+:host {
+    // Variables common to several collection pages
+
+    // Collection columns
+    --collection-column-background-color: #fafafa;
+
+    // Info overlay pop-up
+    --info-overlay-background-color:        #333;
+    --info-overlay-text-color:              #e3e3e3;
+    --info-overlay-link-to-reference-color: #84cce3;
+}

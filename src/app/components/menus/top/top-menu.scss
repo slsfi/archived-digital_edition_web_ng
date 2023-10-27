@@ -6,9 +6,9 @@
   height: 100%;
   font-family: var(--font-stack-app-base);
   background-color: var(--primary-color);
-  color: var(--text-color-on-primary-color-background);
+  color: var(--primary-color-contrast);
   contain: layout size;
-  border-bottom: var(--top-menu-toolbar-bottom-border);
+  border-bottom: var(--top-menu-toolbar-bottom-border, 0);
   overflow: visible;
 }
 
@@ -59,7 +59,7 @@ ul {
       position: absolute;
       display: none;
       background: #fafafa;
-      top: calc(100% + calc(var(--top-menu-height) - 100%) / 2);
+      top: calc(100% + calc(var(--top-menu-height, 62px) - 100%) / 2);
       left: 50%;
       transform: translate(-50%, 0);
       margin: 0;
@@ -164,7 +164,7 @@ ul {
 
       img {
         display: block;
-        height: var(--top-menu-logo-height, 60px);
+        height: var(--top-menu-logo-height, 56px);
         width: auto;
       }
 

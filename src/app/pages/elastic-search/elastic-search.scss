@@ -1,4 +1,4 @@
-// Import page specific, non-global CSS variables
+// Import scoped CSS variables
 @import "src/theme/scoped-variables/page-elastic-search-variables.scss";
 
 ion-content {
@@ -135,7 +135,7 @@ h1.page-title {
     }
 
     > h2 {
-      border: 1px solid var(--outline-frame-border-color);
+      border: 1px solid var(--main-background-accent-color);
       border-radius: 3px;
       font-size: 1.125em;
       font-weight: bold;
@@ -149,7 +149,7 @@ h1.page-title {
 
     .fg-wrapper {
       background-color: transparent;
-      border: 1px solid var(--outline-frame-border-color);
+      border: 1px solid var(--main-background-accent-color);
       border-radius: 3px;
       margin: 0 0 0.5em 0;
       transition: border-color 0.4s;
@@ -266,7 +266,7 @@ h1.page-title {
   }
 
   ion-select.sort-select {
-    --border-color: var(--outline-frame-border-color);
+    --border-color: var(--main-background-accent-color);
     --highlight-color-focused: var(--outline-button-color);
     --highlight-color-valid: var(--outline-button-color);
     display: none;

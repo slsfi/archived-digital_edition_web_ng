@@ -1,4 +1,11 @@
-// CSS variables scoped to <page-text> by import
+/*
+    CSS variables scoped to <page-text> by import.
+
+    To override any of these variables in custom.scss you must use
+    this selector for defining the scope:
+
+    page-text[class] { }
+*/
 
 :host {
     // Variant category colors

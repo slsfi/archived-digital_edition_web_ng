@@ -1,4 +1,4 @@
-// Import page specific, non-global CSS variables
+// Import scoped CSS variables
 @import "src/theme/scoped-variables/page-index-variables.scss";
 
 ion-content {
@@ -174,7 +174,7 @@ h1.page-title {
         ion-fab-button {
             --background: var(--fab-button-primary-background-color, var(--primary-color));
             --box-shadow: none;
-            --color: var(--fab-button-primary-icon-color, var(--text-color-on-primary-color-background));
+            --color: var(--fab-button-primary-icon-color, var(--primary-color-contrast));
             font-size: 1.125rem;
             margin-right: 0;
 

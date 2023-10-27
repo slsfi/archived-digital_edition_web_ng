@@ -1,11 +1,15 @@
+// Import scoped CSS variables
+@import "src/theme/scoped-variables/semantic-code-color-variables.scss";
+
 ion-list-header {
-	--background: var(--ion-popover-list-header-background-color);
+	--background: var(--secondary-color);
+	--color: var(--secondary-color-contrast);
 	font-weight: bold;
 	font-size: 1em;
 	margin-bottom: 0;
 }
 ion-list.list-md {
-	background: var(--ion-popover-content-background-color);
+	background: var(--main-background-color);
 	padding: 0;
 }
 ion-list.list-md:last-child {
@@ -13,9 +17,9 @@ ion-list.list-md:last-child {
 }
 
 ion-item.item {
-	--background: var(--ion-popover-content-background-color);
-	--background-hover: var(--ion-popover-content-background-color);
-	--border-color: var(--ion-popover-item-border-bottom-color);
+	--background: var(--main-background-color);
+	--background-hover: var(--main-background-color);
+	--border-color: var(--main-background-accent-color);
 }
 ion-item.item:last-child {
 	--border-width: 0;
@@ -39,7 +43,7 @@ ion-button.close {
 
 ion-button.text-button {
 	--background: transparent;
-	--background-hover: var(--outline-button-color);
+	--background-hover: var(--button-background-color);
 	--background-hover-opacity: 0.2;
 	--box-shadow: none;
 	--color: #000;
@@ -54,8 +58,8 @@ ion-button.text-button::part(native) {
 	width: 3.25rem;
 }
 ion-button.text-button.selected-font-size {
-	--background: var(--outline-button-color);
-	--color: #fff;
+	--background: var(--button-background-color);
+	--color: var(--button-text-color);
 }
 ion-button.text-xsmall {
 	font-size: 0.75rem !important;
@@ -82,20 +86,20 @@ ion-button.text-xlarge {
 	padding-right: 0.125rem;
 }
 .show_personInfo {
-	background-color: var(--persName-color);
+	background-color: var(--persName-color, #f9e0bf);
 }
 .show_workInfo {
-	background-color: var(--workTitle-color);
+	background-color: var(--workTitle-color, #f7efba);
 }
 .show_placeInfo {
-	background-color: var(--placeName-color);
+	background-color: var(--placeName-color, #dee8ca);
 }
 .show_abbreviations {
-	background-color: var(--abbreviations-color);
+	background-color: var(--abbreviations-color, #ffe2fa);
 }
 .show_changesInfo {
-	background-color: var(--changes-color);
+	background-color: var(--changes-color, #ccc);
 }
 .show_normalisationsInfo {
-	background-color: var(--normalisations-color);
+	background-color: var(--normalisations-color, #e6e6e6);
 }

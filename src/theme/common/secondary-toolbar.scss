@@ -4,7 +4,7 @@ ion-toolbar.secondary {
         --background: transparent;
         --background-hover: transparent !important;
         --box-shadow: none;
-        --color: var(--text-color-on-secondary-color-background);
+        --color: var(--secondary-color-contrast);
         --ripple-color: transparent;
         --transition: opacity 0.2s;
         letter-spacing: normal;
@@ -17,7 +17,7 @@ ion-toolbar.secondary {
     .secondary-toolbar-buttons-wrapper {
         a {
             align-items: center;
-            color: var(--text-color-on-secondary-color-background);
+            color: var(--secondary-color-contrast);
             display: flex;
             padding: 0 10px;
             text-decoration: none;
@@ -25,7 +25,7 @@ ion-toolbar.secondary {
             transition: color 0.2s;
 
             &:hover {
-                color: rgba(var(--text-color-on-secondary-color-background-rgb), 0.6);
+                color: rgba(var(--secondary-color-contrast-rgb), 0.6);
             }
         }
 
