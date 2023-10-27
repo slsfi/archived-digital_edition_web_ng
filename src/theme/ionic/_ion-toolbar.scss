@@ -3,8 +3,8 @@ ion-toolbar {
     --color: var(--primary-color-contrast);
 }
 ion-toolbar.secondary {
-    --background: var(--secondary-color);
-    --color: var(--secondary-color-contrast);
+    --background: var(--secondary-toolbar-color);
+    --color: var(--secondary-toolbar-color-contrast);
     --min-height: 50px;
     max-height: 50px;
 }
