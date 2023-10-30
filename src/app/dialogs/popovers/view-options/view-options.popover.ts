@@ -31,17 +31,17 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
     'pageBreakOriginal': boolean,
     'pageBreakEdition': boolean
   };
-  show = {
-    'comments': false,
-    'personInfo': false,
-    'placeInfo': false,
-    'workInfo': false,
-    'changes': false,
-    'normalisations': false,
-    'abbreviations': false,
-    'paragraphNumbering': false,
-    'pageBreakOriginal': false,
-    'pageBreakEdition': false
+  show: Record<string, boolean> = {
+    comments: false,
+    personInfo: false,
+    placeInfo: false,
+    workInfo: false,
+    changes: false,
+    normalisations: false,
+    abbreviations: false,
+    paragraphNumbering: false,
+    pageBreakOriginal: false,
+    pageBreakEdition: false
   };
   textsize: Textsize = Textsize.Small;
   textsizeSubscription: Subscription | null = null;

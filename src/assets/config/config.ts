@@ -245,6 +245,7 @@ export const config: Config = {
     },
     text: {
       defaultViews: ["established", "comments", "facsimiles"],
+      defaultViewOptions: ["comments"],
       showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
@@ -881,6 +882,7 @@ export const config_vonWright: Config = {
     },
     text: {
       defaultViews: ["established", "comments"],
+      defaultViewOptions: ["comments"],
       showURNButton: true,
       showViewOptionsButton: true,
       viewOptions: {
@@ -1410,6 +1412,7 @@ export const config_mechelin: Config = {
     },
     text: {
       defaultViews: ["established_sv", "established_fi", "manuscripts", "facsimiles"],
+      defaultViewOptions: ["comments", "personInfo", "abbreviations"],
       showTextDownloadButton: true,
       showURNButton: true,
       showViewOptionsButton: true,
