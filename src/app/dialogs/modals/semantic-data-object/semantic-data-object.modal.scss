@@ -27,7 +27,7 @@
     }
 
     occurrences-accordion {
-        background: var(--ion-modal-item-background-color);
+        background: var(--main-background-color);
         line-height: 1.4;
         margin: 0;
         padding: 1rem;
@@ -83,7 +83,7 @@
                 + div {
                     dt,
                     dd {
-                        border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
+                        border-top: 1px solid var(--main-background-accent-color);
                     }
                 }
 
@@ -115,7 +115,7 @@
     }
 
     h3 {
-        border-top: 1px solid var(--ion-modal-item-divider-border-bottom-color);
+        border-top: 1px solid var(--main-background-accent-color);
         font-size: 1rem;
         font-weight: normal;
         margin: 0 0 0.75rem 0;

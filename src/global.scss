@@ -16,7 +16,10 @@
 @import "~@ionic/angular/css/typography.css";
 
 
-/* Import font files using @font-face rules */
+/**
+ * Import font files using @font-face rules. Comment out the import lines of
+ * the font-families you don’t use in your project.
+ */
 @import "./theme/font-face/roboto";
 @import "./theme/font-face/source-serif";
 @import "./theme/font-face/mulish";

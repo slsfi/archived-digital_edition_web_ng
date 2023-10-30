@@ -1,31 +1,31 @@
 :host {
+  color: var(--secondary-toolbar-color-contrast);
   display: block;
-  text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
   padding: 0 1.5rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   width: 100%;
-  color: var(--text-color-on-secondary-color-background);
 }
 
 :host(.text-changer-mobile-mode) {
-  background-color: var(--text-changer-background-color-mobile-mode);
-  color: var(--text-changer-text-color-mobile-mode);
+  background-color: #cbcbcb;
+  color: #000;
   height: 46px;
   padding: 0;
 }
 
 .text-changer-wrapper {
-  display: flex;
-  margin: auto;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
   align-items: center;
+  display: flex;
+  height: 100%;
   justify-content: space-between;
+  margin: auto;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 
   .next-wrapper,
   .prev-wrapper {
@@ -40,38 +40,38 @@
   .current-text-name {
     font-weight: bold;
     line-height: 1.5;
-    text-align: center;
     max-width: 40%;
-    padding: 0 3rem;
     overflow: hidden;
+    padding: 0 3rem;
+    text-align: center;
   }
 
   .current-text-name p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    margin: 0;
     font-size: 1rem;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   button {
+    align-items: center;
+    background: transparent;
     color: inherit;
     display: flex;
-    align-items: center;
     height: 100%;
     hyphens: auto;
-    background: transparent;
-    overflow: hidden;
-    width: 100%;
-    padding: 0 6px;
     outline-offset: -0.125rem;
+    overflow: hidden;
+    padding: 0 6px;
+    width: 100%;
 
     > span {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
       font-size: 0.9375rem;
       line-height: 1.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &:hover > span {
@@ -88,8 +88,8 @@
     }
 
     ion-icon {
-      min-width: 28px;
       font-size: 1.75rem !important;
+      min-width: 28px;
     }
 
     &.next-button {
@@ -111,8 +111,8 @@
 
     button {
       &:hover {
-        opacity: var(--opacity-hover);
-        transition: var(--opacity-hover-transition);
+        opacity: 0.6;
+        transition: opacity 0.2s;
       }
 
       > span {

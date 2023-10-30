@@ -18,7 +18,7 @@
             <span class="side-title" i18n="@@BasicActions.Download">Ladda ner</span>
           </ion-button>
           <ion-popover #downloadOptionsPopover
-                [ngStyle]="{'--offset-y': '-30px'}"
+                [ngStyle]="{'--offset-y': '-30px', '--background': 'var(--main-background-color)'}"
                 reference="trigger"
                 side="bottom"
                 alignment="end"
@@ -31,7 +31,8 @@
               <div
                     [ngStyle]="{
                       'align-items': 'center',
-                      'background-color': 'var(--ion-popover-list-header-background-color)',
+                      'background-color': 'var(--secondary-color)',
+                      'color': 'var(--secondary-color-contrast)',
                       'display': 'flex',
                       'justify-content': 'space-between',
                       'padding': '0 0 0 1rem',
@@ -43,6 +44,7 @@
                       fill="clear"
                       (click)="closeDownloadPopover()"
                       [ngStyle]="{
+                        '--color': 'var(--secondary-color-contrast)',
                         '--padding-start': '0.65em',
 	                      '--padding-end': '0.65em'
                       }"

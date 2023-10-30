@@ -139,8 +139,8 @@ ion-content.epub-ion-content::part(scroll) {
   }
 
   &.mobile-mode-epub {
-    background-color: var(--text-changer-background-color-mobile-mode);
-    color: var(--text-changer-text-color-mobile-mode);
+    background-color: #cbcbcb;
+    color: #000;
     height: 46px;
     justify-content: space-between;
     padding: 0;
@@ -149,12 +149,15 @@ ion-content.epub-ion-content::part(scroll) {
       --background: transparent;
       --background-hover: transparent !important;
       --box-shadow: none;
-      --color: var(--text-color-on-secondary-color-background);
-      --color-hover: rgba(var(--text-color-on-secondary-color-background-rgb), var(--opacity-hover));
+      --color: var(--secondary-color-contrast);
       --ripple-color: transparent;
-      --transition: color 0.2s;
+      --transition: opacity 0.2s;
       letter-spacing: normal;
       width: 46px;
+
+      &:hover {
+        --opacity: 0.6;
+      }
     }
 
     .current-section-label {
@@ -289,7 +292,7 @@ ion-content.epub-ion-content::part(scroll) {
     --ripple-color: transparent;
 
     &:hover {
-      opacity: var(--opacity-hover);
+      opacity: 0.6;
     }
   }
 

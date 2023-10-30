@@ -1,3 +1,6 @@
+// Import scoped CSS variables
+@import "src/theme/scoped-variables/page-introduction-variables.scss";
+
 // Import general styles for the secondary toolbar
 @import "src/theme/common/secondary-toolbar.scss";
 
@@ -8,7 +11,7 @@
 @import "src/theme/common/scroll-content-container.scss";
 
 #TOC {
-  background-color: var(--page-introduction-separate-toc-background-color);
+  background-color: var(--intro-toc-background-color);
   padding: 10px 20px 70px 20px;
   margin: 0 10px 0 20px;
   height: calc(100% - 102px);
@@ -32,6 +35,7 @@
 }
 
 #TOC #toc-close-button ion-button.close ion-icon {
+  color: var(--intro-toc-text-color);
   font-size: 2rem;
 }
 

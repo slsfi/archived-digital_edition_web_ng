@@ -25,7 +25,7 @@ li {
         align-items: center;
         background-color: transparent;
         border-left: 4px solid transparent;
-        color: var(--toc-text-color);
+        color: var(--side-menu-text-color);
         cursor: pointer;
         display: flex;
         font-size: inherit;
@@ -37,33 +37,37 @@ li {
 
         &:hover,
         &.menu-highlight:hover {
-            border-left-color: var(--toc-hover-color);
+            border-left-color: var(--side-menu-hover-color);
         }
 
         &.menu-highlight {
-            background-color: var(--toc-selected-item-background-color);
-            border-left-color: var(--toc-selected-item-border-color);
-            color: var(--toc-selected-item-text-color);
-            font-weight: var(--toc-selected-item-font-weight);
+            background-color: var(--side-menu-selected-background-color);
+            border-left-color: var(--side-menu-selected-hover-color);
+            color: var(--side-menu-selected-text-color);
+            font-weight: var(--side-menu-selected-font-weight);
 
             .description {
-                color: var(--toc-selected-item-description-text-color);
+                color: var(--side-menu-selected-description-text-color);
             }
 
             ion-icon.toggle-icon {
-                color: var(--toc-selected-item-arrow-color);
+                color: var(--side-menu-selected-text-color);
             }
         }
 
         .label {
-            border-bottom: 1px solid var(--toc-divider-color);
+            border-bottom: 1px solid var(--side-menu-divider-color);
             margin-right: 8px;
             padding: 11px 0 11px 0;
             width: 100%;
         }
 
+        &.menu-highlight .label {
+            border-bottom-color: transparent;
+        }
+
         .description {
-            color: var(--toc-description-text-color);
+            color: var(--side-menu-description-text-color);
             display: block;
             font-size: .875rem;
             font-weight: normal;
@@ -72,7 +76,7 @@ li {
         }
 
         ion-icon.toggle-icon {
-            color: var(--toc-arrow-color);
+            color: var(--side-menu-text-color);
             font-size: 1.25rem;
             flex-shrink: 0;
             margin: 0 8px 0 auto;

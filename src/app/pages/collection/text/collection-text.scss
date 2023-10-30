@@ -1,3 +1,6 @@
+// Import scoped CSS variables
+@import "src/theme/scoped-variables/page-text-variables.scss";
+
 // Import general styles for the secondary toolbar
 @import "src/theme/common/secondary-toolbar.scss";
 
@@ -36,13 +39,15 @@ ion-content.collection-ion-content::part(scroll) {
     width: 100%;
 
     ion-card {
-      --background: var(--page-text-columns-background-color);
+      --background: var(--text-area-background-color, #fafafa);
+      --color: #222;
       border-radius: 0;
       box-shadow: none;
       margin: 0 10px;
 
       .column-card-title {
-        background: var(--page-text-columns-header-background-color);
+        background: var(--secondary-color);
+        color: var(--secondary-color-contrast);
         display: block;
         font-size: 0.875rem;
         font-weight: bold;
@@ -65,7 +70,7 @@ ion-content.collection-ion-content::part(scroll) {
       }
 
       .scroll-content-container {
-        height: calc(100vh - 165px - var(--top-menu-height));
+        height: calc(100vh - 165px - var(--top-menu-height, 62px));
       }
     }
   }
@@ -110,8 +115,8 @@ ion-fab.column-options {
 
   .add-column {
     align-items: center;
-    background: var(--page-text-add-column-background-color);
-    color: var(--page-text-add-column-text-color);
+    background: var(--secondary-color);
+    color: var(--secondary-color-contrast);
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -164,7 +169,7 @@ ion-segment-button:not(.segment-button-checked) {
 // Adjust padding and background color of text and facsimile columns in mobile mode
 div.mobile-mode-established,
 div.mobile-mode-manuscripts {
-  background-color: var(--page-text-columns-background-color);
+  background-color: var(--text-area-background-color, #fafafa);
   display: block;
   height: calc(100% - 32px); // full height minus ion-segment height
   padding: 12px;

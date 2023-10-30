@@ -4,11 +4,10 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  font-family: var(--font-stack-top-menu);
+  font-family: var(--font-stack-app-base);
   background-color: var(--primary-color);
-  color: var(--text-color-on-primary-color-background);
+  color: var(--primary-color-contrast);
   contain: layout size;
-  border-bottom: var(--top-menu-toolbar-bottom-border);
   overflow: visible;
 }
 
@@ -38,7 +37,7 @@ ul {
       filter: var(--top-menu-button-filter, none);
       flex-flow: row nowrap;
       align-items: center;
-      transition: var(--opacity-hover-transition);
+      transition: opacity 0.2s;
       text-transform: uppercase;
     }
 
@@ -48,7 +47,7 @@ ul {
 
     a:hover,
     button:hover {
-      opacity: var(--opacity-hover);
+      opacity: 0.6;
     }
 
     &.content-button.visuallyhidden {
@@ -59,13 +58,13 @@ ul {
       position: absolute;
       display: none;
       background: #fafafa;
-      top: calc(100% + calc(var(--top-menu-height) - 100%) / 2);
+      top: calc(100% + calc(var(--top-menu-height, 62px) - 100%) / 2);
       left: 50%;
       transform: translate(-50%, 0);
       margin: 0;
       border: 1px solid var(--primary-color);
       border-top: 0;
-      border-radius: 0 0 var(--corner-border-radius) var(--corner-border-radius);
+      border-radius: 0 0 3px 3px;
       padding: 0 10px;
       width: fit-content;
 
@@ -164,7 +163,7 @@ ul {
 
       img {
         display: block;
-        height: var(--top-menu-logo-height, 60px);
+        height: var(--top-menu-logo-height, 56px);
         width: auto;
       }
 

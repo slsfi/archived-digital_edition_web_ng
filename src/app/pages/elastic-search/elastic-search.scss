@@ -1,3 +1,6 @@
+// Import scoped CSS variables
+@import "src/theme/scoped-variables/page-elastic-search-variables.scss";
+
 ion-content {
   --padding-bottom: 5rem;
 }
@@ -132,7 +135,7 @@ h1.page-title {
     }
 
     > h2 {
-      border: 1px solid var(--elastic-search-filter-border-color);
+      border: 1px solid var(--main-background-accent-color);
       border-radius: 3px;
       font-size: 1.125em;
       font-weight: bold;
@@ -146,7 +149,7 @@ h1.page-title {
 
     .fg-wrapper {
       background-color: transparent;
-      border: 1px solid var(--elastic-search-filter-border-color);
+      border: 1px solid var(--main-background-accent-color);
       border-radius: 3px;
       margin: 0 0 0.5em 0;
       transition: border-color 0.4s;
@@ -263,7 +266,7 @@ h1.page-title {
   }
 
   ion-select.sort-select {
-    --border-color: var(--elastic-search-filter-border-color);
+    --border-color: var(--main-background-accent-color);
     --highlight-color-focused: var(--outline-button-color);
     --highlight-color-valid: var(--outline-button-color);
     display: none;
@@ -314,7 +317,7 @@ li.hit-item {
   align-content: flex-start;
   align-items: flex-start;
   background-color: #fafafa;
-  border: 1px solid var(--elastic-search-hititem-border-color);
+  border: 1px solid var(--hititem-border-color);
   border-radius: 4px;
   display: flex;
   gap: 1rem;
@@ -324,8 +327,8 @@ li.hit-item {
   width: 100%;
 
   &:hover {
-    background-color: var(--elastic-search-hititem-hover-background-color);
-    border-color: var(--elastic-search-hititem-hover-border-color);
+    background-color: var(--hititem-hover-background-color);
+    border-color: var(--hititem-hover-border-color);
   }
 
   > p {
@@ -390,7 +393,7 @@ li.hit-item {
   .hit-text-type,
   .hit-text-date {
     background-color: #efefef;
-    border-radius: var(--corner-border-radius);
+    border-radius: 3px;
     color: #000;
     font-size: 0.75em;
     margin-left: 8px;
@@ -425,7 +428,7 @@ li.hit-item {
   }
 
   .match-highlights {
-    border-top: 1px solid var(--elastic-search-hititem-border-color);
+    border-top: 1px solid var(--hititem-border-color);
     margin-top: 0.5em;
     padding-top: 0.5em;
     white-space: normal;

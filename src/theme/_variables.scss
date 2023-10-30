@@ -1,193 +1,64 @@
 :root {
-  // CSS VARIABLES
+  // GLOBAL CSS VARIABLES
 
   // Base colors
-  --primary-color:                              #4F7A8C;
-  --primary-color-rgb:                            83, 132, 148;
-  --secondary-color:                            #e6e1d8;
-  --dark-color:                                 #222;
-  --text-color-on-primary-color-background:     #fff;
-  --text-color-on-primary-color-background-rgb:   255, 255, 255;
-  --text-color-on-secondary-color-background:   #000;
-  --text-color-on-secondary-color-background-rgb: 0, 0, 0;
-  --default-link-color:                         #538494;
-  --main-background-color:                      #ecebe4;
-  --route-loading-progress-bar-color:             rgba(var(--text-color-on-primary-color-background-rgb), 0.8);
-
-  // Semantic code colors
-  --persName-color:                #f9e0bf;
-  --persName-color-rgb:              249, 224, 191;
-  --placeName-color:               #dee8ca;
-  --placeName-color-rgb:             222, 232, 202;
-  --workTitle-color:               #f7efba;
-  --workTitle-color-rgb:             247, 239, 186;
-  --changes-color:                 #ccc;
-  --changes-color-rgb:               204, 204, 204;
-  --normalisations-color:          #e6e6e6;
-  --normalisations-color-rgb:        230, 230, 230;
-  --abbreviations-color:           #ffe2fa;
-  --abbreviations-color-rgb:         255, 226, 250;
-  --pageBreakOriginal-color:       #c34be1;
-  --pageBreakEdition-color:        #d58205;
-
-  // Variant category colors
-  --lemma-identical-variant-background-color: #fff1b9;
-  --orthographic-variant-background-color:    #eee6ff;
-  --interpunction-variant-background-color:   #dbf0ec;
-  --substantial-variant-background-color:     #fee0e2;
-  --error-variant-background-color:           #f3c598;
-  --typographic-variant-background-color:     #f6e65b;
-  --variant-background-color:                 #c5c5c5;
-
-  // TOC, i.e. the left navigation
-  --toc-text-color:                           var(--dark-color);
-  --toc-background-color:                     var(--main-background-color);
-  --toc-border-right-color:                 #dedede;
-  --toc-arrow-color:                          var(--toc-text-color);
-  --toc-divider-color:                      #dedede;
-  --toc-hover-color:                          var(--primary-color);
-  --toc-description-text-color:             #515151;
-  --toc-collection-title-text-color:          var(--toc-text-color);
-  --toc-collection-title-background-color:  #d1ceca;
-  --toc-back-button-text-color:               var(--dark-color);
-  --toc-back-button-arrow-color:              var(--toc-back-button-text-color);
-  --toc-back-button-background-color:         var(--secondary-color);
-  --toc-selected-item-text-color:             var(--dark-color);
-  --toc-selected-item-font-weight:            bold;
-  --toc-selected-item-arrow-color:            var(--toc-selected-item-text-color);
-  --toc-selected-item-background-color:       transparent;
-  --toc-selected-item-border-color:           transparent;
-  --toc-selected-item-divider-color:          var(--toc-divider-color);
-  --toc-selected-item-description-text-color: var(--toc-description-text-color);
-  --toc-sort-select-highlight-color:          var(--primary-color);
-  --toc-sort-select-wrapper-background-color: transparent;
-
-  // Collection introduction page
-  --page-introduction-separate-toc-background-color:        var(--secondary-color);
-  --page-introduction-separate-toc-text-color:              var(--dark-color);
-
-  // Collection text page
-  --page-text-columns-header-background-color:              var(--secondary-color);
-  --page-text-columns-background-color:                   #fafafa;
-  --page-text-add-column-text-color:                        var(--dark-color);
-  --page-text-add-column-background-color:                  var(--secondary-color);
-
-  // Top-menu
-  --top-menu-height:                                        62px;
-  --top-menu-toolbar-bottom-border:                         0;
-  --top-menu-toolbar-button-icons-font-size:                1.875rem;
-  --top-menu-button-filter:                                 drop-shadow(0 1px 3px rgba(35, 35, 35, .3));
-  --top-menu-logo-height:                                   56px;
-
-  // Text-changer in read-page
-  --text-changer-background-color-mobile-mode:            #d8d8d8;
-  --text-changer-text-color-mobile-mode:                  #000;
-
-  // Facsimile column in read-page
-  --facsimile-column-page-number-wrapper-background-color:  var(--main-background-color);
-  --facsimile-column-highlight-color:                       var(--fab-button-primary-background-color);
-
-  // Elastic search
-  --elastic-search-filter-border-color:                     #ccc;
-  --elastic-search-hititem-border-color:                    #ccc;
-  --elastic-search-hititem-hover-background-color:          #fff;
-  --elastic-search-hititem-hover-border-color:                var(--primary-color);
-  --elastic-search-search-match-highlight-background-color: #a5d7a5;
-  --elastic-search-search-match-highlight-text-color:       #000;
-  --elastic-search-date-histogram-year-bar-color:             var(--primary-color);
-  --elastic-search-date-histogram-year-hover-color:           var(--secondary-color);
-  --elastic-search-date-histogram-year-in-range-color:      #751e22;
-
-  // Indices of persons, places, keywords and works
-  --index-list-item-background-color:             transparent;
-  --index-list-item-hover-background-color:     #f5f5f5;
-  --index-list-item-border-color:               #ccc;
-  --index-list-heading-background-color:        #e0e0e0;
-  --index-list-heading-border-color:            #979797;
-
-  // Info overlay
-	--infoOverlay-background-color:               #333;
-	--infoOverlay-text-color:                     #e3e3e3;
-  --info-overlay-link-to-reference-color:       #7cc6de;
-
-  // Tooltips
-  --tooltip-background-color:                   #fafafa;
-
-  // Ion-modal
-  --ion-modal-content-background-color:           var(--main-background-color);
-  --ion-modal-item-background-color:              var(--main-background-color);
-  --ion-modal-item-divider-border-bottom-color: #dedede;
-
-  // Ion-popover
-  --ion-popover-content-background-color:         var(--main-background-color);
-  --ion-popover-item-border-bottom-color:       #dedede;
-  --ion-popover-list-header-background-color:     var(--secondary-color);
-
-  // Ion-segment
-  --segment-activated-background-color:           var(--primary-color);
-  --segment-activated-text-color:                 var(--text-color-on-primary-color-background);
+  --primary-color:                    #497083;
+  --primary-color-rgb:                73, 112, 131;
+  --primary-color-contrast:           #fff;
+  --secondary-color:                  #d6d6d6;
+  --secondary-color-contrast:         #000;
+  --tertiary-color:                   var(--main-background-color); // must be light
+  --default-link-color:               #004aa5;
+  --main-background-color:            #ededed;
+  --main-background-accent-color:     #ccc;
+  --route-loading-progress-bar-color: rgba(255, 255, 255, 0.8);
+  --search-match-background-color:    #a5d7a5; // must be light
+  --text-area-background-color:       #fafafa;
 
   // Buttons
-  --button-background-color:                      var(--primary-color);
-  --button-background-color-rgb:                  var(--primary-color-rgb);
-  --button-text-color:                            var(--text-color-on-primary-color-background);
-  --button-clear-text-color:                      var(--primary-color);
-  --fab-button-primary-background-color:          var(--primary-color);
-  --fab-button-primary-icon-color:                var(--text-color-on-primary-color-background);
-  --fab-button-secondary-background-color:      #e9e9e9;
-  --fab-button-secondary-icon-color:            #000;
-  --outline-button-color:                         var(--primary-color); // must be dark enough to provide sufficient contrast on white and light to medium grey backgrounds, check the contrast especially against --main-background-color
+  --button-background-color:               var(--primary-color);
+  --button-text-color:                     var(--primary-color-contrast);
+  --fab-button-primary-background-color:   var(--primary-color);
+  --fab-button-primary-icon-color:         var(--primary-color-contrast);
+  --fab-button-secondary-background-color: #e9e9e9;
+  --fab-button-secondary-icon-color:       #000;
+  --outline-button-color:                  var(--primary-color); // must be dark
 
   // Font stacks
-  --font-stack-system:               -apple-system, BlinkMacSystemFont, "Segoe UI",
-                                     Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-                                     "Helvetica Neue", sans-serif;
-  --font-stack-app-base:             "Roboto", var(--font-stack-system);
-  --font-stack-home-banner:          var(--font-stack-app-base);
-  --font-stack-top-menu:             var(--font-stack-app-base);
-  --font-stack-tei:                  "SourceSerif", Constantia, "Lucida Bright",
-                                     Lucidabright, "Lucida Serif", Lucida,
-                                     "DejaVu Serif", "Bitstream Vera Serif",
-                                     "Liberation Serif", Georgia, serif;
-  --font-stack-tei-blackletter:      "Inter", var(--font-stack-system);
-  --font-stack-tei-print-stamp:      Cambria, "Hoefler Text", Utopia,
-                                     "Liberation Serif", "Nimbus Roman No9 L Regular",
-                                     Times, "Times New Roman", serif;
-  --font-stack-tei-editorial-note:   "Helvetica Neue", "Arial Nova", Helvetica,
-                                     Arial, sans-serif;
+  --font-stack-system:             -apple-system, BlinkMacSystemFont, "Segoe UI",
+                                   Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+                                   "Helvetica Neue", sans-serif;
+  --font-stack-app-base:           "Roboto", var(--font-stack-system);
+  --font-stack-home-banner:        var(--font-stack-app-base);
+  --font-stack-tei:                "SourceSerif", Constantia, "Lucida Bright",
+                                   Lucidabright, "Lucida Serif", Lucida,
+                                   "DejaVu Serif", "Bitstream Vera Serif",
+                                   "Liberation Serif", Georgia, serif;
+  --font-stack-tei-blackletter:    "Roboto", var(--font-stack-system);
+  --font-stack-tei-print-stamp:    Cambria, "Hoefler Text", Utopia,
+                                   "Liberation Serif", "Nimbus Roman No9 L Regular",
+                                   Times, "Times New Roman", serif;
+  --font-stack-tei-editorial-note: "Helvetica Neue", "Arial Nova", Helvetica,
+                                   Arial, sans-serif;
 
-  --opacity-hover: 0.6;
-  --opacity-hover-transition: opacity 0.2s;
-  --search-match-background-color: #a5d7a5;
-  --corner-border-radius: 3px;
-
-  --est-color:       #0a2a80;
-  --com-color:       #980202;
-  --ms-color:        #69863a;
-  --inl-color:       #812b5d;
-  --tit-color:       #5e1a06;
-  --fore-color:      #113c49;
-  --var-color:       #803fa7;
-  --grey-color:      #666666;
-
-
-  // OVERRIDE IONIC CSS VARIABLES
-  --ion-font-family: var(--font-stack-app-base);
-  --ion-card-background: var(--page-text-columns-background-color);
-  --ion-card-color: var(--dark-color);
-  --ion-backdrop-opacity: 0.3;
+  // Override global Ionic CSS variables
+  --ion-backdrop-opacity:       0.3;
+  --ion-color-primary:          var(--primary-color);
+  --ion-color-primary-rgb:      var(--primary-color-rgb);
+  --ion-color-primary-contrast: var(--primary-color-contrast);
+  --ion-font-family:            var(--font-stack-app-base);
 }
 
 
-// SCSS VARIABLES
+// GLOBAL SCSS VARIABLES
 
 // Text size variables
-$text-fontsize-mini:            12px; // 0.75rem;   => Only for print
-$text-fontsize-tiny:            13px; // 0.8125rem; => Only for print
-$text-fontsize-xxxsmall:        14px; // 0.875rem;  => Only for print
-$text-fontsize-xxsmall:         15px; // 0.9375rem; => Only for print
-$text-fontsize-xsmall:          16px; // 1rem;
-$text-fontsize-small:           17px; // 1.0625rem;
-$text-fontsize-medium:          18px; // 1.125rem;
-$text-fontsize-large:           19px; // 1.1875rem; => Not for print
-$text-fontsize-xlarge:          21px; // 1.3125rem; => Not for print
+$text-fontsize-mini:     12px; // 0.75rem;   => Only for print
+$text-fontsize-tiny:     13px; // 0.8125rem; => Only for print
+$text-fontsize-xxxsmall: 14px; // 0.875rem;  => Only for print
+$text-fontsize-xxsmall:  15px; // 0.9375rem; => Only for print
+$text-fontsize-xsmall:   16px; // 1rem;
+$text-fontsize-small:    17px; // 1.0625rem;
+$text-fontsize-medium:   18px; // 1.125rem;
+$text-fontsize-large:    19px; // 1.1875rem; => Not for print
+$text-fontsize-xlarge:   21px; // 1.3125rem; => Not for print

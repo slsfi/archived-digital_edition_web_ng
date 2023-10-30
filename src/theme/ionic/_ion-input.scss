@@ -1,8 +1,8 @@
 ion-input.image-nr-input.input-fill-solid {
-    --background: var(--facsimile-column-page-number-wrapper-background-color) !important;
+    --background: var(--tertiary-color) !important;
     --border-radius: 0;
-    --highlight-color-focused: var(--facsimile-column-highlight-color);
-    --highlight-color-valid: var(--facsimile-column-highlight-color);
+    --highlight-color-focused: var(--outline-button-color);
+    --highlight-color-valid: var(--outline-button-color);
     display: flex;
     font-size: initial;
     
@@ -21,17 +21,17 @@ ion-input.image-nr-input.input-fill-solid {
             padding: 5px 8px;
             border: 1px solid #666;
             margin: 8px 0;
-            border-radius: var(--corner-border-radius);
+            border-radius: 3px;
             background-color: #fafafa;
         }
         .native-input:focus {
-            border-color: var(--facsimile-column-highlight-color);
+            border-color: var(--outline-button-color);
         }
     }
   
     .input-bottom {
         font-size: initial;
-        background-color: var(--facsimile-column-page-number-wrapper-background-color);
+        background-color: var(--tertiary-color);
         padding: 0;
         align-items: center;
         border-bottom: 1px solid var(--border-color);
@@ -54,14 +54,14 @@ ion-modal {
             --border-style: none;
     
             .input-wrapper {
-                border-top-left-radius: var(--corner-border-radius);
-                border-bottom-left-radius: var(--corner-border-radius);
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
             }
     
             .input-bottom {
                 border-bottom: none;
-                border-top-right-radius: var(--corner-border-radius);
-                border-bottom-right-radius: var(--corner-border-radius);
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
             }
         }
     }

@@ -1,6 +1,6 @@
 // Style for alert where a different variant, manuscript or facsimile text can be selected.
 ion-alert.custom-select-alert .alert-wrapper {
-    border-radius: var(--corner-border-radius);
+    border-radius: 3px;
     min-width: 300px;
     max-width: 500px;
   
@@ -57,8 +57,8 @@ ion-alert.custom-select-alert .alert-wrapper {
         }
 
         .alert-button-highlighted {
-            background-color: var(--button-background-color);
-            color: var(--button-text-color);
+            background-color: var(--outline-button-color);
+            color: #fff;
             height: 1.875rem;
         }
     }

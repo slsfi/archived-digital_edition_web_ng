@@ -26,7 +26,7 @@ ion-list.list-md {
 
   ion-list-header {
     --background: var(--secondary-color);
-    --color: var(--text-color-on-secondary-color-background);
+    --color: var(--secondary-color-contrast);
     font-size: 1rem;
     font-weight: bold;
   }

@@ -1,3 +1,6 @@
+// Import scoped CSS variables
+@import "src/theme/scoped-variables/page-index-variables.scss";
+
 ion-content {
     --padding-bottom: 5rem;
 }
@@ -114,15 +117,15 @@ h1.page-title {
             }
 
             h2 {
-                background-color: var(--index-list-heading-background-color, #e0e0e0);
-                border-top: 1px solid var(--index-list-heading-border-color, #979797);
+                background-color: var(--list-heading-background-color, #e0e0e0);
+                border-top: 1px solid var(--list-heading-border-color, #979797);
                 font-size: 1.125rem;
                 text-transform: uppercase;
             }
 
             a {
-                background-color: var(--index-list-item-background-color, transparent);
-                border-top: 1px solid var(--index-list-item-border-color, #ccc);
+                background-color: var(--list-item-background-color, transparent);
+                border-top: 1px solid var(--list-item-border-color, #ccc);
                 color: #000;
                 display: block;
                 padding-left: 2.25rem;
@@ -130,7 +133,7 @@ h1.page-title {
                 transition: all .4s;
 
                 &:hover {
-                    background-color: var(--index-list-item-hover-background-color, #f5f5f5);
+                    background-color: var(--list-item-hover-background-color, #f5f5f5);
                     text-decoration: underline;
                 }
             }
@@ -171,7 +174,7 @@ h1.page-title {
         ion-fab-button {
             --background: var(--fab-button-primary-background-color, var(--primary-color));
             --box-shadow: none;
-            --color: var(--fab-button-primary-icon-color, var(--text-color-on-primary-color-background));
+            --color: var(--fab-button-primary-icon-color, var(--primary-color-contrast));
             font-size: 1.125rem;
             margin-right: 0;
 
