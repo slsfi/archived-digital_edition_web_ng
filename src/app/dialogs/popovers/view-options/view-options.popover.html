@@ -55,46 +55,46 @@
   </ion-list-header>
 
   <ion-item *ngIf="togglesCounter > 1">
-    <ion-toggle (ionChange)="toggleAll($event)" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.All">Välj alla</ion-toggle>
+    <ion-toggle (ionChange)="toggleAll($event)" [checked]="checkedToggles > togglesCounter-1" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.All">Välj alla</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.comments">
-    <ion-toggle class="show_comments" [(ngModel)]="show.comments" (ionChange)="toggleComments()" justify="space-between" [enableOnOffLabels]="true"><img alt="Röd asterisk" i18n-alt="@@Read.Popover.CommentSymbol" src="assets/images/asterisk.svg" class="asterisk"><ng-container i18n="@@Read.Popover.Comments">Kommentarer</ng-container></ion-toggle>
+  <ion-item *ngIf="availableToggles.comments">
+    <ion-toggle class="show_comments" [(ngModel)]="show.comments" (ionChange)="toggleOption('comments')" justify="space-between" [enableOnOffLabels]="true"><img alt="Röd asterisk" i18n-alt="@@Read.Popover.CommentSymbol" src="assets/images/asterisk.svg" class="asterisk"><ng-container i18n="@@Read.Popover.Comments">Kommentarer</ng-container></ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.personInfo">
-    <ion-toggle class="show_personInfo" [(ngModel)]="show.personInfo" (ionChange)="togglePersonInfo()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PersonInfo">Personupplysningar</ion-toggle>
+  <ion-item *ngIf="availableToggles.personInfo">
+    <ion-toggle class="show_personInfo" [(ngModel)]="show.personInfo" (ionChange)="toggleOption('personInfo')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PersonInfo">Personupplysningar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.placeInfo">
-    <ion-toggle class="show_placeInfo" [(ngModel)]="show.placeInfo" (ionChange)="togglePlaceInfo()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PlaceInfo">Platsupplysningar</ion-toggle>
+  <ion-item *ngIf="availableToggles.placeInfo">
+    <ion-toggle class="show_placeInfo" [(ngModel)]="show.placeInfo" (ionChange)="toggleOption('placeInfo')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PlaceInfo">Platsupplysningar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.workInfo">
-    <ion-toggle class="show_workInfo" [(ngModel)]="show.workInfo" (ionChange)="toggleWorkInfo()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.WorkInfo">Verkupplysningar</ion-toggle>
+  <ion-item *ngIf="availableToggles.workInfo">
+    <ion-toggle class="show_workInfo" [(ngModel)]="show.workInfo" (ionChange)="toggleOption('workInfo')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.WorkInfo">Verkupplysningar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.abbreviations">
-    <ion-toggle class="show_abbreviations" [(ngModel)]="show.abbreviations" (ionChange)="toggleAbbreviations()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Abbreviations">Förkortningar</ion-toggle>
+  <ion-item *ngIf="availableToggles.abbreviations">
+    <ion-toggle class="show_abbreviations" [(ngModel)]="show.abbreviations" (ionChange)="toggleOption('abbreviations')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Abbreviations">Förkortningar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.changes">
-    <ion-toggle class="show_changesInfo" [(ngModel)]="show.changes" (ionChange)="toggleChanges()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Changes">Utgivarens ändringar</ion-toggle>
+  <ion-item *ngIf="availableToggles.changes">
+    <ion-toggle class="show_changesInfo" [(ngModel)]="show.changes" (ionChange)="toggleOption('changes')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Changes">Utgivarens ändringar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.normalisations">
-    <ion-toggle class="show_normalisationsInfo" [(ngModel)]="show.normalisations" (ionChange)="toggleNormalisations()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Normalisations">Normaliseringar</ion-toggle>
+  <ion-item *ngIf="availableToggles.normalisations">
+    <ion-toggle class="show_normalisationsInfo" [(ngModel)]="show.normalisations" (ionChange)="toggleOption('normalisations')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.Normalisations">Normaliseringar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.paragraphNumbering">
-    <ion-toggle [(ngModel)]="show.paragraphNumbering" (ionChange)="toggleParagraphNumbering()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.ParagraphNumbering">Stycke-/radnumrering</ion-toggle>
+  <ion-item *ngIf="availableToggles.paragraphNumbering">
+    <ion-toggle [(ngModel)]="show.paragraphNumbering" (ionChange)="toggleOption('paragraphNumbering')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.ParagraphNumbering">Stycke-/radnumrering</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.pageBreakOriginal">
-    <ion-toggle [(ngModel)]="show.pageBreakOriginal" (ionChange)="togglePageBreakOriginal()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PageBreakOriginal">Sidnummer/-brytning i originalet</ion-toggle>
+  <ion-item *ngIf="availableToggles.pageBreakOriginal">
+    <ion-toggle [(ngModel)]="show.pageBreakOriginal" (ionChange)="toggleOption('pageBreakOriginal')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PageBreakOriginal">Sidnummer/-brytning i originalet</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="optionsToggles.pageBreakEdition">
-    <ion-toggle [(ngModel)]="show.pageBreakEdition" (ionChange)="togglePageBreakEdition()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PageBreakEdition">Sidnummer i den tryckta utgåvan</ion-toggle>
+  <ion-item *ngIf="availableToggles.pageBreakEdition">
+    <ion-toggle [(ngModel)]="show.pageBreakEdition" (ionChange)="toggleOption('pageBreakEdition')" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Popover.PageBreakEdition">Sidnummer i den tryckta utgåvan</ion-toggle>
   </ion-item>
 </ion-list>
