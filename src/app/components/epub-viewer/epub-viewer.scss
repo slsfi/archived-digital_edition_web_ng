@@ -150,11 +150,14 @@ ion-content.epub-ion-content::part(scroll) {
       --background-hover: transparent !important;
       --box-shadow: none;
       --color: var(--secondary-color-contrast);
-      --color-hover: rgba(var(--secondary-color-contrast-rgb), 0.6);
       --ripple-color: transparent;
-      --transition: color 0.2s;
+      --transition: opacity 0.2s;
       letter-spacing: normal;
       width: 46px;
+
+      &:hover {
+        --opacity: 0.6;
+      }
     }
 
     .current-section-label {

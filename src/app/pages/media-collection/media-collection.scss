@@ -7,14 +7,14 @@ ion-content {
 
 a.back-link {
   align-items: center;
-  color: #000;
+  color: var(--secondary-toolbar-color-contrast);
   display: flex;
   padding-left: 1.875rem;
   text-decoration: none;
+  transition: opacity 0.2s;
 
   &:hover {
-    text-shadow: 1px 0 0 currentColor;
-    transition: text-shadow 0.2s;
+      opacity: 0.6;
   }
 
   ion-icon {

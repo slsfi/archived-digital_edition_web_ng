@@ -1251,7 +1251,7 @@ div.tei {
         padding: 3px;
         margin-left: 0.25em;
         border: 1px solid rgb(152, 0, 0);
-        background: var(--collection-column-background-color, #fafafa);
+        background: var(--text-area-background-color, #fafafa);
         border-radius: 3px;
         box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     }
@@ -1980,7 +1980,7 @@ styles from div.tei
 */
 .tei.toolTip {
     z-index: 1001;
-    background: var(--collection-column-background-color, #fafafa);
+    background: var(--text-area-background-color, #fafafa);
     border: 1px solid #222;
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
@@ -2121,7 +2121,7 @@ from div.tei
         padding: 0 24px 24px 16px;
 
         a {
-            color: var(--info-overlay-link-to-reference-color);
+            color: var(--info-overlay-link-color);
         }
 
         .footnoteWrapper {

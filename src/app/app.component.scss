@@ -1,5 +1,9 @@
 // Import scoped CSS variables
-@import "src/theme/scoped-variables/ion-app-variables.scss";
+@import "src/theme/scoped-variables/info-overlay-variables.scss";
+@import "src/theme/scoped-variables/secondary-toolbar-variables.scss";
+@import "src/theme/scoped-variables/semantic-code-variables.scss";
+@import "src/theme/scoped-variables/side-menu-variables.scss";
+@import "src/theme/scoped-variables/top-menu-variables.scss";
 
 header {
   box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.6);
@@ -37,11 +41,11 @@ header {
   top: var(--top-menu-height, 62px);
 
   .side-navigation {
-    background-color: var(--toc-background-color, transparent);
-    border-right: 1px solid var(--toc-border-right-color, transparent);
+    background-color: var(--side-menu-background-color, transparent);
+    border-right: 1px solid var(--side-menu-border-right-color, transparent);
     bottom: 0;
     box-shadow: 4px 0 4px -4px rgba(0, 0, 0, 0.4);
-    color: var(--toc-text-color, #000);
+    color: var(--side-menu-text-color, #000);
     flex: 0 0 auto;
     height: 100%;
     left: 0;
