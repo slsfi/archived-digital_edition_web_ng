@@ -41,88 +41,13 @@ export class IndexFilterModal implements OnInit {
     }
 
     if (this.searchType === 'persons') {
-      this.getFilterPersonTypes();
       this.shouldFilterYear = true;
-    } else if (this.searchType === 'places') {
-      this.getFilterPlaceCountries();
-    } else if (this.searchType === 'keywords') {
-      this.getFilterCategoryTypes();
     }
+    this.setFilters();
   }
 
-  getFilterPersonTypes() {
-    this.showLoading = true;
-    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
-      (filterPersonTypes) => {
-        this.filterPersonTypes = filterPersonTypes['aggregations']['types']['buckets'];
-        this.filterPersonTypes?.forEach(cat => {
-          cat.name = cat.key;
-          if (this.activeFilters['filterPersonTypes'] && this.activeFilters['filterPersonTypes'].length > 0) {
-            for (let i = 0; i < this.activeFilters['filterPersonTypes'].length; i++) {
-              if (cat.name === this.activeFilters['filterPersonTypes'][i].name) {
-                cat.selected = true;
-                break;
-              } else {
-                cat.selected = false;
-              }
-            }
-          } else {
-            cat.selected = false;
-          }
-        });
-        this.showLoading = false;
-      }
-    );
-  }
-
-  getFilterCategoryTypes() {
-    this.showLoading = true;
-    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
-      (filterCategoryTypes) => {
-        this.filterCategoryTypes = filterCategoryTypes['aggregations']['types']['buckets'];
-        this.filterCategoryTypes?.forEach(cat => {
-          cat.name = cat.key;
-          if (this.activeFilters['filterCategoryTypes'] && this.activeFilters['filterCategoryTypes'].length > 0) {
-            for (let i = 0; i < this.activeFilters['filterCategoryTypes'].length; i++) {
-              if (cat.name === this.activeFilters['filterCategoryTypes'][i].name) {
-                cat.selected = true;
-                break;
-              } else {
-                cat.selected = false;
-              }
-            }
-          } else {
-            cat.selected = false;
-          }
-        });
-        this.showLoading = false;
-      }
-    );
-  }
-
-  getFilterPlaceCountries() {
-    this.showLoading = true;
-    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
-      (filterPlaceCountries) => {
-        this.filterPlaceCountries = filterPlaceCountries['aggregations']['countries']['buckets'];
-        this.filterPlaceCountries?.forEach(cat => {
-          cat.name = cat.key;
-          if (this.activeFilters['filterPlaceCountries'] && this.activeFilters['filterPlaceCountries'].length > 0) {
-            for (let i = 0; i < this.activeFilters['filterPlaceCountries'].length; i++) {
-              if (cat.name === this.activeFilters['filterPlaceCountries'][i].name) {
-                cat.selected = true;
-                break;
-              } else {
-                cat.selected = false;
-              }
-            }
-          } else {
-            cat.selected = false;
-          }
-        });
-        this.showLoading = false;
-      }
-    );
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'close');
   }
 
   apply() {
@@ -181,7 +106,43 @@ export class IndexFilterModal implements OnInit {
     return this.modalCtrl.dismiss(filters, 'apply');
   }
 
-  checkIfFiltersEmpty(filters: any) {
+  private setFilters() {
+    this.showLoading = true;
+    const typeKey: string = (this.searchType === 'persons') ? 'filterPersonTypes'
+          : (this.searchType === 'places') ? 'filterPlaceCountries'
+          : 'filterCategoryTypes';
+
+    this.namedEntityService.getFilterOptionsFromElastic(this.searchType).subscribe(
+      (res: any) => {
+        const buckets = res?.aggregations?.types?.buckets;
+        buckets?.forEach((cat: any) => {
+          cat.name = cat.key;
+          if (this.activeFilters[typeKey] && this.activeFilters[typeKey].length > 0) {
+            for (let i = 0; i < this.activeFilters[typeKey].length; i++) {
+              if (cat.name === this.activeFilters[typeKey][i].name) {
+                cat.selected = true;
+                break;
+              } else {
+                cat.selected = false;
+              }
+            }
+          } else {
+            cat.selected = false;
+          }
+        });
+        if (this.searchType === 'persons') {
+          this.filterPersonTypes = buckets;
+        } else if (this.searchType === 'places') {
+          this.filterPlaceCountries = buckets;
+        } else if (this.searchType === 'keywords') {
+          this.filterCategoryTypes = buckets;
+        }
+        this.showLoading = false;
+      }
+    );
+  }
+
+  private checkIfFiltersEmpty(filters: any) {
     if (this.searchType === 'persons') {
       const d = new Date();
       if (!filters['filterYearMin'] && filters['filterYearMax']) {
@@ -209,10 +170,6 @@ export class IndexFilterModal implements OnInit {
     if (this.searchType === 'keywords' && filters['filterCategoryTypes'].length < 1) {
       this.isEmpty = true;
     }
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'close');
   }
 
 }
