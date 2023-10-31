@@ -14,7 +14,7 @@
   background-color: var(--intro-toc-background-color);
   padding: 10px 20px 70px 20px;
   margin: 0 10px 0 20px;
-  height: calc(100% - 102px);
+  height: calc(100% - 90px);
   width: 85%;
   max-width: 375px;
   position: fixed;
@@ -22,7 +22,7 @@
   overflow-x: hidden;
   transition: 0.25s;
   font-size: 1rem;
-  right: 16px;
+  right: 10px;
 }
 
 #TOC #toc-close-button {
