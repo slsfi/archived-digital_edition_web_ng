@@ -111,13 +111,19 @@
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
-        <target>Licence: CC BY-NC-ND 4.0</target>
+        <target>CC BY-NC-ND 4.0</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNoticeIntroduction">
       <segment state="initial">
         <source>Licens: CC BY-NC-ND 4.0</source>
-        <target>Licence: CC BY-NC-ND 4.0</target>
+        <target>CC BY-NC-ND 4.0</target>
+      </segment>
+    </unit>
+    <unit id="DownloadTexts.CopyrightNoticeLabel">
+      <segment state="initial">
+        <source>Licens</source>
+        <target>License</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightURL">
@@ -166,18 +172,6 @@
       <segment state="initial">
         <source>XML</source>
         <target>XML</target>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.Instructions">
-      <segment state="initial">
-        <source>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
-        <target>Here you can download the texts in different formats. You can also open the texts in print-friendly format. The selected text will then open in a new window (you have to allow popup-windows from the web page).</target>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.InstructionsIntroduction">
-      <segment state="initial">
-        <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
-        <target>Here you can download the introduction or open it in print-friendly format in a new window (you have to allow popup-windows from the web page).</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.MissingTextError">

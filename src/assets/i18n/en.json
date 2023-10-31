@@ -414,10 +414,9 @@
     "DownloadTexts": {
         "Download": "Download",
         "Title": "Download and print",
-        "Instructions": "Here you can download the texts in different formats. You can also open the texts in print-friendly format. The selected text will then open in a new window (you have to allow popup-windows from the web page).",
-        "InstructionsIntroduction": "Here you can download the introduction or open it in print-friendly format in a new window (you have to allow popup-windows from the web page).",
-        "CopyrightNotice": "Licence: CC BY-NC-ND 4.0",
-        "CopyrightNoticeIntroduction": "Licence: CC BY-NC-ND 4.0",
+        "CopyrightNoticeLabel": "License",
+        "CopyrightNotice": "CC BY-NC-ND 4.0",
+        "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
         "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
         "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
         "Print": "Print",

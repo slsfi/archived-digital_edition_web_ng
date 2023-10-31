@@ -101,6 +101,11 @@
         <source>Licens: CC BY-NC-ND 4.0</source>
       </segment>
     </unit>
+    <unit id="DownloadTexts.CopyrightNoticeLabel">
+      <segment>
+        <source>Licens</source>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.CopyrightURL">
       <segment>
         <source>https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv</source>
@@ -139,16 +144,6 @@
     <unit id="DownloadTexts.Format.XML">
       <segment>
         <source>XML</source>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.Instructions">
-      <segment>
-        <source>Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.InstructionsIntroduction">
-      <segment>
-        <source>Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.MissingTextError">

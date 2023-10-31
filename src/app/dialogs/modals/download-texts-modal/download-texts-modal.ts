@@ -1,8 +1,10 @@
 import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, DOCUMENT, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PRIMARY_OUTLET, Router, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of, Subscription, tap } from 'rxjs';
+import { marked } from 'marked';
 
 import { config } from '@config';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -10,6 +12,7 @@ import { CollectionsService } from '@services/collections.service';
 import { CollectionTableOfContentsService } from '@services/collection-toc.service';
 import { CommentService } from '@services/comment.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { MarkdownContentService } from '@services/markdown-content.service';
 import { ReferenceDataService } from '@services/reference-data.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames } from '@utility-functions';
@@ -20,7 +23,7 @@ import { concatenateNames } from '@utility-functions';
   selector: 'page-download-texts-modal',
   templateUrl: 'download-texts-modal.html',
   styleUrls: ['download-texts-modal.scss'],
-  imports: [AsyncPipe, NgClass, NgFor, NgIf, NgStyle, IonicModule]
+  imports: [AsyncPipe, NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet, IonicModule]
 })
 export class DownloadTextsModal implements OnDestroy, OnInit {
   @Input() origin: string = '';
@@ -38,7 +41,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   downloadFormatsMs: string[] = [];
   downloadOptionsExist: boolean = false;
   downloadTextSubscription: Subscription | null = null;
-  instructionsText: string = '';
+  instructionsText$: Observable<SafeHtml>;
   introductionMode: boolean = false;
   introductionTitle: string = '';
   loadingCom: boolean = false;
@@ -65,10 +68,12 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private commentService: CommentService,
+    private mdContentService: MarkdownContentService,
     private modalCtrl: ModalController,
     private parserService: HtmlParserService,
     private referenceDataService: ReferenceDataService,
     private router: Router,
+    private sanitizer: DomSanitizer,
     private tocService: CollectionTableOfContentsService,
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string,
@@ -130,11 +135,13 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    let instructionsTextMdNode: string = '06';
     // Set which page has initiated the download modal
     if (this.origin === 'page-text') {
       this.readTextsMode = true;
     } else if (this.origin === 'page-introduction') {
       this.introductionMode = true;
+      instructionsTextMdNode = '07';
       if (this.downloadFormatsIntro.length) {
         this.downloadOptionsExist = true;
       }
@@ -142,6 +149,9 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
 
     this.urnResolverUrl = this.referenceDataService.getUrnResolverUrl();
     this.currentUrl = this.document.defaultView?.location.href.split('?')[0] || '';
+    this.instructionsText$ = this.getMdContent(
+      this.activeLocale + '-12-' + instructionsTextMdNode
+    );
     this.setTranslations();
     this.setReferenceData();
 
@@ -577,7 +587,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       header += '    <p><a href="' + this.currentUrl + '">' + this.currentUrl + '</a></p>\n';
     }
     if (this.copyrightText) {
-      header += '    <p class="apart">' + this.copyrightText + (this.copyrightURL ? (', <a href="' + this.copyrightURL + '">' + this.copyrightURL + '</a>') : '') + '</p>\n';
+      header += '    <p class="apart">' + $localize`:@@DownloadTexts.CopyrightNoticeLabel:Licens` + ': ' + this.copyrightText + (this.copyrightURL ? (', <a href="' + this.copyrightURL + '">' + this.copyrightURL + '</a>') : '') + '</p>\n';
     }
     header += '</div>\n';
 
@@ -705,10 +715,6 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     if (this.readTextsMode) {
       this.commentTitle = $localize`:@@DownloadTexts.CommentaryTo:Kommentarer till`;
 
-      if ($localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
-        this.instructionsText = $localize`:@@DownloadTexts.Instructions:Här kan du ladda ner texterna i olika format. Du kan också öppna texterna i utskriftsvänligt format. Den valda texten öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
-      }
-
       if ($localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`) {
         this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`;
       }
@@ -718,10 +724,6 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       }
     } else if (this.introductionMode) {
       this.introductionTitle = $localize`:@@Read.Introduction.Title:Inledning`;
-
-      if ($localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`) {
-        this.instructionsText = $localize`:@@DownloadTexts.InstructionsIntroduction:Här kan du ladda ner inledningen eller öppna den i utskriftsvänligt format. Den öppnas då i ett nytt fönster (du måste tillåta popup-fönster från webbplatsen).`;
-      }
 
       if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
         this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
@@ -913,6 +915,17 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       (this.document.defaultView?.location.origin ?? '')
             + (this.document.defaultView?.location.pathname.split('/')[1] === this.activeLocale ? '/' + this.activeLocale : '')
             + '/assets/images/'
+    );
+  }
+
+  private getMdContent(fileID: string): Observable<SafeHtml> {
+    return this.mdContentService.getMdContent(fileID).pipe(
+      map((res: any) => {
+        return this.sanitizer.bypassSecurityTrustHtml(marked(res.content));
+      }),
+      catchError((e) => {
+        return of('');
+      })
     );
   }
 
