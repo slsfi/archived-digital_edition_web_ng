@@ -138,28 +138,33 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="downloadOptionsExist; else noOptions">
-        <div *ngIf="instructionsText || copyrightText" class="notice">
-          <p *ngIf="instructionsText" class="download-instructions" [innerHTML]="instructionsText"></p>
-          <p *ngIf="copyrightText && !copyrightURL" class="copyright-notice" [innerHTML]="copyrightText"></p>
-          <p *ngIf="copyrightText && copyrightURL" class="copyright-notice">
-            <a [href]="copyrightURL" target="_blank">
-              <span [innerHTML]="copyrightText"></span>
-              <ion-icon name="open-outline"
-                    [ngStyle]="{
-                      'font-size': '1.375rem',
-                      'padding-left': '0.125rem',
-                      'vertical-align': 'text-bottom'
-                    }"
-                    aria-label="Länken öppnas i ett nytt fönster"
-                    i18n-aria-label="@@BasicActions.OpenInNewWindow"
-              ></ion-icon>
-            </a>
-          </p>
-        </div>
+      <ng-container *ngIf="downloadOptionsExist; else noDownloads">
+        <ng-container *ngTemplateOutlet="showNotice; context: {$implicit: (instructionsText$ | async)}"/>
+
+        <ng-template #showNotice let-instructionsText>
+          <div *ngIf="copyrightText || instructionsText" class="notice">
+            <div *ngIf="instructionsText" class="markdown download-instructions" [innerHTML]="instructionsText"></div>
+            <p *ngIf="copyrightText && !copyrightURL" class="copyright-notice"><ng-container i18n="@@DownloadTexts.CopyrightNoticeLabel">Licens</ng-container>: <span [innerHTML]="copyrightText"></span></p>
+            <p *ngIf="copyrightText && copyrightURL" class="copyright-notice">
+              <ng-container i18n="@@DownloadTexts.CopyrightNoticeLabel">Licens</ng-container>: 
+              <a [href]="copyrightURL" target="_blank">
+                <span [innerHTML]="copyrightText"></span>
+                <ion-icon name="open-outline"
+                      [ngStyle]="{
+                        'font-size': '1.375rem',
+                        'padding-left': '0.125rem',
+                        'vertical-align': 'text-bottom'
+                      }"
+                      aria-label="Länken öppnas i ett nytt fönster"
+                      i18n-aria-label="@@BasicActions.OpenInNewWindow"
+                ></ion-icon>
+              </a>
+            </p>
+          </div>
+        </ng-template>
       </ng-container>
 
-      <ng-template #noOptions>
+      <ng-template #noDownloads>
         <p class="no-dl-options" i18n="@@DownloadTexts.NoDownloads">Inga texter tillgängliga för nedladdning eller utskrift.</p>
       </ng-template>
       
