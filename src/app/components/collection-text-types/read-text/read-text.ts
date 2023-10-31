@@ -1,5 +1,5 @@
 import { Component, Input, ElementRef, EventEmitter, OnInit, Output, Renderer2, NgZone, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -19,7 +19,7 @@ import { isBrowser } from '@utility-functions';
   selector: 'read-text',
   templateUrl: 'read-text.html',
   styleUrls: ['read-text.scss'],
-  imports: [CommonModule, IonicModule, MathJaxDirective]
+  imports: [NgIf, IonicModule, MathJaxDirective]
 })
 export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   @Input() language: string = '';

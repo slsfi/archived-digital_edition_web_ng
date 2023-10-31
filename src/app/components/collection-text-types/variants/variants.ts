@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AlertButton, AlertController, AlertInput, IonicModule } from '@ionic/angular';
 
@@ -15,7 +15,7 @@ import { ViewOptionsService } from '@services/view-options.service';
   selector: 'variants',
   templateUrl: 'variants.html',
   styleUrls: ['variants.scss'],
-  imports: [CommonModule, IonicModule]
+  imports: [NgIf, IonicModule]
 })
 export class VariantsComponent implements OnInit {
   @Input() searchMatches: Array<string> = [];

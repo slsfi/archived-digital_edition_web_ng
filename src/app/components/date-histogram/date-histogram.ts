@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
-import { CommonModule } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +13,7 @@ import { IonicModule } from '@ionic/angular';
   selector: 'date-histogram',
   templateUrl: 'date-histogram.html',
   styleUrls: ['date-histogram.scss'],
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [NgClass, NgFor, NgIf, FormsModule, IonicModule]
 })
 export class DateHistogram implements OnChanges {
   @Input() selectedRange?: any = undefined;

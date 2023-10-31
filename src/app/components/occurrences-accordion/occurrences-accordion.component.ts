@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
@@ -18,13 +18,7 @@ import { flattenObjectTree, sortArrayOfObjectsAlphabetically } from '@utility-fu
   selector: 'occurrences-accordion',
   templateUrl: 'occurrences-accordion.component.html',
   styleUrls: ['occurrences-accordion.component.scss'],
-  imports: [
-    CommonModule,
-    IonicModule,
-    RouterModule,
-    CollectionPagePathPipe,
-    OccurrenceCollectionTextPageQueryparamsPipe
-  ]
+  imports: [NgFor, NgIf, IonicModule, RouterModule, CollectionPagePathPipe, OccurrenceCollectionTextPageQueryparamsPipe]
 })
 export class OccurrencesAccordionComponent implements OnInit {
   @Input() id: number | undefined = undefined;

@@ -1,5 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -13,7 +13,7 @@ import { isBrowser } from '@utility-functions';
   selector: 'modal-fullscreen-image-viewer',
   templateUrl: 'fullscreen-image-viewer.modal.html',
   styleUrls: ['fullscreen-image-viewer.modal.scss'],
-  imports: [CommonModule, FormsModule, IonicModule, DraggableImageDirective]
+  imports: [NgIf, NgStyle, FormsModule, IonicModule, DraggableImageDirective]
 })
 export class FullscreenImageViewerModal implements OnInit {
   @Input() activeImageIndex: number = 0;

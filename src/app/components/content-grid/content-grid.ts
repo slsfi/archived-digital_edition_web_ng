@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
@@ -16,7 +16,7 @@ import { MarkdownContentService } from '@services/markdown-content.service';
   selector: 'content-grid',
   templateUrl: 'content-grid.html',
   styleUrls: ['content-grid.scss'],
-  imports: [CommonModule, IonicModule, RouterLink, ParentChildPagePathPipe]
+  imports: [AsyncPipe, NgFor, NgIf, IonicModule, RouterLink, ParentChildPagePathPipe]
 })
 export class ContentGridComponent implements OnInit {
   availableEbooks: any[] = [];

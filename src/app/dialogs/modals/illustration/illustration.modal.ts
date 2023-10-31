@@ -1,5 +1,5 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -13,7 +13,7 @@ import { config } from '@config';
   selector: 'modal-illustration',
   templateUrl: 'illustration.modal.html',
   styleUrls: ['illustration.modal.scss'],
-  imports: [CommonModule, RouterModule, IonicModule, FullscreenImageViewerModal]
+  imports: [NgIf, RouterModule, IonicModule, FullscreenImageViewerModal]
 })
 export class IllustrationModal implements OnInit {
   @Input() imageNumber: string = '';

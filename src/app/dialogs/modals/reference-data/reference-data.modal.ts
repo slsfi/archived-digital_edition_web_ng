@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgIf } from '@angular/common';
 import { PRIMARY_OUTLET, Router, RouterModule, UrlSegment, UrlTree } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -11,7 +11,7 @@ import { ReferenceDataService } from '@services/reference-data.service';
   selector: 'modal-reference-data',
   templateUrl: './reference-data.modal.html',
   styleUrls: ['reference-data.modal.scss'],
-  imports: [CommonModule, IonicModule, RouterModule]
+  imports: [NgIf, IonicModule, RouterModule]
 })
 export class ReferenceDataModal implements OnInit {
   @Input() origin: string = '';

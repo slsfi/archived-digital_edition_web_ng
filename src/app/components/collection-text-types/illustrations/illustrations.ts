@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
@@ -12,7 +12,7 @@ import { ScrollService } from '@services/scroll.service';
   selector: 'illustrations',
   templateUrl: 'illustrations.html',
   styleUrls: ['illustrations.scss'],
-  imports: [CommonModule, IonicModule]
+  imports: [NgClass, NgFor, NgIf, IonicModule]
 })
 export class IllustrationsComponent implements OnChanges, OnInit {
   @Input() singleImage: Record<string, any> | undefined = undefined;

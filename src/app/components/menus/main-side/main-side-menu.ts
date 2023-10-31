@@ -1,5 +1,5 @@
 import { Component, Inject, Input, LOCALE_ID, OnChanges, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
@@ -18,7 +18,7 @@ import { addOrRemoveValueInArray, sortArrayOfObjectsAlphabetically } from '@util
   selector: 'main-side-menu',
   templateUrl: './main-side-menu.html',
   styleUrls: ['./main-side-menu.scss'],
-  imports: [CommonModule, IonicModule, RouterLink, ParentChildPagePathPipe]
+  imports: [NgFor, NgIf, NgTemplateOutlet, IonicModule, RouterLink, ParentChildPagePathPipe]
 })
 export class MainSideMenu implements OnInit, OnChanges {
   @Input() urlSegments: UrlSegment[] = [];
