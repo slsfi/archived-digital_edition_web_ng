@@ -19,18 +19,8 @@ import { ViewOptionsService } from '@services/view-options.service';
 export class ViewOptionsPopover implements OnDestroy, OnInit {
   @Input() toggles: any = undefined;
 
-  optionsToggles: {
-    'comments': boolean,
-    'personInfo': boolean,
-    'placeInfo': boolean,
-    'workInfo': boolean,
-    'changes': boolean,
-    'normalisations': boolean,
-    'abbreviations': boolean,
-    'paragraphNumbering': boolean,
-    'pageBreakOriginal': boolean,
-    'pageBreakEdition': boolean
-  };
+  availableToggles: any = undefined;
+  checkedToggles: number = 0;
   show: Record<string, boolean> = {
     comments: false,
     personInfo: false,
@@ -53,28 +43,30 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
     private popoverCtrl: PopoverController,
     private viewOptionsService: ViewOptionsService
   ) {
-    this.optionsToggles = config.page?.text?.viewOptions ?? undefined;
+    this.availableToggles = config.page?.text?.viewOptions ?? undefined;
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (
-      this.toggles !== undefined &&
-      this.toggles !== null &&
-      Object.keys(this.toggles).length !== 0
+      this.toggles &&
+      Object.keys(this.toggles).length > 0
     ) {
-      this.optionsToggles = this.toggles;
+      this.availableToggles = this.toggles;
     }
 
     this.togglesCounter = 0;
-    for (const prop in this.optionsToggles) {
-      if (this.optionsToggles.hasOwnProperty(prop)) {
-        if (this.optionsToggles[prop as keyof typeof this.optionsToggles] === true) {
-          this.togglesCounter++;
-        }
+    Object.values(this.availableToggles).forEach(value => {
+      if (value) {
+        this.togglesCounter++;
       }
-    }
+    });
 
     this.show = this.viewOptionsService.show;
+    for (const [key, value] of Object.entries(this.show)) {
+      if (value && this.availableToggles[key]) {
+        this.checkedToggles++;
+      }
+    }
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {
@@ -93,36 +85,37 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
 
   toggleAll(e: any) {
     if (e.detail.checked === true) {
-      if (this.optionsToggles.comments) {
+      if (this.availableToggles.comments) {
         this.show.comments = true;
       }
-      if (this.optionsToggles.personInfo) {
+      if (this.availableToggles.personInfo) {
         this.show.personInfo = true;
       }
-      if (this.optionsToggles.placeInfo) {
+      if (this.availableToggles.placeInfo) {
         this.show.placeInfo = true;
       }
-      if (this.optionsToggles.workInfo) {
+      if (this.availableToggles.workInfo) {
         this.show.workInfo = true;
       }
-      if (this.optionsToggles.changes) {
+      if (this.availableToggles.changes) {
         this.show.changes = true;
       }
-      if (this.optionsToggles.normalisations) {
+      if (this.availableToggles.normalisations) {
         this.show.normalisations = true;
       }
-      if (this.optionsToggles.abbreviations) {
+      if (this.availableToggles.abbreviations) {
         this.show.abbreviations = true;
       }
-      if (this.optionsToggles.paragraphNumbering) {
+      if (this.availableToggles.paragraphNumbering) {
         this.show.paragraphNumbering = true;
       }
-      if (this.optionsToggles.pageBreakOriginal) {
+      if (this.availableToggles.pageBreakOriginal) {
         this.show.pageBreakOriginal = true;
       }
-      if (this.optionsToggles.pageBreakEdition) {
+      if (this.availableToggles.pageBreakEdition) {
         this.show.pageBreakEdition = true;
       }
+      this.checkedToggles = 0;
     } else {
       this.show.comments = false;
       this.show.personInfo = false;
@@ -134,57 +127,26 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
       this.show.paragraphNumbering = false;
       this.show.pageBreakOriginal = false;
       this.show.pageBreakEdition = false;
+      this.checkedToggles = this.togglesCounter;
     }
-    this.toggleComments();
-    this.togglePersonInfo();
-    this.togglePlaceInfo();
-    this.toggleWorkInfo();
-    this.toggleChanges();
-    this.toggleNormalisations();
-    this.toggleAbbreviations();
-    this.toggleParagraphNumbering();
-    this.togglePageBreakOriginal();
-    this.togglePageBreakEdition();
+
+    this.toggleOption('comments');
+    this.toggleOption('personInfo');
+    this.toggleOption('placeInfo');
+    this.toggleOption('workInfo');
+    this.toggleOption('changes');
+    this.toggleOption('normalisations');
+    this.toggleOption('abbreviations');
+    this.toggleOption('paragraphNumbering');
+    this.toggleOption('pageBreakOriginal');
+    this.toggleOption('pageBreakEdition');
   }
 
-  toggleComments() {
-    this.viewOptionsService.show.comments = this.show.comments;
-  }
-
-  togglePersonInfo() {
-    this.viewOptionsService.show.personInfo = this.show.personInfo;
-  }
-
-  togglePlaceInfo() {
-    this.viewOptionsService.show.placeInfo = this.show.placeInfo;
-  }
-
-  toggleWorkInfo() {
-    this.viewOptionsService.show.workInfo = this.show.workInfo;
-  }
-
-  toggleChanges() {
-    this.viewOptionsService.show.changes = this.show.changes;
-  }
-
-  toggleNormalisations() {
-    this.viewOptionsService.show.normalisations = this.show.normalisations;
-  }
-
-  toggleAbbreviations() {
-    this.viewOptionsService.show.abbreviations = this.show.abbreviations;
-  }
-
-  toggleParagraphNumbering() {
-    this.viewOptionsService.show.paragraphNumbering = this.show.paragraphNumbering;
-  }
-
-  togglePageBreakOriginal() {
-    this.viewOptionsService.show.pageBreakOriginal = this.show.pageBreakOriginal;
-  }
-
-  togglePageBreakEdition() {
-    this.viewOptionsService.show.pageBreakEdition = this.show.pageBreakEdition;
+  toggleOption(optionKey: string) {
+    this.viewOptionsService.show[optionKey] = this.show[optionKey];
+    if (this.availableToggles[optionKey]) {
+      this.checkedToggles = this.show[optionKey] ? this.checkedToggles + 1 : this.checkedToggles - 1;
+    }
   }
 
   setTextSize(size: Textsize) {
