@@ -76,17 +76,6 @@
     display: block;
     margin: 1rem auto;
   }
-
-  page-home {
-    h1 {
-      text-transform: none;
-    }
-
-    h2 {
-      font-size: 1.625rem;
-      margin-top: 0;
-    }
-  }
 }
 
 /* --- Style block: Styles for the markdown content in the legend component. --- */
@@ -146,23 +135,6 @@
   }
 }
 /* --- */
-
-/* --- Style block: Styles for the markdown content in the search pages. --- */
-page-elastic-search,
-page-persons,
-page-places,
-page-keywords,
-page-works {
-  .markdown {
-    > p:first-child {
-      margin-top: 0;
-    }
-
-    > p:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
 
 page-elastic-search .markdown {
   ul {
