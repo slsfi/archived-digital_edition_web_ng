@@ -1,5 +1,5 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { catchError, Observable, of, Subject } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { CollectionContentService } from '@services/collection-content.service';
   selector: 'text-metadata',
   templateUrl: 'metadata.html',
   styleUrls: ['metadata.scss'],
-  imports: [CommonModule, IonicModule]
+  imports: [AsyncPipe, NgFor, NgIf, IonicModule]
 })
 export class MetadataComponent implements OnInit {
   @Input() textItemID: string = '';

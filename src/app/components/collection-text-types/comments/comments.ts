@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
 
@@ -16,7 +16,7 @@ import { concatenateNames, isBrowser } from '@utility-functions';
   selector: 'comments',
   templateUrl: 'comments.html',
   styleUrls: ['comments.scss'],
-  imports: [CommonModule, IonicModule]
+  imports: [NgIf, IonicModule]
 })
 export class CommentsComponent implements OnInit, OnDestroy {
   @Input() searchMatches: string[] = [];

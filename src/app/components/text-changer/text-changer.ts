@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { sortArrayOfObjectsAlphabetically, sortArrayOfObjectsNumerically } from 
   selector: 'text-changer',
   templateUrl: 'text-changer.html',
   styleUrls: ['text-changer.scss'],
-  imports: [CommonModule, IonicModule]
+  imports: [NgIf, IonicModule]
 })
 export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   @Input() parentPageType: string = '';

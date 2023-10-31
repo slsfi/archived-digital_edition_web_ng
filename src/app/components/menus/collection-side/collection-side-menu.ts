@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { Params, RouterLink, UrlSegment } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
@@ -17,13 +17,7 @@ import { addOrRemoveValueInArray, flattenObjectTree, isBrowser, sortArrayOfObjec
   selector: 'collection-side-menu',
   templateUrl: 'collection-side-menu.html',
   styleUrls: ['collection-side-menu.scss'],
-  imports: [
-    CommonModule,
-    IonicModule,
-    RouterLink,
-    CollectionPagePathPipe,
-    CollectionPagePositionQueryparamPipe
-  ]
+  imports: [NgClass, NgFor, NgIf, NgTemplateOutlet, IonicModule, RouterLink, CollectionPagePathPipe, CollectionPagePositionQueryparamPipe]
 })
 export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;

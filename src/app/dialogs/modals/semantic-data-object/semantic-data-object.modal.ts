@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { catchError, defaultIfEmpty, filter, forkJoin, map, Observable, of, Subject, Subscription, timeout } from 'rxjs';
@@ -16,7 +16,7 @@ import { isEmptyObject } from '@utility-functions';
   selector: 'modal-semantic-data-object',
   templateUrl: 'semantic-data-object.modal.html',
   styleUrls: ['semantic-data-object.modal.scss'],
-  imports: [CommonModule, IonicModule, OccurrencesAccordionComponent, RouterModule]
+  imports: [AsyncPipe, NgFor, NgIf, IonicModule, OccurrencesAccordionComponent, RouterModule]
 })
 export class SemanticDataObjectModal implements OnInit {
   @Input() id: string = '';
