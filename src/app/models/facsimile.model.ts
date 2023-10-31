@@ -1,23 +1,21 @@
 export class Facsimile {
-  public id: number;
-  public zoom: number;
-  public page: number;
-  public pages: number;
-  public pre_page_count: number;
-  public page_nr: number;
-  public itemId: string;
-  public manuscript_id: number;
-  public publication_facsimile_collection_id: number;
-  public facsimile_id: number;
-  public number_of_pages: number;
-  public priority: number;
-
-  public title: any;
-  public content = '';
-  public images: any = [];
-  public zoomedImages: any = [];
-
-  public type: number;
+  content = '';
+  facsimile_id: number;
+  id: number;
+  images: any = [];
+  itemId: string;
+  manuscript_id: number;
+  number_of_pages: number;
+  page: number;
+  page_nr: number;
+  pages: number;
+  pre_page_count: number;
+  priority: number;
+  publication_facsimile_collection_id: number;
+  title: any;
+  type: number;
+  zoom: number;
+  zoomedImages: any = [];
 
   constructor(facsimileInfo: any) {
     this.id = facsimileInfo.id;
