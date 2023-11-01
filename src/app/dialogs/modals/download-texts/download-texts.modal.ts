@@ -20,7 +20,7 @@ import { concatenateNames } from '@utility-functions';
 
 @Component({
   standalone: true,
-  selector: 'page-download-texts-modal',
+  selector: 'modal-download-texts',
   templateUrl: 'download-texts.modal.html',
   styleUrls: ['download-texts.modal.scss'],
   imports: [AsyncPipe, NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet, IonicModule]
