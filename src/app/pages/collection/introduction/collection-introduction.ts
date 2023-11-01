@@ -7,8 +7,8 @@ import { combineLatest, map, Subscription } from 'rxjs';
 import { config } from '@config';
 import { DownloadTextsModal } from '@modals/download-texts-modal/download-texts-modal';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
+import { NamedEntityModal } from '@modals/named-entity/named-entity.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
-import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
 import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CollectionContentService } from '@services/collection-content.service';
@@ -764,7 +764,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   async showSemanticDataObjectModal(id: string, type: string) {
     const modal = await this.modalCtrl.create({
-      component: SemanticDataObjectModal,
+      component: NamedEntityModal,
       componentProps: { id, type }
     });
 

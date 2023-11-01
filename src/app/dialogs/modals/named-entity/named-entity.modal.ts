@@ -13,12 +13,12 @@ import { isEmptyObject } from '@utility-functions';
 
 @Component({
   standalone: true,
-  selector: 'modal-semantic-data-object',
-  templateUrl: 'semantic-data-object.modal.html',
-  styleUrls: ['semantic-data-object.modal.scss'],
+  selector: 'modal-named-entity',
+  templateUrl: 'named-entity.modal.html',
+  styleUrls: ['named-entity.modal.scss'],
   imports: [AsyncPipe, NgFor, NgIf, IonicModule, OccurrencesAccordionComponent, RouterModule]
 })
-export class SemanticDataObjectModal implements OnInit {
+export class NamedEntityModal implements OnInit {
   @Input() id: string = '';
   @Input() type: string = '';
 
@@ -55,7 +55,7 @@ export class SemanticDataObjectModal implements OnInit {
   }
 
   ngOnInit() {
-    this.objectData$ = this.getSemanticDataObjectData(this.type, this.id);
+    this.objectData$ = this.getNamedEntityData(this.type, this.id);
 
     // Close the modal on route change
     this.routerEventsSubscription = this.router.events.pipe(
@@ -71,13 +71,13 @@ export class SemanticDataObjectModal implements OnInit {
     this.routerEventsSubscription?.unsubscribe();
   }
 
-  private getSemanticDataObjectData(type: string, id: string): Observable<any> {
+  private getNamedEntityData(type: string, id: string): Observable<any> {
     return forkJoin(
       [
-        this.getSemanticDataObjectDetails(type, id),
-        this.getSemanticDataObjectMediaData(type, id),
-        this.getSemanticDataObjectArticleData(type, id),
-        this.getSemanticDataObjectGalleryOccurrences(type, id)
+        this.getEntityDetails(type, id),
+        this.getEntityMediaData(type, id),
+        this.getEntityArticleData(type, id),
+        this.getEntityGalleryOccurrences(type, id)
       ]
     ).pipe(
       map((res: any[]) => {
@@ -117,7 +117,7 @@ export class SemanticDataObjectModal implements OnInit {
     );
   }
 
-  private getSemanticDataObjectDetails(type: string, id: string): Observable<any> {
+  private getEntityDetails(type: string, id: string): Observable<any> {
     if (type !== 'work' || (type === 'work' && this.simpleWorkMetadata)) {
       // Get semantic data object details from the backend API
       return this.namedEntityService.getEntity(type, id).pipe(
@@ -171,7 +171,7 @@ export class SemanticDataObjectModal implements OnInit {
     }
   }
 
-  private getSemanticDataObjectMediaData(type: string, id: string): Observable<any> {
+  private getEntityMediaData(type: string, id: string): Observable<any> {
     return (!this.showMediaData && of({})) || this.namedEntityService.getEntityMediaData(type, id).pipe(
       timeout(20000),
       map((data: any) => {
@@ -184,7 +184,7 @@ export class SemanticDataObjectModal implements OnInit {
     );
   }
 
-  private getSemanticDataObjectArticleData(type: string, id: string): Observable<any> {
+  private getEntityArticleData(type: string, id: string): Observable<any> {
     return (!this.showArticleData && of({})) || this.namedEntityService.getEntityArticleData(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
@@ -193,7 +193,7 @@ export class SemanticDataObjectModal implements OnInit {
     );
   }
 
-  private getSemanticDataObjectGalleryOccurrences(type: string, id: string): Observable<any> {
+  private getEntityGalleryOccurrences(type: string, id: string): Observable<any> {
     return (!this.showGalleryOccurrences && of({})) || this.namedEntityService.getEntityMediaCollectionOccurrences(type, id).pipe(
       timeout(20000),
       catchError((error: any) => {
