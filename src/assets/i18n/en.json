@@ -440,5 +440,9 @@
             "Title": "Illustration",
             "OpenMediaCollection": "Open media collection"
         }
+    },
+    "PageNotFound": {
+        "Title": "404 Page not found",
+        "DefaultMessage": "Something went wrong. We can’t find the page you tried to access. You can go back to the previous page using the browser’s back-button, or you can try to correct the web address in the browser’s address bar."
     }
 }

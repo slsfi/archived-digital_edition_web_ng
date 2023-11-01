@@ -55,6 +55,10 @@ const routes: Routes = [
   {
     path: 'search',
     loadChildren: () => import('./pages/elastic-search/elastic-search.module').then( m => m.ElasticSearchPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   }
 ];
 

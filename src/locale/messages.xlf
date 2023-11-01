@@ -741,6 +741,16 @@
         <source>Förekomster för verk är inte tillgängliga.</source>
       </segment>
     </unit>
+    <unit id="PageNotFound.DefaultMessage">
+      <segment>
+        <source>Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält.</source>
+      </segment>
+    </unit>
+    <unit id="PageNotFound.Title">
+      <segment>
+        <source>404 Sidan hittas inte</source>
+      </segment>
+    </unit>
     <unit id="Read.AddColumn">
       <segment>
         <source>Ny kolumn</source>

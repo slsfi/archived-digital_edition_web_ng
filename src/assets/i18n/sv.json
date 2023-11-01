@@ -440,5 +440,9 @@
             "Title": "Illustration",
             "OpenMediaCollection": "Öppna bildbanken"
         }
+    },
+    "PageNotFound": {
+        "Title": "404 Sidan hittas inte",
+        "DefaultMessage": "Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält."
     }
 }
