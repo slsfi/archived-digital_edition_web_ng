@@ -61,7 +61,7 @@ export class SemanticDataObjectModal implements OnInit {
     this.routerEventsSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      this.modalCtrl.getTop().then((modal) => {
+      this.modalCtrl.getTop().then((modal: any) => {
         modal?.dismiss();
       });
     });
