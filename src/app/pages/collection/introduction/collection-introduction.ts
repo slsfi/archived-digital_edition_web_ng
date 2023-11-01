@@ -5,7 +5,7 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { combineLatest, map, Subscription } from 'rxjs';
 
 import { config } from '@config';
-import { DownloadTextsModal } from '@modals/download-texts-modal/download-texts-modal';
+import { DownloadTextsModal } from '@modals/download-texts/download-texts.modal';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { NamedEntityModal } from '@modals/named-entity/named-entity.modal';
 import { ReferenceDataModal } from '@modals/reference-data/reference-data.modal';
