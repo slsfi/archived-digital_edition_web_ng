@@ -34,7 +34,7 @@ export class OccurrencesAccordionComponent implements OnInit {
     private namedEntityService: NamedEntityService,
     private tocService: CollectionTableOfContentsService
   ) {
-    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
+    this.simpleWorkMetadata = config.modal?.namedEntity?.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {

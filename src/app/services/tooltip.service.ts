@@ -28,7 +28,7 @@ export class TooltipService {
     private platformService: PlatformService,
     private sanitizer: DomSanitizer
   ) {
-    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
+    this.simpleWorkMetadata = config.modal?.namedEntity?.useSimpleWorkMetadata ?? false;
   }
 
   getSemanticDataObjectTooltip(id: string, type: string, targetElem: HTMLElement): Observable<string> {

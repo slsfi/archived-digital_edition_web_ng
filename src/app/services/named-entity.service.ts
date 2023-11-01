@@ -24,7 +24,7 @@ export class NamedEntityService {
     const apiBaseURL = config.app?.apiEndpoint ?? '';
     const projectName = config.app?.machineName ?? '';
     this.apiURL = apiBaseURL + '/' + projectName;
-    this.multilingual = config.app?.i18n?.multilingualSemanticData ?? false;
+    this.multilingual = config.app?.i18n?.multilingualNamedEntityData ?? false;
   }
 
   /**

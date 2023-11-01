@@ -18,7 +18,7 @@ export const config: Config = {
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: [],
-      multilingualSemanticData: false
+      multilingualNamedEntityData: false
     },
     enableRouterLoadingBar: true
   },
@@ -374,7 +374,7 @@ export const config: Config = {
     referenceData: {
       URNResolverURL: "https://urn.fi/",
     },
-    semanticDataObject: {
+    namedEntity: {
       showAliasAndPrevLastName: false,
       showArticleData: false,
       showCityRegionCountry: false,
@@ -742,7 +742,7 @@ export const config_soderholm: Config = {
     referenceData: {
       URNResolverURL: "https://urn.fi/",
     },
-    semanticDataObject: {
+    namedEntity: {
       showAliasAndPrevLastName: false,
       useSimpleWorkMetadata: false
     }
@@ -997,7 +997,7 @@ export const config_vonWright: Config = {
     referenceData: {
       URNResolverURL: "https://urn.fi/",
     },
-    semanticDataObject: {
+    namedEntity: {
       showAliasAndPrevLastName: false,
       useSimpleWorkMetadata: false
     }
@@ -1318,7 +1318,7 @@ export const config_granqvist: Config = {
     referenceData: {
       URNResolverURL: "https://urn.fi/",
     },
-    semanticDataObject: {
+    namedEntity: {
       showAliasAndPrevLastName: false,
       showArticleData: true,
       showCityRegionCountry: true,
@@ -1347,7 +1347,7 @@ export const config_mechelin: Config = {
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: true,
       multilingualReadingTextLanguages: ["sv", "fi"],
-      multilingualSemanticData: true
+      multilingualNamedEntityData: true
     }
   },
   collections: {
@@ -1529,7 +1529,7 @@ export const config_mechelin: Config = {
     referenceData: {
       URNResolverURL: "https://urn.fi/",
     },
-    semanticDataObject: {
+    namedEntity: {
       showOccurrences: false,
       useSimpleWorkMetadata: false
     }

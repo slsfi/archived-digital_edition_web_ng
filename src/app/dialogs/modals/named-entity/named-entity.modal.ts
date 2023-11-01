@@ -42,16 +42,16 @@ export class NamedEntityModal implements OnInit {
     private router: Router,
     private tooltipService: TooltipService
   ) {
-    this.showAliasAndPrevLastName = config.modal?.semanticDataObject?.showAliasAndPrevLastName ?? true;
-    this.showArticleData = config.modal?.semanticDataObject?.showArticleData ?? false;
-    this.showCityRegionCountry = config.modal?.semanticDataObject?.showCityRegionCountry ?? false;
-    this.showDescriptionLabel = config.modal?.semanticDataObject?.showDescriptionLabel ?? false;
-    this.showGalleryOccurrences = config.modal?.semanticDataObject?.showGalleryOccurrences ?? false;
-    this.showMediaData = config.modal?.semanticDataObject?.showMediaData ?? false;
-    this.showOccupation = config.modal?.semanticDataObject?.showOccupation ?? false;
-    this.showOccurrences = config.modal?.semanticDataObject?.showOccurrences ?? true;
-    this.showType = config.modal?.semanticDataObject?.showType ?? false;
-    this.simpleWorkMetadata = config.modal?.semanticDataObject?.useSimpleWorkMetadata ?? false;
+    this.showAliasAndPrevLastName = config.modal?.namedEntity?.showAliasAndPrevLastName ?? true;
+    this.showArticleData = config.modal?.namedEntity?.showArticleData ?? false;
+    this.showCityRegionCountry = config.modal?.namedEntity?.showCityRegionCountry ?? false;
+    this.showDescriptionLabel = config.modal?.namedEntity?.showDescriptionLabel ?? false;
+    this.showGalleryOccurrences = config.modal?.namedEntity?.showGalleryOccurrences ?? false;
+    this.showMediaData = config.modal?.namedEntity?.showMediaData ?? false;
+    this.showOccupation = config.modal?.namedEntity?.showOccupation ?? false;
+    this.showOccurrences = config.modal?.namedEntity?.showOccurrences ?? true;
+    this.showType = config.modal?.namedEntity?.showType ?? false;
+    this.simpleWorkMetadata = config.modal?.namedEntity?.useSimpleWorkMetadata ?? false;
   }
 
   ngOnInit() {
