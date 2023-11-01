@@ -152,7 +152,8 @@ page-elastic-search .markdown {
 }
 /* --- */
 
-/* --- Style block: Styles for the markdown content (instructions text) in download texts modal. --- */
+/* --- Style block: Styles for markdown content where first and last children should not have top/bottom margins. --- */
+page-not-found .markdown,
 modal-download-texts .markdown {
 	*:first-child {
 		margin-top: 0;

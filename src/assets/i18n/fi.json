@@ -440,5 +440,9 @@
             "Title": "Kuva",
             "OpenMediaCollection": "Avaa kuvapankki"
         }
+    },
+    "PageNotFound": {
+        "Title": "404 Sivua ei löydy",
+        "DefaultMessage": "Tapahtui virhe. Emme löydä hakemaasi sivua. Voit palata edelliselle sivulle selaimen näppäimestä, tai yrittää korjata selaimen osoiterivillä olevaa verkko-osoitetta."
     }
 }
