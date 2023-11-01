@@ -109,8 +109,6 @@ export class VariantsComponent implements OnInit {
 
   postprocessVariantText(text: string) {
     text = text.trim();
-    // Replace png images with svg counterparts
-    text = text.replace(/\.png/g, '.svg');
     // Fix image paths
     text = text.replace(/images\//g, 'assets/images/');
     // Add "tei" and "teiVariant" to all classlists

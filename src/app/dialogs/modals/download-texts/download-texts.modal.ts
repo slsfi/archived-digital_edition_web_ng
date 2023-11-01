@@ -423,7 +423,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   }
 
   private getProcessedPrintIntro(text: string): string {
-    text = text.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+    text = text.replace(/images\//g, 'assets/images/');
     text = this.fixImagePaths(text);
     return this.constructHtmlForPrint(text, 'intro');
   }

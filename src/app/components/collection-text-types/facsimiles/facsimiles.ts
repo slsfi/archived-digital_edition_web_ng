@@ -162,7 +162,7 @@ export class FacsimilesComponent implements OnInit {
     this.facsURLDefault = config.app.apiEndpoint + '/' + config.app.machineName +
           `/facsimiles/${facs.publication_facsimile_collection_id}/`;
     this.text = this.sanitizer.bypassSecurityTrustHtml(
-      facs.content?.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg')
+      facs.content?.replace(/images\//g, 'assets/images/')
     );
 
     if (extImageNr !== undefined) {

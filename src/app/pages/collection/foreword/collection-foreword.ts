@@ -86,7 +86,7 @@ export class CollectionForewordPage implements OnDestroy, OnInit {
     return this.collectionContentService.getForeword(id, lang).pipe(
       map((res: any) => {
         if (res?.content && res?.content !== 'File not found') {
-          let text = res.content.replace(/images\//g, 'assets/images/').replace(/\.png/g, '.svg');
+          let text = res.content.replace(/images\//g, 'assets/images/');
           text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           return this.sanitizer.bypassSecurityTrustHtml(text);
         } else {

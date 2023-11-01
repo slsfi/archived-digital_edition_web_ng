@@ -124,8 +124,6 @@ export class CommentService {
   }
 
   private postprocessCommentsText(text: string): string {
-    // Replace png images with svg counterparts
-    text = text.replace(/\.png/g, '.svg');
     // Fix image paths
     text = text.replace(/images\//g, 'assets/images/');
     // Add "teiComment" to all classlists

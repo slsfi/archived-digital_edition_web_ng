@@ -39,8 +39,6 @@ export class HtmlParserService {
 
     postprocessManuscriptText(text: string) {
         text = text.trim();
-        // Replace png images with svg counterparts
-        text = text.replace(/\.png/g, '.svg');
         // Fix image paths
         text = text.replace(/images\//g, 'assets/images/');
         // Add "tei" and "teiManuscript" to all classlists
@@ -99,7 +97,6 @@ export class HtmlParserService {
     }
 
     mapIllustrationImagePaths(text: string, collectionId: string) {
-        text = text.replace(/\.png/g, '.svg');
         text = text.replace(/images\//g, 'assets/images/');
         text = text.replace(/assets\/images\/verk\/http/g, 'http');
 
