@@ -7,7 +7,7 @@ import { marked } from 'marked';
 
 import { config } from '@config';
 import { IndexFilterModal } from '@modals/index-filter/index-filter.modal';
-import { SemanticDataObjectModal } from '@modals/semantic-data-object/semantic-data-object.modal';
+import { NamedEntityModal } from '@modals/named-entity/named-entity.modal';
 import { MarkdownContentService } from '@services/markdown-content.service';
 import { NamedEntityService } from '@services/named-entity.service';
 import { TooltipService } from '@services/tooltip.service';
@@ -446,7 +446,7 @@ export class IndexPage implements OnInit {
 
   async openSemanticDataObjectModal(id: string | number, type: string) {
     const modal = await this.modalCtrl.create({
-      component: SemanticDataObjectModal,
+      component: NamedEntityModal,
       componentProps: {
         id: String(id),
         type
