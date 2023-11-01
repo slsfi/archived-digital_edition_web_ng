@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      <ng-container *ngIf="type === 'subject'" i18n="@@Occurrences.person">Person</ng-container>
-      <ng-container *ngIf="type === 'location'" i18n="@@Occurrences.place">Plats</ng-container>
-      <ng-container *ngIf="type === 'tag'" i18n="@@Occurrences.keyword">Ämnesord</ng-container>
+      <ng-container *ngIf="type === 'subject' || type === 'person'" i18n="@@Occurrences.person">Person</ng-container>
+      <ng-container *ngIf="type === 'location' || type === 'place'" i18n="@@Occurrences.place">Plats</ng-container>
+      <ng-container *ngIf="type === 'tag' || type === 'keyword'" i18n="@@Occurrences.keyword">Ämnesord</ng-container>
       <ng-container *ngIf="type === 'work'" i18n="@@Occurrences.work">Verk</ng-container>
     </ion-title>
     <ion-buttons slot="end">
