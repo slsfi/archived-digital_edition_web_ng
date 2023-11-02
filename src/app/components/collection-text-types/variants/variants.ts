@@ -79,6 +79,8 @@ export class VariantsComponent implements OnInit {
       })[0];
       if (inputVariant) {
         this.selectedVariant = inputVariant;
+      } else {
+        this.selectedVariant = this.variants[0];
       }
     } else if (this.sortOrder) {
       const inputVariant = this.variants.filter((item: any) => {
@@ -189,24 +191,30 @@ export class VariantsComponent implements OnInit {
   }
 
   emitOutputValues(variant: any) {
-    // Emit the var id so the read page can update queryParams
+    // Emit the var id so the collection text page can update queryParams
     this.emitSelectedVariantId(variant.id);
-    // Emit the var sort_order so the read page can update queryParams
+    // Emit the var sort_order so the collection text page can update queryParams
     this.emitSelectedVariantSortOrder(variant.sort_order);
-    // Emit the var name so the read page can display it in the column header
+    // Emit the var name so the collection text page can display it in the column header
     this.emitSelectedVariantName(variant.name);
   }
 
   emitSelectedVariantId(id: number) {
-    this.selectedVarID.emit(id);
+    if (this.variants.length > 1) {
+      this.selectedVarID.emit(id);
+    }
   }
 
   emitSelectedVariantName(name: string) {
-    this.selectedVarName.emit(name);
+    if (this.variants.length > 1) {
+      this.selectedVarName.emit(name);
+    }
   }
 
   emitSelectedVariantSortOrder(order: number) {
-    this.selectedVarSortOrder.emit(order);
+    if (this.variants.length > 1) {
+      this.selectedVarSortOrder.emit(order);
+    }
   }
 
   openNewVar(event: Event, id: any) {
