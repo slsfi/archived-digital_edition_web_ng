@@ -108,7 +108,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Read.Established.NoEstablished:Det finns ingen utskriven lästext, se faksimil.`;
+          this.text = $localize`:@@ReadingText.Missing:Det finns ingen utskriven lästext, se faksimil.`;
         }
         if (res?.language) {
           this.textLanguage = res.language;
@@ -118,7 +118,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
       },
       error: (e) => {
         console.error(e);
-        this.text = $localize`:@@Read.Established.Error:Ett fel har uppstått. Lästexten kunde inte hämtas.`;
+        this.text = $localize`:@@ReadingText.Error:Ett fel har uppstått. Lästexten kunde inte hämtas.`;
       }
     });
   }

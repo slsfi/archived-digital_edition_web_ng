@@ -132,7 +132,7 @@ export class MainSideMenu implements OnInit, OnChanges {
   }
 
   private getHomePageMenuItem(): Observable<any> {
-    const menuData: any[] = [{ id: '', title: $localize`:@@TOC.Home:Hem`, parentPath: '/' }];
+    const menuData: any[] = [{ id: '', title: $localize`:@@MainSideMenu.Home:Hem`, parentPath: '/' }];
     return of({ menuType: 'home', menuData });
   }
 
@@ -164,7 +164,7 @@ export class MainSideMenu implements OnInit, OnChanges {
       });
       if (this.ebooksList.length > 1) {
         menuData = [{
-          title: $localize`:@@TOC.Ebooks:E-böcker`,
+          title: $localize`:@@MainSideMenu.Ebooks:E-böcker`,
           children: menuData
         }];
       }
@@ -180,12 +180,12 @@ export class MainSideMenu implements OnInit, OnChanges {
           res = this.categorizeCollections(res);
           let menu = [];
           for (let i = 0; i < res.length; i++) {
-            let title = $localize`:@@TOC.Read:Innehåll`;
+            let title = $localize`:@@MainSideMenu.Collections:Innehåll`;
             if (i > 0) {
-              i === 1 ? title = $localize`:@@TOC.Read1:Innehåll 2`
-              : i === 2 ? title = $localize`:@@TOC.Read2:Innehåll 3`
-              : i === 3 ? title = $localize`:@@TOC.Read3:Innehåll 4`
-              : i === 4 ? title = $localize`:@@TOC.Read4:Innehåll 5`
+              i === 1 ? title = $localize`:@@MainSideMenu.Collections1:Innehåll 2`
+              : i === 2 ? title = $localize`:@@MainSideMenu.Collections2:Innehåll 3`
+              : i === 3 ? title = $localize`:@@MainSideMenu.Collections3:Innehåll 4`
+              : i === 4 ? title = $localize`:@@MainSideMenu.Collections4:Innehåll 5`
               : title = 'Error: out of category translations';
             }
             menu.push({ title, children: res[i] });
@@ -208,8 +208,8 @@ export class MainSideMenu implements OnInit, OnChanges {
         if (res?.length > 0) {
           sortArrayOfObjectsAlphabetically(res, 'title');
           this.recursivelyAddParentPagePath(res, '/media-collection');
-          res.unshift({ id: '', title: $localize`:@@TOC.All:Alla`, parentPath: '/media-collection' });
-          res = [{ title: $localize`:@@TOC.MediaCollections:Bildbank`, children: res }];
+          res.unshift({ id: '', title: $localize`:@@MediaCollection.AllMediaCollections:Alla bildsamlingar`, parentPath: '/media-collection' });
+          res = [{ title: $localize`:@@MainSideMenu.MediaCollections:Bildbank`, children: res }];
         } else {
           res = [];
         }
@@ -225,13 +225,13 @@ export class MainSideMenu implements OnInit, OnChanges {
   private getIndexPageMenuItem(indexType: string): Observable<any> {
     let menuData: any[] = [];
     if (indexType === 'persons') {
-      menuData = [{ id: '', title: $localize`:@@TOC.PersonSearch:Personregister`, parentPath: '/index/persons' }];
+      menuData = [{ id: '', title: $localize`:@@MainSideMenu.IndexPersons:Personregister`, parentPath: '/index/persons' }];
     } else if (indexType === 'places') {
-      menuData = [{ id: '', title: $localize`:@@TOC.PlaceSearch:Ortregister`, parentPath: '/index/places' }];
+      menuData = [{ id: '', title: $localize`:@@MainSideMenu.IndexPlaces:Ortregister`, parentPath: '/index/places' }];
     } else if (indexType === 'keywords') {
-      menuData = [{ id: '', title: $localize`:@@TOC.TagSearch:Ämnesord`, parentPath: '/index/keywords' }];
+      menuData = [{ id: '', title: $localize`:@@MainSideMenu.IndexKeywords:Ämnesord`, parentPath: '/index/keywords' }];
     } else if (indexType === 'works') {
-      menuData = [{ id: '', title: $localize`:@@TOC.WorkSearch:Verkregister`, parentPath: '/index/works' }];
+      menuData = [{ id: '', title: $localize`:@@MainSideMenu.IndexWorks:Verkregister`, parentPath: '/index/works' }];
     }
     return of({ menuType: indexType, menuData });
   }
@@ -316,7 +316,7 @@ export class MainSideMenu implements OnInit, OnChanges {
       if (itemPath === stringForComparison) {
         this.highlightedMenu = item.nodeId;
         if (item.parentPath === '/media-collection') {
-          this.headService.setTitle([String(item.title), $localize`:@@TOC.MediaCollections:Bildbank`]);
+          this.headService.setTitle([String(item.title), $localize`:@@MainSideMenu.MediaCollections:Bildbank`]);
         } else if (!this.topMenuItems.includes(item.parentPath) && this.urlSegments[0]?.path !== 'collection') {
           // For top menu items the title is set by app.component, and
           // for collections the title is set by the collection side menu

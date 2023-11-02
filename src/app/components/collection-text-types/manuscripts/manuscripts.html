@@ -3,16 +3,16 @@
 <div *ngIf="text && manuscripts.length>0" class="text-select-wrapper">
   <h3 *ngIf="showTitle" [innerHTML]="selectedManuscript.name"></h3>
   <div *ngIf="manuscripts.length>1 || showOpenLegendButton" class="flex-buttons">
-    <ion-button *ngIf="manuscripts.length>1" class="custom-button" (click)="selectManuscript()" i18n="@@Read.Manuscripts.ChangeManuscript">Byt manuskript</ion-button>
+    <ion-button *ngIf="manuscripts.length>1" class="custom-button" (click)="selectManuscript()" i18n="@@Manuscripts.ChangeManuscript">Byt manuskript</ion-button>
     <!--
-    <ion-button fill="outline" class="custom-outline-button" (click)="openFacsimileMan($event, selectedManuscript)" i18n="@@Read.Manuscripts.OpenFacsimile">Öppna faksimil</ion-button>
+    <ion-button fill="outline" class="custom-outline-button" (click)="openFacsimileMan($event, selectedManuscript)" i18n="@@Manuscripts.OpenFacsimile">Öppna faksimil</ion-button>
     -->
-    <ion-button *ngIf="showOpenLegendButton" fill="outline" slot="icon-only" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="Teckenförklaringar" i18n-title="@@Read.Legend.Title">
+    <ion-button *ngIf="showOpenLegendButton" fill="outline" slot="icon-only" class="circular-icon-button align-right" (click)="openNewLegend($event)" title="Teckenförklaringar" i18n-title="@@Legend.Legend">
       <ion-icon name="help-outline"></ion-icon>
     </ion-button>
   </div>
   <div class="show-normalized-toggle">
-    <ion-toggle (ionChange)="toggleNormalizedManuscript()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Read.Manuscripts.ShowNormalized">Visa ändringar inarbetade</ion-toggle>
+    <ion-toggle (ionChange)="toggleNormalizedManuscript()" justify="space-between" [enableOnOffLabels]="true" i18n="@@Manuscripts.ShowNormalized">Visa ändringar inarbetade</ion-toggle>
   </div>
 </div>
 

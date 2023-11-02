@@ -100,12 +100,12 @@ export class FacsimilesComponent implements OnInit {
           }
           this.setInitialFacsimile();
         } else {
-          this.text = $localize`:@@Read.Facsimiles.NoFacsimiles:Inga faksimil tillgängliga.`;
+          this.text = $localize`:@@Facsimiles.Missing:Inga faksimil tillgängliga.`;
         }
       },
       error: (e) => {
         console.error(e);
-        this.text = $localize`:@@Read.Facsimiles.Error:Ett fel har uppstått. Faksimil kunde inte hämtas.`;
+        this.text = $localize`:@@Facsimiles.Error:Ett fel har uppstått. Faksimil kunde inte hämtas.`;
       }
     });
   }
@@ -130,7 +130,7 @@ export class FacsimilesComponent implements OnInit {
       ) {
         this.selectedFacsimileIsExternal = true;
         this.emitSelectedFacsimileId(0);
-        this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`);
+        this.emitSelectedFacsimileName($localize`:@@Facsimiles.ExternalFacsimiles:Externa faksimil`);
       } else {
         this.selectedFacsimile = this.facsimiles[0];
       }
@@ -147,7 +147,7 @@ export class FacsimilesComponent implements OnInit {
     if (facs === 'external') {
       this.selectedFacsimileIsExternal = true;
       this.emitSelectedFacsimileId(0);
-      this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`);
+      this.emitSelectedFacsimileName($localize`:@@Facsimiles.ExternalFacsimiles:Externa faksimil`);
       this.emitImageNumber(null);
     } else if (facs) {
       this.initializeDisplayedFacsimile(facs);
@@ -193,7 +193,7 @@ export class FacsimilesComponent implements OnInit {
     if (this.externalFacsimiles.length > 0) {
       inputs.push({
         type: 'radio',
-        label: $localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`,
+        label: $localize`:@@Facsimiles.ExternalFacsimiles:Externa faksimil`,
         value: '-1',
         checked: this.selectedFacsimileIsExternal
       });
@@ -238,8 +238,8 @@ export class FacsimilesComponent implements OnInit {
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Facsimiles.SelectFacsDialogTitle:Välj faksimil`,
-      subHeader: $localize`:@@Read.Facsimiles.SelectFacsDialogSubtitle:Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.`,
+      header: $localize`:@@Facsimiles.SelectFacsDialogTitle:Välj faksimil`,
+      subHeader: $localize`:@@Facsimiles.SelectFacsDialogSubtitle:Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs

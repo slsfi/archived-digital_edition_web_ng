@@ -572,7 +572,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     } else if (textType === 'com') {
       header += '    <p><b>' + this.commentTitle + ' ' + this.publicationTitle + '</b></p>\n';
     } else if (textType === 'ms') {
-      header += '    <p><b>' + $localize`:@@Read.Manuscripts.Title:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
+      header += '    <p><b>' + $localize`:@@Manuscripts.Manuscript:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
     } else {
       header += '    <p><b>' + this.publicationTitle + '</b></p>\n';
     }
@@ -723,7 +723,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
         this.copyrightURL = $localize`:@@DownloadTexts.CopyrightURL:https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv`;
       }
     } else if (this.introductionMode) {
-      this.introductionTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+      this.introductionTitle = $localize`:@@CollectionIntroduction.Introduction:Inledning`;
 
       if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
         this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
@@ -842,25 +842,25 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   private getCorrespondenceDataAsHtml(data: any, concatSenders: string, concatReceivers: string): string {
     let mContent = '';
     mContent += '<div class="ms">\n';
-    mContent += '<h3>' + $localize`:@@Read.Comments.Manuscript.Title:Manuskriptbeskrivning` + '</h3>\n';
+    mContent += '<h3>' + $localize`:@@Commentary.Manuscript.Title:Manuskriptbeskrivning` + '</h3>\n';
 
     if (data.legacy_id || concatSenders || concatReceivers || data.source_archive || data.source_collection_id) {
       mContent += '<ul>\n';
     }
     if (data.legacy_id) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.LegacyId:Brevsignum` + ': ' + data.legacy_id + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.LegacyId:Brevsignum` + ': ' + data.legacy_id + '</li>\n';
     }
     if (concatSenders) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Sender:Avsändare` + ': ' + concatSenders + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Sender:Avsändare` + ': ' + concatSenders + '</li>\n';
     }
     if (concatReceivers) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Receiver:Mottagare` + ': ' + concatReceivers + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Receiver:Mottagare` + ': ' + concatReceivers + '</li>\n';
     }
     if (data.source_archive) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Archive:Arkiv` + ': ' + data.source_archive + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Archive:Arkiv` + ': ' + data.source_archive + '</li>\n';
     }
     if (data.source_collection_id) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Collection:Samling, signum` + ': ' + data.source_collection_id + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Collection:Samling, signum` + ': ' + data.source_collection_id + '</li>\n';
     }
     if (data.legacy_id || concatSenders || concatReceivers || data.source_archive || data.source_collection_id) {
       mContent += '</ul>\n';
@@ -868,40 +868,40 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
 
     mContent += '<ul>\n';
     if (data.material_type) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Type:Form` + ': ' + data.material_type + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Type:Form` + ': ' + data.material_type + '</li>\n';
     }
     if (data.material_source) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Status:Status` + ': ' + data.material_source + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Status:Status` + ': ' + data.material_source + '</li>\n';
     }
     if (data.material_format) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Format:Format` + ': ' + data.material_format + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Format:Format` + ': ' + data.material_format + '</li>\n';
     }
     if (data.leaf_count) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Leafs:Lägg` + ': ' + data.leaf_count + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Leafs:Lägg` + ': ' + data.leaf_count + '</li>\n';
     }
     if (data.sheet_count) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Sheets:Antal blad` + ': ' + data.sheet_count + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Sheets:Antal blad` + ': ' + data.sheet_count + '</li>\n';
     }
     if (data.page_count) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Pages:Sidor brevtext` + ': ' + data.page_count + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Pages:Sidor brevtext` + ': ' + data.page_count + '</li>\n';
     }
     if (data.material_color) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Color:Färg` + ': ' + data.material_color + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Color:Färg` + ': ' + data.material_color + '</li>\n';
     }
     if (data.material_quality) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Quality:Kvalitet` + ': ' + data.material_quality + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Quality:Kvalitet` + ': ' + data.material_quality + '</li>\n';
     }
     if (data.material_pattern) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Pattern:Mönster` + ': ' + data.material_pattern + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Pattern:Mönster` + ': ' + data.material_pattern + '</li>\n';
     }
     if (data.material_state) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.State:Tillstånd` + ': ' + data.material_state + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.State:Tillstånd` + ': ' + data.material_state + '</li>\n';
     }
     if (data.material) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Material:Skrivmaterial` + ': ' + data.material + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Material:Skrivmaterial` + ': ' + data.material + '</li>\n';
     }
     if (data.material_notes) {
-      mContent += '<li>' + $localize`:@@Read.Comments.Manuscript.Other:Övrigt` + ': ' + data.material_notes + '</li>\n';
+      mContent += '<li>' + $localize`:@@Commentary.Manuscript.Other:Övrigt` + ': ' + data.material_notes + '</li>\n';
     }
     mContent += '</ul>\n';
     mContent += '</div>\n';

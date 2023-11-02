@@ -1061,12 +1061,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   private showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
       next: (tooltip) => {
-        this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
+        this.setInfoOverlayTitle($localize`:@@Commentary.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(tooltip.description);
       },
       error: (errorC) => {
-        this.setInfoOverlayTitle($localize`:@@Occurrences.Commentary:Kommentar`);
+        this.setInfoOverlayTitle($localize`:@@Commentary.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText($localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`);
       }
@@ -1118,7 +1118,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         }
       } else if (targetElem.nextElementSibling.classList.contains('ttComment')) {
         // Comment.
-        this.setInfoOverlayTitle($localize`:@@Read.Comments.Title:Kommentarer`);
+        this.setInfoOverlayTitle($localize`:@@ViewOptions.ExplanatoryNote:Punktkommentar`);
         if (targetElem.nextElementSibling?.classList.contains('noteText')) {
           text = '<p class="infoOverlayText"><span class="ioDescription">'
             + targetElem.nextElementSibling.innerHTML + '</span></p>';

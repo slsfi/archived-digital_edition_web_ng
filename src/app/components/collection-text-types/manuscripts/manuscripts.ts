@@ -67,12 +67,12 @@ export class ManuscriptsComponent implements OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Read.Manuscripts.NoManuscripts:Inga manuskript.`;
+          this.text = $localize`:@@Manuscripts.Missing:Inga manuskript.`;
         }
       },
       error: (e) => {
         console.error(e);
-        this.text = $localize`:@@Read.Manuscripts.Error:Ett fel har uppstått. Manuskript kunde inte hämtas.`;
+        this.text = $localize`:@@Manuscripts.Error:Ett fel har uppstått. Manuskript kunde inte hämtas.`;
       }
     });
   }
@@ -155,8 +155,8 @@ export class ManuscriptsComponent implements OnInit {
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Manuscripts.SelectMsDialogTitle:Välj manuskript`,
-      subHeader: $localize`:@@Read.Manuscripts.SelectMsDialogSubtitle:Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.`,
+      header: $localize`:@@Manuscripts.SelectMsDialogTitle:Välj manuskript`,
+      subHeader: $localize`:@@Manuscripts.SelectMsDialogSubtitle:Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs

@@ -91,14 +91,14 @@ export class CollectionForewordPage implements OnDestroy, OnInit {
           return this.sanitizer.bypassSecurityTrustHtml(text);
         } else {
           return of(this.sanitizer.bypassSecurityTrustHtml(
-            $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
+            $localize`:@@CollectionForeword.Missing:Förordet kunde inte laddas.`
           ));
         }
       }),
       catchError((e: any) => {
         console.error(e);
         return of(this.sanitizer.bypassSecurityTrustHtml(
-          $localize`:@@Read.ForewordPage.NoForeword:Förordet kunde inte laddas.`
+          $localize`:@@CollectionForeword.Missing:Förordet kunde inte laddas.`
         ));
       })
     );

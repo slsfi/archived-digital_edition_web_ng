@@ -132,7 +132,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
     if (this.parentPageType === 'page-cover') {
       // Initialised from page-cover
-      this.currentItemTitle = $localize`:@@Read.CoverPage.Title:Omslag`;
+      this.currentItemTitle = $localize`:@@CollectionCover.Cover:Omslag`;
 
       this.firstItem = true;
       this.lastItem = false;
@@ -148,7 +148,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
     } else if (this.parentPageType === 'page-title') {
       // Initialised from page-title
-      this.currentItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
+      this.currentItemTitle = $localize`:@@CollectionTitle.TitlePage:Titelblad`;
 
       if (this.collectionHasCover) {
         this.firstItem = false;
@@ -172,7 +172,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
     } else if (this.parentPageType === 'page-foreword') {
       // Initialised from page-foreword
-      this.currentItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
+      this.currentItemTitle = $localize`:@@CollectionForeword.Foreword:Förord`;
 
       this.lastItem = false;
       if (this.collectionHasCover || this.collectionHasTitle) {
@@ -195,7 +195,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
 
     } else if (this.parentPageType === 'page-introduction') {
       // Initialised from page-introduction
-      this.currentItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+      this.currentItemTitle = $localize`:@@CollectionIntroduction.Introduction:Inledning`;
 
       this.lastItem = false;
       if (this.collectionHasCover || this.collectionHasTitle || this.collectionHasForeword) {
@@ -261,7 +261,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageTitleAsNext(collectionId: string) {
-    this.nextItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
+    this.nextItemTitle = $localize`:@@CollectionTitle.TitlePage:Titelblad`;
     this.nextItem = {
       itemId: collectionId,
       page: 'page-title'
@@ -269,7 +269,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageForewordAsNext(collectionId: string) {
-    this.nextItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
+    this.nextItemTitle = $localize`:@@CollectionForeword.Foreword:Förord`;
     this.nextItem = {
       itemId: collectionId,
       page: 'page-foreword'
@@ -277,7 +277,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageIntroductionAsNext(collectionId: string) {
-    this.nextItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+    this.nextItemTitle = $localize`:@@CollectionIntroduction.Introduction:Inledning`;
     this.nextItem = {
       itemId: collectionId,
       page: 'page-introduction'
@@ -293,7 +293,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageCoverAsPrevious(collectionId: string) {
-    this.prevItemTitle = $localize`:@@Read.CoverPage.Title:Omslag`;
+    this.prevItemTitle = $localize`:@@CollectionCover.Cover:Omslag`;
     this.prevItem = {
       itemId: collectionId,
       page: 'page-cover'
@@ -301,7 +301,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageTitleAsPrevious(collectionId: string) {
-    this.prevItemTitle = $localize`:@@Read.TitlePage.Title:Titelblad`;
+    this.prevItemTitle = $localize`:@@CollectionTitle.TitlePage:Titelblad`;
     this.prevItem = {
       itemId: collectionId,
       page: 'page-title'
@@ -309,7 +309,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageForewordAsPrevious(collectionId: string) {
-    this.prevItemTitle = $localize`:@@Read.ForewordPage.Title:Förord`;
+    this.prevItemTitle = $localize`:@@CollectionForeword.Foreword:Förord`;
     this.prevItem = {
       itemId: collectionId,
       page: 'page-foreword'
@@ -317,7 +317,7 @@ export class TextChangerComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setPageIntroductionAsPrevious(collectionId: string) {
-    this.prevItemTitle = $localize`:@@Read.Introduction.Title:Inledning`;
+    this.prevItemTitle = $localize`:@@CollectionIntroduction.Introduction:Inledning`;
     this.prevItem = {
       itemId: collectionId,
       page: 'page-introduction'

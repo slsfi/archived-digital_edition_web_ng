@@ -67,12 +67,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Read.Comments.NoComments:Inga kommentarer.`;
+          this.text = $localize`:@@Commentary.Missing:Inga kommentarer.`;
         }
       },
       error: (e) =>  {
         console.error(e);
-        this.text = $localize`:@@Read.Comments.Error:Ett fel har uppstått. Kommentarer kunde inte hämtas.`;
+        this.text = $localize`:@@Commentary.Error:Ett fel har uppstått. Kommentarer kunde inte hämtas.`;
       }
     });
   }

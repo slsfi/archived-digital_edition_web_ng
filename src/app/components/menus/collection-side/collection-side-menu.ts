@@ -114,7 +114,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
               this.categoricalMenu = this.constructCategoricalMenu(flattenedMenu, primaryKey, secondaryKey);
             }
             this.sortSelectOptions = {
-              header: $localize`:@@TOC.SortOptions.SortTOC:Välj sortering för innehållsförteckningen`,
+              header: $localize`:@@CollectionSideMenu.SortOptions.SelectSorting:Välj sortering för innehållsförteckningen`,
               cssClass: 'custom-select-alert'
             }
           }
@@ -142,16 +142,16 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
     const pageTitle = this.initialUrlSegments[2].path;
     switch (pageTitle) {
       case 'cover':
-        this.headService.setTitle([$localize`:@@Read.CoverPage.Title:Omslag`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@CollectionCover.Cover:Omslag`, this.collectionTitle]);
         return true;
       case 'title':
-        this.headService.setTitle([$localize`:@@Read.TitlePage.Title:Titelblad`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@CollectionTitle.TitlePage:Titelblad`, this.collectionTitle]);
         return true;
       case 'foreword':
-        this.headService.setTitle([$localize`:@@Read.ForewordPage.Title:Förord`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@CollectionForeword.Foreword:Förord`, this.collectionTitle]);
         return true;
       case 'introduction':
-        this.headService.setTitle([$localize`:@@Read.Introduction.Title:Inledning`, this.collectionTitle]);
+        this.headService.setTitle([$localize`:@@CollectionIntroduction.Introduction:Inledning`, this.collectionTitle]);
         return true;
       default:
         return false;
