@@ -62,7 +62,7 @@ export class VariantsComponent implements OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Read.Variants.NoVariations:Inga tryckta varianter tillgängliga.`;
+          this.text = $localize`:@@Read.Variants.NoVariants:Inga tryckta varianter tillgängliga.`;
         }
       },
       error: (e) => {
@@ -147,8 +147,8 @@ export class VariantsComponent implements OnInit {
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Variants.SelectVariationDialogTitle:Välj variant`,
-      subHeader:  $localize`:@@Read.Variants.SelectVariationDialogSubtitle:Varianten ersätter den variant som visas i kolumnen där du klickade.`,
+      header: $localize`:@@Read.Variants.SelectVariantDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variants.SelectVariantDialogSubtitle:Varianten ersätter den variant som visas i kolumnen där du klickade.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs
@@ -178,8 +178,8 @@ export class VariantsComponent implements OnInit {
     });
 
     const alert = await this.alertCtrl.create({
-      header: $localize`:@@Read.Variants.OpenNewVariationDialogTitle:Välj variant`,
-      subHeader:  $localize`:@@Read.Variants.OpenNewVariationDialogSubtitle:Varianten öppnas i en ny kolumn.`,
+      header: $localize`:@@Read.Variants.OpenNewVariantDialogTitle:Välj variant`,
+      subHeader:  $localize`:@@Read.Variants.OpenNewVariantDialogSubtitle:Varianten öppnas i en ny kolumn.`,
       cssClass: 'custom-select-alert',
       buttons: buttons,
       inputs: inputs

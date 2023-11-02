@@ -40,17 +40,18 @@
             "ParagraphNumbering": "Paragraph/Stanza numbering",
             "PageBreakOriginal": "Original page breaks",
             "PageBreakEdition": "Edition page breaks",
-            "CommentSymbol": "Red asterisk"
+            "CommentSymbolAltText": "Red asterisk"
         },
-        "ReadFromBeginning": "From the beginning",
         "Established": {
-            "Title": "Established text",
-            "AddButtonText": "Established text view",
-            "NoEstablished": "No established text, see facsimiles.",
-            "Error": "An error occurred. The established text could not be loaded."
+            "Title": "Reading text",
+            "TitleSwedishText": "Swedish text",
+            "TitleFinnishText": "Finnish text",
+            "AddButtonText": "Reading text",
+            "NoEstablished": "No reading text, see facsimiles.",
+            "Error": "An error occurred. The reading text could not be loaded."
         },
         "Comments": {
-            "Title": "Comments",
+            "Title": "Commentary",
             "AddButtonText": "Comments view",
             "NoComments": "No comments.",
             "Error": "An error occurred. Comments could not be loaded.",
@@ -89,21 +90,20 @@
         "Variants": {
             "Title": "Variant",
             "AddButtonText": "Variant",
-            "NoVariations": "No variants available.",
-            "ChangeVariation": "Change variant",
-            "OpenNewVariation": "Open new variant",
-            "SelectVariationDialogTitle": "Select variant",
-            "SelectVariationDialogSubtitle": "The variant will be shown in the column where you clicked.",
-            "OpenNewVariationDialogTitle": "Select variant",
-            "OpenNewVariationDialogSubtitle": "The variant will open in a new column.",
+            "NoVariants": "No variants available.",
+            "ChangeVariant": "Change variant",
+            "OpenNewVariant": "Open new variant",
+            "SelectVariantDialogTitle": "Select variant",
+            "SelectVariantDialogSubtitle": "The variant will be shown in the column where you clicked.",
+            "OpenNewVariantDialogTitle": "Select variant",
+            "OpenNewVariantDialogSubtitle": "The variant will open in a new column.",
             "Error": "An error occurred. Variants could not be loaded."
         },
         "Facsimiles": {
             "Title": "Facsimiles",
             "AddButtonText": "Facsimile view",
-            "Page": "Image",
-            "OpenManuscript": "Open manuscript",
-            "ExternalHeading": "External facsimiles",
+            "Image": "Image",
+            "ExternalFacsimiles": "External facsimiles",
             "ChangeFacsimile": "Select facsimile",
             "NoFacsimiles": "No facsimiles available.",
             "SelectFacsDialogTitle": "Select facsimile",
@@ -133,15 +133,15 @@
         },
         "Introduction": {
             "Title": "Introduction",
-            "AddButtonText": "Introduction",
             "Contents": "Contents",
             "NoIntroduction": "The introduction could not be loaded."
         },
         "Illustrations": {
+            "Title": "Illustrations",
             "AddButtonText": "Illustrations",
             "Goto": "Go to position in text",
-            "Nothing": "No illustrations.",
-            "Showall": "Show all"
+            "NoIllustrations": "No illustrations.",
+            "ShowAll": "Show all"
         },
         "Legend": {
             "Title": "Legend",
@@ -174,13 +174,18 @@
             "ImageNumberInfo": "Image number info",
             "ExternalUrl": "Link"
         },
-        "ShowAll": "Show all",
-        "ShowSearchResults": "Occurrences",
-        "AddColumn": "Add column",
-        "ToggleColumnOptionsMenu": "Open/close column options menu",
-        "RemoveColumn": "Remove column",
-        "MoveColumnRight": "Switch places with the column to the right",
-        "MoveColumnLeft": "Switch places with the column to the left"
+        "AddTextColumnPopover": {
+            "AddColumn": "Add column",
+            "ShowAll": "Show all"
+        }
+    },
+    "CollectionText": {
+        "ColumnOptionsMenu": {
+            "Toggle": "Open/close column options menu",
+            "Remove": "Remove column",
+            "MoveRight": "Switch places with the column to the right",
+            "MoveLeft": "Switch places with the column to the left"
+        }
     },
     "About": {
         "LoadingError": "Failed to load page content."
@@ -370,17 +375,6 @@
         "mediaCollection": "Refer to this media collection",
         "missing": "This page does not have a persistent identifier"
     },
-    "established": "Reading text",
-    "established_sv": "Reading text (in Swedish)",
-    "established_fi": "Reading text (in Finnish)",
-    "comments": "Commentary",
-    "facsimiles": "Fascimile",
-    "manuscripts": "Manuscript",
-    "variants": "Variants",
-    "introduction": "Introduction",
-    "illustrations": "Illustrations",
-    "legend": "Legend",
-    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"

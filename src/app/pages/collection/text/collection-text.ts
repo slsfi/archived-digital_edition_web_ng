@@ -1118,7 +1118,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         }
       } else if (targetElem.nextElementSibling.classList.contains('ttComment')) {
         // Comment.
-        this.setInfoOverlayTitle($localize`:@@comments:Kommentarer`);
+        this.setInfoOverlayTitle($localize`:@@Read.Comments.Title:Kommentarer`);
         if (targetElem.nextElementSibling?.classList.contains('noteText')) {
           text = '<p class="infoOverlayText"><span class="ioDescription">'
             + targetElem.nextElementSibling.innerHTML + '</span></p>';

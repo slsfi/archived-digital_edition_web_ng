@@ -40,11 +40,12 @@
             "ParagraphNumbering": "Kappale-/rivinumerointi",
             "PageBreakOriginal": "Alkuteoksen sivunumerot",
             "PageBreakEdition": "Painetun edition sivunumerot",
-            "CommentSymbol": "Punainen asteriski"
+            "CommentSymbolAltText": "Punainen asteriski"
         },
-        "ReadFromBeginning": "Lue",
         "Established": {
             "Title": "Lukuteksti",
+            "TitleSwedishText": "Ruotsinkielinen teksti",
+            "TitleFinnishText": "Suomenkielinen teksti",
             "AddButtonText": "Lukuteksti",
             "NoEstablished": "Lukutekstiä ei ole, katso faksimile.",
             "Error": "Lukutekstin lataus epäonnistui."
@@ -89,21 +90,20 @@
         "Variants": {
             "Title": "Painettu variantti",
             "AddButtonText": "Painettu variantti",
-            "NoVariations": "Painettuja variantteja ei ole saatavilla.",
-            "ChangeVariation": "Vaihda varianttia",
-            "OpenNewVariation": "Avaa uusi variantti",
-            "SelectVariationDialogTitle": "Valitse variantti",
-            "SelectVariationDialogSubtitle": "Valittu variantti korvaa sarakkeen variantin.",
-            "OpenNewVariationDialogTitle": "Valitse variantti",
-            "OpenNewVariationDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen.",
+            "NoVariants": "Painettuja variantteja ei ole saatavilla.",
+            "ChangeVariant": "Vaihda varianttia",
+            "OpenNewVariant": "Avaa uusi variantti",
+            "SelectVariantDialogTitle": "Valitse variantti",
+            "SelectVariantDialogSubtitle": "Valittu variantti korvaa sarakkeen variantin.",
+            "OpenNewVariantDialogTitle": "Valitse variantti",
+            "OpenNewVariantDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen.",
             "Error": "Varianttien lataus epäonnistui."
         },
         "Facsimiles": {
             "Title": "Faksimile",
             "AddButtonText": "Faksimilet",
-            "Page": "Kuva",
-            "OpenManuscript": "Käsikirjoitus",
-            "ExternalHeading": "Ulkopuoliset faksimilet",
+            "Image": "Kuva",
+            "ExternalFacsimiles": "Ulkopuoliset faksimilet",
             "ChangeFacsimile": "Vaihda faksimilea",
             "NoFacsimiles": "Faksimileja ei ole saatavilla.",
             "SelectFacsDialogTitle": "Valitse faksimile",
@@ -133,15 +133,15 @@
         },
         "Introduction": {
             "Title": "Johdanto",
-            "AddButtonText": "Johdanto",
             "Contents": "Sisältö",
             "NoIntroduction": "Johdannon lataus epäonnistui."
         },
         "Illustrations": {
+            "Title": "Kuvat",
             "AddButtonText": "Kuvat",
             "Goto": "Näytä esiintymä",
-            "Nothing": "Ei kuvia",
-            "Showall": "Näytä kaikki"
+            "NoIllustrations": "Ei kuvia",
+            "ShowAll": "Näytä kaikki"
         },
         "Legend": {
             "Title": "Lukuohje",
@@ -174,13 +174,18 @@
             "ImageNumberInfo": "Kuvien numerot digitaalisessa arkistossa",
             "ExternalUrl": "Faksimilen linkki"
         },
-        "ShowAll": "Näytä kaikki",
-        "ShowSearchResults": "Esiintymät",
-        "AddColumn": "Lisää sarake",
-        "ToggleColumnOptionsMenu": "Avaa/sulje sarakkeen valikko",
-        "RemoveColumn": "Poista sarake",
-        "MoveColumnRight": "Vaihda paikkaa oikeanpuoleisen sarakkeen kanssa",
-        "MoveColumnLeft": "Vaihda paikkaa vasemmanpuoleisen sarakkeen kanssa"
+        "AddTextColumnPopover": {
+            "AddColumn": "Lisää sarake",
+            "ShowAll": "Näytä kaikki"
+        }
+    },
+    "CollectionText": {
+        "ColumnOptionsMenu": {
+            "Toggle": "Avaa/sulje sarakkeen valikko",
+            "Remove": "Poista sarake",
+            "MoveRight": "Vaihda paikkaa oikeanpuoleisen sarakkeen kanssa",
+            "MoveLeft": "Vaihda paikkaa vasemmanpuoleisen sarakkeen kanssa"
+        }
     },
     "About": {
         "LoadingError": "Sivun sisällön lataus epäonnistui."
@@ -370,17 +375,6 @@
         "mediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
         "missing": "Sivulla ei ole pysyvää osoitetta"
     },
-    "established": "Lukuteksti",
-    "established_sv": "Lukuteksti (ruotsiksi)",
-    "established_fi": "Lukuteksti (suomeksi)",
-    "comments": "Kommentaari",
-    "facsimiles": "Faksimilet",
-    "manuscripts": "Käsikirjoitukset",
-    "variants": "Painetut variantit",
-    "introduction": "Johdanto",
-    "illustrations": "Kuvat",
-    "legend": "Lukuohje",
-    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"

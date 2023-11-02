@@ -24,7 +24,7 @@
 
     <div class="modal-inner-box">
       <div *ngIf="introductionMode && downloadFormatsIntro.length" class="dlt-group">
-        <h3 i18n="@@introduction">Inledning</h3>
+        <h3 i18n="@@Read.Introduction.Title">Inledning</h3>
         <ion-buttons class="download-buttons">
           <ng-container *ngFor="let format of downloadFormatsIntro">
             <ion-button *ngIf="format !== 'print'"
@@ -53,8 +53,8 @@
             <div *ngIf="readTextLanguages.length < 2 || (readTextLanguages.length > 1 && publicationData.original_filename?.[language])" class="dlt-group">
               <h3 *ngIf="readTextLanguages.length < 2" i18n="@@Read.Established.Title">Lästext</h3>
               <h3 *ngIf="readTextLanguages.length > 1">
-                  <ng-container *ngIf="language === 'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-                  <ng-container *ngIf="language === 'fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
+                  <ng-container *ngIf="language === 'sv'" i18n="@@Read.Established.TitleSwedishText">Svensk text</ng-container>
+                  <ng-container *ngIf="language === 'fi'" i18n="@@Read.Established.TitleFinnishText">Finsk text</ng-container>
               </h3>
               <ion-buttons class="download-buttons">
                 <ng-container *ngFor="let format of downloadFormatsEst">
@@ -111,7 +111,7 @@
 
       <ng-container *ngIf="(manuscriptsList$ | async) as manuscripts">
         <div *ngIf="readTextsMode && downloadFormatsMs.length" class="dlt-group">
-          <h3 i18n="@@manuscripts">Manuskript</h3>
+          <h3 i18n="@@Read.Manuscripts.Title">Manuskript</h3>
           <ng-container *ngFor="let ms of manuscripts; index as i">
             <h4 *ngIf="manuscripts.length > 1" [innerHTML]="ms.name"></h4>
             <ion-buttons class="download-buttons">

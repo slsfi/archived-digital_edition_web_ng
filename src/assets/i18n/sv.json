@@ -40,11 +40,12 @@
             "ParagraphNumbering": "Stycke-/radnumrering",
             "PageBreakOriginal": "Sidnummer i originalet",
             "PageBreakEdition": "Sidnummer i den tryckta utgåvan",
-            "CommentSymbol": "Röd asterisk"
+            "CommentSymbolAltText": "Röd asterisk"
         },
-        "ReadFromBeginning": "Läs från början",
         "Established": {
             "Title": "Lästext",
+            "TitleSwedishText": "Svensk text",
+            "TitleFinnishText": "Finsk text",
             "AddButtonText": "Lästext",
             "NoEstablished": "Det finns ingen utskriven lästext, se faksimil.",
             "Error": "Ett fel har uppstått. Lästexten kunde inte hämtas."
@@ -89,21 +90,20 @@
         "Variants": {
             "Title": "Tryckt variant",
             "AddButtonText": "Tryckt variant",
-            "NoVariations": "Inga tryckta varianter tillgängliga.",
-            "ChangeVariation": "Byt variant",
-            "OpenNewVariation": "Öppna ny variant",
-            "SelectVariationDialogTitle": "Välj variant",
-            "SelectVariationDialogSubtitle": "Varianten ersätter den variant som visas i kolumnen där du klickade.",
-            "OpenNewVariationDialogTitle": "Välj variant",
-            "OpenNewVariationDialogSubtitle": "Varianten öppnas i en ny kolumn.",
+            "NoVariants": "Inga tryckta varianter tillgängliga.",
+            "ChangeVariant": "Byt variant",
+            "OpenNewVariant": "Öppna ny variant",
+            "SelectVariantDialogTitle": "Välj variant",
+            "SelectVariantDialogSubtitle": "Varianten ersätter den variant som visas i kolumnen där du klickade.",
+            "OpenNewVariantDialogTitle": "Välj variant",
+            "OpenNewVariantDialogSubtitle": "Varianten öppnas i en ny kolumn.",
             "Error": "Ett fel har uppstått. Varianter kunde inte laddas."
         },
         "Facsimiles": {
             "Title": "Faksimil",
             "AddButtonText": "Faksimil",
-            "Page": "Bild:",
-            "OpenManuscript": "Öppna manuskript",
-            "ExternalHeading": "Externa faksimil",
+            "Image": "Bild:",
+            "ExternalFacsimiles": "Externa faksimil",
             "ChangeFacsimile": "Byt faksimil",
             "NoFacsimiles": "Inga faksimil tillgängliga.",
             "SelectFacsDialogTitle": "Välj faksimil",
@@ -133,15 +133,15 @@
         },
         "Introduction": {
             "Title": "Inledning",
-            "AddButtonText": "Inledning",
             "Contents": "Innehåll",
             "NoIntroduction": "Inledningen kunde inte laddas."
         },
         "Illustrations": {
+            "Title": "Illustrationer",
             "AddButtonText": "Illustrationer",
             "Goto": "Gå till position i lästext",
-            "Nothing": "Inga illustrationer.",
-            "Showall": "Visa alla"
+            "NoIllustrations": "Inga illustrationer.",
+            "ShowAll": "Visa alla"
         },
         "Legend": {
             "Title": "Teckenförklaringar",
@@ -174,13 +174,18 @@
             "ImageNumberInfo": "Bildernas nummer i digitalarkivet",
             "ExternalUrl": "Extern länk för faksimilet"
         },
-        "ShowAll": "Visa alla",
-        "ShowSearchResults": "Förekomster",
-        "AddColumn": "Ny kolumn",
-        "ToggleColumnOptionsMenu": "Öppna/stäng alternativ för kolumnen",
-        "RemoveColumn": "Ta bort kolumnen",
-        "MoveColumnRight": "Byt plats med kolumnen till höger",
-        "MoveColumnLeft": "Byt plats med kolumnen till vänster"
+        "AddTextColumnPopover": {
+            "AddColumn": "Ny kolumn",
+            "ShowAll": "Visa alla"
+        }
+    },
+    "CollectionText": {
+        "ColumnOptionsMenu": {
+            "Toggle": "Öppna/stäng alternativ för kolumnen",
+            "Remove": "Ta bort kolumnen",
+            "MoveRight": "Byt plats med kolumnen till höger",
+            "MoveColumnLeft": "Byt plats med kolumnen till vänster"
+        }
     },
     "About": {
         "LoadingError": "Sidans innehåll kunde inte laddas."
@@ -370,17 +375,6 @@
         "mediaCollection": "Hänvisa till denna bildsamling",
         "missing": "Sidan saknar beständig webbadress"
     },
-    "established": "Lästext",
-    "established_sv": "Lästext (på svenska)",
-    "established_fi": "Lästext (på finska)",
-    "comments": "Kommentarer",
-    "facsimiles": "Faksimil",
-    "manuscripts": "Manuskript",
-    "variants": "Tryckta varianter",
-    "introduction": "Inledning",
-    "illustrations": "Illustrationer",
-    "legend": "Teckenförklaringar",
-    "metadata": "Metadata",
     "EditionsList": {
         "DownloadPDF": "PDF",
         "DownloadEPUB": "EPUB"

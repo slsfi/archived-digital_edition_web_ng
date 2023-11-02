@@ -82,18 +82,18 @@
 
           <!-- Ion fab column options -->
           <ion-fab *ngIf="views.length>1" class="column-options">
-            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@Read.ToggleColumnOptionsMenu" #fabColumnOptionsButton>
-              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@Read.ToggleColumnOptionsMenu"></ion-icon>
+            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@CollectionText.ColumnOptionsMenu.Toggle" #fabColumnOptionsButton>
+              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@CollectionText.ColumnOptionsMenu.Toggle"></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@Read.RemoveColumn">
-                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@Read.RemoveColumn"></ion-icon>
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@CollectionText.ColumnOptionsMenu.Remove">
+                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@CollectionText.ColumnOptionsMenu.Remove"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@Read.MoveColumnRight">
-                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@Read.MoveColumnRight"></ion-icon>
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@CollectionText.ColumnOptionsMenu.MoveRight">
+                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@CollectionText.ColumnOptionsMenu.MoveRight"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@Read.MoveColumnLeft">
-                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@Read.MoveColumnLeft"></ion-icon>
+              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@CollectionText.ColumnOptionsMenu.MoveLeft">
+                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@CollectionText.ColumnOptionsMenu.MoveLeft"></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
@@ -101,16 +101,16 @@
           <!-- Ion card for each column-->
           <ion-card>
             <ion-card-header class="column-card-title">
-              <ng-container *ngIf="view.type === 'established'" i18n="@@established">Lästext</ng-container>
-              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
-              <ng-container *ngIf="view.type === 'comments'" i18n="@@comments">Kommentarer</ng-container>
-              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@facsimiles">Faksimil</ng-container>
-              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@manuscripts">Manuskript</ng-container>
+              <ng-container *ngIf="view.type === 'established'" i18n="@@Read.Established.Title">Lästext</ng-container>
+              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@Read.Established.TitleSwedishText">Svensk text</ng-container>
+              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@Read.Established.TitleFinnishText">Finsk text</ng-container>
+              <ng-container *ngIf="view.type === 'comments'" i18n="@@Read.Comments.Title">Kommentarer</ng-container>
+              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@Read.Facsimiles.Title">Faksimil</ng-container>
+              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@Read.Manuscripts.Title">Manuskript</ng-container>
               <ng-container *ngIf="view.type === 'variants'" i18n="@@Read.Variants.Title">Tryckt variant</ng-container>
-              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@illustrations">Illustrationer</ng-container>
-              <ng-container *ngIf="view.type === 'legend'" i18n="@@legend">Teckenförklaringar</ng-container>
-              <ng-container *ngIf="view.type === 'metadata'" i18n="@@metadata">Metadata</ng-container>
+              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@Read.Illustrations.Title">Illustrationer</ng-container>
+              <ng-container *ngIf="view.type === 'legend'" i18n="@@Read.Legend.Title">Teckenförklaringar</ng-container>
+              <ng-container *ngIf="view.type === 'metadata'" i18n="@@Read.Metadata.Title">Metadata</ng-container>
 
               <span *ngIf="(
                       view.type === 'variants' ||
@@ -243,7 +243,7 @@
                 >
                   <ng-container *ngIf="type === 'showAll'">
                     <ion-icon slot="start" name="albums-outline"></ion-icon>
-                    <ng-container i18n="@@Read.ShowAll">Visa alla</ng-container>
+                    <ng-container i18n="@@Read.AddTextColumnPopover.ShowAll">Visa alla</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'established'">
@@ -254,8 +254,8 @@
                   <ng-container *ngIf="type.startsWith('established_')">
                     <ion-icon slot="start" name="reader-outline"></ion-icon>
                     <ng-container [ngSwitch]="type.split('_')[1]">
-                      <ng-container *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-                      <ng-container *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
+                      <ng-container *ngSwitchCase="'sv'" i18n="@@Read.Established.TitleSwedishText">Svensk text</ng-container>
+                      <ng-container *ngSwitchCase="'fi'" i18n="@@Read.Established.TitleFinnishText">Finsk text</ng-container>
                     </ng-container>
                   </ng-container>
 
@@ -320,7 +320,7 @@
           </ion-popover>
 
           <div class="add-column">
-            <p id="add-column-label" i18n="@@Read.AddColumn">Ny kolumn</p>
+            <p id="add-column-label" i18n="@@Read.AddTextColumnPopover.AddColumn">Ny kolumn</p>
           </div>
         </div>
       </div>
@@ -383,8 +383,8 @@
         <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
           <ion-segment-button [value]="'established_'+lang" *ngIf="availableMobileModeViews.includes('established_'+lang)">
             <ng-container [ngSwitch]="lang">
-              <ion-label *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ion-label>
-              <ion-label *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ion-label>
+              <ion-label *ngSwitchCase="'sv'" i18n="@@Read.Established.TitleSwedishText">Svensk text</ion-label>
+              <ion-label *ngSwitchCase="'fi'" i18n="@@Read.Established.TitleFinnishText">Finsk text</ion-label>
             </ng-container>
           </ion-segment-button>
         </ng-container>
@@ -394,7 +394,7 @@
       </ion-segment-button>
       <!--
       <ion-segment-button value="manuscripts" *ngIf="availableMobileModeViews.includes('manuscripts')">
-        <ion-label i18n="@@manuscripts">Manuskript</ion-label>
+        <ion-label i18n="@@Read.Manuscripts.Title">Manuskript</ion-label>
       </ion-segment-button>
       -->
     </ion-segment>

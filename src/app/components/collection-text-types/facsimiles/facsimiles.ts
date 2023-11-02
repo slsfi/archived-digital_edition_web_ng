@@ -130,7 +130,7 @@ export class FacsimilesComponent implements OnInit {
       ) {
         this.selectedFacsimileIsExternal = true;
         this.emitSelectedFacsimileId(0);
-        this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`);
+        this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`);
       } else {
         this.selectedFacsimile = this.facsimiles[0];
       }
@@ -147,7 +147,7 @@ export class FacsimilesComponent implements OnInit {
     if (facs === 'external') {
       this.selectedFacsimileIsExternal = true;
       this.emitSelectedFacsimileId(0);
-      this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`);
+      this.emitSelectedFacsimileName($localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`);
       this.emitImageNumber(null);
     } else if (facs) {
       this.initializeDisplayedFacsimile(facs);
@@ -193,7 +193,7 @@ export class FacsimilesComponent implements OnInit {
     if (this.externalFacsimiles.length > 0) {
       inputs.push({
         type: 'radio',
-        label: $localize`:@@Read.Facsimiles.ExternalHeading:Externa faksimil`,
+        label: $localize`:@@Read.Facsimiles.ExternalFacsimiles:Externa faksimil`,
         value: '-1',
         checked: this.selectedFacsimileIsExternal
       });

@@ -84,12 +84,6 @@
         <target>Kommentti</target>
       </segment>
     </unit>
-    <unit id="comments">
-      <segment state="initial">
-        <source>Kommentarer</source>
-        <target>Kommentaari</target>
-      </segment>
-    </unit>
     <unit id="criticalNote">
       <segment state="initial">
         <source>Utgivarens anmärkning</source>
@@ -432,30 +426,6 @@
         <target>Lukuteksti</target>
       </segment>
     </unit>
-    <unit id="established">
-      <segment state="initial">
-        <source>Lästext</source>
-        <target>Lukuteksti</target>
-      </segment>
-    </unit>
-    <unit id="established_fi">
-      <segment state="initial">
-        <source>Lästext (på finska)</source>
-        <target>Lukuteksti (suomeksi)</target>
-      </segment>
-    </unit>
-    <unit id="established_sv">
-      <segment state="initial">
-        <source>Lästext (på svenska)</source>
-        <target>Lukuteksti (ruotsiksi)</target>
-      </segment>
-    </unit>
-    <unit id="facsimiles">
-      <segment state="initial">
-        <source>Faksimil</source>
-        <target>Faksimilet</target>
-      </segment>
-    </unit>
     <unit id="fictionalPersonCorresp">
       <segment state="initial">
         <source>historisk förebild</source>
@@ -484,12 +454,6 @@
       <segment state="initial">
         <source>Sök ...</source>
         <target>Hae ...</target>
-      </segment>
-    </unit>
-    <unit id="illustrations">
-      <segment state="initial">
-        <source>Illustrationer</source>
-        <target>Kuvat</target>
       </segment>
     </unit>
     <unit id="Index.ActiveFilters">
@@ -588,18 +552,6 @@
         <target>Johdanto</target>
       </segment>
     </unit>
-    <unit id="introduction">
-      <segment state="initial">
-        <source>Inledning</source>
-        <target>Johdanto</target>
-      </segment>
-    </unit>
-    <unit id="legend">
-      <segment state="initial">
-        <source>Teckenförklaringar</source>
-        <target>Lukuohje</target>
-      </segment>
-    </unit>
     <unit id="LetterReceiverLocation">
       <segment state="initial">
         <source>Mottagarort (brev)</source>
@@ -622,12 +574,6 @@
       <segment state="initial">
         <source>Avsändare (brev)</source>
         <target>Lähettäjä (kirjeet)</target>
-      </segment>
-    </unit>
-    <unit id="manuscripts">
-      <segment state="initial">
-        <source>Manuskript</source>
-        <target>Käsikirjoitukset</target>
       </segment>
     </unit>
     <unit id="MediaCollection.ClearFilters">
@@ -682,12 +628,6 @@
       <segment state="initial">
         <source>Visar</source>
         <target>Näytetään</target>
-      </segment>
-    </unit>
-    <unit id="metadata">
-      <segment state="initial">
-        <source>Metadata</source>
-        <target>Metadata</target>
       </segment>
     </unit>
     <unit id="Modal.Illustration.OpenMediaCollection">
@@ -1068,6 +1008,18 @@
         <target>Lukuteksti</target>
       </segment>
     </unit>
+    <unit id="Read.Established.TitleFinnishText">
+      <segment state="initial">
+        <source>Finsk text</source>
+        <target>Suomenkielinen teksti</target>
+      </segment>
+    </unit>
+    <unit id="Read.Established.TitleSwedishText">
+      <segment state="initial">
+        <source>Svensk text</source>
+        <target>Ruotsinkielinen teksti</target>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.AddButtonText">
       <segment state="initial">
         <source>Faksimil</source>
@@ -1218,6 +1170,12 @@
         <target>Näytä kaikki</target>
       </segment>
     </unit>
+    <unit id="Read.Illustrations.Title">
+      <segment state="initial">
+        <source>Illustrationer</source>
+        <target>Kuvat</target>
+      </segment>
+    </unit>
     <unit id="Read.Introduction.Contents">
       <segment state="initial">
         <source>Innehåll</source>
@@ -1294,6 +1252,12 @@
       <segment state="initial">
         <source>Visa ändringar inarbetade</source>
         <target>Näytä muutokset toteutettuina</target>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment state="initial">
+        <source>Manuskript</source>
+        <target>Käsikirjoitus</target>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">
@@ -1476,7 +1440,7 @@
         <target>Kommentit</target>
       </segment>
     </unit>
-    <unit id="Read.Popover.CommentSymbol">
+    <unit id="Read.Popover.CommentSymbolAltText">
       <segment state="initial">
         <source>Röd asterisk</source>
         <target>Punainen asteriski</target>
@@ -1608,7 +1572,7 @@
         <target>Painettu variantti</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.ChangeVariation">
+    <unit id="Read.Variants.ChangeVariant">
       <segment state="initial">
         <source>Byt variant</source>
         <target>Vaihda varianttia</target>
@@ -1620,37 +1584,37 @@
         <target>Varianttien lataus epäonnistui.</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.NoVariations">
+    <unit id="Read.Variants.NoVariants">
       <segment state="initial">
         <source>Inga tryckta varianter tillgängliga.</source>
         <target>Painettuja variantteja ei ole saatavilla.</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariation">
+    <unit id="Read.Variants.OpenNewVariant">
       <segment state="initial">
         <source>Öppna ny variant</source>
         <target>Avaa uusi variantti</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariationDialogSubtitle">
+    <unit id="Read.Variants.OpenNewVariantDialogSubtitle">
       <segment state="initial">
         <source>Varianten öppnas i en ny kolumn.</source>
         <target>Variantti avautuu uuteen sarakkeeseen.</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariationDialogTitle">
+    <unit id="Read.Variants.OpenNewVariantDialogTitle">
       <segment state="initial">
         <source>Välj variant</source>
         <target>Valitse variantti</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.SelectVariationDialogSubtitle">
+    <unit id="Read.Variants.SelectVariantDialogSubtitle">
       <segment state="initial">
         <source>Varianten ersätter den variant som visas i kolumnen där du klickade.</source>
         <target>Valittu variantti korvaa sarakkeen variantin.</target>
       </segment>
     </unit>
-    <unit id="Read.Variants.SelectVariationDialogTitle">
+    <unit id="Read.Variants.SelectVariantDialogTitle">
       <segment state="initial">
         <source>Välj variant</source>
         <target>Valitse variantti</target>

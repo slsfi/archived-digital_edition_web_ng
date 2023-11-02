@@ -572,7 +572,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     } else if (textType === 'com') {
       header += '    <p><b>' + this.commentTitle + ' ' + this.publicationTitle + '</b></p>\n';
     } else if (textType === 'ms') {
-      header += '    <p><b>' + $localize`:@@manuscripts:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
+      header += '    <p><b>' + $localize`:@@Read.Manuscripts.Title:Manuskript` + ': ' + this.publicationTitle + (typeTitle ? ' (' + typeTitle + ')' : '') + '</b></p>\n';
     } else {
       header += '    <p><b>' + this.publicationTitle + '</b></p>\n';
     }

@@ -6,7 +6,7 @@
       [class.mobile-mode]="mobileMode"
 >
   <h3 *ngIf="!selectedFacsimileIsExternal && showTitle" [innerHTML]="selectedFacsimile.title"></h3>
-  <h3 *ngIf="selectedFacsimileIsExternal" i18n="@@Read.Facsimiles.ExternalHeading">Externa faksimil</h3>
+  <h3 *ngIf="selectedFacsimileIsExternal" i18n="@@Read.Facsimiles.ExternalFacsimiles">Externa faksimil</h3>
   <div *ngIf="facsimiles.length > 1 || (facsimiles.length == 1 && externalFacsimiles.length > 0)"
         class="flex-buttons"
   >
@@ -32,7 +32,7 @@
       [class.mobile-mode]="mobileMode"
       fill="solid"
       label="Bild:"
-      i18n-label="@@Read.Facsimiles.Page"
+      i18n-label="@@Read.Facsimiles.Image"
       [helperText]="numberOfImages ? '/ ' + numberOfImages : ''"
       type="number"
       inputmode="numeric"

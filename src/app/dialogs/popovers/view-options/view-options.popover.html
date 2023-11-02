@@ -59,7 +59,7 @@
   </ion-item>
 
   <ion-item *ngIf="availableToggles.comments">
-    <ion-toggle class="show_comments" [(ngModel)]="show.comments" (ionChange)="toggleOption('comments')" justify="space-between" [enableOnOffLabels]="true"><img alt="Röd asterisk" i18n-alt="@@Read.Popover.CommentSymbol" src="assets/images/asterisk.svg" class="asterisk"><ng-container i18n="@@Read.Popover.Comments">Kommentarer</ng-container></ion-toggle>
+    <ion-toggle class="show_comments" [(ngModel)]="show.comments" (ionChange)="toggleOption('comments')" justify="space-between" [enableOnOffLabels]="true"><img alt="Röd asterisk" i18n-alt="@@Read.Popover.CommentSymbolAltText" src="assets/images/asterisk.svg" class="asterisk"><ng-container i18n="@@Read.Popover.Comments">Kommentarer</ng-container></ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="availableToggles.personInfo">

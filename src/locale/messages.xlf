@@ -71,11 +71,6 @@
         <source>Kommentar</source>
       </segment>
     </unit>
-    <unit id="comments">
-      <segment>
-        <source>Kommentarer</source>
-      </segment>
-    </unit>
     <unit id="criticalNote">
       <segment>
         <source>Utgivarens anmärkning</source>
@@ -361,26 +356,6 @@
         <source>Lästext</source>
       </segment>
     </unit>
-    <unit id="established">
-      <segment>
-        <source>Lästext</source>
-      </segment>
-    </unit>
-    <unit id="established_fi">
-      <segment>
-        <source>Lästext (på finska)</source>
-      </segment>
-    </unit>
-    <unit id="established_sv">
-      <segment>
-        <source>Lästext (på svenska)</source>
-      </segment>
-    </unit>
-    <unit id="facsimiles">
-      <segment>
-        <source>Faksimil</source>
-      </segment>
-    </unit>
     <unit id="fictionalPersonCorresp">
       <segment>
         <source>historisk förebild</source>
@@ -404,11 +379,6 @@
     <unit id="Home.SearchPlaceholder">
       <segment>
         <source>Sök ...</source>
-      </segment>
-    </unit>
-    <unit id="illustrations">
-      <segment>
-        <source>Illustrationer</source>
       </segment>
     </unit>
     <unit id="Index.ActiveFilters">
@@ -491,16 +461,6 @@
         <source>Inledning</source>
       </segment>
     </unit>
-    <unit id="introduction">
-      <segment>
-        <source>Inledning</source>
-      </segment>
-    </unit>
-    <unit id="legend">
-      <segment>
-        <source>Teckenförklaringar</source>
-      </segment>
-    </unit>
     <unit id="LetterReceiverLocation">
       <segment>
         <source>Mottagarort (brev)</source>
@@ -519,11 +479,6 @@
     <unit id="LetterSenderName">
       <segment>
         <source>Avsändare (brev)</source>
-      </segment>
-    </unit>
-    <unit id="manuscripts">
-      <segment>
-        <source>Manuskript</source>
       </segment>
     </unit>
     <unit id="MediaCollection.ClearFilters">
@@ -569,11 +524,6 @@
     <unit id="MediaCollection.Showing">
       <segment>
         <source>Visar</source>
-      </segment>
-    </unit>
-    <unit id="metadata">
-      <segment>
-        <source>Metadata</source>
       </segment>
     </unit>
     <unit id="Modal.Illustration.OpenMediaCollection">
@@ -891,6 +841,16 @@
         <source>Lästext</source>
       </segment>
     </unit>
+    <unit id="Read.Established.TitleFinnishText">
+      <segment>
+        <source>Finsk text</source>
+      </segment>
+    </unit>
+    <unit id="Read.Established.TitleSwedishText">
+      <segment>
+        <source>Svensk text</source>
+      </segment>
+    </unit>
     <unit id="Read.Facsimiles.AddButtonText">
       <segment>
         <source>Faksimil</source>
@@ -1016,6 +976,11 @@
         <source>Visa alla</source>
       </segment>
     </unit>
+    <unit id="Read.Illustrations.Title">
+      <segment>
+        <source>Illustrationer</source>
+      </segment>
+    </unit>
     <unit id="Read.Introduction.Contents">
       <segment>
         <source>Innehåll</source>
@@ -1079,6 +1044,11 @@
     <unit id="Read.Manuscripts.ShowNormalized">
       <segment>
         <source>Visa ändringar inarbetade</source>
+      </segment>
+    </unit>
+    <unit id="Read.Manuscripts.Title">
+      <segment>
+        <source>Manuskript</source>
       </segment>
     </unit>
     <unit id="Read.Metadata.AddButtonText">
@@ -1231,7 +1201,7 @@
         <source>Kommentarer</source>
       </segment>
     </unit>
-    <unit id="Read.Popover.CommentSymbol">
+    <unit id="Read.Popover.CommentSymbolAltText">
       <segment>
         <source>Röd asterisk</source>
       </segment>
@@ -1341,7 +1311,7 @@
         <source>Tryckt variant</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.ChangeVariation">
+    <unit id="Read.Variants.ChangeVariant">
       <segment>
         <source>Byt variant</source>
       </segment>
@@ -1351,32 +1321,32 @@
         <source>Ett fel har uppstått. Varianter kunde inte laddas.</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.NoVariations">
+    <unit id="Read.Variants.NoVariants">
       <segment>
         <source>Inga tryckta varianter tillgängliga.</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariation">
+    <unit id="Read.Variants.OpenNewVariant">
       <segment>
         <source>Öppna ny variant</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariationDialogSubtitle">
+    <unit id="Read.Variants.OpenNewVariantDialogSubtitle">
       <segment>
         <source>Varianten öppnas i en ny kolumn.</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.OpenNewVariationDialogTitle">
+    <unit id="Read.Variants.OpenNewVariantDialogTitle">
       <segment>
         <source>Välj variant</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.SelectVariationDialogSubtitle">
+    <unit id="Read.Variants.SelectVariantDialogSubtitle">
       <segment>
         <source>Varianten ersätter den variant som visas i kolumnen där du klickade.</source>
       </segment>
     </unit>
-    <unit id="Read.Variants.SelectVariationDialogTitle">
+    <unit id="Read.Variants.SelectVariantDialogTitle">
       <segment>
         <source>Välj variant</source>
       </segment>
