@@ -1,6 +1,6 @@
 <ion-content>
 
-  <h1 class="page-title" i18n="@@ElasticSearch.PageTitle">Sök i utgåvan</h1>
+  <h1 class="page-title" i18n="@@ElasticSearch.SearchEdition">Sök i utgåvan</h1>
 
   <ng-container *ngIf="(mdContent$ | async) as mdContent">
     <div class="info markdown" [innerHTML]="mdContent"></div>
@@ -172,7 +172,7 @@
                 <a [routerLink]="hit | elasticHitCollectionPagePath" [queryParams]="hit | elasticHitCollectionPageQueryparams">
                   <div>
                     <h3>
-                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentsHitHeadingPrepend">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>
+                      <span *ngIf="hit.source.text_type === 'com'" class="comment-prepend" i18n="@@ElasticSearch.CommentaryTo">Kommentar till</span> <span [innerHTML]="getHeading(hit)"></span>
                     </h3>
                     <p>{{getPublicationCollectionName(hit.source)}}</p>
                   </div>
