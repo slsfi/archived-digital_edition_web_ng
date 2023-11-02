@@ -84,13 +84,15 @@ export class ManuscriptsComponent implements OnInit {
       })[0];
       if (inputManuscript) {
         this.selectedManuscript = inputManuscript;
+      } else {
+        this.selectedManuscript = this.manuscripts[0];
       }
     } else {
       this.selectedManuscript = this.manuscripts[0];
     }
-    // Emit the ms id so the read page can update queryParams
+    // Emit the ms id so the collection text page can update queryParams
     this.emitSelectedManuscriptId(this.selectedManuscript.id);
-    // Emit the ms name so the read page can display it in the column header
+    // Emit the ms name so the collection text page can display it in the column header
     this.emitSelectedManuscriptName(this.selectedManuscript.name);
     this.changeManuscript();
   }
@@ -164,7 +166,9 @@ export class ManuscriptsComponent implements OnInit {
   }
 
   emitSelectedManuscriptId(id: number) {
-    this.selectedMsID.emit(id);
+    if (this.manuscripts.length > 1) {
+      this.selectedMsID.emit(id);
+    }
   }
 
   emitSelectedManuscriptName(name: string) {
