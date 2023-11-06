@@ -126,9 +126,9 @@ export class ContentGridComponent implements OnInit {
       const ebookItem = new ContentItem(
         {
           id: 'media-collection',
-          imageAltText: config.component?.contentGrid?.mediaCollectionCoverAltTexts?.[this.activeLocale] ?? $localize`:@@TOC.MediaCollections:Bildbank`,
+          imageAltText: config.component?.contentGrid?.mediaCollectionCoverAltTexts?.[this.activeLocale] ?? $localize`:@@MainSideMenu.MediaCollections:Bildbank`,
           imageURL: config.component?.contentGrid?.mediaCollectionCoverURL ?? '',
-          title: $localize`:@@TOC.MediaCollections:Bildbank`,
+          title: $localize`:@@MainSideMenu.MediaCollections:Bildbank`,
           type: 'media-collection'
         }
       );

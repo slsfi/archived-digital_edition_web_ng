@@ -26,7 +26,7 @@
   <li *ngIf="showTopAboutButton" class="about-button" role="menuitem">
     <a [routerLink]="['/about', firstAboutPageId]">
       <ion-icon name="information-circle-sharp"></ion-icon>
-      <span class="side-title" i18n="@@TopMenu.About">Om</span>
+      <span class="side-title" i18n="@@TopMenu.About">Om utgåvan</span>
     </a>
   </li>
   <li *ngIf="showTopSearchButton" class="search-button" role="menuitem">
@@ -38,7 +38,7 @@
   <li *ngIf="showTopURNButton" class="reference-button" role="menuitem">
     <button (click)="showReference($event)" type="button" aria-haspopup="dialog">
       <ion-icon name="arrow-redo-sharp"></ion-icon>
-      <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+      <span class="side-title" i18n="@@Reference.Refer">Hänvisa</span>
     </button>
   </li>
   <li *ngIf="showLanguageButton && currentLanguageLabel && languages.length > 1" class="language-menu-button" role="menuitem">

@@ -110,7 +110,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
         const shouldSetFilters = this.mediaCollectionID !== '' ? true : false;
         this.mediaCollectionID = '';
         this.namedEntityID = '';
-        this.mediaCollectionTitle = $localize`:@@TOC.MediaCollections:Bildbank`;
+        this.mediaCollectionTitle = $localize`:@@MainSideMenu.MediaCollections:Bildbank`;
         this.cdRef.detectChanges();
         this.mdContent$ = this.getMdContent(this.activeLocale + '-11-all');
 
@@ -262,7 +262,7 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
           this.mediaCollectionDescription = '';
         }
 
-        this.headService.setTitle([this.mediaCollectionTitle, $localize`:@@TOC.MediaCollections:Bildbank`]);
+        this.headService.setTitle([this.mediaCollectionTitle, $localize`:@@MainSideMenu.MediaCollections:Bildbank`]);
 
         this.loadingGallery = false;
         this.cdRef.detectChanges();

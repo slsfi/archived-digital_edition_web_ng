@@ -8,7 +8,7 @@
         </button>
         <ul *ngIf="!collection.hidden" role="menu">
             <li *ngFor="let publication of collection['publications']" role="menuitem">
-                <span class="text-name">{{publication.occurrences[0].displayName}}<ng-container *ngIf="publication.occurrences.length > 1"> ({{publication.occurrences.length}}&nbsp;<ng-container i18n="@@Occurrences.OccurrencesSmall">förekomster</ng-container>)</ng-container></span>
+                <span class="text-name">{{publication.occurrences[0].displayName}}<ng-container *ngIf="publication.occurrences.length > 1"> ({{publication.occurrences.length}}&nbsp;<ng-container i18n="@@NamedEntity.OccurrencesLowercase">förekomster</ng-container>)</ng-container></span>
 
                 <div class="text-links">
                     <ng-container *ngFor="let occ of publication.occurrences; index as i">
@@ -17,15 +17,15 @@
                                     [routerLink]="occ.linkID | collectionPagePath"
                                     [queryParams]="occ | occurrenceCollectionTextPageQueryparams"
                         >
-                            <ng-container *ngIf="occ.textType == 'ms'" i18n="@@Occurrences.Manuscript">Manuskript</ng-container>
+                            <ng-container *ngIf="occ.textType == 'ms'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
         
-                            <ng-container *ngIf="occ.textType == 'var'" i18n="@@Occurrences.Variation">Variant</ng-container>
+                            <ng-container *ngIf="occ.textType == 'var'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
         
-                            <ng-container *ngIf="occ.textType == 'com'" i18n="@@Occurrences.Commentary">Kommentar</ng-container>
+                            <ng-container *ngIf="occ.textType == 'com'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
         
-                            <ng-container *ngIf="occ.textType == 'facs'" i18n="@@Occurrences.Facsimile">Faksimil</ng-container><ng-container *ngIf="occ.facsimilePage">:&nbsp;{{occ.facsimilePage}}</ng-container>
+                            <ng-container *ngIf="occ.textType == 'facs'" i18n="@@Facsimiles.Facsimile">Faksimil</ng-container><ng-container *ngIf="occ.facsimilePage">:&nbsp;{{occ.facsimilePage}}</ng-container>
         
-                            <ng-container *ngIf="occ.textType == 'est'" i18n="@@Occurrences.Established">Lästext</ng-container>
+                            <ng-container *ngIf="occ.textType == 'est'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
                         </a>
                     </ng-container>
                 </div>
@@ -34,8 +34,8 @@
     </li>
 </ul>
 
-<p *ngIf="simpleWorkMetadata && (type === 'work' || type === 'work_manifestation'); else noOccurrences" i18n="@@Occurrences.workOccurrencesDisabled">Förekomster för verk är inte tillgängliga.</p>
+<p *ngIf="simpleWorkMetadata && (type === 'work' || type === 'work_manifestation'); else noOccurrences" i18n="@@NamedEntity.WorkOccurrencesUnavailable">Förekomster för verk är inte tillgängliga.</p>
 
 <ng-template #noOccurrences>
-    <p *ngIf="!isLoading && occurrenceData.length < 1" i18n="@@Occurrences.NoInfoFound">Ingen information hittades.</p>
+    <p *ngIf="!isLoading && occurrenceData.length < 1" i18n="@@NamedEntity.NoInfoFound">Ingen information hittades.</p>
 </ng-template>

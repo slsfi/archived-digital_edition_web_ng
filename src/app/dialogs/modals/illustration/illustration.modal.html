@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title i18n="@@Modal.Illustration.Title">Illustration</ion-title>
+    <ion-title i18n="@@Illustrations.Illustration">Illustration</ion-title>
     <ion-buttons slot="end">
       <ion-button class="close" (click)="dismiss()">
         <ion-icon name="close" slot="icon-only" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
@@ -16,7 +16,7 @@
           (click)="zoomImage()"
           aria-haspopup="dialog"
           aria-label="Zooma in"
-          i18n-aria-label="@@Read.Facsimiles.ZoomIn"
+          i18n-aria-label="@@Facsimiles.ZoomIn"
     >
       <img [alt]="imgMetadata?.media_title_translation || 'Illustration'" [src]="imgPath">
     </button>
@@ -27,7 +27,7 @@
       <p *ngIf="imgMetadata.art_location">{{imgMetadata.art_location}}</p>
       <p class="media-collection-link" *ngIf="imgMetadata.media_collection_id">
         <a [routerLink]="['/media-collection', imgMetadata.media_collection_id]">
-          <ion-icon name="images" aria-hidden="true"></ion-icon> <ng-container i18n="@@Modal.Illustration.OpenMediaCollection">Öppna bildbanken</ng-container>
+          <ion-icon name="images" aria-hidden="true"></ion-icon> <ng-container i18n="@@Illustrations.OpenMediaCollection">Öppna bildbanken</ng-container>
         </a>
       </p>
     </div>

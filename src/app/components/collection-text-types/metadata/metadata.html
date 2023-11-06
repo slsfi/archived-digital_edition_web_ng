@@ -1,35 +1,35 @@
 <div class="tei teiContainer">
     <ng-container *ngIf="(metadata$ | async) as metadata; else loadingOrError">
-        <h2 i18n="@@Read.Metadata.Title">Metadata</h2>
+        <h2 i18n="@@Metadata.Metadata">Metadata</h2>
         <dl>
             <div *ngIf="metadata.publication_title">
-                <dt i18n="@@Read.Metadata.PublicationTitle">Dokumentets titel</dt>
+                <dt i18n="@@Metadata.PublicationTitle">Dokumentets titel</dt>
                 <dd>{{metadata.publication_title}}</dd>
             </div>
             <div *ngIf="metadata.publication_subtitle">
-                <dt i18n="@@Read.Metadata.PublicationSubtitle">Undertitel</dt>
+                <dt i18n="@@Metadata.PublicationSubtitle">Undertitel</dt>
                 <dd>{{metadata.publication_subtitle}}</dd>
             </div>
             <div *ngIf="metadata.published_by">
-                <dt i18n="@@Read.Metadata.PublishedBy">Publicerat i</dt>
+                <dt i18n="@@Metadata.PublishedBy">Publicerat i</dt>
                 <dd>{{metadata.published_by}}</dd>
             </div>
             <div *ngIf="metadata.document_type">
-                <dt i18n="@@Read.Metadata.DocumentType">Dokumenttyp</dt>
+                <dt i18n="@@Metadata.DocumentType">Dokumenttyp</dt>
                 <dd>{{metadata.document_type}}</dd>
             </div>
             <div *ngIf="metadata.original_language">
-                <dt i18n="@@Read.Metadata.OriginalLanguage">Originalspråk</dt>
+                <dt i18n="@@Metadata.OriginalLanguage">Originalspråk</dt>
                 <dd>{{metadata.original_language}}</dd>
             </div>
             <div *ngIf="metadata.publication_date">
-                <dt i18n="@@Read.Metadata.PublicationDate">Datering</dt>
+                <dt i18n="@@Metadata.PublicationDate">Datering</dt>
                 <dd>{{metadata.publication_date}}</dd>
             </div>
             <div *ngIf="metadata.author?.length">
                 <dt>
-                    <ng-container *ngIf="metadata.author.length < 2" i18n="@@Read.Metadata.Author">Författare</ng-container>
-                    <ng-container *ngIf="metadata.author.length > 1" i18n="@@Read.Metadata.Authors">Författare</ng-container>
+                    <ng-container *ngIf="metadata.author.length < 2" i18n="@@Metadata.Author">Författare</ng-container>
+                    <ng-container *ngIf="metadata.author.length > 1" i18n="@@Metadata.Authors">Författare</ng-container>
                 </dt>
                 <dd>
                     <ng-container *ngFor="let a of metadata.author; last as isLast">
@@ -39,8 +39,8 @@
             </div>
             <div *ngIf="metadata.sender?.length">
                 <dt>
-                    <ng-container *ngIf="metadata.sender.length < 2" i18n="@@Read.Metadata.Sender">Avsändare</ng-container>
-                    <ng-container *ngIf="metadata.sender.length > 1" i18n="@@Read.Metadata.Senders">Avsändare</ng-container>
+                    <ng-container *ngIf="metadata.sender.length < 2" i18n="@@Metadata.Sender">Avsändare</ng-container>
+                    <ng-container *ngIf="metadata.sender.length > 1" i18n="@@Metadata.Senders">Avsändare</ng-container>
                 </dt>
                 <dd>
                     <ng-container *ngFor="let s of metadata.sender; last as isLast">
@@ -50,8 +50,8 @@
             </div>
             <div *ngIf="metadata.recipient?.length">
                 <dt>
-                    <ng-container *ngIf="metadata.recipient.length < 2" i18n="@@Read.Metadata.Recipient">Mottagare</ng-container>
-                    <ng-container *ngIf="metadata.recipient.length > 1" i18n="@@Read.Metadata.Recipients">Mottagare</ng-container>
+                    <ng-container *ngIf="metadata.recipient.length < 2" i18n="@@Metadata.Recipient">Mottagare</ng-container>
+                    <ng-container *ngIf="metadata.recipient.length > 1" i18n="@@Metadata.Recipients">Mottagare</ng-container>
                 </dt>
                 <dd>
                     <ng-container *ngFor="let r of metadata.recipient; last as isLastRecipient">
@@ -61,8 +61,8 @@
             </div>
             <div *ngIf="metadata.translations?.length">
                 <dt>
-                    <ng-container *ngIf="metadata.translations.length < 2" i18n="@@Read.Metadata.Translation">Översättning</ng-container>
-                    <ng-container *ngIf="metadata.translations.length > 1" i18n="@@Read.Metadata.Translations">Översättningar</ng-container>
+                    <ng-container *ngIf="metadata.translations.length < 2" i18n="@@Metadata.Translation">Översättning</ng-container>
+                    <ng-container *ngIf="metadata.translations.length > 1" i18n="@@Metadata.Translations">Översättningar</ng-container>
                 </dt>
                 <dd>
                     <ng-container *ngFor="let t of metadata.translations; last as isLastTranslation">
@@ -81,28 +81,28 @@
 
         <ng-container *ngIf="metadata.facsimiles?.length">
             <h3>
-                <ng-container *ngIf="metadata.facsimiles.length < 2" i18n="@@Read.Metadata.Facsimile">Faksimil</ng-container>
-                <ng-container *ngIf="metadata.facsimiles.length > 1" i18n="@@Read.Metadata.Facsimiles">Faksimil</ng-container>
+                <ng-container *ngIf="metadata.facsimiles.length < 2" i18n="@@Metadata.Facsimile">Faksimil</ng-container>
+                <ng-container *ngIf="metadata.facsimiles.length > 1" i18n="@@Metadata.Facsimiles">Faksimil</ng-container>
             </h3>
             <dl *ngFor="let f of metadata.facsimiles" class="dl-group">
                 <div *ngIf="f.facsimile_title && (f.facsimile_title !== metadata.publication_title || metadata.facsimiles.length > 1)">
-                    <dt i18n="@@Read.Metadata.FacsimileTitle">Faksimilets titel</dt>
+                    <dt i18n="@@Metadata.FacsimileTitle">Faksimilets titel</dt>
                     <dd>{{f.facsimile_title}}</dd>
                 </div>
                 <div *ngIf="f.archive_info">
-                    <dt i18n="@@Read.Metadata.ArchiveInfo">Arkivkälla för faksimilet</dt>
+                    <dt i18n="@@Metadata.ArchiveInfo">Arkivkälla för faksimilet</dt>
                     <dd>{{f.archive_info}}</dd>
                 </div>
                 <div *ngIf="f.number_of_images">
-                    <dt i18n="@@Read.Metadata.NumberOfImages">Antal bilder</dt>
+                    <dt i18n="@@Metadata.NumberOfImages">Antal bilder</dt>
                     <dd>{{f.number_of_images}}</dd>
                 </div>
                 <div *ngIf="f.image_number_info">
-                    <dt i18n="@@Read.Metadata.ImageNumberInfo">Bildernas nummer i digitalarkivet</dt>
+                    <dt i18n="@@Metadata.ImageNumberInfo">Bildernas nummer i digitalarkivet</dt>
                     <dd>{{f.image_number_info}}</dd>
                 </div>
                 <div *ngIf="f.external_url">
-                    <dt i18n="@@Read.Metadata.ExternalUrl">Extern länk för faksimilet</dt>
+                    <dt i18n="@@Metadata.ExternalUrl">Extern länk för faksimilet</dt>
                     <dd><a [href]="f.external_url">{{f.external_url}}</a></dd>
                 </div>
             </dl>
@@ -111,7 +111,7 @@
 
     <ng-template #loadingOrError>
         <ng-container *ngIf="(loadingError$ | async); else loading">
-            <p class="noIndent" i18n="@@Read.Metadata.NoMetadata">Ingen metadata tillgänglig.</p>
+            <p class="noIndent" i18n="@@Metadata.None">Ingen metadata tillgänglig.</p>
         </ng-container>
     </ng-template>
 

@@ -219,14 +219,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           }
         } else {
           this.textLoading = false;
-          this.text = $localize`:@@Read.Introduction.NoIntroduction:Inledningen kunde inte laddas.`;
+          this.text = $localize`:@@CollectionIntroduction.None:Inledningen kunde inte laddas.`;
           this.hasSeparateIntroToc = false;
         }
       },
       error: (e: any) =>  {
         console.error(e);
         this.textLoading = false;
-        this.text = $localize`:@@Read.Introduction.NoIntroduction:Inledningen kunde inte laddas.`;
+        this.text = $localize`:@@CollectionIntroduction.None:Inledningen kunde inte laddas.`;
         this.hasSeparateIntroToc = false;
       }
     });
@@ -608,7 +608,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     this.tooltipService.getFootnoteTooltip(id, 'introduction', targetElem).subscribe(
       (footnoteHTML: string) => {
         if (footnoteHTML) {
-          this.setInfoOverlayTitle($localize`:@@note:Not`);
+          this.setInfoOverlayTitle($localize`:@@ViewOptions.Note:Not`);
           this.setInfoOverlayPositionAndWidth(targetElem);
           this.setInfoOverlayText(footnoteHTML);
         }

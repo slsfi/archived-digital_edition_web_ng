@@ -10,11 +10,11 @@
       </ion-button>
       <ion-button *ngIf="showURNButton" (click)="showReference()">
         <ion-icon slot="start" class="urn-icon" name="arrow-redo-sharp"></ion-icon>
-        <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+        <span class="side-title" i18n="@@Reference.Refer">Hänvisa</span>
       </ion-button>
       <ion-button *ngIf="showViewOptionsButton" (click)="showViewOptionsPopover($event)">
         <ion-icon slot="start" class="settings-icon" name="settings-sharp"></ion-icon>
-        <span class="side-title" i18n="@@Read.Popover.Options">Inställningar</span>
+        <span class="side-title" i18n="@@ViewOptions.Settings">Inställningar</span>
       </ion-button>
     </ion-buttons>
 
@@ -82,18 +82,18 @@
 
           <!-- Ion fab column options -->
           <ion-fab *ngIf="views.length>1" class="column-options">
-            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@Read.ToggleColumnOptionsMenu" #fabColumnOptionsButton>
-              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@Read.ToggleColumnOptionsMenu"></ion-icon>
+            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@CollectionText.ColumnOptions.ToggleMenu" #fabColumnOptionsButton>
+              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@Read.RemoveColumn">
-                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@Read.RemoveColumn"></ion-icon>
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@CollectionText.ColumnOptions.Remove">
+                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.Remove"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@Read.MoveColumnRight">
-                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@Read.MoveColumnRight"></ion-icon>
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@CollectionText.ColumnOptions.MoveRight">
+                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@Read.MoveColumnLeft">
-                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@Read.MoveColumnLeft"></ion-icon>
+              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@CollectionText.ColumnOptions.MoveLeft">
+                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
@@ -101,16 +101,16 @@
           <!-- Ion card for each column-->
           <ion-card>
             <ion-card-header class="column-card-title">
-              <ng-container *ngIf="view.type === 'established'" i18n="@@established">Lästext</ng-container>
-              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
-              <ng-container *ngIf="view.type === 'comments'" i18n="@@comments">Kommentarer</ng-container>
-              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@facsimiles">Faksimil</ng-container>
-              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@manuscripts">Manuskript</ng-container>
-              <ng-container *ngIf="view.type === 'variants'" i18n="@@Read.Variants.Title">Tryckt variant</ng-container>
-              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@illustrations">Illustrationer</ng-container>
-              <ng-container *ngIf="view.type === 'legend'" i18n="@@legend">Teckenförklaringar</ng-container>
-              <ng-container *ngIf="view.type === 'metadata'" i18n="@@metadata">Metadata</ng-container>
+              <ng-container *ngIf="view.type === 'established'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
+              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
+              <ng-container *ngIf="view.type === 'comments'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
+              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
+              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+              <ng-container *ngIf="view.type === 'variants'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
+              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
+              <ng-container *ngIf="view.type === 'legend'" i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
+              <ng-container *ngIf="view.type === 'metadata'" i18n="@@Metadata.Metadata">Metadata</ng-container>
 
               <span *ngIf="(
                       view.type === 'variants' ||
@@ -243,55 +243,55 @@
                 >
                   <ng-container *ngIf="type === 'showAll'">
                     <ion-icon slot="start" name="albums-outline"></ion-icon>
-                    <ng-container i18n="@@Read.ShowAll">Visa alla</ng-container>
+                    <ng-container i18n="@@CollectionText.AddColumn.ShowAll">Visa alla</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'established'">
                     <ion-icon slot="start" name="reader-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Established.AddButtonText">Lästext</ng-container>
+                    <ng-container i18n="@@ReadingText.ReadingText">Lästext</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type.startsWith('established_')">
                     <ion-icon slot="start" name="reader-outline"></ion-icon>
                     <ng-container [ngSwitch]="type.split('_')[1]">
-                      <ng-container *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ng-container>
-                      <ng-container *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ng-container>
+                      <ng-container *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
+                      <ng-container *ngSwitchCase="'fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
                     </ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'comments'">
                     <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Comments.AddButtonText">Kommentarer</ng-container>
+                    <ng-container i18n="@@Commentary.Commentary">Kommentar</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'manuscripts'">
                     <ion-icon slot="start" name="document-text-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Manuscripts.AddButtonText">Manuskript</ng-container>
+                    <ng-container i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'variants'">
                     <ion-icon slot="start" name="documents-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Variants.AddButtonText">Tryckt variant</ng-container>
+                    <ng-container i18n="@@Variants.Variant">Tryckt variant</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'facsimiles'">
                     <ion-icon slot="start" name="image-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Facsimiles.AddButtonText">Faksimil</ng-container>
+                    <ng-container i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'illustrations'">
                     <ion-icon slot="start" name="images-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Illustrations.AddButtonText">Illustrationer</ng-container>
+                    <ng-container i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'legend'">
                     <ion-icon slot="start" name="bulb-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Legend.AddButtonText">Teckenförklaringar</ng-container>
+                    <ng-container i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
                   </ng-container>
 
                   <ng-container *ngIf="type === 'metadata'">
                     <ion-icon slot="start" name="server-outline"></ion-icon>
-                    <ng-container i18n="@@Read.Metadata.AddButtonText">Metadata</ng-container>
+                    <ng-container i18n="@@Metadata.Metadata">Metadata</ng-container>
                   </ng-container>
 
                 </ion-button>
@@ -320,7 +320,7 @@
           </ion-popover>
 
           <div class="add-column">
-            <p id="add-column-label" i18n="@@Read.AddColumn">Ny kolumn</p>
+            <p id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</p>
           </div>
         </div>
       </div>
@@ -377,24 +377,24 @@
     <!-- Ion segment for choosing displayed column type -->
     <ion-segment mode="ios" [(ngModel)]="activeMobileModeViewType" (ionChange)="storeActiveMobileModeViewType()">
       <ion-segment-button value="established" *ngIf="availableMobileModeViews.includes('established')">
-        <ion-label i18n="@@Read.Established.Title">Lästext</ion-label>
+        <ion-label i18n="@@ReadingText.ReadingText">Lästext</ion-label>
       </ion-segment-button>
       <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
         <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
           <ion-segment-button [value]="'established_'+lang" *ngIf="availableMobileModeViews.includes('established_'+lang)">
             <ng-container [ngSwitch]="lang">
-              <ion-label *ngSwitchCase="'sv'" i18n="@@established_sv">Lästext (på svenska)</ion-label>
-              <ion-label *ngSwitchCase="'fi'" i18n="@@established_fi">Lästext (på finska)</ion-label>
+              <ion-label *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ion-label>
+              <ion-label *ngSwitchCase="'fi'" i18n="@@ReadingText.FinnishText">Finsk text</ion-label>
             </ng-container>
           </ion-segment-button>
         </ng-container>
       </ng-container>
       <ion-segment-button value="facsimiles" *ngIf="availableMobileModeViews.includes('facsimiles')">
-        <ion-label i18n="@@Read.Facsimiles.Title">Faksimil</ion-label>
+        <ion-label i18n="@@Facsimiles.Facsimile">Faksimil</ion-label>
       </ion-segment-button>
       <!--
       <ion-segment-button value="manuscripts" *ngIf="availableMobileModeViews.includes('manuscripts')">
-        <ion-label i18n="@@manuscripts">Manuskript</ion-label>
+        <ion-label i18n="@@Manuscripts.Manuscript">Manuskript</ion-label>
       </ion-segment-button>
       -->
     </ion-segment>

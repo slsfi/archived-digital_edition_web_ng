@@ -67,7 +67,7 @@ export class LegendComponent implements OnDestroy, OnInit {
         } else if (fileID.split('-')[2] !== '00') {
           return this.getMdContent(this.activeLocale + '-' + this.staticMdLegendFolderNumber + '-' + '00');
         } else {
-          return of($localize`:@@Read.Legend.NoLegend:Inga teckenförklaringar tillgängliga.`);
+          return of($localize`:@@Legend.None:Inga teckenförklaringar tillgängliga.`);
         }
       })
     );
