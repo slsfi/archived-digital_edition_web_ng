@@ -1,11 +1,5 @@
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="undefined">
   <file id="ngi18n" original="ng.template">
-    <unit id="abbreviation">
-      <segment state="initial">
-        <source>Förkortning</source>
-        <target>Lyhenne</target>
-      </segment>
-    </unit>
     <unit id="About.LoadingError">
       <segment state="initial">
         <source>Sidans innehåll kunde inte laddas.</source>
@@ -48,28 +42,34 @@
         <target>Linkki avautuu uuteen ikkunaan</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Print">
+      <segment state="initial">
+        <source>Skriv ut</source>
+        <target>Tulosta</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.ScrollToTop">
       <segment state="initial">
         <source>Till början</source>
         <target>Palaa alkuun</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Hae</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.SearchEllipsis">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Hae ...</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.ShowMore">
       <segment state="initial">
         <source>Visa fler</source>
         <target>Näytä lisää</target>
-      </segment>
-    </unit>
-    <unit id="BC">
-      <segment state="initial">
-        <source>f.Kr.</source>
-        <target>eKr.</target>
-      </segment>
-    </unit>
-    <unit id="Collection">
-      <segment state="initial">
-        <source>Delutgåva</source>
-        <target>Editio</target>
       </segment>
     </unit>
     <unit id="CollectionCover.Cover">
@@ -196,12 +196,6 @@
       <segment state="initial">
         <source>Titelblad</source>
         <target>Nimiölehti</target>
-      </segment>
-    </unit>
-    <unit id="com">
-      <segment state="initial">
-        <source>Kommentar</source>
-        <target>Kommentti</target>
       </segment>
     </unit>
     <unit id="Commentary.Commentary">
@@ -333,7 +327,7 @@
     <unit id="criticalNote">
       <segment state="initial">
         <source>Utgivarens anmärkning</source>
-        <target>Toimittajan huomautus</target>
+        <target>Utgivarens anmärkning</target>
       </segment>
     </unit>
     <unit id="DateHistogram.Clear">
@@ -384,6 +378,12 @@
         <target>Lataa</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.DownloadAndPrint">
+      <segment state="initial">
+        <source>Ladda ner och skriv ut</source>
+        <target>Lataa ja tulosta</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Format.HTML">
       <segment state="initial">
         <source>HTML</source>
@@ -432,12 +432,6 @@
         <target>Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.</target>
       </segment>
     </unit>
-    <unit id="DownloadTexts.Print">
-      <segment state="initial">
-        <source>Skriv ut</source>
-        <target>Tulosta</target>
-      </segment>
-    </unit>
     <unit id="DownloadTexts.Source">
       <segment state="initial">
         <source>Texten är hämtad från</source>
@@ -450,40 +444,22 @@
         <target>Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.</target>
       </segment>
     </unit>
-    <unit id="DownloadTexts.Textsize">
-      <segment state="initial">
-        <source>Textstorlek</source>
-        <target>Tekstin koko</target>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.Title">
-      <segment state="initial">
-        <source>Ladda ner och skriv ut</source>
-        <target>Lataa ja tulosta</target>
-      </segment>
-    </unit>
     <unit id="Ebook.InvalidFilename">
       <segment state="initial">
         <source>Ogiltigt filnamn. E-boken kunde inte hittas.</source>
         <target>Viallinen tiedostonimi. Sähkökirjaa ei löytynyt.</target>
       </segment>
     </unit>
-    <unit id="editorialChange">
-      <segment state="initial">
-        <source>Utgivarändring</source>
-        <target>Toimittajan tekemä muutos</target>
-      </segment>
-    </unit>
-    <unit id="editorialNormalisation">
-      <segment state="initial">
-        <source>Normalisering</source>
-        <target>Normalisointi</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.ClearAllActiveFilters">
       <segment state="initial">
         <source>Ta bort alla aktiva avgränsningar</source>
         <target>Poista kaikki aktiiviset rajaukset</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Collection">
+      <segment state="initial">
+        <source>Delutgåva</source>
+        <target>Editio</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.CommentaryTo">
@@ -504,10 +480,40 @@
         <target>Tekstejä, joissa hakutuloksia:</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.Genre">
+      <segment state="initial">
+        <source>Genre</source>
+        <target>Tekstilaji</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
         <target>Piilota rajaukset</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterReceiverLocation">
+      <segment state="initial">
+        <source>Mottagarort (brev)</source>
+        <target>Vastaanottajan paikkakunta (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterReceiverName">
+      <segment state="initial">
+        <source>Mottagare (brev)</source>
+        <target>Vastaanottaja (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterSenderLocation">
+      <segment state="initial">
+        <source>Avsändarort (brev)</source>
+        <target>Lähettäjän paikkakunta (kirjeet)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterSenderName">
+      <segment state="initial">
+        <source>Avsändare (brev)</source>
+        <target>Lähettäjä (kirjeet)</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.LoadingError">
@@ -618,22 +624,16 @@
         <target>Ajanjakso</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.Type">
+      <segment state="initial">
+        <source>Texttyp</source>
+        <target>Tekstityyppi</target>
+      </segment>
+    </unit>
     <unit id="Epub.Contents">
       <segment state="initial">
         <source>Innehåll</source>
         <target>Sisältö</target>
-      </segment>
-    </unit>
-    <unit id="Epub.DisplayOptions">
-      <segment state="initial">
-        <source>Textstorlek</source>
-        <target>Tekstikoko</target>
-      </segment>
-    </unit>
-    <unit id="Epub.Download">
-      <segment state="initial">
-        <source>Ladda ner</source>
-        <target>Lataa</target>
       </segment>
     </unit>
     <unit id="Epub.FileNotFound">
@@ -652,24 +652,6 @@
       <segment state="initial">
         <source>Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat.</source>
         <target>Tämä on epub-muodossa oleva sähkökirja, jota näytetään verkkosivustolla sisäänrakennetun lukuohjelman avulla. Lukuohjelma toimii parhaiten Firefox-selaimessa. Chrome, Edge ja Safari-selaimissa sähkökirjojen linkit eivät toimi lukuohjelmassa. Suosittelemme siksi, että käytät Firefoxia, tai lataat sähkökirjan ja luet sitä omalla laitteellasi, valitsemallasi lukuohjelmalla.</target>
-      </segment>
-    </unit>
-    <unit id="Epub.Search">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Haku</target>
-      </segment>
-    </unit>
-    <unit id="Epub.SearchPhrase">
-      <segment state="initial">
-        <source>Söktext</source>
-        <target>Hakulause</target>
-      </segment>
-    </unit>
-    <unit id="est">
-      <segment state="initial">
-        <source>Lästext</source>
-        <target>Lukuteksti</target>
       </segment>
     </unit>
     <unit id="Facsimiles.AltText">
@@ -768,18 +750,6 @@
         <target>Pienennä</target>
       </segment>
     </unit>
-    <unit id="fictionalPersonCorresp">
-      <segment state="initial">
-        <source>historisk förebild</source>
-        <target>historisk förebild</target>
-      </segment>
-    </unit>
-    <unit id="fore">
-      <segment state="initial">
-        <source>Förord</source>
-        <target>Esipuhe</target>
-      </segment>
-    </unit>
     <unit id="FullscreenImageViewer.ToggleDescription">
       <segment state="initial">
         <source>Visa/dölj beskrivning</source>
@@ -792,22 +762,10 @@
         <target>Näytä/piilota kääntöpuoli</target>
       </segment>
     </unit>
-    <unit id="Genre">
-      <segment>
-        <source>Genre</source>
-        <target>Tekstilaji</target>
-      </segment>
-    </unit>
-    <unit id="Home.SearchButtonAriaLabel">
+    <unit id="Illustrations.Illustration">
       <segment state="initial">
-        <source>Sök</source>
-        <target>Hae</target>
-      </segment>
-    </unit>
-    <unit id="Home.SearchPlaceholder">
-      <segment state="initial">
-        <source>Sök ...</source>
-        <target>Hae ...</target>
+        <source>Illustration</source>
+        <target>Illustration</target>
       </segment>
     </unit>
     <unit id="Illustrations.Illustrations">
@@ -820,6 +778,12 @@
       <segment state="initial">
         <source>Inga illustrationer.</source>
         <target>Ei kuvia</target>
+      </segment>
+    </unit>
+    <unit id="Illustrations.OpenMediaCollection">
+      <segment state="initial">
+        <source>Öppna bildbanken</source>
+        <target>Öppna bildbanken</target>
       </segment>
     </unit>
     <unit id="Illustrations.ShowAll">
@@ -924,12 +888,6 @@
         <target>Henkilökategoriat</target>
       </segment>
     </unit>
-    <unit id="inl">
-      <segment state="initial">
-        <source>Inledning</source>
-        <target>Johdanto</target>
-      </segment>
-    </unit>
     <unit id="Legend.Legend">
       <segment state="initial">
         <source>Teckenförklaringar</source>
@@ -940,30 +898,6 @@
       <segment state="initial">
         <source>Inga teckenförklaringar tillgängliga.</source>
         <target>Inga teckenförklaringar tillgängliga.</target>
-      </segment>
-    </unit>
-    <unit id="LetterReceiverLocation">
-      <segment state="initial">
-        <source>Mottagarort (brev)</source>
-        <target>Vastaanottajan paikkakunta (kirjeet)</target>
-      </segment>
-    </unit>
-    <unit id="LetterReceiverName">
-      <segment state="initial">
-        <source>Mottagare (brev)</source>
-        <target>Vastaanottaja (kirjeet)</target>
-      </segment>
-    </unit>
-    <unit id="LetterSenderLocation">
-      <segment state="initial">
-        <source>Avsändarort (brev)</source>
-        <target>Lähettäjän paikkakunta (kirjeet)</target>
-      </segment>
-    </unit>
-    <unit id="LetterSenderName">
-      <segment state="initial">
-        <source>Avsändare (brev)</source>
-        <target>Lähettäjä (kirjeet)</target>
       </segment>
     </unit>
     <unit id="MainSideMenu.Collections">
@@ -1278,184 +1212,178 @@
         <target>Käännökset</target>
       </segment>
     </unit>
-    <unit id="Modal.Illustration.OpenMediaCollection">
-      <segment state="initial">
-        <source>Öppna bildbanken</source>
-        <target>Avaa kuvapankki</target>
-      </segment>
-    </unit>
-    <unit id="Modal.Illustration.Title">
-      <segment state="initial">
-        <source>Illustration</source>
-        <target>Kuva</target>
-      </segment>
-    </unit>
-    <unit id="ms">
-      <segment state="initial">
-        <source>Manuskript</source>
-        <target>Käsikirjoitus</target>
-      </segment>
-    </unit>
-    <unit id="note">
-      <segment state="initial">
-        <source>Not</source>
-        <target>Viite</target>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Articles">
+    <unit id="NamedEntity.Articles">
       <segment state="initial">
         <source>Artiklar</source>
         <target>Artikkeleita</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Authors">
+    <unit id="NamedEntity.Authors">
       <segment state="initial">
         <source>Författare</source>
         <target>Kirjoittaja</target>
       </segment>
     </unit>
-    <unit id="Occurrences.City">
+    <unit id="NamedEntity.BC">
+      <segment state="initial">
+        <source>f.Kr.</source>
+        <target>eKr.</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.City">
       <segment state="initial">
         <source>Stad</source>
         <target>Kaupunki</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Country">
+    <unit id="NamedEntity.Country">
       <segment state="initial">
         <source>Land</source>
         <target>Maa</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Description">
+    <unit id="NamedEntity.Description">
       <segment state="initial">
         <source>Beskrivning</source>
         <target>Beskrivning</target>
       </segment>
     </unit>
-    <unit id="Occurrences.DownloadPDF">
+    <unit id="NamedEntity.DownloadPDF">
       <segment state="initial">
         <source>ladda ner pdf</source>
         <target>lataa pdf</target>
       </segment>
     </unit>
-    <unit id="Occurrences.ISBN">
+    <unit id="NamedEntity.HistoricalFigureLabel">
+      <segment state="initial">
+        <source>historisk förebild</source>
+        <target>historisk förebild</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.ISBN">
       <segment state="initial">
         <source>ISBN</source>
         <target>ISBN</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Journal">
+    <unit id="NamedEntity.Journal">
       <segment state="initial">
         <source>Journal</source>
         <target>Aikakauslehti</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Keyword">
+    <unit id="NamedEntity.Keyword">
       <segment state="initial">
         <source>Ämnesord</source>
         <target>Asiasana</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Latitude">
+    <unit id="NamedEntity.Latitude">
       <segment state="initial">
         <source>lat.</source>
         <target>lat.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Longitude">
+    <unit id="NamedEntity.Longitude">
       <segment state="initial">
         <source>long.</source>
         <target>long.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.NoInfoFound">
+    <unit id="NamedEntity.NoInfoFound">
       <segment state="initial">
         <source>Ingen information hittades.</source>
         <target>Ei tietoja.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Occurrences">
+    <unit id="NamedEntity.Occurrences">
       <segment state="initial">
         <source>Förekomster</source>
         <target>Esiintymät</target>
       </segment>
     </unit>
-    <unit id="Occurrences.OccurrencesLowercase">
+    <unit id="NamedEntity.OccurrencesLowercase">
       <segment state="initial">
         <source>förekomster</source>
         <target>esiitymää</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Person">
+    <unit id="NamedEntity.Person">
       <segment state="initial">
         <source>Person</source>
         <target>Henkilö</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Place">
+    <unit id="NamedEntity.Place">
       <segment state="initial">
         <source>Plats</source>
         <target>Paikka</target>
       </segment>
     </unit>
-    <unit id="Occurrences.PlaceOfBirth">
+    <unit id="NamedEntity.PlaceOfBirth">
       <segment state="initial">
         <source>Födelseort</source>
         <target>Paikkakunta</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Publisher">
+    <unit id="NamedEntity.Possibly">
+      <segment state="initial">
+        <source>ev.</source>
+        <target>ev.</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.Publisher">
       <segment state="initial">
         <source>Utgivare</source>
         <target>Kustantaja</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Region">
+    <unit id="NamedEntity.Region">
       <segment state="initial">
         <source>Region</source>
         <target>Alue</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Source">
+    <unit id="NamedEntity.Source">
       <segment state="initial">
         <source>Källa</source>
         <target>Lähde</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Type">
+    <unit id="NamedEntity.Type">
       <segment state="initial">
         <source>Typ</source>
         <target>Tyyppi</target>
       </segment>
     </unit>
-    <unit id="Occurrences.work">
+    <unit id="NamedEntity.work">
       <segment state="initial">
         <source>Verk</source>
         <target>Verk</target>
       </segment>
     </unit>
-    <unit id="Occurrences.WorkOccurrencesUnavailable">
+    <unit id="NamedEntity.WorkOccurrencesUnavailable">
       <segment state="initial">
         <source>Förekomster för verk är inte tillgängliga.</source>
         <target>Teosten esiintymät eivät ole saatavilla.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.YearOfPublication">
+    <unit id="NamedEntity.YearOfPublication">
       <segment state="initial">
         <source>Utgivningsår</source>
         <target>Julkaisuvuosi</target>
+      </segment>
+    </unit>
+    <unit id="PageNotFound.404PageNotFound">
+      <segment state="initial">
+        <source>404 Sidan hittas inte</source>
+        <target>404 Sivua ei löydy</target>
       </segment>
     </unit>
     <unit id="PageNotFound.DefaultMessage">
       <segment state="initial">
         <source>Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält.</source>
         <target>Tapahtui virhe. Emme löydä hakemaasi sivua. Voit palata edelliselle sivulle selaimen näppäimestä, tai yrittää korjata selaimen osoiterivillä olevaa verkko-osoitetta.</target>
-      </segment>
-    </unit>
-    <unit id="PageNotFound.Title">
-      <segment state="initial">
-        <source>404 Sidan hittas inte</source>
-        <target>404 Sivua ei löydy</target>
       </segment>
     </unit>
     <unit id="ReadingText.Error">
@@ -1488,82 +1416,82 @@
         <target>Ruotsinkielinen teksti</target>
       </segment>
     </unit>
-    <unit id="Reference.established">
-      <segment state="initial">
-        <source>Hänvisa till denna lästext</source>
-        <target>Lähdevittaus tähän lukutekstiin</target>
-      </segment>
-    </unit>
-    <unit id="Reference.intro">
-      <segment state="initial">
-        <source>Hänvisa till denna inledning</source>
-        <target>Lähdevittaus tähän johdantoon</target>
-      </segment>
-    </unit>
-    <unit id="Reference.mediaCollection">
-      <segment state="initial">
-        <source>Hänvisa till denna bildsamling</source>
-        <target>Lähdeviittaus tähän kuvakokoelmaan</target>
-      </segment>
-    </unit>
-    <unit id="Reference.missing">
+    <unit id="Reference.Missing">
       <segment state="initial">
         <source>Sidan saknar beständig webbadress</source>
         <target>Sivulla ei ole pysyvää osoitetta</target>
       </segment>
     </unit>
-    <unit id="Reference.pageEpub">
-      <segment state="initial">
-        <source>Hänvisa till denna text</source>
-        <target>Lähdeviittaus tähän tekstiin</target>
-      </segment>
-    </unit>
-    <unit id="Reference.pageForeword">
-      <segment state="initial">
-        <source>Hänvisa till detta förord</source>
-        <target>Lähdeviittaus tähän esipuheeseen</target>
-      </segment>
-    </unit>
-    <unit id="Reference.pageTitle">
-      <segment state="initial">
-        <source>Hänvisa till denna delutgåva</source>
-        <target>Lähdeviittaus editioon</target>
-      </segment>
-    </unit>
-    <unit id="Reference.permaLink">
+    <unit id="Reference.Permalink">
       <segment state="initial">
         <source>Beständig webbadress</source>
         <target>Pysyvä osoite</target>
       </segment>
     </unit>
-    <unit id="Reference.refer">
+    <unit id="Reference.Refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Viittaa</target>
       </segment>
     </unit>
-    <unit id="Reference.thisPage">
-      <segment state="initial">
-        <source>Hänvisa till denna sida</source>
-        <target>Lähdevittaus</target>
-      </segment>
-    </unit>
-    <unit id="Reference.title">
+    <unit id="Reference.Reference">
       <segment state="initial">
         <source>Källhänvisning</source>
         <target>Viittausohje</target>
       </segment>
     </unit>
-    <unit id="Reference.topMenu">
+    <unit id="Reference.ReferToCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna delutgåva</source>
+        <target>Lähdeviittaus editioon</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToEbook">
+      <segment state="initial">
+        <source>Hänvisa till denna text</source>
+        <target>Lähdeviittaus tähän tekstiin</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToEdition">
       <segment state="initial">
         <source>Hänvisa till denna webbutgåva</source>
         <target>Lähdeviittaus tähän digitaaliseen editioon</target>
       </segment>
     </unit>
+    <unit id="Reference.ReferToForeword">
+      <segment state="initial">
+        <source>Hänvisa till detta förord</source>
+        <target>Lähdeviittaus tähän esipuheeseen</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToIntroduction">
+      <segment state="initial">
+        <source>Hänvisa till denna inledning</source>
+        <target>Lähdevittaus tähän johdantoon</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToMediaCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna bildsamling</source>
+        <target>Lähdeviittaus tähän kuvakokoelmaan</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToReadingText">
+      <segment state="initial">
+        <source>Hänvisa till denna lästext</source>
+        <target>Lähdevittaus tähän lukutekstiin</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToThisPage">
+      <segment state="initial">
+        <source>Hänvisa till denna sida</source>
+        <target>Lähdevittaus</target>
+      </segment>
+    </unit>
     <unit id="revisionNote">
       <segment state="initial">
         <source>Repetitionsanteckning</source>
-        <target>Kertausmuistiinpano</target>
+        <target>Repetitionsanteckning</target>
       </segment>
     </unit>
     <unit id="Site.MetaDescription.Home">
@@ -1582,12 +1510,6 @@
       <segment state="initial">
         <source>Webbplatsens titel</source>
         <target>Sivuston otsikko</target>
-      </segment>
-    </unit>
-    <unit id="tit">
-      <segment state="initial">
-        <source>Titelblad</source>
-        <target>Nimiölehti</target>
       </segment>
     </unit>
     <unit id="TopMenu.About">
@@ -1630,24 +1552,6 @@
       <segment state="initial">
         <source>Sök</source>
         <target>Hae</target>
-      </segment>
-    </unit>
-    <unit id="Type">
-      <segment state="initial">
-        <source>Texttyp</source>
-        <target>Tekstityyppi</target>
-      </segment>
-    </unit>
-    <unit id="uncertainPersonCorresp">
-      <segment state="initial">
-        <source>ev.</source>
-        <target>ev.</target>
-      </segment>
-    </unit>
-    <unit id="var">
-      <segment state="initial">
-        <source>Tryckt variant</source>
-        <target>Painettu variantti</target>
       </segment>
     </unit>
     <unit id="Variants.ChangeVariant">
@@ -1704,10 +1608,22 @@
         <target>Painettu variantti</target>
       </segment>
     </unit>
+    <unit id="ViewOptions.Abbreviation">
+      <segment state="initial">
+        <source>Förkortning</source>
+        <target>Lyhenne</target>
+      </segment>
+    </unit>
     <unit id="ViewOptions.Abbreviations">
       <segment state="initial">
         <source>Förkortningar</source>
-        <target>Lyhennykset</target>
+        <target>Lyhenteet</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.Emendation">
+      <segment state="initial">
+        <source>Utgivarändring</source>
+        <target>Toimittajan tekemä muutos</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Emendations">
@@ -1734,10 +1650,22 @@
         <target>Punainen asteriski</target>
       </segment>
     </unit>
+    <unit id="ViewOptions.Normalisation">
+      <segment state="initial">
+        <source>Normalisering</source>
+        <target>Normalisointi</target>
+      </segment>
+    </unit>
     <unit id="ViewOptions.Normalisations">
       <segment state="initial">
         <source>Normaliseringar</source>
         <target>Normalisoinnit</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.Note">
+      <segment state="initial">
+        <source>Not</source>
+        <target>Viite</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Options">

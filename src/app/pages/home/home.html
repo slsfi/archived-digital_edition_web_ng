@@ -35,7 +35,7 @@
             class="custom-searchbar manual-exec"
             [class.highlight]="searchQuery"
             placeholder="Sök ..."
-            i18n-placeholder="@@Home.SearchPlaceholder"
+            i18n-placeholder="@@BasicActions.SearchEllipsis"
             show-clear-button="always"
             enterkeyhint="search"
             inputmode="search"
@@ -45,7 +45,7 @@
             (keyup.enter)="submitSearchQuery()"
       ></ion-searchbar>
       <ion-button (click)="submitSearchQuery()">
-        <ion-icon slot="icon-only" name="search" aria-label="Sök" i18n-aria-label="@@Home.SearchButtonAriaLabel"></ion-icon>
+        <ion-icon slot="icon-only" name="search" aria-label="Sök" i18n-aria-label="@@BasicActions.Search"></ion-icon>
       </ion-button>
     </div>
 

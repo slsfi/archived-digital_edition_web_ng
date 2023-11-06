@@ -52,25 +52,25 @@
               <div class="active-filter-group" *ngIf="activeFilterGroup.keys.length">
                 <p class="afg-title">
                   <ng-container *ngIf="activeFilterGroup.name === 'Type'">
-                    <ng-container i18n="@@Type">Texttyp</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.Type">Texttyp</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'Genre'">
-                    <ng-container i18n="@@Genre">Genre</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.Genre">Genre</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'Collection'">
-                    <ng-container i18n="@@Collection">Delutgåva</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.Collection">Delutgåva</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderName'">
-                    <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.LetterSenderName">Avsändare (brev)</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverName'">
-                    <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.LetterReceiverName">Mottagare (brev)</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'LetterSenderLocation'">
-                    <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.LetterSenderLocation">Avsändarort (brev)</ng-container>:
                   </ng-container>
                   <ng-container *ngIf="activeFilterGroup.name === 'LetterReceiverLocation'">
-                    <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
+                    <ng-container i18n="@@ElasticSearch.LetterReceiverLocation">Mottagarort (brev)</ng-container>:
                   </ng-container>
                 </p>
                 <ul>
@@ -80,13 +80,13 @@
                           class="custom-outline-button"
                     >
                       <ng-container [ngSwitch]="filterKey.toString()">
-                        <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                        <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                        <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                        <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                        <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                        <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                        <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                        <ng-container *ngSwitchCase="'est'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+                        <ng-container *ngSwitchCase="'com'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
+                        <ng-container *ngSwitchCase="'ms'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+                        <ng-container *ngSwitchCase="'var'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
+                        <ng-container *ngSwitchCase="'tit'" i18n="@@CollectionTitle.TitlePage">Titelblad</ng-container>
+                        <ng-container *ngSwitchCase="'fore'" i18n="@@CollectionForeword.Foreword">Förord</ng-container>
+                        <ng-container *ngSwitchCase="'inl'" i18n="@@CollectionIntroduction.Introduction">Inledning</ng-container>
                         <ng-container *ngSwitchDefault>{{getEllipsisString(filterKey.toString())}}</ng-container>
                       </ng-container>
                       <ion-icon name="close" slot="end"></ion-icon>
@@ -180,13 +180,13 @@
                     <div class="hit-text-type {{ hit.source.text_type }}">
                       <span>
                         <ng-container [ngSwitch]="hit.source.text_type">
-                          <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                          <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                          <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                          <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                          <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                          <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                          <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                          <ng-container *ngSwitchCase="'est'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+                          <ng-container *ngSwitchCase="'com'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
+                          <ng-container *ngSwitchCase="'ms'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+                          <ng-container *ngSwitchCase="'var'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
+                          <ng-container *ngSwitchCase="'tit'" i18n="@@CollectionTitle.TitlePage">Titelblad</ng-container>
+                          <ng-container *ngSwitchCase="'fore'" i18n="@@CollectionForeword.Foreword">Förord</ng-container>
+                          <ng-container *ngSwitchCase="'inl'" i18n="@@CollectionIntroduction.Introduction">Inledning</ng-container>
                           <ng-container *ngSwitchDefault>{{hit.source.text_type}}</ng-container>
                         </ng-container>
                       </span>
@@ -249,25 +249,25 @@
                   <ng-container i18n="@@ElasticSearch.TimeRange">Tidsperiod</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'Type'">
-                  <ng-container i18n="@@Type">Texttyp</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.Type">Texttyp</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'Genre'">
-                  <ng-container i18n="@@Genre">Genre</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.Genre">Genre</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'Collection'">
-                  <ng-container i18n="@@Collection">Delutgåva</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.Collection">Delutgåva</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'LetterSenderName'">
-                  <ng-container i18n="@@LetterSenderName">Avsändare (brev)</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.LetterSenderName">Avsändare (brev)</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'LetterReceiverName'">
-                  <ng-container i18n="@@LetterReceiverName">Mottagare (brev)</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.LetterReceiverName">Mottagare (brev)</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'LetterSenderLocation'">
-                  <ng-container i18n="@@LetterSenderLocation">Avsändarort (brev)</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.LetterSenderLocation">Avsändarort (brev)</ng-container>:
                 </ng-container>
                 <ng-container *ngIf="filterGroup.name === 'LetterReceiverLocation'">
-                  <ng-container i18n="@@LetterReceiverLocation">Mottagarort (brev)</ng-container>:
+                  <ng-container i18n="@@ElasticSearch.LetterReceiverLocation">Mottagarort (brev)</ng-container>:
                 </ng-container>
               </h3>
               <ion-icon id="arrow-{{filterGroup.name}}" name="chevron-forward" [class.open]="filterGroup.open"></ion-icon>
@@ -305,13 +305,13 @@
                         <span>
                           <ng-container *ngIf="filterGroup.name === 'Type'">
                             <ng-container [ngSwitch]="filter.key.toString()">
-                              <ng-container *ngSwitchCase="'est'" i18n="@@est">Lästext</ng-container>
-                              <ng-container *ngSwitchCase="'com'" i18n="@@com">Kommentar</ng-container>
-                              <ng-container *ngSwitchCase="'ms'" i18n="@@ms">Manuskript</ng-container>
-                              <ng-container *ngSwitchCase="'var'" i18n="@@var">Tryckt variant</ng-container>
-                              <ng-container *ngSwitchCase="'tit'" i18n="@@tit">Titelblad</ng-container>
-                              <ng-container *ngSwitchCase="'fore'" i18n="@@fore">Förord</ng-container>
-                              <ng-container *ngSwitchCase="'inl'" i18n="@@inl">Inledning</ng-container>
+                              <ng-container *ngSwitchCase="'est'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+                              <ng-container *ngSwitchCase="'com'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
+                              <ng-container *ngSwitchCase="'ms'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+                              <ng-container *ngSwitchCase="'var'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
+                              <ng-container *ngSwitchCase="'tit'" i18n="@@CollectionTitle.TitlePage">Titelblad</ng-container>
+                              <ng-container *ngSwitchCase="'fore'" i18n="@@CollectionForeword.Foreword">Förord</ng-container>
+                              <ng-container *ngSwitchCase="'inl'" i18n="@@CollectionIntroduction.Introduction">Inledning</ng-container>
                               <ng-container *ngSwitchDefault>{{filter.key.toString()}}</ng-container>
                             </ng-container>
                           </ng-container>

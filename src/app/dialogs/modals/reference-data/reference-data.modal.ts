@@ -29,8 +29,8 @@ export class ReferenceDataModal implements OnInit {
     @Inject(DOCUMENT) private document: Document
   ) {
     // Check if these label translations exist
-    this.thisPageTranslation = $localize`:@@Reference.thisPage:Hänvisa till denna sida` ? true : false;
-    this.permaLinkTranslation = $localize`:@@Reference.permaLink:Beständig webbadress` ? true : false;
+    this.thisPageTranslation = $localize`:@@Reference.ReferToThisPage:Hänvisa till denna sida` ? true : false;
+    this.permaLinkTranslation = $localize`:@@Reference.Permalink:Beständig webbadress` ? true : false;
   }
 
   ngOnInit() {

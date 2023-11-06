@@ -6,10 +6,6 @@
             "Home": "A general description of the website for search engines."
         }
     },
-    "Home": {
-        "SearchButtonAriaLabel": "Search",
-        "SearchPlaceholder": "Search ..."
-    },
     "TopMenu": {
         "Menu": "Menu",
         "Home": "Home",
@@ -34,13 +30,19 @@
         "PersonInfo": "People",
         "PlaceInfo": "Places",
         "WorkInfo": "Works",
-        "Emendations": "Changes",
+        "Emendation": "Emendation",
+        "Emendations": "Emendations",
+        "Normalisation": "Normalisation",
         "Normalisations": "Normalisations",
+        "Abbreviation": "Abbreviation",
         "Abbreviations": "Abbreviations",
         "ParagraphNumbering": "Paragraph/Stanza numbering",
         "PageBreakOriginal": "Original page breaks",
         "PageBreakEdition": "Edition page breaks",
-        "ExplanatoryNotesAltText": "Red asterisk"
+        "ExplanatoryNotesAltText": "Red asterisk",
+        "Note": "Note",
+        "RevisionNote": "Revision note",
+        "EditorialNote": "Editorial note"
     },
     "ReadingText": {
         "ReadingText": "Reading text",
@@ -239,7 +241,7 @@
         "LatestYear": "Latest year",
         "PersonTypes": "Person categories"
     },
-    "Occurrences": {
+    "NamedEntity": {
         "Occurrences": "Occurrences",
         "NoInfoFound": "No information.",
         "OccurrencesLowercase": "occurrences",
@@ -263,7 +265,10 @@
         "Person": "Person",
         "Place": "Place",
         "Keyword": "Keyword",
-        "Work": "Work"
+        "Work": "Work",
+        "Possibly": "possibly",
+        "HistoricalFigureLabel": "historical figure:",
+        "BC": "BC"
     },
     "ElasticSearch": {
         "SearchEdition": "Search the edition",
@@ -288,7 +293,14 @@
         "ShowFacets": "Show filters",
         "HideFacets": "Hide filters",
         "StartSearchInstruction": "Start by entering search terms or applying filters.",
-        "ClearAllActiveFilters": "Clear all active filters"
+        "ClearAllActiveFilters": "Clear all active filters",
+        "Type": "Type",
+        "Genre": "Genre",
+        "Collection": "Collection",
+        "LetterSenderName": "Sender",
+        "LetterReceiverName": "Reciever",
+        "LetterSenderLocation": "Sender place",
+        "LetterReceiverLocation": "Reciever place"
     },
     "DateHistogram": {
         "Clear": "Clear",
@@ -296,69 +308,19 @@
         "Refresh": "Refresh",
         "To": "To year"
     },
-    "Type": "Type",
-    "Genre": "Genre",
-    "Collection": "Collections",
-    "Location": "Location",
-    "Subjects": "Subjects",
-    "Tags": "Taggs",
-    "Person": "Person",
-    "LetterSenderName": "Sender",
-    "LetterReceiverName": "Reciever",
-    "LetterSenderLocation": "Sender place",
-    "LetterReceiverLocation": "Reciever place",
-    "est": "Established text",
-    "ms": "Manuscript",
-    "com": "Commentary",
-    "tit": "Title page",
-    "fore": "Foreword",
-    "var": "Variation",
-    "inl": "Introduction",
-    "locations": "Locations",
-    "location": "Location",
-    "tags": "Tags",
-    "tag": "Tags",
-    "subjects": "Subjects",
-    "subject": "Subject",
-    "uncertainPersonCorresp": "possibly",
-    "fictionalPersonCorresp": "historical figure:",
-    "collections": "Collections",
-    "works": "Works",
-    "photos": "photos",
-    "recorder": "Recorder",
-    "playman": "Playman",
-    "Text": "PDF",
-    "BC": "BC",
-    "note": "Note",
-    "editorialChange": "Emendation",
-    "editorialNormalisation": "Normalization",
-    "abbreviation": "Abbreviation",
-    "revisionNote": "Revision note",
-    "criticalNote": "Critical remark",
-    "download": "Download",
     "Reference": {
-        "title": "Reference",
-        "refer": "Refer",
-        "urn": "URN",
-        "share": "Share",
-        "mail": "Mail",
-        "thisPage": "Refer to this page",
-        "permaLink": "Permalink",
-        "topMenu": "Refer to this digital edition",
-        "established": "Refer to this text",
-        "intro": "Refer to this introduction",
-        "pageTitle": "Refer to this edition",
-        "pageForeword": "Refer to this foreword",
-        "pageEpub": "Refer to this text",
-        "mediaCollection": "Refer to this media collection",
-        "missing": "This page does not have a persistent identifier"
-    },
-    "EditionsList": {
-        "DownloadPDF": "PDF",
-        "DownloadEPUB": "EPUB"
-    },
-    "TOC-translation": {
-        "media": "Photografies"
+        "Reference": "Reference",
+        "Refer": "Refer",
+        "ReferToThisPage": "Refer to this page",
+        "Permalink": "Permalink",
+        "ReferToEdition": "Refer to this digital edition",
+        "ReferToReadingText": "Refer to this text",
+        "ReferToIntroduction": "Refer to this introduction",
+        "ReferToCollection": "Refer to this edition",
+        "ReferToForeword": "Refer to this foreword",
+        "ReferToEbook": "Refer to this text",
+        "ReferToMediaCollection": "Refer to this media collection",
+        "Missing": "This page does not have a persistent identifier"
     },
     "BasicActions": {
         "Ok": "Ok",
@@ -368,16 +330,15 @@
         "ShowMore": "Show more",
         "ScrollToTop": "Scroll to top",
         "Close": "Close",
-        "OpenInNewWindow": "Opens in a new window"
+        "OpenInNewWindow": "Opens in a new window",
+        "Search": "Search",
+        "SearchEllipsis": "Search ...",
+        "Print": "Print"
     },
     "Ebook": {
         "InvalidFilename": "Invalid filename. The ebook could not be found."
     },
     "Epub": {
-        "DisplayOptions": "Text size",
-        "Download": "Download",
-        "Search": "Search",
-        "SearchPhrase": "Search phrase",
         "Contents": "Contents",
         "FileNotFound": "Unable to load the text. The epub-file cannot be found.",
         "NoticeHeader": "Notice",
@@ -385,14 +346,12 @@
     },
     "DownloadTexts": {
         "Download": "Download",
-        "Title": "Download and print",
+        "DownloadAndPrint": "Download and print",
         "CopyrightNoticeLabel": "License",
         "CopyrightNotice": "CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
         "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
         "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en",
-        "Print": "Print",
-        "Textsize": "Text size",
         "TextLoadingError": "Failed to download text. Please try again and allow popup-windows from the web page.",
         "OpenPrintError": "The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.",
         "MissingTextError": "The text doesn’t exist and can’t be downloaded or printed.",
@@ -407,14 +366,8 @@
             "XML": "XML"
         }
     },
-    "Modal": {
-        "Illustration": {
-            "Title": "Illustration",
-            "OpenMediaCollection": "Open media collection"
-        }
-    },
     "PageNotFound": {
-        "Title": "404 Page not found",
+        "404PageNotFound": "404 Page not found",
         "DefaultMessage": "Something went wrong. We can’t find the page you tried to access. You can go back to the previous page using the browser’s back-button, or you can try to correct the web address in the browser’s address bar."
     }
 }

@@ -6,10 +6,6 @@
             "Home": "En generell beskrivning av webbplatsen för sökmotorer."
         }
     },
-    "Home": {
-        "SearchButtonAriaLabel": "Sök",
-        "SearchPlaceholder": "Sök ..."
-    },
     "TopMenu": {
         "Menu": "Meny",
         "Home": "Hem",
@@ -34,13 +30,19 @@
         "PersonInfo": "Personupplysningar",
         "PlaceInfo": "Platsupplysningar",
         "WorkInfo": "Verkupplysningar",
+        "Emendation": "Utgivarändring",
         "Emendations": "Utgivarens ändringar",
+        "Normalisation": "Normalisering",
         "Normalisations": "Normaliseringar",
+        "Abbreviation": "Förkortning",
         "Abbreviations": "Förkortningar",
         "ParagraphNumbering": "Stycke-/radnumrering",
         "PageBreakOriginal": "Sidnummer i originalet",
         "PageBreakEdition": "Sidnummer i den tryckta utgåvan",
-        "ExplanatoryNotesAltText": "Röd asterisk"
+        "ExplanatoryNotesAltText": "Röd asterisk",
+        "Note": "Not",
+        "RevisionNote": "Repetitionsanteckning",
+        "EditorialNote": "Utgivarens anmärkning"
     },
     "ReadingText": {
         "ReadingText": "Lästext",
@@ -134,10 +136,12 @@
         "Missing": "Inledningen kunde inte laddas."
     },
     "Illustrations": {
+        "Illustration": "Illustration",
         "Illustrations": "Illustrationer",
         "ShowInReadingText": "Visa position i lästext",
         "Missing": "Inga illustrationer.",
-        "ShowAll": "Visa alla"
+        "ShowAll": "Visa alla",
+        "OpenMediaCollection": "Öppna bildbanken"
     },
     "Legend": {
         "Legend": "Teckenförklaringar",
@@ -239,7 +243,7 @@
         "LatestYear": "Senast år",
         "PersonTypes": "Personkategorier"
     },
-    "Occurrences": {
+    "NamedEntity": {
         "Occurrences": "Förekomster",
         "NoInfoFound": "Ingen information hittades.",
         "OccurrencesLowercase": "förekomster",
@@ -263,7 +267,10 @@
         "Person": "Person",
         "Place": "Plats",
         "Keyword": "Ämnesord",
-        "Work": "Verk"
+        "Work": "Verk",
+        "Possibly": "ev.",
+        "HistoricalFigureLabel": "historisk förebild",
+        "BC": "f.Kr."
     },
     "ElasticSearch": {
         "SearchEdition": "Sök i utgåvan",
@@ -288,7 +295,14 @@
         "ShowFacets": "Visa avgränsningar",
         "HideFacets": "Dölj avgränsningar",
         "StartSearchInstruction": "Börja söka genom att skriva in sökord eller välja avgränsningar.",
-        "ClearAllActiveFilters": "Ta bort alla aktiva avgränsningar"
+        "ClearAllActiveFilters": "Ta bort alla aktiva avgränsningar",
+        "Type": "Texttyp",
+        "Genre": "Genre",
+        "Collection": "Delutgåva",
+        "LetterSenderName": "Avsändare (brev)",
+        "LetterReceiverName": "Mottagare (brev)",
+        "LetterSenderLocation": "Avsändarort (brev)",
+        "LetterReceiverLocation": "Mottagarort (brev)"
     },
     "DateHistogram": {
         "Clear": "Nollställ",
@@ -296,69 +310,19 @@
         "Refresh": "Uppdatera",
         "To": "Till år"
     },
-    "Type": "Texttyp",
-    "Genre": "Genre",
-    "Collection": "Delutgåva",
-    "Location": "Plats",
-    "Subjects": "Ämnen",
-    "Tags": "Taggar",
-    "Person": "Person",
-    "LetterSenderName": "Avsändare (brev)",
-    "LetterReceiverName": "Mottagare (brev)",
-    "LetterSenderLocation": "Avsändarort (brev)",
-    "LetterReceiverLocation": "Mottagarort (brev)",
-    "est": "Lästext",
-    "ms": "Manuskript",
-    "com": "Kommentar",
-    "tit": "Titelblad",
-    "fore": "Förord",
-    "var": "Tryckt variant",
-    "inl": "Inledning",
-    "locations": "Platser",
-    "location": "Plats",
-    "tags": "Ämnesord",
-    "tag": "Ämnesord",
-    "subjects": "Personer",
-    "subject": "Person",
-    "uncertainPersonCorresp": "ev.",
-    "fictionalPersonCorresp": "historisk förebild",
-    "collections": "Samlingar",
-    "works": "Verk",
-    "photos": "foton",
-    "recorder": "Upptecknare",
-    "playman": "Spelman",
-    "Text": "PDF",
-    "BC": "f.Kr.",
-    "note": "Not",
-    "editorialChange": "Utgivarändring",
-    "editorialNormalisation": "Normalisering",
-    "abbreviation": "Förkortning",
-    "revisionNote": "Repetitionsanteckning",
-    "criticalNote": "Utgivarens anmärkning",
-    "download": "Ladda ner",
     "Reference": {
-        "title": "Källhänvisning",
-        "refer": "Hänvisa",
-        "urn": "URN",
-        "share": "Dela",
-        "mail": "E-post",
-        "thisPage": "Hänvisa till denna sida",
-        "permaLink": "Beständig webbadress",
-        "topMenu": "Hänvisa till denna webbutgåva",
-        "established": "Hänvisa till denna lästext",
-        "intro": "Hänvisa till denna inledning",
-        "pageTitle": "Hänvisa till denna delutgåva",
-        "pageForeword": "Hänvisa till detta förord",
-        "pageEpub": "Hänvisa till denna text",
-        "mediaCollection": "Hänvisa till denna bildsamling",
-        "missing": "Sidan saknar beständig webbadress"
-    },
-    "EditionsList": {
-        "DownloadPDF": "PDF",
-        "DownloadEPUB": "EPUB"
-    },
-    "TOC-translation": {
-        "media": "Fotografier"
+        "Reference": "Källhänvisning",
+        "Refer": "Hänvisa",
+        "ReferToThisPage": "Hänvisa till denna sida",
+        "Permalink": "Beständig webbadress",
+        "ReferToEdition": "Hänvisa till denna webbutgåva",
+        "ReferToReadingText": "Hänvisa till denna lästext",
+        "ReferToIntroduction": "Hänvisa till denna inledning",
+        "ReferToCollection": "Hänvisa till denna delutgåva",
+        "ReferToForeword": "Hänvisa till detta förord",
+        "ReferToEbook": "Hänvisa till denna text",
+        "ReferToMediaCollection": "Hänvisa till denna bildsamling",
+        "Missing": "Sidan saknar beständig webbadress"
     },
     "BasicActions": {
         "Ok": "Ok",
@@ -368,16 +332,15 @@
         "ShowMore": "Visa fler",
         "ScrollToTop": "Till början",
         "Close": "Stäng",
-        "OpenInNewWindow": "Länken öppnas i ett nytt fönster"
+        "OpenInNewWindow": "Länken öppnas i ett nytt fönster",
+        "Search": "Sök",
+        "SearchEllipsis": "Sök ...",
+        "Print": "Skriv ut"
     },
     "Ebook": {
         "InvalidFilename": "Ogiltigt filnamn. E-boken kunde inte hittas."
     },
     "Epub": {
-        "DisplayOptions": "Textstorlek",
-        "Download": "Ladda ner",
-        "Search": "Sök",
-        "SearchPhrase": "Söktext",
         "Contents": "Innehåll",
         "FileNotFound": "Texten kunde inte laddas. Epub-filen saknas.",
         "NoticeHeader": "Anmärkning",
@@ -385,14 +348,12 @@
     },
     "DownloadTexts": {
         "Download": "Ladda ner",
-        "Title": "Ladda ner och skriv ut",
+        "DownloadAndPrint": "Ladda ner och skriv ut",
         "CopyrightNoticeLabel": "Licens",
         "CopyrightNotice": "CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
         "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
         "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
-        "Print": "Skriv ut",
-        "Textsize": "Textstorlek",
         "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
         "MissingTextError": "Texten saknas och går inte att ladda ner eller skriva ut.",
@@ -407,14 +368,8 @@
             "XML": "XML"
         }
     },
-    "Modal": {
-        "Illustration": {
-            "Title": "Illustration",
-            "OpenMediaCollection": "Öppna bildbanken"
-        }
-    },
     "PageNotFound": {
-        "Title": "404 Sidan hittas inte",
+        "404PageNotFound": "404 Sidan hittas inte",
         "DefaultMessage": "Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält."
     }
 }

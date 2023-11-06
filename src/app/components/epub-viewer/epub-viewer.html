@@ -30,12 +30,12 @@
                 [attr.target]="(epubData.downloadOptions?.[0]?.url | isExternalURL) ? '_blank' : null"
           >
             <ion-icon name="download"></ion-icon>
-            <span class="side-title" i18n="@@Epub.Download">Ladda ner</span>
+            <span class="side-title" i18n="@@BasicActions.Download">Ladda ner</span>
           </a>
 
           <ion-button *ngIf="epubData.downloadOptions?.length > 1" (click)="openDownloadPopover($event)">
             <ion-icon name="download"></ion-icon>
-            <span class="side-title" i18n="@@Epub.Download">Ladda ner</span>
+            <span class="side-title" i18n="@@BasicActions.Download">Ladda ner</span>
           </ion-button>
           <ion-popover #downloadOptionsPopover
                 [ngStyle]="{'--offset-y': '-30px', '--background': 'var(--main-background-color)'}"
@@ -58,7 +58,7 @@
                       'padding': '0 0 0 1rem',
                       'width': '100%'
                     }">
-                <p [ngStyle]="{'margin': '0'}"><b i18n="@@Epub.Download">Ladda ner</b></p>
+                <p [ngStyle]="{'margin': '0'}"><b i18n="@@BasicActions.Download">Ladda ner</b></p>
                 <ion-button
                       class="close"
                       fill="clear"
@@ -95,16 +95,16 @@
 
         <ion-button *ngIf="showURNButton" (click)="showReference()">
           <ion-icon slot="start" name="arrow-redo-sharp"></ion-icon>
-          <span class="side-title" i18n="@@Reference.refer">Hänvisa</span>
+          <span class="side-title" i18n="@@Reference.Refer">Hänvisa</span>
         </ion-button>
         <ion-button *ngIf="showViewOptionsButton" (click)="showReadSettingsPopover($event)">
           <ion-icon slot="start" name="settings"></ion-icon>
-          <span class="side-title" i18n="@@Epub.DisplayOptions">Textstorlek</span>
+          <span class="side-title" i18n="@@ViewOptions.Textsize">Textstorlek</span>
         </ion-button>
         <ion-button (click)="toggleSearchMenu()">
           <ion-icon slot="start" name="search" [class.visuallyhidden]="searchMenuOpen"></ion-icon>
           <ion-icon slot="start" name="close" [class.visuallyhidden]="!searchMenuOpen"></ion-icon>
-          <span class="side-title" i18n="@@Epub.Search">Sök</span>
+          <span class="side-title" i18n="@@BasicActions.Search">Sök</span>
         </ion-button>
         <ion-button *ngIf="showTOCButton" [ngClass]="tocMenuOpen ? 'menuOpenTOC' : 'menuClosedTOC'" (click)="toggleTocMenu()">
           <ion-icon slot="start" name="list" [class.visuallyhidden]="tocMenuOpen"></ion-icon>
@@ -160,8 +160,8 @@
           (ionInput)="doSearch($event)"
           (ionClear)="clearSearch()"
           [(ngModel)]="searchText"
-          placeholder="Söktext"
-          i18n-placeholder="@@Epub.SearchPhrase"
+          placeholder="Sök ..."
+          i18n-placeholder="@@BasicActions.SearchEllipsis"
           inputmode="text"
           [debounce]="500"
     ></ion-searchbar>

@@ -42,7 +42,7 @@ export class TooltipService {
       return of(cachedTooltip);
     }
 
-    const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
+    const noInfoFound = $localize`:@@NamedEntity.NoInfoFound:Ingen information hittades.`;
 
     if (type === 'work' && !this.simpleWorkMetadata) {
       return this.namedEntityService.getEntityFromElastic('work', id).pipe(
@@ -189,12 +189,12 @@ export class TooltipService {
   constructPersonTooltipText(tooltip: any, targetElem: HTMLElement) {
     const uncertainPretext = (
       targetElem.classList.contains('uncertain') &&
-      $localize`:@@uncertainPersonCorresp:ev.`
-    ) ? $localize`:@@uncertainPersonCorresp:ev.` + ' ' : '';
+      $localize`:@@NamedEntity.Possibly:ev.`
+    ) ? $localize`:@@NamedEntity.Possibly:ev.` + ' ' : '';
     const fictionalPretext = (
       targetElem.classList.contains('fictional') &&
-      $localize`:@@fictionalPersonCorresp:historisk förebild`
-    ) ? $localize`:@@fictionalPersonCorresp:historisk förebild` + ':<br/>' : '';
+      $localize`:@@NamedEntity.HistoricalFigureLabel:historisk förebild`
+    ) ? $localize`:@@NamedEntity.HistoricalFigureLabel:historisk förebild` + ':<br/>' : '';
 
     let text = '<b>' + tooltip.full_name.trim() + '</b>';
     const yearBornDeceasedString = this.constructYearBornDeceasedString(
@@ -219,10 +219,10 @@ export class TooltipService {
         ? String(dateDeceased).split('-')[0].replace(/^0+/, '').split(' ')[0]
         : null;
     const bcIndicatorDeceased = String(dateDeceased).includes('BC')
-      ? ' ' + $localize`:@@BC:f.Kr.`
+      ? ' ' + $localize`:@@NamedEntity.BC:f.Kr.`
       : '';
     let bcIndicatorBorn = String(dateBorn).includes('BC')
-      ? ' ' + $localize`:@@BC:f.Kr.`
+      ? ' ' + $localize`:@@NamedEntity.BC:f.Kr.`
       : '';
     if (
       String(dateBorn).includes('BC') &&

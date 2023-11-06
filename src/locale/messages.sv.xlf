@@ -1,11 +1,5 @@
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="undefined">
   <file id="ngi18n" original="ng.template">
-    <unit id="abbreviation">
-      <segment state="initial">
-        <source>Förkortning</source>
-        <target>Förkortning</target>
-      </segment>
-    </unit>
     <unit id="About.LoadingError">
       <segment state="initial">
         <source>Sidans innehåll kunde inte laddas.</source>
@@ -48,28 +42,34 @@
         <target>Länken öppnas i ett nytt fönster</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Print">
+      <segment state="initial">
+        <source>Skriv ut</source>
+        <target>Skriv ut</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.ScrollToTop">
       <segment state="initial">
         <source>Till början</source>
         <target>Till början</target>
       </segment>
     </unit>
+    <unit id="BasicActions.Search">
+      <segment state="initial">
+        <source>Sök</source>
+        <target>Sök</target>
+      </segment>
+    </unit>
+    <unit id="BasicActions.SearchEllipsis">
+      <segment state="initial">
+        <source>Sök ...</source>
+        <target>Sök ...</target>
+      </segment>
+    </unit>
     <unit id="BasicActions.ShowMore">
       <segment state="initial">
         <source>Visa fler</source>
         <target>Visa fler</target>
-      </segment>
-    </unit>
-    <unit id="BC">
-      <segment state="initial">
-        <source>f.Kr.</source>
-        <target>f.Kr.</target>
-      </segment>
-    </unit>
-    <unit id="Collection">
-      <segment state="initial">
-        <source>Delutgåva</source>
-        <target>Delutgåva</target>
       </segment>
     </unit>
     <unit id="CollectionCover.Cover">
@@ -196,12 +196,6 @@
       <segment state="initial">
         <source>Titelblad</source>
         <target>Titelblad</target>
-      </segment>
-    </unit>
-    <unit id="com">
-      <segment state="initial">
-        <source>Kommentar</source>
-        <target>Kommentar</target>
       </segment>
     </unit>
     <unit id="Commentary.Commentary">
@@ -384,6 +378,12 @@
         <target>Ladda ner</target>
       </segment>
     </unit>
+    <unit id="DownloadTexts.DownloadAndPrint">
+      <segment state="initial">
+        <source>Ladda ner och skriv ut</source>
+        <target>Ladda ner och skriv ut</target>
+      </segment>
+    </unit>
     <unit id="DownloadTexts.Format.HTML">
       <segment state="initial">
         <source>HTML</source>
@@ -432,12 +432,6 @@
         <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
       </segment>
     </unit>
-    <unit id="DownloadTexts.Print">
-      <segment state="initial">
-        <source>Skriv ut</source>
-        <target>Skriv ut</target>
-      </segment>
-    </unit>
     <unit id="DownloadTexts.Source">
       <segment state="initial">
         <source>Texten är hämtad från</source>
@@ -450,40 +444,22 @@
         <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
       </segment>
     </unit>
-    <unit id="DownloadTexts.Textsize">
-      <segment state="initial">
-        <source>Textstorlek</source>
-        <target>Textstorlek</target>
-      </segment>
-    </unit>
-    <unit id="DownloadTexts.Title">
-      <segment state="initial">
-        <source>Ladda ner och skriv ut</source>
-        <target>Ladda ner och skriv ut</target>
-      </segment>
-    </unit>
     <unit id="Ebook.InvalidFilename">
       <segment state="initial">
         <source>Ogiltigt filnamn. E-boken kunde inte hittas.</source>
         <target>Ogiltigt filnamn. E-boken kunde inte hittas.</target>
       </segment>
     </unit>
-    <unit id="editorialChange">
-      <segment state="initial">
-        <source>Utgivarändring</source>
-        <target>Utgivarändring</target>
-      </segment>
-    </unit>
-    <unit id="editorialNormalisation">
-      <segment state="initial">
-        <source>Normalisering</source>
-        <target>Normalisering</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.ClearAllActiveFilters">
       <segment state="initial">
         <source>Ta bort alla aktiva avgränsningar</source>
         <target>Ta bort alla aktiva avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.Collection">
+      <segment state="initial">
+        <source>Delutgåva</source>
+        <target>Delutgåva</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.CommentaryTo">
@@ -504,10 +480,40 @@
         <target>Texter med sökträffar:</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.Genre">
+      <segment state="initial">
+        <source>Genre</source>
+        <target>Genre</target>
+      </segment>
+    </unit>
     <unit id="ElasticSearch.HideFacets">
       <segment state="initial">
         <source>Dölj avgränsningar</source>
         <target>Dölj avgränsningar</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterReceiverLocation">
+      <segment state="initial">
+        <source>Mottagarort (brev)</source>
+        <target>Mottagarort (brev)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterReceiverName">
+      <segment state="initial">
+        <source>Mottagare (brev)</source>
+        <target>Mottagare (brev)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterSenderLocation">
+      <segment state="initial">
+        <source>Avsändarort (brev)</source>
+        <target>Avsändarort (brev)</target>
+      </segment>
+    </unit>
+    <unit id="ElasticSearch.LetterSenderName">
+      <segment state="initial">
+        <source>Avsändare (brev)</source>
+        <target>Avsändare (brev)</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.LoadingError">
@@ -618,22 +624,16 @@
         <target>Tidsperiod</target>
       </segment>
     </unit>
+    <unit id="ElasticSearch.Type">
+      <segment state="initial">
+        <source>Texttyp</source>
+        <target>Texttyp</target>
+      </segment>
+    </unit>
     <unit id="Epub.Contents">
       <segment state="initial">
         <source>Innehåll</source>
         <target>Innehåll</target>
-      </segment>
-    </unit>
-    <unit id="Epub.DisplayOptions">
-      <segment state="initial">
-        <source>Textstorlek</source>
-        <target>Textstorlek</target>
-      </segment>
-    </unit>
-    <unit id="Epub.Download">
-      <segment state="initial">
-        <source>Ladda ner</source>
-        <target>Ladda ner</target>
       </segment>
     </unit>
     <unit id="Epub.FileNotFound">
@@ -652,24 +652,6 @@
       <segment state="initial">
         <source>Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat.</source>
         <target>Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat.</target>
-      </segment>
-    </unit>
-    <unit id="Epub.Search">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Sök</target>
-      </segment>
-    </unit>
-    <unit id="Epub.SearchPhrase">
-      <segment state="initial">
-        <source>Söktext</source>
-        <target>Söktext</target>
-      </segment>
-    </unit>
-    <unit id="est">
-      <segment state="initial">
-        <source>Lästext</source>
-        <target>Lästext</target>
       </segment>
     </unit>
     <unit id="Facsimiles.AltText">
@@ -768,18 +750,6 @@
         <target>Zooma ut</target>
       </segment>
     </unit>
-    <unit id="fictionalPersonCorresp">
-      <segment state="initial">
-        <source>historisk förebild</source>
-        <target>historisk förebild</target>
-      </segment>
-    </unit>
-    <unit id="fore">
-      <segment state="initial">
-        <source>Förord</source>
-        <target>Förord</target>
-      </segment>
-    </unit>
     <unit id="FullscreenImageViewer.ToggleDescription">
       <segment state="initial">
         <source>Visa/dölj beskrivning</source>
@@ -792,22 +762,10 @@
         <target>Visa/dölj frånsida</target>
       </segment>
     </unit>
-    <unit id="Genre">
-      <segment>
-        <source>Genre</source>
-        <target>Genre</target>
-      </segment>
-    </unit>
-    <unit id="Home.SearchButtonAriaLabel">
+    <unit id="Illustrations.Illustration">
       <segment state="initial">
-        <source>Sök</source>
-        <target>Sök</target>
-      </segment>
-    </unit>
-    <unit id="Home.SearchPlaceholder">
-      <segment state="initial">
-        <source>Sök ...</source>
-        <target>Sök ...</target>
+        <source>Illustration</source>
+        <target>Illustration</target>
       </segment>
     </unit>
     <unit id="Illustrations.Illustrations">
@@ -820,6 +778,12 @@
       <segment state="initial">
         <source>Inga illustrationer.</source>
         <target>Inga illustrationer.</target>
+      </segment>
+    </unit>
+    <unit id="Illustrations.OpenMediaCollection">
+      <segment state="initial">
+        <source>Öppna bildbanken</source>
+        <target>Öppna bildbanken</target>
       </segment>
     </unit>
     <unit id="Illustrations.ShowAll">
@@ -924,12 +888,6 @@
         <target>Personkategorier</target>
       </segment>
     </unit>
-    <unit id="inl">
-      <segment state="initial">
-        <source>Inledning</source>
-        <target>Inledning</target>
-      </segment>
-    </unit>
     <unit id="Legend.Legend">
       <segment state="initial">
         <source>Teckenförklaringar</source>
@@ -940,30 +898,6 @@
       <segment state="initial">
         <source>Inga teckenförklaringar tillgängliga.</source>
         <target>Inga teckenförklaringar tillgängliga.</target>
-      </segment>
-    </unit>
-    <unit id="LetterReceiverLocation">
-      <segment state="initial">
-        <source>Mottagarort (brev)</source>
-        <target>Mottagarort (brev)</target>
-      </segment>
-    </unit>
-    <unit id="LetterReceiverName">
-      <segment state="initial">
-        <source>Mottagare (brev)</source>
-        <target>Mottagare (brev)</target>
-      </segment>
-    </unit>
-    <unit id="LetterSenderLocation">
-      <segment state="initial">
-        <source>Avsändarort (brev)</source>
-        <target>Avsändarort (brev)</target>
-      </segment>
-    </unit>
-    <unit id="LetterSenderName">
-      <segment state="initial">
-        <source>Avsändare (brev)</source>
-        <target>Avsändare (brev)</target>
       </segment>
     </unit>
     <unit id="MainSideMenu.Collections">
@@ -1278,184 +1212,178 @@
         <target>Översättningar</target>
       </segment>
     </unit>
-    <unit id="Modal.Illustration.OpenMediaCollection">
-      <segment state="initial">
-        <source>Öppna bildbanken</source>
-        <target>Öppna bildbanken</target>
-      </segment>
-    </unit>
-    <unit id="Modal.Illustration.Title">
-      <segment state="initial">
-        <source>Illustration</source>
-        <target>Illustration</target>
-      </segment>
-    </unit>
-    <unit id="ms">
-      <segment state="initial">
-        <source>Manuskript</source>
-        <target>Manuskript</target>
-      </segment>
-    </unit>
-    <unit id="note">
-      <segment state="initial">
-        <source>Not</source>
-        <target>Not</target>
-      </segment>
-    </unit>
-    <unit id="Occurrences.Articles">
+    <unit id="NamedEntity.Articles">
       <segment state="initial">
         <source>Artiklar</source>
         <target>Artiklar</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Authors">
+    <unit id="NamedEntity.Authors">
       <segment state="initial">
         <source>Författare</source>
         <target>Författare</target>
       </segment>
     </unit>
-    <unit id="Occurrences.City">
+    <unit id="NamedEntity.BC">
+      <segment state="initial">
+        <source>f.Kr.</source>
+        <target>f.Kr.</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.City">
       <segment state="initial">
         <source>Stad</source>
         <target>Stad</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Country">
+    <unit id="NamedEntity.Country">
       <segment state="initial">
         <source>Land</source>
         <target>Land</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Description">
+    <unit id="NamedEntity.Description">
       <segment state="initial">
         <source>Beskrivning</source>
         <target>Beskrivning</target>
       </segment>
     </unit>
-    <unit id="Occurrences.DownloadPDF">
+    <unit id="NamedEntity.DownloadPDF">
       <segment state="initial">
         <source>ladda ner pdf</source>
         <target>ladda ner pdf</target>
       </segment>
     </unit>
-    <unit id="Occurrences.ISBN">
+    <unit id="NamedEntity.HistoricalFigureLabel">
+      <segment state="initial">
+        <source>historisk förebild</source>
+        <target>historisk förebild</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.ISBN">
       <segment state="initial">
         <source>ISBN</source>
         <target>ISBN</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Journal">
+    <unit id="NamedEntity.Journal">
       <segment state="initial">
         <source>Journal</source>
         <target>Journal</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Keyword">
+    <unit id="NamedEntity.Keyword">
       <segment state="initial">
         <source>Ämnesord</source>
         <target>Ämnesord</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Latitude">
+    <unit id="NamedEntity.Latitude">
       <segment state="initial">
         <source>lat.</source>
         <target>lat.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Longitude">
+    <unit id="NamedEntity.Longitude">
       <segment state="initial">
         <source>long.</source>
         <target>long.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.NoInfoFound">
+    <unit id="NamedEntity.NoInfoFound">
       <segment state="initial">
         <source>Ingen information hittades.</source>
         <target>Ingen information hittades.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Occurrences">
+    <unit id="NamedEntity.Occurrences">
       <segment state="initial">
         <source>Förekomster</source>
         <target>Förekomster</target>
       </segment>
     </unit>
-    <unit id="Occurrences.OccurrencesLowercase">
+    <unit id="NamedEntity.OccurrencesLowercase">
       <segment state="initial">
         <source>förekomster</source>
         <target>förekomster</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Person">
+    <unit id="NamedEntity.Person">
       <segment state="initial">
         <source>Person</source>
         <target>Person</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Place">
+    <unit id="NamedEntity.Place">
       <segment state="initial">
         <source>Plats</source>
         <target>Plats</target>
       </segment>
     </unit>
-    <unit id="Occurrences.PlaceOfBirth">
+    <unit id="NamedEntity.PlaceOfBirth">
       <segment state="initial">
         <source>Födelseort</source>
         <target>Födelseort</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Publisher">
+    <unit id="NamedEntity.Possibly">
+      <segment state="initial">
+        <source>ev.</source>
+        <target>ev.</target>
+      </segment>
+    </unit>
+    <unit id="NamedEntity.Publisher">
       <segment state="initial">
         <source>Utgivare</source>
         <target>Utgivare</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Region">
+    <unit id="NamedEntity.Region">
       <segment state="initial">
         <source>Region</source>
         <target>Region</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Source">
+    <unit id="NamedEntity.Source">
       <segment state="initial">
         <source>Källa</source>
         <target>Källa</target>
       </segment>
     </unit>
-    <unit id="Occurrences.Type">
+    <unit id="NamedEntity.Type">
       <segment state="initial">
         <source>Typ</source>
         <target>Typ</target>
       </segment>
     </unit>
-    <unit id="Occurrences.work">
+    <unit id="NamedEntity.work">
       <segment state="initial">
         <source>Verk</source>
         <target>Verk</target>
       </segment>
     </unit>
-    <unit id="Occurrences.WorkOccurrencesUnavailable">
+    <unit id="NamedEntity.WorkOccurrencesUnavailable">
       <segment state="initial">
         <source>Förekomster för verk är inte tillgängliga.</source>
         <target>Förekomster för verk är inte tillgängliga.</target>
       </segment>
     </unit>
-    <unit id="Occurrences.YearOfPublication">
+    <unit id="NamedEntity.YearOfPublication">
       <segment state="initial">
         <source>Utgivningsår</source>
         <target>Utgivningsår</target>
+      </segment>
+    </unit>
+    <unit id="PageNotFound.404PageNotFound">
+      <segment state="initial">
+        <source>404 Sidan hittas inte</source>
+        <target>404 Sidan hittas inte</target>
       </segment>
     </unit>
     <unit id="PageNotFound.DefaultMessage">
       <segment state="initial">
         <source>Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält.</source>
         <target>Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält.</target>
-      </segment>
-    </unit>
-    <unit id="PageNotFound.Title">
-      <segment state="initial">
-        <source>404 Sidan hittas inte</source>
-        <target>404 Sidan hittas inte</target>
       </segment>
     </unit>
     <unit id="ReadingText.Error">
@@ -1488,76 +1416,76 @@
         <target>Svensk text</target>
       </segment>
     </unit>
-    <unit id="Reference.established">
-      <segment state="initial">
-        <source>Hänvisa till denna lästext</source>
-        <target>Hänvisa till denna lästext</target>
-      </segment>
-    </unit>
-    <unit id="Reference.intro">
-      <segment state="initial">
-        <source>Hänvisa till denna inledning</source>
-        <target>Hänvisa till denna inledning</target>
-      </segment>
-    </unit>
-    <unit id="Reference.mediaCollection">
-      <segment state="initial">
-        <source>Hänvisa till denna bildsamling</source>
-        <target>Hänvisa till denna bildsamling</target>
-      </segment>
-    </unit>
-    <unit id="Reference.missing">
+    <unit id="Reference.Missing">
       <segment state="initial">
         <source>Sidan saknar beständig webbadress</source>
         <target>Sidan saknar beständig webbadress</target>
       </segment>
     </unit>
-    <unit id="Reference.pageEpub">
-      <segment state="initial">
-        <source>Hänvisa till denna text</source>
-        <target>Hänvisa till denna text</target>
-      </segment>
-    </unit>
-    <unit id="Reference.pageForeword">
-      <segment state="initial">
-        <source>Hänvisa till detta förord</source>
-        <target>Hänvisa till detta förord</target>
-      </segment>
-    </unit>
-    <unit id="Reference.pageTitle">
-      <segment state="initial">
-        <source>Hänvisa till denna delutgåva</source>
-        <target>Hänvisa till denna delutgåva</target>
-      </segment>
-    </unit>
-    <unit id="Reference.permaLink">
+    <unit id="Reference.Permalink">
       <segment state="initial">
         <source>Beständig webbadress</source>
         <target>Beständig webbadress</target>
       </segment>
     </unit>
-    <unit id="Reference.refer">
+    <unit id="Reference.Refer">
       <segment state="initial">
         <source>Hänvisa</source>
         <target>Hänvisa</target>
       </segment>
     </unit>
-    <unit id="Reference.thisPage">
-      <segment state="initial">
-        <source>Hänvisa till denna sida</source>
-        <target>Hänvisa till denna sida</target>
-      </segment>
-    </unit>
-    <unit id="Reference.title">
+    <unit id="Reference.Reference">
       <segment state="initial">
         <source>Källhänvisning</source>
         <target>Källhänvisning</target>
       </segment>
     </unit>
-    <unit id="Reference.topMenu">
+    <unit id="Reference.ReferToCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna delutgåva</source>
+        <target>Hänvisa till denna delutgåva</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToEbook">
+      <segment state="initial">
+        <source>Hänvisa till denna text</source>
+        <target>Hänvisa till denna text</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToEdition">
       <segment state="initial">
         <source>Hänvisa till denna webbutgåva</source>
         <target>Hänvisa till denna webbutgåva</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToForeword">
+      <segment state="initial">
+        <source>Hänvisa till detta förord</source>
+        <target>Hänvisa till detta förord</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToIntroduction">
+      <segment state="initial">
+        <source>Hänvisa till denna inledning</source>
+        <target>Hänvisa till denna inledning</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToMediaCollection">
+      <segment state="initial">
+        <source>Hänvisa till denna bildsamling</source>
+        <target>Hänvisa till denna bildsamling</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToReadingText">
+      <segment state="initial">
+        <source>Hänvisa till denna lästext</source>
+        <target>Hänvisa till denna lästext</target>
+      </segment>
+    </unit>
+    <unit id="Reference.ReferToThisPage">
+      <segment state="initial">
+        <source>Hänvisa till denna sida</source>
+        <target>Hänvisa till denna sida</target>
       </segment>
     </unit>
     <unit id="revisionNote">
@@ -1582,12 +1510,6 @@
       <segment state="initial">
         <source>Webbplatsens titel</source>
         <target>Webbplatsens titel</target>
-      </segment>
-    </unit>
-    <unit id="tit">
-      <segment state="initial">
-        <source>Titelblad</source>
-        <target>Titelblad</target>
       </segment>
     </unit>
     <unit id="TopMenu.About">
@@ -1630,24 +1552,6 @@
       <segment state="initial">
         <source>Sök</source>
         <target>Sök</target>
-      </segment>
-    </unit>
-    <unit id="Type">
-      <segment state="initial">
-        <source>Texttyp</source>
-        <target>Texttyp</target>
-      </segment>
-    </unit>
-    <unit id="uncertainPersonCorresp">
-      <segment state="initial">
-        <source>ev.</source>
-        <target>ev.</target>
-      </segment>
-    </unit>
-    <unit id="var">
-      <segment state="initial">
-        <source>Tryckt variant</source>
-        <target>Tryckt variant</target>
       </segment>
     </unit>
     <unit id="Variants.ChangeVariant">
@@ -1704,10 +1608,22 @@
         <target>Tryckt variant</target>
       </segment>
     </unit>
+    <unit id="ViewOptions.Abbreviation">
+      <segment state="initial">
+        <source>Förkortning</source>
+        <target>Förkortning</target>
+      </segment>
+    </unit>
     <unit id="ViewOptions.Abbreviations">
       <segment state="initial">
         <source>Förkortningar</source>
         <target>Förkortningar</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.Emendation">
+      <segment state="initial">
+        <source>Utgivarändring</source>
+        <target>Utgivarändring</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Emendations">
@@ -1734,10 +1650,22 @@
         <target>Röd asterisk</target>
       </segment>
     </unit>
+    <unit id="ViewOptions.Normalisation">
+      <segment state="initial">
+        <source>Normalisering</source>
+        <target>Normalisering</target>
+      </segment>
+    </unit>
     <unit id="ViewOptions.Normalisations">
       <segment state="initial">
         <source>Normaliseringar</source>
         <target>Normaliseringar</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.Note">
+      <segment state="initial">
+        <source>Not</source>
+        <target>Not</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Options">

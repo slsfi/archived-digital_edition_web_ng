@@ -580,7 +580,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     header += '    <p>' + $localize`:@@Site.Title:Webbplatsens titel` + (this.siteUrl ? (' – ' + '<a href="' + this.siteUrl + '">' + this.siteUrl + '</a>') : '') + '</p>\n';
     if ((textType === 'est' || textType === 'intro') && this.referenceData) {
 
-      header += '    <p class="apart">' + (textType === 'est' ? $localize`:@@Reference.established:Hänvisa till denna lästext` : $localize`:@@Reference.intro:Hänvisa till denna inledning`) + ':</p>\n';
+      header += '    <p class="apart">' + (textType === 'est' ? $localize`:@@Reference.ReferToReadingText:Hänvisa till denna lästext` : $localize`:@@Reference.ReferToIntroduction:Hänvisa till denna inledning`) + ':</p>\n';
       header += '    <p>' + this.referenceData.reference_text + ', <a href="' + referenceURL + '">' + referenceURL + '</a></p>\n';
     } else {
       header += '    <p class="apart">' + $localize`:@@DownloadTexts.Source:Texten är hämtad från` + ':</p>\n';
@@ -734,14 +734,14 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       }
     }
 
-    if ($localize`:@@DownloadTexts.Print:Skriv ut`) {
-      this.printTranslation = $localize`:@@DownloadTexts.Print:Skriv ut`;
+    if ($localize`:@@BasicActions.Print:Skriv ut`) {
+      this.printTranslation = $localize`:@@BasicActions.Print:Skriv ut`;
     } else {
       this.printTranslation = 'Skriv ut';
     }
 
-    if ($localize`:@@DownloadTexts.Textsize:Textstorlek`) {
-      this.textSizeTranslation = $localize`:@@DownloadTexts.Textsize:Textstorlek`;
+    if ($localize`:@@ViewOptions.Textsize:Textstorlek`) {
+      this.textSizeTranslation = $localize`:@@ViewOptions.Textsize:Textstorlek`;
     } else {
       this.textSizeTranslation = 'Text storlek';
     }

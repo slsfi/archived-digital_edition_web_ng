@@ -6,10 +6,6 @@
             "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
         }
     },
-    "Home": {
-        "SearchButtonAriaLabel": "Hae",
-        "SearchPlaceholder": "Hae ..."
-    },
     "TopMenu": {
         "Menu": "Valikko",
         "Home": "Etusivu",
@@ -34,13 +30,19 @@
         "PersonInfo": "Henkilöt",
         "PlaceInfo": "Paikannimet",
         "WorkInfo": "Teokset",
+        "Emendation": "Toimittajan tekemä muutos",
         "Emendations": "Toimittajan tekemät muutokset",
+        "Normalisation": "Normalisointi",
         "Normalisations": "Normalisoinnit",
-        "Abbreviations": "Lyhennykset",
+        "Abbreviation": "Lyhenne",
+        "Abbreviations": "Lyhenteet",
         "ParagraphNumbering": "Kappale-/rivinumerointi",
         "PageBreakOriginal": "Alkuteoksen sivunumerot",
         "PageBreakEdition": "Painetun edition sivunumerot",
-        "ExplanatoryNotesAltText": "Punainen asteriski"
+        "ExplanatoryNotesAltText": "Punainen asteriski",
+        "Note": "Viite",
+        "RevisionNote": "Kertausmuistiinpano",
+        "EditorialNote": "Toimittajan huomautus"
     },
     "ReadingText": {
         "ReadingText": "Lukuteksti",
@@ -239,7 +241,7 @@
         "LatestYear": "Aikaisintaan vuonna",
         "PersonTypes": "Henkilökategoriat"
     },
-    "Occurrences": {
+    "NamedEntity": {
         "Occurrences": "Esiintymät",
         "NoInfoFound": "Ei tietoja.",
         "OccurrencesLowercase": "esiitymää",
@@ -263,7 +265,10 @@
         "Person": "Henkilö",
         "Place": "Paikka",
         "Keyword": "Asiasana",
-        "Work": "Teos"
+        "Work": "Teos",
+        "Possibly": "ev.",
+        "HistoricalFigureLabel": "historisk förebild",
+        "BC": "eKr."
     },
     "ElasticSearch": {
         "SearchEdition": "Hae editiosta",
@@ -288,7 +293,14 @@
         "ShowFacets": "Näytä rajaukset",
         "HideFacets": "Piilota rajaukset",
         "StartSearchInstruction": "Aloita haku kirjoittamalla hakusana tai valitsemalla rajauksia.",
-        "ClearAllActiveFilters": "Poista kaikki aktiiviset rajaukset"
+        "ClearAllActiveFilters": "Poista kaikki aktiiviset rajaukset",
+        "Type": "Tekstityyppi",
+        "Genre": "Tekstilaji",
+        "Collection": "Editio",
+        "LetterSenderName": "Lähettäjä (kirjeet)",
+        "LetterReceiverName": "Vastaanottaja (kirjeet)",
+        "LetterSenderLocation": "Lähettäjän paikkakunta (kirjeet)",
+        "LetterReceiverLocation": "Vastaanottajan paikkakunta (kirjeet)"
     },
     "DateHistogram": {
         "Clear": "Nollaa",
@@ -296,69 +308,19 @@
         "Refresh": "Päivitä",
         "To": "Vuoteen"
     },
-    "Type": "Tekstityyppi",
-    "Genre": "Tekstilaji",
-    "Collection": "Editio",
-    "Location": "Paikka",
-    "Subjects": "Aihe",
-    "Tags": "Asiansanat",
-    "Person": "Henkilö",
-    "LetterSenderName": "Lähettäjä (kirjeet)",
-    "LetterReceiverName": "Vastaanottaja (kirjeet)",
-    "LetterSenderLocation": "Lähettäjän paikkakunta (kirjeet)",
-    "LetterReceiverLocation": "Vastaanottajan paikkakunta (kirjeet)",
-    "est": "Lukuteksti",
-    "ms": "Käsikirjoitus",
-    "com": "Kommentti",
-    "tit": "Nimiölehti",
-    "fore": "Esipuhe",
-    "var": "Painettu variantti",
-    "inl": "Johdanto",
-    "locations": "Paikat",
-    "location": "Paikka",
-    "tags": "Aihesanat",
-    "tag": "Aihesana",
-    "subjects": "Henkilöt",
-    "subject": "Henkilö",
-    "uncertainPersonCorresp": "ev.",
-    "fictionalPersonCorresp": "historisk förebild",
-    "collections": "Samlingar",
-    "works": "Verk",
-    "photos": "foton",
-    "recorder": "Upptecknare",
-    "playman": "Spelman",
-    "Text": "PDF",
-    "BC": "eKr.",
-    "note": "Viite",
-    "editorialChange": "Toimittajan tekemä muutos",
-    "editorialNormalisation": "Normalisointi",
-    "abbreviation": "Lyhenne",
-    "revisionNote": "Kertausmuistiinpano",
-    "criticalNote": "Toimittajan huomautus",
-    "download": "Lataa",
     "Reference": {
-        "title": "Viittausohje",
-        "refer": "Viittaa",
-        "urn": "URN",
-        "share": "Jaa",
-        "mail": "Sähköposti",
-        "thisPage": "Lähdevittaus",
-        "permaLink": "Pysyvä osoite",
-        "topMenu": "Lähdeviittaus tähän digitaaliseen editioon",
-        "established": "Lähdevittaus tähän lukutekstiin",
-        "intro": "Lähdevittaus tähän johdantoon",
-        "pageTitle": "Lähdeviittaus editioon",
-        "pageForeword": "Lähdeviittaus tähän esipuheeseen",
-        "pageEpub": "Lähdeviittaus tähän tekstiin",
-        "mediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
-        "missing": "Sivulla ei ole pysyvää osoitetta"
-    },
-    "EditionsList": {
-        "DownloadPDF": "PDF",
-        "DownloadEPUB": "EPUB"
-    },
-    "TOC-translation": {
-        "media": "Kuvat"
+        "Reference": "Viittausohje",
+        "Refer": "Viittaa",
+        "ReferToThisPage": "Lähdevittaus",
+        "Permalink": "Pysyvä osoite",
+        "ReferToEdition": "Lähdeviittaus tähän digitaaliseen editioon",
+        "ReferToReadingText": "Lähdevittaus tähän lukutekstiin",
+        "ReferToIntroduction": "Lähdevittaus tähän johdantoon",
+        "ReferToCollection": "Lähdeviittaus editioon",
+        "ReferToForeword": "Lähdeviittaus tähän esipuheeseen",
+        "ReferToEbook": "Lähdeviittaus tähän tekstiin",
+        "ReferToMediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
+        "Missing": "Sivulla ei ole pysyvää osoitetta"
     },
     "BasicActions": {
         "Ok": "Ok",
@@ -368,16 +330,15 @@
         "ShowMore": "Näytä lisää",
         "ScrollToTop": "Palaa alkuun",
         "Close": "Sulje",
-        "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan"
+        "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan",
+        "Search": "Hae",
+        "SearchEllipsis": "Hae ...",
+        "Print": "Tulosta"
     },
     "Ebook": {
         "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."
     },
     "Epub": {
-        "DisplayOptions": "Tekstikoko",
-        "Download": "Lataa",
-        "Search": "Haku",
-        "SearchPhrase": "Hakulause",
         "Contents": "Sisältö",
         "FileNotFound": "Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole.",
         "NoticeHeader": "Huomautus",
@@ -385,14 +346,12 @@
     },
     "DownloadTexts": {
         "Download": "Lataa",
-        "Title": "Lataa ja tulosta",
+        "DownloadAndPrint": "Lataa ja tulosta",
         "CopyrightNoticeLabel": "Lisenssi",
         "CopyrightNotice": "CC BY-NC-ND 4.0",
         "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
         "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
         "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
-        "Print": "Tulosta",
-        "Textsize": "Tekstin koko",
         "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
         "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
@@ -407,14 +366,8 @@
             "XML": "XML"
         }
     },
-    "Modal": {
-        "Illustration": {
-            "Title": "Kuva",
-            "OpenMediaCollection": "Avaa kuvapankki"
-        }
-    },
     "PageNotFound": {
-        "Title": "404 Sivua ei löydy",
+        "404PageNotFound": "404 Sivua ei löydy",
         "DefaultMessage": "Tapahtui virhe. Emme löydä hakemaasi sivua. Voit palata edelliselle sivulle selaimen näppäimestä, tai yrittää korjata selaimen osoiterivillä olevaa verkko-osoitetta."
     }
 }

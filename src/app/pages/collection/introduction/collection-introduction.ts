@@ -608,7 +608,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     this.tooltipService.getFootnoteTooltip(id, 'introduction', targetElem).subscribe(
       (footnoteHTML: string) => {
         if (footnoteHTML) {
-          this.setInfoOverlayTitle($localize`:@@note:Not`);
+          this.setInfoOverlayTitle($localize`:@@ViewOptions.Note:Not`);
           this.setInfoOverlayPositionAndWidth(targetElem);
           this.setInfoOverlayText(footnoteHTML);
         }

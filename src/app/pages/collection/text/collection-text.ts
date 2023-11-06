@@ -1029,7 +1029,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         this.setToolTipText(tooltip.description);
       },
       error: (e) => {
-        const noInfoFound = $localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`;
+        const noInfoFound = $localize`:@@NamedEntity.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
       }
@@ -1050,7 +1050,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.tooltipService.getFootnoteTooltip(id, textType, targetElem).subscribe(
       (footnoteHTML: string) => {
         if (footnoteHTML) {
-          this.setInfoOverlayTitle($localize`:@@note:Not`);
+          this.setInfoOverlayTitle($localize`:@@ViewOptions.Note:Not`);
           this.setInfoOverlayPositionAndWidth(targetElem);
           this.setInfoOverlayText(footnoteHTML);
         }
@@ -1068,7 +1068,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       error: (errorC) => {
         this.setInfoOverlayTitle($localize`:@@Commentary.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
-        this.setInfoOverlayText($localize`:@@Occurrences.NoInfoFound:Ingen information hittades.`);
+        this.setInfoOverlayText($localize`:@@NamedEntity.NoInfoFound:Ingen information hittades.`);
       }
     });
   }
@@ -1085,7 +1085,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
       if (targetElem.nextElementSibling.classList.contains('ttChanges')) {
         // Change.
-        this.setInfoOverlayTitle($localize`:@@editorialChange:Utgivarändring`);
+        this.setInfoOverlayTitle($localize`:@@ViewOptions.Emendation:Utgivarändring`);
         if (targetElem.classList.contains('corr_red')) {
           lemma = targetElem.innerHTML;
         } else if (targetElem.firstElementChild?.classList.contains('corr_hide')) {
@@ -1098,7 +1098,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttNormalisations')) {
         // Normalisation.
-        this.setInfoOverlayTitle($localize`:@@editorialNormalisation:Normalisering`);
+        this.setInfoOverlayTitle($localize`:@@ViewOptions.Normalisation:Normalisering`);
         if (targetElem.classList.contains('reg_hide')) {
           lemma = '<span class="reg_hide">' + targetElem.innerHTML + '</span>';
         } else {
@@ -1109,7 +1109,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           + targetElem.nextElementSibling.innerHTML + '</span></p>';
       } else if (targetElem.nextElementSibling.classList.contains('ttAbbreviations')) {
         // Abbreviation.
-        this.setInfoOverlayTitle($localize`:@@abbreviation:Förkortning`);
+        this.setInfoOverlayTitle($localize`:@@ViewOptions.Abbreviation:Förkortning`);
         if (targetElem.firstElementChild?.classList.contains('abbr')) {
           text = '<p class="infoOverlayText"><span class="ioLemma">'
             + targetElem.firstElementChild.innerHTML
