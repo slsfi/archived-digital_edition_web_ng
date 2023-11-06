@@ -715,8 +715,8 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     if (this.readTextsMode) {
       this.commentTitle = $localize`:@@DownloadTexts.CommentaryTo:Kommentarer till`;
 
-      if ($localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`) {
-        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:Licens: CC BY-NC-ND 4.0`;
+      if ($localize`:@@DownloadTexts.CopyrightNotice:CC BY-NC-ND 4.0`) {
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNotice:CC BY-NC-ND 4.0`;
       }
 
       if ($localize`:@@DownloadTexts.CopyrightURL:https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv`) {
@@ -725,8 +725,8 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     } else if (this.introductionMode) {
       this.introductionTitle = $localize`:@@CollectionIntroduction.Introduction:Inledning`;
 
-      if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`) {
-        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:Licens: CC BY-NC-ND 4.0`;
+      if ($localize`:@@DownloadTexts.CopyrightNoticeIntroduction:CC BY-NC-ND 4.0`) {
+        this.copyrightText = $localize`:@@DownloadTexts.CopyrightNoticeIntroduction:CC BY-NC-ND 4.0`;
       }
 
       if ($localize`:@@DownloadTexts.CopyrightURLIntroduction:https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv`) {

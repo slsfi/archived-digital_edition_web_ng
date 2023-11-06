@@ -6,6 +6,19 @@
             "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
         }
     },
+    "BasicActions": {
+        "Ok": "Ok",
+        "Cancel": "Peruuta",
+        "DontShowAgain": "Visa inte igen",
+        "Download": "Lataa",
+        "ShowMore": "Näytä lisää",
+        "ScrollToTop": "Palaa alkuun",
+        "Close": "Sulje",
+        "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan",
+        "Search": "Hae",
+        "SearchEllipsis": "Hae ...",
+        "Print": "Tulosta"
+    },
     "TopMenu": {
         "Menu": "Valikko",
         "Home": "Etusivu",
@@ -14,6 +27,31 @@
         "Search": "Hae",
         "LogoAltText": "Logo",
         "ChooseLanguage": "Valitse kieli. Nykyinen kieli:"
+    },
+    "MainSideMenu": {
+        "Home": "Aloitussivu",
+        "Ebooks": "Sähkökirjat",
+        "CollectionsGroup1": "Sisältö",
+        "CollectionsGroup2": "Sisältö 2",
+        "CollectionsGroup3": "Sisältö 3",
+        "CollectionsGroup4": "Sisältö 4",
+        "CollectionsGroup5": "Sisältö 5",
+        "MediaCollections": "Kuvakokoelmat",
+        "IndexPersons": "Henkilöhakemisto",
+        "IndexPlaces": "Paikkahakemisto",
+        "IndexKeywords": "Aihesanahakemisto",
+        "IndexWorks": "Teoshakemisto"
+    },
+    "CollectionSideMenu": {
+        "Back": "Takaisin",
+        "SortOptions": {
+            "Sorting": "Järjestys",
+            "SelectSorting": "Sisällysluettelon järjestys",
+            "Default": "Oletus",
+            "Chronological": "Kronologinen",
+            "Alphabetical": "Aakkosellinen",
+            "Categorical": "Kategorioittain"
+        }
     },
     "ViewOptions": {
         "Settings": "Asetukset",
@@ -48,12 +86,12 @@
         "ReadingText": "Lukuteksti",
         "SwedishText": "Ruotsinkielinen teksti",
         "FinnishText": "Suomenkielinen teksti",
-        "Missing": "Lukutekstiä ei ole, katso faksimile.",
+        "None": "Lukutekstiä ei ole, katso faksimile.",
         "Error": "Lukutekstin lataus epäonnistui."
     },
     "Commentary": {
         "Commentary": "Kommentaari",
-        "Missing": "Ei kommentteja.",
+        "None": "Ei kommentteja.",
         "Error": "Kommenttien lataus epäonnistui.",
         "Manuscript": {
             "ManuscriptDescription": "Kuvaus käsikirjoituksesta",
@@ -80,7 +118,7 @@
         "Manuscript": "Käsikirjoitus",
         "ShowNormalized": "Näytä muutokset toteutettuina",
         "OpenFacsimile": "Näytä faksimilet",
-        "Missing": "Ei transkriboituja käsikirjoituksia.",
+        "None": "Ei transkriboituja käsikirjoituksia.",
         "ChangeManuscript": "Vaihda käsikirjoitusta",
         "SelectMsDialogTitle": "Valitse käsikirjoitus",
         "SelectMsDialogSubtitle": "Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen.",
@@ -88,7 +126,7 @@
     },
     "Variants": {
         "Variant": "Painettu variantti",
-        "Missing": "Painettuja variantteja ei ole saatavilla.",
+        "None": "Painettuja variantteja ei ole saatavilla.",
         "ChangeVariant": "Vaihda varianttia",
         "OpenNewVariant": "Avaa uusi variantti",
         "SelectVariantDialogTitle": "Valitse variantti",
@@ -102,7 +140,7 @@
         "Image": "Kuva:",
         "ExternalFacsimiles": "Ulkopuoliset faksimilet",
         "ChangeFacsimile": "Vaihda faksimilea",
-        "Missing": "Faksimileja ei ole saatavilla.",
+        "None": "Faksimileja ei ole saatavilla.",
         "SelectFacsDialogTitle": "Valitse faksimile",
         "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen.",
         "AltText": "Skannattu faksimile",
@@ -121,11 +159,11 @@
     },
     "CollectionTitle": {
         "TitlePage": "Nimiölehti",
-        "Missing": "Nimiölehden lataus epäonnistui."
+        "None": "Nimiölehden lataus epäonnistui."
     },
     "CollectionForeword": {
         "Foreword": "Esipuhe",
-        "Missing": "Esipuheen lataus epäonnistui."
+        "None": "Esipuheen lataus epäonnistui."
     },
     "CollectionCover": {
         "Cover": "Kansikuva"
@@ -133,21 +171,21 @@
     "CollectionIntroduction": {
         "Introduction": "Johdanto",
         "Contents": "Sisältö",
-        "Missing": "Johdannon lataus epäonnistui."
+        "None": "Johdannon lataus epäonnistui."
     },
     "Illustrations": {
         "Illustrations": "Kuvat",
         "ShowInReadingText": "Näytä sijainti lukutekstissä",
-        "Missing": "Ei kuvia",
+        "None": "Ei kuvia",
         "ShowAll": "Näytä kaikki"
     },
     "Legend": {
         "Legend": "Lukuohje",
-        "Missing": "Lukuohjetta ei ole saatavilla."
+        "None": "Lukuohjetta ei ole saatavilla."
     },
     "Metadata": {
         "Metadata": "Metadata",
-        "Missing": "Dokumentin metadata ei ole saatavilla.",
+        "None": "Dokumentin metadata ei ole saatavilla.",
         "PublicationTitle": "Dokumentin nimi",
         "PublicationSubtitle": "Alaotsikko",
         "PublishedBy": "Julkaistu",
@@ -196,31 +234,6 @@
         "Images": "kuvaa",
         "Collections": "kokoelmaa",
         "ClearFilters": "Poista aktiiviset rajaukset"
-    },
-    "MainSideMenu": {
-        "Home": "Aloitussivu",
-        "Ebooks": "Sähkökirjat",
-        "Collections": "Sisältö",
-        "Collections1": "Sisältö 2",
-        "Collections2": "Sisältö 3",
-        "Collections3": "Sisältö 4",
-        "Collections4": "Sisältö 5",
-        "MediaCollections": "Kuvakokoelmat",
-        "IndexPersons": "Henkilöhakemisto",
-        "IndexPlaces": "Paikkahakemisto",
-        "IndexKeywords": "Aihesanahakemisto",
-        "IndexWorks": "Teoshakemisto"
-    },
-    "CollectionSideMenu": {
-        "Back": "Takaisin",
-        "SortOptions": {
-            "Sorting": "Järjestys",
-            "SelectSorting": "Valitse sisällysluettelolle järjestys",
-            "Default": "Oletus",
-            "Chronological": "Kronologinen",
-            "Alphabetical": "Aakkosellinen",
-            "Categorical": "Kategorioittain"
-        }
     },
     "Index": {
         "ActiveFilters": "Aktiiviset rajaukset",
@@ -274,8 +287,6 @@
         "SearchEdition": "Hae editiosta",
         "NoHits": "Haulla ei löytynyt yhtään tulosta.",
         "Found": "Tekstejä, joissa hakutuloksia:",
-        "SearchPlaceholder": "Hae ...",
-        "SearchButtonAriaLabel": "Hae",
         "TimeRange": "Ajanjakso",
         "ShowMore": "Näytä enemmän",
         "ShowLess": "Näytä vähemmän",
@@ -320,20 +331,7 @@
         "ReferToForeword": "Lähdeviittaus tähän esipuheeseen",
         "ReferToEbook": "Lähdeviittaus tähän tekstiin",
         "ReferToMediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
-        "Missing": "Sivulla ei ole pysyvää osoitetta"
-    },
-    "BasicActions": {
-        "Ok": "Ok",
-        "Cancel": "Peruuta",
-        "DontShowAgain": "Visa inte igen",
-        "Download": "Lataa",
-        "ShowMore": "Näytä lisää",
-        "ScrollToTop": "Palaa alkuun",
-        "Close": "Sulje",
-        "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan",
-        "Search": "Hae",
-        "SearchEllipsis": "Hae ...",
-        "Print": "Tulosta"
+        "None": "Sivulla ei ole pysyvää osoitetta"
     },
     "Ebook": {
         "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."

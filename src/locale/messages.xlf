@@ -71,7 +71,7 @@
         <source>Förord</source>
       </segment>
     </unit>
-    <unit id="CollectionForeword.Missing">
+    <unit id="CollectionForeword.None">
       <segment>
         <source>Förordet kunde inte laddas.</source>
       </segment>
@@ -86,7 +86,7 @@
         <source>Inledning</source>
       </segment>
     </unit>
-    <unit id="CollectionIntroduction.Missing">
+    <unit id="CollectionIntroduction.None">
       <segment>
         <source>Inledningen kunde inte laddas.</source>
       </segment>
@@ -156,7 +156,7 @@
         <source>Öppna/stäng alternativ för kolumnen</source>
       </segment>
     </unit>
-    <unit id="CollectionTitle.Missing">
+    <unit id="CollectionTitle.None">
       <segment>
         <source>Titelbladet kunde inte laddas.</source>
       </segment>
@@ -266,14 +266,9 @@
         <source>Form</source>
       </segment>
     </unit>
-    <unit id="Commentary.Missing">
+    <unit id="Commentary.None">
       <segment>
         <source>Inga kommentarer.</source>
-      </segment>
-    </unit>
-    <unit id="criticalNote">
-      <segment>
-        <source>Utgivarens anmärkning</source>
       </segment>
     </unit>
     <unit id="DateHistogram.Clear">
@@ -288,12 +283,12 @@
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment>
-        <source>Licens: CC BY-NC-ND 4.0</source>
+        <source>CC BY-NC-ND 4.0</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNoticeIntroduction">
       <segment>
-        <source>Licens: CC BY-NC-ND 4.0</source>
+        <source>CC BY-NC-ND 4.0</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNoticeLabel">
@@ -348,7 +343,7 @@
     </unit>
     <unit id="DownloadTexts.MissingTextError">
       <segment>
-        <source>Texten saknas och går inte att ladda ner.</source>
+        <source>Texten saknas och går inte att ladda ner eller skriva ut.</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.NoDownloads">
@@ -466,19 +461,9 @@
         <source>Relevans</source>
       </segment>
     </unit>
-    <unit id="ElasticSearch.SearchButtonAriaLabel">
-      <segment>
-        <source>Sök</source>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.SearchEdition">
       <segment>
         <source>Sök i utgåvan</source>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.SearchPlaceholder">
-      <segment>
-        <source>Sök ...</source>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowAllHitHighlights">
@@ -581,14 +566,14 @@
         <source>Bild:</source>
       </segment>
     </unit>
-    <unit id="Facsimiles.Missing">
-      <segment>
-        <source>Inga faksimil tillgängliga.</source>
-      </segment>
-    </unit>
     <unit id="Facsimiles.Next">
       <segment>
         <source>Följande bild</source>
+      </segment>
+    </unit>
+    <unit id="Facsimiles.None">
+      <segment>
+        <source>Inga faksimil tillgängliga.</source>
       </segment>
     </unit>
     <unit id="Facsimiles.Previous">
@@ -646,7 +631,7 @@
         <source>Illustrationer</source>
       </segment>
     </unit>
-    <unit id="Illustrations.Missing">
+    <unit id="Illustrations.None">
       <segment>
         <source>Inga illustrationer.</source>
       </segment>
@@ -746,32 +731,32 @@
         <source>Teckenförklaringar</source>
       </segment>
     </unit>
-    <unit id="Legend.NoLegend">
+    <unit id="Legend.None">
       <segment>
         <source>Inga teckenförklaringar tillgängliga.</source>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections">
+    <unit id="MainSideMenu.CollectionsGroup1">
       <segment>
         <source>Innehåll</source>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections1">
+    <unit id="MainSideMenu.CollectionsGroup2">
       <segment>
         <source>Innehåll 2</source>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections2">
+    <unit id="MainSideMenu.CollectionsGroup3">
       <segment>
         <source>Innehåll 3</source>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections3">
+    <unit id="MainSideMenu.CollectionsGroup4">
       <segment>
         <source>Innehåll 4</source>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections4">
+    <unit id="MainSideMenu.CollectionsGroup5">
       <segment>
         <source>Innehåll 5</source>
       </segment>
@@ -826,9 +811,9 @@
         <source>Manuskript</source>
       </segment>
     </unit>
-    <unit id="Manuscripts.Missing">
+    <unit id="Manuscripts.None">
       <segment>
-        <source>Inga manuskript.</source>
+        <source>Inga manuskriptutskrifter.</source>
       </segment>
     </unit>
     <unit id="Manuscripts.SelectMsDialogSubtitle">
@@ -946,7 +931,7 @@
         <source>Metadata</source>
       </segment>
     </unit>
-    <unit id="Metadata.Missing">
+    <unit id="Metadata.None">
       <segment>
         <source>Ingen metadata tillgänglig.</source>
       </segment>
@@ -1166,7 +1151,7 @@
         <source>Finsk text</source>
       </segment>
     </unit>
-    <unit id="ReadingText.Missing">
+    <unit id="ReadingText.None">
       <segment>
         <source>Det finns ingen utskriven lästext, se faksimil.</source>
       </segment>
@@ -1181,7 +1166,7 @@
         <source>Svensk text</source>
       </segment>
     </unit>
-    <unit id="Reference.Missing">
+    <unit id="Reference.None">
       <segment>
         <source>Sidan saknar beständig webbadress</source>
       </segment>
@@ -1239,11 +1224,6 @@
     <unit id="Reference.ReferToThisPage">
       <segment>
         <source>Hänvisa till denna sida</source>
-      </segment>
-    </unit>
-    <unit id="revisionNote">
-      <segment>
-        <source>Repetitionsanteckning</source>
       </segment>
     </unit>
     <unit id="Site.MetaDescription.Home">
@@ -1306,7 +1286,7 @@
         <source>Ett fel har uppstått. Varianter kunde inte laddas.</source>
       </segment>
     </unit>
-    <unit id="Variants.Missing">
+    <unit id="Variants.None">
       <segment>
         <source>Inga tryckta varianter tillgängliga.</source>
       </segment>
@@ -1349,6 +1329,11 @@
     <unit id="ViewOptions.Abbreviations">
       <segment>
         <source>Förkortningar</source>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.EditorialNote">
+      <segment>
+        <source>Utgivarens anmärkning</source>
       </segment>
     </unit>
     <unit id="ViewOptions.Emendation">
@@ -1398,12 +1383,12 @@
     </unit>
     <unit id="ViewOptions.PageBreakEdition">
       <segment>
-        <source>Sidnummer i den tryckta utgåvan</source>
+        <source>Sidnummer, tryckt utgåva</source>
       </segment>
     </unit>
     <unit id="ViewOptions.PageBreakOriginal">
       <segment>
-        <source>Sidnummer/-brytning i originalet</source>
+        <source>Sidnummer, original</source>
       </segment>
     </unit>
     <unit id="ViewOptions.ParagraphNumbering">
@@ -1419,6 +1404,11 @@
     <unit id="ViewOptions.PlaceInfo">
       <segment>
         <source>Platsupplysningar</source>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.RevisionNote">
+      <segment>
+        <source>Repetitionsanteckning</source>
       </segment>
     </unit>
     <unit id="ViewOptions.Settings">

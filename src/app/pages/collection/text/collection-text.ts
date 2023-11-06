@@ -1130,7 +1130,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         // Some other note coded as a footnote (but lacking id and data-id attributes).
         if (targetElem.nextElementSibling.firstElementChild?.classList.contains('ttFixed')) {
           if (targetElem.classList.contains('revision')) {
-            this.setInfoOverlayTitle($localize`:@@revisionNote:Repetitionsanteckning`);
+            this.setInfoOverlayTitle($localize`:@@ViewOptions.RevisionNote:Repetitionsanteckning`);
             lemma = '';
           } else {
             this.setInfoOverlayTitle('');
@@ -1143,7 +1143,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       } else {
         // Some other note, generally editorial remarks pertaining to a manuscript.
         if (targetElem.classList.contains('ttMs')) {
-          this.setInfoOverlayTitle($localize`:@@criticalNote:Utgivarens anmärkning`);
+          this.setInfoOverlayTitle($localize`:@@ViewOptions.EditorialNote:Utgivarens anmärkning`);
         } else {
           this.setInfoOverlayTitle('');
         }

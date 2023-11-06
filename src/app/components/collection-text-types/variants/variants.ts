@@ -62,7 +62,7 @@ export class VariantsComponent implements OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Variants.Missing:Inga tryckta varianter tillgängliga.`;
+          this.text = $localize`:@@Variants.None:Inga tryckta varianter tillgängliga.`;
         }
       },
       error: (e) => {

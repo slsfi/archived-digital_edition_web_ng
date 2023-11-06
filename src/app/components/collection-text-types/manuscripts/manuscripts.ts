@@ -67,7 +67,7 @@ export class ManuscriptsComponent implements OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Manuscripts.Missing:Inga manuskript.`;
+          this.text = $localize`:@@Manuscripts.None:Inga manuskriptutskrifter.`;
         }
       },
       error: (e) => {

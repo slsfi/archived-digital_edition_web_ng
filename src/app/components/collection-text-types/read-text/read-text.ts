@@ -108,7 +108,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@ReadingText.Missing:Det finns ingen utskriven lästext, se faksimil.`;
+          this.text = $localize`:@@ReadingText.None:Det finns ingen utskriven lästext, se faksimil.`;
         }
         if (res?.language) {
           this.textLanguage = res.language;

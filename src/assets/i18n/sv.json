@@ -6,6 +6,19 @@
             "Home": "En generell beskrivning av webbplatsen för sökmotorer."
         }
     },
+    "BasicActions": {
+        "Ok": "Ok",
+        "Cancel": "Avbryt",
+        "DontShowAgain": "Visa inte igen",
+        "Download": "Ladda ner",
+        "ShowMore": "Visa fler",
+        "ScrollToTop": "Till början",
+        "Close": "Stäng",
+        "OpenInNewWindow": "Länken öppnas i ett nytt fönster",
+        "Search": "Sök",
+        "SearchEllipsis": "Sök ...",
+        "Print": "Skriv ut"
+    },
     "TopMenu": {
         "Menu": "Meny",
         "Home": "Hem",
@@ -14,6 +27,31 @@
         "Search": "Sök",
         "LogoAltText": "Logo",
         "ChooseLanguage": "Välj språk. Nuvarande språk:"
+    },
+    "MainSideMenu": {
+        "Home": "Hem",
+        "Ebooks": "E-böcker",
+        "CollectionsGroup1": "Innehåll",
+        "CollectionsGroup2": "Innehåll 2",
+        "CollectionsGroup3": "Innehåll 3",
+        "CollectionsGroup4": "Innehåll 4",
+        "CollectionsGroup5": "Innehåll 5",
+        "MediaCollections": "Bildbank",
+        "IndexPersons": "Personregister",
+        "IndexPlaces": "Ortregister",
+        "IndexKeywords": "Ämnesord",
+        "IndexWorks": "Verkregister"
+    },
+    "CollectionSideMenu": {
+        "Back": "Tillbaka",
+        "SortOptions": {
+            "Sorting": "Sortering",
+            "SelectSorting": "Välj sortering för innehållsförteckningen",
+            "Default": "Standard",
+            "Chronological": "Kronologisk",
+            "Alphabetical": "Alfabetisk",
+            "Categorical": "Kategorivis"
+        }
     },
     "ViewOptions": {
         "Settings": "Inställningar",
@@ -37,8 +75,8 @@
         "Abbreviation": "Förkortning",
         "Abbreviations": "Förkortningar",
         "ParagraphNumbering": "Stycke-/radnumrering",
-        "PageBreakOriginal": "Sidnummer i originalet",
-        "PageBreakEdition": "Sidnummer i den tryckta utgåvan",
+        "PageBreakOriginal": "Sidnummer, original",
+        "PageBreakEdition": "Sidnummer, tryckt utgåva",
         "ExplanatoryNotesAltText": "Röd asterisk",
         "Note": "Not",
         "RevisionNote": "Repetitionsanteckning",
@@ -48,12 +86,12 @@
         "ReadingText": "Lästext",
         "SwedishText": "Svensk text",
         "FinnishText": "Finsk text",
-        "Missing": "Det finns ingen utskriven lästext, se faksimil.",
+        "None": "Det finns ingen utskriven lästext, se faksimil.",
         "Error": "Ett fel har uppstått. Lästexten kunde inte hämtas."
     },
     "Commentary": {
         "Commentary": "Kommentar",
-        "Missing": "Inga kommentarer.",
+        "None": "Inga kommentarer.",
         "Error": "Ett fel har uppstått. Kommentarer kunde inte hämtas.",
         "Manuscript": {
             "ManuscriptDescription": "Manuskriptbeskrivning",
@@ -80,7 +118,7 @@
         "Manuscript": "Manuskript",
         "ShowNormalized": "Visa ändringar inarbetade",
         "OpenFacsimile": "Öppna faksimil",
-        "Missing": "Inga manuskriptutskrifter.",
+        "None": "Inga manuskriptutskrifter.",
         "ChangeManuscript": "Byt manuskript",
         "SelectMsDialogTitle": "Välj manuskript",
         "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.",
@@ -88,7 +126,7 @@
     },
     "Variants": {
         "Variant": "Tryckt variant",
-        "Missing": "Inga tryckta varianter tillgängliga.",
+        "None": "Inga tryckta varianter tillgängliga.",
         "ChangeVariant": "Byt variant",
         "OpenNewVariant": "Öppna ny variant",
         "SelectVariantDialogTitle": "Välj variant",
@@ -102,7 +140,7 @@
         "Image": "Bild:",
         "ExternalFacsimiles": "Externa faksimil",
         "ChangeFacsimile": "Byt faksimil",
-        "Missing": "Inga faksimil tillgängliga.",
+        "None": "Inga faksimil tillgängliga.",
         "SelectFacsDialogTitle": "Välj faksimil",
         "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.",
         "AltText": "Skannat faksimil",
@@ -121,11 +159,11 @@
     },
     "CollectionTitle": {
         "TitlePage": "Titelblad",
-        "Missing": "Titelbladet kunde inte laddas."
+        "None": "Titelbladet kunde inte laddas."
     },
     "CollectionForeword": {
         "Foreword": "Förord",
-        "NoForeword": "Förordet kunde inte laddas."
+        "None": "Förordet kunde inte laddas."
     },
     "CollectionCover": {
         "Cover": "Omslag"
@@ -133,23 +171,23 @@
     "CollectionIntroduction": {
         "Introduction": "Inledning",
         "Contents": "Innehåll",
-        "Missing": "Inledningen kunde inte laddas."
+        "None": "Inledningen kunde inte laddas."
     },
     "Illustrations": {
         "Illustration": "Illustration",
         "Illustrations": "Illustrationer",
         "ShowInReadingText": "Visa position i lästext",
-        "Missing": "Inga illustrationer.",
+        "None": "Inga illustrationer.",
         "ShowAll": "Visa alla",
         "OpenMediaCollection": "Öppna bildbanken"
     },
     "Legend": {
         "Legend": "Teckenförklaringar",
-        "Missing": "Inga teckenförklaringar tillgängliga."
+        "None": "Inga teckenförklaringar tillgängliga."
     },
     "Metadata": {
         "Metadata": "Metadata",
-        "Missing": "Ingen metadata tillgänglig.",
+        "None": "Ingen metadata tillgänglig.",
         "PublicationTitle": "Dokumentets titel",
         "PublicationSubtitle": "Undertitel",
         "PublishedBy": "Publicerat i",
@@ -198,31 +236,6 @@
         "Images": "bilder",
         "Collections": "samlingar",
         "ClearFilters": "Ta bort aktiva avgränsningar"
-    },
-    "MainSideMenu": {
-        "Home": "Hem",
-        "Ebooks": "E-böcker",
-        "Collections": "Innehåll",
-        "Collections1": "Innehåll 2",
-        "Collections2": "Innehåll 3",
-        "Collections3": "Innehåll 4",
-        "Collections4": "Innehåll 5",
-        "MediaCollections": "Bildbank",
-        "IndexPersons": "Personregister",
-        "IndexPlaces": "Ortregister",
-        "IndexKeywords": "Ämnesord",
-        "IndexWorks": "Verkregister"
-    },
-    "CollectionSideMenu": {
-        "Back": "Tillbaka",
-        "SortOptions": {
-            "Sorting": "Sortering",
-            "SelectSorting": "Välj sortering för innehållsförteckningen",
-            "Default": "Standard",
-            "Chronological": "Kronologisk",
-            "Alphabetical": "Alfabetisk",
-            "Categorical": "Kategorivis"
-        }
     },
     "Index": {
         "ActiveFilters": "Aktiva avgränsningar",
@@ -276,8 +289,6 @@
         "SearchEdition": "Sök i utgåvan",
         "NoHits": "Sökningen gav inga svar.",
         "Found": "Texter med sökträffar:",
-        "SearchPlaceholder": "Sök ...",
-        "SearchButtonAriaLabel": "Sök",
         "TimeRange": "Tidsperiod",
         "ShowMore": "Visa fler",
         "ShowLess": "Visa färre",
@@ -322,20 +333,7 @@
         "ReferToForeword": "Hänvisa till detta förord",
         "ReferToEbook": "Hänvisa till denna text",
         "ReferToMediaCollection": "Hänvisa till denna bildsamling",
-        "Missing": "Sidan saknar beständig webbadress"
-    },
-    "BasicActions": {
-        "Ok": "Ok",
-        "Cancel": "Avbryt",
-        "DontShowAgain": "Visa inte igen",
-        "Download": "Ladda ner",
-        "ShowMore": "Visa fler",
-        "ScrollToTop": "Till början",
-        "Close": "Stäng",
-        "OpenInNewWindow": "Länken öppnas i ett nytt fönster",
-        "Search": "Sök",
-        "SearchEllipsis": "Sök ...",
-        "Print": "Skriv ut"
+        "None": "Sidan saknar beständig webbadress"
     },
     "Ebook": {
         "InvalidFilename": "Ogiltigt filnamn. E-boken kunde inte hittas."

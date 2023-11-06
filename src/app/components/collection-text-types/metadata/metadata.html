@@ -111,7 +111,7 @@
 
     <ng-template #loadingOrError>
         <ng-container *ngIf="(loadingError$ | async); else loading">
-            <p class="noIndent" i18n="@@Metadata.Missing">Ingen metadata tillgänglig.</p>
+            <p class="noIndent" i18n="@@Metadata.None">Ingen metadata tillgänglig.</p>
         </ng-container>
     </ng-template>
 

@@ -100,7 +100,7 @@ export class FacsimilesComponent implements OnInit {
           }
           this.setInitialFacsimile();
         } else {
-          this.text = $localize`:@@Facsimiles.Missing:Inga faksimil tillgängliga.`;
+          this.text = $localize`:@@Facsimiles.None:Inga faksimil tillgängliga.`;
         }
       },
       error: (e) => {

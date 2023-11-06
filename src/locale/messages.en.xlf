@@ -84,7 +84,7 @@
         <target>Foreword</target>
       </segment>
     </unit>
-    <unit id="CollectionForeword.Missing">
+    <unit id="CollectionForeword.None">
       <segment state="initial">
         <source>Förordet kunde inte laddas.</source>
         <target>The foreword could not be loaded.</target>
@@ -102,7 +102,7 @@
         <target>Introduction</target>
       </segment>
     </unit>
-    <unit id="CollectionIntroduction.Missing">
+    <unit id="CollectionIntroduction.None">
       <segment state="initial">
         <source>Inledningen kunde inte laddas.</source>
         <target>The introduction could not be loaded.</target>
@@ -186,7 +186,7 @@
         <target>Open/close column options menu</target>
       </segment>
     </unit>
-    <unit id="CollectionTitle.Missing">
+    <unit id="CollectionTitle.None">
       <segment state="initial">
         <source>Titelbladet kunde inte laddas.</source>
         <target>The title page could not be loaded.</target>
@@ -318,16 +318,10 @@
         <target>Type</target>
       </segment>
     </unit>
-    <unit id="Commentary.Missing">
+    <unit id="Commentary.None">
       <segment state="initial">
         <source>Inga kommentarer.</source>
         <target>No comments.</target>
-      </segment>
-    </unit>
-    <unit id="criticalNote">
-      <segment state="initial">
-        <source>Utgivarens anmärkning</source>
-        <target>Utgivarens anmärkning</target>
       </segment>
     </unit>
     <unit id="DateHistogram.Clear">
@@ -344,13 +338,13 @@
     </unit>
     <unit id="DownloadTexts.CopyrightNotice">
       <segment state="initial">
-        <source>Licens: CC BY-NC-ND 4.0</source>
+        <source>CC BY-NC-ND 4.0</source>
         <target>CC BY-NC-ND 4.0</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.CopyrightNoticeIntroduction">
       <segment state="initial">
-        <source>Licens: CC BY-NC-ND 4.0</source>
+        <source>CC BY-NC-ND 4.0</source>
         <target>CC BY-NC-ND 4.0</target>
       </segment>
     </unit>
@@ -416,7 +410,7 @@
     </unit>
     <unit id="DownloadTexts.MissingTextError">
       <segment state="initial">
-        <source>Texten saknas och går inte att ladda ner.</source>
+        <source>Texten saknas och går inte att ladda ner eller skriva ut.</source>
         <target>The text doesn’t exist and can’t be downloaded or printed.</target>
       </segment>
     </unit>
@@ -558,22 +552,10 @@
         <target>Relevance</target>
       </segment>
     </unit>
-    <unit id="ElasticSearch.SearchButtonAriaLabel">
-      <segment state="initial">
-        <source>Sök</source>
-        <target>Search</target>
-      </segment>
-    </unit>
     <unit id="ElasticSearch.SearchEdition">
       <segment state="initial">
         <source>Sök i utgåvan</source>
         <target>Search the edition</target>
-      </segment>
-    </unit>
-    <unit id="ElasticSearch.SearchPlaceholder">
-      <segment state="initial">
-        <source>Sök ...</source>
-        <target>Search ...</target>
       </segment>
     </unit>
     <unit id="ElasticSearch.ShowAllHitHighlights">
@@ -696,16 +678,16 @@
         <target>Image:</target>
       </segment>
     </unit>
-    <unit id="Facsimiles.Missing">
-      <segment state="initial">
-        <source>Inga faksimil tillgängliga.</source>
-        <target>No facsimiles available.</target>
-      </segment>
-    </unit>
     <unit id="Facsimiles.Next">
       <segment state="initial">
         <source>Följande bild</source>
         <target>Next image</target>
+      </segment>
+    </unit>
+    <unit id="Facsimiles.None">
+      <segment state="initial">
+        <source>Inga faksimil tillgängliga.</source>
+        <target>No facsimiles available.</target>
       </segment>
     </unit>
     <unit id="Facsimiles.Previous">
@@ -774,7 +756,7 @@
         <target>Illustrations</target>
       </segment>
     </unit>
-    <unit id="Illustrations.Missing">
+    <unit id="Illustrations.None">
       <segment state="initial">
         <source>Inga illustrationer.</source>
         <target>No illustrations.</target>
@@ -894,37 +876,37 @@
         <target>Legend</target>
       </segment>
     </unit>
-    <unit id="Legend.NoLegend">
+    <unit id="Legend.None">
       <segment state="initial">
         <source>Inga teckenförklaringar tillgängliga.</source>
-        <target>Inga teckenförklaringar tillgängliga.</target>
+        <target>No legend available.</target>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections">
+    <unit id="MainSideMenu.CollectionsGroup1">
       <segment state="initial">
         <source>Innehåll</source>
         <target>Content</target>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections1">
+    <unit id="MainSideMenu.CollectionsGroup2">
       <segment state="initial">
         <source>Innehåll 2</source>
         <target>Content 2</target>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections2">
+    <unit id="MainSideMenu.CollectionsGroup3">
       <segment state="initial">
         <source>Innehåll 3</source>
         <target>Content 3</target>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections3">
+    <unit id="MainSideMenu.CollectionsGroup4">
       <segment state="initial">
         <source>Innehåll 4</source>
         <target>Content 4</target>
       </segment>
     </unit>
-    <unit id="MainSideMenu.Collections4">
+    <unit id="MainSideMenu.CollectionsGroup5">
       <segment state="initial">
         <source>Innehåll 5</source>
         <target>Content 5</target>
@@ -990,9 +972,9 @@
         <target>Manuscript</target>
       </segment>
     </unit>
-    <unit id="Manuscripts.Missing">
+    <unit id="Manuscripts.None">
       <segment state="initial">
-        <source>Inga manuskript.</source>
+        <source>Inga manuskriptutskrifter.</source>
         <target>No transcribed manuscripts.</target>
       </segment>
     </unit>
@@ -1134,7 +1116,7 @@
         <target>Metadata</target>
       </segment>
     </unit>
-    <unit id="Metadata.Missing">
+    <unit id="Metadata.None">
       <segment state="initial">
         <source>Ingen metadata tillgänglig.</source>
         <target>No metadata available.</target>
@@ -1398,7 +1380,7 @@
         <target>Finnish text</target>
       </segment>
     </unit>
-    <unit id="ReadingText.Missing">
+    <unit id="ReadingText.None">
       <segment state="initial">
         <source>Det finns ingen utskriven lästext, se faksimil.</source>
         <target>No reading text, see facsimiles.</target>
@@ -1416,7 +1398,7 @@
         <target>Swedish text</target>
       </segment>
     </unit>
-    <unit id="Reference.Missing">
+    <unit id="Reference.None">
       <segment state="initial">
         <source>Sidan saknar beständig webbadress</source>
         <target>This page does not have a persistent identifier</target>
@@ -1486,12 +1468,6 @@
       <segment state="initial">
         <source>Hänvisa till denna sida</source>
         <target>Refer to this page</target>
-      </segment>
-    </unit>
-    <unit id="revisionNote">
-      <segment state="initial">
-        <source>Repetitionsanteckning</source>
-        <target>Repetitionsanteckning</target>
       </segment>
     </unit>
     <unit id="Site.MetaDescription.Home">
@@ -1566,7 +1542,7 @@
         <target>An error occurred. Variants could not be loaded.</target>
       </segment>
     </unit>
-    <unit id="Variants.Missing">
+    <unit id="Variants.None">
       <segment state="initial">
         <source>Inga tryckta varianter tillgängliga.</source>
         <target>No variants available.</target>
@@ -1618,6 +1594,12 @@
       <segment state="initial">
         <source>Förkortningar</source>
         <target>Abbreviations</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.EditorialNote">
+      <segment state="initial">
+        <source>Utgivarens anmärkning</source>
+        <target>Editorial note</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Emendation">
@@ -1676,13 +1658,13 @@
     </unit>
     <unit id="ViewOptions.PageBreakEdition">
       <segment state="initial">
-        <source>Sidnummer i den tryckta utgåvan</source>
+        <source>Sidnummer, tryckt utgåva</source>
         <target>Edition page breaks</target>
       </segment>
     </unit>
     <unit id="ViewOptions.PageBreakOriginal">
       <segment state="initial">
-        <source>Sidnummer/-brytning i originalet</source>
+        <source>Sidnummer, original</source>
         <target>Original page breaks</target>
       </segment>
     </unit>
@@ -1702,6 +1684,12 @@
       <segment state="initial">
         <source>Platsupplysningar</source>
         <target>Places</target>
+      </segment>
+    </unit>
+    <unit id="ViewOptions.RevisionNote">
+      <segment state="initial">
+        <source>Repetitionsanteckning</source>
+        <target>Revision note</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Settings">

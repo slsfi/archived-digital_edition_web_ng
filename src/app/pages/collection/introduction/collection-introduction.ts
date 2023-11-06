@@ -219,14 +219,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
           }
         } else {
           this.textLoading = false;
-          this.text = $localize`:@@CollectionIntroduction.Missing:Inledningen kunde inte laddas.`;
+          this.text = $localize`:@@CollectionIntroduction.None:Inledningen kunde inte laddas.`;
           this.hasSeparateIntroToc = false;
         }
       },
       error: (e: any) =>  {
         console.error(e);
         this.textLoading = false;
-        this.text = $localize`:@@CollectionIntroduction.Missing:Inledningen kunde inte laddas.`;
+        this.text = $localize`:@@CollectionIntroduction.None:Inledningen kunde inte laddas.`;
         this.hasSeparateIntroToc = false;
       }
     });

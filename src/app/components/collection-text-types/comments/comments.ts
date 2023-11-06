@@ -67,7 +67,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             this.scrollService.scrollToFirstSearchMatch(this.elementRef.nativeElement, this.intervalTimerId);
           }
         } else {
-          this.text = $localize`:@@Commentary.Missing:Inga kommentarer.`;
+          this.text = $localize`:@@Commentary.None:Inga kommentarer.`;
         }
       },
       error: (e) =>  {

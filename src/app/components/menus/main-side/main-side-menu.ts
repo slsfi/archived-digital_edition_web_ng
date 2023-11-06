@@ -180,12 +180,12 @@ export class MainSideMenu implements OnInit, OnChanges {
           res = this.categorizeCollections(res);
           let menu = [];
           for (let i = 0; i < res.length; i++) {
-            let title = $localize`:@@MainSideMenu.Collections:Innehåll`;
+            let title = $localize`:@@MainSideMenu.CollectionsGroup1:Innehåll`;
             if (i > 0) {
-              i === 1 ? title = $localize`:@@MainSideMenu.Collections1:Innehåll 2`
-              : i === 2 ? title = $localize`:@@MainSideMenu.Collections2:Innehåll 3`
-              : i === 3 ? title = $localize`:@@MainSideMenu.Collections3:Innehåll 4`
-              : i === 4 ? title = $localize`:@@MainSideMenu.Collections4:Innehåll 5`
+              i === 1 ? title = $localize`:@@MainSideMenu.CollectionsGroup2:Innehåll 2`
+              : i === 2 ? title = $localize`:@@MainSideMenu.CollectionsGroup3:Innehåll 3`
+              : i === 3 ? title = $localize`:@@MainSideMenu.CollectionsGroup4:Innehåll 4`
+              : i === 4 ? title = $localize`:@@MainSideMenu.CollectionsGroup5:Innehåll 5`
               : title = 'Error: out of category translations';
             }
             menu.push({ title, children: res[i] });

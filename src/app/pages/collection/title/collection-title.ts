@@ -97,14 +97,14 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
             return this.sanitizer.bypassSecurityTrustHtml(text);
           } else {
             return of(this.sanitizer.bypassSecurityTrustHtml(
-              $localize`:@@CollectionTitle.Missing:Titelbladet kunde inte laddas.`
+              $localize`:@@CollectionTitle.None:Titelbladet kunde inte laddas.`
             ));
           }
         }),
         catchError((e: any) => {
           console.error(e);
           return of(this.sanitizer.bypassSecurityTrustHtml(
-            $localize`:@@CollectionTitle.Missing:Titelbladet kunde inte laddas.`
+            $localize`:@@CollectionTitle.None:Titelbladet kunde inte laddas.`
           ));
         })
       );
@@ -121,7 +121,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
       catchError((e: any) => {
         console.error(e);
         return of(this.sanitizer.bypassSecurityTrustHtml(
-          $localize`:@@CollectionTitle.Missing:Titelbladet kunde inte laddas.`
+          $localize`:@@CollectionTitle.None:Titelbladet kunde inte laddas.`
         ));
       })
     );

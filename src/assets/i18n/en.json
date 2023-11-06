@@ -6,6 +6,19 @@
             "Home": "A general description of the website for search engines."
         }
     },
+    "BasicActions": {
+        "Ok": "Ok",
+        "Cancel": "Cancel",
+        "DontShowAgain": "Don’t show again",
+        "Download": "Download",
+        "ShowMore": "Show more",
+        "ScrollToTop": "Scroll to top",
+        "Close": "Close",
+        "OpenInNewWindow": "Opens in a new window",
+        "Search": "Search",
+        "SearchEllipsis": "Search ...",
+        "Print": "Print"
+    },
     "TopMenu": {
         "Menu": "Menu",
         "Home": "Home",
@@ -14,6 +27,31 @@
         "Search": "Search",
         "LogoAltText": "Logo",
         "ChooseLanguage": "Choose your preferred language. Current language:"
+    },
+    "MainSideMenu": {
+        "Home": "Home",
+        "Ebooks": "E-books",
+        "CollectionsGroup1": "Content",
+        "CollectionsGroup2": "Content 2",
+        "CollectionsGroup3": "Content 3",
+        "CollectionsGroup4": "Content 4",
+        "CollectionsGroup5": "Content 5",
+        "MediaCollections": "Media collections",
+        "IndexPersons": "Index of persons",
+        "IndexPlaces": "Index of places",
+        "IndexKeywords": "Index of keywords",
+        "IndexWorks": "Index of works"
+    },
+    "CollectionSideMenu": {
+        "Back": "Go back",
+        "SortOptions": {
+            "Sorting": "Sorting",
+            "SelectSorting": "Select sorting for the table of contents",
+            "Default": "Default",
+            "Chronological": "Chronological",
+            "Alphabetical": "Alphabetical",
+            "Categorical": "Categorical"
+        }
     },
     "ViewOptions": {
         "Settings": "Settings",
@@ -48,12 +86,12 @@
         "ReadingText": "Reading text",
         "SwedishText": "Swedish text",
         "FinnishText": "Finnish text",
-        "Missing": "No reading text, see facsimiles.",
+        "None": "No reading text, see facsimiles.",
         "Error": "An error occurred. The reading text could not be loaded."
     },
     "Commentary": {
         "Commentary": "Commentary",
-        "Missing": "No comments.",
+        "None": "No comments.",
         "Error": "An error occurred. Comments could not be loaded.",
         "Manuscript": {
             "ManuscriptDescription": "Manuscript description",
@@ -80,7 +118,7 @@
         "Manuscript": "Manuscript",
         "ShowNormalized": "Visa ändringar inarbetade",
         "OpenFacsimile": "Open fascimile",
-        "Missing": "No transcribed manuscripts.",
+        "None": "No transcribed manuscripts.",
         "ChangeManuscript": "Change manuscript",
         "SelectMsDialogTitle": "Select manuscript",
         "SelectMsDialogSubtitle": "The manuscript will be shown in the column where you clicked.",
@@ -88,7 +126,7 @@
     },
     "Variants": {
         "Variant": "Variant",
-        "Missing": "No variants available.",
+        "None": "No variants available.",
         "ChangeVariant": "Change variant",
         "OpenNewVariant": "Open new variant",
         "SelectVariantDialogTitle": "Select variant",
@@ -102,7 +140,7 @@
         "Image": "Image:",
         "ExternalFacsimiles": "External facsimiles",
         "ChangeFacsimile": "Select facsimile",
-        "Missing": "No facsimiles available.",
+        "None": "No facsimiles available.",
         "SelectFacsDialogTitle": "Select facsimile",
         "SelectFacsDialogSubtitle": "The facsimile will be shown in the column where you clicked.",
         "AltText": "Scanned facsimile image",
@@ -121,11 +159,11 @@
     },
     "CollectionTitle": {
         "TitlePage": "Title page",
-        "Missing": "The title page could not be loaded."
+        "None": "The title page could not be loaded."
     },
     "CollectionForeword": {
         "Foreword": "Foreword",
-        "Missing": "The foreword could not be loaded."
+        "None": "The foreword could not be loaded."
     },
     "CollectionCover": {
         "Cover": "Cover"
@@ -133,21 +171,21 @@
     "CollectionIntroduction": {
         "Introduction": "Introduction",
         "Contents": "Contents",
-        "Missing": "The introduction could not be loaded."
+        "None": "The introduction could not be loaded."
     },
     "Illustrations": {
         "Illustrations": "Illustrations",
         "ShowInReadingText": "Show position in reading text",
-        "Missing": "No illustrations.",
+        "None": "No illustrations.",
         "ShowAll": "Show all"
     },
     "Legend": {
         "Legend": "Legend",
-        "Missing": "No legend available."
+        "None": "No legend available."
     },
     "Metadata": {
         "Metadata": "Metadata",
-        "Missing": "No metadata available.",
+        "None": "No metadata available.",
         "PublicationTitle": "Document title",
         "PublicationSubtitle": "Subtitle",
         "PublishedBy": "Published by",
@@ -196,31 +234,6 @@
         "Images": "images",
         "Collections": "collections",
         "ClearFilters": "Clear active filters"
-    },
-    "MainSideMenu": {
-        "Home": "Home",
-        "Ebooks": "E-books",
-        "Collections": "Content",
-        "Collections1": "Content 2",
-        "Collections2": "Content 3",
-        "Collections3": "Content 4",
-        "Collections4": "Content 5",
-        "MediaCollections": "Media collections",
-        "IndexPersons": "Index of persons",
-        "IndexPlaces": "Index of places",
-        "IndexKeywords": "Index of keywords",
-        "IndexWorks": "Index of works"
-    },
-    "CollectionSideMenu": {
-        "Back": "Go back",
-        "SortOptions": {
-            "Sorting": "Sorting",
-            "SelectSorting": "Select sorting for the table of contents",
-            "Default": "Default",
-            "Chronological": "Chronological",
-            "Alphabetical": "Alphabetical",
-            "Categorical": "Categorical"
-        }
     },
     "Index": {
         "ActiveFilters": "Active filters",
@@ -274,8 +287,6 @@
         "SearchEdition": "Search the edition",
         "NoHits": "No search matches.",
         "Found": "Texts with matches:",
-        "SearchPlaceholder": "Search ...",
-        "SearchButtonAriaLabel": "Search",
         "TimeRange": "Period",
         "ShowMore": "Show more",
         "ShowLess": "Show less",
@@ -320,20 +331,7 @@
         "ReferToForeword": "Refer to this foreword",
         "ReferToEbook": "Refer to this text",
         "ReferToMediaCollection": "Refer to this media collection",
-        "Missing": "This page does not have a persistent identifier"
-    },
-    "BasicActions": {
-        "Ok": "Ok",
-        "Cancel": "Cancel",
-        "DontShowAgain": "Don’t show again",
-        "Download": "Download",
-        "ShowMore": "Show more",
-        "ScrollToTop": "Scroll to top",
-        "Close": "Close",
-        "OpenInNewWindow": "Opens in a new window",
-        "Search": "Search",
-        "SearchEllipsis": "Search ...",
-        "Print": "Print"
+        "None": "This page does not have a persistent identifier"
     },
     "Ebook": {
         "InvalidFilename": "Invalid filename. The ebook could not be found."
