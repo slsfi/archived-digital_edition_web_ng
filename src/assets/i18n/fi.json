@@ -1,212 +1,42 @@
 {
-    "Site": {
-        "Title": "Sivuston otsikko",
-        "Subtitle": "Sivuston alaotsikko",
-        "MetaDescription": {
-            "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
-        }
+    "About": {
+        "LoadingError": "Sivun sisällön lataus epäonnistui."
     },
     "BasicActions": {
-        "Ok": "Ok",
         "Cancel": "Peruuta",
+        "Close": "Sulje",
         "DontShowAgain": "Visa inte igen",
         "Download": "Lataa",
-        "ShowMore": "Näytä lisää",
-        "ScrollToTop": "Palaa alkuun",
-        "Close": "Sulje",
+        "Ok": "Ok",
         "OpenInNewWindow": "Linkki avautuu uuteen ikkunaan",
+        "Print": "Tulosta",
+        "ScrollToTop": "Palaa alkuun",
         "Search": "Hae",
         "SearchEllipsis": "Hae ...",
-        "Print": "Tulosta"
+        "ShowMore": "Näytä lisää"
     },
-    "TopMenu": {
-        "Menu": "Valikko",
-        "Home": "Etusivu",
-        "Content": "Sisältö",
-        "About": "Tietoja",
-        "Search": "Hae",
-        "LogoAltText": "Logo",
-        "ChooseLanguage": "Valitse kieli. Nykyinen kieli:"
-    },
-    "MainSideMenu": {
-        "Home": "Aloitussivu",
-        "Ebooks": "Sähkökirjat",
-        "CollectionsGroup1": "Sisältö",
-        "CollectionsGroup2": "Sisältö 2",
-        "CollectionsGroup3": "Sisältö 3",
-        "CollectionsGroup4": "Sisältö 4",
-        "CollectionsGroup5": "Sisältö 5",
-        "MediaCollections": "Kuvakokoelmat",
-        "IndexPersons": "Henkilöhakemisto",
-        "IndexPlaces": "Paikkahakemisto",
-        "IndexKeywords": "Aihesanahakemisto",
-        "IndexWorks": "Teoshakemisto"
-    },
-    "CollectionSideMenu": {
-        "Back": "Takaisin",
-        "SortOptions": {
-            "Sorting": "Järjestys",
-            "SelectSorting": "Sisällysluettelon järjestys",
-            "Default": "Oletus",
-            "Chronological": "Kronologinen",
-            "Alphabetical": "Aakkosellinen",
-            "Categorical": "Kategorioittain"
-        }
-    },
-    "ViewOptions": {
-        "Settings": "Asetukset",
-        "ToggleAll": "Valitse kaikki",
-        "Textsize": "Tekstin koko",
-        "TextsizeXSmall": "Tekstin koko: pieni",
-        "TextsizeSmall": "Tekstin koko: normaali",
-        "TextsizeMedium": "Tekstin koko: iso",
-        "TextsizeLarge": "Tekstin koko: hyvin iso",
-        "TextsizeXLarge": "Tekstin koko: isoin",
-        "Options": "Näkymävaihtoehdot",
-        "ExplanatoryNote": "Kommentti",
-        "ExplanatoryNotes": "Kommentit",
-        "PersonInfo": "Henkilöt",
-        "PlaceInfo": "Paikannimet",
-        "WorkInfo": "Teokset",
-        "Emendation": "Toimittajan tekemä muutos",
-        "Emendations": "Toimittajan tekemät muutokset",
-        "Normalisation": "Normalisointi",
-        "Normalisations": "Normalisoinnit",
-        "Abbreviation": "Lyhenne",
-        "Abbreviations": "Lyhenteet",
-        "ParagraphNumbering": "Kappale-/rivinumerointi",
-        "PageBreakOriginal": "Alkuteoksen sivunumerot",
-        "PageBreakEdition": "Painetun edition sivunumerot",
-        "ExplanatoryNotesAltText": "Punainen asteriski",
-        "Note": "Viite",
-        "RevisionNote": "Kertausmuistiinpano",
-        "EditorialNote": "Toimittajan huomautus"
-    },
-    "ReadingText": {
-        "ReadingText": "Lukuteksti",
-        "SwedishText": "Ruotsinkielinen teksti",
-        "FinnishText": "Suomenkielinen teksti",
-        "None": "Lukutekstiä ei ole, katso faksimile.",
-        "Error": "Lukutekstin lataus epäonnistui."
-    },
-    "Commentary": {
-        "Commentary": "Kommentaari",
-        "None": "Ei kommentteja.",
-        "Error": "Kommenttien lataus epäonnistui.",
-        "Manuscript": {
-            "ManuscriptDescription": "Kuvaus käsikirjoituksesta",
-            "LegacyId": "Kirjeen arkistotunnus",
-            "Sender": "Lähettäjä",
-            "Receiver": "Vastaanottaja",
-            "Archive": "Arkisto",
-            "Collection": "Kokoelma, arkistotunnus",
-            "Type": "Tyyppi",
-            "Status": "Tila",
-            "Format": "Koko",
-            "Leafs": "Arkkeja",
-            "Sheets": "Lehtiä",
-            "Pages": "Kirjesivuja",
-            "Color": "Väri",
-            "Quality": "Laatu",
-            "Pattern": "Kuosi",
-            "State": "Kunto",
-            "Material": "Materiaali",
-            "Other": "Muuta"
-        }
-    },
-    "Manuscripts": {
-        "Manuscript": "Käsikirjoitus",
-        "ShowNormalized": "Näytä muutokset toteutettuina",
-        "OpenFacsimile": "Näytä faksimilet",
-        "None": "Ei transkriboituja käsikirjoituksia.",
-        "ChangeManuscript": "Vaihda käsikirjoitusta",
-        "SelectMsDialogTitle": "Valitse käsikirjoitus",
-        "SelectMsDialogSubtitle": "Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen.",
-        "Error": "Käsikirjoitusten lataus epäonnistui."
-    },
-    "Variants": {
-        "Variant": "Painettu variantti",
-        "None": "Painettuja variantteja ei ole saatavilla.",
-        "ChangeVariant": "Vaihda varianttia",
-        "OpenNewVariant": "Avaa uusi variantti",
-        "SelectVariantDialogTitle": "Valitse variantti",
-        "SelectVariantDialogSubtitle": "Valittu variantti korvaa sarakkeen variantin.",
-        "OpenNewVariantDialogTitle": "Valitse variantti",
-        "OpenNewVariantDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen.",
-        "Error": "Varianttien lataus epäonnistui."
-    },
-    "Facsimiles": {
-        "Facsimile": "Faksimile",
-        "Image": "Kuva:",
-        "ExternalFacsimiles": "Ulkopuoliset faksimilet",
-        "ChangeFacsimile": "Vaihda faksimilea",
-        "None": "Faksimileja ei ole saatavilla.",
-        "SelectFacsDialogTitle": "Valitse faksimile",
-        "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen.",
-        "AltText": "Skannattu faksimile",
-        "Previous": "Edellinen kuva",
-        "Next": "Seuraava kuva",
-        "Fullscreen": "Näytä kokonäytön tilassa",
-        "ZoomIn": "Suurenna",
-        "ZoomOut": "Pienennä",
-        "Rotate": "Käännä",
-        "Reset": "Palauta",
-        "Error": "Tapahtui virhe. Faksimileja ei voitu ladata."
-    },
-    "FullscreenImageViewer": {
-        "ToggleReverseSide": "Näytä/piilota kääntöpuoli",
-        "ToggleDescription": "Näytä/piilota kuvaus"
-    },
-    "CollectionTitle": {
-        "TitlePage": "Nimiölehti",
-        "None": "Nimiölehden lataus epäonnistui."
+    "CollectionCover": {
+        "Cover": "Kansikuva"
     },
     "CollectionForeword": {
         "Foreword": "Esipuhe",
         "None": "Esipuheen lataus epäonnistui."
     },
-    "CollectionCover": {
-        "Cover": "Kansikuva"
-    },
     "CollectionIntroduction": {
-        "Introduction": "Johdanto",
         "Contents": "Sisältö",
+        "Introduction": "Johdanto",
         "None": "Johdannon lataus epäonnistui."
     },
-    "Illustrations": {
-        "Illustrations": "Kuvat",
-        "ShowInReadingText": "Näytä sijainti lukutekstissä",
-        "None": "Ei kuvia",
-        "ShowAll": "Näytä kaikki"
-    },
-    "Legend": {
-        "Legend": "Lukuohje",
-        "None": "Lukuohjetta ei ole saatavilla."
-    },
-    "Metadata": {
-        "Metadata": "Metadata",
-        "None": "Dokumentin metadata ei ole saatavilla.",
-        "PublicationTitle": "Dokumentin nimi",
-        "PublicationSubtitle": "Alaotsikko",
-        "PublishedBy": "Julkaistu",
-        "DocumentType": "Dokumentin tyyppi",
-        "OriginalLanguage": "Alkuperäiskieli",
-        "PublicationDate": "Päiväys",
-        "Author": "Tekijä",
-        "Authors": "Tekijät",
-        "Sender": "Lähettäjä",
-        "Senders": "Lähettäjät",
-        "Recipient": "Vastaanottaja",
-        "Recipients": "Vastaanottajat",
-        "Translation": "Käännös",
-        "Translations": "Käännökset",
-        "Facsimile": "Faksimile",
-        "Facsimiles": "Faksimilet",
-        "FacsimileTitle": "Faksimilen nimi",
-        "ArchiveInfo": "Faksimilen aineistotiedot",
-        "NumberOfImages": "Kuvien määrä",
-        "ImageNumberInfo": "Kuvien numerot digitaalisessa arkistossa",
-        "ExternalUrl": "Faksimilen linkki"
+    "CollectionSideMenu": {
+        "Back": "Takaisin",
+        "SortOptions": {
+            "Alphabetical": "Aakkosellinen",
+            "Categorical": "Kategorioittain",
+            "Chronological": "Kronologinen",
+            "Default": "Oletus",
+            "SelectSorting": "Sisällysluettelon järjestys",
+            "Sorting": "Järjestys"
+        }
     },
     "CollectionText": {
         "AddColumn": {
@@ -214,26 +44,137 @@
             "ShowAll": "Näytä kaikki"
         },
         "ColumnOptions": {
-            "ToggleMenu": "Avaa/sulje sarakkeen valikko",
-            "Remove": "Poista sarake",
+            "MoveLeft": "Vaihda paikkaa vasemmanpuoleisen sarakkeen kanssa",
             "MoveRight": "Vaihda paikkaa oikeanpuoleisen sarakkeen kanssa",
-            "MoveLeft": "Vaihda paikkaa vasemmanpuoleisen sarakkeen kanssa"
+            "Remove": "Poista sarake",
+            "ToggleMenu": "Avaa/sulje sarakkeen valikko"
         }
     },
-    "About": {
-        "LoadingError": "Sivun sisällön lataus epäonnistui."
+    "CollectionTitle": {
+        "None": "Nimiölehden lataus epäonnistui.",
+        "TitlePage": "Nimiölehti"
     },
-    "MediaCollection": {
-        "AllMediaCollections": "Kaikki kuvakokoelmat",
-        "MediaCollections": "Kuvakokoelmat",
-        "GenericAltText": "Galleriakuva",
-        "FilterKeyword": "Aihesanarajaus",
-        "FilterPerson": "Henkilörajaus",
-        "FilterPlace": "Paikkarajaus",
-        "Showing": "Näytetään",
-        "Images": "kuvaa",
-        "Collections": "kokoelmaa",
-        "ClearFilters": "Poista aktiiviset rajaukset"
+    "Commentary": {
+        "Commentary": "Kommentaari",
+        "Error": "Kommenttien lataus epäonnistui.",
+        "Manuscript": {
+            "Archive": "Arkisto",
+            "Collection": "Kokoelma, arkistotunnus",
+            "Color": "Väri",
+            "Format": "Koko",
+            "Leafs": "Arkkeja",
+            "LegacyId": "Kirjeen arkistotunnus",
+            "ManuscriptDescription": "Kuvaus käsikirjoituksesta",
+            "Material": "Materiaali",
+            "Other": "Muuta",
+            "Pages": "Kirjesivuja",
+            "Pattern": "Kuosi",
+            "Quality": "Laatu",
+            "Receiver": "Vastaanottaja",
+            "Sender": "Lähettäjä",
+            "Sheets": "Lehtiä",
+            "State": "Kunto",
+            "Status": "Tila",
+            "Type": "Tyyppi"
+        },
+        "None": "Ei kommentteja."
+    },
+    "DateHistogram": {
+        "Clear": "Nollaa",
+        "From": "Vuodesta",
+        "Refresh": "Päivitä",
+        "To": "Vuoteen"
+    },
+    "DownloadTexts": {
+        "CommentaryTo": "Kommentaari tekstiin",
+        "CopyrightNotice": "CC BY-NC-ND 4.0",
+        "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
+        "CopyrightNoticeLabel": "Lisenssi",
+        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
+        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
+        "Download": "Lataa",
+        "DownloadAndPrint": "Lataa ja tulosta",
+        "Format": {
+            "HTML": "HTML",
+            "Print": "Tulosta",
+            "TXT": "TXT",
+            "XHTML": "XHTML",
+            "XML": "XML"
+        },
+        "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
+        "NoDownloads": "Laddattavia tai tulostettavia tekstejä ei ole saatavilla.",
+        "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
+        "Source": "Teksti on haettu osoitteesta",
+        "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta."
+    },
+    "Ebook": {
+        "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."
+    },
+    "ElasticSearch": {
+        "ClearAllActiveFilters": "Poista kaikki aktiiviset rajaukset",
+        "Collection": "Editio",
+        "CommentaryTo": "Kommentaari tekstiin",
+        "FilterResults": "Rajaa hakua",
+        "Found": "Tekstejä, joissa hakutuloksia:",
+        "Genre": "Tekstilaji",
+        "HideFacets": "Piilota rajaukset",
+        "LetterReceiverLocation": "Vastaanottajan paikkakunta (kirjeet)",
+        "LetterReceiverName": "Vastaanottaja (kirjeet)",
+        "LetterSenderLocation": "Lähettäjän paikkakunta (kirjeet)",
+        "LetterSenderName": "Lähettäjä (kirjeet)",
+        "LoadingError": "Tapahtui virhe ladatessa hakutuloksia.",
+        "LoadingFilters": "Pieni hetki, ladataan rajauksia ...",
+        "NewestFirst": "Uusimmat ensin",
+        "NoFilterOptions": "Ei hakusanoja",
+        "NoHits": "Haulla ei löytynyt yhtään tulosta.",
+        "OldestFirst": "Vanhimmat ensin",
+        "Relevance": "Relevanssi",
+        "SearchEdition": "Hae editiosta",
+        "ShowAllHitHighlights": "Näytä tekstin kaikki hakutulokset",
+        "ShowFacets": "Näytä rajaukset",
+        "ShowLess": "Näytä vähemmän",
+        "ShowMore": "Näytä enemmän",
+        "ShowMoreHits": "Näytä lisää hakutuloksia",
+        "SortBy": "Lajitteluperuste",
+        "StartSearchInstruction": "Aloita haku kirjoittamalla hakusana tai valitsemalla rajauksia.",
+        "TimeRange": "Ajanjakso",
+        "Type": "Tekstityyppi"
+    },
+    "Epub": {
+        "Contents": "Sisältö",
+        "FileNotFound": "Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole.",
+        "NoticeHeader": "Huomautus",
+        "NoticeMessage": "Tämä on epub-muodossa oleva sähkökirja, jota näytetään verkkosivustolla sisäänrakennetun lukuohjelman avulla. Lukuohjelma toimii parhaiten Firefox-selaimessa. Chrome, Edge ja Safari-selaimissa sähkökirjojen linkit eivät toimi lukuohjelmassa. Suosittelemme siksi, että käytät Firefoxia, tai lataat sähkökirjan ja luet sitä omalla laitteellasi, valitsemallasi lukuohjelmalla."
+    },
+    "Facsimiles": {
+        "AltText": "Skannattu faksimile",
+        "ChangeFacsimile": "Vaihda faksimilea",
+        "Error": "Tapahtui virhe. Faksimileja ei voitu ladata.",
+        "ExternalFacsimiles": "Ulkopuoliset faksimilet",
+        "Facsimile": "Faksimile",
+        "Fullscreen": "Näytä kokonäytön tilassa",
+        "Image": "Kuva:",
+        "Next": "Seuraava kuva",
+        "None": "Faksimileja ei ole saatavilla.",
+        "Previous": "Edellinen kuva",
+        "Reset": "Palauta",
+        "Rotate": "Käännä",
+        "SelectFacsDialogSubtitle": "Valittu faksimile korvaa sarakkeen faksimilen.",
+        "SelectFacsDialogTitle": "Valitse faksimile",
+        "ZoomIn": "Suurenna",
+        "ZoomOut": "Pienennä"
+    },
+    "FullscreenImageViewer": {
+        "ToggleDescription": "Näytä/piilota kuvaus",
+        "ToggleReverseSide": "Näytä/piilota kääntöpuoli"
+    },
+    "Illustrations": {
+        "Illustration": "Kuva",
+        "Illustrations": "Kuvat",
+        "None": "Ei kuvia",
+        "OpenMediaCollection": "Avaa kuvakokoelma",
+        "ShowAll": "Näytä kaikki",
+        "ShowInReadingText": "Näytä sijainti lukutekstissä"
     },
     "Index": {
         "ActiveFilters": "Aktiiviset rajaukset",
@@ -254,118 +195,179 @@
         "LatestYear": "Aikaisintaan vuonna",
         "PersonTypes": "Henkilökategoriat"
     },
+    "Legend": {
+        "Legend": "Lukuohje",
+        "None": "Lukuohjetta ei ole saatavilla."
+    },
+    "MainSideMenu": {
+        "CollectionsGroup1": "Sisältö",
+        "CollectionsGroup2": "Sisältö 2",
+        "CollectionsGroup3": "Sisältö 3",
+        "CollectionsGroup4": "Sisältö 4",
+        "CollectionsGroup5": "Sisältö 5",
+        "Ebooks": "Sähkökirjat",
+        "Home": "Aloitussivu",
+        "IndexKeywords": "Aihesanahakemisto",
+        "IndexPersons": "Henkilöhakemisto",
+        "IndexPlaces": "Paikkahakemisto",
+        "IndexWorks": "Teoshakemisto",
+        "MediaCollections": "Kuvakokoelmat"
+    },
+    "Manuscripts": {
+        "ChangeManuscript": "Vaihda käsikirjoitusta",
+        "Error": "Käsikirjoitusten lataus epäonnistui.",
+        "Manuscript": "Käsikirjoitus",
+        "None": "Ei transkriboituja käsikirjoituksia.",
+        "OpenFacsimile": "Näytä faksimilet",
+        "SelectMsDialogSubtitle": "Valittu käsikirjoitus korvaa sarakkeen käsikirjoituksen.",
+        "SelectMsDialogTitle": "Valitse käsikirjoitus",
+        "ShowNormalized": "Näytä muutokset toteutettuina"
+    },
+    "MediaCollection": {
+        "AllMediaCollections": "Kaikki kuvakokoelmat",
+        "ClearFilters": "Poista aktiiviset rajaukset",
+        "Collections": "kokoelmaa",
+        "FilterKeyword": "Aihesanarajaus",
+        "FilterPerson": "Henkilörajaus",
+        "FilterPlace": "Paikkarajaus",
+        "GenericAltText": "Galleriakuva",
+        "Images": "kuvaa",
+        "MediaCollections": "Kuvakokoelmat",
+        "Showing": "Näytetään"
+    },
+    "Metadata": {
+        "ArchiveInfo": "Faksimilen aineistotiedot",
+        "Author": "Tekijä",
+        "Authors": "Tekijät",
+        "DocumentType": "Dokumentin tyyppi",
+        "ExternalUrl": "Faksimilen linkki",
+        "Facsimile": "Faksimile",
+        "Facsimiles": "Faksimilet",
+        "FacsimileTitle": "Faksimilen nimi",
+        "ImageNumberInfo": "Kuvien numerot digitaalisessa arkistossa",
+        "Metadata": "Metadata",
+        "None": "Dokumentin metadata ei ole saatavilla.",
+        "NumberOfImages": "Kuvien määrä",
+        "OriginalLanguage": "Alkuperäiskieli",
+        "PublicationDate": "Päiväys",
+        "PublicationSubtitle": "Alaotsikko",
+        "PublicationTitle": "Dokumentin nimi",
+        "PublishedBy": "Julkaistu",
+        "Recipient": "Vastaanottaja",
+        "Recipients": "Vastaanottajat",
+        "Sender": "Lähettäjä",
+        "Senders": "Lähettäjät",
+        "Translation": "Käännös",
+        "Translations": "Käännökset"
+    },
     "NamedEntity": {
-        "Occurrences": "Esiintymät",
-        "NoInfoFound": "Ei tietoja.",
-        "OccurrencesLowercase": "esiitymää",
-        "Longitude": "long.",
-        "Latitude": "lat.",
+        "Articles": "Artikkeleita",
+        "Authors": "Kirjoittaja",
+        "BC": "eKr.",
         "City": "Kaupunki",
-        "Region": "Alue",
         "Country": "Maa",
-        "PlaceOfBirth": "Paikkakunta",
-        "Type": "Tyyppi",
-        "Source": "Lähde",
         "Description": "Beskrivning",
         "DownloadPDF": "lataa pdf",
-        "Articles": "Artikkeleita",
-        "Publisher": "Kustantaja",
-        "Journal": "Aikakauslehti",
+        "HistoricalFigureLabel": "historisk förebild",
         "ISBN": "ISBN",
-        "YearOfPublication": "Julkaisuvuosi",
-        "Authors": "Kirjoittaja",
-        "WorkOccurrencesUnavailable": "Teosten esiintymät eivät ole saatavilla.",
+        "Journal": "Aikakauslehti",
+        "Keyword": "Asiasana",
+        "Latitude": "lat.",
+        "Longitude": "long.",
+        "NoInfoFound": "Ei tietoja.",
+        "Occurrences": "Esiintymät",
+        "OccurrencesLowercase": "esiitymää",
         "Person": "Henkilö",
         "Place": "Paikka",
-        "Keyword": "Asiasana",
-        "Work": "Teos",
+        "PlaceOfBirth": "Paikkakunta",
         "Possibly": "ev.",
-        "HistoricalFigureLabel": "historisk förebild",
-        "BC": "eKr."
-    },
-    "ElasticSearch": {
-        "SearchEdition": "Hae editiosta",
-        "NoHits": "Haulla ei löytynyt yhtään tulosta.",
-        "Found": "Tekstejä, joissa hakutuloksia:",
-        "TimeRange": "Ajanjakso",
-        "ShowMore": "Näytä enemmän",
-        "ShowLess": "Näytä vähemmän",
-        "SortBy": "Lajitteluperuste",
-        "Relevance": "Relevanssi",
-        "OldestFirst": "Vanhimmat ensin",
-        "NewestFirst": "Uusimmat ensin",
-        "NoFilterOptions": "Ei hakusanoja",
-        "ShowMoreHits": "Näytä lisää hakutuloksia",
-        "ShowAllHitHighlights": "Näytä tekstin kaikki hakutulokset",
-        "LoadingError": "Tapahtui virhe ladatessa hakutuloksia.",
-        "LoadingFilters": "Pieni hetki, ladataan rajauksia ...",
-        "CommentaryTo": "Kommentaari tekstiin",
-        "FilterResults": "Rajaa hakua",
-        "ShowFacets": "Näytä rajaukset",
-        "HideFacets": "Piilota rajaukset",
-        "StartSearchInstruction": "Aloita haku kirjoittamalla hakusana tai valitsemalla rajauksia.",
-        "ClearAllActiveFilters": "Poista kaikki aktiiviset rajaukset",
-        "Type": "Tekstityyppi",
-        "Genre": "Tekstilaji",
-        "Collection": "Editio",
-        "LetterSenderName": "Lähettäjä (kirjeet)",
-        "LetterReceiverName": "Vastaanottaja (kirjeet)",
-        "LetterSenderLocation": "Lähettäjän paikkakunta (kirjeet)",
-        "LetterReceiverLocation": "Vastaanottajan paikkakunta (kirjeet)"
-    },
-    "DateHistogram": {
-        "Clear": "Nollaa",
-        "From": "Vuodesta",
-        "Refresh": "Päivitä",
-        "To": "Vuoteen"
-    },
-    "Reference": {
-        "Reference": "Viittausohje",
-        "Refer": "Viittaa",
-        "ReferToThisPage": "Lähdevittaus",
-        "Permalink": "Pysyvä osoite",
-        "ReferToEdition": "Lähdeviittaus tähän digitaaliseen editioon",
-        "ReferToReadingText": "Lähdevittaus tähän lukutekstiin",
-        "ReferToIntroduction": "Lähdevittaus tähän johdantoon",
-        "ReferToCollection": "Lähdeviittaus editioon",
-        "ReferToForeword": "Lähdeviittaus tähän esipuheeseen",
-        "ReferToEbook": "Lähdeviittaus tähän tekstiin",
-        "ReferToMediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
-        "None": "Sivulla ei ole pysyvää osoitetta"
-    },
-    "Ebook": {
-        "InvalidFilename": "Viallinen tiedostonimi. Sähkökirjaa ei löytynyt."
-    },
-    "Epub": {
-        "Contents": "Sisältö",
-        "FileNotFound": "Tekstiä ei pystytty lataamaan. Epub-tiedostoa ei ole.",
-        "NoticeHeader": "Huomautus",
-        "NoticeMessage": "Tämä on epub-muodossa oleva sähkökirja, jota näytetään verkkosivustolla sisäänrakennetun lukuohjelman avulla. Lukuohjelma toimii parhaiten Firefox-selaimessa. Chrome, Edge ja Safari-selaimissa sähkökirjojen linkit eivät toimi lukuohjelmassa. Suosittelemme siksi, että käytät Firefoxia, tai lataat sähkökirjan ja luet sitä omalla laitteellasi, valitsemallasi lukuohjelmalla."
-    },
-    "DownloadTexts": {
-        "Download": "Lataa",
-        "DownloadAndPrint": "Lataa ja tulosta",
-        "CopyrightNoticeLabel": "Lisenssi",
-        "CopyrightNotice": "CC BY-NC-ND 4.0",
-        "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
-        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
-        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fi",
-        "TextLoadingError": "Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
-        "OpenPrintError": "Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.",
-        "MissingTextError": "Tekstiä ei ole eikä sitä voi ladata tai tulostaa.",
-        "CommentaryTo": "Kommentaari tekstiin",
-        "Source": "Teksti on haettu osoitteesta",
-        "NoDownloads": "Laddattavia tai tulostettavia tekstejä ei ole saatavilla.",
-        "Format": {
-            "Print": "Tulosta",
-            "HTML": "HTML",
-            "TXT": "TXT",
-            "XHTML": "XHTML",
-            "XML": "XML"
-        }
+        "Publisher": "Kustantaja",
+        "Region": "Alue",
+        "Source": "Lähde",
+        "Type": "Tyyppi",
+        "Work": "Teos",
+        "WorkOccurrencesUnavailable": "Teosten esiintymät eivät ole saatavilla.",
+        "YearOfPublication": "Julkaisuvuosi"
     },
     "PageNotFound": {
         "404PageNotFound": "404 Sivua ei löydy",
         "DefaultMessage": "Tapahtui virhe. Emme löydä hakemaasi sivua. Voit palata edelliselle sivulle selaimen näppäimestä, tai yrittää korjata selaimen osoiterivillä olevaa verkko-osoitetta."
+    },
+    "ReadingText": {
+        "Error": "Lukutekstin lataus epäonnistui.",
+        "FinnishText": "Suomenkielinen teksti",
+        "None": "Lukutekstiä ei ole, katso faksimile.",
+        "ReadingText": "Lukuteksti",
+        "SwedishText": "Ruotsinkielinen teksti"
+    },
+    "Reference": {
+        "None": "Sivulla ei ole pysyvää osoitetta",
+        "Permalink": "Pysyvä osoite",
+        "Refer": "Viittaa",
+        "Reference": "Viittausohje",
+        "ReferToCollection": "Lähdeviittaus editioon",
+        "ReferToEbook": "Lähdeviittaus tähän tekstiin",
+        "ReferToEdition": "Lähdeviittaus tähän digitaaliseen editioon",
+        "ReferToForeword": "Lähdeviittaus tähän esipuheeseen",
+        "ReferToIntroduction": "Lähdevittaus tähän johdantoon",
+        "ReferToMediaCollection": "Lähdeviittaus tähän kuvakokoelmaan",
+        "ReferToReadingText": "Lähdevittaus tähän lukutekstiin",
+        "ReferToThisPage": "Lähdevittaus"
+    },
+    "Site": {
+        "MetaDescription": {
+            "Home": "Yleinen kuvaus sivustosta hakukoneita varten."
+        },
+        "Subtitle": "Sivuston alaotsikko",
+        "Title": "Sivuston otsikko"
+    },
+    "TopMenu": {
+        "About": "Tietoja",
+        "ChooseLanguage": "Valitse kieli. Nykyinen kieli:",
+        "Content": "Sisältö",
+        "Home": "Etusivu",
+        "LogoAltText": "Logo",
+        "Menu": "Valikko",
+        "Search": "Hae"
+    },
+    "Variants": {
+        "ChangeVariant": "Vaihda varianttia",
+        "Error": "Varianttien lataus epäonnistui.",
+        "None": "Painettuja variantteja ei ole saatavilla.",
+        "OpenNewVariant": "Avaa uusi variantti",
+        "OpenNewVariantDialogSubtitle": "Variantti avautuu uuteen sarakkeeseen.",
+        "OpenNewVariantDialogTitle": "Valitse variantti",
+        "SelectVariantDialogSubtitle": "Valittu variantti korvaa sarakkeen variantin.",
+        "SelectVariantDialogTitle": "Valitse variantti",
+        "Variant": "Painettu variantti"
+    },
+    "ViewOptions": {
+        "Abbreviation": "Lyhenne",
+        "Abbreviations": "Lyhenteet",
+        "EditorialNote": "Toimittajan huomautus",
+        "Emendation": "Toimittajan tekemä muutos",
+        "Emendations": "Toimittajan tekemät muutokset",
+        "ExplanatoryNote": "Kommentti",
+        "ExplanatoryNotes": "Kommentit",
+        "ExplanatoryNotesAltText": "Punainen asteriski",
+        "Normalisation": "Normalisointi",
+        "Normalisations": "Normalisoinnit",
+        "Note": "Viite",
+        "Options": "Näkymävaihtoehdot",
+        "PageBreakEdition": "Painetun edition sivunumerot",
+        "PageBreakOriginal": "Alkuteoksen sivunumerot",
+        "ParagraphNumbering": "Kappale-/rivinumerointi",
+        "PersonInfo": "Henkilöt",
+        "PlaceInfo": "Paikannimet",
+        "RevisionNote": "Kertausmuistiinpano",
+        "Settings": "Asetukset",
+        "Textsize": "Tekstin koko",
+        "TextsizeLarge": "Tekstin koko: hyvin iso",
+        "TextsizeMedium": "Tekstin koko: iso",
+        "TextsizeSmall": "Tekstin koko: normaali",
+        "TextsizeXLarge": "Tekstin koko: isoin",
+        "TextsizeXSmall": "Tekstin koko: pieni",
+        "ToggleAll": "Valitse kaikki",
+        "WorkInfo": "Teokset"
     }
 }

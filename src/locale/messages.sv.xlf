@@ -765,7 +765,7 @@
     <unit id="Illustrations.OpenMediaCollection">
       <segment state="initial">
         <source>Öppna bildbanken</source>
-        <target>Öppna bildbanken</target>
+        <target>Öppna bildsamling</target>
       </segment>
     </unit>
     <unit id="Illustrations.ShowAll">

@@ -747,7 +747,7 @@
     <unit id="Illustrations.Illustration">
       <segment state="initial">
         <source>Illustration</source>
-        <target>Illustration</target>
+        <target>Kuva</target>
       </segment>
     </unit>
     <unit id="Illustrations.Illustrations">
@@ -765,7 +765,7 @@
     <unit id="Illustrations.OpenMediaCollection">
       <segment state="initial">
         <source>Öppna bildbanken</source>
-        <target>Öppna bildbanken</target>
+        <target>Avaa kuvakokoelma</target>
       </segment>
     </unit>
     <unit id="Illustrations.ShowAll">

@@ -1,214 +1,42 @@
 {
-    "Site": {
-        "Title": "Webbplatsens titel",
-        "Subtitle": "Webbplatsens undertitel",
-        "MetaDescription": {
-            "Home": "En generell beskrivning av webbplatsen för sökmotorer."
-        }
+    "About": {
+        "LoadingError": "Sidans innehåll kunde inte laddas."
     },
     "BasicActions": {
-        "Ok": "Ok",
         "Cancel": "Avbryt",
+        "Close": "Stäng",
         "DontShowAgain": "Visa inte igen",
         "Download": "Ladda ner",
-        "ShowMore": "Visa fler",
-        "ScrollToTop": "Till början",
-        "Close": "Stäng",
+        "Ok": "Ok",
         "OpenInNewWindow": "Länken öppnas i ett nytt fönster",
+        "Print": "Skriv ut",
+        "ScrollToTop": "Till början",
         "Search": "Sök",
         "SearchEllipsis": "Sök ...",
-        "Print": "Skriv ut"
+        "ShowMore": "Visa fler"
     },
-    "TopMenu": {
-        "Menu": "Meny",
-        "Home": "Hem",
-        "Content": "Innehåll",
-        "About": "Om utgåvan",
-        "Search": "Sök",
-        "LogoAltText": "Logo",
-        "ChooseLanguage": "Välj språk. Nuvarande språk:"
-    },
-    "MainSideMenu": {
-        "Home": "Hem",
-        "Ebooks": "E-böcker",
-        "CollectionsGroup1": "Innehåll",
-        "CollectionsGroup2": "Innehåll 2",
-        "CollectionsGroup3": "Innehåll 3",
-        "CollectionsGroup4": "Innehåll 4",
-        "CollectionsGroup5": "Innehåll 5",
-        "MediaCollections": "Bildbank",
-        "IndexPersons": "Personregister",
-        "IndexPlaces": "Ortregister",
-        "IndexKeywords": "Ämnesord",
-        "IndexWorks": "Verkregister"
-    },
-    "CollectionSideMenu": {
-        "Back": "Tillbaka",
-        "SortOptions": {
-            "Sorting": "Sortering",
-            "SelectSorting": "Välj sortering för innehållsförteckningen",
-            "Default": "Standard",
-            "Chronological": "Kronologisk",
-            "Alphabetical": "Alfabetisk",
-            "Categorical": "Kategorivis"
-        }
-    },
-    "ViewOptions": {
-        "Settings": "Inställningar",
-        "ToggleAll": "Välj alla",
-        "Textsize": "Textstorlek",
-        "TextsizeXSmall": "Textstorlek: liten",
-        "TextsizeSmall": "Textstorlek: normal",
-        "TextsizeMedium": "Textstorlek: stor",
-        "TextsizeLarge": "Textstorlek: mycket stor",
-        "TextsizeXLarge": "Textstorlek: störst",
-        "Options": "Visningsalternativ",
-        "ExplanatoryNote": "Punktkommentar",
-        "ExplanatoryNotes": "Punktkommentarer",
-        "PersonInfo": "Personupplysningar",
-        "PlaceInfo": "Platsupplysningar",
-        "WorkInfo": "Verkupplysningar",
-        "Emendation": "Utgivarändring",
-        "Emendations": "Utgivarens ändringar",
-        "Normalisation": "Normalisering",
-        "Normalisations": "Normaliseringar",
-        "Abbreviation": "Förkortning",
-        "Abbreviations": "Förkortningar",
-        "ParagraphNumbering": "Stycke-/radnumrering",
-        "PageBreakOriginal": "Sidnummer, original",
-        "PageBreakEdition": "Sidnummer, tryckt utgåva",
-        "ExplanatoryNotesAltText": "Röd asterisk",
-        "Note": "Not",
-        "RevisionNote": "Repetitionsanteckning",
-        "EditorialNote": "Utgivarens anmärkning"
-    },
-    "ReadingText": {
-        "ReadingText": "Lästext",
-        "SwedishText": "Svensk text",
-        "FinnishText": "Finsk text",
-        "None": "Det finns ingen utskriven lästext, se faksimil.",
-        "Error": "Ett fel har uppstått. Lästexten kunde inte hämtas."
-    },
-    "Commentary": {
-        "Commentary": "Kommentar",
-        "None": "Inga kommentarer.",
-        "Error": "Ett fel har uppstått. Kommentarer kunde inte hämtas.",
-        "Manuscript": {
-            "ManuscriptDescription": "Manuskriptbeskrivning",
-            "LegacyId": "Brevsignum",
-            "Sender": "Avsändare",
-            "Receiver": "Mottagare",
-            "Archive": "Arkiv",
-            "Collection": "Samling, signum",
-            "Type": "Form",
-            "Status": "Status",
-            "Format": "Format",
-            "Leafs": "Lägg",
-            "Sheets": "Antal blad",
-            "Pages": "Sidor brevtext",
-            "Color": "Färg",
-            "Quality": "Kvalitet",
-            "Pattern": "Mönster",
-            "State": "Tillstånd",
-            "Material": "Skrivmaterial",
-            "Other": "Övrigt"
-        }
-    },
-    "Manuscripts": {
-        "Manuscript": "Manuskript",
-        "ShowNormalized": "Visa ändringar inarbetade",
-        "OpenFacsimile": "Öppna faksimil",
-        "None": "Inga manuskriptutskrifter.",
-        "ChangeManuscript": "Byt manuskript",
-        "SelectMsDialogTitle": "Välj manuskript",
-        "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.",
-        "Error": "Ett fel har uppstått. Manuskript kunde inte hämtas."
-    },
-    "Variants": {
-        "Variant": "Tryckt variant",
-        "None": "Inga tryckta varianter tillgängliga.",
-        "ChangeVariant": "Byt variant",
-        "OpenNewVariant": "Öppna ny variant",
-        "SelectVariantDialogTitle": "Välj variant",
-        "SelectVariantDialogSubtitle": "Varianten ersätter den variant som visas i kolumnen där du klickade.",
-        "OpenNewVariantDialogTitle": "Välj variant",
-        "OpenNewVariantDialogSubtitle": "Varianten öppnas i en ny kolumn.",
-        "Error": "Ett fel har uppstått. Varianter kunde inte laddas."
-    },
-    "Facsimiles": {
-        "Facsimile": "Faksimil",
-        "Image": "Bild:",
-        "ExternalFacsimiles": "Externa faksimil",
-        "ChangeFacsimile": "Byt faksimil",
-        "None": "Inga faksimil tillgängliga.",
-        "SelectFacsDialogTitle": "Välj faksimil",
-        "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.",
-        "AltText": "Skannat faksimil",
-        "Previous": "Föregående bild",
-        "Next": "Följande bild",
-        "Fullscreen": "Visa i helskärmsläge",
-        "ZoomIn": "Zooma in",
-        "ZoomOut": "Zooma ut",
-        "Rotate": "Rotera",
-        "Reset": "Återställ",
-        "Error": "Ett fel har uppstått. Faksimil kunde inte hämtas."
-    },
-    "FullscreenImageViewer": {
-        "ToggleReverseSide": "Visa/dölj frånsida",
-        "ToggleDescription": "Visa/dölj beskrivning"
-    },
-    "CollectionTitle": {
-        "TitlePage": "Titelblad",
-        "None": "Titelbladet kunde inte laddas."
+    "CollectionCover": {
+        "Cover": "Omslag"
     },
     "CollectionForeword": {
         "Foreword": "Förord",
         "None": "Förordet kunde inte laddas."
     },
-    "CollectionCover": {
-        "Cover": "Omslag"
-    },
     "CollectionIntroduction": {
-        "Introduction": "Inledning",
         "Contents": "Innehåll",
+        "Introduction": "Inledning",
         "None": "Inledningen kunde inte laddas."
     },
-    "Illustrations": {
-        "Illustration": "Illustration",
-        "Illustrations": "Illustrationer",
-        "ShowInReadingText": "Visa position i lästext",
-        "None": "Inga illustrationer.",
-        "ShowAll": "Visa alla",
-        "OpenMediaCollection": "Öppna bildbanken"
-    },
-    "Legend": {
-        "Legend": "Teckenförklaringar",
-        "None": "Inga teckenförklaringar tillgängliga."
-    },
-    "Metadata": {
-        "Metadata": "Metadata",
-        "None": "Ingen metadata tillgänglig.",
-        "PublicationTitle": "Dokumentets titel",
-        "PublicationSubtitle": "Undertitel",
-        "PublishedBy": "Publicerat i",
-        "DocumentType": "Dokumenttyp",
-        "OriginalLanguage": "Originalspråk",
-        "PublicationDate": "Datering",
-        "Author": "Författare",
-        "Authors": "Författare",
-        "Sender": "Avsändare",
-        "Senders": "Avsändare",
-        "Recipient": "Mottagare",
-        "Recipients": "Mottagare",
-        "Translation": "Översättning",
-        "Translations": "Översättningar",
-        "Facsimile": "Faksimil",
-        "Facsimiles": "Faksimil",
-        "FacsimileTitle": "Faksimilets titel",
-        "ArchiveInfo": "Arkivkälla för faksimilet",
-        "NumberOfImages": "Antal bilder",
-        "ImageNumberInfo": "Bildernas nummer i digitalarkivet",
-        "ExternalUrl": "Extern länk för faksimilet"
+    "CollectionSideMenu": {
+        "Back": "Tillbaka",
+        "SortOptions": {
+            "Alphabetical": "Alfabetisk",
+            "Categorical": "Kategorivis",
+            "Chronological": "Kronologisk",
+            "Default": "Standard",
+            "SelectSorting": "Välj sortering för innehållsförteckningen",
+            "Sorting": "Sortering"
+        }
     },
     "CollectionText": {
         "AddColumn": {
@@ -216,26 +44,137 @@
             "ShowAll": "Visa alla"
         },
         "ColumnOptions": {
-            "ToggleMenu": "Öppna/stäng alternativ för kolumnen",
-            "Remove": "Ta bort kolumnen",
+            "MoveLeft": "Byt plats med kolumnen till vänster",
             "MoveRight": "Byt plats med kolumnen till höger",
-            "MoveLeft": "Byt plats med kolumnen till vänster"
+            "Remove": "Ta bort kolumnen",
+            "ToggleMenu": "Öppna/stäng alternativ för kolumnen"
         }
     },
-    "About": {
-        "LoadingError": "Sidans innehåll kunde inte laddas."
+    "CollectionTitle": {
+        "None": "Titelbladet kunde inte laddas.",
+        "TitlePage": "Titelblad"
     },
-    "MediaCollection": {
-        "AllMediaCollections": "Alla bildsamlingar",
-        "MediaCollections": "Bildsamlingar",
-        "GenericAltText": "Galleribild",
-        "FilterKeyword": "Avgränsa enligt ämnesord",
-        "FilterPerson": "Avgränsa enligt person",
-        "FilterPlace": "Avgränsa enligt plats",
-        "Showing": "Visar",
-        "Images": "bilder",
-        "Collections": "samlingar",
-        "ClearFilters": "Ta bort aktiva avgränsningar"
+    "Commentary": {
+        "Commentary": "Kommentar",
+        "Error": "Ett fel har uppstått. Kommentarer kunde inte hämtas.",
+        "Manuscript": {
+            "Archive": "Arkiv",
+            "Collection": "Samling, signum",
+            "Color": "Färg",
+            "Format": "Format",
+            "Leafs": "Lägg",
+            "LegacyId": "Brevsignum",
+            "ManuscriptDescription": "Manuskriptbeskrivning",
+            "Material": "Skrivmaterial",
+            "Other": "Övrigt",
+            "Pages": "Sidor brevtext",
+            "Pattern": "Mönster",
+            "Quality": "Kvalitet",
+            "Receiver": "Mottagare",
+            "Sender": "Avsändare",
+            "Sheets": "Antal blad",
+            "State": "Tillstånd",
+            "Status": "Status",
+            "Type": "Form"
+        },
+        "None": "Inga kommentarer."
+    },
+    "DateHistogram": {
+        "Clear": "Nollställ",
+        "From": "Från år",
+        "Refresh": "Uppdatera",
+        "To": "Till år"
+    },
+    "DownloadTexts": {
+        "CommentaryTo": "Kommentarer till",
+        "CopyrightNotice": "CC BY-NC-ND 4.0",
+        "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
+        "CopyrightNoticeLabel": "Licens",
+        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
+        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
+        "Download": "Ladda ner",
+        "DownloadAndPrint": "Ladda ner och skriv ut",
+        "Format": {
+            "HTML": "HTML",
+            "Print": "Utskrift",
+            "TXT": "TXT",
+            "XHTML": "XHTML",
+            "XML": "XML"
+        },
+        "MissingTextError": "Texten saknas och går inte att ladda ner eller skriva ut.",
+        "NoDownloads": "Inga texter tillgängliga för nedladdning eller utskrift.",
+        "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
+        "Source": "Texten är hämtad från",
+        "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen."
+    },
+    "Ebook": {
+        "InvalidFilename": "Ogiltigt filnamn. E-boken kunde inte hittas."
+    },
+    "ElasticSearch": {
+        "ClearAllActiveFilters": "Ta bort alla aktiva avgränsningar",
+        "Collection": "Delutgåva",
+        "CommentaryTo": "Kommentar till",
+        "FilterResults": "Avgränsa sökningen",
+        "Found": "Texter med sökträffar:",
+        "Genre": "Genre",
+        "HideFacets": "Dölj avgränsningar",
+        "LetterReceiverLocation": "Mottagarort (brev)",
+        "LetterReceiverName": "Mottagare (brev)",
+        "LetterSenderLocation": "Avsändarort (brev)",
+        "LetterSenderName": "Avsändare (brev)",
+        "LoadingError": "Ett fel har uppstått när sökträffarna skulle laddas.",
+        "LoadingFilters": "Ett ögonblick, laddar sökavgränsningar ...",
+        "NewestFirst": "Nyast först",
+        "NoFilterOptions": "Inga sökord",
+        "NoHits": "Sökningen gav inga svar.",
+        "OldestFirst": "Äldst först",
+        "Relevance": "Relevans",
+        "SearchEdition": "Sök i utgåvan",
+        "ShowAllHitHighlights": "Visa alla träffar i texten",
+        "ShowFacets": "Visa avgränsningar",
+        "ShowLess": "Visa färre",
+        "ShowMore": "Visa fler",
+        "ShowMoreHits": "Visa fler sökträffar",
+        "SortBy": "Sortera enligt",
+        "StartSearchInstruction": "Börja söka genom att skriva in sökord eller välja avgränsningar.",
+        "TimeRange": "Tidsperiod",
+        "Type": "Texttyp"
+    },
+    "Epub": {
+        "Contents": "Innehåll",
+        "FileNotFound": "Texten kunde inte laddas. Epub-filen saknas.",
+        "NoticeHeader": "Anmärkning",
+        "NoticeMessage": "Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat."
+    },
+    "Facsimiles": {
+        "AltText": "Skannat faksimil",
+        "ChangeFacsimile": "Byt faksimil",
+        "Error": "Ett fel har uppstått. Faksimil kunde inte hämtas.",
+        "ExternalFacsimiles": "Externa faksimil",
+        "Facsimile": "Faksimil",
+        "Fullscreen": "Visa i helskärmsläge",
+        "Image": "Bild:",
+        "Next": "Följande bild",
+        "None": "Inga faksimil tillgängliga.",
+        "Previous": "Föregående bild",
+        "Reset": "Återställ",
+        "Rotate": "Rotera",
+        "SelectFacsDialogSubtitle": "Faksimilet ersätter det faksimil som visas i kolumnen där du klickade.",
+        "SelectFacsDialogTitle": "Välj faksimil",
+        "ZoomIn": "Zooma in",
+        "ZoomOut": "Zooma ut"
+    },
+    "FullscreenImageViewer": {
+        "ToggleDescription": "Visa/dölj beskrivning",
+        "ToggleReverseSide": "Visa/dölj frånsida"
+    },
+    "Illustrations": {
+        "Illustration": "Illustration",
+        "Illustrations": "Illustrationer",
+        "None": "Inga illustrationer.",
+        "OpenMediaCollection": "Öppna bildsamling",
+        "ShowAll": "Visa alla",
+        "ShowInReadingText": "Visa position i lästext"
     },
     "Index": {
         "ActiveFilters": "Aktiva avgränsningar",
@@ -256,118 +195,179 @@
         "LatestYear": "Senast år",
         "PersonTypes": "Personkategorier"
     },
+    "Legend": {
+        "Legend": "Teckenförklaringar",
+        "None": "Inga teckenförklaringar tillgängliga."
+    },
+    "MainSideMenu": {
+        "CollectionsGroup1": "Innehåll",
+        "CollectionsGroup2": "Innehåll 2",
+        "CollectionsGroup3": "Innehåll 3",
+        "CollectionsGroup4": "Innehåll 4",
+        "CollectionsGroup5": "Innehåll 5",
+        "Ebooks": "E-böcker",
+        "Home": "Hem",
+        "IndexKeywords": "Ämnesord",
+        "IndexPersons": "Personregister",
+        "IndexPlaces": "Ortregister",
+        "IndexWorks": "Verkregister",
+        "MediaCollections": "Bildbank"
+    },
+    "Manuscripts": {
+        "ChangeManuscript": "Byt manuskript",
+        "Error": "Ett fel har uppstått. Manuskript kunde inte hämtas.",
+        "Manuscript": "Manuskript",
+        "None": "Inga manuskriptutskrifter.",
+        "OpenFacsimile": "Öppna faksimil",
+        "SelectMsDialogSubtitle": "Manuskriptet ersätter det manuskript som visas i kolumnen där du klickade.",
+        "SelectMsDialogTitle": "Välj manuskript",
+        "ShowNormalized": "Visa ändringar inarbetade"
+    },
+    "MediaCollection": {
+        "AllMediaCollections": "Alla bildsamlingar",
+        "ClearFilters": "Ta bort aktiva avgränsningar",
+        "Collections": "samlingar",
+        "FilterKeyword": "Avgränsa enligt ämnesord",
+        "FilterPerson": "Avgränsa enligt person",
+        "FilterPlace": "Avgränsa enligt plats",
+        "GenericAltText": "Galleribild",
+        "Images": "bilder",
+        "MediaCollections": "Bildsamlingar",
+        "Showing": "Visar"
+    },
+    "Metadata": {
+        "ArchiveInfo": "Arkivkälla för faksimilet",
+        "Author": "Författare",
+        "Authors": "Författare",
+        "DocumentType": "Dokumenttyp",
+        "ExternalUrl": "Extern länk för faksimilet",
+        "Facsimile": "Faksimil",
+        "Facsimiles": "Faksimil",
+        "FacsimileTitle": "Faksimilets titel",
+        "ImageNumberInfo": "Bildernas nummer i digitalarkivet",
+        "Metadata": "Metadata",
+        "None": "Ingen metadata tillgänglig.",
+        "NumberOfImages": "Antal bilder",
+        "OriginalLanguage": "Originalspråk",
+        "PublicationDate": "Datering",
+        "PublicationSubtitle": "Undertitel",
+        "PublicationTitle": "Dokumentets titel",
+        "PublishedBy": "Publicerat i",
+        "Recipient": "Mottagare",
+        "Recipients": "Mottagare",
+        "Sender": "Avsändare",
+        "Senders": "Avsändare",
+        "Translation": "Översättning",
+        "Translations": "Översättningar"
+    },
     "NamedEntity": {
-        "Occurrences": "Förekomster",
-        "NoInfoFound": "Ingen information hittades.",
-        "OccurrencesLowercase": "förekomster",
-        "Longitude": "long.",
-        "Latitude": "lat.",
+        "Articles": "Artiklar",
+        "Authors": "Författare",
+        "BC": "f.Kr.",
         "City": "Stad",
-        "Region": "Region",
         "Country": "Land",
-        "PlaceOfBirth": "Födelseort",
-        "Type": "Typ",
-        "Source": "Källa",
         "Description": "Beskrivning",
         "DownloadPDF": "ladda ner pdf",
-        "Articles": "Artiklar",
-        "Publisher": "Utgivare",
-        "Journal": "Journal",
+        "HistoricalFigureLabel": "historisk förebild",
         "ISBN": "ISBN",
-        "YearOfPublication": "Utgivningsår",
-        "Authors": "Författare",
-        "WorkOccurrencesUnavailable": "Förekomster för verk är inte tillgängliga.",
+        "Journal": "Journal",
+        "Keyword": "Ämnesord",
+        "Latitude": "lat.",
+        "Longitude": "long.",
+        "NoInfoFound": "Ingen information hittades.",
+        "Occurrences": "Förekomster",
+        "OccurrencesLowercase": "förekomster",
         "Person": "Person",
         "Place": "Plats",
-        "Keyword": "Ämnesord",
-        "Work": "Verk",
+        "PlaceOfBirth": "Födelseort",
         "Possibly": "ev.",
-        "HistoricalFigureLabel": "historisk förebild",
-        "BC": "f.Kr."
-    },
-    "ElasticSearch": {
-        "SearchEdition": "Sök i utgåvan",
-        "NoHits": "Sökningen gav inga svar.",
-        "Found": "Texter med sökträffar:",
-        "TimeRange": "Tidsperiod",
-        "ShowMore": "Visa fler",
-        "ShowLess": "Visa färre",
-        "SortBy": "Sortera enligt",
-        "Relevance": "Relevans",
-        "OldestFirst": "Äldst först",
-        "NewestFirst": "Nyast först",
-        "NoFilterOptions": "Inga sökord",
-        "ShowMoreHits": "Visa fler sökträffar",
-        "ShowAllHitHighlights": "Visa alla träffar i texten",
-        "LoadingError": "Ett fel har uppstått när sökträffarna skulle laddas.",
-        "LoadingFilters": "Ett ögonblick, laddar sökavgränsningar ...",
-        "CommentaryTo": "Kommentar till",
-        "FilterResults": "Avgränsa sökningen",
-        "ShowFacets": "Visa avgränsningar",
-        "HideFacets": "Dölj avgränsningar",
-        "StartSearchInstruction": "Börja söka genom att skriva in sökord eller välja avgränsningar.",
-        "ClearAllActiveFilters": "Ta bort alla aktiva avgränsningar",
-        "Type": "Texttyp",
-        "Genre": "Genre",
-        "Collection": "Delutgåva",
-        "LetterSenderName": "Avsändare (brev)",
-        "LetterReceiverName": "Mottagare (brev)",
-        "LetterSenderLocation": "Avsändarort (brev)",
-        "LetterReceiverLocation": "Mottagarort (brev)"
-    },
-    "DateHistogram": {
-        "Clear": "Nollställ",
-        "From": "Från år",
-        "Refresh": "Uppdatera",
-        "To": "Till år"
-    },
-    "Reference": {
-        "Reference": "Källhänvisning",
-        "Refer": "Hänvisa",
-        "ReferToThisPage": "Hänvisa till denna sida",
-        "Permalink": "Beständig webbadress",
-        "ReferToEdition": "Hänvisa till denna webbutgåva",
-        "ReferToReadingText": "Hänvisa till denna lästext",
-        "ReferToIntroduction": "Hänvisa till denna inledning",
-        "ReferToCollection": "Hänvisa till denna delutgåva",
-        "ReferToForeword": "Hänvisa till detta förord",
-        "ReferToEbook": "Hänvisa till denna text",
-        "ReferToMediaCollection": "Hänvisa till denna bildsamling",
-        "None": "Sidan saknar beständig webbadress"
-    },
-    "Ebook": {
-        "InvalidFilename": "Ogiltigt filnamn. E-boken kunde inte hittas."
-    },
-    "Epub": {
-        "Contents": "Innehåll",
-        "FileNotFound": "Texten kunde inte laddas. Epub-filen saknas.",
-        "NoticeHeader": "Anmärkning",
-        "NoticeMessage": "Det här är en e-bok i epubformat som visas på webbsidan med hjälp av ett inbyggt läsprogram. Läsprogrammet fungerar bäst om din webbläsare är Firefox. I Chrome, Edge och Safari fungerar inte e-böckers länkar i läsprogrammet. Vi rekommenderar därför att du använder Firefox, eller laddar ner e-boken och läser den med ett läsprogram på din apparat."
-    },
-    "DownloadTexts": {
-        "Download": "Ladda ner",
-        "DownloadAndPrint": "Ladda ner och skriv ut",
-        "CopyrightNoticeLabel": "Licens",
-        "CopyrightNotice": "CC BY-NC-ND 4.0",
-        "CopyrightNoticeIntroduction": "CC BY-NC-ND 4.0",
-        "CopyrightURL": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
-        "CopyrightURLIntroduction": "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.sv",
-        "TextLoadingError": "Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
-        "OpenPrintError": "Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.",
-        "MissingTextError": "Texten saknas och går inte att ladda ner eller skriva ut.",
-        "CommentaryTo": "Kommentarer till",
-        "Source": "Texten är hämtad från",
-        "NoDownloads": "Inga texter tillgängliga för nedladdning eller utskrift.",
-        "Format": {
-            "Print": "Utskrift",
-            "HTML": "HTML",
-            "TXT": "TXT",
-            "XHTML": "XHTML",
-            "XML": "XML"
-        }
+        "Publisher": "Utgivare",
+        "Region": "Region",
+        "Source": "Källa",
+        "Type": "Typ",
+        "Work": "Verk",
+        "WorkOccurrencesUnavailable": "Förekomster för verk är inte tillgängliga.",
+        "YearOfPublication": "Utgivningsår"
     },
     "PageNotFound": {
         "404PageNotFound": "404 Sidan hittas inte",
         "DefaultMessage": "Något gick fel. Vi kan inte hitta sidan du försökte nå. Du kan gå tillbaka till föregående sida med hjälp av webbläsarens tillbaka-knapp, eller försöka rätta adressen i webbläsarens adressfält."
+    },
+    "ReadingText": {
+        "Error": "Ett fel har uppstått. Lästexten kunde inte hämtas.",
+        "FinnishText": "Finsk text",
+        "None": "Det finns ingen utskriven lästext, se faksimil.",
+        "ReadingText": "Lästext",
+        "SwedishText": "Svensk text"
+    },
+    "Reference": {
+        "None": "Sidan saknar beständig webbadress",
+        "Permalink": "Beständig webbadress",
+        "Refer": "Hänvisa",
+        "Reference": "Källhänvisning",
+        "ReferToCollection": "Hänvisa till denna delutgåva",
+        "ReferToEbook": "Hänvisa till denna text",
+        "ReferToEdition": "Hänvisa till denna webbutgåva",
+        "ReferToForeword": "Hänvisa till detta förord",
+        "ReferToIntroduction": "Hänvisa till denna inledning",
+        "ReferToMediaCollection": "Hänvisa till denna bildsamling",
+        "ReferToReadingText": "Hänvisa till denna lästext",
+        "ReferToThisPage": "Hänvisa till denna sida"
+    },
+    "Site": {
+        "MetaDescription": {
+            "Home": "En generell beskrivning av webbplatsen för sökmotorer."
+        },
+        "Subtitle": "Webbplatsens undertitel",
+        "Title": "Webbplatsens titel"
+    },
+    "TopMenu": {
+        "About": "Om utgåvan",
+        "ChooseLanguage": "Välj språk. Nuvarande språk:",
+        "Content": "Innehåll",
+        "Home": "Hem",
+        "LogoAltText": "Logo",
+        "Menu": "Meny",
+        "Search": "Sök"
+    },
+    "Variants": {
+        "ChangeVariant": "Byt variant",
+        "Error": "Ett fel har uppstått. Varianter kunde inte laddas.",
+        "None": "Inga tryckta varianter tillgängliga.",
+        "OpenNewVariant": "Öppna ny variant",
+        "OpenNewVariantDialogSubtitle": "Varianten öppnas i en ny kolumn.",
+        "OpenNewVariantDialogTitle": "Välj variant",
+        "SelectVariantDialogSubtitle": "Varianten ersätter den variant som visas i kolumnen där du klickade.",
+        "SelectVariantDialogTitle": "Välj variant",
+        "Variant": "Tryckt variant"
+    },
+    "ViewOptions": {
+        "Abbreviation": "Förkortning",
+        "Abbreviations": "Förkortningar",
+        "EditorialNote": "Utgivarens anmärkning",
+        "Emendation": "Utgivarändring",
+        "Emendations": "Utgivarens ändringar",
+        "ExplanatoryNote": "Punktkommentar",
+        "ExplanatoryNotes": "Punktkommentarer",
+        "ExplanatoryNotesAltText": "Röd asterisk",
+        "Normalisation": "Normalisering",
+        "Normalisations": "Normaliseringar",
+        "Note": "Not",
+        "Options": "Visningsalternativ",
+        "PageBreakEdition": "Sidnummer, tryckt utgåva",
+        "PageBreakOriginal": "Sidnummer, original",
+        "ParagraphNumbering": "Stycke-/radnumrering",
+        "PersonInfo": "Personupplysningar",
+        "PlaceInfo": "Platsupplysningar",
+        "RevisionNote": "Repetitionsanteckning",
+        "Settings": "Inställningar",
+        "Textsize": "Textstorlek",
+        "TextsizeLarge": "Textstorlek: mycket stor",
+        "TextsizeMedium": "Textstorlek: stor",
+        "TextsizeSmall": "Textstorlek: normal",
+        "TextsizeXLarge": "Textstorlek: störst",
+        "TextsizeXSmall": "Textstorlek: liten",
+        "ToggleAll": "Välj alla",
+        "WorkInfo": "Verkupplysningar"
     }
 }
