@@ -23,6 +23,7 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   @Input() collectionID: string;
   @Input() initialUrlSegments: UrlSegment[];
   @Input() initialQueryParams: Params;
+  @Input() sideMenuToggled: boolean;
 
   _config = config;
   activeMenuSorting: string = 'default';
@@ -71,6 +72,12 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
         ) {
           this.collectionMenu?.length && this.updateHighlightedMenuItem();
           break;
+        } else if (
+          propName === 'sideMenuToggled' &&
+          changes.sideMenuToggled.previousValue !== changes.sideMenuToggled.currentValue &&
+          changes.sideMenuToggled.currentValue
+        ) {
+          this.scrollHighlightedMenuItemIntoView(this.getItemId(), 200);
         }
       }
     }
@@ -139,8 +146,8 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   }
 
   private setTitleForFrontMatterPages() {
-    const pageTitle = this.initialUrlSegments[2].path;
-    switch (pageTitle) {
+    const page = this.initialUrlSegments[2].path;
+    switch (page) {
       case 'cover':
         this.headService.setTitle([$localize`:@@CollectionCover.Cover:Omslag`, this.collectionTitle]);
         return true;
@@ -211,8 +218,11 @@ export class CollectionSideMenu implements OnInit, OnChanges, OnDestroy {
   private scrollHighlightedMenuItemIntoView(itemId: string, scrollTimeout: number = 600) {
     if (isBrowser()) {
       setTimeout(() => {
+        const dataIdValue = this.initialUrlSegments[2].path === 'text'
+              ? 'toc_' + itemId
+              : 'toc_' + this.initialUrlSegments[2].path;
         const container = document.querySelector('.side-navigation') as HTMLElement;
-        const target = document.querySelector('collection-side-menu [data-id="' + 'toc_' + itemId + '"] .menu-highlight') as HTMLElement;
+        const target = document.querySelector('collection-side-menu [data-id="' + dataIdValue + '"] .menu-highlight') as HTMLElement;
         if (container && target) {
           this.scrollService.scrollElementIntoView(target, 'center', 0, 'smooth', container);
         }
