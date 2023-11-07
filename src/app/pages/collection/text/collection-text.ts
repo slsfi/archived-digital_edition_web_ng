@@ -31,9 +31,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   @ViewChildren('fabColumnOptions') fabColumnOptions: QueryList<IonFabList>;
   @ViewChildren('fabColumnOptionsButton') fabColumnOptionsButton: QueryList<IonFabButton>;
 
-  activeMobileModeViewType: string = 'established';
+  activeMobileModeViewIndex: number = 0;
   addViewPopoverisOpen: boolean = false;
-  availableMobileModeViews: string[] = [];
   collectionAndPublicationLegacyId: string = '';
   enabledViewTypes: string[] = [];
   illustrationsViewShown: boolean = false;
@@ -122,36 +121,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
           this.enabledViewTypes.push(type);
         }
       }
-    }
-
-    // Set default mobile mode views
-    if (this.multilingualReadingTextLanguages.length > 1) {
-      for (const estLanguage of this.multilingualReadingTextLanguages) {
-        this.availableMobileModeViews.push('established_' + estLanguage);
-      }
-    } else {
-      this.availableMobileModeViews.push('established');
-    }
-    this.availableMobileModeViews.push('facsimiles');
-    // availableMobileModeViews.push('manuscripts');
-    const defaultViews = config.page?.text?.defaultViews ?? ['established'];
-    this.activeMobileModeViewType = defaultViews.filter(
-      (value: string) => this.availableMobileModeViews.includes(value) && this.enabledViewTypes.includes(value)
-    )[0] || 'established';
-    if (
-      this.multilingualReadingTextLanguages.length > 1 &&
-      this.activeMobileModeViewType.includes('established_')
-    ) {
-      // Set the default selected mobile mode view to the active locale's read text if multilingual read texts
-      this.activeMobileModeViewType = 'established_' + this.activeLocale;
-    }
-    if (
-      this.collectionContentService.activeCollectionTextMobileModeView &&
-      this.availableMobileModeViews.includes(
-        this.collectionContentService.activeCollectionTextMobileModeView
-      )
-    ) {
-      this.activeMobileModeViewType = this.collectionContentService.activeCollectionTextMobileModeView;
     }
   }
 
@@ -276,25 +245,47 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       // show default view types
       this.setDefaultViewsFromConfig();
     }
+    this.setActiveViewInMobileMode();
   }
 
   private setDefaultViewsFromConfig() {
-    let newViews: Array<any> = [];
+    let newViews: any[] = [];
+    const defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
 
-    if (this.platformService.isMobile()) {
-      this.availableMobileModeViews.forEach((type: string) => {
+    defaultViews.forEach((type: string) => {
+      if (this.enabledViewTypes.indexOf(type) !== -1) {
         newViews.push({ type });
-      });
-    } else {
-      const defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
-      defaultViews.forEach((type: string) => {
-        if (this.enabledViewTypes.indexOf(type) !== -1) {
-          newViews.push({ type });
-        }
-      });
-    }
+      }
+    });
 
     this.updateViewsInRouterQueryParams(newViews);
+  }
+
+  /**
+   * Set active view in mobile mode.
+   */
+  private setActiveViewInMobileMode() {
+    if (this.mobileMode) {
+      if (this.collectionContentService.activeCollectionTextMobileModeView) {
+        this.activeMobileModeViewIndex = this.collectionContentService.activeCollectionTextMobileModeView;
+      } else {
+        const defaultViews = config.page?.text?.defaultViews ?? ['established'];
+        let activeMobileModeViewType = defaultViews[0];
+
+        if (
+          this.multilingualReadingTextLanguages.length > 1 &&
+          activeMobileModeViewType.includes('established_')
+        ) {
+          // Set the default selected mobile mode view to the active locale's read text if multilingual read texts
+          activeMobileModeViewType = 'established_' + this.activeLocale;
+        }
+
+        this.activeMobileModeViewIndex = this.views.findIndex((view) => view.type === activeMobileModeViewType);
+        if (this.activeMobileModeViewIndex < 0) {
+          this.activeMobileModeViewIndex = 0;
+        }
+      }
+    }
   }
 
   private getEventTarget(event: any) {
@@ -1358,18 +1349,24 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   showAllViewTypes() {
-    this.enabledViewTypes.forEach((type: any) => {
-      const viewTypesShown = this.getViewTypesShown();
+    const newViewTypes: string[] = [];
+    const viewTypesShown = this.getViewTypesShown();
+
+    this.enabledViewTypes.forEach((type: string) => {
       if (
         type !== 'showAll' &&
         viewTypesShown.indexOf(type) < 0
       ) {
-        this.addView(type);
+        newViewTypes.push(type);
       }
     });
+
+    for (let i = 0; i < newViewTypes.length; i++) {
+      this.addView(newViewTypes[i], undefined, undefined, i > newViewTypes.length - 2);
+    }
   }
 
-  addView(type: string, id?: number | null, image?: any) {
+  addView(type: string, id?: number | null, image?: any, scroll?: boolean) {
     if (type === 'showAll') {
       this.showAllViewTypes();
       return;
@@ -1388,12 +1385,23 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
       this.updateViewsInRouterQueryParams(this.views);
+
+      // In mobile mode, set the added view as active
+      if (this.mobileMode) {
+        this.activeMobileModeViewIndex = this.views.length - 1;
+      }
+
+      // Conditionally scroll the added view into view
+      (scroll === true) && !this.mobileMode && this.scrollService.scrollLastViewIntoView();
     }
   }
 
   removeView(i: any) {
     this.views.splice(i, 1);
     this.updateViewsInRouterQueryParams(this.views);
+    if (this.mobileMode) {
+      this.activeMobileModeViewIndex = i > 0 ? i - 1 : 0;
+    }
   }
 
   /**
@@ -1581,8 +1589,9 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.addViewPopoverisOpen = true;
   }
 
-  storeActiveMobileModeViewType() {
-    this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewType;
+  setActiveMobileModeViewType(e: any) {
+    this.activeMobileModeViewIndex = e.detail.value;
+    this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewIndex;
   }
 
 }

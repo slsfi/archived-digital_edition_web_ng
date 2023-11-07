@@ -159,34 +159,61 @@ ion-fab.column-options {
   visibility: visible;
 }
 
-ion-segment {
-  --background: var(--outline-button-color);
-  border-radius: 0;
-  justify-content: center;
-  margin: 0 auto;
+.text-select-wrapper {
+  align-items: center;
+  background-color: var(--text-area-background-color, #fafafa);
+  display: flex;
   max-width: 710px;
-  width: calc(100% - 2px);
-  z-index: 100;
-}
-ion-segment-button {
-  --border-radius: 0;
-  font-size: 0.875rem;
-}
-ion-segment-button:not(.segment-button-checked) {
-  color: #fff;
+  padding: 0.75rem 0.5rem 0.5rem 0.5rem;
+  width: 100%;
+
+  ion-select {
+    --border-color: var(--main-background-accent-color);
+    --highlight-color-focused: var(--outline-button-color);
+    --highlight-color-valid: var(--outline-button-color);
+    max-width: calc(100% - 104px);
+    min-height: 3.125rem;
+  
+    &:hover {
+      --border-color: var(--outline-button-color);
+    }
+  }
+
+  ion-fab {
+    position: relative;
+
+    ion-fab-button ion-icon {
+      --ionicon-stroke-width: 48px;
+    }
+
+    &:first-of-type ion-fab-button {
+      margin-left: 12px;
+      margin-right: 4px;
+    }
+
+    &:last-of-type ion-fab-button {
+      margin-right: 0;
+    }
+  }
 }
 
 // Adjust padding and background color of text and facsimile columns in mobile mode
 div.mobile-mode-established,
+div.mobile-mode-comments,
+div.mobile-mode-manuscripts,
+div.mobile-mode-variants,
+div.mobile-mode-illustrations,
+div.mobile-mode-legend,
+div.mobile-mode-metadata,
 div.mobile-mode-manuscripts {
   background-color: var(--text-area-background-color, #fafafa);
   display: block;
-  height: calc(100% - 32px); // full height minus ion-segment height
+  height: calc(100% - 72px); // full height minus .text-select-wrapper height
   padding: 12px;
   width: 100%;
 }
 
 div.mobile-mode-facsimiles {
-  height: calc(100% - 32px); // full height minus ion-segment height
+  height: calc(100% - 72px); // full height minus .text-select-wrapper height
   width: 100%;
 }
