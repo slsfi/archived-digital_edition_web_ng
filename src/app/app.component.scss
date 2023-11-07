@@ -82,7 +82,7 @@ header {
     z-index: 0;
 
     .backdrop-dismiss {
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0, 0, 0, var(--ion-backdrop-opacity));
       bottom: 0;
       left: 0;
       position: absolute;
