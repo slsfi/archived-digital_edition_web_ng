@@ -22,6 +22,7 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
   currentUrlSegments: UrlSegment[] = [];
   enableRouterLoadingBar: boolean = false;
   loadingBarHidden: boolean = false;
+  mobileMode: boolean = true;
   mountMainSideMenu: boolean = false;
   previousRouterUrl: string = '';
   routerEventsSubscription: Subscription;
@@ -34,11 +35,13 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
     private router: Router
   ) {
     this.enableRouterLoadingBar = config.app?.enableRouterLoadingBar ?? false;
-    // Side menu is shown by default in desktop mode but not in mobile mode.
-    this.showSideNav = this.platformService.isDesktop() ? true : false;
   }
 
   ngOnInit(): void {
+    this.mobileMode = this.platformService.isMobile() ? true : false;
+    // Side menu is shown by default in desktop mode but not in mobile mode.
+    this.showSideNav = !this.mobileMode;
+
     this.routerEventsSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {

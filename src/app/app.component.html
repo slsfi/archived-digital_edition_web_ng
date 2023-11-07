@@ -21,6 +21,7 @@
     </nav>
     <div class="main-content">
       <ion-router-outlet [animated]="false" (activate)="hideLoadingBar(true)" (deactivate)="hideLoadingBar(false)"></ion-router-outlet>
+      <div *ngIf="mobileMode && showSideNav" class="backdrop-dismiss" (click)="toggleSideNav()"></div>
     </div>
   </div>
 

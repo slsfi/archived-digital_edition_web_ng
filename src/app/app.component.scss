@@ -80,5 +80,21 @@ header {
     right: 0;
     top: 0;
     z-index: 0;
+
+    .backdrop-dismiss {
+      background-color: rgba(0, 0, 0, var(--ion-backdrop-opacity));
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 10;
+    }
+
+    @media only screen and (min-width: 1000px) {
+      .backdrop-dismiss {
+        display: none;
+      }
+    }
   }
 }
