@@ -422,8 +422,8 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Source">
@@ -434,8 +434,8 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</target>
       </segment>
     </unit>
     <unit id="Ebook.InvalidFilename">

@@ -422,7 +422,7 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
         <target>Tekstin tulostusversiota ei pystytty avaamaan uuteen ikkunaan. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.</target>
       </segment>
     </unit>
@@ -434,7 +434,7 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
         <target>Lataus epäonnistui. Yritä uudelleen ja salli popup-ikkunat verkkosivustolta.</target>
       </segment>
     </unit>

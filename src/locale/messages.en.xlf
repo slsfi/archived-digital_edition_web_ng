@@ -422,8 +422,8 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>The print version of the text could not be opened in a new window. Please try again and allow popup-windows from the web page.</target>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>The print version of the text could not be opened in a new window. Please try again and allow popup-windows for the web page.</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Source">
@@ -434,8 +434,8 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>Failed to download text. Please try again and allow popup-windows from the web page.</target>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>Failed to download text. Please try again and allow popup-windows for the web page.</target>
       </segment>
     </unit>
     <unit id="Ebook.InvalidFilename">

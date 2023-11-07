@@ -353,7 +353,7 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment>
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.Source">
@@ -363,7 +363,7 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment>
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
       </segment>
     </unit>
     <unit id="Ebook.InvalidFilename">
