@@ -280,6 +280,7 @@
   <comments *ngIf="view.type === 'comments'"
         [textItemID]="textItemID"
         [searchMatches]="searchMatches"
+        (setMobileModeActiveText)="setActiveMobileModeViewType(undefined, $event)"
   ></comments>
 
   <facsimiles *ngIf="view.type === 'facsimiles'"

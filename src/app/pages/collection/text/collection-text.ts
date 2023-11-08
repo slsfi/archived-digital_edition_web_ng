@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
@@ -80,6 +80,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   private unlistenMouseoutEvents?: () => void;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private elementRef: ElementRef,
@@ -1515,6 +1516,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         this.activeMobileModeViewIndex = index > -1 ? index : 0;
       }
       this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewIndex;
+      this.cdRef.detectChanges();
     }
   }
 

@@ -153,7 +153,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
             target.parentElement.insertBefore(tmpImage, target);
             
             if (this.platformService.isMobile()) {
-              // In mobile mode the reading text view needs to be made
+              // In mobile mode the reading text view needs time to be made
               // visible before scrolling can start.
               setTimeout(() => {
                 this.scrollService.scrollElementIntoView(tmpImage);
@@ -170,7 +170,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
               // visible before scrolling can start.
               setTimeout(() => {
                 this.scrollService.scrollElementIntoView(target, 'top');
-              }, 700);
+              }, 500);
             } else {
               this.scrollService.scrollElementIntoView(target, 'top', 75);
             }

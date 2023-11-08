@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -6,6 +6,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { IllustrationModal } from '@modals/illustration/illustration.modal';
 import { CommentService } from '@services/comment.service';
 import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
 import { ViewOptionsService } from '@services/view-options.service';
 import { concatenateNames, isBrowser } from '@utility-functions';
@@ -21,6 +22,7 @@ import { concatenateNames, isBrowser } from '@utility-functions';
 export class CommentsComponent implements OnInit, OnDestroy {
   @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
+  @Output() setMobileModeActiveText: EventEmitter<string> = new EventEmitter();
 
   intervalTimerId: number = 0;
   letter: any = undefined;
@@ -37,6 +39,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private modalController: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private renderer2: Renderer2,
     private sanitizer: DomSanitizer,
     private scrollService: ScrollService,
@@ -141,12 +144,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
               while (
                 targetElem !== null &&
                 !targetElem.classList.contains('commentScrollTarget') &&
-                targetElem.tagName !== 'COMMENT'
+                targetElem.tagName !== 'COMMENTS'
               ) {
                 targetElem = targetElem.parentElement;
               }
             }
-            if (targetElem !== null && targetElem !== undefined) {
+            if (targetElem) {
               // Find the lemma in the reading text. Remove all non-digits at the start of the comment's id.
               const numId = targetElem.classList[targetElem.classList.length - 1].replace( /^\D+/g, '');
               const targetId = 'start' + numId;
@@ -155,14 +158,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
               ) as HTMLElement;
               lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
               if (
-                (
-                  lemmaStart.parentElement !== null &&
-                  lemmaStart.parentElement.classList.contains('ttFixed')
-                ) ||
-                (
-                  lemmaStart.parentElement?.parentElement !== null &&
-                  lemmaStart.parentElement?.parentElement.classList.contains('ttFixed')
-                )
+                lemmaStart?.parentElement?.classList.contains('ttFixed') ||
+                lemmaStart?.parentElement?.parentElement?.classList.contains('ttFixed')
               ) {
                 // The lemma is in a footnote, so we should get the second element with targetId
                 lemmaStart = document.querySelector(
@@ -172,11 +169,20 @@ export class CommentsComponent implements OnInit, OnDestroy {
                   '[data-id="' + targetId + '"]'
                 )[1] as HTMLElement;
               }
-              if (lemmaStart !== null && lemmaStart !== undefined) {
+              if (lemmaStart) {
+                this.setMobileModeActiveText.emit('established');
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
-                this.scrollService.scrollToCommentLemma(lemmaStart);
-                // Scroll to comment in the comments-column.
-                this.scrollService.scrollToComment(numId, targetElem);
+                if (this.platformService.isMobile()) {
+                  // In mobile mode the reading text view needs time to be made
+                  // visible before scrolling can start.
+                  setTimeout(() => {
+                    this.scrollService.scrollToCommentLemma(lemmaStart);
+                  }, 500);
+                } else {
+                  this.scrollService.scrollToCommentLemma(lemmaStart);
+                  // Scroll to comment in the comments-column.
+                  this.scrollService.scrollToComment(numId, targetElem);
+                }
               }
             }
           }
