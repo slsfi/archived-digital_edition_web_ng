@@ -245,7 +245,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       );
     } else if (textType === 'est') {
       this.loadingEst = true;
-      dlText$ = this.collectionContentService.getDownloadableReadText(
+      dlText$ = this.collectionContentService.getDownloadableReadingText(
         this.textItemID, format, language
       );
     } else if (textType === 'com') {
@@ -331,7 +331,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       text$ = this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale);
     } else if (textType === 'est') {
       this.loadingEst = true;
-      text$ = this.collectionContentService.getReadText(this.textItemID, language);
+      text$ = this.collectionContentService.getReadingText(this.textItemID, language);
     } else if (textType === 'com') {
       this.loadingCom = true;
       text$ = forkJoin([

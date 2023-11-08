@@ -67,7 +67,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             changes.textPosition.previousValue &&
             changes.textPosition.currentValue === undefined
           ) {
-            this.scrollReadTextToTop();
+            this.scrollReadingTextToTop();
           }
         }
       }
@@ -78,7 +78,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     this.mobileMode = this.platformService.isMobile();
 
     if (this.textItemID) {
-      this.loadReadText();
+      this.loadReadingText();
     }
     if (isBrowser()) {
       this.setUpTextListeners();
@@ -89,8 +89,8 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     this.unlistenClickEvents?.();
   }
 
-  loadReadText() {
-    this.collectionContentService.getReadText(this.textItemID, this.language).subscribe({
+  private loadReadingText() {
+    this.collectionContentService.getReadingText(this.textItemID, this.language).subscribe({
       next: (res) => {
         if (
           res?.content &&
@@ -100,7 +100,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
           text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
-          this.illustrationsVisibleInReadtext = this.parserService.readTextHasVisibleIllustrations(text);
+          this.illustrationsVisibleInReadtext = this.parserService.readingTextHasVisibleIllustrations(text);
 
           if (this.textPosition) {
             this.scrollToTextPosition();
@@ -141,52 +141,50 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             event.preventDefault();
           }
 
-          if (!this.platformService.isMobile()) {
-            let image = null as any;
+          let image = null as any;
 
-            // Check if click on an illustration or icon representing an illustration
-            if (eventTarget.classList.contains('doodle') && eventTarget.hasAttribute('src')) {
-              // Click on a pictogram ("doodle")
-              image = {
-                src: 'assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
-                class: 'doodle'
-              };
-            } else if (this.illustrationsVisibleInReadtext) {
-              // There are possibly visible illustrations in the read text. Check if click on such an image.
-              if (
-                eventTarget.classList.contains('est_figure_graphic') &&
-                eventTarget.hasAttribute('src')
-              ) {
-                image = { src: event.target.src, class: 'visible-illustration' };
-              }
-            } else {
-              // Check if click on an icon representing an image which is NOT visible in the reading text
-              if (
-                eventTarget.previousElementSibling !== null &&
-                eventTarget.previousElementSibling.classList.contains('est_figure_graphic') &&
-                eventTarget.previousElementSibling.hasAttribute('src')
-              ) {
-                image = { src: event.target.previousElementSibling.src, class: 'illustration' };
-              }
+          // Check if click on an illustration or icon representing an illustration
+          if (eventTarget.classList.contains('doodle') && eventTarget.hasAttribute('src')) {
+            // Click on a pictogram ("doodle")
+            image = {
+              src: 'assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
+              class: 'doodle'
+            };
+          } else if (this.illustrationsVisibleInReadtext) {
+            // There are possibly visible illustrations in the read text. Check if click on such an image.
+            if (
+              eventTarget.classList.contains('est_figure_graphic') &&
+              eventTarget.hasAttribute('src')
+            ) {
+              image = { src: event.target.src, class: 'visible-illustration' };
             }
+          } else {
+            // Check if click on an icon representing an image which is NOT visible in the reading text
+            if (
+              eventTarget.previousElementSibling !== null &&
+              eventTarget.previousElementSibling.classList.contains('est_figure_graphic') &&
+              eventTarget.previousElementSibling.hasAttribute('src')
+            ) {
+              image = { src: event.target.previousElementSibling.src, class: 'illustration' };
+            }
+          }
 
-            // Check if we have an image to show in the illustrations-view
-            if (image !== null) {
-              // Check if we have an illustrations-view open, if not, open and display the clicked image there
-              if (
-                document.querySelector(
-                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations'
-                ) === null
-              ) {
-                this.ngZone.run(() => {
-                  this.openIllustrationInNewView(image);
-                });
-              } else {
-                // Display image in an illustrations-view which is already open
-                this.ngZone.run(() => {
-                  this.updateSelectedIllustrationImage(image);
-                });
-              }
+          // Check if we have an image to show in the illustrations-view
+          if (image !== null) {
+            // Check if we have an illustrations-view open, if not, open and display the clicked image there
+            if (
+              document.querySelector(
+                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations'
+              )
+            ) {
+              // Display image in an illustrations-view which is already open
+              this.ngZone.run(() => {
+                this.updateSelectedIllustrationImage(image);
+              });
+            } else {
+              this.ngZone.run(() => {
+                this.openIllustrationInNewView(image);
+              });
             }
           }
         } catch (e) {
@@ -209,18 +207,17 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   /**
    * Function for opening the passed image in a new illustrations-view.
    */
-  openIllustrationInNewView(image: any) {
+  private openIllustrationInNewView(image: any) {
     image.viewType = 'illustrations';
     this.openNewIllustrView.emit(image);
-    this.scrollService.scrollLastViewIntoView();
   }
 
-  updateSelectedIllustrationImage(image: any) {
+  private updateSelectedIllustrationImage(image: any) {
     image.viewType = 'illustrations';
     this.selectedIllustration.emit(image);
   }
 
-  async openIllustration(imageNumber: string) {
+  private async openIllustration(imageNumber: string) {
     const modal = await this.modalController.create({
       component: IllustrationModal,
       componentProps: { 'imageNumber': imageNumber }
@@ -228,7 +225,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     modal.present();
   }
 
-  scrollToTextPosition() {
+  private scrollToTextPosition() {
     // Scroll to textPosition if defined.
     if (isBrowser() && this.textPosition) {
       this.ngZone.runOutsideAngular(() => {
@@ -265,7 +262,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  scrollReadTextToTop() {
+  private scrollReadingTextToTop() {
     if (isBrowser()) {
       this.ngZone.runOutsideAngular(() => {
         const target = document.querySelector(

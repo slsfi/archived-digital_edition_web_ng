@@ -1,7 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-mode"></text-changer>
+    <!-- Text changer in desktop mode -->
+    <text-changer *ngIf="!mobileMode"
+          [textItemID]="textItemID"
+          [textPosition]="textPosition"
+          [parentPageType]="'page-text'"
+          class="text-changer-desktop-mode"
+    ></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
@@ -39,39 +45,8 @@
             [class.illustrations-view-shown]="illustrationsViewShown"
             [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
       >
-        <!-- Tooltip wrapper -->
-        <div
-              class="toolTip tei teiContainer"
-              [class.show_comments]="viewOptionsService.show.comments"
-              [class.show_personInfo]="viewOptionsService.show.personInfo"
-              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-              [class.show_workInfo]="viewOptionsService.show.workInfo"
-              [class.show_normalisations]="viewOptionsService.show.normalisations"
-              [class.show_changes]="viewOptionsService.show.changes"
-              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-              [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-              [innerHTML]="toolTipText"
-              [MathJax]="toolTipText"
-        ></div>
-
-        <!-- Info overlay wrapper -->
-        <div
-              class="infoOverlay tei teiContainer"
-              [class.show_comments]="viewOptionsService.show.comments"
-              [class.show_personInfo]="viewOptionsService.show.personInfo"
-              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-              [class.show_workInfo]="viewOptionsService.show.workInfo"
-              [class.show_normalisations]="viewOptionsService.show.normalisations"
-              [class.show_changes]="viewOptionsService.show.changes"
-              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-              [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
-        >
-          <div class="infoOverlayHeader">
-            <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-            <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
-          </div>
-          <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
-        </div>
+        <!-- Tooltip and info overlay -->
+        <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
         
         <!-- Wrapper for each column -->
         <div *ngFor="let view of views; index as i"
@@ -82,18 +57,47 @@
 
           <!-- Ion fab column options -->
           <ion-fab *ngIf="views.length > 1" class="column-options">
-            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@CollectionText.ColumnOptions.ToggleMenu" #fabColumnOptionsButton>
-              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"></ion-icon>
+            <ion-fab-button #fabColumnOptionsButton
+                  class="toggle-fab-list-button"
+                  size="small"
+                  title="Öppna/stäng alternativ för kolumnen"
+                  i18n-title="@@CollectionText.ColumnOptions.ToggleMenu"
+            >
+              <ion-icon name="ellipsis-vertical"
+                    aria-label="Öppna/stäng alternativ för kolumnen"
+                    i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"
+              ></ion-icon>
             </ion-fab-button>
             <ion-fab-list *ngIf="views.length > 1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@CollectionText.ColumnOptions.Remove">
-                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.Remove"></ion-icon>
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1"
+                    (click)="removeView(i)"
+                    title="Ta bort kolumnen"
+                    i18n-title="@@CollectionText.ColumnOptions.Remove"
+              >
+                <ion-icon name="trash-bin-sharp"
+                      aria-label="Ta bort kolumnen"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.Remove"
+                ></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@CollectionText.ColumnOptions.MoveRight">
-                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"></ion-icon>
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i"
+                    (click)="moveViewRight(i)"
+                    title="Byt plats med kolumnen till höger"
+                    i18n-title="@@CollectionText.ColumnOptions.MoveRight"
+              >
+                <ion-icon name="return-down-forward-sharp"
+                      aria-label="Byt plats med kolumnen till höger"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"
+                ></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@CollectionText.ColumnOptions.MoveLeft">
-                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"></ion-icon>
+              <ion-fab-button *ngIf="views.length > i && i > 0"
+                    (click)="moveViewLeft(i)"
+                    title="Byt plats med kolumnen till vänster"
+                    i18n-title="@@CollectionText.ColumnOptions.MoveLeft"
+              >
+                <ion-icon name="return-down-back-sharp"
+                      aria-label="Byt plats med kolumnen till vänster"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"
+                ></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
@@ -102,7 +106,6 @@
           <ion-card>
             <ion-card-header class="column-card-title">
               <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
-
               <span *ngIf="(
                       view.type === 'variants' ||
                       view.type === 'manuscripts' ||
@@ -123,7 +126,11 @@
         <!-- Add view -->
         <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
           <ion-fab id="add-view-fab" #fabmenuadd>
-            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" (click)="showAddViewPopover($event)">
+            <ion-fab-button id="add-view-fab-button"
+                  class="toggle-fab-list-button"
+                  size="small"
+                  (click)="showAddViewPopover($event)"
+            >
               <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -148,49 +155,20 @@
         [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
         [class.largeFontSize]="textsize == TextsizeEnum.Large"
         [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
+        [class.illustrations-view-shown]="illustrationsViewShown"
         [scrollX]="false"
         [scrollY]="false"
   >
-    <!-- Tooltip wrapper in mobile mode -->
-    <div
-          class="toolTip tei teiContainer"
-          [class.show_comments]="viewOptionsService.show.comments"
-          [class.show_personInfo]="viewOptionsService.show.personInfo"
-          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-          [class.show_workInfo]="viewOptionsService.show.workInfo"
-          [class.show_normalisations]="viewOptionsService.show.normalisations"
-          [class.show_changes]="viewOptionsService.show.changes"
-          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-          [innerHTML]="toolTipText"
-          [MathJax]="toolTipText"
-    ></div>
+    <!-- Tooltip and info overlay -->
+    <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
 
-    <!-- Info overlay wrapper in mobile mode -->
-    <div
-          class="infoOverlay tei teiContainer"
-          [class.show_comments]="viewOptionsService.show.comments"
-          [class.show_personInfo]="viewOptionsService.show.personInfo"
-          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-          [class.show_workInfo]="viewOptionsService.show.workInfo"
-          [class.show_normalisations]="viewOptionsService.show.normalisations"
-          [class.show_changes]="viewOptionsService.show.changes"
-          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
-    >
-      <div class="infoOverlayHeader">
-        <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-        <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
-      </div>
-      <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
-    </div>
-
+    <!-- Components for selecting active text type in mobile mode -->
     <div class="text-select-wrapper">
       <ion-select
-            aria-label="Visa"
+            aria-label="Texttyp"
             interface="popover"
-            label="Visa"
-            placeholder="Visa"
+            label="Texttyp"
+            placeholder="Texttyp"
             label-placement="floating"
             fill="outline"
             (ionChange)="setActiveMobileModeViewType($event)"
@@ -230,9 +208,12 @@
 
     <!-- Columns in mobile mode -->
     <div *ngFor="let view of views; index as i"
-          class="scroll-content-container"
+          class="scroll-content-container column_type_{{view.type}}"
           [class.visuallyhidden]="activeMobileModeViewIndex !== i"
-          [class.mobile-mode-established]="view.type === 'established' || view.type === 'established_sv' || view.type === 'established_fi'"
+          [class.mobile-mode-established]="
+                view.type === 'established' ||
+                view.type === 'established_sv' ||
+                view.type === 'established_fi'"
           [class.mobile-mode-comments]="view.type === 'comments'"
           [class.mobile-mode-facsimiles]="view.type === 'facsimiles'"
           [class.mobile-mode-manuscripts]="view.type === 'manuscripts'"
@@ -246,11 +227,19 @@
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-mode"></text-changer>
+<!-- Text changer in mobile mode -->
+<text-changer *ngIf="mobileMode"
+      [textItemID]="textItemID"
+      [textPosition]="textPosition"
+      [parentPageType]="'page-text'"
+      class="text-changer-mobile-mode"
+></text-changer>
+
+
 
 <!-- TEMPLATES -->
 
-<!-- Column headings -->
+<!-- Column headings template -->
 <ng-template #columnHeadingTemplate let-view>
   <ng-container *ngIf="view.type === 'established'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
   <ng-container *ngIf="view.type === 'established_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
@@ -264,7 +253,8 @@
   <ng-container *ngIf="view.type === 'metadata'" i18n="@@Metadata.Metadata">Metadata</ng-container>
 </ng-template>
 
-<!-- Column types -->
+
+<!-- Column types template -->
 <ng-template #columnTypesTemplate let-view="view" let-i="i">
   <read-text *ngIf="view.type === 'established' && multilingualReadingTextLanguages.length < 2"
         [textItemID]="textItemID"
@@ -327,6 +317,7 @@
         [singleImage]="view.image"
         [textItemID]="textItemID"
         (showAllImages)="updateIllustrationViewImage($event)"
+        (setMobileModeActiveText)="setActiveMobileModeViewType(undefined, $event)"
   ></illustrations>
 
   <text-legend *ngIf="view.type === 'legend'"
@@ -339,7 +330,8 @@
   ></text-metadata>
 </ng-template>
 
-<!-- Add view popover -->
+
+<!-- Add view popover template -->
 <ng-template #addViewPopoverTemplate let-enabledViewTypes>
   <ion-popover #addViewPopover
         class="page-text-add-view-popover"
@@ -453,4 +445,39 @@
       </ion-content>
     </ng-template>
   </ion-popover>
+</ng-template>
+
+
+<!-- Tooltip and info overlay template -->
+<ng-template #tooltipInfoOverlayTemplate>
+  <div
+        class="toolTip tei teiContainer"
+        [class.show_comments]="viewOptionsService.show.comments"
+        [class.show_personInfo]="viewOptionsService.show.personInfo"
+        [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+        [class.show_workInfo]="viewOptionsService.show.workInfo"
+        [class.show_normalisations]="viewOptionsService.show.normalisations"
+        [class.show_changes]="viewOptionsService.show.changes"
+        [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+        [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+        [innerHTML]="toolTipText"
+        [MathJax]="toolTipText"
+  ></div>
+  <div
+        class="infoOverlay tei teiContainer"
+        [class.show_comments]="viewOptionsService.show.comments"
+        [class.show_personInfo]="viewOptionsService.show.personInfo"
+        [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+        [class.show_workInfo]="viewOptionsService.show.workInfo"
+        [class.show_normalisations]="viewOptionsService.show.normalisations"
+        [class.show_changes]="viewOptionsService.show.changes"
+        [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+        [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+  >
+    <div class="infoOverlayHeader">
+      <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
+      <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
+    </div>
+    <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
+  </div>
 </ng-template>

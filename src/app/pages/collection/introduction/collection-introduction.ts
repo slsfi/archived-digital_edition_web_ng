@@ -300,7 +300,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
   private setCollectionLegacyId(id: string) {
     this.collectionsService.getLegacyIdByCollectionId(id).subscribe({
-      next: (collection: any) => {
+      next: (collection: any[]) => {
         this.collectionLegacyId = '';
         if (collection[0].legacy_id) {
           this.collectionLegacyId = collection[0].legacy_id;

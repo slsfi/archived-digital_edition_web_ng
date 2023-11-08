@@ -49,8 +49,8 @@ export class HtmlParserService {
         return text;
       }
 
-    getReadTextIllustrations(id: string): Observable<any> {
-        return this.collectionContentService.getReadText(id).pipe(
+    getReadingTextIllustrations(id: string): Observable<any> {
+        return this.collectionContentService.getReadingText(id).pipe(
             map((res) => {
                 const images: any[] = [];
                 if (
@@ -139,7 +139,7 @@ export class HtmlParserService {
         return text;
     }
 
-    readTextHasVisibleIllustrations(text: string): boolean {
+    readingTextHasVisibleIllustrations(text: string): boolean {
         const handler = new DomHandler();
         const parser = new Parser(handler);
         parser.write(text);

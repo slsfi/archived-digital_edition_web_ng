@@ -18,7 +18,7 @@ import { ScrollService } from '@services/scroll.service';
 import { TooltipService } from '@services/tooltip.service';
 import { UrlService } from '@services/url.service';
 import { ViewOptionsService } from '@services/view-options.service';
-import { isBrowser } from '@utility-functions';
+import { isBrowser, moveArrayItem } from '@utility-functions';
 
 
 @Component({
@@ -543,7 +543,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
           eventTarget.classList.add('highlight');
           this.ngZone.run(() => {
-            this.scrollToVariant(eventTarget);
+            this.hideToolTip();
+            this.scrollService.scrollToVariant(eventTarget, this.elementRef.nativeElement);
           });
           window.setTimeout(function(elem: any) {
             elem.classList.remove('highlight');
@@ -1015,11 +1016,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   private showCommentTooltip(id: string, targetElem: HTMLElement) {
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
-      next: (tooltip) => {
+      next: (tooltip: any) => {
         this.setToolTipPosition(targetElem, tooltip.description);
         this.setToolTipText(tooltip.description);
       },
-      error: (e) => {
+      error: (e: any) => {
         const noInfoFound = $localize`:@@NamedEntity.NoInfoFound:Ingen information hittades.`;
         this.setToolTipPosition(targetElem, noInfoFound);
         this.setToolTipText(noInfoFound);
@@ -1051,12 +1052,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   private showCommentInfoOverlay(id: string, targetElem: HTMLElement) {
     this.tooltipService.getCommentTooltip(this.textItemID, id).subscribe({
-      next: (tooltip) => {
+      next: (tooltip: any) => {
         this.setInfoOverlayTitle($localize`:@@Commentary.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText(tooltip.description);
       },
-      error: (errorC) => {
+      error: (errorC: any) => {
         this.setInfoOverlayTitle($localize`:@@Commentary.Commentary:Kommentar`);
         this.setInfoOverlayPositionAndWidth(targetElem);
         this.setInfoOverlayText($localize`:@@NamedEntity.NoInfoFound:Ingen information hittades.`);
@@ -1326,25 +1327,21 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   private viewTypeIsShown(type: string, views?: any[]): boolean {
     views = views ? views : this.views;
-    for (let i = 0; i < views.length; i++) {
-      if (views[i].type === type) {
-        return true;
-      }
-    }
-    return false;
+    const index = views.findIndex((view) => view.type === type);
+    return (index > -1) || false;
   }
 
   openNewView(event: any) {
     if (event.viewType === 'facsimiles') {
-      this.addView(event.viewType, event.id);
+      this.addView(event.viewType, event.id, undefined, true);
     } else if (event.viewType === 'manuscriptFacsimile') {
-      this.addView('facsimiles', event.id);
+      this.addView('facsimiles', event.id, undefined, true);
     } else if (event.viewType === 'facsimileManuscript') {
-      this.addView('manuscripts', event.id);
+      this.addView('manuscripts', event.id, undefined, true);
     } else if (event.viewType === 'illustrations') {
-      this.addView(event.viewType, event.id, event);
+      this.addView(event.viewType, event.id, event, true);
     } else {
-      this.addView(event.viewType, event.id);
+      this.addView(event.viewType, event.id, undefined, true);
     }
   }
 
@@ -1372,21 +1369,21 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       return;
     }
 
-    if (this.enabledViewTypes.indexOf(type) !== -1) {
-      const newView = { type: type } as any;
+    if (this.enabledViewTypes.indexOf(type) > -1) {
+      const newView: any = { type };
 
       if (id != null) {
-        newView['id'] = id;
+        newView.id = id;
       }
       if (image != null) {
-        newView['image'] = image;
+        newView.image = image;
       }
 
       // Append the new view to the array of current views and navigate
       this.views.push(newView);
       this.updateViewsInRouterQueryParams(this.views);
 
-      // In mobile mode, set the added view as active
+      // In mobile mode, set the added view as the active view
       if (this.mobileMode) {
         this.activeMobileModeViewIndex = this.views.length - 1;
       }
@@ -1396,9 +1393,15 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
+  /**
+   * Removes the view with index i in the this.views array.
+   * @param i index of the view to be removed from this.views.
+   */
   removeView(i: any) {
     this.views.splice(i, 1);
     this.updateViewsInRouterQueryParams(this.views);
+
+    // In mobile mode, change the active view
     if (this.mobileMode) {
       this.activeMobileModeViewIndex = i > 0 ? i - 1 : 0;
     }
@@ -1410,7 +1413,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
    */
   moveViewRight(id: number) {
     if (id > -1 && id < this.views.length - 1) {
-      this.views = this.moveArrayItem(this.views, id, id + 1);
+      this.views = moveArrayItem(this.views, id, id + 1);
       this.fabColumnOptions.forEach(fabList => {
         fabList.activated = false;
       });
@@ -1429,7 +1432,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
    */
   moveViewLeft(id: number) {
     if (id > 0 && id < this.views.length) {
-      this.views = this.moveArrayItem(this.views, id, id - 1);
+      this.views = moveArrayItem(this.views, id, id - 1);
       this.fabColumnOptions.forEach(fabList => {
         fabList.activated = false;
       });
@@ -1442,31 +1445,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     }
   }
 
-  /**
-   * Reorders the given array by moving the item at position 'fromIndex'
-   * to the position 'toIndex'. Returns the reordered array.
-   */
-  private moveArrayItem(array: any[], fromIndex: number, toIndex: number) {
-    const reorderedArray = array;
-    if (
-      fromIndex > -1 &&
-      toIndex > -1 &&
-      fromIndex < array.length &&
-      toIndex < array.length &&
-      fromIndex !== toIndex
-    ) {
-      reorderedArray.splice(toIndex, 0, reorderedArray.splice(fromIndex, 1)[0]);
-    }
-    return reorderedArray;
-  }
-
   updateIllustrationViewImage(image: any) {
-    for (let i = 0; i < this.views.length; i++) {
-      if (this.views[i].type === 'illustrations') {
-        this.updateViewProperty('image', image, i);
-        break;
-      }
-    }
+    const index = this.views.findIndex((view) => view.type === 'illustrations');
+    this.updateViewProperty('image', image, index);
+    this.setActiveMobileModeViewType(undefined, 'illustrations', index);
   }
 
   updateViewProperty(propertyName: string, value: any, viewIndex: number, updateQueryParams: boolean = true) {
@@ -1504,80 +1486,15 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     );
   }
 
-  private scrollToVariant(element: HTMLElement) {
-    this.hideToolTip();
-    try {
-      if (element['classList'].contains('variantScrollTarget')) {
-        const variantContElems: NodeListOf<HTMLElement> = this.elementRef.nativeElement.querySelectorAll(
-          'variants'
-        );
-        for (let v = 0; v < variantContElems.length; v++) {
-          const elems: NodeListOf<HTMLElement> = variantContElems[v].querySelectorAll(
-            '.teiVariant'
-          );
-          let variantNotScrolled = true;
-          for (let i = 0; i < elems.length; i++) {
-            if (elems[i].id === element.id) {
-              if (!elems[i].classList.contains('highlight')) {
-                elems[i].classList.add('highlight');
-              }
-              if (variantNotScrolled) {
-                variantNotScrolled = false;
-                this.scrollService.scrollElementIntoView(elems[i]);
-              }
-              setTimeout(function () {
-                elems[i]?.classList.remove('highlight');
-              }, 5000);
-            }
-          }
-        }
-      } else if (element['classList'].contains('anchorScrollTarget')) {
-        const elems: NodeListOf<HTMLElement> = this.elementRef.nativeElement.querySelectorAll(
-          '.teiVariant.anchorScrollTarget'
-        );
-        const elementClassList = element.className.split(' ');
-        let targetClassName = '';
-        let targetCompClassName = '';
-        for (let x = 0; x < elementClassList.length; x++) {
-          if (elementClassList[x].startsWith('struct')) {
-            targetClassName = elementClassList[x];
-            break;
-          }
-        }
-        if (targetClassName.endsWith('a')) {
-          targetCompClassName = targetClassName.substring(0, targetClassName.length - 1) + 'b';
-        } else {
-          targetCompClassName = targetClassName.substring(0, targetClassName.length - 1) + 'a';
-        }
-        let iClassList = [];
-        for (let i = 0; i < elems.length; i++) {
-          iClassList = elems[i].className.split(' ');
-          for (let y = 0; y < iClassList.length; y++) {
-            if (iClassList[y] === targetClassName || iClassList[y] === targetCompClassName) {
-              elems[i].classList.add('highlight');
-              setTimeout(function () {
-                elems[i]?.classList.remove('highlight');
-              }, 5000);
-              if (iClassList[y] === targetClassName) {
-                this.scrollService.scrollElementIntoView(elems[i]);
-              }
-            }
-          }
-        }
-      }
-    } catch (e) {
-    }
-  }
-
   private setCollectionAndPublicationLegacyId(publicationID: string) {
     this.collectionsService.getLegacyIdByPublicationId(publicationID).subscribe({
-      next: (publication) => {
+      next: (publication: any[]) => {
         this.collectionAndPublicationLegacyId = '';
         if (publication[0].legacy_id) {
           this.collectionAndPublicationLegacyId = publication[0].legacy_id;
         }
       },
-      error: (e) => {
+      error: (e: any) => {
         this.collectionAndPublicationLegacyId = '';
         console.error('Error: could not get publication data trying to resolve collection and publication legacy id', e);
       }
@@ -1589,9 +1506,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.addViewPopoverisOpen = true;
   }
 
-  setActiveMobileModeViewType(e: any) {
-    this.activeMobileModeViewIndex = e.detail.value;
-    this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewIndex;
+  setActiveMobileModeViewType(event?: any, type?: string, viewIndex?: number) {
+    if (this.mobileMode) {
+      if (event) {
+        this.activeMobileModeViewIndex = event.detail.value;
+      } else {
+        const index = viewIndex ? viewIndex : this.views.findIndex((view) => view.type === type);
+        this.activeMobileModeViewIndex = index > -1 ? index : 0;
+      }
+      this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewIndex;
+    }
   }
 
 }

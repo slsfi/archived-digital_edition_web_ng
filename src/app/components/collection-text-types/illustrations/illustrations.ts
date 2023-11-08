@@ -4,6 +4,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 
 import { FullscreenImageViewerModal } from '@modals/fullscreen-image-viewer/fullscreen-image-viewer.modal';
 import { HtmlParserService } from '@services/html-parser.service';
+import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
 
 
@@ -18,6 +19,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   @Input() singleImage: Record<string, any> | undefined = undefined;
   @Input() textItemID: string = '';
   @Output() showAllImages: EventEmitter<any> = new EventEmitter();
+  @Output() setMobileModeActiveText: EventEmitter<string> = new EventEmitter();
   
   imageCountTotal: number = 0;
   images: Array<any> = [];
@@ -29,6 +31,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   constructor(
     private modalCtrl: ModalController,
     private parserService: HtmlParserService,
+    private platformService: PlatformService,
     private scrollService: ScrollService
   ) {}
 
@@ -57,7 +60,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   }
 
   private getIllustrationImages() {
-    this.parserService.getReadTextIllustrations(this.textItemID).subscribe(
+    this.parserService.getReadingTextIllustrations(this.textItemID).subscribe(
       (images: any[]) => {
         this.images = images;
         this.imageCountTotal = this.images.length;
@@ -109,7 +112,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
     let imageFilename = '';
     if (imageSrc) {
       imageFilename = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
-      let target = null as HTMLElement | null;
+      let target: HTMLElement | null = null;
       const readtextElem = document.querySelector(
         'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
       );
@@ -140,6 +143,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
         }
 
         if (target?.parentElement) {
+          this.setMobileModeActiveText.emit('established');
           if (image.class !== 'visible-illustration') {
             // Prepend arrow to the image/icon in the reading text and scroll into view
             const tmpImage: HTMLImageElement = new Image();
@@ -147,12 +151,29 @@ export class IllustrationsComponent implements OnChanges, OnInit {
             tmpImage.alt = 'ms arrow right image';
             tmpImage.classList.add('inl_ms_arrow');
             target.parentElement.insertBefore(tmpImage, target);
-            this.scrollService.scrollElementIntoView(tmpImage);
-            setTimeout(function() {
+            
+            if (this.platformService.isMobile()) {
+              // In mobile mode the reading text view needs to be made
+              // visible before scrolling can start.
+              setTimeout(() => {
+                this.scrollService.scrollElementIntoView(tmpImage);
+              }, 700);
+            } else {
+              this.scrollService.scrollElementIntoView(tmpImage);
+            }
+            setTimeout(() => {
               target?.parentElement?.removeChild(tmpImage);
             }, 5000);
           } else {
-            this.scrollService.scrollElementIntoView(target, 'top', 75);
+            if (this.platformService.isMobile()) {
+              // In mobile mode the reading text view needs to be made
+              // visible before scrolling can start.
+              setTimeout(() => {
+                this.scrollService.scrollElementIntoView(target, 'top');
+              }, 700);
+            } else {
+              this.scrollService.scrollElementIntoView(target, 'top', 75);
+            }
           }
         } else {
           console.log('Unable to find target when scrolling to image position in text, imageSrc:', imageSrc);
