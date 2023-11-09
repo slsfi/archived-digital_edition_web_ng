@@ -9,7 +9,7 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class CollectionContentService {
-  activeCollectionTextMobileModeView: number = 0;
+  activeCollectionTextMobileModeView: number | undefined = undefined;
   previousReadViewTextId: string = '';
   readViewTextId: string = '';
   recentCollectionTextViews: any[] = [];

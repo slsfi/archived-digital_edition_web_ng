@@ -24,6 +24,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   imageCountTotal: number = 0;
   images: Array<any> = [];
   imagesCache: Array<any> = [];
+  mobileMode: boolean = true;
   selectedImage: Array<string> = [];
   imgLoading: boolean = true;
   viewAll: boolean = true;
@@ -54,6 +55,8 @@ export class IllustrationsComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.getIllustrationImages();
     }
@@ -152,7 +155,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
             tmpImage.classList.add('inl_ms_arrow');
             target.parentElement.insertBefore(tmpImage, target);
             
-            if (this.platformService.isMobile()) {
+            if (this.mobileMode) {
               // In mobile mode the reading text view needs time to be made
               // visible before scrolling can start.
               setTimeout(() => {
@@ -165,12 +168,12 @@ export class IllustrationsComponent implements OnChanges, OnInit {
               target?.parentElement?.removeChild(tmpImage);
             }, 5000);
           } else {
-            if (this.platformService.isMobile()) {
+            if (this.mobileMode) {
               // In mobile mode the reading text view needs to be made
               // visible before scrolling can start.
               setTimeout(() => {
                 this.scrollService.scrollElementIntoView(target, 'top');
-              }, 500);
+              }, 700);
             } else {
               this.scrollService.scrollElementIntoView(target, 'top', 75);
             }

@@ -356,4 +356,34 @@ export class ScrollService {
     }
   }
 
+  /**
+   * Finds the first element with the given attribute in the given
+   * collection text type.
+   * @param attrName name of the attribute to find.
+   * @param attrValue value of the attribute to find.
+   * @param textTypeSelector lowercase tag name of the collection text type.
+   * @returns HTMLElement.
+   */
+  findElementInColumnByAttribute(
+    attrName: string,
+    attrValue: string,
+    textTypeSelector: string
+  ): HTMLElement {
+    let el: HTMLElement = document.querySelector(
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ' + textTypeSelector
+    ) as HTMLElement;
+    el = el?.querySelector('[' + attrName + '="' + attrValue + '"]') as HTMLElement;
+    if (
+      el?.parentElement?.classList.contains('ttFixed') ||
+      el?.parentElement?.parentElement?.classList.contains('ttFixed')
+    ) {
+      // The element is in a footnote, so we should get the second element with matching dataId
+      el = document.querySelector(
+        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ' + textTypeSelector
+      ) as HTMLElement;
+      el = el.querySelectorAll('[' + attrName + '="' + attrValue + '"]')[1] as HTMLElement;
+    }
+    return el;
+  }
+
 }

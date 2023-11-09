@@ -22,11 +22,13 @@ import { concatenateNames, isBrowser } from '@utility-functions';
 export class CommentsComponent implements OnInit, OnDestroy {
   @Input() searchMatches: string[] = [];
   @Input() textItemID: string = '';
+  @Output() openNewReadingTextView: EventEmitter<string> = new EventEmitter();
   @Output() setMobileModeActiveText: EventEmitter<string> = new EventEmitter();
 
   intervalTimerId: number = 0;
   letter: any = undefined;
   manuscript: any = undefined;
+  mobileMode: boolean = true;
   receiver: string = '';
   sender: string = '';
   text: SafeHtml | string = '';
@@ -47,6 +49,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.mobileMode = this.platformService.isMobile();
+
     if (this.textItemID) {
       this.loadCommentsText();
       this.getCorrespondanceMetadata();
@@ -150,48 +154,43 @@ export class CommentsComponent implements OnInit, OnDestroy {
               }
             }
             if (targetElem) {
-              // Find the lemma in the reading text. Remove all non-digits at the start of the comment's id.
-              const numId = targetElem.classList[targetElem.classList.length - 1].replace( /^\D+/g, '');
-              const targetId = 'start' + numId;
-              let lemmaStart = document.querySelector(
-                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
-              ) as HTMLElement;
-              lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
-              if (
-                lemmaStart?.parentElement?.classList.contains('ttFixed') ||
-                lemmaStart?.parentElement?.parentElement?.classList.contains('ttFixed')
-              ) {
-                // The lemma is in a footnote, so we should get the second element with targetId
-                lemmaStart = document.querySelector(
-                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
-                ) as HTMLElement;
-                lemmaStart = lemmaStart.querySelectorAll(
-                  '[data-id="' + targetId + '"]'
-                )[1] as HTMLElement;
-              }
+              // Find the lemma in the reading text.
+              // Remove all non-digits at the start of the comment's id.
+              const numId: string = targetElem.classList[targetElem.classList.length - 1]
+                    .replace( /^\D+/g, '');
+              const targetId: string = 'start' + numId;
+              const lemmaStart = this.scrollService.findElementInColumnByAttribute('data-id', targetId, 'read-text');
+
               if (lemmaStart) {
-                this.setMobileModeActiveText.emit('established');
+                // There is a reading text view open.
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
-                if (this.platformService.isMobile()) {
+                if (this.mobileMode) {
+                  this.setMobileModeActiveText.emit('established');
                   // In mobile mode the reading text view needs time to be made
                   // visible before scrolling can start.
                   setTimeout(() => {
                     this.scrollService.scrollToCommentLemma(lemmaStart);
-                  }, 500);
+                  }, 700);
                 } else {
                   this.scrollService.scrollToCommentLemma(lemmaStart);
                   // Scroll to comment in the comments-column.
                   this.scrollService.scrollToComment(numId, targetElem);
                 }
+              } else {
+                // A reading text view is not open -> open one so the lemma can be scrolled
+                // into view there.
+                this.ngZone.run(() => {
+                  this.openNewReadingTextView.emit(targetId);
+                });
+                // Scroll to comment in the comments-column.
+                this.scrollService.scrollToComment(numId, targetElem);
               }
             }
           }
 
           // Check if click on a link to an illustration that should be opened in a modal
           if (targetIsLink && targetElem?.classList.contains('ref_illustration')) {
-            const illRefElem = targetElem as HTMLAnchorElement;
-            const hashNumber = illRefElem.hash;
-            const imageNumber = hashNumber.split('#')[1];
+            const imageNumber = (targetElem as HTMLAnchorElement).hash.split('#')[1];
             this.ngZone.run(() => {
               this.openIllustration(imageNumber);
             });

@@ -163,14 +163,13 @@
     <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
 
     <!-- Components for selecting active text type in mobile mode -->
-    <div class="text-select-wrapper">
+    <div *ngIf="enabledViewTypes.length > 1" class="select-view-wrapper">
       <ion-select
-            aria-label="Texttyp"
-            interface="popover"
-            label="Texttyp"
-            placeholder="Texttyp"
-            label-placement="floating"
             fill="outline"
+            interface="popover"
+            label="Aktiv vy"
+            i18n-label="@@CollectionText.ActiveView"
+            label-placement="floating"
             (ionChange)="setActiveMobileModeViewType($event)"
             [value]="activeMobileModeViewIndex"
       >
@@ -187,13 +186,13 @@
         </ion-select-option>
       </ion-select>
 
-      <ion-fab *ngIf="views.length > 1">
-        <ion-fab-button size="small" (click)="removeView(activeMobileModeViewIndex)">
+      <ion-fab>
+        <ion-fab-button size="small" [disabled]="views.length < 2" (click)="removeView(activeMobileModeViewIndex)">
           <ion-icon name="trash-bin-sharp"></ion-icon>
         </ion-fab-button>
       </ion-fab>
 
-      <ion-fab *ngIf="enabledViewTypes.length > 1" id="add-view-fab" #fabmenuadd>
+      <ion-fab id="add-view-fab" #fabmenuadd>
         <ion-fab-button
               id="add-view-fab-button"
               class="toggle-fab-list-button"
@@ -208,7 +207,7 @@
 
     <!-- Columns in mobile mode -->
     <div *ngFor="let view of views; index as i"
-          class="scroll-content-container column_type_{{view.type}}"
+          class="scroll-content-container mobile-scc column_type_{{view.type}}"
           [class.visuallyhidden]="activeMobileModeViewIndex !== i"
           [class.mobile-mode-established]="
                 view.type === 'established' ||
@@ -280,6 +279,7 @@
   <comments *ngIf="view.type === 'comments'"
         [textItemID]="textItemID"
         [searchMatches]="searchMatches"
+        (openNewReadingTextView)="openNewReadingTextShowCommentLemma($event)"
         (setMobileModeActiveText)="setActiveMobileModeViewType(undefined, $event)"
   ></comments>
 

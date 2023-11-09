@@ -93,7 +93,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    public scrollService: ScrollService,
+    private scrollService: ScrollService,
     private tooltipService: TooltipService,
     private urlService: UrlService,
     public viewOptionsService: ViewOptionsService,
@@ -237,37 +237,49 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     if (this.views.length > 0) {
       // show current views
       this.updateViewsInRouterQueryParams(this.views);
+      this.setActiveViewInMobileMode(this.views);
     } else if (this.collectionContentService.recentCollectionTextViews.length > 0) {
       // show recent view types
       // if different collection than previously pass type of views only
-      let typesOnly = this.textItemID.split('_')[0] !== this.collectionContentService.previousReadViewTextId.split('_')[0] ? true : false;
-      this.updateViewsInRouterQueryParams(this.collectionContentService.recentCollectionTextViews, typesOnly);
+      const typesOnly = this.textItemID.split('_')[0] !== this.collectionContentService.previousReadViewTextId.split('_')[0] ? true : false;
+      this.updateViewsInRouterQueryParams(
+        this.collectionContentService.recentCollectionTextViews, typesOnly
+      );
+      this.setActiveViewInMobileMode(this.collectionContentService.recentCollectionTextViews);
     } else {
       // show default view types
-      this.setDefaultViewsFromConfig();
-    }
-    this.setActiveViewInMobileMode();
-  }
+      let newViews: any[] = [];
+      let defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
 
-  private setDefaultViewsFromConfig() {
-    let newViews: any[] = [];
-    const defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
-
-    defaultViews.forEach((type: string) => {
-      if (this.enabledViewTypes.indexOf(type) !== -1) {
-        newViews.push({ type });
+      if (
+        this.multilingualReadingTextLanguages.length > 1 &&
+        defaultViews[0].startsWith('established_') &&
+        defaultViews[0] !== 'established_' + this.activeLocale
+      ) {
+        // Set the active locale's reading text to first column if
+        // multilingual reading texts
+        defaultViews = moveArrayItem(
+          defaultViews, defaultViews.indexOf('established_' + this.activeLocale), 0
+        );
       }
-    });
 
-    this.updateViewsInRouterQueryParams(newViews);
+      defaultViews.forEach((type: string) => {
+        if (this.enabledViewTypes.indexOf(type) > -1) {
+          newViews.push({ type });
+        }
+      });
+
+      this.updateViewsInRouterQueryParams(newViews);
+      this.setActiveViewInMobileMode(newViews);
+    }
   }
 
   /**
    * Set active view in mobile mode.
    */
-  private setActiveViewInMobileMode() {
+  private setActiveViewInMobileMode(availableViews: any) {
     if (this.mobileMode) {
-      if (this.collectionContentService.activeCollectionTextMobileModeView) {
+      if (this.collectionContentService.activeCollectionTextMobileModeView !== undefined) {
         this.activeMobileModeViewIndex = this.collectionContentService.activeCollectionTextMobileModeView;
       } else {
         const defaultViews = config.page?.text?.defaultViews ?? ['established'];
@@ -275,13 +287,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
         if (
           this.multilingualReadingTextLanguages.length > 1 &&
-          activeMobileModeViewType.includes('established_')
+          activeMobileModeViewType.startsWith('established_')
         ) {
-          // Set the default selected mobile mode view to the active locale's read text if multilingual read texts
+          // Set the default selected mobile mode view to the active
+          // locale's reading text if multilingual reading texts
           activeMobileModeViewType = 'established_' + this.activeLocale;
         }
 
-        this.activeMobileModeViewIndex = this.views.findIndex((view) => view.type === activeMobileModeViewType);
+        this.activeMobileModeViewIndex = availableViews.findIndex(
+          (view: any) => view.type === activeMobileModeViewType
+        );
         if (this.activeMobileModeViewIndex < 0) {
           this.activeMobileModeViewIndex = 0;
         }
@@ -406,38 +421,27 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               eventTarget['classList'].contains('comment') &&
               this.viewOptionsService.show.comments
             ) {
-              /* The user has clicked a comment lemma ("asterisk") in the reading-text.
-                Check if comments view is shown. */
+              // The user has clicked a comment lemma ("asterisk") in the reading-text.
+              // Check if comments view is shown.
               const viewTypesShown = this.getViewTypesShown();
               const commentsViewIsShown = viewTypesShown.includes('comments');
-              if (commentsViewIsShown && this.platformService.isDesktop()) {
+              if (commentsViewIsShown && !this.mobileMode) {
                 // Scroll to comment in comments view and scroll lemma in reading-text view.
                 const numId = eventTarget.getAttribute('data-id').replace( /^\D+/g, '');
                 const targetId = 'start' + numId;
-                let lemmaStart = document.querySelector(
-                  'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
-                ) as HTMLElement;
-                lemmaStart = lemmaStart.querySelector('[data-id="' + targetId + '"]') as HTMLElement;
-                if (
-                  lemmaStart.parentElement !== null &&
-                  lemmaStart.parentElement.classList.contains('ttFixed')
-                ) {
-                  // The lemma is in a footnote, so we should get the second element with targetId.
-                  lemmaStart = document.querySelector(
-                    'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
-                  ) as HTMLElement;
-                  lemmaStart = lemmaStart.querySelectorAll(
-                    '[data-id="' + targetId + '"]'
-                  )[1] as HTMLElement;
-                }
-                if (lemmaStart !== null && lemmaStart !== undefined) {
+                const lemmaStart = this.scrollService.findElementInColumnByAttribute(
+                  'data-id', targetId, 'read-text'
+                );
+
+                if (lemmaStart) {
                   // Scroll to start of lemma in reading text and temporarily prepend arrow.
                   this.scrollService.scrollToCommentLemma(lemmaStart);
                   // Scroll to comment in the comments-column.
                   this.scrollService.scrollToComment(numId);
                 }
               } else {
-                // If a comments view isn't shown or viewmode is mobile, show comment in infoOverlay.
+                // If a comments view isn't shown or viewmode is mobile,
+                // show comment in infoOverlay.
                 this.ngZone.run(() => {
                   this.showCommentInfoOverlay(eventTarget.getAttribute('data-id'), eventTarget);
                 });
@@ -449,20 +453,33 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             ) {
               // Footnote reference clicked in manuscript column
               this.ngZone.run(() => {
-                this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), 'manuscript', eventTarget);
+                this.showFootnoteInfoOverlay(
+                  eventTarget.getAttribute('data-id'), 'manuscript', eventTarget
+                );
               });
               modalShown = true;
             } else if (eventTarget['classList'].contains('ttFoot')) {
               // Footnote reference clicked in reading text
               this.ngZone.run(() => {
-                this.showFootnoteInfoOverlay(eventTarget.getAttribute('data-id'), 'read-text', eventTarget);
+                this.showFootnoteInfoOverlay(
+                  eventTarget.getAttribute('data-id'), 'read-text', eventTarget
+                );
               });
               modalShown = true;
             }
           } else if (
-            (eventTarget['classList'].contains('ttChanges') && this.viewOptionsService.show.changes) ||
-            (eventTarget['classList'].contains('ttNormalisations') && this.viewOptionsService.show.normalisations) ||
-            (eventTarget['classList'].contains('ttAbbreviations') && this.viewOptionsService.show.abbreviations)
+            (
+              eventTarget['classList'].contains('ttChanges') &&
+              this.viewOptionsService.show.changes
+            ) ||
+            (
+              eventTarget['classList'].contains('ttNormalisations') &&
+              this.viewOptionsService.show.normalisations
+            ) ||
+            (
+              eventTarget['classList'].contains('ttAbbreviations') &&
+              this.viewOptionsService.show.abbreviations
+            )
           ) {
             this.ngZone.run(() => {
               this.showInfoOverlayFromInlineHtml(eventTarget);
@@ -477,8 +494,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               eventTarget['classList'].contains('gap') ||
               eventTarget['classList'].contains('marginalia')
             ) {
-              /* Editorial note about unclear text or text in margin, should be clickable only in
-                 the reading text column. */
+              // Editorial note about unclear text or text in margin,
+              // should be clickable only in the reading text column.
               let parentElem: any = eventTarget;
               parentElem = parentElem.parentElement;
               while (parentElem !== null && parentElem.tagName !== 'READ-TEXT') {
@@ -517,10 +534,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             modalShown = true;
           }
 
-          /* Get the parent node of the event target for the next iteration
-             if a modal or infoOverlay hasn't been shown already. This is
-             for finding nested tooltiptriggers, i.e. a person can be a
-             child of a change. */
+          // Get the parent node of the event target for the next iteration
+          // if a modal or infoOverlay hasn't been shown already. This is
+          // for finding nested tooltiptriggers, i.e. a person can be a
+          // child of a change.
           if (!modalShown) {
             eventTarget = eventTarget['parentNode'];
             if (
@@ -528,8 +545,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               eventTarget['parentNode'] &&
               eventTarget['parentNode']['classList'].contains('tooltiptrigger')
             ) {
-              /* The parent isn't a tooltiptrigger, but the parent of the parent
-                 is, use it for the next iteration. */
+              // The parent isn't a tooltiptrigger, but the parent of the parent
+              // is, use it for the next iteration.
               eventTarget = eventTarget['parentNode'];
             }
           }
@@ -537,19 +554,25 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
         eventTarget = this.getEventTarget(event);
         if (
-          eventTarget['classList'].contains('variantScrollTarget') ||
-          eventTarget['classList'].contains('anchorScrollTarget')
+          eventTarget.classList.contains('variantScrollTarget') ||
+          eventTarget.classList.contains('anchorScrollTarget')
         ) {
-          // Click on variant lemma --> highlight and scroll all variant columns.
-
-          eventTarget.classList.add('highlight');
-          this.ngZone.run(() => {
-            this.hideToolTip();
-            this.scrollService.scrollToVariant(eventTarget, this.elementRef.nativeElement);
-          });
-          window.setTimeout(function(elem: any) {
-            elem.classList.remove('highlight');
-          }.bind(null, eventTarget), 5000);
+          // Click on variant lemma --> highlight and scroll all variant columns
+          // in desktop mode; display variant info in infoOverlay in mobile mode.
+          if (!this.mobileMode) {
+            eventTarget.classList.add('highlight');
+            this.ngZone.run(() => {
+              this.hideToolTip();
+              this.scrollService.scrollToVariant(eventTarget, this.elementRef.nativeElement);
+            });
+            window.setTimeout(function(elem: any) {
+              elem.classList.remove('highlight');
+            }.bind(null, eventTarget), 5000);
+          } else if (eventTarget.classList.contains('tooltiptrigger')) {
+            this.ngZone.run(() => {
+              this.showInfoOverlayFromInlineHtml(eventTarget);
+            });
+          }
         } else if (eventTarget['classList'].contains('extVariantsTrigger')) {
           // Click on trigger for showing links to external variants
           if (eventTarget.nextElementSibling) {
@@ -604,9 +627,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               // Find the containing scrollable element.
               let containerElem = null;
               if (targetColumnId) {
-                containerElem = nElement.querySelector(
-                  '#' + targetColumnId
-                );
+                containerElem = nElement.querySelector('#' + targetColumnId);
               } else {
                 containerElem = anchorElem.parentElement;
                 while (
@@ -619,7 +640,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                   containerElem = null;
                 }
                 if (!containerElem) {
-                  // Check if a footnotereference link in infoOverlay. This method is used to find the container element if in mobile mode.
+                  // Check if a footnotereference link in infoOverlay.
+                  // This method is used to find the container element if in mobile mode.
                   if (
                     anchorElem.parentElement?.parentElement?.hasAttribute('class') &&
                     anchorElem.parentElement?.parentElement?.classList.contains('infoOverlayContent')
@@ -686,7 +708,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             }
 
           } else {
-            // Link to a reading-text, comment or introduction.
+            // Link to a reading text, comment or introduction.
             // Get the href parts for the targeted text.
             const hrefLink = anchorElem.href.replace('_', ' ');
             const hrefTargetItems: Array<string> = decodeURIComponent(
@@ -706,9 +728,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               let comparePageId = '';
 
               if (hrefTargetItems.length === 1 && hrefTargetItems[0].startsWith('#')) {
-                // If only a position starting with a hash, assume it's in the same collection, text and chapter.
+                // If only a position starting with a hash, assume it's
+                // in the same collection, text and chapter.
                 if (this.paramChapterID) {
-                  comparePageId = this.paramCollectionID + '_' + this.paramPublicationID + '_' + this.paramChapterID;
+                  comparePageId = this.paramCollectionID
+                        + '_' + this.paramPublicationID + '_' + this.paramChapterID;
                 } else {
                   comparePageId = this.paramCollectionID + '_' + this.paramPublicationID;
                 }
@@ -735,36 +759,56 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 // We are on the same page and the last item in the target href is a textposition.
                 positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('#', '');
 
-                // Find the element in the correct column (read-text or comments) based on ref type.
-                const matchingElements = nElement.querySelectorAll(
-                  '[name="' + positionId + '"]'
-                );
-                let targetElement = null;
-                let refType = 'READ-TEXT';
+                // Find element in the correct column (read-text or comments) based on ref type.
+                let refType = 'read-text';
                 if (anchorElem.classList.contains('ref_comment')) {
-                  refType = 'COMMENTS';
+                  refType = 'comments';
                 }
-                for (let i = 0; i < matchingElements.length; i++) {
-                  let parentElem = matchingElements[i].parentElement;
-                  while (parentElem?.tagName !== refType) {
-                    parentElem = parentElem?.parentElement ?? null;
-                  }
-                  if (parentElem?.tagName === refType) {
-                    targetElement = matchingElements[i] as HTMLElement;
-                    if (
-                      targetElement.parentElement?.classList.contains('ttFixed') ||
-                      targetElement.parentElement?.parentElement?.classList.contains('ttFixed')
-                    ) {
-                      // Found position is in footnote --> look for next occurence since the first
-                      // footnote element is not displayed (footnote elements are copied to a list
-                      // at the end of the reading text and that's the position we need to find).
-                    } else {
-                      break;
+                const addViewType = (refType === 'read-text') ? 'established' : refType;
+
+                if (
+                  !nElement.querySelector(
+                    'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ' + refType
+                  )
+                ) {
+                  // The target column type needs to be opened first
+                  this.ngZone.run(() => {
+                    this.addView(addViewType, undefined, undefined, true);
+                    this.setActiveMobileModeViewType(undefined, addViewType);
+                  });
+
+                  // The added view needs to be rendered before looking for
+                  // matching elements again -> timeout.
+                  // TODO: ideally get rid of setTimeout for this functionality
+                  setTimeout(() => {
+                    let targetElement = this.scrollService.findElementInColumnByAttribute(
+                      'name', positionId, refType
+                    );
+                    if (targetElement?.classList.contains('anchor')) {
+                      this.scrollService.scrollToHTMLElement(targetElement);
                     }
+                  }, 700);
+                } else {
+                  if (!this.mobileMode) {
+                    let targetElement = this.scrollService.findElementInColumnByAttribute(
+                      'name', positionId, refType
+                    );
+                    if (targetElement?.classList.contains('anchor')) {
+                      this.scrollService.scrollToHTMLElement(targetElement);
+                    }
+                  } else {
+                    this.ngZone.run(() => {
+                      this.setActiveMobileModeViewType(undefined, addViewType);
+                    });
+                    setTimeout(() => {
+                      let targetElement = this.scrollService.findElementInColumnByAttribute(
+                        'name', positionId, refType
+                      );
+                      if (targetElement?.classList.contains('anchor')) {
+                        this.scrollService.scrollToHTMLElement(targetElement);
+                      }
+                    }, 700);
                   }
-                }
-                if (targetElement?.classList.contains('anchor')) {
-                  this.scrollService.scrollToHTMLElement(targetElement);
                 }
               } else {
                 // We are not on the same page, open in new window.
@@ -1137,6 +1181,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         // Some other note, generally editorial remarks pertaining to a manuscript.
         if (targetElem.classList.contains('ttMs')) {
           this.setInfoOverlayTitle($localize`:@@ViewOptions.EditorialNote:Utgivarens anmärkning`);
+        } else if (targetElem.classList.contains('ttVariant')) {
+          this.setInfoOverlayTitle($localize`:@@Variants.VariantCategory:Variantkategori`);
         } else {
           this.setInfoOverlayTitle('');
         }
@@ -1385,12 +1431,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       this.updateViewsInRouterQueryParams(this.views);
 
       // In mobile mode, set the added view as the active view
-      if (this.mobileMode) {
-        this.activeMobileModeViewIndex = this.views.length - 1;
-      }
+      this.setActiveMobileModeViewType(undefined, undefined, this.views.length - 1);
 
       // Conditionally scroll the added view into view
-      (scroll === true) && !this.mobileMode && this.scrollService.scrollLastViewIntoView();
+      if (scroll === true && !this.mobileMode) {
+        this.scrollService.scrollLastViewIntoView();
+      }
     }
   }
 
@@ -1403,9 +1449,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.updateViewsInRouterQueryParams(this.views);
 
     // In mobile mode, change the active view
-    if (this.mobileMode) {
-      this.activeMobileModeViewIndex = i > 0 ? i - 1 : 0;
-    }
+    const index = i > 0 ? i - 1 : 0;
+    this.setActiveMobileModeViewType(undefined, undefined, index);
   }
 
   /**
@@ -1518,6 +1563,22 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       this.collectionContentService.activeCollectionTextMobileModeView = this.activeMobileModeViewIndex;
       this.cdRef.detectChanges();
     }
+  }
+
+  /**
+   * Opens a new reading text view and scrolls the given comment lemma into view.
+   * @param commentLemmaId 
+   */
+  openNewReadingTextShowCommentLemma(commentLemmaId: string) {
+    this.openNewView({ viewType: 'established' });
+    this.setActiveMobileModeViewType(undefined, 'established');
+
+    setTimeout(() => {
+      const lemmaStart = this.scrollService.findElementInColumnByAttribute(
+        'data-id', commentLemmaId, 'read-text'
+      );
+      this.scrollService.scrollToCommentLemma(lemmaStart);
+    }, 700);
   }
 
 }

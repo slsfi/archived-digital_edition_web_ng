@@ -141,7 +141,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
             event.preventDefault();
           }
 
-          let image = null as any;
+          let image: any = null;
 
           // Check if click on an illustration or icon representing an illustration
           if (eventTarget.classList.contains('doodle') && eventTarget.hasAttribute('src')) {
@@ -172,11 +172,9 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           // Check if we have an image to show in the illustrations-view
           if (image !== null) {
             // Check if we have an illustrations-view open, if not, open and display the clicked image there
-            if (
-              document.querySelector(
-                'page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations'
-              )
-            ) {
+            if (document.querySelector(
+              'page-text:not([ion-page-hidden]):not(.ion-page-hidden) illustrations'
+            )) {
               // Display image in an illustrations-view which is already open
               this.ngZone.run(() => {
                 this.updateSelectedIllustrationImage(image);

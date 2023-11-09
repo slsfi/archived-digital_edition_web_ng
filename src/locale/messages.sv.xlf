@@ -150,6 +150,12 @@
         <target>Sortering</target>
       </segment>
     </unit>
+    <unit id="CollectionText.ActiveView">
+      <segment state="initial">
+        <source>Aktiv vy</source>
+        <target>Aktiv vy</target>
+      </segment>
+    </unit>
     <unit id="CollectionText.AddColumn.AddColumn">
       <segment state="initial">
         <source>Ny kolumn</source>
@@ -1582,6 +1588,12 @@
       <segment state="initial">
         <source>Tryckt variant</source>
         <target>Tryckt variant</target>
+      </segment>
+    </unit>
+    <unit id="Variants.VariantCategory">
+      <segment state="initial">
+        <source>Variantkategori</source>
+        <target>Variantkategori</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Abbreviation">

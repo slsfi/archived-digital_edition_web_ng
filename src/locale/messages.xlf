@@ -126,6 +126,11 @@
         <source>Sortering</source>
       </segment>
     </unit>
+    <unit id="CollectionText.ActiveView">
+      <segment>
+        <source>Aktiv vy</source>
+      </segment>
+    </unit>
     <unit id="CollectionText.AddColumn.AddColumn">
       <segment>
         <source>Ny kolumn</source>
@@ -1319,6 +1324,11 @@
     <unit id="Variants.Variant">
       <segment>
         <source>Tryckt variant</source>
+      </segment>
+    </unit>
+    <unit id="Variants.VariantCategory">
+      <segment>
+        <source>Variantkategori</source>
       </segment>
     </unit>
     <unit id="ViewOptions.Abbreviation">

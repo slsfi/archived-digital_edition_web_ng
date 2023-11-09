@@ -159,7 +159,7 @@ ion-fab.column-options {
   visibility: visible;
 }
 
-.text-select-wrapper {
+.select-view-wrapper {
   align-items: center;
   background-color: var(--text-area-background-color, #fafafa);
   display: flex;
@@ -198,22 +198,15 @@ ion-fab.column-options {
 }
 
 // Adjust padding and background color of text and facsimile columns in mobile mode
-div.mobile-mode-established,
-div.mobile-mode-comments,
-div.mobile-mode-manuscripts,
-div.mobile-mode-variants,
-div.mobile-mode-illustrations,
-div.mobile-mode-legend,
-div.mobile-mode-metadata,
-div.mobile-mode-manuscripts {
+.scroll-content-container.mobile-scc {
   background-color: var(--text-area-background-color, #fafafa);
   display: block;
-  height: calc(100% - 72px); // full height minus .text-select-wrapper height
+  height: 100%;
   padding: 12px;
   width: 100%;
 }
 
-div.mobile-mode-facsimiles {
-  height: calc(100% - 72px); // full height minus .text-select-wrapper height
-  width: 100%;
+.select-view-wrapper ~ .scroll-content-container.mobile-scc {
+  height: calc(100% - 72px); // full height minus .select-view-wrapper height
+  padding-top: 0;
 }
