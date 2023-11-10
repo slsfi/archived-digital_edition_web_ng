@@ -356,19 +356,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         if (eventTarget !== null && !eventTarget.classList.contains('xreference')) {
           if (eventTarget.parentElement) {
             eventTarget = eventTarget.parentElement;
-            if (eventTarget !== null) {
-              if (!eventTarget.classList.contains('xreference') && eventTarget.parentElement) {
-                eventTarget = eventTarget.parentElement;
-              }
+            if (!eventTarget.classList.contains('xreference') && eventTarget.parentElement) {
+              eventTarget = eventTarget.parentElement;
             }
           }
         }
 
         // Links in the introduction.
-        if (
-          eventTarget !== null &&
-          eventTarget.classList.contains('xreference')
-        ) {
+        if (eventTarget?.classList.contains('xreference')) {
           event.preventDefault();
           const anchorElem: HTMLAnchorElement = eventTarget as HTMLAnchorElement;
 
@@ -702,7 +697,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     const eventTarget: HTMLElement = event.target as HTMLElement;
 
     try {
-      if (eventTarget !== undefined && eventTarget !== null) {
+      if (eventTarget) {
         if (eventTarget.getAttribute('data-id')) {
           return eventTarget;
         }
