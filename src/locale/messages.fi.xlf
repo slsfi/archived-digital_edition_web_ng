@@ -168,6 +168,12 @@
         <target>Näytä kaikki</target>
       </segment>
     </unit>
+    <unit id="CollectionText.AddView">
+      <segment state="initial">
+        <source>Lägg till ny vy</source>
+        <target>Lisää uusi näkymä</target>
+      </segment>
+    </unit>
     <unit id="CollectionText.ColumnOptions.MoveLeft">
       <segment state="initial">
         <source>Byt plats med kolumnen till vänster</source>
@@ -190,6 +196,12 @@
       <segment state="initial">
         <source>Öppna/stäng alternativ för kolumnen</source>
         <target>Avaa/sulje sarakkeen valikko</target>
+      </segment>
+    </unit>
+    <unit id="CollectionText.RemoveActiveView">
+      <segment state="initial">
+        <source>Ta bort aktiv vy</source>
+        <target>Poista aktiivinen näkymä</target>
       </segment>
     </unit>
     <unit id="CollectionTitle.None">

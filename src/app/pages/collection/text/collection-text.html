@@ -187,7 +187,13 @@
       </ion-select>
 
       <ion-fab>
-        <ion-fab-button size="small" [disabled]="views.length < 2" (click)="removeView(activeMobileModeViewIndex)">
+        <ion-fab-button
+              size="small"
+              [disabled]="views.length < 2"
+              (click)="removeView(activeMobileModeViewIndex)"
+              aria-label="Ta bort aktiv vy"
+              i18n-aria-label="@@CollectionText.RemoveActiveView"
+        >
           <ion-icon name="trash-bin-sharp"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -198,6 +204,8 @@
               class="toggle-fab-list-button"
               size="small"
               (click)="showAddViewPopover($event)"
+              aria-label="Lägg till ny vy"
+              i18n-aria-label="@@CollectionText.AddView"
         >
           <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>

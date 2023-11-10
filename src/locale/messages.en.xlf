@@ -168,6 +168,12 @@
         <target>Show all</target>
       </segment>
     </unit>
+    <unit id="CollectionText.AddView">
+      <segment state="initial">
+        <source>Lägg till ny vy</source>
+        <target>Add new view</target>
+      </segment>
+    </unit>
     <unit id="CollectionText.ColumnOptions.MoveLeft">
       <segment state="initial">
         <source>Byt plats med kolumnen till vänster</source>
@@ -190,6 +196,12 @@
       <segment state="initial">
         <source>Öppna/stäng alternativ för kolumnen</source>
         <target>Open/close column options menu</target>
+      </segment>
+    </unit>
+    <unit id="CollectionText.RemoveActiveView">
+      <segment state="initial">
+        <source>Ta bort aktiv vy</source>
+        <target>Remove active view</target>
       </segment>
     </unit>
     <unit id="CollectionTitle.None">
