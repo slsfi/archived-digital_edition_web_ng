@@ -31,7 +31,7 @@ export class ScrollService {
    * either be 'auto' or the default 'smooth'.
    */
   scrollElementIntoView(
-    element: HTMLElement,
+    element: HTMLElement | null,
     yPosition = 'center',
     offset = 0,
     scrollBehavior = 'smooth',
@@ -44,8 +44,11 @@ export class ScrollService {
     // Find the scrollable container of the element which is to be scrolled into view
     if (!container) {
       container = element.parentElement as HTMLElement;
-      while (container !== null && container.parentElement !== null &&
-        !container.classList.contains('scroll-content-container')) {
+      while (
+        container !== null &&
+        container.parentElement !== null &&
+        !container.classList.contains('scroll-content-container')
+      ) {
         container = container.parentElement;
       }
       if (container === null || container.parentElement === null) {
@@ -65,6 +68,7 @@ export class ScrollService {
         baseOffset = baseOffset - 45;
       }
     }
+
     if (scrollBehavior === 'smooth') {
       container.scrollTo({top: y - baseOffset - offset, behavior: 'smooth'});
     } else {
@@ -94,7 +98,7 @@ export class ScrollService {
         tmpImage.classList.add('inl_ms_arrow');
         element.parentElement?.insertBefore(tmpImage, element);
         this.scrollElementIntoView(tmpImage, position, 0, scrollBehavior);
-        setTimeout(function() {
+        setTimeout(() => {
           element.parentElement?.removeChild(tmpImage);
         }, timeOut);
       });
@@ -284,6 +288,102 @@ export class ScrollService {
         commentLemmaElement: noteLemmaElem,
       };
     }
+  }
+
+  /**
+   * Function used to scroll all corresponding variants in all variant columns into view.
+   * @param element the variant element that was clicked.
+   * @param container element that contains all variant columns.
+   */
+  scrollToVariant(element: HTMLElement, container: HTMLElement) {
+    if (element.classList.contains('variantScrollTarget')) {
+      const variantContElems: NodeListOf<HTMLElement> = container.querySelectorAll(
+        'variants'
+      );
+      for (let v = 0; v < variantContElems.length; v++) {
+        const elems: NodeListOf<HTMLElement> = variantContElems[v].querySelectorAll(
+          '.teiVariant'
+        );
+        let variantNotScrolled = true;
+        for (let i = 0; i < elems.length; i++) {
+          if (elems[i].id === element.id) {
+            if (!elems[i].classList.contains('highlight')) {
+              elems[i].classList.add('highlight');
+            }
+            if (variantNotScrolled) {
+              variantNotScrolled = false;
+              this.scrollElementIntoView(elems[i]);
+            }
+            setTimeout(() => {
+              elems[i]?.classList.remove('highlight');
+            }, 5000);
+          }
+        }
+      }
+    } else if (element.classList.contains('anchorScrollTarget')) {
+      const elems: NodeListOf<HTMLElement> = container.querySelectorAll(
+        '.teiVariant.anchorScrollTarget'
+      );
+      const elementClassList = element.className.split(' ');
+      let targetClassName = '';
+      let targetCompClassName = '';
+      for (let x = 0; x < elementClassList.length; x++) {
+        if (elementClassList[x].startsWith('struct')) {
+          targetClassName = elementClassList[x];
+          break;
+        }
+      }
+      if (targetClassName.endsWith('a')) {
+        targetCompClassName = targetClassName.substring(0, targetClassName.length - 1) + 'b';
+      } else {
+        targetCompClassName = targetClassName.substring(0, targetClassName.length - 1) + 'a';
+      }
+      let iClassList = [];
+      for (let i = 0; i < elems.length; i++) {
+        iClassList = elems[i].className.split(' ');
+        for (let y = 0; y < iClassList.length; y++) {
+          if (iClassList[y] === targetClassName || iClassList[y] === targetCompClassName) {
+            elems[i].classList.add('highlight');
+            setTimeout(() => {
+              elems[i]?.classList.remove('highlight');
+            }, 5000);
+            if (iClassList[y] === targetClassName) {
+              this.scrollElementIntoView(elems[i]);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Finds the first element with the given attribute in the given
+   * collection text type.
+   * @param attrName name of the attribute to find.
+   * @param attrValue value of the attribute to find.
+   * @param textTypeSelector lowercase tag name of the collection text type.
+   * @returns HTMLElement.
+   */
+  findElementInColumnByAttribute(
+    attrName: string,
+    attrValue: string,
+    textTypeSelector: string
+  ): HTMLElement {
+    let el: HTMLElement = document.querySelector(
+      'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ' + textTypeSelector
+    ) as HTMLElement;
+    el = el?.querySelector('[' + attrName + '="' + attrValue + '"]') as HTMLElement;
+    if (
+      el?.parentElement?.classList.contains('ttFixed') ||
+      el?.parentElement?.parentElement?.classList.contains('ttFixed')
+    ) {
+      // The element is in a footnote, so we should get the second element with matching dataId
+      el = document.querySelector(
+        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) ' + textTypeSelector
+      ) as HTMLElement;
+      el = el.querySelectorAll('[' + attrName + '="' + attrValue + '"]')[1] as HTMLElement;
+    }
+    return el;
   }
 
 }

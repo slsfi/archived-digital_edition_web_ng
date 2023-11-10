@@ -126,6 +126,11 @@
         <source>Sortering</source>
       </segment>
     </unit>
+    <unit id="CollectionText.ActiveView">
+      <segment>
+        <source>Aktiv vy</source>
+      </segment>
+    </unit>
     <unit id="CollectionText.AddColumn.AddColumn">
       <segment>
         <source>Ny kolumn</source>
@@ -134,6 +139,11 @@
     <unit id="CollectionText.AddColumn.ShowAll">
       <segment>
         <source>Visa alla</source>
+      </segment>
+    </unit>
+    <unit id="CollectionText.AddView">
+      <segment>
+        <source>Lägg till ny vy</source>
       </segment>
     </unit>
     <unit id="CollectionText.ColumnOptions.MoveLeft">
@@ -154,6 +164,11 @@
     <unit id="CollectionText.ColumnOptions.ToggleMenu">
       <segment>
         <source>Öppna/stäng alternativ för kolumnen</source>
+      </segment>
+    </unit>
+    <unit id="CollectionText.RemoveActiveView">
+      <segment>
+        <source>Ta bort aktiv vy</source>
       </segment>
     </unit>
     <unit id="CollectionTitle.None">
@@ -353,7 +368,7 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment>
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
       </segment>
     </unit>
     <unit id="DownloadTexts.Source">
@@ -363,7 +378,7 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment>
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
       </segment>
     </unit>
     <unit id="Ebook.InvalidFilename">
@@ -1319,6 +1334,11 @@
     <unit id="Variants.Variant">
       <segment>
         <source>Tryckt variant</source>
+      </segment>
+    </unit>
+    <unit id="Variants.VariantCategory">
+      <segment>
+        <source>Variantkategori</source>
       </segment>
     </unit>
     <unit id="ViewOptions.Abbreviation">

@@ -1,7 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="secondary">
 
-    <text-changer *ngIf="!mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-desktop-mode"></text-changer>
+    <!-- Text changer in desktop mode -->
+    <text-changer *ngIf="!mobileMode"
+          [textItemID]="textItemID"
+          [textPosition]="textPosition"
+          [parentPageType]="'page-text'"
+          class="text-changer-desktop-mode"
+    ></text-changer>
 
     <ion-buttons slot="end" class="secondary-toolbar-buttons-wrapper">
       <ion-button *ngIf="showTextDownloadButton" (click)="showDownloadModal()">
@@ -39,61 +45,59 @@
             [class.illustrations-view-shown]="illustrationsViewShown"
             [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
       >
-        <!-- Tooltip wrapper -->
-        <div
-              class="toolTip tei teiContainer"
-              [class.show_comments]="viewOptionsService.show.comments"
-              [class.show_personInfo]="viewOptionsService.show.personInfo"
-              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-              [class.show_workInfo]="viewOptionsService.show.workInfo"
-              [class.show_normalisations]="viewOptionsService.show.normalisations"
-              [class.show_changes]="viewOptionsService.show.changes"
-              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-              [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-              [innerHTML]="toolTipText"
-              [MathJax]="toolTipText"
-        ></div>
-
-        <!-- Info overlay wrapper -->
-        <div
-              class="infoOverlay tei teiContainer"
-              [class.show_comments]="viewOptionsService.show.comments"
-              [class.show_personInfo]="viewOptionsService.show.personInfo"
-              [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-              [class.show_workInfo]="viewOptionsService.show.workInfo"
-              [class.show_normalisations]="viewOptionsService.show.normalisations"
-              [class.show_changes]="viewOptionsService.show.changes"
-              [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-              [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
-        >
-          <div class="infoOverlayHeader">
-            <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-            <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
-          </div>
-          <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
-        </div>
+        <!-- Tooltip and info overlay -->
+        <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
         
         <!-- Wrapper for each column -->
-        <div *ngFor="let view of views; let i = index"
+        <div *ngFor="let view of views; index as i"
               id="read_div_{{i}}"
               class="read-column column_type_{{view.type}}"
               [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
         >
 
           <!-- Ion fab column options -->
-          <ion-fab *ngIf="views.length>1" class="column-options">
-            <ion-fab-button class="toggle-fab-list-button" size="small" title="Öppna/stäng alternativ för kolumnen" i18n-title="@@CollectionText.ColumnOptions.ToggleMenu" #fabColumnOptionsButton>
-              <ion-icon name="ellipsis-vertical" aria-label="Öppna/stäng alternativ för kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"></ion-icon>
+          <ion-fab *ngIf="views.length > 1" class="column-options">
+            <ion-fab-button #fabColumnOptionsButton
+                  class="toggle-fab-list-button"
+                  size="small"
+                  title="Öppna/stäng alternativ för kolumnen"
+                  i18n-title="@@CollectionText.ColumnOptions.ToggleMenu"
+            >
+              <ion-icon name="ellipsis-vertical"
+                    aria-label="Öppna/stäng alternativ för kolumnen"
+                    i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"
+              ></ion-icon>
             </ion-fab-button>
-            <ion-fab-list *ngIf="views.length>1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1" (click)="removeView(i)" title="Ta bort kolumnen" i18n-title="@@CollectionText.ColumnOptions.Remove">
-                <ion-icon name="trash-bin-sharp" aria-label="Ta bort kolumnen" i18n-aria-label="@@CollectionText.ColumnOptions.Remove"></ion-icon>
+            <ion-fab-list *ngIf="views.length > 1" side="bottom" #fabColumnOptions>
+              <ion-fab-button *ngIf="enabledViewTypes.length > 1"
+                    (click)="removeView(i)"
+                    title="Ta bort kolumnen"
+                    i18n-title="@@CollectionText.ColumnOptions.Remove"
+              >
+                <ion-icon name="trash-bin-sharp"
+                      aria-label="Ta bort kolumnen"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.Remove"
+                ></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i" (click)="moveViewRight(i)" title="Byt plats med kolumnen till höger" i18n-title="@@CollectionText.ColumnOptions.MoveRight">
-                <ion-icon name="return-down-forward-sharp" aria-label="Byt plats med kolumnen till höger" i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"></ion-icon>
+              <ion-fab-button *ngIf="i > -1 && views.length-1 > i"
+                    (click)="moveViewRight(i)"
+                    title="Byt plats med kolumnen till höger"
+                    i18n-title="@@CollectionText.ColumnOptions.MoveRight"
+              >
+                <ion-icon name="return-down-forward-sharp"
+                      aria-label="Byt plats med kolumnen till höger"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"
+                ></ion-icon>
               </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0" (click)="moveViewLeft(i)" title="Byt plats med kolumnen till vänster" i18n-title="@@CollectionText.ColumnOptions.MoveLeft">
-                <ion-icon name="return-down-back-sharp" aria-label="Byt plats med kolumnen till vänster" i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"></ion-icon>
+              <ion-fab-button *ngIf="views.length > i && i > 0"
+                    (click)="moveViewLeft(i)"
+                    title="Byt plats med kolumnen till vänster"
+                    i18n-title="@@CollectionText.ColumnOptions.MoveLeft"
+              >
+                <ion-icon name="return-down-back-sharp"
+                      aria-label="Byt plats med kolumnen till vänster"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"
+                ></ion-icon>
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
@@ -101,17 +105,7 @@
           <!-- Ion card for each column-->
           <ion-card>
             <ion-card-header class="column-card-title">
-              <ng-container *ngIf="view.type === 'established'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
-              <ng-container *ngIf="view.type === 'established_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
-              <ng-container *ngIf="view.type === 'established_fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
-              <ng-container *ngIf="view.type === 'comments'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
-              <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
-              <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
-              <ng-container *ngIf="view.type === 'variants'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
-              <ng-container *ngIf="view.type === 'illustrations'" i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
-              <ng-container *ngIf="view.type === 'legend'" i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
-              <ng-container *ngIf="view.type === 'metadata'" i18n="@@Metadata.Metadata">Metadata</ng-container>
-
+              <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
               <span *ngIf="(
                       view.type === 'variants' ||
                       view.type === 'manuscripts' ||
@@ -123,79 +117,7 @@
             </ion-card-header>
             <ion-card-content class="column-card-content">
               <div class="scroll-content-container">
-
-                <read-text *ngIf="view.type === 'established' && multilingualReadingTextLanguages.length < 2"
-                      [textItemID]="textItemID"
-                      [textPosition]="textPosition"
-                      [searchMatches]="searchMatches"
-                      (openNewIllustrView)="openNewView($event)"
-                      (selectedIllustration)="updateIllustrationViewImage($event)"
-                ></read-text>
-
-                <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
-                  <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
-                    <read-text *ngIf="view.type === 'established_' + lang"
-                          [language]="lang"
-                          [textItemID]="textItemID"
-                          [textPosition]="textPosition"
-                          [searchMatches]="searchMatches"
-                          (openNewIllustrView)="openNewView($event)"
-                          (selectedIllustration)="updateIllustrationViewImage($event)"
-                    ></read-text>
-                  </ng-container>
-                </ng-container>
-
-                <comments *ngIf="view.type === 'comments'"
-                      [textItemID]="textItemID"
-                      [searchMatches]="searchMatches"
-                ></comments>
-
-                <facsimiles *ngIf="view.type === 'facsimiles'"
-                      [textItemID]="textItemID"
-                      [facsID]="view.id"
-                      [imageNr]="view.nr"
-                      (selectedFacsID)="updateViewProperty('id', $event, i)"
-                      (selectedImageNr)="updateViewProperty('nr', $event, i)"
-                      (selectedFacsName)="updateViewProperty('title', $event, i, false)"
-                ></facsimiles>
-
-                <manuscripts *ngIf="view.type === 'manuscripts'"
-                      [textItemID]="textItemID"
-                      [msID]="view.id"
-                      [searchMatches]="searchMatches"
-                      (selectedMsID)="updateViewProperty('id', $event, i)"
-                      (selectedMsName)="updateViewProperty('title', $event, i, false)"
-                      (openNewManView)="openNewView($event)"
-                      (openNewLegendView)="openNewView($event)"
-                ></manuscripts>
-
-                <variants *ngIf="view.type === 'variants'"
-                      [textItemID]="textItemID"
-                      [varID]="view.id"
-                      [searchMatches]="searchMatches"
-                      [sortOrder]="view.sortOrder"
-                      (selectedVarID)="updateViewProperty('id', $event, i)"
-                      (selectedVarName)="updateViewProperty('title', $event, i, false)"
-                      (selectedVarSortOrder)="updateViewProperty('sortOrder', $event, i)"
-                      (openNewVarView)="openNewView($event)"
-                      (openNewLegendView)="openNewView($event)"
-                ></variants>
-                
-                <illustrations *ngIf="view.type === 'illustrations'"
-                      [singleImage]="view.image"
-                      [textItemID]="textItemID"
-                      (showAllImages)="updateIllustrationViewImage($event)"
-                ></illustrations>
-
-                <text-legend *ngIf="view.type === 'legend'"
-                      [itemId]="textItemID"
-                      [scrollToElementId]="view.id"
-                ></text-legend>
-
-                <text-metadata *ngIf="view.type === 'metadata'"
-                      [textItemID]="textItemID"
-                ></text-metadata>
-
+                <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
               </div>
             </ion-card-content>
           </ion-card>
@@ -204,120 +126,16 @@
         <!-- Add view -->
         <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
           <ion-fab id="add-view-fab" #fabmenuadd>
-            <ion-fab-button id="add-view-fab-button" class="toggle-fab-list-button" size="small" (click)="showAddViewPopover($event)">
+            <ion-fab-button id="add-view-fab-button"
+                  class="toggle-fab-list-button"
+                  size="small"
+                  (click)="showAddViewPopover($event)"
+            >
               <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
             </ion-fab-button>
           </ion-fab>
-          <ion-popover #addViewPopover
-                class="page-text-add-view-popover"
-                reference="trigger"
-                side="bottom"
-                alignment="end"
-                [isOpen]="addViewPopoverisOpen"
-                (didDismiss)="addViewPopoverisOpen = false"
-                [dismissOnSelect]="true"
-                [ngStyle]="{
-                  '--background': 'transparent',
-                  '--box-shadow': 'none',
-                  '--offset-y': '1.25rem'
-                }"
-          >
-            <ng-template>
-              <ion-content class="no-padding">
 
-                <ion-button *ngFor="let type of enabledViewTypes"
-                      class="custom-outline-button"
-                      fill="outline"
-                      (click)="addView(type); scrollService.scrollLastViewIntoView()"
-                      [ngStyle]="{
-                        '--background': '#f2f2f2',
-                        '--border-radius': '1rem',
-                        '--border-color': 'transparent',
-                        '--color': '#000',
-                        '--padding-bottom': '0.375rem',
-                        '--padding-top': '0.375rem',
-                        'font-size': '1rem',
-                        'margin': '2px',
-                        'text-transform': 'unset'
-                      }"
-                >
-                  <ng-container *ngIf="type === 'showAll'">
-                    <ion-icon slot="start" name="albums-outline"></ion-icon>
-                    <ng-container i18n="@@CollectionText.AddColumn.ShowAll">Visa alla</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'established'">
-                    <ion-icon slot="start" name="reader-outline"></ion-icon>
-                    <ng-container i18n="@@ReadingText.ReadingText">Lästext</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type.startsWith('established_')">
-                    <ion-icon slot="start" name="reader-outline"></ion-icon>
-                    <ng-container [ngSwitch]="type.split('_')[1]">
-                      <ng-container *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
-                      <ng-container *ngSwitchCase="'fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
-                    </ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'comments'">
-                    <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
-                    <ng-container i18n="@@Commentary.Commentary">Kommentar</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'manuscripts'">
-                    <ion-icon slot="start" name="document-text-outline"></ion-icon>
-                    <ng-container i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'variants'">
-                    <ion-icon slot="start" name="documents-outline"></ion-icon>
-                    <ng-container i18n="@@Variants.Variant">Tryckt variant</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'facsimiles'">
-                    <ion-icon slot="start" name="image-outline"></ion-icon>
-                    <ng-container i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'illustrations'">
-                    <ion-icon slot="start" name="images-outline"></ion-icon>
-                    <ng-container i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'legend'">
-                    <ion-icon slot="start" name="bulb-outline"></ion-icon>
-                    <ng-container i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="type === 'metadata'">
-                    <ion-icon slot="start" name="server-outline"></ion-icon>
-                    <ng-container i18n="@@Metadata.Metadata">Metadata</ng-container>
-                  </ng-container>
-
-                </ion-button>
-
-                <ion-button fill="outline"
-                      class="custom-outline-button circular-icon-button"
-                      [ngStyle]="{
-                        '--background': '#f2f2f2',
-                        '--border-radius': '1rem',
-                        '--border-color': 'transparent',
-                        '--color': '#000',
-                        '--padding-bottom': '0.375rem',
-                        '--padding-end': '0.375rem',
-                        '--padding-start': '0.375rem',
-                        '--padding-top': '0.375rem',
-                        'font-size': '1rem',
-                        'margin': '2px',
-                        'text-transform': 'unset'
-                      }"
-                >
-                  <ion-icon slot="icon-only" name="close"></ion-icon>
-                </ion-button>
-
-              </ion-content>
-            </ng-template>
-          </ion-popover>
+          <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
 
           <div class="add-column">
             <p id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</p>
@@ -337,104 +155,338 @@
         [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
         [class.largeFontSize]="textsize == TextsizeEnum.Large"
         [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
+        [class.illustrations-view-shown]="illustrationsViewShown"
         [scrollX]="false"
         [scrollY]="false"
   >
-    <!-- Tooltip wrapper in mobile mode -->
-    <div
-          class="toolTip tei teiContainer"
-          [class.show_comments]="viewOptionsService.show.comments"
-          [class.show_personInfo]="viewOptionsService.show.personInfo"
-          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-          [class.show_workInfo]="viewOptionsService.show.workInfo"
-          [class.show_normalisations]="viewOptionsService.show.normalisations"
-          [class.show_changes]="viewOptionsService.show.changes"
-          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-          [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
-          [innerHTML]="toolTipText"
-          [MathJax]="toolTipText"
-    ></div>
+    <!-- Tooltip and info overlay -->
+    <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
 
-    <!-- Info overlay wrapper in mobile mode -->
-    <div
-          class="infoOverlay tei teiContainer"
-          [class.show_comments]="viewOptionsService.show.comments"
-          [class.show_personInfo]="viewOptionsService.show.personInfo"
-          [class.show_placeInfo]="viewOptionsService.show.placeInfo"
-          [class.show_workInfo]="viewOptionsService.show.workInfo"
-          [class.show_normalisations]="viewOptionsService.show.normalisations"
-          [class.show_changes]="viewOptionsService.show.changes"
-          [class.show_abbreviations]="viewOptionsService.show.abbreviations"
-          [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
-    >
-      <div class="infoOverlayHeader">
-        <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-        <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
-      </div>
-      <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
+    <!-- Components for selecting active text type in mobile mode -->
+    <div *ngIf="enabledViewTypes.length > 1" class="select-view-wrapper">
+      <ion-select
+            fill="outline"
+            interface="popover"
+            label="Aktiv vy"
+            i18n-label="@@CollectionText.ActiveView"
+            label-placement="floating"
+            (ionChange)="setActiveMobileModeViewType($event)"
+            [value]="activeMobileModeViewIndex"
+      >
+        <ion-select-option *ngFor="let view of views; index as i" [value]="i">
+          <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
+          <ng-container *ngIf="(
+                  view.type === 'variants' ||
+                  view.type === 'manuscripts' ||
+                  view.type === 'facsimiles'
+                ) && view.title"
+          >
+            – <span [innerHTML]="view.title"></span>
+          </ng-container>
+        </ion-select-option>
+      </ion-select>
+
+      <ion-fab>
+        <ion-fab-button
+              size="small"
+              [disabled]="views.length < 2"
+              (click)="removeView(activeMobileModeViewIndex)"
+              aria-label="Ta bort aktiv vy"
+              i18n-aria-label="@@CollectionText.RemoveActiveView"
+        >
+          <ion-icon name="trash-bin-sharp"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-fab id="add-view-fab" #fabmenuadd>
+        <ion-fab-button
+              id="add-view-fab-button"
+              class="toggle-fab-list-button"
+              size="small"
+              (click)="showAddViewPopover($event)"
+              aria-label="Lägg till ny vy"
+              i18n-aria-label="@@CollectionText.AddView"
+        >
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
     </div>
-
-    <!-- Ion segment for choosing displayed column type -->
-    <ion-segment mode="ios" [(ngModel)]="activeMobileModeViewType" (ionChange)="storeActiveMobileModeViewType()">
-      <ion-segment-button value="established" *ngIf="availableMobileModeViews.includes('established')">
-        <ion-label i18n="@@ReadingText.ReadingText">Lästext</ion-label>
-      </ion-segment-button>
-      <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
-        <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
-          <ion-segment-button [value]="'established_'+lang" *ngIf="availableMobileModeViews.includes('established_'+lang)">
-            <ng-container [ngSwitch]="lang">
-              <ion-label *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ion-label>
-              <ion-label *ngSwitchCase="'fi'" i18n="@@ReadingText.FinnishText">Finsk text</ion-label>
-            </ng-container>
-          </ion-segment-button>
-        </ng-container>
-      </ng-container>
-      <ion-segment-button value="facsimiles" *ngIf="availableMobileModeViews.includes('facsimiles')">
-        <ion-label i18n="@@Facsimiles.Facsimile">Faksimil</ion-label>
-      </ion-segment-button>
-      <!--
-      <ion-segment-button value="manuscripts" *ngIf="availableMobileModeViews.includes('manuscripts')">
-        <ion-label i18n="@@Manuscripts.Manuscript">Manuskript</ion-label>
-      </ion-segment-button>
-      -->
-    </ion-segment>
 
     <!-- Columns in mobile mode -->
-    <div *ngIf="multilingualReadingTextLanguages.length < 2"
-          [class.visuallyhidden]="activeMobileModeViewType !== 'established'"
-          class="mobile-mode-established scroll-content-container"
+    <div *ngFor="let view of views; index as i"
+          class="scroll-content-container mobile-scc column_type_{{view.type}}"
+          [class.visuallyhidden]="activeMobileModeViewIndex !== i"
+          [class.mobile-mode-established]="
+                view.type === 'established' ||
+                view.type === 'established_sv' ||
+                view.type === 'established_fi'"
+          [class.mobile-mode-comments]="view.type === 'comments'"
+          [class.mobile-mode-facsimiles]="view.type === 'facsimiles'"
+          [class.mobile-mode-manuscripts]="view.type === 'manuscripts'"
+          [class.mobile-mode-variants]="view.type === 'variants'"
+          [class.mobile-mode-illustrations]="view.type === 'illustrations'"
+          [class.mobile-mode-legend]="view.type === 'legend'"
+          [class.mobile-mode-metadata]="view.type === 'metadata'"
     >
-        <read-text
-              [textItemID]="textItemID"
-              [textPosition]="textPosition"
-              [searchMatches]="searchMatches"
-        ></read-text>
+      <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
     </div>
-    <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
-      <div [class.visuallyhidden]="activeMobileModeViewType !== 'established_'+lang"
-            class="mobile-mode-established scroll-content-container"
-      >
-        <read-text
-              [language]="lang"
-              [textItemID]="textItemID"
-              [textPosition]="textPosition"
-              [searchMatches]="searchMatches"
-        ></read-text>
-      </div>
-    </ng-container>
-    <div [class.visuallyhidden]="activeMobileModeViewType !== 'facsimiles'"
-          class="mobile-mode-facsimiles"
-    >
-      <facsimiles [textItemID]="textItemID"></facsimiles>
-    </div>
-    <!--
-    <div [class.visuallyhidden]="activeMobileModeViewType !== 'manuscripts'"
-          class="mobile-mode-manuscripts scroll-content-container"
-    >
-      <manuscripts [textItemID]="textItemID" [searchMatches]="searchMatches" (openNewManView)="openNewView($event)" (openNewLegendView)="openNewView($event)"></manuscripts>
-    </div>
-    -->
   </ion-content>
 </ng-container>
 
-<text-changer *ngIf="mobileMode" [textItemID]="textItemID" [textPosition]="textPosition" [parentPageType]="'page-text'" class="text-changer-mobile-mode"></text-changer>
+<!-- Text changer in mobile mode -->
+<text-changer *ngIf="mobileMode"
+      [textItemID]="textItemID"
+      [textPosition]="textPosition"
+      [parentPageType]="'page-text'"
+      class="text-changer-mobile-mode"
+></text-changer>
+
+
+
+<!-- TEMPLATES -->
+
+<!-- Column headings template -->
+<ng-template #columnHeadingTemplate let-view>
+  <ng-container *ngIf="view.type === 'established'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+  <ng-container *ngIf="view.type === 'established_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
+  <ng-container *ngIf="view.type === 'established_fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
+  <ng-container *ngIf="view.type === 'comments'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
+  <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
+  <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+  <ng-container *ngIf="view.type === 'variants'" i18n="@@Variants.Variant">Tryckt variant</ng-container>
+  <ng-container *ngIf="view.type === 'illustrations'" i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
+  <ng-container *ngIf="view.type === 'legend'" i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
+  <ng-container *ngIf="view.type === 'metadata'" i18n="@@Metadata.Metadata">Metadata</ng-container>
+</ng-template>
+
+
+<!-- Column types template -->
+<ng-template #columnTypesTemplate let-view="view" let-i="i">
+  <read-text *ngIf="view.type === 'established' && multilingualReadingTextLanguages.length < 2"
+        [textItemID]="textItemID"
+        [textPosition]="textPosition"
+        [searchMatches]="searchMatches"
+        (openNewIllustrView)="openNewView($event)"
+        (selectedIllustration)="updateIllustrationViewImage($event)"
+  ></read-text>
+
+  <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
+    <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
+      <read-text *ngIf="view.type === 'established_' + lang"
+            [language]="lang"
+            [textItemID]="textItemID"
+            [textPosition]="textPosition"
+            [searchMatches]="searchMatches"
+            (openNewIllustrView)="openNewView($event)"
+            (selectedIllustration)="updateIllustrationViewImage($event)"
+      ></read-text>
+    </ng-container>
+  </ng-container>
+
+  <comments *ngIf="view.type === 'comments'"
+        [textItemID]="textItemID"
+        [searchMatches]="searchMatches"
+        (openNewReadingTextView)="openNewReadingTextShowCommentLemma($event)"
+        (setMobileModeActiveText)="setActiveMobileModeViewType(undefined, $event)"
+  ></comments>
+
+  <facsimiles *ngIf="view.type === 'facsimiles'"
+        [textItemID]="textItemID"
+        [facsID]="view.id"
+        [imageNr]="view.nr"
+        (selectedFacsID)="updateViewProperty('id', $event, i)"
+        (selectedImageNr)="updateViewProperty('nr', $event, i)"
+        (selectedFacsName)="updateViewProperty('title', $event, i, false)"
+  ></facsimiles>
+
+  <manuscripts *ngIf="view.type === 'manuscripts'"
+        [textItemID]="textItemID"
+        [msID]="view.id"
+        [searchMatches]="searchMatches"
+        (selectedMsID)="updateViewProperty('id', $event, i)"
+        (selectedMsName)="updateViewProperty('title', $event, i, false)"
+        (openNewManView)="openNewView($event)"
+        (openNewLegendView)="openNewView($event)"
+  ></manuscripts>
+
+  <variants *ngIf="view.type === 'variants'"
+        [textItemID]="textItemID"
+        [varID]="view.id"
+        [searchMatches]="searchMatches"
+        [sortOrder]="view.sortOrder"
+        (selectedVarID)="updateViewProperty('id', $event, i)"
+        (selectedVarName)="updateViewProperty('title', $event, i, false)"
+        (selectedVarSortOrder)="updateViewProperty('sortOrder', $event, i)"
+        (openNewVarView)="openNewView($event)"
+        (openNewLegendView)="openNewView($event)"
+  ></variants>
+  
+  <illustrations *ngIf="view.type === 'illustrations'"
+        [singleImage]="view.image"
+        [textItemID]="textItemID"
+        (showAllImages)="updateIllustrationViewImage($event)"
+        (setMobileModeActiveText)="setActiveMobileModeViewType(undefined, $event)"
+  ></illustrations>
+
+  <text-legend *ngIf="view.type === 'legend'"
+        [itemId]="textItemID"
+        [scrollToElementId]="view.id"
+  ></text-legend>
+
+  <text-metadata *ngIf="view.type === 'metadata'"
+        [textItemID]="textItemID"
+  ></text-metadata>
+</ng-template>
+
+
+<!-- Add view popover template -->
+<ng-template #addViewPopoverTemplate let-enabledViewTypes>
+  <ion-popover #addViewPopover
+        class="page-text-add-view-popover"
+        reference="trigger"
+        side="bottom"
+        alignment="end"
+        [isOpen]="addViewPopoverisOpen"
+        (didDismiss)="addViewPopoverisOpen = false"
+        [dismissOnSelect]="true"
+        [ngStyle]="{
+          '--background': 'transparent',
+          '--box-shadow': 'none',
+          '--offset-y': '1.25rem'
+        }"
+  >
+    <ng-template>
+      <ion-content class="no-padding">
+
+        <ng-container *ngFor="let type of enabledViewTypes">
+          <ion-button *ngIf="!(mobileMode && type === 'showAll')"
+                class="custom-outline-button"
+                fill="outline"
+                (click)="addView(type, undefined, undefined, true)"
+                [ngStyle]="{
+                  '--background': '#f2f2f2',
+                  '--border-radius': '1rem',
+                  '--border-color': 'transparent',
+                  '--color': '#000',
+                  '--padding-bottom': '0.375rem',
+                  '--padding-top': '0.375rem',
+                  'font-size': '1rem',
+                  'margin': '2px',
+                  'text-transform': 'unset'
+                }"
+          >
+            <ng-container *ngIf="type === 'showAll'">
+              <ion-icon slot="start" name="albums-outline"></ion-icon>
+              <ng-container i18n="@@CollectionText.AddColumn.ShowAll">Visa alla</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'established'">
+              <ion-icon slot="start" name="reader-outline"></ion-icon>
+              <ng-container i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type.startsWith('established_')">
+              <ion-icon slot="start" name="reader-outline"></ion-icon>
+              <ng-container [ngSwitch]="type.split('_')[1]">
+                <ng-container *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
+                <ng-container *ngSwitchCase="'fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
+              </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'comments'">
+              <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
+              <ng-container i18n="@@Commentary.Commentary">Kommentar</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'manuscripts'">
+              <ion-icon slot="start" name="document-text-outline"></ion-icon>
+              <ng-container i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'variants'">
+              <ion-icon slot="start" name="documents-outline"></ion-icon>
+              <ng-container i18n="@@Variants.Variant">Tryckt variant</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'facsimiles'">
+              <ion-icon slot="start" name="image-outline"></ion-icon>
+              <ng-container i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'illustrations'">
+              <ion-icon slot="start" name="images-outline"></ion-icon>
+              <ng-container i18n="@@Illustrations.Illustrations">Illustrationer</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'legend'">
+              <ion-icon slot="start" name="bulb-outline"></ion-icon>
+              <ng-container i18n="@@Legend.Legend">Teckenförklaringar</ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="type === 'metadata'">
+              <ion-icon slot="start" name="server-outline"></ion-icon>
+              <ng-container i18n="@@Metadata.Metadata">Metadata</ng-container>
+            </ng-container>
+
+          </ion-button>
+        </ng-container>
+
+        <ion-button fill="outline"
+              class="custom-outline-button circular-icon-button"
+              [ngStyle]="{
+                '--background': '#f2f2f2',
+                '--border-radius': '1rem',
+                '--border-color': 'transparent',
+                '--color': '#000',
+                '--padding-bottom': '0.375rem',
+                '--padding-end': '0.375rem',
+                '--padding-start': '0.375rem',
+                '--padding-top': '0.375rem',
+                'font-size': '1rem',
+                'margin': '2px',
+                'text-transform': 'unset'
+              }"
+        >
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</ng-template>
+
+
+<!-- Tooltip and info overlay template -->
+<ng-template #tooltipInfoOverlayTemplate>
+  <div
+        class="toolTip tei teiContainer"
+        [class.show_comments]="viewOptionsService.show.comments"
+        [class.show_personInfo]="viewOptionsService.show.personInfo"
+        [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+        [class.show_workInfo]="viewOptionsService.show.workInfo"
+        [class.show_normalisations]="viewOptionsService.show.normalisations"
+        [class.show_changes]="viewOptionsService.show.changes"
+        [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+        [ngStyle]="{'position': toolTipPosType, 'top': toolTipPosition.top, 'left': toolTipPosition.left, 'max-width': toolTipMaxWidth, 'transform': 'scale(' + toolTipScaleValue + ')'}"
+        [innerHTML]="toolTipText"
+        [MathJax]="toolTipText"
+  ></div>
+  <div
+        class="infoOverlay tei teiContainer"
+        [class.show_comments]="viewOptionsService.show.comments"
+        [class.show_personInfo]="viewOptionsService.show.personInfo"
+        [class.show_placeInfo]="viewOptionsService.show.placeInfo"
+        [class.show_workInfo]="viewOptionsService.show.workInfo"
+        [class.show_normalisations]="viewOptionsService.show.normalisations"
+        [class.show_changes]="viewOptionsService.show.changes"
+        [class.show_abbreviations]="viewOptionsService.show.abbreviations"
+        [ngStyle]="{'position': infoOverlayPosType, 'bottom': infoOverlayPosition.bottom, 'left': infoOverlayPosition.left, 'width': infoOverlayWidth}"
+  >
+    <div class="infoOverlayHeader">
+      <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
+      <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
+    </div>
+    <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
+  </div>
+</ng-template>

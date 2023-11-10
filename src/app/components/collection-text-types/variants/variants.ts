@@ -227,7 +227,6 @@ export class VariantsComponent implements OnInit {
   openVariationInNewView(variant?: any) {
     variant.viewType = 'variants';
     this.openNewVarView.emit(variant);
-    this.scrollService.scrollLastViewIntoView();
   }
 
   /*
@@ -249,7 +248,6 @@ export class VariantsComponent implements OnInit {
       id: 'var-legend'
     }
     this.openNewLegendView.emit(id);
-    this.scrollService.scrollLastViewIntoView();
   }
 
 }

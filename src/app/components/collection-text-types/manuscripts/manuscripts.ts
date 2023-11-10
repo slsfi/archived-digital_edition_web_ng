@@ -202,7 +202,6 @@ export class ManuscriptsComponent implements OnInit {
       id: 'ms-legend'
     }
     this.openNewLegendView.emit(id);
-    this.scrollService.scrollLastViewIntoView();
   }
 
 }

@@ -14,11 +14,11 @@ import { UrlService } from '@services/url.service';
 })
 export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
   highlightSearchMatches: boolean = true;
-  openEstWithComTypeHit: boolean = false;
+  openReadingTextWithCommentsHit: boolean = false;
 
   constructor(private urlService: UrlService) {
     this.highlightSearchMatches = config.collections?.highlightSearchMatches ?? true;
-    this.openEstWithComTypeHit = config.page?.elasticSearch?.openEstWithComTypeHit ?? false;
+    this.openReadingTextWithCommentsHit = config.page?.elasticSearch?.openEstWithComTypeHit ?? false;
   }
 
   transform(elasticHit: any): any {
@@ -38,14 +38,6 @@ export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
         type_id = Number(type_id);
       }
 
-      if (text_type === 'com' && this.openEstWithComTypeHit) {
-        views.push(
-          {
-            type: 'established'
-          }
-        );
-      }
-
       views.push(
         {
           type: (
@@ -57,6 +49,14 @@ export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
           ...(type_id && { id: type_id })
         }
       );
+
+      if (text_type === 'com' && this.openReadingTextWithCommentsHit) {
+        views.push(
+          {
+            type: 'established'
+          }
+        );
+      }
     }
 
     // Add search match strings to query params

@@ -9,7 +9,7 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class CollectionContentService {
-  activeCollectionTextMobileModeView: string = '';
+  activeCollectionTextMobileModeView: number | undefined = undefined;
   previousReadViewTextId: string = '';
   readViewTextId: string = '';
   recentCollectionTextViews: any[] = [];
@@ -39,7 +39,7 @@ export class CollectionContentService {
     return this.http.get(endpoint);
   }
 
-  getReadText(id: string, language: string = ''): Observable<any> {
+  getReadingText(id: string, language: string = ''): Observable<any> {
     const estFolder = language ? 'est-i18n' : 'est';
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';
@@ -87,7 +87,7 @@ export class CollectionContentService {
     return this.http.get(endpoint);
   }
 
-  getDownloadableReadText(id: string, format: string, language: string = ''): Observable<any> {
+  getDownloadableReadingText(id: string, format: string, language: string = ''): Observable<any> {
     const estFolder = language ? 'est-i18n' : 'est';
     const idParts = id.split(';')[0].split('_');
     const ch_id = idParts.length > 2 ? '/' + idParts[2] : '';

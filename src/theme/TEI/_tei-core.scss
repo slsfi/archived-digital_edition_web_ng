@@ -2015,11 +2015,9 @@ read-text div.tei.clickable-illustrations .est_figure_graphic {
 }
 
 /*
-In mobile mode doodles are not clickable since they can't be
-opened in an illustrations-view. Same for doodles in
-manuscripts-view.
+Doodles are not clickable in manuscripts-view since
+they can't be opened in an illustrations-view from there.
 */
-.mobile-mode-established read-text div.tei img.doodle,
 manuscripts div.tei img.teiManuscript.doodle {
     cursor: default;
 }

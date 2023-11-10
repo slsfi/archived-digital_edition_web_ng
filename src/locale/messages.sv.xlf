@@ -150,6 +150,12 @@
         <target>Sortering</target>
       </segment>
     </unit>
+    <unit id="CollectionText.ActiveView">
+      <segment state="initial">
+        <source>Aktiv vy</source>
+        <target>Aktiv vy</target>
+      </segment>
+    </unit>
     <unit id="CollectionText.AddColumn.AddColumn">
       <segment state="initial">
         <source>Ny kolumn</source>
@@ -160,6 +166,12 @@
       <segment state="initial">
         <source>Visa alla</source>
         <target>Visa alla</target>
+      </segment>
+    </unit>
+    <unit id="CollectionText.AddView">
+      <segment state="initial">
+        <source>Lägg till ny vy</source>
+        <target>Lägg till ny vy</target>
       </segment>
     </unit>
     <unit id="CollectionText.ColumnOptions.MoveLeft">
@@ -184,6 +196,12 @@
       <segment state="initial">
         <source>Öppna/stäng alternativ för kolumnen</source>
         <target>Öppna/stäng alternativ för kolumnen</target>
+      </segment>
+    </unit>
+    <unit id="CollectionText.RemoveActiveView">
+      <segment state="initial">
+        <source>Ta bort aktiv vy</source>
+        <target>Ta bort aktiv vy</target>
       </segment>
     </unit>
     <unit id="CollectionTitle.None">
@@ -422,8 +440,8 @@
     </unit>
     <unit id="DownloadTexts.OpenPrintError">
       <segment state="initial">
-        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
+        <source>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>Utskriftsversionen kunde inte öppnas i ett nytt fönster. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</target>
       </segment>
     </unit>
     <unit id="DownloadTexts.Source">
@@ -434,8 +452,8 @@
     </unit>
     <unit id="DownloadTexts.TextLoadingError">
       <segment state="initial">
-        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</source>
-        <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster från webbplatsen.</target>
+        <source>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</source>
+        <target>Nedladdningen misslyckades. Vänligen försök igen och tillåt popup-fönster för webbplatsen.</target>
       </segment>
     </unit>
     <unit id="Ebook.InvalidFilename">
@@ -1582,6 +1600,12 @@
       <segment state="initial">
         <source>Tryckt variant</source>
         <target>Tryckt variant</target>
+      </segment>
+    </unit>
+    <unit id="Variants.VariantCategory">
+      <segment state="initial">
+        <source>Variantkategori</source>
+        <target>Variantkategori</target>
       </segment>
     </unit>
     <unit id="ViewOptions.Abbreviation">
