@@ -2,30 +2,31 @@
 @import "src/theme/common/side-menu.scss";
 
 .menu-header {
-    display: flex;
-    flex-flow: column nowrap;
-    width: 100%;
     position: sticky;
     top: 0;
+    width: 100%;
     z-index: 999;
 
     .go-back-menu-item {
-        background-color: var(--side-menu-back-button-background-color);
-        color: var(--side-menu-back-button-text-color);
-        font-size: 1rem;
-        text-decoration: none;
-        display: flex;
-        flex-wrap: nowrap;
         align-items: center;
-        font-weight: normal;
-        margin: 0;
+        background-color: var(--side-menu-collection-title-background-color);
         border-left: 4px solid transparent;
-        padding: 11px 18px 11px 6px;
+        color: var(--side-menu-collection-title-text-color);
+        display: flex;
+        font-size: 1rem;
+        margin: 0;
+        padding: 11px 16px 11px 6px;
+        text-decoration: none;
 
         ion-icon {
-            color: var(--side-menu-back-button-text-color);
+            color: var(--side-menu-collection-title-text-color);
             font-size: 1.75rem;
             margin-right: 0.5rem;
+        }
+
+        span {
+            font-weight: bold;
+            width: 100%;
         }
     }
     .go-back-menu-item:hover {
@@ -33,14 +34,6 @@
     }
     .go-back-menu-item:focus {
         outline-offset: -0.25rem;
-    }
-    h1 {
-        background-color: var(--side-menu-collection-title-background-color);
-        color: var(--side-menu-collection-title-text-color);
-        margin: 0;
-        padding: 16px 18px 16px 16px;
-        font-size: 1rem;
-        font-weight: bold;
     }
 }
 

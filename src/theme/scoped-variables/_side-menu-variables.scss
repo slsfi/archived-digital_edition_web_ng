@@ -15,10 +15,8 @@ ion-app {
   --side-menu-divider-color:                     #dedede;
   --side-menu-hover-color:                       var(--primary-color);
   --side-menu-description-text-color:            #4f4f4f;
-  --side-menu-collection-title-text-color:       var(--side-menu-text-color);
-  --side-menu-collection-title-background-color: #bababa;
-  --side-menu-back-button-text-color:            var(--secondary-toolbar-color-contrast);
-  --side-menu-back-button-background-color:      var(--secondary-toolbar-color);
+  --side-menu-collection-title-text-color:       var(--secondary-toolbar-color-contrast);
+  --side-menu-collection-title-background-color: var(--secondary-toolbar-color);
   --side-menu-selected-text-color:               var(--side-menu-text-color);
   --side-menu-selected-font-weight:              bold;
   --side-menu-selected-background-color:         transparent;

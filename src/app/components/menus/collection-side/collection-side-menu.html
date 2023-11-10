@@ -1,7 +1,13 @@
 <ng-container *ngIf="!isLoading">
   <div class="menu-header">
-    <a class="go-back-menu-item" [routerLink]="['/']"><ion-icon name="arrow-back-sharp"></ion-icon> <span i18n="@@CollectionSideMenu.Back">Tillbaka</span></a>
-    <h1>{{collectionTitle}}</h1>
+    <a class="go-back-menu-item"
+          [routerLink]="['/']"
+          aria-label="Tillbaka"
+          i18n-aria-label="@@CollectionSideMenu.Back"
+    >
+      <ion-icon name="arrow-back-sharp" aria-hidden="true"></ion-icon>
+      <span>{{collectionTitle}}</span>
+    </a>
   </div>
   <div class="sort-select-wrapper" *ngIf="sortOptions.length > 0">
     <ion-select
