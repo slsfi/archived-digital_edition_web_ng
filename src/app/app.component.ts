@@ -38,9 +38,13 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.mobileMode = this.platformService.isMobile() ? true : false;
+    this.mobileMode = this.platformService.isMobile();
     // Side menu is shown by default in desktop mode but not in mobile mode.
     this.showSideNav = !this.mobileMode;
+
+    // Set Open Graph meta tags that are common for all routes. og:title is set by
+    // this.headService.setTitle
+    this.headService.setCommonOpenGraphTags();
 
     this.routerEventsSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -70,13 +74,13 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
       // 2. App is starting on the home page in desktop mode.
       if (
         (
-          this.platformService.isMobile() &&
+          this.mobileMode &&
           this.currentRouterUrl.split('?')[0] !== this.previousRouterUrl.split('?')[0]
         ) ||
         (
           this.appIsStarting &&
           !this.currentUrlSegments &&
-          this.platformService.isDesktop()
+          !this.mobileMode
         )
       ) {
         this.showSideNav = false;
@@ -88,10 +92,22 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
 
       this.setTitleForTopMenuPages(this.currentUrlSegments?.[0]?.path || '');
 
-      this.currentRouterUrl === '/' && this.headService.setMetaProperty('description', $localize`:@@Site.MetaDescription.Home:En generell beskrivning av webbplatsen för sökmotorer.`);
-      this.currentRouterUrl !== '/' && this.headService.setMetaProperty('description', '');
+      if (this.currentRouterUrl === '/') {
+        this.headService.setMetaTag(
+          'name',
+          'description',
+          $localize`:@@Site.MetaDescription.Home:En generell beskrivning av webbplatsen för sökmotorer.`
+        );
+        this.headService.setOpenGraphDescriptionProperty(
+          $localize`:@@Site.MetaDescription.Home:En generell beskrivning av webbplatsen för sökmotorer.`
+        );
+      } else {
+        this.headService.setMetaTag('name', 'description', '');
+        this.headService.setOpenGraphDescriptionProperty('');
+      }
 
       this.headService.setLinks(this.currentRouterUrl);
+      this.headService.setOpenGraphURLProperty(this.currentRouterUrl);
     });
   }
 
