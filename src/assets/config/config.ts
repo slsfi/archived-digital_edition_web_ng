@@ -12,15 +12,28 @@ export const config: Config = {
     facsimileBase: "",
     i18n: {
       languages: [
-        { code: "sv", label: "Svenska" },
-        { code: "fi", label: "Suomi" }
+        { code: "sv", label: "Svenska", region: "FI" },
+        { code: "fi", label: "Suomi", region: "FI" }
       ],
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: false,
       multilingualReadingTextLanguages: [],
       multilingualNamedEntityData: false
     },
-    enableRouterLoadingBar: true
+    enableRouterLoadingBar: true,
+    openGraphMetaTags: {
+      enabled: true,
+      image: {
+        sv: {
+          altText: "alt-text",
+          URL: "assets/images/home-page-banner.jpg"
+        },
+        fi: {
+          altText: "alt-teksti",
+          URL: "assets/images/home-page-banner.jpg"
+        }
+      }
+    }
   },
   collections: {
     coversMarkdownFolderNumber: "08",
@@ -400,7 +413,7 @@ export const config_soderholm: Config = {
     apiEndpoint: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
-        { code: "sv", label: "Svenska" }
+        { code: "sv", label: "Svenska", region: "FI" }
       ],
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: false,
@@ -760,7 +773,7 @@ export const config_vonWright: Config = {
     apiEndpoint: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
-        { code: "sv", label: "Svenska" }
+        { code: "sv", label: "Svenska", region: "FI" }
       ],
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: false,
@@ -1015,9 +1028,9 @@ export const config_granqvist: Config = {
     apiEndpoint: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
-        { code: "sv", label: "Svenska" },
-        { code: "en", label: "English" },
-        { code: "ar", label: "Arabic" },
+        { code: "sv", label: "Svenska", region: "FI" },
+        { code: "en", label: "English", region: "GB" },
+        { code: "ar", label: "Arabic", region: "AR" },
       ],
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: false,
@@ -1341,8 +1354,8 @@ export const config_mechelin: Config = {
     facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     i18n: {
       languages: [
-        { code: "sv", label: "Svenska" },
-        { code: "fi", label: "Suomi" }
+        { code: "sv", label: "Svenska", region: "FI" },
+        { code: "fi", label: "Suomi", region: "FI" }
       ],
       defaultLanguage: "sv",
       multilingualCollectionTableOfContents: true,
