@@ -22,8 +22,8 @@ export class ParentChildPagePathPipe implements PipeTransform {
                 return `${parentPath}/${childId}/foreword`;
             } else if (config.collections?.frontMatterPages?.introduction) {
                 return `${parentPath}/${childId}/introduction`;
-            } else if (config.collections?.firstReadItem) {
-                const idPath = config.collections.firstReadItem[childId]?.split('_') || [];
+            } else if (config.collections?.firstTextItem) {
+                const idPath = config.collections.firstTextItem[childId]?.split('_') || [];
                 if (idPath.length) {
                     idPath[0] = 'text';
                 }

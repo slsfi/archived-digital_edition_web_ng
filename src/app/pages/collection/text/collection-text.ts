@@ -104,7 +104,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.showURNButton = config.page?.text?.showURNButton ?? true;
     this.showViewOptionsButton = config.page?.text?.showViewOptionsButton ?? true;
 
-    // Hide some or all of the view types that can be added (variants, facsimiles, established etc.)
+    // Hide some or all of the view types that can be added (variants, facsimiles, readingtext etc.)
     const viewTypes = config.page?.text?.viewTypes ?? {};
     for (const type in viewTypes) {
       if (
@@ -112,7 +112,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         viewTypes[type]
       ) {
         if (
-          type === 'established' &&
+          type === 'readingtext' &&
           this.multilingualReadingTextLanguages.length > 1
         ) {
           for (const estLanguage of this.multilingualReadingTextLanguages) {
@@ -249,17 +249,17 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     } else {
       // show default view types
       let newViews: any[] = [];
-      let defaultViews: string[] = config.page?.text?.defaultViews ?? ['established'];
+      let defaultViews: string[] = config.page?.text?.defaultViews ?? ['readingtext'];
 
       if (
         this.multilingualReadingTextLanguages.length > 1 &&
-        defaultViews[0].startsWith('established_') &&
-        defaultViews[0] !== 'established_' + this.activeLocale
+        defaultViews[0].startsWith('readingtext_') &&
+        defaultViews[0] !== 'readingtext_' + this.activeLocale
       ) {
         // Set the active locale's reading text to first column if
         // multilingual reading texts
         defaultViews = moveArrayItem(
-          defaultViews, defaultViews.indexOf('established_' + this.activeLocale), 0
+          defaultViews, defaultViews.indexOf('readingtext_' + this.activeLocale), 0
         );
       }
 
@@ -282,16 +282,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       if (this.collectionContentService.activeCollectionTextMobileModeView !== undefined) {
         this.activeMobileModeViewIndex = this.collectionContentService.activeCollectionTextMobileModeView;
       } else {
-        const defaultViews = config.page?.text?.defaultViews ?? ['established'];
+        const defaultViews = config.page?.text?.defaultViews ?? ['readingtext'];
         let activeMobileModeViewType = defaultViews[0];
 
         if (
           this.multilingualReadingTextLanguages.length > 1 &&
-          activeMobileModeViewType.startsWith('established_')
+          activeMobileModeViewType.startsWith('readingtext_')
         ) {
           // Set the default selected mobile mode view to the active
           // locale's reading text if multilingual reading texts
-          activeMobileModeViewType = 'established_' + this.activeLocale;
+          activeMobileModeViewType = 'readingtext_' + this.activeLocale;
         }
 
         this.activeMobileModeViewIndex = availableViews.findIndex(
@@ -430,7 +430,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 const numId = eventTarget.getAttribute('data-id').replace( /^\D+/g, '');
                 const targetId = 'start' + numId;
                 const lemmaStart = this.scrollService.findElementInColumnByAttribute(
-                  'data-id', targetId, 'read-text'
+                  'data-id', targetId, 'reading-text'
                 );
 
                 if (lemmaStart) {
@@ -462,7 +462,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               // Footnote reference clicked in reading text
               this.ngZone.run(() => {
                 this.showFootnoteInfoOverlay(
-                  eventTarget.getAttribute('data-id'), 'read-text', eventTarget
+                  eventTarget.getAttribute('data-id'), 'reading-text', eventTarget
                 );
               });
               modalShown = true;
@@ -759,12 +759,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 // We are on the same page and the last item in the target href is a textposition.
                 positionId = hrefTargetItems[hrefTargetItems.length - 1].replace('#', '');
 
-                // Find element in the correct column (read-text or comments) based on ref type.
-                let refType = 'read-text';
+                // Find element in the correct column (reading-text or comments) based on ref type.
+                let refType = 'reading-text';
                 if (anchorElem.classList.contains('ref_comment')) {
                   refType = 'comments';
                 }
-                const addViewType = (refType === 'read-text') ? 'established' : refType;
+                const addViewType = (refType === 'reading-text') ? 'readingtext' : refType;
 
                 if (
                   !nElement.querySelector(
@@ -917,7 +917,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                 });
               } else if (eventTarget['classList'].contains('ttFoot')) {
                 this.ngZone.run(() => {
-                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'read-text', eventTarget);
+                  this.showFootnoteTooltip(eventTarget.getAttribute('data-id'), 'reading-text', eventTarget);
                 });
               }
             } else if (
@@ -1570,12 +1570,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
    * @param commentLemmaId 
    */
   openNewReadingTextShowCommentLemma(commentLemmaId: string) {
-    this.openNewView({ viewType: 'established' });
-    this.setActiveMobileModeViewType(undefined, 'established');
+    this.openNewView({ viewType: 'readingtext' });
+    this.setActiveMobileModeViewType(undefined, 'readingtext');
 
     setTimeout(() => {
       const lemmaStart = this.scrollService.findElementInColumnByAttribute(
-        'data-id', commentLemmaId, 'read-text'
+        'data-id', commentLemmaId, 'reading-text'
       );
       this.scrollService.scrollToCommentLemma(lemmaStart);
     }, 700);

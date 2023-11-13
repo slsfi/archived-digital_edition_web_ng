@@ -40,7 +40,7 @@ export const config: Config = {
     titlesMarkdownFolderNumber: "",
     enableLegacyIDs: true,
     enableMathJax: false,
-    firstReadItem: {
+    firstTextItem: {
       216: "216_20280", 219: "219_19443", 220: "220_20122",
       218: "218_20230_ch2", 210: "210_20548_ch1", 208: "208_18466_ch4",
       207: "207_18464_ch1", 214: "214_20240_ch1", 203: "203_20217_ch1",
@@ -57,13 +57,13 @@ export const config: Config = {
       introduction: true
     },
     highlightSearchMatches: true,
+    inlineIllustrations: [206],
     mediaCollectionMappings: { 214: 44, 206: 19 },
     order: [
       [216, 219, 220, 218, 210, 208, 207, 214, 203, 213,
         202, 199, 221, 206, 201, 211, 200, 205, 215, 217,
         204, 212, 209]
-    ],
-    visibleInlineReadTextIllustrations: [206]
+    ]
   },
   ebooks: [
     {
@@ -122,7 +122,7 @@ export const config: Config = {
       filterGroupsOpenByDefault: ["Years", "Type", "Genre", "Collection"],
       hitsPerPage: 15,
       indices: ["topelius"],
-      openEstWithComTypeHit: false,
+      openReadingTextWithComments: false,
       textHighlightFragmentSize: 150,
       textHighlightType: "fvh",
       textTitleHighlightType: "fvh",
@@ -257,7 +257,7 @@ export const config: Config = {
       showURNButton: true
     },
     text: {
-      defaultViews: ["established", "comments", "facsimiles"],
+      defaultViews: ["readingtext", "comments", "facsimiles"],
       defaultViewOptions: ["comments"],
       showTextDownloadButton: true,
       showURNButton: true,
@@ -276,7 +276,7 @@ export const config: Config = {
       },
       viewTypes: {
         showAll: true,
-        established: true,
+        readingtext: true,
         comments: true,
         facsimiles: true,
         manuscripts: true,
@@ -359,7 +359,7 @@ export const config: Config = {
         txt: false,
         print: true
       },
-      readTextFormats: {
+      readingTextFormats: {
         xml: true,
         html: false,
         xhtml: false,
@@ -423,7 +423,7 @@ export const config_soderholm: Config = {
   collections: {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "",
-    firstReadItem: {
+    firstTextItem: {
       1084: "1084_77105", 1699: "1699_77946", 1700: "1700_78162",
       1701: "1701_78326", 1702: "1702_78404", 1703: "1703_78486",
       1704: "1704_78634", 1705: "1705_78754", 1706: "1706_78908",
@@ -548,7 +548,7 @@ export const config_soderholm: Config = {
       filterGroupsOpenByDefault: ["Type", "Collection"],
       hitsPerPage: 15,
       indices: ["soderholm"],
-      openEstWithComTypeHit: false,
+      openReadingTextWithComments: false,
       textHighlightType: "fvh",
       textTitleHighlightType: "fvh",
       typeFilterGroupOptions: ["ms"],
@@ -649,7 +649,7 @@ export const config_soderholm: Config = {
       },
       viewTypes: {
         showAll: false,
-        established: false,
+        readingtext: false,
         comments: false,
         facsimiles: true,
         manuscripts: true,
@@ -727,7 +727,7 @@ export const config_soderholm: Config = {
         txt: false,
         print: false
       },
-      readTextFormats: {
+      readingTextFormats: {
         xml: false,
         html: false,
         xhtml: false,
@@ -784,7 +784,7 @@ export const config_vonWright: Config = {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "",
     enableMathJax: true,
-    firstReadItem: {
+    firstTextItem: {
       146: "", 225: ""
     },
     frontMatterPages: {
@@ -810,7 +810,7 @@ export const config_vonWright: Config = {
       filterGroupsOpenByDefault: ["Type", "Collection"],
       hitsPerPage: 15,
       indices: ["vonwright"],
-      openEstWithComTypeHit: false,
+      openReadingTextWithComments: false,
       textHighlightType: "fvh",
       textTitleHighlightType: "fvh",
       typeFilterGroupOptions: ["est", "com", "inl", "tit"],
@@ -894,7 +894,7 @@ export const config_vonWright: Config = {
       showURNButton: true
     },
     text: {
-      defaultViews: ["established", "comments"],
+      defaultViews: ["readingtext", "comments"],
       defaultViewOptions: ["comments"],
       showURNButton: true,
       showViewOptionsButton: true,
@@ -912,7 +912,7 @@ export const config_vonWright: Config = {
       },
       viewTypes: {
         showAll: true,
-        established: true,
+        readingtext: true,
         comments: true,
         facsimiles: true,
         manuscripts: false,
@@ -989,7 +989,7 @@ export const config_vonWright: Config = {
         txt: false,
         print: true
       },
-      readTextFormats: {
+      readingTextFormats: {
         xml: true,
         html: false,
         xhtml: false,
@@ -1144,7 +1144,7 @@ export const config_granqvist: Config = {
       filterGroupsOpenByDefault: ["Type", "Collection"],
       hitsPerPage: 15,
       indices: ["granqvist"],
-      openEstWithComTypeHit: false,
+      openReadingTextWithComments: false,
       textHighlightType: "fvh",
       textTitleHighlightType: "fvh",
       typeFilterGroupOptions: ["tit"],
@@ -1228,7 +1228,7 @@ export const config_granqvist: Config = {
       showViewOptionsButton: true,
       viewTypes: {
         showAll: false,
-        established: false,
+        readingtext: false,
         comments: false,
         facsimiles: true,
         manuscripts: false,
@@ -1310,7 +1310,7 @@ export const config_granqvist: Config = {
         txt: false,
         print: false
       },
-      readTextFormats: {
+      readingTextFormats: {
         xml: false,
         html: false,
         xhtml: false,
@@ -1366,7 +1366,7 @@ export const config_mechelin: Config = {
   collections: {
     coversMarkdownFolderNumber: "08",
     titlesMarkdownFolderNumber: "",
-    firstReadItem: {
+    firstTextItem: {
       1: "1_1199"
     },
     frontMatterPages: {
@@ -1424,7 +1424,7 @@ export const config_mechelin: Config = {
       showURNButton: true
     },
     text: {
-      defaultViews: ["established_sv", "established_fi", "manuscripts", "facsimiles"],
+      defaultViews: ["readingtext_sv", "readingtext_fi", "manuscripts", "facsimiles"],
       defaultViewOptions: ["comments", "personInfo", "abbreviations"],
       showTextDownloadButton: true,
       showURNButton: true,
@@ -1443,7 +1443,7 @@ export const config_mechelin: Config = {
       },
       viewTypes: {
         showAll: true,
-        established: true,
+        readingtext: true,
         comments: false,
         facsimiles: true,
         manuscripts: true,
@@ -1521,7 +1521,7 @@ export const config_mechelin: Config = {
         txt: false,
         print: true
       },
-      readTextFormats: {
+      readingTextFormats: {
         xml: true,
         html: false,
         xhtml: false,

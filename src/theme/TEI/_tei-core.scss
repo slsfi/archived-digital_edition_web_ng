@@ -12,7 +12,7 @@ after the texts.
 page-title div.teiContainer,
 page-foreword div.teiContainer,
 page-introduction div.teiContainer,
-read-text > div.teiContainer,
+reading-text > div.teiContainer,
 comments > div.teiContainer,
 variants > div.teiContainer,
 manuscripts > div.teiContainer,
@@ -494,7 +494,7 @@ div.tei img.teiManuscript.handSymbol {
 
 /*
 Make the red triangle (indicates start of lemmas in
-read-texts) blink brighter.
+reading-texts) blink brighter.
 */
 @keyframes filter-animation-brightness {
     0% {
@@ -1954,7 +1954,7 @@ div.tei {
     }
     img.doodle {
         cursor: pointer;
-        display: none !important; /* By default doodles in read-text are not shown except when illustrations-view is shown. */
+        display: none !important; /* By default doodles in reading-text are not shown except when illustrations-view is shown. */
     }
     .pdf_figure_graphic {
         display: inline-block;
@@ -2005,12 +2005,12 @@ styles from div.tei
     }
 }
 
-read-text div.tei .unclear.tooltiptrigger,
-read-text div.tei .gap.tooltiptrigger,
-read-text div.tei .marginalia.tooltiptrigger,
-read-text div.tei .revision.tooltiptrigger,
-read-text div.tei .tooltiptrigger > .keyword_symbol,
-read-text div.tei.clickable-illustrations .est_figure_graphic {
+reading-text div.tei .unclear.tooltiptrigger,
+reading-text div.tei .gap.tooltiptrigger,
+reading-text div.tei .marginalia.tooltiptrigger,
+reading-text div.tei .revision.tooltiptrigger,
+reading-text div.tei .tooltiptrigger > .keyword_symbol,
+reading-text div.tei.clickable-illustrations .est_figure_graphic {
     cursor: pointer;
 }
 
@@ -2023,12 +2023,12 @@ manuscripts div.tei img.teiManuscript.doodle {
 }
 
 /*
-Show doodles in read-text when there is an illustrations-view
+Show doodles in reading-text when there is an illustrations-view
 open and always in manuscript-views. Also always show
-'unkown' doodle images in read-text.
+'unkown' doodle images in reading-text.
 */
-.illustrations-view-shown read-text div.tei img.doodle,
-read-text div.tei img.doodle.unknown,
+.illustrations-view-shown reading-text div.tei img.doodle,
+reading-text div.tei img.doodle.unknown,
 manuscripts div.tei img.teiManuscript.doodle {
     display: inline-block !important;
 }
@@ -2251,29 +2251,29 @@ div.tei .tooltip { display: none; }
 }
 
 /*
-Left padding for read-texts and introductions when the
+Left padding for reading-texts and introductions when the
 paragraph numbering is displayed
 */
-read-text .tei.show_paragraphNumbering,
+reading-text .tei.show_paragraphNumbering,
 page-introduction .tei.show_paragraphNumbering {
     padding-left: 20px;
 }
 @media screen and (max-width: 820px) {
     /* Add margin on small screens when showing paragraph numbering */
-    read-text .tei.show_paragraphNumbering,
+    reading-text .tei.show_paragraphNumbering,
     page-introduction .tei.show_paragraphNumbering {
         margin-left: 8px;
     }
 }
 /* left padding if showing paragraph numbering in mobile view */
-page-text .mobile-mode-established .tei.show_paragraphNumbering {
+page-text .mobile-mode-readingtext .tei.show_paragraphNumbering {
     padding-left: 28px;
 }
 /*
 Icons that open corresponding images in the illustrations-view
 are not clickable in mobile mode.
 */
-page-text .mobile-mode-established img.hide-illustration + span.tei.figureP.iconBefore::before {
+page-text .mobile-mode-readingtext img.hide-illustration + span.tei.figureP.iconBefore::before {
     cursor: default;
 }
 
@@ -2312,8 +2312,8 @@ span.footnoteindicator {
     cursor: pointer;
 }
 
-/* Overrides for read-text */
-read-text {
+/* Overrides for reading-text */
+reading-text {
     div.tei {
         transition: padding-left linear 0.2s;
 

@@ -217,10 +217,10 @@
     <div *ngFor="let view of views; index as i"
           class="scroll-content-container mobile-scc column_type_{{view.type}}"
           [class.visuallyhidden]="activeMobileModeViewIndex !== i"
-          [class.mobile-mode-established]="
-                view.type === 'established' ||
-                view.type === 'established_sv' ||
-                view.type === 'established_fi'"
+          [class.mobile-mode-readingtext]="
+                view.type === 'readingtext' ||
+                view.type === 'readingtext_sv' ||
+                view.type === 'readingtext_fi'"
           [class.mobile-mode-comments]="view.type === 'comments'"
           [class.mobile-mode-facsimiles]="view.type === 'facsimiles'"
           [class.mobile-mode-manuscripts]="view.type === 'manuscripts'"
@@ -248,9 +248,9 @@
 
 <!-- Column headings template -->
 <ng-template #columnHeadingTemplate let-view>
-  <ng-container *ngIf="view.type === 'established'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
-  <ng-container *ngIf="view.type === 'established_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
-  <ng-container *ngIf="view.type === 'established_fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
+  <ng-container *ngIf="view.type === 'readingtext'" i18n="@@ReadingText.ReadingText">Lästext</ng-container>
+  <ng-container *ngIf="view.type === 'readingtext_sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>
+  <ng-container *ngIf="view.type === 'readingtext_fi'" i18n="@@ReadingText.FinnishText">Finsk text</ng-container>
   <ng-container *ngIf="view.type === 'comments'" i18n="@@Commentary.Commentary">Kommentar</ng-container>
   <ng-container *ngIf="view.type === 'facsimiles'" i18n="@@Facsimiles.Facsimile">Faksimil</ng-container>
   <ng-container *ngIf="view.type === 'manuscripts'" i18n="@@Manuscripts.Manuscript">Manuskript</ng-container>
@@ -263,24 +263,24 @@
 
 <!-- Column types template -->
 <ng-template #columnTypesTemplate let-view="view" let-i="i">
-  <read-text *ngIf="view.type === 'established' && multilingualReadingTextLanguages.length < 2"
+  <reading-text *ngIf="view.type === 'readingtext' && multilingualReadingTextLanguages.length < 2"
         [textItemID]="textItemID"
         [textPosition]="textPosition"
         [searchMatches]="searchMatches"
         (openNewIllustrView)="openNewView($event)"
         (selectedIllustration)="updateIllustrationViewImage($event)"
-  ></read-text>
+  ></reading-text>
 
   <ng-container *ngIf="multilingualReadingTextLanguages.length > 1">
     <ng-container *ngFor="let lang of multilingualReadingTextLanguages">
-      <read-text *ngIf="view.type === 'established_' + lang"
+      <reading-text *ngIf="view.type === 'readingtext_' + lang"
             [language]="lang"
             [textItemID]="textItemID"
             [textPosition]="textPosition"
             [searchMatches]="searchMatches"
             (openNewIllustrView)="openNewView($event)"
             (selectedIllustration)="updateIllustrationViewImage($event)"
-      ></read-text>
+      ></reading-text>
     </ng-container>
   </ng-container>
 
@@ -381,12 +381,12 @@
               <ng-container i18n="@@CollectionText.AddColumn.ShowAll">Visa alla</ng-container>
             </ng-container>
 
-            <ng-container *ngIf="type === 'established'">
+            <ng-container *ngIf="type === 'readingtext'">
               <ion-icon slot="start" name="reader-outline"></ion-icon>
               <ng-container i18n="@@ReadingText.ReadingText">Lästext</ng-container>
             </ng-container>
 
-            <ng-container *ngIf="type.startsWith('established_')">
+            <ng-container *ngIf="type.startsWith('readingtext_')">
               <ion-icon slot="start" name="reader-outline"></ion-icon>
               <ng-container [ngSwitch]="type.split('_')[1]">
                 <ng-container *ngSwitchCase="'sv'" i18n="@@ReadingText.SwedishText">Svensk text</ng-container>

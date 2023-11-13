@@ -25,8 +25,8 @@ export class OccurrenceCollectionTextPageQueryparamsPipe implements PipeTransfor
             text_type = 'facsimiles'
             viewTypeID = textData.publication_facsimile_id
             facsNr = textData.facsimilePage;
-        } else if (textData.textType === 'est') {
-            text_type = 'established'
+        } else if (textData.textType === 'rt') {
+            text_type = 'readingtext'
         } else {
             text_type = 'comments';
         }

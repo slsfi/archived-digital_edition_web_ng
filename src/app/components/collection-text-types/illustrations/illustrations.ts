@@ -117,7 +117,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
       imageFilename = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
       let target: HTMLElement | null = null;
       const readtextElem = document.querySelector(
-        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+        'page-text:not([ion-page-hidden]):not(.ion-page-hidden) reading-text'
       );
       try {
         if (image.class === 'doodle') {
@@ -146,7 +146,7 @@ export class IllustrationsComponent implements OnChanges, OnInit {
         }
 
         if (target?.parentElement) {
-          this.setMobileModeActiveText.emit('established');
+          this.setMobileModeActiveText.emit('readingtext');
           if (image.class !== 'visible-illustration') {
             // Prepend arrow to the image/icon in the reading text and scroll into view
             const tmpImage: HTMLImageElement = new Image();

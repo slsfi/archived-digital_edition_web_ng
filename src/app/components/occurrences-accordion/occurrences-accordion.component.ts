@@ -95,7 +95,7 @@ export class OccurrencesAccordionComponent implements OnInit {
         !occurrence.publication_facsimile_id &&
         !occurrence.publication_version_id
       ) {
-        this.setOccurrenceType(occurrence, 'est');
+        this.setOccurrenceType(occurrence, 'rt');
     } else {
       if (occurrence.publication_manuscript_id) {
         this.setOccurrenceType(occurrence, 'ms');
