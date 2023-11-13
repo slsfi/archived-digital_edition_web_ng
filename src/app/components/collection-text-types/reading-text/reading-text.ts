@@ -16,9 +16,9 @@ import { isBrowser } from '@utility-functions';
 
 @Component({
   standalone: true,
-  selector: 'read-text',
-  templateUrl: 'read-text.html',
-  styleUrls: ['read-text.scss'],
+  selector: 'reading-text',
+  templateUrl: 'reading-text.html',
+  styleUrls: ['reading-text.scss'],
   imports: [NgIf, IonicModule, MathJaxDirective]
 })
 export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
@@ -30,7 +30,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
   @Output() selectedIllustration: EventEmitter<any> = new EventEmitter();
 
   illustrationsViewAvailable: boolean = false;
-  illustrationsVisibleInReadtext: boolean = false;
+  inlineVisibleIllustrations: boolean = false;
   intervalTimerId: number = 0;
   mobileMode: boolean = false;
   text: SafeHtml = '';
@@ -97,10 +97,10 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
           res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
         ) {
           let text: string = res.content;
-          text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
+          text = this.parserService.postprocessReadingText(text, this.textItemID.split('_')[0]);
           text = this.parserService.insertSearchMatchTags(text, this.searchMatches);
           this.text = this.sanitizer.bypassSecurityTrustHtml(text);
-          this.illustrationsVisibleInReadtext = this.parserService.readingTextHasVisibleIllustrations(text);
+          this.inlineVisibleIllustrations = this.parserService.readingTextHasVisibleIllustrations(text);
 
           if (this.textPosition) {
             this.scrollToTextPosition();
@@ -150,7 +150,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
               src: 'assets/images/verk/' + String(eventTarget.dataset['id']).replace('tag_', '') + '.jpg',
               class: 'doodle'
             };
-          } else if (this.illustrationsVisibleInReadtext) {
+          } else if (this.inlineVisibleIllustrations) {
             // There are possibly visible illustrations in the read text. Check if click on such an image.
             if (
               eventTarget.classList.contains('est_figure_graphic') &&
@@ -264,7 +264,7 @@ export class ReadTextComponent implements OnChanges, OnDestroy, OnInit {
     if (isBrowser()) {
       this.ngZone.runOutsideAngular(() => {
         const target = document.querySelector(
-          'page-text:not([ion-page-hidden]):not(.ion-page-hidden) read-text'
+          'page-text:not([ion-page-hidden]):not(.ion-page-hidden) reading-text'
         ) as HTMLElement;
         if (target) {
           this.scrollService.scrollElementIntoView(target, 'top', 50);

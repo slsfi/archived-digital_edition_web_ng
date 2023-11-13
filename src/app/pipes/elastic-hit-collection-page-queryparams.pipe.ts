@@ -18,7 +18,7 @@ export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
 
   constructor(private urlService: UrlService) {
     this.highlightSearchMatches = config.collections?.highlightSearchMatches ?? true;
-    this.openReadingTextWithCommentsHit = config.page?.elasticSearch?.openEstWithComTypeHit ?? false;
+    this.openReadingTextWithCommentsHit = config.page?.elasticSearch?.openReadingTextWithComments ?? false;
   }
 
   transform(elasticHit: any): any {
@@ -41,7 +41,7 @@ export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
       views.push(
         {
           type: (
-            text_type === 'est' ? 'established'
+            text_type === 'est' ? 'readingtext'
             : text_type === 'com' ? 'comments'
             : text_type === 'var' ? 'variants'
             : 'manuscripts'
@@ -53,7 +53,7 @@ export class ElasticHitCollectionPageQueryparamsPipe implements PipeTransform {
       if (text_type === 'com' && this.openReadingTextWithCommentsHit) {
         views.push(
           {
-            type: 'established'
+            type: 'readingtext'
           }
         );
       }

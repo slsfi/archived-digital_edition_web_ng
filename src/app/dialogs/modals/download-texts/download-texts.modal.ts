@@ -88,7 +88,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     this.siteUrl = config.app?.siteURLOrigin ?? '';
 
     const formatsCom = config.modal?.downloadTexts?.commentsFormats ?? {};
-    const formatsEst = config.modal?.downloadTexts?.readTextFormats ?? {};
+    const formatsEst = config.modal?.downloadTexts?.readingTextFormats ?? {};
     const formatsIntro = config.modal?.downloadTexts?.introductionFormats ?? {};
     const formatsMs = config.modal?.downloadTexts?.manuscriptsFormats ?? {};
 
@@ -168,9 +168,9 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
         this.setPublicationTitle();
 
         if (this.downloadFormatsEst.length || this.downloadFormatsCom.length) {
-          // Get publication data in order to determine if read-texts and
+          // Get publication data in order to determine if reading-texts and
           // comments are available. original_filename is used to determine if
-          // read-texts exist, and publication_comment_id if comments exist.
+          // reading-texts exist, and publication_comment_id if comments exist.
           this.publicationData$ = this.collectionsService.getPublication(
             idParts[1]
           ).pipe(
@@ -243,7 +243,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
       dlText$ = this.collectionContentService.getDownloadableIntroduction(
         this.textItemID, format, this.activeLocale
       );
-    } else if (textType === 'est') {
+    } else if (textType === 'rt') {
       this.loadingEst = true;
       dlText$ = this.collectionContentService.getDownloadableReadingText(
         this.textItemID, format, language
@@ -271,7 +271,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
             fileName = this.convertToFilename(
               this.introductionTitle + '-' + this.collectionTitle
             ) + '.' + fileExtension;
-          } else if (textType === 'est') {
+          } else if (textType === 'rt') {
             const langForFilename = language ? '_' + language : '';
             fileName = this.convertToFilename(this.publicationTitle)
                   + langForFilename + '-id-' + this.textItemID.split('_')[1]
@@ -329,7 +329,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     if (textType === 'intro') {
       this.loadingIntro = true;
       text$ = this.collectionContentService.getIntroduction(this.textItemID, this.activeLocale);
-    } else if (textType === 'est') {
+    } else if (textType === 'rt') {
       this.loadingEst = true;
       text$ = this.collectionContentService.getReadingText(this.textItemID, language);
     } else if (textType === 'com') {
@@ -358,7 +358,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
           if (
             (textType === 'intro' && res?.content) ||
             (
-              textType === 'est' &&
+              textType === 'rt' &&
               res?.content &&
               res?.content !== '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>File not found</body></html>'
             ) ||
@@ -373,7 +373,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
 
             if (textType === 'intro') {
               text = this.getProcessedPrintIntro(res.content);
-            } else if (textType === 'est') {
+            } else if (textType === 'rt') {
               text = this.getProcessedPrintReadText(res.content, language);
             } else if (textType === 'com') {
               text = this.getProcessedPrintComments(res);
@@ -397,7 +397,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
             }
 
           } else {
-            if (textType === 'est') {
+            if (textType === 'rt') {
               this.showMissingTextError = true;
             } else {
               this.showPrintError = true;
@@ -429,10 +429,10 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
   }
 
   private getProcessedPrintReadText(text: string, language?: string): string {
-    text = this.parserService.postprocessReadText(text, this.textItemID.split('_')[0]);
+    text = this.parserService.postprocessReadingText(text, this.textItemID.split('_')[0]);
     text = text.replace('<p> </p><p> </p><section role="doc-endnotes"><ol class="tei footnotesList"></ol></section>', '');
     text = this.fixImagePaths(text);
-    return this.constructHtmlForPrint(text, 'est', language);
+    return this.constructHtmlForPrint(text, 'rt', language);
   }
 
   private getProcessedPrintComments(commentsData: any): string {
@@ -509,7 +509,7 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     header += '    div.tei.teiContainer { padding-bottom: 0; line-height: 1.45em; }\n';
     header += '    div.tei.teiContainer p { line-height: 1.45em; }\n';
     header += '    div.tei p.teiComment.note { margin-top: 0.25rem; margin-left: 1.5em; text-indent: -1.5em; }\n';
-    header += '    read-text .tei.show_paragraphNumbering, page-introduction .tei.show_paragraphNumbering { padding-left: 35px; }\n';
+    header += '    reading-text .tei.show_paragraphNumbering, page-introduction .tei.show_paragraphNumbering { padding-left: 35px; }\n';
     header += '    div.tei ol.footnotesList li.footnoteItem a.footnoteReference { color: initial; }\n';
     header += '    page-introduction div.tei span.footnoteindicator { color: initial; }\n';
     header += '    h1, h2, h3, h4, h5, h6 { break-after: avoid; break-inside: avoid; }\n';
@@ -578,9 +578,9 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     }
     header += '    <p>' + this.collectionTitle + '</p>\n';
     header += '    <p>' + $localize`:@@Site.Title:Webbplatsens titel` + (this.siteUrl ? (' – ' + '<a href="' + this.siteUrl + '">' + this.siteUrl + '</a>') : '') + '</p>\n';
-    if ((textType === 'est' || textType === 'intro') && this.referenceData) {
+    if ((textType === 'rt' || textType === 'intro') && this.referenceData) {
 
-      header += '    <p class="apart">' + (textType === 'est' ? $localize`:@@Reference.ReferToReadingText:Hänvisa till denna lästext` : $localize`:@@Reference.ReferToIntroduction:Hänvisa till denna inledning`) + ':</p>\n';
+      header += '    <p class="apart">' + (textType === 'rt' ? $localize`:@@Reference.ReferToReadingText:Hänvisa till denna lästext` : $localize`:@@Reference.ReferToIntroduction:Hänvisa till denna inledning`) + ':</p>\n';
       header += '    <p>' + this.referenceData.reference_text + ', <a href="' + referenceURL + '">' + referenceURL + '</a></p>\n';
     } else {
       header += '    <p class="apart">' + $localize`:@@DownloadTexts.Source:Texten är hämtad från` + ':</p>\n';
@@ -591,8 +591,8 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     }
     header += '</div>\n';
 
-    if (textType === 'est') {
-      header += '<read-text>\n';
+    if (textType === 'rt') {
+      header += '<reading-text>\n';
     } else if (textType === 'com') {
       header += '<comments>\n';
     } else if (textType === 'ms') {
@@ -604,8 +604,8 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
     }
 
     let closer = '</div>\n';
-    if (textType === 'est') {
-      closer += '</read-text>\n';
+    if (textType === 'rt') {
+      closer += '</reading-text>\n';
     } else if (textType === 'com') {
       closer += '</comments>\n';
     } else if (textType === 'ms') {
@@ -657,14 +657,14 @@ export class DownloadTextsModal implements OnDestroy, OnInit {
 
   private getViewOptionsClassNames(textType: string): string {
     let classes = '';
-    if (textType === 'est' || textType === 'intro') {
+    if (textType === 'rt' || textType === 'intro') {
       if (this.viewOptionsService.show.paragraphNumbering) {
         classes += 'show_paragraphNumbering ';
       }
       if (this.viewOptionsService.show.pageBreakEdition) {
         classes += 'show_pageBreakEdition ';
       }
-      if (textType === 'est' && this.viewOptionsService.show.pageBreakOriginal) {
+      if (textType === 'rt' && this.viewOptionsService.show.pageBreakOriginal) {
         classes += 'show_pageBreakOriginal ';
       }
     }

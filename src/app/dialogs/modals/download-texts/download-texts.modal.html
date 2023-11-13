@@ -60,7 +60,7 @@
                 <ng-container *ngFor="let format of downloadFormatsEst">
                   <ion-button *ngIf="format !== 'print'"
                         class="custom-button"
-                        (click)="loadingGroupIndex = i; initiateDownload('est', format, language)"
+                        (click)="loadingGroupIndex = i; initiateDownload('rt', format, language)"
                   >
                     <ng-container *ngIf="format === 'xml'" i18n="@@DownloadTexts.Format.XML">XML</ng-container>
                     <ng-container *ngIf="format === 'html'" i18n="@@DownloadTexts.Format.HTML">HTML</ng-container>
@@ -70,7 +70,7 @@
                   <ion-button *ngIf="format === 'print'"
                         class="custom-outline-button"
                         fill="outline"
-                        (click)="loadingGroupIndex = i; openPrintFriendlyText('est', language)"
+                        (click)="loadingGroupIndex = i; openPrintFriendlyText('rt', language)"
                         i18n="@@DownloadTexts.Format.Print"
                   >Utskrift</ion-button>
                 </ng-container>

@@ -10,7 +10,7 @@ import { IllustrationsComponent } from '@components/collection-text-types/illust
 import { LegendComponent } from '@components/collection-text-types/legend/legend';
 import { ManuscriptsComponent } from '@components/collection-text-types/manuscripts/manuscripts';
 import { MetadataComponent } from '@components/collection-text-types/metadata/metadata';
-import { ReadTextComponent } from '@components/collection-text-types/read-text/read-text';
+import { ReadTextComponent } from '@components/collection-text-types/reading-text/reading-text';
 import { TextChangerComponent } from '@components/text-changer/text-changer';
 import { VariantsComponent } from '@components/collection-text-types/variants/variants';
 import { CollectionTextPage } from './collection-text';

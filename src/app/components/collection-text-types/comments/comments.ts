@@ -159,13 +159,13 @@ export class CommentsComponent implements OnInit, OnDestroy {
               const numId: string = targetElem.classList[targetElem.classList.length - 1]
                     .replace( /^\D+/g, '');
               const targetId: string = 'start' + numId;
-              const lemmaStart = this.scrollService.findElementInColumnByAttribute('data-id', targetId, 'read-text');
+              const lemmaStart = this.scrollService.findElementInColumnByAttribute('data-id', targetId, 'reading-text');
 
               if (lemmaStart) {
                 // There is a reading text view open.
                 // Scroll to start of lemma in reading text and temporarily prepend arrow.
                 if (this.mobileMode) {
-                  this.setMobileModeActiveText.emit('established');
+                  this.setMobileModeActiveText.emit('readingtext');
                   // In mobile mode the reading text view needs time to be made
                   // visible before scrolling can start.
                   setTimeout(() => {
