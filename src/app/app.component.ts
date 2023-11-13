@@ -86,6 +86,14 @@ export class DigitalEditionsApp implements OnDestroy, OnInit {
         this.showSideNav = false;
       }
 
+      // Open side menu if user navigated to a collection page from the content page
+      if (
+        this.currentUrlSegments?.[0]?.path === 'collection' &&
+        this.previousRouterUrl === '/content'
+      ) {
+        this.showSideNav = true;
+      }
+
       if (this.appIsStarting) {
         this.appIsStarting = false;
       }
