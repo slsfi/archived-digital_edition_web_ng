@@ -11,8 +11,8 @@ async function generateSitemap() {
     console.log('Generating sitemap ...');
     const config = getConfig();
 
-    const projectName = config.app?.machineName ?? '';
-    const API = config.app?.apiEndpoint ?? '';
+    const projectName = config.app?.projectNameDB ?? '';
+    const API = config.app?.backendBaseURL ?? '';
     let urlOrigin = config.app?.siteURLOrigin ?? '';
     const locale = config.app?.i18n?.defaultLanguage ?? 'sv';
     const multilingualCollectionTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;

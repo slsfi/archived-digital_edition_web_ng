@@ -554,7 +554,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
       'personInfo': false,
       'placeInfo': false,
       'workInfo': false,
-      'changes': false,
+      'emendations': false,
       'normalisations': false,
       'abbreviations': false,
       'paragraphNumbering': false,

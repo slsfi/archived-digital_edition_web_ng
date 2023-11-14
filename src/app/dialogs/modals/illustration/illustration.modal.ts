@@ -36,8 +36,8 @@ export class IllustrationModal implements OnInit {
       (data: any) => {
         this.imgMetadata = data;
         if (data?.media_collection_id && data?.image_filename_front) {
-          this.imgPath = config.app.apiEndpoint + '/'
-          + config.app.machineName + '/gallery/get/'
+          this.imgPath = config.app.backendBaseURL + '/'
+          + config.app.projectNameDB + '/gallery/get/'
           + data.media_collection_id + '/'
           + data.image_filename_front;
         }

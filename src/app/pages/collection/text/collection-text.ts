@@ -469,8 +469,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             }
           } else if (
             (
-              eventTarget['classList'].contains('ttChanges') &&
-              this.viewOptionsService.show.changes
+              (
+                eventTarget['classList'].contains('ttChanges') ||
+                eventTarget['classList'].contains('ttEmendations')
+               ) &&
+              this.viewOptionsService.show.emendations
             ) ||
             (
               eventTarget['classList'].contains('ttNormalisations') &&
@@ -922,8 +925,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
               }
             } else if (
               (
-                eventTarget['classList'].contains('ttChanges') &&
-                this.viewOptionsService.show.changes
+                (
+                  eventTarget['classList'].contains('ttChanges') ||
+                  eventTarget['classList'].contains('ttEmendations')
+                ) &&
+                this.viewOptionsService.show.emendations
               ) || (
                 eventTarget['classList'].contains('ttNormalisations') &&
                 this.viewOptionsService.show.normalisations
@@ -1049,7 +1055,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   /**
-   * This function is used for showing tooltips for changes,
+   * This function is used for showing tooltips for emendations,
    * normalisations, abbreviations and explanations in manuscripts.
    */
   private showTooltipFromInlineHtml(targetElem: HTMLElement) {
@@ -1111,7 +1117,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   /**
-   * This function is used for showing infoOverlays for changes,
+   * This function is used for showing infoOverlays for emendations,
    * normalisations and abbreviations, and also comments if they
    * are present inline in the text.
    */

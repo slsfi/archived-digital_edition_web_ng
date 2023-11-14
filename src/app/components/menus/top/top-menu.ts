@@ -55,9 +55,9 @@ export class TopMenuComponent implements OnDestroy, OnInit {
     this.showTopAboutButton = config.component?.topMenu?.showAboutButton ?? true;
     this.showSiteLogo = config.component?.topMenu?.showSiteLogo ?? false;
 
-    this.siteLogoLinkUrl = config.component?.topMenu?.siteLogoLinkUrl ?? 'https://www.sls.fi/';
-    this.siteLogoDefaultImageUrl = config.component?.topMenu?.siteLogoDefaultImageUrl ?? 'assets/images/logo.svg';
-    this.siteLogoMobileImageUrl = config.component?.topMenu?.siteLogoMobileImageUrl ?? 'assets/images/logo-mobile.svg';
+    this.siteLogoLinkUrl = config.component?.topMenu?.siteLogoLinkURL ?? 'https://www.sls.fi/';
+    this.siteLogoDefaultImageUrl = config.component?.topMenu?.siteLogoDefaultImageURL ?? 'assets/images/logo.svg';
+    this.siteLogoMobileImageUrl = config.component?.topMenu?.siteLogoMobileImageURL ?? 'assets/images/logo-mobile.svg';
 
     if (!this.siteLogoMobileImageUrl && this.siteLogoDefaultImageUrl) {
       this.siteLogoMobileImageUrl = this.siteLogoDefaultImageUrl;

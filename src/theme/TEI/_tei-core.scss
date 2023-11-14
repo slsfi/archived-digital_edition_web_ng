@@ -186,56 +186,56 @@ been removed from the text, or in variants, text that is
 missing.
 */
 div.tei.show_normalisations span.reg_hide img,
-div.tei.show_changes span.corr_hide img,
+div.tei.show_emendations span.corr_hide img,
 div.tei span.seg img {
     display: inline-block;
     width:   0.625em; // default if the font size is not working
     height:  0.625em;
 }
 .miniFontSize div.tei.show_normalisations span.reg_hide img,
-.miniFontSize div.tei.show_changes span.corr_hide img,
+.miniFontSize div.tei.show_emendations span.corr_hide img,
 .miniFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-mini);
     height: ceil(0.585 * $text-fontsize-mini);
 }
 .tinyFontSize div.tei.show_normalisations span.reg_hide img,
-.tinyFontSize div.tei.show_changes span.corr_hide img,
+.tinyFontSize div.tei.show_emendations span.corr_hide img,
 .tinyFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-tiny);
     height: ceil(0.585 * $text-fontsize-tiny);
 }
 .xxsmallFontSize div.tei.show_normalisations span.reg_hide img,
-.xxsmallFontSize div.tei.show_changes span.corr_hide img,
+.xxsmallFontSize div.tei.show_emendations span.corr_hide img,
 .xxsmallFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-xxsmall);
     height: ceil(0.585 * $text-fontsize-xxsmall);
 }
 .xsmallFontSize div.tei.show_normalisations span.reg_hide img,
-.xsmallFontSize div.tei.show_changes span.corr_hide img,
+.xsmallFontSize div.tei.show_emendations span.corr_hide img,
 .xsmallFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-xsmall);
     height: ceil(0.585 * $text-fontsize-xsmall);
 }
 .smallFontSize div.tei.show_normalisations span.reg_hide img,
-.smallFontSize div.tei.show_changes span.corr_hide img,
+.smallFontSize div.tei.show_emendations span.corr_hide img,
 .smallFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-small);
     height: ceil(0.585 * $text-fontsize-small);
 }
 .mediumFontSize div.tei.show_normalisations span.reg_hide img,
-.mediumFontSize div.tei.show_changes span.corr_hide img,
+.mediumFontSize div.tei.show_emendations span.corr_hide img,
 .mediumFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-medium);
     height: ceil(0.585 * $text-fontsize-medium);
 }
 .largeFontSize div.tei.show_normalisations span.reg_hide img,
-.largeFontSize div.tei.show_changes span.corr_hide img,
+.largeFontSize div.tei.show_emendations span.corr_hide img,
 .largeFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-large);
     height: ceil(0.585 * $text-fontsize-large);
 }
 .xlargeFontSize div.tei.show_normalisations span.reg_hide img,
-.xlargeFontSize div.tei.show_changes span.corr_hide img,
+.xlargeFontSize div.tei.show_emendations span.corr_hide img,
 .xlargeFontSize div.tei span.seg img {
     width:  ceil(0.585 * $text-fontsize-xlarge);
     height: ceil(0.585 * $text-fontsize-xlarge);
@@ -2180,10 +2180,10 @@ from div.tei
 .infoOverlay.show_placeInfo .infoOverlayContent p.infoOverlayText span.placeName,
 .infoOverlay.show_workInfo .infoOverlayContent p.footnoteText span.title,
 .infoOverlay.show_workInfo .infoOverlayContent p.infoOverlayText span.title,
-.infoOverlay.show_changes .infoOverlayContent p.footnoteText span.corr,
-.infoOverlay.show_changes .infoOverlayContent p.infoOverlayText span.corr,
-.infoOverlay.show_changes .infoOverlayContent p.footnoteText span.corr_red,
-.infoOverlay.show_changes .infoOverlayContent p.infoOverlayText span.corr_red,
+.infoOverlay.show_emendations .infoOverlayContent p.footnoteText span.corr,
+.infoOverlay.show_emendations .infoOverlayContent p.infoOverlayText span.corr,
+.infoOverlay.show_emendations .infoOverlayContent p.footnoteText span.corr_red,
+.infoOverlay.show_emendations .infoOverlayContent p.infoOverlayText span.corr_red,
 .infoOverlay.show_normalisations .infoOverlayContent p.footnoteText span.reg,
 .infoOverlay.show_normalisations .infoOverlayContent p.infoOverlayText span.reg,
 .infoOverlay.show_abbreviations .infoOverlayContent p.footnoteText span.abbr,
@@ -2193,35 +2193,59 @@ from div.tei
 }
 
 
-/* Advanced mode styles */
-div.tei .tooltip { display: none; }
-.tei                        img.comment { display: none; }
-.tei.show_comments          img.comment { display: inline-block; cursor: pointer; top: 0; }
-
-.tei.show_personInfo        span.person { background-color: var(--persName-color, #f9e0bf); cursor: pointer; }
-
-.tei.show_placeInfo         span.placeName { background-color: var(--placeName-color, #dee8ca); cursor: pointer; }
-
-.tei.show_workInfo          span.title { background-color: var(--workTitle-color, #f7efba); cursor: pointer; }
-
-.tei.show_abbreviations     span.abbr { background-color: var(--abbreviations-color, #ffe2fa); cursor: pointer; }
-
-.tei.show_changes           span.corr, 
-.tei.show_changes           span.corr_red { background-color: var(--changes-color, #ccc); cursor: pointer; }
-.tei                        span.corr_hide { display: none; }
-
-.tei.show_normalisations    span.reg.ttNormalisations { background-color: var(--normalisations-color, #e6e6e6); cursor: pointer; }
-.tei                        span.reg_hide { display: none; }
-.tei.show_normalisations    span.reg_hide,
-.tei.show_changes           span.corr_hide { display: inline; cursor: pointer; }
-
-
-
-/* PARAGRAPH AND LINE NUMBERING */
+/* Advanced mode styles, paragraph and line numberings */
+div.tei .tooltip,
+.tei img.comment,
+.tei span.corr_hide,
+.tei span.reg_hide,
 .tei span.lNumber,
 .tei span.paragraph_number {
     display: none;
 }
+
+.tei.show_comments img.comment {
+    display: inline-block;
+    cursor: pointer;
+    top: 0;
+}
+
+.tei.show_personInfo span.person {
+    background-color: var(--persName-color, #f9e0bf);
+    cursor: pointer;
+}
+
+.tei.show_placeInfo span.placeName {
+    background-color: var(--placeName-color, #dee8ca);
+    cursor: pointer;
+}
+
+.tei.show_workInfo span.title {
+    background-color: var(--workTitle-color, #f7efba);
+    cursor: pointer;
+}
+
+.tei.show_abbreviations span.abbr {
+    background-color: var(--abbreviations-color, #ffe2fa);
+    cursor: pointer;
+}
+
+.tei.show_emendations span.corr, 
+.tei.show_emendations span.corr_red {
+    background-color: var(--emendations-color, #ccc);
+    cursor: pointer;
+}
+
+.tei.show_normalisations span.reg.ttNormalisations {
+    background-color: var(--normalisations-color, #e6e6e6);
+    cursor: pointer;
+}
+
+.tei.show_normalisations span.reg_hide,
+.tei.show_emendations span.corr_hide {
+    display: inline;
+    cursor: pointer;
+} 
+
 .tei.show_paragraphNumbering span.paragraph_number,
 .tei.show_paragraphNumbering span.lNumber {
     display: block;

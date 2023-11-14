@@ -14,8 +14,8 @@ export class MarkdownContentService {
   constructor(
     private http: HttpClient
   ) {
-    const apiBaseURL = config.app?.apiEndpoint ?? '';
-    const projectName = config.app?.machineName ?? '';
+    const apiBaseURL = config.app?.backendBaseURL ?? '';
+    const projectName = config.app?.projectNameDB ?? '';
     this.apiURL = apiBaseURL + '/' + projectName;
   }
 

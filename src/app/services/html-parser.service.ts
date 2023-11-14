@@ -19,8 +19,8 @@ export class HtmlParserService {
   constructor(
     private collectionContentService: CollectionContentService
   ) {
-    const apiBaseURL = config.app?.apiEndpoint ?? '';
-    const projectName = config.app?.machineName ?? '';
+    const apiBaseURL = config.app?.backendBaseURL ?? '';
+    const projectName = config.app?.projectNameDB ?? '';
     this.apiURL = apiBaseURL + '/' + projectName;
   }
 

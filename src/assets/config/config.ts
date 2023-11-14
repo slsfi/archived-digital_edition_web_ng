@@ -6,10 +6,10 @@ type Config = { [key: string]: any }
 export const config: Config = {
   app: {
     siteURLOrigin: "https://topelius.sls.fi",
-    machineName: "topelius",
+    projectNameDB: "topelius",
     projectId: 10,
-    apiEndpoint: "https://testa-vonwright.sls.fi:8000/digitaledition",
-    facsimileBase: "",
+    backendBaseURL: "https://testa-vonwright.sls.fi:8000/digitaledition",
+    alternateFacsimileBaseURL: "",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska", region: "FI" },
@@ -266,7 +266,7 @@ export const config: Config = {
         comments: true,
         personInfo: true,
         placeInfo: true,
-        changes: true,
+        emendations: true,
         normalisations: true,
         workInfo: true,
         abbreviations: true,
@@ -316,7 +316,7 @@ export const config: Config = {
     },
     facsimiles: {
       imageQuality: 4,
-      showFacsimileTitle: true
+      showTitle: true
     },
     mainSideMenu: {
       items: {
@@ -342,9 +342,9 @@ export const config: Config = {
       showURNButton: false,
       showLanguageButton: true,
       showSiteLogo: true,
-      siteLogoDefaultImageUrl: "assets/images/logo.svg",
-      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
-      siteLogoLinkUrl: "https://www.sls.fi/"
+      siteLogoDefaultImageURL: "assets/images/logo.svg",
+      siteLogoMobileImageURL: "assets/images/logo-mobile.svg",
+      siteLogoLinkURL: "https://www.sls.fi/"
     },
     variants: {
       showOpenLegendButton: true
@@ -408,9 +408,9 @@ export const config: Config = {
 export const config_soderholm: Config = {
   app: {
     siteURLOrigin: "https://soderholm.sls.fi",
-    machineName: "soderholm",
+    projectNameDB: "soderholm",
     projectId: 7,
-    apiEndpoint: "https://api.sls.fi/digitaledition",
+    backendBaseURL: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska", region: "FI" }
@@ -639,7 +639,7 @@ export const config_soderholm: Config = {
         comments: false,
         personInfo: false,
         placeInfo: false,
-        changes: false,
+        emendations: false,
         normalisations: false,
         workInfo: false,
         abbreviations: false,
@@ -684,7 +684,7 @@ export const config_soderholm: Config = {
     },
     facsimiles: {
       imageQuality: 2,
-      showFacsimileTitle: false
+      showTitle: false
     },
     mainSideMenu: {
       items: {
@@ -710,9 +710,9 @@ export const config_soderholm: Config = {
       showURNButton: false,
       showLanguageButton: false,
       showSiteLogo: true,
-      siteLogoDefaultImageUrl: "assets/images/logo.svg",
-      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
-      siteLogoLinkUrl: "https://www.sls.fi/"
+      siteLogoDefaultImageURL: "assets/images/logo.svg",
+      siteLogoMobileImageURL: "assets/images/logo-mobile.svg",
+      siteLogoLinkURL: "https://www.sls.fi/"
     },
     variants: {
       showOpenLegendButton: false
@@ -768,9 +768,9 @@ export const config_soderholm: Config = {
 export const config_vonWright: Config = {
   app: {
     siteURLOrigin: "https://vonwright.sls.fi",
-    machineName: "vonwright",
+    projectNameDB: "vonwright",
     projectId: 6,
-    apiEndpoint: "https://api.sls.fi/digitaledition",
+    backendBaseURL: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska", region: "FI" }
@@ -902,7 +902,7 @@ export const config_vonWright: Config = {
         comments: true,
         personInfo: true,
         placeInfo: true,
-        changes: true,
+        emendations: true,
         normalisations: true,
         workInfo: true,
         abbreviations: false,
@@ -947,7 +947,7 @@ export const config_vonWright: Config = {
     },
     facsimiles: {
       imageQuality: 4,
-      showFacsimileTitle: false
+      showTitle: false
     },
     mainSideMenu: {
       items: {
@@ -972,9 +972,9 @@ export const config_vonWright: Config = {
       showURNButton: false,
       showLanguageButton: false,
       showSiteLogo: true,
-      siteLogoDefaultImageUrl: "assets/images/logo.svg",
-      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
-      siteLogoLinkUrl: "https://www.sls.fi/"
+      siteLogoDefaultImageURL: "assets/images/logo.svg",
+      siteLogoMobileImageURL: "assets/images/logo-mobile.svg",
+      siteLogoLinkURL: "https://www.sls.fi/"
     },
     variants: {
       showOpenLegendButton: false
@@ -1023,9 +1023,9 @@ export const config_vonWright: Config = {
 export const config_granqvist: Config = {
   app: {
     siteURLOrigin: "https://granqvist.sls.fi",
-    machineName: "granqvist",
+    projectNameDB: "granqvist",
     projectId: 2,
-    apiEndpoint: "https://api.sls.fi/digitaledition",
+    backendBaseURL: "https://api.sls.fi/digitaledition",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska", region: "FI" },
@@ -1268,7 +1268,7 @@ export const config_granqvist: Config = {
     },
     facsimiles: {
       imageQuality: 1,
-      showFacsimileTitle: false
+      showTitle: false
     },
     mainSideMenu: {
       items: {
@@ -1293,9 +1293,9 @@ export const config_granqvist: Config = {
       showURNButton: false,
       showLanguageButton: true,
       showSiteLogo: true,
-      siteLogoDefaultImageUrl: "assets/images/logo.svg",
-      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
-      siteLogoLinkUrl: "https://www.sls.fi/"
+      siteLogoDefaultImageURL: "assets/images/logo.svg",
+      siteLogoMobileImageURL: "assets/images/logo-mobile.svg",
+      siteLogoLinkURL: "https://www.sls.fi/"
     },
     variants: {
       showOpenLegendButton: false
@@ -1348,10 +1348,10 @@ export const config_granqvist: Config = {
 export const config_mechelin: Config = {
   app: {
     siteURLOrigin: "https://leomechelin.fi",
-    machineName: "leomechelin",
+    projectNameDB: "leomechelin",
     projectId: 1,
-    apiEndpoint: "https://leomechelin.fi/api",
-    facsimileBase: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
+    backendBaseURL: "https://leomechelin.fi/api",
+    alternateFacsimileBaseURL: "https://leomechelin-facsimiles.storage.googleapis.com/facsimile_collection",
     i18n: {
       languages: [
         { code: "sv", label: "Svenska", region: "FI" },
@@ -1433,7 +1433,7 @@ export const config_mechelin: Config = {
         comments: true,
         personInfo: true,
         placeInfo: false,
-        changes: true,
+        emendations: true,
         normalisations: true,
         workInfo: false,
         abbreviations: true,
@@ -1478,7 +1478,7 @@ export const config_mechelin: Config = {
     },
     facsimiles: {
       imageQuality: 1,
-      showFacsimileTitle: false
+      showTitle: false
     },
     mainSideMenu: {
       items: {
@@ -1504,9 +1504,9 @@ export const config_mechelin: Config = {
       showURNButton: false,
       showLanguageButton: true,
       showSiteLogo: false,
-      siteLogoDefaultImageUrl: "assets/images/logo.svg",
-      siteLogoMobileImageUrl: "assets/images/logo-mobile.svg",
-      siteLogoLinkUrl: ""
+      siteLogoDefaultImageURL: "assets/images/logo.svg",
+      siteLogoMobileImageURL: "assets/images/logo-mobile.svg",
+      siteLogoLinkURL: ""
     },
     variants: {
       showOpenLegendButton: false

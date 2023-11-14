@@ -21,8 +21,8 @@ export class NamedEntityService {
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    const apiBaseURL = config.app?.apiEndpoint ?? '';
-    const projectName = config.app?.machineName ?? '';
+    const apiBaseURL = config.app?.backendBaseURL ?? '';
+    const projectName = config.app?.projectNameDB ?? '';
     this.apiURL = apiBaseURL + '/' + projectName;
     this.multilingual = config.app?.i18n?.multilingualNamedEntityData ?? false;
   }
@@ -49,7 +49,7 @@ export class NamedEntityService {
    */
   getEntityOccurrences(type: string, id: string): Observable<any> {
     type = convertNamedEntityTypeForBackend(type);
-    const endpoint = `${config.app.apiEndpoint}/occurrences/${type}/${id}`;
+    const endpoint = `${config.app.backendBaseURL}/occurrences/${type}/${id}`;
     return this.http.get(endpoint);
   }
 
