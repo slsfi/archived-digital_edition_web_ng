@@ -102,21 +102,21 @@
   }
 
   ion-app[class][class] {
-    --abbreviations-color: #ffe2fa;
-    --emendations-color: #ccc;
-    --normalisations-color: #e6e6e6;
-    --pageBreakEdition-color: #8f6b28;
+    --abbreviations-color:     #ffe2fa;
+    --emendations-color:       #ccc;
+    --normalisations-color:    #e6e6e6;
+    --pageBreakEdition-color:  #8f6b28;
     --pageBreakOriginal-color: #b32fa0;
-    --persName-color: #f9e0bf;
-    --placeName-color: #dee8ca;
-    --workTitle-color: #f7efba;
+    --persName-color:          #f9e0bf;
+    --placeName-color:         #dee8ca;
+    --workTitle-color:         #f7efba;
 
     --info-overlay-background-color: #333;
     --info-overlay-text-color:       #e3e3e3;
     --info-overlay-link-color:       #84cce3;
 
-    --secondary-toolbar-color:              var(--secondary-color);
-    --secondary-toolbar-color-contrast:     var(--secondary-color-contrast);
+    --secondary-toolbar-color:          var(--secondary-color);
+    --secondary-toolbar-color-contrast: var(--secondary-color-contrast);
 
     --side-menu-text-color:                        #000;
     --side-menu-background-color:                  var(--main-background-color);
@@ -133,6 +133,9 @@
     --side-menu-selected-background-color:         transparent;
     --side-menu-selected-hover-color:              var(--side-menu-hover-color);
     --side-menu-selected-description-text-color:   var(--side-menu-description-text-color);
+
+    --text-changer-mobile-color:          var(--secondary-toolbar-color);
+    --text-changer-mobile-color-contrast: var(--secondary-toolbar-color-contrast);
 
     --top-menu-height:                         62px;
     --top-menu-toolbar-button-icons-font-size: 1.875rem;
