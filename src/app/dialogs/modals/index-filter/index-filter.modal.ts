@@ -9,8 +9,8 @@ import { NamedEntityService } from '@services/named-entity.service';
 @Component({
   standalone: true,
   selector: 'modal-index-filter',
-  templateUrl: 'index-filter.modal.html',
-  styleUrls: ['index-filter.modal.scss'],
+  templateUrl: './index-filter.modal.html',
+  styleUrls: ['./index-filter.modal.scss'],
   imports: [NgFor, NgIf, FormsModule, IonicModule]
 })
 export class IndexFilterModal implements OnInit {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ElasticSearchPage } from './elastic-search';
+import { ElasticSearchPage } from './elastic-search.page';
 
 const routes: Routes = [
   {

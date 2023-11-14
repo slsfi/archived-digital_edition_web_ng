@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CollectionIntroductionPage } from './collection-introduction';
+import { CollectionIntroductionPage } from './collection-introduction.page';
 
 
 const routes: Routes = [

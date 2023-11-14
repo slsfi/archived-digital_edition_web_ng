@@ -10,8 +10,8 @@ import { isBrowser } from '@utility-functions';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class DigitalEditionsApp implements OnDestroy, OnInit {
   appIsStarting: boolean = true;

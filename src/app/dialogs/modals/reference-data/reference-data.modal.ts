@@ -10,7 +10,7 @@ import { ReferenceDataService } from '@services/reference-data.service';
   standalone: true,
   selector: 'modal-reference-data',
   templateUrl: './reference-data.modal.html',
-  styleUrls: ['reference-data.modal.scss'],
+  styleUrls: ['./reference-data.modal.scss'],
   imports: [NgIf, IonicModule, RouterModule]
 })
 export class ReferenceDataModal implements OnInit {

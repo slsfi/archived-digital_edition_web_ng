@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { ContentGridComponent } from '@components/content-grid/content-grid';
-import { ContentPage } from './content';
+import { ContentGridComponent } from '@components/content-grid/content-grid.component';
+import { ContentPage } from './content.page';
 import { ContentPageRoutingModule } from './content-routing.module';
 
 

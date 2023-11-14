@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
-import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
+import { PageNotFoundPageRoutingModule } from './page-not-found-routing.module';
 import { PageNotFoundPage } from './page-not-found.page';
 
 
@@ -13,7 +13,7 @@ import { PageNotFoundPage } from './page-not-found.page';
   imports: [
     CommonModule,
     IonicModule,
-    PageNotFoundRoutingModule
+    PageNotFoundPageRoutingModule
   ]
 })
 export class PageNotFoundPageModule {}

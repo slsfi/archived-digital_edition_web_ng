@@ -16,8 +16,8 @@ import { flattenObjectTree, sortArrayOfObjectsAlphabetically } from '@utility-fu
 @Component({
   standalone: true,
   selector: 'occurrences-accordion',
-  templateUrl: 'occurrences-accordion.component.html',
-  styleUrls: ['occurrences-accordion.component.scss'],
+  templateUrl: './occurrences-accordion.component.html',
+  styleUrls: ['./occurrences-accordion.component.scss'],
   imports: [NgFor, NgIf, IonicModule, RouterModule, CollectionPagePathPipe, OccurrenceCollectionTextPageQueryparamsPipe]
 })
 export class OccurrencesAccordionComponent implements OnInit {

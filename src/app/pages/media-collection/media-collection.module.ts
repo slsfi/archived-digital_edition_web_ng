@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { MediaCollectionRoutingModule } from './media-collection-routing.module';
-import { MediaCollectionPage } from './media-collection';
+import { MediaCollectionPageRoutingModule } from './media-collection-routing.module';
+import { MediaCollectionPage } from './media-collection.page';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { MediaCollectionPage } from './media-collection';
     CommonModule,
     FormsModule,
     IonicModule,
-    MediaCollectionRoutingModule
+    MediaCollectionPageRoutingModule
   ],
 })
 export class MediaCollectionPageModule {}

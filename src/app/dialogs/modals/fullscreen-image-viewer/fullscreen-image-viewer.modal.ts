@@ -11,8 +11,8 @@ import { isBrowser } from '@utility-functions';
 @Component({
   standalone: true,
   selector: 'modal-fullscreen-image-viewer',
-  templateUrl: 'fullscreen-image-viewer.modal.html',
-  styleUrls: ['fullscreen-image-viewer.modal.scss'],
+  templateUrl: './fullscreen-image-viewer.modal.html',
+  styleUrls: ['./fullscreen-image-viewer.modal.scss'],
   imports: [NgIf, NgStyle, FormsModule, IonicModule, DraggableImageDirective]
 })
 export class FullscreenImageViewerModal implements OnInit {
