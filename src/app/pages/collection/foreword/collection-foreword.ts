@@ -110,7 +110,7 @@ export class CollectionForewordPage implements OnDestroy, OnInit {
       'personInfo': false,
       'placeInfo': false,
       'workInfo': false,
-      'changes': false,
+      'emendations': false,
       'normalisations': false,
       'abbreviations': false,
       'paragraphNumbering': false,

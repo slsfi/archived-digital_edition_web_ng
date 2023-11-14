@@ -64,8 +64,8 @@ export class MediaCollectionPage implements OnDestroy, OnInit {
     private urlService: UrlService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.apiEndPoint = config.app?.apiEndpoint ?? '';
-    this.projectName = config.app?.machineName ?? '';
+    this.apiEndPoint = config.app?.backendBaseURL ?? '';
+    this.projectName = config.app?.projectNameDB ?? '';
     this.showURNButton = config.page?.mediaCollection?.showURNButton ?? false;
 
     this.filterSelectOptions = {

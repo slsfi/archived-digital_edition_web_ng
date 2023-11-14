@@ -53,8 +53,8 @@ export class FacsimilesComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {
     this.facsSize = config.component?.facsimiles?.imageQuality ?? 1;
-    this.facsURLAlternate = config.app?.facsimileBase ?? '';
-    this.showTitle = config.component?.facsimiles?.showFacsimileTitle ?? true;
+    this.facsURLAlternate = config.app?.alternateFacsimileBaseURL ?? '';
+    this.showTitle = config.component?.facsimiles?.showTitle ?? true;
   }
 
   ngOnInit() {
@@ -159,7 +159,7 @@ export class FacsimilesComponent implements OnInit {
     this.selectedFacsimileIsExternal = false;
     this.selectedFacsimile = facs;
     this.numberOfImages = facs.number_of_pages;
-    this.facsURLDefault = config.app.apiEndpoint + '/' + config.app.machineName +
+    this.facsURLDefault = config.app.backendBaseURL + '/' + config.app.projectNameDB +
           `/facsimiles/${facs.publication_facsimile_collection_id}/`;
     this.text = this.sanitizer.bypassSecurityTrustHtml(
       facs.content?.replace(/images\//g, 'assets/images/')

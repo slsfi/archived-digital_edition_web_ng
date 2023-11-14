@@ -18,8 +18,8 @@ export class CollectionTableOfContentsService {
     private http: HttpClient,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    const apiBaseURL = config.app?.apiEndpoint ?? '';
-    const projectName = config.app?.machineName ?? '';
+    const apiBaseURL = config.app?.backendBaseURL ?? '';
+    const projectName = config.app?.projectNameDB ?? '';
     this.apiURL = apiBaseURL + '/' + projectName;
     this.multilingualTOC = config.app?.i18n?.multilingualCollectionTableOfContents ?? false;
   }

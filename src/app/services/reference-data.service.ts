@@ -29,7 +29,7 @@ export class ReferenceDataService {
 
     // We need to double encode the URL for the API
     url = encodeURI(encodeURIComponent(url));
-    const endpoint = `${config.app.apiEndpoint}/${config.app.machineName}/urn/${url}/`;
+    const endpoint = `${config.app.backendBaseURL}/${config.app.projectNameDB}/urn/${url}/`;
 
     return this.http.get(endpoint).pipe(
       switchMap((data: any) => {

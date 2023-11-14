@@ -26,7 +26,7 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
     personInfo: false,
     placeInfo: false,
     workInfo: false,
-    changes: false,
+    emendations: false,
     normalisations: false,
     abbreviations: false,
     paragraphNumbering: false,
@@ -97,8 +97,8 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
       if (this.availableToggles.workInfo) {
         this.show.workInfo = true;
       }
-      if (this.availableToggles.changes) {
-        this.show.changes = true;
+      if (this.availableToggles.emendations) {
+        this.show.emendations = true;
       }
       if (this.availableToggles.normalisations) {
         this.show.normalisations = true;
@@ -121,7 +121,7 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
       this.show.personInfo = false;
       this.show.placeInfo = false;
       this.show.workInfo = false;
-      this.show.changes = false;
+      this.show.emendations = false;
       this.show.normalisations = false;
       this.show.abbreviations = false;
       this.show.paragraphNumbering = false;
@@ -134,7 +134,7 @@ export class ViewOptionsPopover implements OnDestroy, OnInit {
     this.toggleOption('personInfo');
     this.toggleOption('placeInfo');
     this.toggleOption('workInfo');
-    this.toggleOption('changes');
+    this.toggleOption('emendations');
     this.toggleOption('normalisations');
     this.toggleOption('abbreviations');
     this.toggleOption('paragraphNumbering');

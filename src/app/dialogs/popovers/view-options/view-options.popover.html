@@ -78,8 +78,8 @@
     <ion-toggle class="show_abbreviations" [(ngModel)]="show.abbreviations" (ionChange)="toggleOption('abbreviations')" justify="space-between" [enableOnOffLabels]="true" i18n="@@ViewOptions.Abbreviations">Förkortningar</ion-toggle>
   </ion-item>
 
-  <ion-item *ngIf="availableToggles.changes">
-    <ion-toggle class="show_changesInfo" [(ngModel)]="show.changes" (ionChange)="toggleOption('changes')" justify="space-between" [enableOnOffLabels]="true" i18n="@@ViewOptions.Emendations">Utgivarens ändringar</ion-toggle>
+  <ion-item *ngIf="availableToggles.emendations">
+    <ion-toggle class="show_emendationsInfo" [(ngModel)]="show.emendations" (ionChange)="toggleOption('emendations')" justify="space-between" [enableOnOffLabels]="true" i18n="@@ViewOptions.Emendations">Utgivarens ändringar</ion-toggle>
   </ion-item>
 
   <ion-item *ngIf="availableToggles.normalisations">

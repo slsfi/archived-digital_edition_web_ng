@@ -105,7 +105,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
         'personInfo': false,
         'placeInfo': false,
         'workInfo': false,
-        'changes': false,
+        'emendations': false,
         'normalisations': false,
         'abbreviations': false,
         'paragraphNumbering': true,
@@ -114,7 +114,7 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       };
     } else {
       this.viewOptionsTogglesIntro.comments = false;
-      this.viewOptionsTogglesIntro.changes = false;
+      this.viewOptionsTogglesIntro.emendations = false;
       this.viewOptionsTogglesIntro.normalisations = false;
       this.viewOptionsTogglesIntro.abbreviations = false;
       this.viewOptionsTogglesIntro.pageBreakOriginal = false;

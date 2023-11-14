@@ -15,7 +15,7 @@ export class ViewOptionsService {
     abbreviations: false,
     placeInfo: false,
     workInfo: false,
-    changes: false,
+    emendations: false,
     normalisations: false,
     paragraphNumbering: false,
     pageBreakOriginal: false,
