@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MediaCollectionPage } from './media-collection';
+import { MediaCollectionPage } from './media-collection.page';
 
 
 const routes: Routes = [
@@ -19,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MediaCollectionRoutingModule {}
+export class MediaCollectionPageRoutingModule {}

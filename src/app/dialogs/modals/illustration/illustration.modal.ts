@@ -11,8 +11,8 @@ import { config } from '@config';
 @Component({
   standalone: true,
   selector: 'modal-illustration',
-  templateUrl: 'illustration.modal.html',
-  styleUrls: ['illustration.modal.scss'],
+  templateUrl: './illustration.modal.html',
+  styleUrls: ['./illustration.modal.scss'],
   imports: [NgIf, RouterModule, IonicModule, FullscreenImageViewerModal]
 })
 export class IllustrationModal implements OnInit {

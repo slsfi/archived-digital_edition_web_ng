@@ -46,7 +46,7 @@ const routes: Routes = [
   },
   {
     path: 'index/:type',
-    loadChildren: () => import('./pages/index/index-page.module').then( m => m.IndexPageModule)
+    loadChildren: () => import('./pages/index/index.module').then( m => m.IndexPageModule)
   },
   {
     path: 'media-collection',
