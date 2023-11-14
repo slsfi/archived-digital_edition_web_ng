@@ -2293,13 +2293,6 @@ page-introduction .tei.show_paragraphNumbering {
 page-text .mobile-mode-readingtext .tei.show_paragraphNumbering {
     padding-left: 28px;
 }
-/*
-Icons that open corresponding images in the illustrations-view
-are not clickable in mobile mode.
-*/
-page-text .mobile-mode-readingtext img.hide-illustration + span.tei.figureP.iconBefore::before {
-    cursor: default;
-}
 
 /* PAGE BREAKS IN ORIGINAL AND EDITION */
 .pb_orig,
