@@ -9,8 +9,8 @@
 }
 
 :host(.text-changer-mobile-mode) {
-  background-color: #cbcbcb;
-  color: #000;
+  background-color: var(--text-changer-mobile-color);
+  color: var(--text-changer-mobile-color-contrast);
   height: 46px;
   padding: 0;
 }
