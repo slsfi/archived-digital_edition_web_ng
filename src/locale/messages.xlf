@@ -751,6 +751,11 @@
         <source>Inga teckenförklaringar tillgängliga.</source>
       </segment>
     </unit>
+    <unit id="MainSideMenu.AriaLabel">
+      <segment>
+        <source>Sekundär meny</source>
+      </segment>
+    </unit>
     <unit id="MainSideMenu.CollectionsGroup1">
       <segment>
         <source>Innehåll</source>
@@ -1259,6 +1264,11 @@
     <unit id="TopMenu.About">
       <segment>
         <source>Om utgåvan</source>
+      </segment>
+    </unit>
+    <unit id="TopMenu.AriaLabel">
+      <segment>
+        <source>Primär meny</source>
       </segment>
     </unit>
     <unit id="TopMenu.ChooseLanguage">

@@ -900,6 +900,12 @@
         <target>Lukuohjetta ei ole saatavilla.</target>
       </segment>
     </unit>
+    <unit id="MainSideMenu.AriaLabel">
+      <segment state="initial">
+        <source>Sekundär meny</source>
+        <target>Sekundaarinen valikko</target>
+      </segment>
+    </unit>
     <unit id="MainSideMenu.CollectionsGroup1">
       <segment state="initial">
         <source>Innehåll</source>
@@ -1510,6 +1516,12 @@
       <segment state="initial">
         <source>Om utgåvan</source>
         <target>Tietoja</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.AriaLabel">
+      <segment state="initial">
+        <source>Primär meny</source>
+        <target>Päävalikko</target>
       </segment>
     </unit>
     <unit id="TopMenu.ChooseLanguage">
