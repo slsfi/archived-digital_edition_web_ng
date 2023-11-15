@@ -900,6 +900,12 @@
         <target>No legend available.</target>
       </segment>
     </unit>
+    <unit id="MainSideMenu.AriaLabel">
+      <segment state="initial">
+        <source>Sekundär meny</source>
+        <target>Secondary menu</target>
+      </segment>
+    </unit>
     <unit id="MainSideMenu.CollectionsGroup1">
       <segment state="initial">
         <source>Innehåll</source>
@@ -1510,6 +1516,12 @@
       <segment state="initial">
         <source>Om utgåvan</source>
         <target>About</target>
+      </segment>
+    </unit>
+    <unit id="TopMenu.AriaLabel">
+      <segment state="initial">
+        <source>Primär meny</source>
+        <target>Primary menu</target>
       </segment>
     </unit>
     <unit id="TopMenu.ChooseLanguage">

@@ -1,3 +1,4 @@
+<h2 id="main-side-menu-label" class="screen-reader-only" i18n="@@MainSideMenu.AriaLabel">Sekundär meny</h2>
 <ng-container *ngIf="mainMenu?.length">
   <ul role="menu">
     <ng-container *ngTemplateOutlet="recursiveMenu; context: {$implicit: mainMenu}"/>
