@@ -485,7 +485,12 @@
   >
     <div class="infoOverlayHeader">
       <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-      <ion-icon name="close" class="infoOverlayButton" (click)="hideInfoOverlay()" aria-label="Stäng" i18n-aria-label="@@BasicActions.Close"></ion-icon>
+      <ion-icon name="close"
+            class="infoOverlayButton"
+            (click)="hideInfoOverlay()"
+            aria-label="Stäng"
+            i18n-aria-label="@@BasicActions.Close"
+      ></ion-icon>
     </div>
     <div class="infoOverlayContent" [innerHTML]="infoOverlayText" [MathJax]="infoOverlayText"></div>
   </div>
