@@ -26,10 +26,10 @@
         [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
   >
     <div *ngIf="(text$ | async) as text; else loading"
-          [class.tei]="!titleFromMarkdownFolderId"
-          [class.teiContainer]="!titleFromMarkdownFolderId"
-          [class.markdown]="titleFromMarkdownFolderId"
-          [class.md_content]="titleFromMarkdownFolderId"
+          [class.tei]="!loadContentFromMarkdown"
+          [class.teiContainer]="!loadContentFromMarkdown"
+          [class.markdown]="loadContentFromMarkdown"
+          [class.md_content]="loadContentFromMarkdown"
           [innerHTML]="text"
     ></div>
     <ng-template #loading>

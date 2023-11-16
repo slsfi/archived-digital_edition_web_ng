@@ -24,7 +24,6 @@ export class MainSideMenuComponent implements OnInit, OnChanges {
   @Input() urlSegments: UrlSegment[] = [];
 
   _config = config;
-  aboutPagesRootNodeID: string = '';
   ebooksList: any[] = [];
   highlightedMenu: string = '';
   mainMenu: any[] = [];
@@ -42,7 +41,6 @@ export class MainSideMenuComponent implements OnInit, OnChanges {
     private mediaCollectionService: MediaCollectionService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.aboutPagesRootNodeID = this._config.page?.about?.markdownFolderNumber ?? '03';
     this.ebooksList = this._config.ebooks ?? [];
 
     if (this.ebooksList) {
@@ -138,7 +136,7 @@ export class MainSideMenuComponent implements OnInit, OnChanges {
 
   private getAboutPagesMenu(): Observable<any> {
     return this.mdcontentService.getMenuTree(
-      this.activeLocale, this.aboutPagesRootNodeID
+      this.activeLocale, '03'
     ).pipe(
       map((res: any) => {
         res = [res];

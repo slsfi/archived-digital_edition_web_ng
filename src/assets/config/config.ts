@@ -33,8 +33,6 @@ export const config: Config = {
     }
   },
   collections: {
-    coversMarkdownFolderNumber: "08",
-    titlesMarkdownFolderNumber: "",
     enableLegacyIDs: true,
     enableMathJax: false,
     firstTextItem: {
@@ -110,7 +108,6 @@ export const config: Config = {
   ],
   page: {
     about: {
-      markdownFolderNumber: "03",
       initialPageNode: "01-01"
     },
     elasticSearch: {
@@ -284,6 +281,7 @@ export const config: Config = {
       }
     },
     title: {
+      loadContentFromMarkdown: false,
       showURNButton: true,
       showViewOptionsButton: true
     }

@@ -25,11 +25,11 @@ import { ViewOptionsService } from '@services/view-options.service';
 export class CollectionTitlePage implements OnDestroy, OnInit {
   collectionID: string = '';
   intervalTimerId: number = 0;
+  loadContentFromMarkdown: boolean = false;
   mobileMode: boolean = false;
   searchMatches: string[] = [];
   showURNButton: boolean = false;
   showViewOptionsButton: boolean = true;
-  titleFromMarkdownFolderId: string = '';
   text$: Observable<SafeHtml>;
   textsize: Textsize = Textsize.Small;
   textsizeSubscription: Subscription | null = null;
@@ -50,7 +50,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
     private viewOptionsService: ViewOptionsService,
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
-    this.titleFromMarkdownFolderId = config.collections?.titlesMarkdownFolderNumber ?? '';
+    this.loadContentFromMarkdown = config.page?.title?.loadContentFromMarkdown ?? false;
     this.showURNButton = config.page?.title?.showURNButton ?? false;
     this.showViewOptionsButton = config.page?.title?.showViewOptionsButton ?? true;
   }
@@ -88,7 +88,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
   }
 
   private loadTitle(id: string, lang: string): Observable<SafeHtml> {
-    if (!this.titleFromMarkdownFolderId) {
+    if (!this.loadContentFromMarkdown) {
       return this.collectionContentService.getTitle(id, lang).pipe(
         map((res: any) => {
           if (res?.content) {
@@ -109,7 +109,7 @@ export class CollectionTitlePage implements OnDestroy, OnInit {
         })
       );
     } else {
-      return this.getMdContent(`${lang}-${this.titleFromMarkdownFolderId}-${id}`);
+      return this.getMdContent(`${lang}-09-${id}`);
     }
   }
 
