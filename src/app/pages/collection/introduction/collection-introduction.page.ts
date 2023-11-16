@@ -655,14 +655,13 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
     // Get bounding rectangle of the div.scroll-content-container element which is the container for the column that the trigger element resides in.
     let containerElem = triggerElement.parentElement;
     while (
-      containerElem !== null &&
-      containerElem.parentElement !== null &&
+      containerElem?.parentElement &&
       !containerElem.classList.contains('scroll-content-container')
     ) {
        containerElem = containerElem.parentElement;
     }
 
-    if (containerElem !== null && containerElem.parentElement !== null) {
+    if (containerElem?.parentElement) {
       const containerElemRect = containerElem.getBoundingClientRect();
       let calcWidth = containerElem.clientWidth; // Width without scrollbar
 

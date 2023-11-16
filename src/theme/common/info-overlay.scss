@@ -37,16 +37,18 @@
       line-height: 1.2;
     }
 
-    .infoOverlayButton {
-      cursor: pointer;
+    ion-button {
+      --color: var(--info-overlay-text-color);
+      --padding-end: 0;
+      --padding-start: 0;
       float: right;
-      opacity: 1;
-      transition: opacity 0.2s;
-      font-size: 1.5625rem;
-    }
+      font-size: 0.875rem;
+      margin: 0;
+      min-height: auto;
 
-    .infoOverlayButton:hover {
-      opacity: 0.6;
+      &::part(native) {
+        min-height: auto;
+      }
     }
   }
 
