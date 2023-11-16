@@ -45,7 +45,7 @@
     ></div>
     
     <!-- Info overlay wrapper -->
-    <div
+    <div tabindex="-1"
           class="infoOverlay tei teiContainer"
           [class.show_personInfo]="viewOptionsService.show.personInfo"
           [class.show_workInfo]="viewOptionsService.show.workInfo"
@@ -53,7 +53,11 @@
     >
       <div class="infoOverlayHeader">
         <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-        <ion-button class="close" fill="clear" (click)="hideInfoOverlay()">
+        <ion-button *ngIf="infoOverlayPosition.left !== '-1500px'"
+              class="close"
+              fill="clear"
+              (click)="hideInfoOverlay()"
+        >
           <ion-icon name="close"
                 slot="icon-only"
                 aria-label="Stäng"

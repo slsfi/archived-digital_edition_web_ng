@@ -689,6 +689,12 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
 
       // Set info overlay width
       this.infoOverlayWidth = calcWidth + 'px';
+
+      // Set focus to info overlay
+      const ioElem = this.elementRef.nativeElement.querySelector(
+        '.infoOverlay'
+      ) as HTMLElement;
+      ioElem?.focus();
     }
   }
 
