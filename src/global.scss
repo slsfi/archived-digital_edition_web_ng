@@ -6,11 +6,11 @@
  * not just one component.
  */
 
-/* Core CSS required for Ionic components to work properly */
+/* Core CSS required for Ionic components to work properly. */
 @import "~@ionic/angular/css/core.css";
 
 
-/* Basic CSS for apps built with Ionic */
+/* Basic CSS for apps built with Ionic. */
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
@@ -26,19 +26,19 @@
 @import "./theme/font-face/inter";
 
 
-/* CSS and Sass variables */
+/* CSS and Sass variables. */
 @import "./theme/variables";
 
 
-/* General global styles */
+/* General global styles. */
 @import "./theme/general";
 
 
-/* Styles for markdown content */
+/* Styles for markdown content. */
 @import "./theme/markdown";
 
 
-/* Style overrides to Ionic components */
+/* Style overrides to Ionic components. */
 @import "./theme/ionic/ion-alert";
 @import "./theme/ionic/ion-button";
 @import "./theme/ionic/ion-content";
@@ -54,9 +54,18 @@
 @import "./theme/ionic/ion-toolbar";
 
 
-/* Misc. global styles */
+/* Misc. global styles. */
 @import "./theme/misc";
 
 
-/* TEI global styles, applied to the content of collection pages */
+/* TEI global styles, applied to the content of collection pages. */
 @import "./theme/TEI/tei-core";
+
+
+/**
+ * Styles for info-overlay and tooltip div:s in collection introduction
+ * and collection text pages. Projects that don't have collections or
+ * tooltips in introduction or text pages can comment these out.
+ */
+@import "./theme/common/info-overlay";
+@import "./theme/common/tooltip";
