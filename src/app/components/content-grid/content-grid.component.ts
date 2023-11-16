@@ -20,7 +20,6 @@ import { MarkdownContentService } from '@services/markdown-content.service';
 })
 export class ContentGridComponent implements OnInit {
   availableEbooks: any[] = [];
-  collectionCoversFolderId: string = '';
   collectionSortOrder: any[] = [];
   contentItems$: Observable<ContentItem[]>;
   includeEbooks: boolean = false;
@@ -33,7 +32,6 @@ export class ContentGridComponent implements OnInit {
     @Inject(LOCALE_ID) private activeLocale: string
   ) {
     this.availableEbooks = config.ebooks ?? [];
-    this.collectionCoversFolderId = config.collections?.coversMarkdownFolderNumber ?? '08';
     this.collectionSortOrder = config.collections?.order ?? [];
     this.includeEbooks = config.component?.contentGrid?.includeEbooks ?? false;
     this.includeMediaCollection = config.component?.contentGrid?.includeMediaCollection ?? false;
@@ -86,7 +84,7 @@ export class ContentGridComponent implements OnInit {
           // parallell, to fetch sequentially you'd use concatMap)
           mergeMap(
             (collection: any) => 
-              this.mdContentService.getMdContent(`${this.activeLocale}-${this.collectionCoversFolderId}-${collection.id}`).pipe(
+              this.mdContentService.getMdContent(`${this.activeLocale}-08-${collection.id}`).pipe(
                 // add image alt-text and cover URL from response to collection data
                 map((coverRes: any) => ({
                   ...collection,

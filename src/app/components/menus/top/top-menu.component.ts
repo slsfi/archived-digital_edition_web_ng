@@ -63,9 +63,8 @@ export class TopMenuComponent implements OnDestroy, OnInit {
       this.siteLogoMobileImageUrl = this.siteLogoDefaultImageUrl;
     }
 
-    const aboutPagesFolderNumber = config.page?.about?.markdownFolderNumber ?? '03';
     const initialAboutPageNode = config.page?.about?.initialPageNode ?? '01';
-    this.firstAboutPageId = aboutPagesFolderNumber + "-" + initialAboutPageNode;
+    this.firstAboutPageId = "03-" + initialAboutPageNode;
 
     this.languages = config.app?.i18n?.languages ?? [];
     this.languages.forEach((languageObj: any) => {

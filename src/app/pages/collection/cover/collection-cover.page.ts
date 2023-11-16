@@ -14,7 +14,6 @@ import { PlatformService } from '@services/platform.service';
 })
 export class CollectionCoverPage implements OnInit {
   collectionID: string = '';
-  coverMdFolderId: string = '08';
   coverData$: Observable<any>;
   mobileMode: boolean = false;
 
@@ -23,9 +22,7 @@ export class CollectionCoverPage implements OnInit {
     private platformService: PlatformService,
     private route: ActivatedRoute,
     @Inject(LOCALE_ID) private activeLocale: string
-  ) {
-    this.coverMdFolderId = config.collections?.coversMarkdownFolderNumber ?? '08';
-  }
+  ) {}
 
   ngOnInit() {
     this.mobileMode = this.platformService.isMobile();
@@ -36,7 +33,7 @@ export class CollectionCoverPage implements OnInit {
       }),
       switchMap(({collectionID}) => {
         return this.getCoverDataFromMdContent(
-          `${this.activeLocale}-${this.coverMdFolderId}-${collectionID}`
+          `${this.activeLocale}-08-${collectionID}`
         );
       })
     );

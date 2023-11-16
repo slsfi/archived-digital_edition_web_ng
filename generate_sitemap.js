@@ -42,7 +42,7 @@ async function generateSitemap() {
     if (config.component?.mainSideMenu?.items?.about) {
         let aboutPages = await fetchFromAPI(APIBase + '/static-pages-toc/' + locale);
         if (aboutPages && aboutPages.children) {
-            urlCounter += generateAboutPagesURLs(aboutPages.children, (config.page?.about?.markdownFolderNumber ?? '03'), urlOrigin, locale);
+            urlCounter += generateAboutPagesURLs(aboutPages.children, '03', urlOrigin, locale);
         }
     }
 
