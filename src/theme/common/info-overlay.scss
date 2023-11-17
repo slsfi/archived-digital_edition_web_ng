@@ -2,39 +2,40 @@
   Style for infoOverlay boxes. They also inherit styles from div.tei
 */
 .tei.infoOverlay {
-  z-index: 1000;
-  display: inline-block;
   background: var(--info-overlay-background-color);
-  margin: 0;
-  padding: 0;
-  max-height: 50%;
+  border-radius: 3px 3px 0 0;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.4);
   clip-path: inset(-12px -12px 0px -12px);
-  white-space: normal;
   color: var(--info-overlay-text-color);
-  font-size: 1em;
-  text-align: left;
-  line-height: 1.4em;
-  overflow: auto;
-  border-radius: 3px 3px 0 0;
+  display: inline-block;
   font-family: var(--font-stack-app-base);
+  font-size: 1em;
+  line-height: 1.4em;
+  margin: 0;
+  max-height: 50%;
+  outline: 0;
+  overflow: auto;
+  padding: 0;
+  text-align: left;
+  white-space: normal;
+  z-index: 1000;
 
   .infoOverlayHeader {
+    background: var(--info-overlay-background-color);
     display: inline-block;
     padding: 12px 16px 8px 16px;
     position: sticky;
     top: 0;
-    background: var(--info-overlay-background-color);
     width: 100%;
     z-index: 10;
 
     .infoOverlayTitle {
-      font-size: 0.7em;
-      text-transform: uppercase;
       color: var(--info-overlay-text-color);
       display: inline;
+      font-size: 0.7em;
       font-weight: 600;
       line-height: 1.2;
+      text-transform: uppercase;
     }
 
     ion-button {
@@ -48,6 +49,10 @@
 
       &::part(native) {
         min-height: auto;
+      }
+
+      &:focus {
+        outline-style: auto;
       }
     }
   }
@@ -72,12 +77,12 @@
 
     p.footnoteText,
     p.infoOverlayText {
+      color: var(--info-overlay-text-color);
       display: inline-block;
+      font-weight: 300;
+      line-height: 1.4em;
       text-indent: 0;
       width: 100%;
-      color: var(--info-overlay-text-color);
-      line-height: 1.4em;
-      font-weight: 300;
 
       img.comment {
         filter: brightness(150%);
@@ -93,8 +98,8 @@
     }
 
     span.ioLemma {
-      font-weight: 600;
       font-style: italic;
+      font-weight: 600;
 
       span.reg_hide,
       span.corr_hide {

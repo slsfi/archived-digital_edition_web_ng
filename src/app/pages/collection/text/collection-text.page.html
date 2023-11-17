@@ -472,7 +472,7 @@
         [innerHTML]="toolTipText"
         [MathJax]="toolTipText"
   ></div>
-  <div
+  <div tabindex="-1"
         class="infoOverlay tei teiContainer"
         [class.show_comments]="viewOptionsService.show.comments"
         [class.show_personInfo]="viewOptionsService.show.personInfo"
@@ -485,7 +485,12 @@
   >
     <div class="infoOverlayHeader">
       <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-      <ion-button class="close" fill="clear" (click)="hideInfoOverlay()">
+      <ion-button *ngIf="infoOverlayTriggerElem"
+            class="close"
+            fill="clear"
+            (keyup.enter)="hideInfoOverlay()"
+            (pointerup)="hideInfoOverlay()"
+      >
         <ion-icon name="close"
               slot="icon-only"
               aria-label="Stäng"

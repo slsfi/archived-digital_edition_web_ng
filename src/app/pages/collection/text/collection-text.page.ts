@@ -43,6 +43,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   infoOverlayPosType: string = 'fixed';
   infoOverlayText: SafeHtml = '';
   infoOverlayTitle: string = '';
+  infoOverlayTriggerElem: HTMLElement | null = null;
   infoOverlayWidth: string | null = null;
   legacyId: string = '';
   mobileMode: boolean = false;
@@ -76,6 +77,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   
   private unlistenFirstTouchStartEvent?: () => void;
   private unlistenClickEvents?: () => void;
+  private unlistenKeyUpEnterEvents?: () => void;
   private unlistenMouseoverEvents?: () => void;
   private unlistenMouseoutEvents?: () => void;
 
@@ -224,6 +226,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.routeQueryParamsSubscription?.unsubscribe();
     this.textsizeSubscription?.unsubscribe();
     this.unlistenClickEvents?.();
+    this.unlistenKeyUpEnterEvents?.();
     this.unlistenMouseoverEvents?.();
     this.unlistenMouseoutEvents?.();
     this.unlistenFirstTouchStartEvent?.();
@@ -373,10 +376,29 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       /* CHECK ONCE IF THE USER IF TOUCHING THE SCREEN */
       this.unlistenFirstTouchStartEvent = this.renderer2.listen(nElement, 'touchstart', (event) => {
         this.userIsTouching = true;
-        // Don't listen for mouseover and mouseout events since they should have no effect on touch devices
+        // Don't listen for keyup enter, mouseover and mouseout
+        // events since they should have no effect on touch devices
+        this.unlistenKeyUpEnterEvents?.();
         this.unlistenMouseoverEvents?.();
         this.unlistenMouseoutEvents?.();
         this.unlistenFirstTouchStartEvent?.();
+      });
+
+      /* KEY UP ENTER EVENTS */
+      // For keyboard navigation to work on semantic information in
+      // dynamically loaded content we need to convert keyup events
+      // on the Enter key to click events, since spans are used for
+      // them and they won't natively trigger click events on Enter
+      // key hits.
+      this.unlistenKeyUpEnterEvents = this.renderer2.listen(nElement, 'keyup.enter', (event) => {
+        const keyTarget = event.target as HTMLElement;
+        if (
+          keyTarget?.tagName !== 'A' &&
+          keyTarget?.tagName !== 'BUTTON' &&
+          keyTarget?.classList.contains('tooltiptrigger')
+        ) {
+          keyTarget.click();
+        }
       });
 
       /* CLICK EVENTS */
@@ -1233,6 +1255,11 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   hideInfoOverlay() {
+    // Return focus to element that triggered the info overlay
+    this.infoOverlayTriggerElem?.focus();
+    this.infoOverlayTriggerElem = null;
+
+    // Clear info overlay content and move it out of viewport
     this.setInfoOverlayText('');
     this.setInfoOverlayTitle('');
     this.infoOverlayPosType = 'fixed'; // Position needs to be fixed so we can safely hide it outside viewport
@@ -1266,6 +1293,9 @@ export class CollectionTextPage implements OnDestroy, OnInit {
    * the same as in introduction.ts due to different page structure on text page.
    */
   private setInfoOverlayPositionAndWidth(triggerElement: HTMLElement, defaultMargins = 20, maxWidth = 600) {
+    // Store triggering element so focus can later be restored to it
+    this.infoOverlayTriggerElem = triggerElement;
+  
     let margins = defaultMargins;
 
     // Get viewport height and width.
@@ -1327,6 +1357,12 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
       // Set info overlay width
       this.infoOverlayWidth = calcWidth + 'px';
+
+      // Set focus to info overlay
+      const ioElem = this.elementRef.nativeElement.querySelector(
+        '.infoOverlay'
+      ) as HTMLElement;
+      ioElem?.focus();
     }
   }
 
