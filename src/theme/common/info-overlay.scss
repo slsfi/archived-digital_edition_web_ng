@@ -50,6 +50,10 @@
       &::part(native) {
         min-height: auto;
       }
+
+      &:focus {
+        outline-style: auto;
+      }
     }
   }
 

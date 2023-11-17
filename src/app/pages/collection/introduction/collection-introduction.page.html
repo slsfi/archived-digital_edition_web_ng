@@ -53,10 +53,11 @@
     >
       <div class="infoOverlayHeader">
         <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
-        <ion-button *ngIf="infoOverlayPosition.left !== '-1500px'"
+        <ion-button *ngIf="infoOverlayTriggerElem"
               class="close"
               fill="clear"
-              (click)="hideInfoOverlay()"
+              (keyup.enter)="hideInfoOverlay()"
+              (pointerup)="hideInfoOverlay()"
         >
           <ion-icon name="close"
                 slot="icon-only"
