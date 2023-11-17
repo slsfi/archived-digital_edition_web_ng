@@ -160,7 +160,7 @@ export class HtmlParserService {
    * 
    * For instance, in the text the match could have a span indicating
    * page break:
-   * Tavast<span class="tei pb_zts">|87|</span>länningar.
+   * Tavast<span class="tei pb_edition">|87|</span>länningar.
    * This occurrence will not be marked with <mark> tags in a search for
    * "Tavastlänningar". These kind of matches ARE found on the elastic-
    * search page. However, the regex does take care of self-closing tags
