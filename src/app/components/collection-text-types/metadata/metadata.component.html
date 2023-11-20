@@ -4,15 +4,15 @@
         <dl>
             <div *ngIf="metadata.publication_title">
                 <dt i18n="@@Metadata.PublicationTitle">Dokumentets titel</dt>
-                <dd>{{metadata.publication_title}}</dd>
+                <dd [innerHTML]="metadata.publication_title"></dd>
             </div>
             <div *ngIf="metadata.publication_subtitle">
                 <dt i18n="@@Metadata.PublicationSubtitle">Undertitel</dt>
-                <dd>{{metadata.publication_subtitle}}</dd>
+                <dd [innerHTML]="metadata.publication_subtitle"></dd>
             </div>
             <div *ngIf="metadata.published_by">
                 <dt i18n="@@Metadata.PublishedBy">Publicerat i</dt>
-                <dd>{{metadata.published_by}}</dd>
+                <dd [innerHTML]="metadata.published_by"></dd>
             </div>
             <div *ngIf="metadata.document_type">
                 <dt i18n="@@Metadata.DocumentType">Dokumenttyp</dt>
@@ -87,7 +87,7 @@
             <dl *ngFor="let f of metadata.facsimiles" class="dl-group">
                 <div *ngIf="f.facsimile_title && (f.facsimile_title !== metadata.publication_title || metadata.facsimiles.length > 1)">
                     <dt i18n="@@Metadata.FacsimileTitle">Faksimilets titel</dt>
-                    <dd>{{f.facsimile_title}}</dd>
+                    <dd [innerHTML]="f.facsimile_title"></dd>
                 </div>
                 <div *ngIf="f.archive_info">
                     <dt i18n="@@Metadata.ArchiveInfo">Arkivkälla för faksimilet</dt>
