@@ -1,9 +1,19 @@
+/**
+ * TEI CORE
+ * Necessary core styles.
+ */
+
 /*
-This file contains style rules which are applied exclusively
-to the contents of the <div> elements with class "tei" on
-the collection pages (cover, title, foreword, introduction
-and text).
+Base style for the div element that always contains the text.
 */
+div.teiContainer {
+  font-family: var(--font-stack-tei);
+  font-size: $text-fontsize-small;
+  line-height: 1.6em;
+  max-width: 100%;
+  position: relative;
+  white-space: normal;
+}
 
 /*
 Padding below the columns so their height won't end precisely
@@ -12,486 +22,126 @@ after the texts.
 page-title div.teiContainer,
 page-foreword div.teiContainer,
 page-introduction div.teiContainer,
-reading-text > div.teiContainer,
-comments > div.teiContainer,
-variants > div.teiContainer,
-manuscripts > div.teiContainer,
-text-legend > div.teiContainer,
-text-metadata > div.teiContainer {
-    padding-bottom: 20vh;
-}
-
-div.teiContainer {
-    font-family: var(--font-stack-tei);
-    font-size: $text-fontsize-small;
-    line-height: 1.6em;
-    max-width: 100%;
-    position: relative;
-    white-space: normal;
+reading-text>div.teiContainer,
+comments>div.teiContainer,
+variants>div.teiContainer,
+manuscripts>div.teiContainer,
+text-legend>div.teiContainer,
+text-metadata>div.teiContainer {
+  padding-bottom: 20vh;
 }
 
 /* Font sizes. */
 .miniFontSize div.tei {
-    font-size: $text-fontsize-mini;
+  font-size: $text-fontsize-mini;
 }
 .tinyFontSize div.tei {
-    font-size: $text-fontsize-tiny;
+  font-size: $text-fontsize-tiny;
 }
 .xxxsmallFontSize div.tei {
-    font-size: $text-fontsize-xxxsmall;
+  font-size: $text-fontsize-xxxsmall;
 }
 .xxsmallFontSize div.tei {
-    font-size: $text-fontsize-xxsmall;
+  font-size: $text-fontsize-xxsmall;
 }
 .xsmallFontSize div.tei {
-    font-size: $text-fontsize-xsmall;
+  font-size: $text-fontsize-xsmall;
 }
 .smallFontSize div.tei {
-    font-size: $text-fontsize-small;
+  font-size: $text-fontsize-small;
 }
 .mediumFontSize div.tei {
-    font-size: $text-fontsize-medium;
+  font-size: $text-fontsize-medium;
 }
 .largeFontSize div.tei {
-    font-size: $text-fontsize-large;
+  font-size: $text-fontsize-large;
 }
 .xlargeFontSize div.tei {
-    font-size: $text-fontsize-xlarge;
-}
-
-/* Size of page numberings at different font sizes. */
-.miniFontSize div.tei.show_pageBreakOriginal,
-.miniFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-mini);
-    }
-}
-.tinyFontSize div.tei.show_pageBreakOriginal,
-.tinyFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-tiny);
-    }
-}
-.xxxsmallFontSize div.tei.show_pageBreakOriginal,
-.xxxsmallFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-xxxsmall);
-    }
-}
-.xxsmallFontSize div.tei.show_pageBreakOriginal,
-.xxsmallFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-xxsmall);
-    }
-}
-.xsmallFontSize div.tei.show_pageBreakOriginal,
-.xsmallFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-xsmall);
-    }
-}
-.smallFontSize div.tei.show_pageBreakOriginal,
-.smallFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-small);
-    }
-}
-.mediumFontSize div.tei.show_pageBreakOriginal,
-.mediumFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-medium);
-    }
-}
-.largeFontSize div.tei.show_pageBreakOriginal,
-.largeFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-large);
-    }
-}
-.xlargeFontSize div.tei.show_pageBreakOriginal,
-.xlargeFontSize div.tei.show_pageBreakEdition {
-    .pb_orig,
-    .pb_edition {
-        font-size: ceil(0.875 * $text-fontsize-xlarge);
-    }
-}
-
-/*
-Size of the "squared times" symbol at different font sizes
-(the symbol indicates a normalisation where something has
-been removed from the text, or in variants, text that is
-missing.
-*/
-div.tei.show_normalisations span.reg_hide img,
-div.tei.show_emendations span.corr_hide img,
-div.tei span.seg img {
-    display: inline-block;
-    width:   0.625em; // default if the font size is not working
-    height:  0.625em;
-}
-.miniFontSize div.tei.show_normalisations span.reg_hide img,
-.miniFontSize div.tei.show_emendations span.corr_hide img,
-.miniFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-mini);
-    height: ceil(0.585 * $text-fontsize-mini);
-}
-.tinyFontSize div.tei.show_normalisations span.reg_hide img,
-.tinyFontSize div.tei.show_emendations span.corr_hide img,
-.tinyFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-tiny);
-    height: ceil(0.585 * $text-fontsize-tiny);
-}
-.xxsmallFontSize div.tei.show_normalisations span.reg_hide img,
-.xxsmallFontSize div.tei.show_emendations span.corr_hide img,
-.xxsmallFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-xxsmall);
-    height: ceil(0.585 * $text-fontsize-xxsmall);
-}
-.xsmallFontSize div.tei.show_normalisations span.reg_hide img,
-.xsmallFontSize div.tei.show_emendations span.corr_hide img,
-.xsmallFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-xsmall);
-    height: ceil(0.585 * $text-fontsize-xsmall);
-}
-.smallFontSize div.tei.show_normalisations span.reg_hide img,
-.smallFontSize div.tei.show_emendations span.corr_hide img,
-.smallFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-small);
-    height: ceil(0.585 * $text-fontsize-small);
-}
-.mediumFontSize div.tei.show_normalisations span.reg_hide img,
-.mediumFontSize div.tei.show_emendations span.corr_hide img,
-.mediumFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-medium);
-    height: ceil(0.585 * $text-fontsize-medium);
-}
-.largeFontSize div.tei.show_normalisations span.reg_hide img,
-.largeFontSize div.tei.show_emendations span.corr_hide img,
-.largeFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-large);
-    height: ceil(0.585 * $text-fontsize-large);
-}
-.xlargeFontSize div.tei.show_normalisations span.reg_hide img,
-.xlargeFontSize div.tei.show_emendations span.corr_hide img,
-.xlargeFontSize div.tei span.seg img {
-    width:  ceil(0.585 * $text-fontsize-xlarge);
-    height: ceil(0.585 * $text-fontsize-xlarge);
-}
-
-/* Size of the red triangle that indicates the start of lemmas etc. */
-div.tei span.anchor_lemma img,
-div.tei img.inl_ms_arrow,
-div.tei span.add_margin img,
-div.tei img.doodle,
-div.tei span.anchorScrollTarget img,
-div.tei span.anchorScrollTarget.highlight img,
-div.tei a.ref_variant img,
-div.tei span.extVariantsTrigger img {
-    display: inline-block;
-    width:   0.75em; // default
-    height:  0.75em;
-}
-div.tei span.anchor_lemma img,
-div.tei img.inl_ms_arrow,
-div.tei span.anchorScrollTarget.highlight img,
-div.tei a.ref_variant.tooltiptrigger.highlight img,
-div.tei span.extVariantsTrigger.highlight img {
-    animation: filter-animation-brightness 1.5s infinite;
-}
-.miniFontSize div.tei span.anchor_lemma img,
-.miniFontSize div.tei img.inl_ms_arrow,
-.miniFontSize div.tei span.add_margin img,
-.miniFontSize div.tei img.doodle,
-.miniFontSize div.tei span.anchorScrollTarget img,
-.miniFontSize div.tei a.ref_variant img,
-.miniFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-mini);
-    height: ceil(0.75 * $text-fontsize-mini);
-}
-.tinyFontSize div.tei span.anchor_lemma img,
-.tinyFontSize div.tei img.inl_ms_arrow,
-.tinyFontSize div.tei span.add_margin img,
-.tinyFontSize div.tei img.doodle,
-.tinyFontSize div.tei span.anchorScrollTarget img,
-.tinyFontSize div.tei a.ref_variant img,
-.tinyFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-tiny);
-    height: ceil(0.75 * $text-fontsize-tiny);
-}
-.xxxsmallFontSize div.tei span.anchor_lemma img,
-.xxxsmallFontSize div.tei img.inl_ms_arrow,
-.xxxsmallFontSize div.tei span.add_margin img,
-.xxxsmallFontSize div.tei img.doodle,
-.xxxsmallFontSize div.tei span.anchorScrollTarget img,
-.xxxsmallFontSize div.tei a.ref_variant img,
-.xxxsmallFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-xxxsmall);
-    height: ceil(0.75 * $text-fontsize-xxxsmall);
-}
-.xxsmallFontSize div.tei span.anchor_lemma img,
-.xxsmallFontSize div.tei img.inl_ms_arrow,
-.xxsmallFontSize div.tei span.add_margin img,
-.xxsmallFontSize div.tei img.doodle,
-.xxsmallFontSize div.tei span.anchorScrollTarget img,
-.xxsmallFontSize div.tei a.ref_variant img,
-.xxsmallFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-xxsmall);
-    height: ceil(0.75 * $text-fontsize-xxsmall);
-}
-.xsmallFontSize div.tei span.anchor_lemma img,
-.xsmallFontSize div.tei img.inl_ms_arrow,
-.xsmallFontSize div.tei span.add_margin img,
-.xsmallFontSize div.tei img.doodle,
-.xsmallFontSize div.tei span.anchorScrollTarget img,
-.xsmallFontSize div.tei a.ref_variant img,
-.xsmallFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-xsmall);
-    height: ceil(0.75 * $text-fontsize-xsmall);
-}
-.smallFontSize div.tei span.anchor_lemma img,
-.smallFontSize div.tei img.inl_ms_arrow,
-.smallFontSize div.tei span.add_margin img,
-.smallFontSize div.tei img.doodle,
-.smallFontSize div.tei span.anchorScrollTarget img,
-.smallFontSize div.tei a.ref_variant img,
-.smallFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-small);
-    height: ceil(0.75 * $text-fontsize-small);
-}
-.mediumFontSize div.tei span.anchor_lemma img,
-.mediumFontSize div.tei img.inl_ms_arrow,
-.mediumFontSize div.tei span.add_margin img,
-.mediumFontSize div.tei img.doodle,
-.mediumFontSize div.tei span.anchorScrollTarget img,
-.mediumFontSize div.tei a.ref_variant img,
-.mediumFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-medium);
-    height: ceil(0.75 * $text-fontsize-medium);
-}
-.largeFontSize div.tei span.anchor_lemma img,
-.largeFontSize div.tei img.inl_ms_arrow,
-.largeFontSize div.tei span.add_margin img,
-.largeFontSize div.tei img.doodle,
-.largeFontSize div.tei span.anchorScrollTarget img,
-.largeFontSize div.tei a.ref_variant img,
-.largeFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-large);
-    height: ceil(0.75 * $text-fontsize-large);
-}
-.xlargeFontSize div.tei span.anchor_lemma img,
-.xlargeFontSize div.tei img.inl_ms_arrow,
-.xlargeFontSize div.tei span.add_margin img,
-.xlargeFontSize div.tei img.doodle,
-.xlargeFontSize div.tei span.anchorScrollTarget img,
-.xlargeFontSize div.tei a.ref_variant img,
-.xlargeFontSize div.tei span.extVariantsTrigger img {
-    width:  ceil(0.75 * $text-fontsize-xlarge);
-    height: ceil(0.75 * $text-fontsize-xlarge);
-}
-
-/* Symbol/icon representing a drawing etc. */
-div.tei img.symbol {
-    display: inline-block;
-    height: auto;
-    vertical-align: text-bottom;
-    width: 1.235em; // default
-}
-.miniFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-mini);
-    height: ceil(1.235 * $text-fontsize-mini);
-    vertical-align: floor(-0.2 * $text-fontsize-mini);
-}
-.tinyFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-tiny);
-    height: ceil(1.235 * $text-fontsize-tiny);
-    vertical-align: floor(-0.2 * $text-fontsize-tiny);
-}
-.xxxsmallFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-xxxsmall);
-    height: ceil(1.235 * $text-fontsize-xxxsmall);
-    vertical-align: floor(-0.2 * $text-fontsize-xxxsmall);
-}
-.xxsmallFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-xxsmall);
-    height: ceil(1.235 * $text-fontsize-xxsmall);
-    vertical-align: floor(-0.2 * $text-fontsize-xxsmall);
-}
-.xsmallFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-xsmall);
-    height: ceil(1.235 * $text-fontsize-xsmall);
-    vertical-align: floor(-0.2 * $text-fontsize-xsmall);
-}
-.smallFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-small);
-    height: ceil(1.235 * $text-fontsize-small);
-    vertical-align: floor(-0.2 * $text-fontsize-small);
-}
-.mediumFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-medium);
-    height: ceil(1.235 * $text-fontsize-medium);
-    vertical-align: floor(-0.2 * $text-fontsize-medium);
-}
-.largeFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-large);
-    height: ceil(1.235 * $text-fontsize-large);
-    vertical-align: floor(-0.2 * $text-fontsize-large);
-}
-.xlargeFontSize div.tei img.symbol {
-    width:  ceil(1.235 * $text-fontsize-xlarge);
-    height: ceil(1.235 * $text-fontsize-xlarge);
-    vertical-align: floor(-0.2 * $text-fontsize-xlarge);
-}
-
-/*
-Make the red triangle (indicates start of lemmas in
-reading-texts) blink brighter.
-*/
-@keyframes filter-animation-brightness {
-    0% {
-        filter: brightness(100%);
-    }
-    25% {
-        filter: brightness(125%);
-    }
-    50% {
-        filter: brightness(150%);
-    }
-    75% {
-        filter: brightness(125%);
-    }
-    100% {
-        filter: brightness(100%);
-    }
+  font-size: $text-fontsize-xlarge;
 }
 
 /* Highlight for search matches. */
 div.tei mark {
-    background-color: var(--search-match-background-color);
-}
-
-/* Advanced mode styles, paragraph and line numberings. */
-div.tei .tooltip,
-.tei img.comment,
-.tei span.corr_hide,
-.tei span.reg_hide,
-.tei span.lNumber,
-.tei span.paragraph_number {
-    display: none;
-}
-
-.tei.show_comments img.comment {
-    display: inline-block;
-    cursor: pointer;
-    top: 0;
-}
-
-.tei.show_personInfo span.person {
-    background-color: var(--persName-color, #f9e0bf);
-    cursor: pointer;
-}
-
-.tei.show_placeInfo span.placeName {
-    background-color: var(--placeName-color, #dee8ca);
-    cursor: pointer;
-}
-
-.tei.show_workInfo span.title {
-    background-color: var(--workTitle-color, #f7efba);
-    cursor: pointer;
-}
-
-.tei.show_abbreviations span.abbr {
-    background-color: var(--abbreviations-color, #ffe2fa);
-    cursor: pointer;
-}
-
-.tei.show_emendations span.corr, 
-.tei.show_emendations span.corr_red {
-    background-color: var(--emendations-color, #ccc);
-    cursor: pointer;
-}
-
-.tei.show_normalisations span.reg.ttNormalisations {
-    background-color: var(--normalisations-color, #e6e6e6);
-    cursor: pointer;
-}
-
-.tei.show_normalisations span.reg_hide,
-.tei.show_emendations span.corr_hide {
-    display: inline;
-    cursor: pointer;
-} 
-
-.tei.show_paragraphNumbering span.paragraph_number,
-.tei.show_paragraphNumbering span.lNumber {
-    display: block;
-    position: absolute;
-    margin-left: -35px;
-    text-align: left;
-    width: 30px;
-    font-family: var(--font-stack-app-base);
-    font-size: 0.6875rem;
-	text-indent: 0;
-    font-style: normal !important;
-    font-weight: normal !important;
-}
-.tei.show_paragraphNumbering span.lNumber,
-.tei.show_paragraphNumbering p.parIndent span.paragraph_number,
-.tei.show_paragraphNumbering p.hangingIndent span.paragraph_number,
-.tei.show_paragraphNumbering blockquote span.paragraph_number {
-    margin-left: -65px;
-}
-
-.tei.show_paragraphNumbering p.item_indented span.paragraph_number {
-    margin-left: -75px;
-}
-
-.tei.show_paragraphNumbering p.labelledLines_before span.lNumber {
-    margin-left: -145px;
+  background-color: var(--search-match-background-color);
 }
 
 /*
-Left padding for reading-texts and introductions when the
-paragraph numbering is displayed
+Make the red triangle icon (indicates start of lemmas in
+reading-texts and scroll-to positions) blink brighter.
 */
-reading-text .tei.show_paragraphNumbering,
-page-introduction .tei.show_paragraphNumbering {
-    padding-left: 20px;
-}
-@media screen and (max-width: 820px) {
-    /* Add margin on small screens when showing paragraph numbering */
-    reading-text .tei.show_paragraphNumbering,
-    page-introduction .tei.show_paragraphNumbering {
-        margin-left: 8px;
-    }
-}
-/* left padding if showing paragraph numbering in mobile view */
-page-text .mobile-mode-readingtext .tei.show_paragraphNumbering {
-    padding-left: 28px;
+@keyframes filter-animation-brightness {
+  0% {
+    filter: brightness(100%);
+  }
+  25% {
+    filter: brightness(125%);
+  }
+  50% {
+    filter: brightness(150%);
+  }
+  75% {
+    filter: brightness(125%);
+  }
+  100% {
+    filter: brightness(100%);
+  }
 }
 
-/* PAGE BREAKS IN ORIGINAL AND EDITION */
-.pb_orig,
-.pb_edition {
-    display: none;
+/*
+Size of red triangle icon indicating scroll-to positions.
+*/
+div.tei span.anchor_lemma img,
+div.tei img.inl_ms_arrow {
+  display: inline-block;
+  width: 0.75em; // default
+  height: 0.75em;
 }
-div.tei.show_pageBreakOriginal .pb_orig,
-div.tei.show_pageBreakEdition .pb_edition {
-    font-family: var(--font-stack-app-base);
-    line-height: 1;
-    display: inline;
+div.tei span.anchor_lemma img,
+div.tei img.inl_ms_arrow {
+  animation: filter-animation-brightness 1.5s infinite;
 }
-div.tei.show_pageBreakOriginal .pb_orig {
-    color: var(--pageBreakOriginal-color, #b32fa0);
+.miniFontSize div.tei span.anchor_lemma img,
+.miniFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-mini);
+  height: ceil(0.75 * $text-fontsize-mini);
 }
-div.tei.show_pageBreakEdition .pb_edition {
-    color: var(--pageBreakEdition-color, #8f6b28);
+.tinyFontSize div.tei span.anchor_lemma img,
+.tinyFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-tiny);
+  height: ceil(0.75 * $text-fontsize-tiny);
+}
+.xxxsmallFontSize div.tei span.anchor_lemma img,
+.xxxsmallFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-xxxsmall);
+  height: ceil(0.75 * $text-fontsize-xxxsmall);
+}
+.xxsmallFontSize div.tei span.anchor_lemma img,
+.xxsmallFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-xxsmall);
+  height: ceil(0.75 * $text-fontsize-xxsmall);
+}
+.xsmallFontSize div.tei span.anchor_lemma img,
+.xsmallFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-xsmall);
+  height: ceil(0.75 * $text-fontsize-xsmall);
+}
+.smallFontSize div.tei span.anchor_lemma img,
+.smallFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-small);
+  height: ceil(0.75 * $text-fontsize-small);
+}
+.mediumFontSize div.tei span.anchor_lemma img,
+.mediumFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-medium);
+  height: ceil(0.75 * $text-fontsize-medium);
+}
+.largeFontSize div.tei span.anchor_lemma img,
+.largeFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-large);
+  height: ceil(0.75 * $text-fontsize-large);
+}
+.xlargeFontSize div.tei span.anchor_lemma img,
+.xlargeFontSize div.tei img.inl_ms_arrow {
+  width: ceil(0.75 * $text-fontsize-xlarge);
+  height: ceil(0.75 * $text-fontsize-xlarge);
 }
