@@ -3,7 +3,7 @@ import { ServerModule } from '@angular/platform-server';
 import { IonicServerModule } from '@ionic/angular-server';
 
 import { AppModule } from './app.module';
-import { DigitalEditionsApp } from './app.component';
+import { DigitalEditionApp } from './app.component';
 
 
 @NgModule({
@@ -12,6 +12,6 @@ import { DigitalEditionsApp } from './app.component';
     ServerModule,
     IonicServerModule,
   ],
-  bootstrap: [DigitalEditionsApp],
+  bootstrap: [DigitalEditionApp],
 })
 export class AppServerModule {}
