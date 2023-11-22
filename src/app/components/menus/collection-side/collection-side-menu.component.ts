@@ -135,7 +135,7 @@ export class CollectionSideMenuComponent implements OnInit, OnChanges, OnDestroy
     this.highlightedMenu = itemId;
     const isFrontMatterPage = this.setTitleForFrontMatterPages();
     if (!isFrontMatterPage) {
-      const item = this.recursiveFinding(this.collectionMenu, itemId);
+      const item = this.recursiveFinding(this.collectionMenu, itemId.split(';')[0]);
       if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
         this.selectedMenu.push(item.itemId || item.nodeId);
       }
