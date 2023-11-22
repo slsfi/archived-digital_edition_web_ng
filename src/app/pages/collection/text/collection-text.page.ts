@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, On
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { DownloadTextsModal } from '@modals/download-texts/download-texts.modal';
@@ -12,6 +12,7 @@ import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
+import { DocumentHeadService } from '@services/document-head.service';
 import { HtmlParserService } from '@services/html-parser.service';
 import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
@@ -34,6 +35,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   activeMobileModeViewIndex: number = 0;
   addViewPopoverisOpen: boolean = false;
   collectionAndPublicationLegacyId: string = '';
+  currentPageTitle$: Observable<string>;
   enabledViewTypes: string[] = [];
   illustrationsViewShown: boolean = false;
   infoOverlayPosition: any = {
@@ -86,6 +88,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private elementRef: ElementRef,
+    private headService: DocumentHeadService,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
@@ -129,6 +132,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.mobileMode = this.platformService.isMobile();
+
+    this.currentPageTitle$ = this.headService.getCurrentPageTitle();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {

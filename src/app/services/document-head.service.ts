@@ -1,6 +1,7 @@
 import { Inject, Injectable, LOCALE_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { config } from '@config';
 
@@ -9,6 +10,7 @@ import { config } from '@config';
   providedIn: 'root',
 })
 export class DocumentHeadService {
+  private currentPageTitle: BehaviorSubject<string> = new BehaviorSubject('');
   private currentRouterUrl: string | undefined = undefined;
   private openGraphTags: any = undefined;
   private languages: any[] = [];
@@ -27,26 +29,32 @@ export class DocumentHeadService {
   }
 
   setTitle(pageTitleParts: string[] = []) {
-    let pageTitle = '';
+    let compositePageTitle = '';
     for (let i = 0; i < pageTitleParts.length; i++) {
       if (pageTitleParts[i] && pageTitleParts[i].length) {
         if (pageTitleParts[i].at(-1) === '.') {
           pageTitleParts[i] = pageTitleParts[i].slice(0, -1);
         }
-        pageTitle = i > 0 ? pageTitle + ' - ' + pageTitleParts[i]
+        compositePageTitle = i > 0 ? compositePageTitle + ' - ' + pageTitleParts[i]
           : pageTitleParts[i];
+        if (i < 1) {
+          this.setCurrentPageTitle(pageTitleParts[i]);
+        }
       }
     }
 
     if (this.openGraphTags?.enabled) {
-      const ogTitle = pageTitle ? pageTitle : $localize`:@@Site.Title:Webbplatsens titel`;
+      const ogTitle = compositePageTitle
+        ? compositePageTitle
+        : $localize`:@@Site.Title:Webbplatsens titel`;
       this.setMetaTag('property', 'og:title', ogTitle.replaceAll(' - ', ' – '));
     }
 
-    pageTitle = pageTitle ? pageTitle + ' - ' + $localize`:@@Site.Title:Webbplatsens titel`
+    compositePageTitle = compositePageTitle
+      ? compositePageTitle + ' - ' + $localize`:@@Site.Title:Webbplatsens titel`
       : $localize`:@@Site.Title:Webbplatsens titel`;
 
-    this.title.setTitle(pageTitle);
+    this.title.setTitle(compositePageTitle);
   }
 
   setLinks(routerURL: string) {
@@ -192,6 +200,14 @@ export class DocumentHeadService {
 
   private canonicalizeURL(url: string): string {
     return url.split('?')[0];
+  }
+
+  setCurrentPageTitle(newTitle: string) {
+    this.currentPageTitle.next(newTitle);
+  }
+
+  getCurrentPageTitle(): Observable<string> {
+    return this.currentPageTitle.asObservable();
   }
 
 }

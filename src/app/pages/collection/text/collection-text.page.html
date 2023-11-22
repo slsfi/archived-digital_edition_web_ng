@@ -34,6 +34,8 @@
         [scrollX]="true"
         [scrollY]="false"
   >
+    <h1 class="screen-reader-only" [innerHTML]="(currentPageTitle$ | async)"></h1>
+
     <div class="column-container">
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper"
@@ -159,6 +161,8 @@
         [scrollX]="false"
         [scrollY]="false"
   >
+    <h1 class="screen-reader-only" [innerHTML]="(currentPageTitle$ | async)"></h1>
+
     <!-- Tooltip and info overlay -->
     <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
 
