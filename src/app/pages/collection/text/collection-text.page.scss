@@ -22,9 +22,6 @@ ion-content.collection-ion-content::part(scroll) {
 }
 
 // Styles for the columns
-.column-container {
-  width: 100%;
-}
 .read-columns-wrapper {
   align-content: center;
   display: flex;
@@ -32,52 +29,62 @@ ion-content.collection-ion-content::part(scroll) {
   width: 100%;
 
   .read-column {
+    background-color: var(--text-area-background-color, #fafafa);
+    color: #222;
     flex: 1 1 auto;
     position: relative;
-    max-width: 730px;
-    min-width: 500px;
+    margin: 0 0.625rem;
+    max-width: 44.375rem;
+    min-width: 31.25rem;
     width: 100%;
-
-    ion-card {
-      --background: var(--text-area-background-color, #fafafa);
-      --color: #222;
-      border-radius: 0;
-      box-shadow: none;
-      margin: 0 10px;
-
-      .column-card-title {
-        background: var(--secondary-color);
-        color: var(--secondary-color-contrast);
-        display: block;
-        font-size: 0.9375rem;
-        font-weight: bold;
-        overflow: hidden;
-        padding: 13px 32px 13px 22px;
-        text-overflow: ellipsis;
-
-        span.column-text-title {
-          display: contents;
-          font-weight: normal;
-
-          &::before {
-            content: " – ";
-          }
-        }
-      }
+    
+    .column-card-header {
+      align-items: center;
+      background: var(--secondary-color);
+      color: var(--secondary-color-contrast);
+      display: flex;
+      font-size: 1rem;
+      font-weight: bold;
+      height: 2.75rem;
+      padding: 0.75rem 2rem 0.75rem 1.375rem;
+      position: absolute;
+      width: 100%;
 
       @media screen and (max-width: 820px) {
-        .column-card-title {
-          padding-left: 12px;
-          padding-right: 12px;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      h2 {
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+
+      span.column-text-title {
+        display: contents;
+        font-weight: normal;
+
+        &::before {
+          content: " – ";
         }
       }
+    }
 
-      .column-card-content {
-        padding: 0;
-      }
+    .column-card-content {
+      border-top: 2.75rem solid transparent; // border needs to be height of .column-card-header
+      height: 100%;
+      padding: 22px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      width: 100%;
 
-      .scroll-content-container {
-        height: calc(100vh - 146px - var(--top-menu-height, 62px));
+      @media screen and (max-width: 820px) {
+        padding: 12px;
       }
     }
   }
@@ -85,8 +92,7 @@ ion-content.collection-ion-content::part(scroll) {
   .read-column.column_type_facsimiles {
     max-width: 100%;
 
-    ion-card .scroll-content-container {
-      max-width: 100%;
+    .column-card-content {
       overflow-y: hidden;
     }
   }
@@ -104,50 +110,47 @@ ion-fab {
     --color: var(--fab-button-primary-icon-color);
   }
   ion-icon {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 }
 ion-fab.column-options {
-  right: -8px;
-  top: -18px;
+  right: -0.9375rem;
+  top: -1.125rem;
 }
 
 // Styles for the narrow column where you can add new columns
 .add-view-column {
   align-items: center;
   display: flex;
-  flex: 0 0 auto;
-  flex-flow: column nowrap;
-  margin-left: -8px;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+  min-width: 4.625rem;
+  padding: 0 1.75rem 0 1rem;
   position: relative;
   visibility: hidden; /* Hides the column by default, set to visible below when preceded by a read-column in the DOM. This prevents the column from flashing to the left in page-text when read-columns have not been loaded yet. */
-  width: 80px;
 
-  .add-column {
-    align-items: center;
-    background: var(--secondary-color);
-    color: var(--secondary-color-contrast);
-    display: flex;
-    flex-flow: column nowrap;
-    height: 100%;
-    justify-content: flex-start;
-    margin: 10px auto 0 auto;
-    width: 30px;
+  @media screen and (max-width: 820px) {
+    min-width: 3.625rem;
+    padding: 0 0.75rem 0 1rem;
   }
 
-  .add-column p {
+  h2 {
+    background: var(--secondary-color);
+    color: var(--secondary-color-contrast);
     font-size: 0.9375rem;
     font-weight: bold;
-    line-height: 1.2;
+    height: 100%;
+    line-height: 2em; // = width of the add column because text-orientation upright
     margin: 0;
+    padding-top: 2.625rem;
+    text-orientation: upright;
     text-transform: uppercase;
-    transform: rotate(90deg) translateX(100%);
+    writing-mode: vertical-rl;
   }
 
   ion-fab {
-    left: 50%;
-    top: -18px;
-    transform: translate(-50%, 0);
+    top: -1.125rem;
 
     ion-fab-button.toggle-fab-list-button ion-icon {
       --ionicon-stroke-width: 48px;

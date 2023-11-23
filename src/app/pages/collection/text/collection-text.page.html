@@ -36,7 +36,6 @@
   >
     <h1 class="screen-reader-only" [innerHTML]="(currentPageTitle$ | async)"></h1>
 
-    <div class="column-container">
       <!-- Wrapper for all columns -->
       <div class="read-columns-wrapper"
             [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
@@ -57,56 +56,10 @@
               [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
         >
 
-          <!-- Ion fab column options -->
-          <ion-fab *ngIf="views.length > 1" class="column-options">
-            <ion-fab-button #fabColumnOptionsButton
-                  class="toggle-fab-list-button"
-                  size="small"
-                  title="Öppna/stäng alternativ för kolumnen"
-                  i18n-title="@@CollectionText.ColumnOptions.ToggleMenu"
-            >
-              <ion-icon name="ellipsis-vertical"
-                    aria-label="Öppna/stäng alternativ för kolumnen"
-                    i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"
-              ></ion-icon>
-            </ion-fab-button>
-            <ion-fab-list *ngIf="views.length > 1" side="bottom" #fabColumnOptions>
-              <ion-fab-button *ngIf="enabledViewTypes.length > 1"
-                    (click)="removeView(i)"
-                    title="Ta bort kolumnen"
-                    i18n-title="@@CollectionText.ColumnOptions.Remove"
-              >
-                <ion-icon name="trash-bin-sharp"
-                      aria-label="Ta bort kolumnen"
-                      i18n-aria-label="@@CollectionText.ColumnOptions.Remove"
-                ></ion-icon>
-              </ion-fab-button>
-              <ion-fab-button *ngIf="i > -1 && views.length-1 > i"
-                    (click)="moveViewRight(i)"
-                    title="Byt plats med kolumnen till höger"
-                    i18n-title="@@CollectionText.ColumnOptions.MoveRight"
-              >
-                <ion-icon name="return-down-forward-sharp"
-                      aria-label="Byt plats med kolumnen till höger"
-                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"
-                ></ion-icon>
-              </ion-fab-button>
-              <ion-fab-button *ngIf="views.length > i && i > 0"
-                    (click)="moveViewLeft(i)"
-                    title="Byt plats med kolumnen till vänster"
-                    i18n-title="@@CollectionText.ColumnOptions.MoveLeft"
-              >
-                <ion-icon name="return-down-back-sharp"
-                      aria-label="Byt plats med kolumnen till vänster"
-                      i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"
-                ></ion-icon>
-              </ion-fab-button>
-            </ion-fab-list>
-          </ion-fab>
-
-          <!-- Ion card for each column-->
-          <ion-card>
-            <ion-card-header class="column-card-title">
+          <!-- Column header -->
+          <div class="column-card-header">
+            <!-- Column type title -->
+            <h2>
               <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
               <span *ngIf="(
                       view.type === 'variants' ||
@@ -116,17 +69,64 @@
                     class="column-text-title"
                     [innerHTML]="view.title"
               ></span>
-            </ion-card-header>
-            <ion-card-content class="column-card-content">
-              <div class="scroll-content-container">
-                <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
-              </div>
-            </ion-card-content>
-          </ion-card>
+            </h2>
+            <!-- Column options -->
+            <ion-fab *ngIf="views.length > 1" class="column-options">
+              <ion-fab-button #fabColumnOptionsButton
+                    class="toggle-fab-list-button"
+                    size="small"
+                    title="Öppna/stäng alternativ för kolumnen"
+                    i18n-title="@@CollectionText.ColumnOptions.ToggleMenu"
+              >
+                <ion-icon name="ellipsis-vertical"
+                      aria-label="Öppna/stäng alternativ för kolumnen"
+                      i18n-aria-label="@@CollectionText.ColumnOptions.ToggleMenu"
+                ></ion-icon>
+              </ion-fab-button>
+              <ion-fab-list *ngIf="views.length > 1" side="bottom" #fabColumnOptions>
+                <ion-fab-button *ngIf="enabledViewTypes.length > 1"
+                      (click)="removeView(i)"
+                      title="Ta bort kolumnen"
+                      i18n-title="@@CollectionText.ColumnOptions.Remove"
+                >
+                  <ion-icon name="trash-bin-sharp"
+                        aria-label="Ta bort kolumnen"
+                        i18n-aria-label="@@CollectionText.ColumnOptions.Remove"
+                  ></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="i > -1 && views.length-1 > i"
+                      (click)="moveViewRight(i)"
+                      title="Byt plats med kolumnen till höger"
+                      i18n-title="@@CollectionText.ColumnOptions.MoveRight"
+                >
+                  <ion-icon name="return-down-forward-sharp"
+                        aria-label="Byt plats med kolumnen till höger"
+                        i18n-aria-label="@@CollectionText.ColumnOptions.MoveRight"
+                  ></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="views.length > i && i > 0"
+                      (click)="moveViewLeft(i)"
+                      title="Byt plats med kolumnen till vänster"
+                      i18n-title="@@CollectionText.ColumnOptions.MoveLeft"
+                >
+                  <ion-icon name="return-down-back-sharp"
+                        aria-label="Byt plats med kolumnen till vänster"
+                        i18n-aria-label="@@CollectionText.ColumnOptions.MoveLeft"
+                  ></ion-icon>
+                </ion-fab-button>
+              </ion-fab-list>
+            </ion-fab>
+          </div>
+
+          <!-- Column content -->
+          <div class="column-card-content">
+            <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
+          </div>
         </div>
 
         <!-- Add view -->
-        <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
+        <section *ngIf="enabledViewTypes.length > 1" class="add-view-column">
+          <h2 id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</h2>
           <ion-fab id="add-view-fab" #fabmenuadd>
             <ion-fab-button id="add-view-fab-button"
                   class="toggle-fab-list-button"
@@ -136,15 +136,9 @@
               <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
             </ion-fab-button>
           </ion-fab>
-
           <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
-
-          <div class="add-column">
-            <p id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</p>
-          </div>
-        </div>
+        </section>
       </div>
-    </div>
   </ion-content>
 </ng-container>
 
