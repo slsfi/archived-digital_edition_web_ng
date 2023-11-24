@@ -18,7 +18,7 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
-  <div class="scroll-content-container"
+  <article class="scroll-content-container"
         [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
         [class.smallFontSize]="textsize == TextsizeEnum.Small"
         [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
@@ -35,7 +35,7 @@
     <ng-template #loading>
       <ion-spinner class="loading" name="crescent"></ion-spinner>
     </ng-template>
-  </div>
+  </article>
 </ion-content>
 
 <text-changer *ngIf="mobileMode" [textItemID]="collectionID" [parentPageType]="'page-title'" class="text-changer-mobile-mode"></text-changer>

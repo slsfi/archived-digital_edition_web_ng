@@ -45,8 +45,7 @@ export class ScrollService {
     if (!container) {
       container = element.parentElement as HTMLElement;
       while (
-        container !== null &&
-        container.parentElement !== null &&
+        container?.parentElement &&
         !container.classList.contains('scroll-content-container')
       ) {
         container = container.parentElement;
@@ -61,7 +60,8 @@ export class ScrollService {
       + container.scrollTop
       - container.getBoundingClientRect().top
     );
-    let baseOffset = 10;
+
+    let baseOffset = 10 + container.offsetHeight - container.clientHeight;
     if (yPosition === 'center') {
       baseOffset = Math.floor(container.offsetHeight / 2);
       if (baseOffset > 45) {
@@ -151,7 +151,7 @@ export class ScrollService {
             iterationsLeft -= 1;
             const viewElements = document.querySelector(
               'page-text:not([ion-page-hidden]):not(.ion-page-hidden)'
-            )?.getElementsByClassName('read-column');
+            )?.getElementsByClassName('text-column');
             if (viewElements?.[0]) {
               const lastViewElement = viewElements[viewElements.length - 1] as HTMLElement;
               that.scrollCollectionTextColumnIntoView(lastViewElement, 0) && clearInterval(that.intervalTimerId);

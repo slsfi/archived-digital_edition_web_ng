@@ -34,28 +34,38 @@
         [scrollX]="true"
         [scrollY]="false"
   >
-    <div class="column-container">
-      <!-- Wrapper for all columns -->
-      <div class="read-columns-wrapper"
-            [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
-            [class.smallFontSize]="textsize == TextsizeEnum.Small"
-            [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
-            [class.largeFontSize]="textsize == TextsizeEnum.Large"
-            [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
-            [class.illustrations-view-shown]="illustrationsViewShown"
-            [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
-      >
-        <!-- Tooltip and info overlay -->
-        <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
-        
-        <!-- Wrapper for each column -->
-        <div *ngFor="let view of views; index as i"
-              id="read_div_{{i}}"
-              class="read-column column_type_{{view.type}}"
-              [ngClass]="views.length > 1 ? 'multiple-columns' : 'single-column'"
-        >
+    <h1 class="screen-reader-only" [innerHTML]="(currentPageTitle$ | async)"></h1>
 
-          <!-- Ion fab column options -->
+    <!-- Wrapper for all columns -->
+    <div class="text-columns-container"
+          [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
+          [class.smallFontSize]="textsize == TextsizeEnum.Small"
+          [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
+          [class.largeFontSize]="textsize == TextsizeEnum.Large"
+          [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
+          [class.illustrations-view-shown]="illustrationsViewShown"
+    > 
+      <!-- Columns -->
+      <article *ngFor="let view of views; index as i"
+            id="tcID{{i}}"
+            class="text-column column-type-{{view.type}}"
+      >
+
+        <!-- Column header -->
+        <div class="text-column-header">
+          <!-- Column type title -->
+          <h2>
+            <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
+            <span *ngIf="(
+                    view.type === 'variants' ||
+                    view.type === 'manuscripts' ||
+                    view.type === 'facsimiles'
+                  ) && view.title"
+                  class="column-text-title"
+                  [innerHTML]="view.title"
+            ></span>
+          </h2>
+          <!-- Column options -->
           <ion-fab *ngIf="views.length > 1" class="column-options">
             <ion-fab-button #fabColumnOptionsButton
                   class="toggle-fab-list-button"
@@ -101,47 +111,31 @@
               </ion-fab-button>
             </ion-fab-list>
           </ion-fab>
-
-          <!-- Ion card for each column-->
-          <ion-card>
-            <ion-card-header class="column-card-title">
-              <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
-              <span *ngIf="(
-                      view.type === 'variants' ||
-                      view.type === 'manuscripts' ||
-                      view.type === 'facsimiles'
-                    ) && view.title"
-                    class="column-text-title"
-                    [innerHTML]="view.title"
-              ></span>
-            </ion-card-header>
-            <ion-card-content class="column-card-content">
-              <div class="scroll-content-container">
-                <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
-              </div>
-            </ion-card-content>
-          </ion-card>
         </div>
 
-        <!-- Add view -->
-        <div *ngIf="enabledViewTypes.length > 1" class="add-view-column">
-          <ion-fab id="add-view-fab" #fabmenuadd>
-            <ion-fab-button id="add-view-fab-button"
-                  class="toggle-fab-list-button"
-                  size="small"
-                  (click)="showAddViewPopover($event)"
-            >
-              <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-
-          <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
-
-          <div class="add-column">
-            <p id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</p>
-          </div>
+        <!-- Column content -->
+        <div class="text-column-content scroll-content-container">
+          <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
         </div>
-      </div>
+      </article>
+
+      <!-- Add view -->
+      <aside *ngIf="enabledViewTypes.length > 1" class="add-view-column">
+        <h2 id="add-column-label" i18n="@@CollectionText.AddColumn.AddColumn">Ny kolumn</h2>
+        <ion-fab id="add-view-fab" #fabmenuadd>
+          <ion-fab-button id="add-view-fab-button"
+                class="toggle-fab-list-button"
+                size="small"
+                (click)="showAddViewPopover($event)"
+          >
+            <ion-icon name="add-outline" aria-labelledby="add-column-label"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
+      </aside>
+
+      <!-- Tooltip and info overlay -->
+      <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
     </div>
   </ion-content>
 </ng-container>
@@ -159,11 +153,10 @@
         [scrollX]="false"
         [scrollY]="false"
   >
-    <!-- Tooltip and info overlay -->
-    <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
+    <h1 class="screen-reader-only" [innerHTML]="(currentPageTitle$ | async)"></h1>
 
     <!-- Components for selecting active text type in mobile mode -->
-    <div *ngIf="enabledViewTypes.length > 1" class="select-view-wrapper">
+    <aside *ngIf="enabledViewTypes.length > 1" class="select-view-wrapper">
       <ion-select
             fill="outline"
             interface="popover"
@@ -211,11 +204,11 @@
         </ion-fab-button>
       </ion-fab>
       <ng-container *ngTemplateOutlet="addViewPopoverTemplate; context: {$implicit: enabledViewTypes}"/>
-    </div>
+    </aside>
 
     <!-- Columns in mobile mode -->
-    <div *ngFor="let view of views; index as i"
-          class="scroll-content-container mobile-scc column_type_{{view.type}}"
+    <article *ngFor="let view of views; index as i"
+          class="scroll-content-container mobile-scc column-type-{{view.type}}"
           [class.visuallyhidden]="activeMobileModeViewIndex !== i"
           [class.mobile-mode-readingtext]="
                 view.type === 'readingtext' ||
@@ -229,8 +222,24 @@
           [class.mobile-mode-legend]="view.type === 'legend'"
           [class.mobile-mode-metadata]="view.type === 'metadata'"
     >
+      <!-- Column type title in mobile mode, for screen readers only -->
+      <h2 class="screen-reader-only">
+        <ng-container *ngTemplateOutlet="columnHeadingTemplate; context: {$implicit: view}"/>
+        <span *ngIf="(
+                view.type === 'variants' ||
+                view.type === 'manuscripts' ||
+                view.type === 'facsimiles'
+              ) && view.title"
+              class="column-text-title"
+              [innerHTML]="view.title"
+        ></span>
+      </h2>
+      <!-- Column content -->
       <ng-container *ngTemplateOutlet="columnTypesTemplate; context: {view, i}"/>
-    </div>
+    </article>
+
+    <!-- Tooltip and info overlay -->
+    <ng-container *ngTemplateOutlet="tooltipInfoOverlayTemplate"/>
   </ion-content>
 </ng-container>
 
@@ -486,10 +495,8 @@
     <div class="infoOverlayHeader">
       <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
       <ion-button *ngIf="infoOverlayTriggerElem"
-            class="close"
+            class="close close-info-overlay"
             fill="clear"
-            (keyup.enter)="hideInfoOverlay()"
-            (pointerup)="hideInfoOverlay()"
       >
         <ion-icon name="close"
               slot="icon-only"

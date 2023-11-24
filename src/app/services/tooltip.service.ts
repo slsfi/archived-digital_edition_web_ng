@@ -159,7 +159,7 @@ export class TooltipService {
         let containerElem = triggerElem.parentElement;
         while (
           containerElem !== null &&
-          !(containerElem.classList.contains('read-column') && containerElem.hasAttribute('id'))
+          !(containerElem.classList.contains('text-column') && containerElem.hasAttribute('id'))
         ) {
           containerElem = containerElem.parentElement;
         }

@@ -8,6 +8,7 @@
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
   <ng-container *ngIf="(coverData$ | async) as data; else loading">
+    <h1 class="screen-reader-only" i18n="@@CollectionCover.Cover">Omslag</h1>
     <div class="cover-image-wrapper" [class.mobile-mode-content]="mobileMode">
       <img class="cover-image" [src]="data.image_src" [alt]="data.image_alt" loading="lazy">
     </div>

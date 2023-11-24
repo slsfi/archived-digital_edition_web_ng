@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, On
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonFabButton, IonFabList, IonPopover, ModalController, PopoverController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { config } from '@config';
 import { DownloadTextsModal } from '@modals/download-texts/download-texts.modal';
@@ -12,6 +12,7 @@ import { Textsize } from '@models/textsize.model';
 import { ViewOptionsPopover } from '@popovers/view-options/view-options.popover';
 import { CollectionContentService } from '@services/collection-content.service';
 import { CollectionsService } from '@services/collections.service';
+import { DocumentHeadService } from '@services/document-head.service';
 import { HtmlParserService } from '@services/html-parser.service';
 import { PlatformService } from '@services/platform.service';
 import { ScrollService } from '@services/scroll.service';
@@ -34,6 +35,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   activeMobileModeViewIndex: number = 0;
   addViewPopoverisOpen: boolean = false;
   collectionAndPublicationLegacyId: string = '';
+  currentPageTitle$: Observable<string>;
   enabledViewTypes: string[] = [];
   illustrationsViewShown: boolean = false;
   infoOverlayPosition: any = {
@@ -86,6 +88,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     private collectionContentService: CollectionContentService,
     private collectionsService: CollectionsService,
     private elementRef: ElementRef,
+    private headService: DocumentHeadService,
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     private parserService: HtmlParserService,
@@ -129,6 +132,8 @@ export class CollectionTextPage implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.mobileMode = this.platformService.isMobile();
+
+    this.currentPageTitle$ = this.headService.getCurrentPageTitle();
 
     this.textsizeSubscription = this.viewOptionsService.getTextsize().subscribe(
       (textsize: Textsize) => {
@@ -395,7 +400,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         if (
           keyTarget?.tagName !== 'A' &&
           keyTarget?.tagName !== 'BUTTON' &&
-          keyTarget?.classList.contains('tooltiptrigger')
+          (
+            keyTarget?.classList.contains('tooltiptrigger') ||
+            keyTarget?.classList.contains('figureP')
+          )
         ) {
           keyTarget.click();
         }
@@ -408,6 +416,14 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             this.hideToolTip();
           });
         }
+
+        if (event?.target?.classList.contains('close-info-overlay')) {
+          this.ngZone.run(() => {
+            this.hideInfoOverlay();
+            return;
+          });
+        }
+
         let eventTarget = this.getEventTarget(event);
         let modalShown = false;
 
@@ -672,7 +688,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                     anchorElem.parentElement?.parentElement?.classList.contains('infoOverlayContent')
                   ) {
                     containerElem = nElement.querySelector(
-                      'ion-content.collection-ion-content.mobile-mode-content .scroll-content-container'
+                      'ion-content.collection-ion-content.mobile-mode-content .scroll-content-container:not(.visuallyhidden)'
                     ) as HTMLElement;
                   }
                 }
@@ -1255,10 +1271,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   hideInfoOverlay() {
-    // Return focus to element that triggered the info overlay
-    this.infoOverlayTriggerElem?.focus();
-    this.infoOverlayTriggerElem = null;
-
     // Clear info overlay content and move it out of viewport
     this.setInfoOverlayText('');
     this.setInfoOverlayTitle('');
@@ -1267,6 +1279,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       bottom: 0 + 'px',
       left: -1500 + 'px'
     };
+
+    // Return focus to element that triggered the info overlay
+    // timeout so the info overlay isn't triggered again on
+    // keyup.enter event
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.infoOverlayTriggerElem?.focus({ preventScroll: true });
+        this.infoOverlayTriggerElem = null;
+      }, 250);
+    });
   }
 
   private setToolTipPosition(targetElem: HTMLElement, ttText: string) {

@@ -356,6 +356,14 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
             this.hideToolTip();
           });
         }
+
+        if (event?.target?.classList.contains('close-info-overlay')) {
+          this.ngZone.run(() => {
+            this.hideInfoOverlay();
+            return;
+          });
+        }
+
         let eventTarget = this.getEventTarget(event);
 
         // Modal trigger for person-, place- or workinfo and info overlay trigger for footnote.
@@ -778,10 +786,6 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
   }
 
   hideInfoOverlay() {
-    // Return focus to element that triggered the info overlay
-    this.infoOverlayTriggerElem?.focus();
-    this.infoOverlayTriggerElem = null;
-
     // Clear info overlay content and move it out of viewport
     this.setInfoOverlayText('');
     this.setInfoOverlayTitle('');
@@ -790,6 +794,16 @@ export class CollectionIntroductionPage implements OnInit, OnDestroy {
       bottom: 0 + 'px',
       left: -1500 + 'px'
     };
+
+    // Return focus to element that triggered the info overlay
+    // timeout so the info overlay isn't triggered again on
+    // keyup.enter event
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.infoOverlayTriggerElem?.focus({ preventScroll: true });
+        this.infoOverlayTriggerElem = null;
+      }, 250);
+    });
   }
 
   async showSemanticDataObjectModal(id: string, type: string) {

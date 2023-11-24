@@ -190,9 +190,12 @@ export class ReadingTextComponent implements OnChanges, OnDestroy, OnInit {
         }
 
         // Check if click on an icon which links to an illustration that should be opened in a modal
-        if (event.target.parentNode.classList.contains('ref_illustration')) {
-          const hashNumber = event.target.parentNode.hash;
-          const imageNumber = hashNumber.split('#')[1];
+        if (
+          event.target.classList.contains('ref_illustration') ||
+          event.target.parentNode.classList.contains('ref_illustration')
+        ) {
+          const hashNumber = event.target.parentNode.hash ?? event.target.hash;
+          const imageNumber = hashNumber?.split('#')[1] || '';
           this.ngZone.run(() => {
             this.openIllustration(imageNumber);
           });
