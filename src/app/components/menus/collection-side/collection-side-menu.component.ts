@@ -135,7 +135,7 @@ export class CollectionSideMenuComponent implements OnInit, OnChanges, OnDestroy
     this.highlightedMenu = itemId;
     const isFrontMatterPage = this.setTitleForFrontMatterPages();
     if (!isFrontMatterPage) {
-      const item = this.recursiveFinding(this.collectionMenu, itemId.split(';')[0]);
+      const item = this.recursiveFindMenuItem(this.collectionMenu, itemId);
       if (item && !this.selectedMenu.includes(item.itemId || item.nodeId)) {
         this.selectedMenu.push(item.itemId || item.nodeId);
       }
@@ -175,21 +175,47 @@ export class CollectionSideMenuComponent implements OnInit, OnChanges, OnDestroy
     return itemId;
   }
 
-  private recursiveFinding(array: any[], stringForComparison: string): any {
+  /**
+   * Recursively search array for an object that has an 'itemId' property
+   * equal to 'searchItemId'. If found, the page title is set to the item's
+   * title and the item is marked as the selected item in the side menu.
+   * @param array 
+   * @param searchItemId 
+   * @param setTitleOnly if true, the matching item is not set as selected
+   * in the menu, it's title is just set as the page title.
+   */
+  private recursiveFindMenuItem(
+    array: any[],
+    searchItemId: string,
+    setTitleOnly: boolean = false
+  ): any {
     return array.find(item => {
-      if (item.itemId === stringForComparison) {
-        this.headService.setTitle([String(item.text), this.collectionTitle]);
+      if (item.itemId === searchItemId) {
+        if (item.itemId.split(';')[1]) {
+          // The itemId contains a position, so we need to find it's parent
+          // that doesn't contain a position, since we don't want positioned
+          // item's titles to be set as page titles.
+          this.recursiveFindMenuItem(
+            this.collectionMenu, item.itemId.split(';')[0], true
+          );
+        } else {
+          this.headService.setTitle([String(item.text), this.collectionTitle]);
+        }
         return item;
       } else if (item.children) {
-        const result = this.recursiveFinding(item.children, stringForComparison);
-        if (result && !this.selectedMenu.includes(result.itemId || result.nodeId)) {
+        const result = this.recursiveFindMenuItem(item.children, searchItemId);
+        if (
+          !setTitleOnly &&
+          result &&
+          !this.selectedMenu.includes(result.itemId || result.nodeId)
+        ) {
           this.selectedMenu.push(result.itemId || result.nodeId);
         }
         return result;
       } else {
         return undefined;
       }
-    })
+    });
   }
 
   /**
