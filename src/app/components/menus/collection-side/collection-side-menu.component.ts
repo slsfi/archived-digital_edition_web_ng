@@ -203,7 +203,9 @@ export class CollectionSideMenuComponent implements OnInit, OnChanges, OnDestroy
         }
         return item;
       } else if (item.children) {
-        const result = this.recursiveFindMenuItem(item.children, searchItemId);
+        const result = this.recursiveFindMenuItem(
+          item.children, searchItemId, setTitleOnly
+        );
         if (
           !setTitleOnly &&
           result &&
