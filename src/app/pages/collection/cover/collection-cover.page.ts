@@ -2,7 +2,6 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { config } from '@config';
 import { MarkdownContentService } from '@services/markdown-content.service';
 import { PlatformService } from '@services/platform.service';
 

@@ -400,7 +400,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
         if (
           keyTarget?.tagName !== 'A' &&
           keyTarget?.tagName !== 'BUTTON' &&
-          keyTarget?.classList.contains('tooltiptrigger')
+          (
+            keyTarget?.classList.contains('tooltiptrigger') ||
+            keyTarget?.classList.contains('figureP')
+          )
         ) {
           keyTarget.click();
         }
@@ -413,6 +416,14 @@ export class CollectionTextPage implements OnDestroy, OnInit {
             this.hideToolTip();
           });
         }
+
+        if (event?.target?.classList.contains('close-info-overlay')) {
+          this.ngZone.run(() => {
+            this.hideInfoOverlay();
+            return;
+          });
+        }
+
         let eventTarget = this.getEventTarget(event);
         let modalShown = false;
 
@@ -677,7 +688,7 @@ export class CollectionTextPage implements OnDestroy, OnInit {
                     anchorElem.parentElement?.parentElement?.classList.contains('infoOverlayContent')
                   ) {
                     containerElem = nElement.querySelector(
-                      'ion-content.collection-ion-content.mobile-mode-content .scroll-content-container'
+                      'ion-content.collection-ion-content.mobile-mode-content .scroll-content-container:not(.visuallyhidden)'
                     ) as HTMLElement;
                   }
                 }
@@ -1260,10 +1271,6 @@ export class CollectionTextPage implements OnDestroy, OnInit {
   }
 
   hideInfoOverlay() {
-    // Return focus to element that triggered the info overlay
-    this.infoOverlayTriggerElem?.focus();
-    this.infoOverlayTriggerElem = null;
-
     // Clear info overlay content and move it out of viewport
     this.setInfoOverlayText('');
     this.setInfoOverlayTitle('');
@@ -1272,6 +1279,16 @@ export class CollectionTextPage implements OnDestroy, OnInit {
       bottom: 0 + 'px',
       left: -1500 + 'px'
     };
+
+    // Return focus to element that triggered the info overlay
+    // timeout so the info overlay isn't triggered again on
+    // keyup.enter event
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.infoOverlayTriggerElem?.focus({ preventScroll: true });
+        this.infoOverlayTriggerElem = null;
+      }, 250);
+    });
   }
 
   private setToolTipPosition(targetElem: HTMLElement, ttText: string) {

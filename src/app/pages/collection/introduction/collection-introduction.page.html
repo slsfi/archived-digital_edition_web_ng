@@ -27,13 +27,26 @@
 </ion-header>
 
 <ion-content class="collection-ion-content" [class.mobile-mode-content]="mobileMode" [scrollX]="false" [scrollY]="false">
-  <div class="scroll-content-container"
+  <article class="scroll-content-container"
         [class.xsmallFontSize]="textsize == TextsizeEnum.XSmall"
         [class.smallFontSize]="textsize == TextsizeEnum.Small"
         [class.mediumFontSize]="textsize == TextsizeEnum.Medium"
         [class.largeFontSize]="textsize == TextsizeEnum.Large"
         [class.xlargeFontSize]="textsize == TextsizeEnum.XLarge"
-  >
+  > 
+    <!-- Loading spinner -->
+    <ion-spinner *ngIf="textLoading" class="loading" name="crescent"></ion-spinner>
+    
+    <!-- Introduction text wrapper -->
+    <div class="tei teiContainer"
+          [class.show_personInfo]="viewOptionsService.show.personInfo && viewOptionsTogglesIntro.personInfo"
+          [class.show_placeInfo]="viewOptionsService.show.placeInfo && viewOptionsTogglesIntro.placeInfo"
+          [class.show_workInfo]="viewOptionsService.show.workInfo && viewOptionsTogglesIntro.workInfo"
+          [class.show_paragraphNumbering]="viewOptionsService.show.paragraphNumbering && viewOptionsTogglesIntro.paragraphNumbering"
+          [class.show_pageBreakEdition]="viewOptionsService.show.pageBreakEdition && viewOptionsTogglesIntro.pageBreakEdition"
+          [class.hideIntro]="hasSeparateIntroToc"
+          [innerHTML]="text"
+    ></div>
 
     <!-- Tooltip wrapper -->
     <div
@@ -54,10 +67,8 @@
       <div class="infoOverlayHeader">
         <p class="infoOverlayTitle" [innerHTML]="infoOverlayTitle"></p>
         <ion-button *ngIf="infoOverlayTriggerElem"
-              class="close"
+              class="close close-info-overlay"
               fill="clear"
-              (keyup.enter)="hideInfoOverlay()"
-              (pointerup)="hideInfoOverlay()"
         >
           <ion-icon name="close"
                 slot="icon-only"
@@ -68,21 +79,7 @@
       </div>
       <div class="infoOverlayContent" [innerHTML]="infoOverlayText"></div>
     </div>
-    
-    <!-- Loading spinner -->
-    <ion-spinner *ngIf="textLoading" class="loading" name="crescent"></ion-spinner>
-    
-    <!-- Introduction text wrapper -->
-    <div class="tei teiContainer"
-          [class.show_personInfo]="viewOptionsService.show.personInfo && viewOptionsTogglesIntro.personInfo"
-          [class.show_placeInfo]="viewOptionsService.show.placeInfo && viewOptionsTogglesIntro.placeInfo"
-          [class.show_workInfo]="viewOptionsService.show.workInfo && viewOptionsTogglesIntro.workInfo"
-          [class.show_paragraphNumbering]="viewOptionsService.show.paragraphNumbering && viewOptionsTogglesIntro.paragraphNumbering"
-          [class.show_pageBreakEdition]="viewOptionsService.show.pageBreakEdition && viewOptionsTogglesIntro.pageBreakEdition"
-          [class.hideIntro]="hasSeparateIntroToc"
-          [innerHTML]="text"
-    ></div>
-  </div>
+  </article>
 
   <!-- Introduction table of contents -->
   <nav id="TOC" *ngIf="hasSeparateIntroToc && tocMenuOpen">
