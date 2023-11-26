@@ -1512,8 +1512,10 @@ export class CollectionTextPage implements OnDestroy, OnInit {
     this.views.splice(i, 1);
     this.updateViewsInRouterQueryParams(this.views);
 
-    // In mobile mode, change the active view
-    const index = i > 0 ? i - 1 : 0;
+    // In mobile mode, set the next view in the views array
+    // as the active view, or the previous view if the deleted
+    // one was the last view in the array.
+    const index = i < this.views.length ? i : i - 1;
     this.setActiveMobileModeViewType(undefined, undefined, index);
   }
 
