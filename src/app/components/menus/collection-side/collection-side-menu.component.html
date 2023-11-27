@@ -1,6 +1,9 @@
 <ng-container *ngIf="!isLoading">
   <div class="menu-header">
-    <a class="go-back-menu-item" [routerLink]="['/']"><ion-icon name="arrow-back-sharp"></ion-icon> <span i18n="@@CollectionSideMenu.Back">Tillbaka</span></a>
+    <a class="go-back-menu-item" [routerLink]="['/content']" [queryParams]="{ menu: 'open' }">
+      <ion-icon aria-hidden="true" name="chevron-back-outline"></ion-icon>
+      <span i18n="@@CollectionSideMenu.Back">Tillbaka</span>
+    </a>
     <h2 id="side-menu-collection-title">{{collectionTitle}}</h2>
   </div>
   <div class="sort-select-wrapper" *ngIf="sortOptions.length > 0">
