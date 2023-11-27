@@ -54,7 +54,6 @@ export class DigitalEditionApp implements OnDestroy, OnInit {
       this.currentRouterUrl = event.url;
       const currentUrlTree: UrlTree = this.router.parseUrl(event.url);
       this.currentUrlSegments = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
-      console.log(currentUrlTree);
 
       // Check if a collection page in order to show collection side
       // menu instead of main side menu.
