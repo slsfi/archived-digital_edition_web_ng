@@ -39,11 +39,12 @@ export class DigitalEditionApp implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.mobileMode = this.platformService.isMobile();
-    // Side menu is shown by default in desktop mode but not in mobile mode.
+    // Side menu is shown by default in desktop mode but not in
+    // mobile mode.
     this.showSideNav = !this.mobileMode;
 
-    // Set Open Graph meta tags that are common for all routes. og:title is set by
-    // this.headService.setTitle
+    // Set Open Graph meta tags that are common for all routes.
+    // og:title is set by this.headService.setTitle
     this.headService.setCommonOpenGraphTags();
 
     this.routerEventsSubscription = this.router.events.pipe(
@@ -53,25 +54,30 @@ export class DigitalEditionApp implements OnDestroy, OnInit {
       this.currentRouterUrl = event.url;
       const currentUrlTree: UrlTree = this.router.parseUrl(event.url);
       this.currentUrlSegments = currentUrlTree?.root?.children[PRIMARY_OUTLET]?.segments;
+      console.log(currentUrlTree);
 
-      // Check if a collection-page in order to show collection side menu instead of main side menu.
+      // Check if a collection page in order to show collection side
+      // menu instead of main side menu.
       if (this.currentUrlSegments?.[0]?.path === 'collection') {
         this.collectionID = this.currentUrlSegments[1]?.path || '';
         this.collectionSideMenuInitialUrlSegments = this.currentUrlSegments;
         this.collectionSideMenuInitialQueryParams = currentUrlTree?.queryParams;
         this.showCollectionSideMenu = true;
       } else {
-        // If the app is started on a collection-page the main side menu is not immediately
-        // created in order to increase performance. Once the user leaves the collection-pages
-        // the side menu gets created and stays mounted. It is hidden with css if the user
-        // visits a collection-page and the collection side menu is displayed.
+        // If the app is started on a collection-page the main side menu
+        // is not immediately created in order to increase performance.
+        // Once the user leaves the collection pages the side menu gets
+        // created and stays mounted. It is hidden with css if the user
+        // visits a collection page and the collection side menu is
+        // displayed.
         this.mountMainSideMenu = true;
         this.showCollectionSideMenu = false;
       }
 
-      // Hide side menu:
-      // 1. After navigation event in mobile mode if navigating to a new url (queryParams not taken into account).
-      // 2. App is starting on the home page in desktop mode.
+      // Hide side menu if:
+      // 1. navigating to a new url in mobile mode (changes to
+      //    queryParams disregarded).
+      // 2. app is starting on the home page in desktop mode.
       if (
         (
           this.mobileMode &&
@@ -86,10 +92,15 @@ export class DigitalEditionApp implements OnDestroy, OnInit {
         this.showSideNav = false;
       }
 
-      // Open side menu if user navigated to a collection page from the content page
+      // Open side menu if:
+      // 1. user navigated to a collection page from the content page
+      // 2. queryParams contains menu=open
       if (
-        this.currentUrlSegments?.[0]?.path === 'collection' &&
-        this.previousRouterUrl === '/content'
+        (
+          this.currentUrlSegments?.[0]?.path === 'collection' &&
+          this.previousRouterUrl === '/content'
+        ) ||
+        currentUrlTree?.queryParams?.menu === 'open'
       ) {
         this.showSideNav = true;
       }
