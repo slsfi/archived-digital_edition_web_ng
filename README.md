@@ -6,7 +6,10 @@ Internationalization and server-side rendering are supported out of the box, mea
 
 The frontend app is built on [Angular][angular] and uses [Ionic][ionic] web components.
 
-Examples of digital editions employing this frontend app include [Zacharias Topelius Skrifter][topelius] and [Leo Mechelin – Pro lege][mechelin].
+Examples of digital editions employing this frontend app include:
+
+- [Zacharias Topelius Skrifter][topelius]
+- [Leo Mechelin – Pro lege][mechelin]
 
 
 ## Changelog
@@ -16,19 +19,19 @@ Examples of digital editions employing this frontend app include [Zacharias Tope
 
 ## Setting Up a Project
 
-1. Create a fork of this repository. Only include the main branch.
+1. Create a fork of this repository. Only include the `main` branch.
 
 2. Rename the default branch of the forked repository `base`, `shared` or something similar.
 
-3. Create a new branch in the forked repository and name it `production` or `prod`.
+3. Create a new branch in the forked repository and name it `production`, `prod` or something similar.
 
 4. Configure your project app by editing `/src/assets/config/config.ts`. Documentation on the configuration options is forthcoming.
 
 The `base` branch of the forked repository must **never** be manually modified. It must be kept as a clone of the upstream `main` branch in this repository. When the upstream `main` branch is updated, you can sync the updates to the `base` branch in your forked repository. You can then merge the `base` branch into your `production` branch.
 
-This workflow enables updates to the frontend app in this repository to be easily distributed to forked project repositories.
+This workflow enables updates to the app in this repository to be easily distributed to forked project repositories.
 
-By default, the app has Swedish and Finnish language versions enabled. See the documentation (forthcoming) on how to configure internationalization, build your app for production and deploy it.
+By default, the app has Swedish and Finnish language versions enabled. See the documentation (forthcoming) on how to configure internationalization, customize your app, build it for production and deploy it.
 
 
 ## Development Setup
@@ -43,7 +46,7 @@ By default, the app has Swedish and Finnish language versions enabled. See the d
 npm install -g @angular/cli
 ```
 
-3. [Clone][clone_repository] this repository locally and `cd` into the folder. On Windows you can use [GitHub Desktop][github_desktop] or [Git Bash][git_bash] ([tutorial on Git Bash][gith_bash_tutorial]).
+3. [Clone][clone_repository] this repository locally and `cd` into the folder. On Windows you can use [GitHub Desktop][github_desktop] or [Git Bash][git_bash] (see [tutorial on Git Bash][gith_bash_tutorial]).
 
 4. Install dependencies:
 
@@ -55,7 +58,7 @@ npm install
 
 #### Development Server
 
-To build and serve the application on a development server as just a client-side app run:
+To build and serve the application on a development server as just a client-side app, run:
 
 ```
 npm run start
@@ -65,13 +68,13 @@ Open your browser on http://localhost:4200/. The app will automatically rebuild 
 
 #### Server-Side Rendered App
 
-To build the server-side rendered application run:
+To build the server-side rendered application, run:
 
 ```
 npm run build:ssr
 ```
 
-Then to serve the app run:
+Then, to serve the app, run:
 
 ```
 npm run serve:ssr
@@ -80,14 +83,14 @@ npm run serve:ssr
 Open your browser on http://localhost:4201/. You need to manually run the build and serve commands again for changes in the source files to take effect.
 
 
-## Previous version
+## Earlier version
 
-The frontend app in this repository is an updated version of https://github.com/slsfi/digital_edition_web, which is an Ionic 3/Angular 5 app.
+The frontend app in this repository is an updated version of `[digital_edition_web][digital_edition_web]`, which is an Ionic 3/Angular 5 frontend app.
 
 
 ## About the SLS Digital Edition Platform
 
-The platform consists of a [Flask-driven REST API][digital_edition_api], a [backend search app][digital_edition_search] run by the Elastic (ELK) Stack, a [template for a backend files repository][digital_edition_required_files_template] and a [database template][digital_edition_db]. There is also a [tool for creating commentaries][digital_edition_commentary] to XML files.
+The platform consists of a [Flask-driven REST API][digital_edition_api], a [backend search app][digital_edition_search] run by the Elastic (ELK) Stack, a [template for a backend files repository][digital_edition_required_files_template] and a [database template][digital_edition_db]. There is also a [tool for creating commentaries][digital_edition_commentary] to texts in [TEI-XML][TEI] format.
 
 
 [angular]: https://angular.io/
@@ -98,6 +101,7 @@ The platform consists of a [Flask-driven REST API][digital_edition_api], a [back
 [digital_edition_db]: https://github.com/slsfi/digital_edition_db
 [digital_edition_required_files_template]: https://github.com/slsfi/digital_edition_required_files_template
 [digital_edition_search]: https://github.com/slsfi/digital_edition_search
+[digital_edition_web]: https://github.com/slsfi/digital_edition_web
 [git_bash]: https://gitforwindows.org/
 [gith_bash_tutorial]: https://www.atlassian.com/git/tutorials/git-bash
 [github_desktop]: https://desktop.github.com/
@@ -106,4 +110,5 @@ The platform consists of a [Flask-driven REST API][digital_edition_api], a [back
 [node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/get-npm
 [SLS]: https://www.sls.fi/en
+[TEI]: https://tei-c.org/
 [topelius]: https://topelius.sls.fi/
