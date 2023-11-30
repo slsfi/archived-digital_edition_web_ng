@@ -85,7 +85,7 @@ Open your browser on http://localhost:4201/. You need to manually run the build 
 
 ## Earlier version
 
-The frontend app in this repository is an updated version of `[digital_edition_web][digital_edition_web]`, which is an Ionic 3/Angular 5 frontend app.
+The frontend app in this repository is an updated version of [`digital_edition_web`][digital_edition_web], which is an Ionic 3/Angular 5 frontend app.
 
 
 ## About the SLS Digital Edition Platform
