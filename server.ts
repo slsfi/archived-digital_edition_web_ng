@@ -80,7 +80,10 @@ function runDev(): void {
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
 const moduleFilename = mainModule && mainModule.filename || '';
-if (!environment.production && moduleFilename === __filename || moduleFilename.includes('iisnode')) {
+if (
+  !environment.production &&
+  (moduleFilename === __filename || moduleFilename.includes('iisnode'))
+) {
   runDev();
 }
 
