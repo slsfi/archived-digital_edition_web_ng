@@ -2,10 +2,10 @@
  * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
  */
 import '@angular/localize/init';
-import 'zone.js';
+import 'zone.js/node';
 import { LOCALE_ID } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -17,20 +17,11 @@ import { environment } from './src/environments/environment';
 export function app(lang: string): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), `dist/app/browser/${lang}`);
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-
-  // SK 31.5.2023: Added inlineCriticalCss: false. See:
-  // https://github.com/angular/universal/issues/2106
-  // https://github.com/angular/angular/issues/42098
-  // Also added optimization property that disables inlineCritical
-  // in angular.json: architect.build.configurations.production
-  server.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
-    extraProviders: [{ provide: LOCALE_ID, useValue: lang }],
-    inlineCriticalCss: false,
-  } as any));
+  const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -42,14 +33,26 @@ export function app(lang: string): express.Express {
     maxAge: '1y'
   }));
 
-  // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
-    res.render(indexHtml, {
-      req, providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: LOCALE_ID, useValue: lang }
-      ]
-    });
+  // All regular routes use the Angular engine
+  server.get('*', (req, res, next) => {
+    const { protocol, originalUrl, baseUrl, headers } = req;
+
+    // * Inlining critical CSS is disabled here and in angular.json:
+    // * architect.build.configurations.production.optimization.styles.inlineCritical
+    commonEngine
+      .render({
+        bootstrap: AppServerModule,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}${originalUrl}`,
+        inlineCriticalCss: false,
+        publicPath: distFolder,
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          { provide: LOCALE_ID, useValue: lang }
+        ],
+      })
+      .then((html) => res.send(html))
+      .catch((err) => next(err));
   });
 
   return server;

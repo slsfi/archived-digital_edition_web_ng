@@ -117,19 +117,19 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "app:build:development"
+              "buildTarget": "app:build:development"
             },
             "ci": {
               "progress": false
             },
             "fi": {
-              "browserTarget": "app:build:development,fi"
+              "buildTarget": "app:build:development,fi"
             },
             "sv": {
-              "browserTarget": "app:build:development,sv"
+              "buildTarget": "app:build:development,sv"
             }
           },
           "defaultConfiguration": "development"
@@ -254,7 +254,7 @@
           "defaultConfiguration": "production"
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "configurations": {
             "development": {
               "browserTarget": "app:build:development",
@@ -268,7 +268,7 @@
           "defaultConfiguration": "development"
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "routes": [
               "/"
@@ -289,7 +289,7 @@
               "routes": [
                 "/"
               ],
-              "guessRoutes": false
+              "discoverRoutes": false
             },
             "fi": {
               "browserTarget": "app:build:production,fi",
@@ -297,7 +297,7 @@
               "routes": [
                 "/"
               ],
-              "guessRoutes": false
+              "discoverRoutes": false
             }
           },
           "defaultConfiguration": "production"
