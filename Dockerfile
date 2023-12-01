@@ -12,7 +12,7 @@ WORKDIR /digital_edition_web_ng
 
 ADD . /digital_edition_web_ng
 
-RUN npm install -g @angular/cli@^16
+RUN npm install -g @angular/cli@17
 RUN npm install
 
 RUN npm run generate-sitemap
