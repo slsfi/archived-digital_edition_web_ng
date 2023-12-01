@@ -372,14 +372,14 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   private setEpubFontsize(size: Textsize) {
     const currentLocation = this.currentLocationCfi;
     try {
-      if (this.rendition !== null) {
+      if (this.rendition) {
         if (this.searchMenuOpen) {
           this.rendition.themes.select('search_fontsize_' + size);
         } else {
           this.rendition.themes.select('fontsize_' + size);
         }
         this.textsize = size;
-        this.rendition.clear();
+        // this.rendition.clear(); // ! Causes typescipt error, but doesn't seem to be needed
         this.rendition.start();
         this.rendition.display(currentLocation);
       }
@@ -520,7 +520,7 @@ export class EpubViewerComponent implements AfterViewInit, OnDestroy, OnInit {
       this.clearSearch();
       this.rendition.themes.select('fontsize_' + this.textsize);
       try {
-        this.rendition.clear();
+        // this.rendition.clear(); // ! Causes typescipt error, but doesn't seem to be needed
         this.rendition.start();
       } catch {}
       this.rendition.display(currentLocation);

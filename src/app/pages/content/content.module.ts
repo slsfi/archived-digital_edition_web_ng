@@ -18,9 +18,6 @@ import { ContentPageRoutingModule } from './content-routing.module';
     IonicModule,
     ContentGridComponent,
     ContentPageRoutingModule
-  ],
-  entryComponents: [
-    ContentPage
   ]
 })
 export class ContentPageModule { }

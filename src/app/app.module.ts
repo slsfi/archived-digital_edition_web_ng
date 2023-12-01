@@ -17,7 +17,7 @@ import { TopMenuComponent } from '@components/menus/top/top-menu.component';
     DigitalEditionApp
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     IonicModule.forRoot(
       {
         mode: 'md',
