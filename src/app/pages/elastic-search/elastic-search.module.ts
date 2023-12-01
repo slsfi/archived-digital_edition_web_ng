@@ -22,9 +22,6 @@ import { ElasticSearchPage } from './elastic-search.page';
     ElasticHitCollectionPagePathPipe,
     ElasticHitCollectionPageQueryparamsPipe,
     ElasticSearchPageRoutingModule
-  ],
-  entryComponents: [
-    ElasticSearchPage
   ]
 })
 export class ElasticSearchPageModule {}

@@ -20,9 +20,6 @@ import { PdfViewerComponent } from '@components/pdf-viewer/pdf-viewer.component'
     EbookPageRoutingModule,
     EpubViewerComponent,
     PdfViewerComponent
-  ],
-  entryComponents: [
-    EbookPage
   ]
 })
 export class EbookPageModule {}

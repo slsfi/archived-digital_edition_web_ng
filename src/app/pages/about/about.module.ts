@@ -13,9 +13,6 @@ import { AboutPageRoutingModule } from './about-routing.module';
     CommonModule,
     IonicModule,
     AboutPageRoutingModule,
-  ],
-  entryComponents: [
-    AboutPage
   ]
 })
 export class AboutPageModule {}
