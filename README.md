@@ -38,7 +38,7 @@ By default, the app has Swedish and Finnish language versions enabled. See the d
 
 ### Prerequisites
 
-1. Install [Node.js][node.js] 18 which includes [npm][npm].
+1. Install [Node.js][node.js] which includes [npm][npm].
 
 2. Install the Angular CLI globally:
 
