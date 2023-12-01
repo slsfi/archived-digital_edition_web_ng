@@ -227,13 +227,15 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "buildOptimizer": true
             },
             "development": {
               "optimization": false,
               "sourceMap": true,
               "extractLicenses": false,
-              "vendorChunk": true
+              "vendorChunk": true,
+              "buildOptimizer": false
             },
             "ci": {},
             "sv": {
