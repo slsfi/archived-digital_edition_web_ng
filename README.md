@@ -11,6 +11,13 @@ Examples of digital editions employing this frontend app include:
 - [Zacharias Topelius Skrifter][topelius]
 - [Leo Mechelin – Pro lege][mechelin]
 
+<p>
+  <img alt="Angular version badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fslsfi%2Fdigital_edition_web_ng%2Fmain%2Fpackage-lock.json&query=%24%5B'dependencies'%5D%5B'%40angular%2Fcore'%5D%5B'version'%5D&logo=angular&label=Angular&color=%23dd0031">
+  &nbsp;
+  <img alt="Ionic version badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fslsfi%2Fdigital_edition_web_ng%2Fmain%2Fpackage-lock.json&query=%24%5B'dependencies'%5D%5B'%40ionic%2Fcore'%5D%5B'version'%5D&logo=ionic&logoColor=%23fff&label=Ionic&color=%23176bff">
+</p>
+
+<hr>
 
 ## Changelog
 
@@ -38,9 +45,13 @@ By default, the app has Swedish and Finnish language versions enabled. See the d
 
 ### Prerequisites
 
-1. Install [Node.js][node.js] which includes [npm][npm].
+1. Install [Node.js][node.js] which includes [npm][npm]. The app is compatible with Node `^18.13.0` and `^20.9.0`. Check your Node version with:
 
-2. Install the Angular CLI globally:
+```
+Node --version
+```
+
+2. Install the [Angular CLI][angular_cli] globally:
 
 ```
 npm install -g @angular/cli
@@ -94,6 +105,7 @@ The platform consists of a [Flask-driven REST API][digital_edition_api], a [back
 
 
 [angular]: https://angular.io/
+[angular_cli]: https://angular.io/cli
 [changelog]: CHANGELOG.md
 [clone_repository]: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
 [digital_edition_api]: https://github.com/slsfi/digital_edition_api
