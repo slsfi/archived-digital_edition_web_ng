@@ -1,5 +1,4 @@
 FROM node:20-alpine
-ENV NODE_ENV production
 
 RUN apk update
 RUN apk add --no-cache g++ gcc libgcc libstdc++ linux-headers make py3-pip
