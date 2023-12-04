@@ -4,12 +4,12 @@ This is the frontend application of the [SLS][SLS] platform for building digital
 
 Internationalization and server-side rendering are supported out of the box, meaning that your web app will be fully indexable by search engines and readable by AI bots. The frontend app utilizes a responsive design and works on both desktop and mobile devices. Many features of the user interface are easily configurable, and theming is straightforward.
 
-The frontend app is built on [Angular][angular] and uses [Ionic][ionic] web components.
-
 Examples of digital editions employing this frontend app include:
 
 - [Zacharias Topelius Skrifter][topelius]
 - [Leo Mechelin – Pro lege][mechelin]
+
+The app is built on [Angular][angular] and uses [Ionic][ionic] web components.
 
 <p>
   <img alt="Angular version badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fslsfi%2Fdigital_edition_web_ng%2Fmain%2Fpackage-lock.json&query=%24%5B'dependencies'%5D%5B'%40angular%2Fcore'%5D%5B'version'%5D&logo=angular&label=Angular&color=%23dd0031">
