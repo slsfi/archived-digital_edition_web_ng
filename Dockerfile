@@ -2,16 +2,15 @@
 # only necessary build artifacts and resources are
 # included in the final image.
 
+
+# 1. Create base image from official Node image.
+#    https://hub.docker.com/_/node/
 FROM node:20-alpine AS base
-# Update index of available packages for Alpine Linux.
-RUN apk update
-# Install additional packages.
-RUN apk add --no-cache g++ gcc libgcc libstdc++ linux-headers make py3-pip
-# Update npm to latest stable version.
-RUN npm install -g npm@latest
 # Change working directory.
 WORKDIR /digital_edition_web_ng
 
+
+# 2. Create intermediate build image, starting from base image.
 FROM base AS build
 # Copy all files from the source folder to the
 # workdir in the container filesystem.
@@ -25,6 +24,8 @@ RUN npm run generate-sitemap
 # Build the Angular SSR app.
 RUN npm run build:ssr
 
+
+# 3. Create final image, starting from base image.
 FROM base AS final
 # Copy package.json and package-lock.json from the
 # source folder to the workdir in the container filesystem.
@@ -34,7 +35,7 @@ COPY package.json package-lock.json ./
 # Angular build but runs the server, requires the 'express'
 # module.
 RUN npm install --omit=dev
-# Copy the dist folder from the build image to the final
+# Copy the dist folder from the build image to the final,
 # runtime image.
 COPY --from=build /digital_edition_web_ng/dist /digital_edition_web_ng/dist
 # Set NODE_ENV environment variable to production.
