@@ -1,6 +1,16 @@
-# Frontend App of the SLS Digital Edition Platform
+# Archived dev version of the Angular frontend app for the SLS Digital Edition Platform
 
-This is the frontend application of the [SLS][SLS] platform for building digital edition web apps. It supports features typically found in digital scholarly editions, like reading texts, manuscripts, facsimiles and commentaries in parallell views, as well as media collection libraries, indices of named entities and keywords, and an integrated EPUB-viewer.
+⚠️⚠️⚠️
+
+This is the **archived dev version** of the frontend application for the [SLS][SLS] platform for building digital edition web apps. It holds the **development history** of the Angular frontend app and **must not be used!**
+
+The maintained production-ready version of the app, which was migrated without git history from this repository on 5 December 2023, is found here: [`digital-edition-frontend-ng`](https://github.com/slsfi/digital-edition-frontend-ng)
+
+**THIS REPOSITORY CAN BE DELETED WHEN THE DEV HISTORY OF THE ANGULAR FRONTEND APP IS NO LONGER NEEDED!**
+
+⚠️⚠️⚠️
+
+The app supports features typically found in digital scholarly editions, like reading texts, manuscripts, facsimiles and commentaries in parallell views, as well as media collection libraries, indices of named entities and keywords, and an integrated EPUB-viewer.
 
 Internationalization and server-side rendering are supported out of the box, meaning that your web app will be fully indexable by search engines and readable by AI bots. The frontend app utilizes a responsive design and works on both desktop and mobile devices. Many features of the user interface are easily configurable, and theming is straightforward.
 
